@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>json&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>json&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_json.html" title="json">json</a>
                  &gt; YAHOO.lang.JSON 
@@ -67,6 +67,121 @@
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:property" resource="#property__BRACKETS">
+                                    <h4><a name="property__BRACKETS" property="yui:name">_BRACKETS</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Third step in the safety evaluation.  Regex used to remove all open
+square brackets following a colon, comma, or at the beginning of the
+string.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__CHARS">
+                                    <h4><a name="property__CHARS" property="yui:name">_CHARS</a>
+                                        - <code>private static <span property="yui:type">{Object}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Character substitution map for common escapes and special characters.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__ESCAPES">
+                                    <h4><a name="property__ESCAPES" property="yui:name">_ESCAPES</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            First step in the safety evaluation.  Regex used to replace all escape
+sequences (i.e. "\\", etc) with '@' characters (a non-JSON character).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__SPECIAL_CHARS">
+                                    <h4><a name="property__SPECIAL_CHARS" property="yui:name">_SPECIAL_CHARS</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Regex used to replace special characters in strings for JSON
+stringification.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__UNICODE_EXCEPTIONS">
+                                    <h4><a name="property__UNICODE_EXCEPTIONS" property="yui:name">_UNICODE_EXCEPTIONS</a>
+                                        - <code>private <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Replace certain Unicode characters that JavaScript may handle incorrectly
+during eval--either by deleting them or treating them as line
+endings--with escape sequences.
+IMPORTANT NOTE: This regex will be used to modify the input if a match is
+found.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__UNSAFE">
+                                    <h4><a name="property__UNSAFE" property="yui:name">_UNSAFE</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Final step in the safety evaluation.  Regex used to test the string left
+after all previous replacements for invalid characters.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__VALUES">
+                                    <h4><a name="property__VALUES" property="yui:name">_VALUES</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Second step in the safety evaluation.  Regex used to replace all simple
+values with ']' characters.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_useNativeParse">
                                     <h4><a name="property_useNativeParse" property="yui:name">useNativeParse</a>
                                         - <code>static <span property="yui:type">Boolean</span></code>
@@ -118,6 +233,122 @@ for browsers with native JSON support.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method__prepare">
+                                    <h4>
+                                        <a name="method__prepare">_prepare</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        String
+                                            <strong property="yui:name">_prepare</strong>
+                                           (
+                                                
+                                                        
+                                                         s
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Replace certain Unicode characters that may be handled incorrectly by
+some browser implementations.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">s</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  parse input</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            String
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">sanitized JSON string ready to be validated/parsed</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__revive">
+                                    <h4>
+                                        <a name="method__revive">_revive</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        MIXED
+                                            <strong property="yui:name">_revive</strong>
+                                           (
+                                                
+                                                        
+                                                         data
+                                                    
+                                                
+                                                        , 
+                                                         reviver
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Traverses nested objects, applying a filter or reviver function to
+each value.  The value returned from the function will replace the
+original value in the key:value pair.  If the value returned is
+undefined, the key will be omitted from the returned object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">data</span>
+                                                        &lt;<span property="yui:type">MIXED</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Any JavaScript data</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">reviver</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  filter or mutation function</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            MIXED
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The results of the filtered/mutated data structure</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_dateToString">
                                     <h4>
                                         <a name="method_dateToString">dateToString</a></h4>
@@ -577,6 +808,13 @@ parse operation.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#property__BRACKETS" title="_BRACKETS">_BRACKETS</a></li>
+                                <li class="private"><a href="#property__CHARS" title="_CHARS">_CHARS</a></li>
+                                <li class="private"><a href="#property__ESCAPES" title="_ESCAPES">_ESCAPES</a></li>
+                                <li class="private"><a href="#property__SPECIAL_CHARS" title="_SPECIAL_CHARS">_SPECIAL_CHARS</a></li>
+                                <li class="private"><a href="#property__UNICODE_EXCEPTIONS" title="_UNICODE_EXCEPTIONS">_UNICODE_EXCEPTIONS</a></li>
+                                <li class="private"><a href="#property__UNSAFE" title="_UNSAFE">_UNSAFE</a></li>
+                                <li class="private"><a href="#property__VALUES" title="_VALUES">_VALUES</a></li>
                                 <li class=""><a href="#property_useNativeParse" title="useNativeParse">useNativeParse</a></li>
                                 <li class=""><a href="#property_useNativeStringify" title="useNativeStringify">useNativeStringify</a></li>
                         </ul>
@@ -585,6 +823,8 @@ parse operation.
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method__prepare" title="_prepare">_prepare</a></li>
+                                <li class="private"><a href="#method__revive" title="_revive">_revive</a></li>
                                 <li class=""><a href="#method_dateToString" title="dateToString">dateToString</a></li>
                                 <li class=""><a href="#method_isSafe" title="isSafe">isSafe</a></li>
                                 <li class=" deprecated"><a href="#method_isValid" title="isValid">isValid</a></li>
@@ -605,7 +845,7 @@ parse operation.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.lang.JSON", "name": "dateToString", "url": "YAHOO.lang.JSON.html#method_dateToString", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isSafe", "url": "YAHOO.lang.JSON.html#method_isSafe", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isValid", "url": "YAHOO.lang.JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "parse", "url": "YAHOO.lang.JSON.html#method_parse", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringify", "url": "YAHOO.lang.JSON.html#method_stringify", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringToDate", "url": "YAHOO.lang.JSON.html#method_stringToDate", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeParse", "url": "YAHOO.lang.JSON.html#property_useNativeParse", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeStringify", "url": "YAHOO.lang.JSON.html#property_useNativeStringify", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.lang.JSON", "name": "_BRACKETS", "url": "YAHOO.lang.JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_CHARS", "url": "YAHOO.lang.JSON.html#property__CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "dateToString", "url": "YAHOO.lang.JSON.html#method_dateToString", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_ESCAPES", "url": "YAHOO.lang.JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isSafe", "url": "YAHOO.lang.JSON.html#method_isSafe", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isValid", "url": "YAHOO.lang.JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "parse", "url": "YAHOO.lang.JSON.html#method_parse", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_prepare", "url": "YAHOO.lang.JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_revive", "url": "YAHOO.lang.JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_SPECIAL_CHARS", "url": "YAHOO.lang.JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringify", "url": "YAHOO.lang.JSON.html#method_stringify", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringToDate", "url": "YAHOO.lang.JSON.html#method_stringToDate", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNICODE_EXCEPTIONS", "url": "YAHOO.lang.JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNSAFE", "url": "YAHOO.lang.JSON.html#property__UNSAFE", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeParse", "url": "YAHOO.lang.JSON.html#property_useNativeParse", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeStringify", "url": "YAHOO.lang.JSON.html#property_useNativeStringify", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_VALUES", "url": "YAHOO.lang.JSON.html#property__VALUES", "type": "property"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

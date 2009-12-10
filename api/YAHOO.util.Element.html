@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>element&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>element&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html" title="element">element</a>
                  &gt; YAHOO.util.Element 
@@ -196,6 +196,10 @@ represents the Element.</span>
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.AttributeProvider.html#property__configs">
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs" property="yui:name" title="_configs">_configs</a>
+                                        </span>
+                                    
                                 </code>
                             </div>
                         </div>
@@ -203,6 +207,14 @@ represents the Element.</span>
                             <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
                             <div class="content" rel="yui:properties">
                                 <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
+                                        </span>
                                     
                                 </code>
                             </div>
@@ -214,6 +226,71 @@ represents the Element.</span>
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method__setHTMLAttrConfig">
+                                    <h4>
+                                        <a name="method__setHTMLAttrConfig">_setHTMLAttrConfig</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_setHTMLAttrConfig</strong>
+                                           (
+                                                
+                                                        
+                                                         element
+                                                    
+                                                
+                                                        , 
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         map
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Sets the value of the property and fires beforeChange and change events.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">element</span>
+                                                        &lt;<span property="yui:type">YAHOO.util.Element</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The Element instance to
+register the config to.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">key</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the config to register</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">map</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> A key-value map of the config's params</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_addClass">
                                     <h4>
                                         <a name="method_addClass">addClass</a></h4>
@@ -1483,6 +1560,9 @@ otherwise.</dd>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_get">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_get" property="yui:name" title="get">get</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig" property="yui:name" title="getAttributeConfig">getAttributeConfig</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys" property="yui:name" title="getAttributeKeys">getAttributeKeys</a><span class="">,</span>
                                             </span>
@@ -1491,6 +1571,9 @@ otherwise.</dd>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_register">                                        
                                             <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_register" property="yui:name" title="register">register</a><span class=" deprecated">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig" property="yui:name" title="resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetValue">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue" property="yui:name" title="resetValue">resetValue</a><span class="">,</span>
@@ -1650,6 +1733,50 @@ myTabs.addListener('beforeAppendTo', handler);</code></p>
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeElementChange">
+                                    <h4>
+                                        <a name="event_beforeElementChange">beforeElementChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeElementChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'element' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:event" resource="#event_contentReady">
                                     <h4>
                                         <a name="event_contentReady">contentReady</a></h4>
@@ -1708,7 +1835,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'element' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'element' changes.
                                         </div>
 
                                         <div class="description">
@@ -1718,9 +1845,9 @@ myTabs.addListener('contentReady', handler);</code></p>
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1848,6 +1975,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method__setHTMLAttrConfig" title="_setHTMLAttrConfig">_setHTMLAttrConfig</a></li>
                                 <li class=""><a href="#method_addClass" title="addClass">addClass</a></li>
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
                                 <li class=""><a href="#method_appendChild" title="appendChild">appendChild</a></li>
@@ -1879,6 +2007,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                                 <li class=""><a href="#event_appendTo" title="appendTo">appendTo</a></li>
                                 <li class=""><a href="#event_available" title="available">available</a></li>
                                 <li class=""><a href="#event_beforeAppendTo" title="beforeAppendTo">beforeAppendTo</a></li>
+                                <li class=""><a href="#event_beforeElementChange" title="beforeElementChange">beforeElementChange</a></li>
                                 <li class=""><a href="#event_contentReady" title="contentReady">contentReady</a></li>
                                 <li class=""><a href="#event_elementChange" title="elementChange">elementChange</a></li>
                         </ul>
@@ -1900,7 +2029,7 @@ myTabs.addListener('contentReady', handler);</code></p>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#event_appendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#event_available", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeAppendTo", "url": "YAHOO.util.Element.html#event_beforeAppendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "configure", "url": "YAHOO.util.Attribute.html#method_configure", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "configureAttribute", "url": "YAHOO.util.AttributeProvider.html#method_configureAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "delegate", "url": "YAHOO.util.Element.html#method_delegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#property_DOM_EVENTS", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#config_element", "type": "config"}, {"access": "", "host": "YAHOO.util.Element", "name": "elementChange", "url": "YAHOO.util.Element.html#event_elementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireBeforeChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "get", "url": "YAHOO.util.AttributeProvider.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeKeys", "url": "YAHOO.util.AttributeProvider.html#method_getAttributeKeys", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#method_getElementsByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getter", "url": "YAHOO.util.Attribute.html#property_getter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getValue", "url": "YAHOO.util.Attribute.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#method_hasChildNodes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "method", "url": "YAHOO.util.Attribute.html#property_method", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "name", "url": "YAHOO.util.Attribute.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "owner", "url": "YAHOO.util.Attribute.html#property_owner", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "readOnly", "url": "YAHOO.util.Attribute.html#property_readOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "refresh", "url": "YAHOO.util.Attribute.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "refresh", "url": "YAHOO.util.AttributeProvider.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "register", "url": "YAHOO.util.AttributeProvider.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#method_removeChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeDelegate", "url": "YAHOO.util.Element.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#method_replaceChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#method_replaceClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetConfig", "url": "YAHOO.util.Attribute.html#method_resetConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetValue", "url": "YAHOO.util.Attribute.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "resetValue", "url": "YAHOO.util.AttributeProvider.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "set", "url": "YAHOO.util.AttributeProvider.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_setAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributes", "url": "YAHOO.util.AttributeProvider.html#method_setAttributes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setter", "url": "YAHOO.util.Attribute.html#property_setter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setValue", "url": "YAHOO.util.Attribute.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "validator", "url": "YAHOO.util.Attribute.html#property_validator", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "value", "url": "YAHOO.util.Attribute.html#property_value", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "writeOnce", "url": "YAHOO.util.Attribute.html#property_writeOnce", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#event_appendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#event_available", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeAppendTo", "url": "YAHOO.util.Element.html#event_beforeAppendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeElementChange", "url": "YAHOO.util.Element.html#event_beforeElementChange", "type": "event"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "_configs", "url": "YAHOO.util.AttributeProvider.html#property__configs", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "configure", "url": "YAHOO.util.Attribute.html#method_configure", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "configureAttribute", "url": "YAHOO.util.AttributeProvider.html#method_configureAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "delegate", "url": "YAHOO.util.Element.html#method_delegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#property_DOM_EVENTS", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#config_element", "type": "config"}, {"access": "", "host": "YAHOO.util.Element", "name": "elementChange", "url": "YAHOO.util.Element.html#event_elementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireBeforeChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "get", "url": "YAHOO.util.AttributeProvider.html#method_get", "type": "method"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_getAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeKeys", "url": "YAHOO.util.AttributeProvider.html#method_getAttributeKeys", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#method_getElementsByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getter", "url": "YAHOO.util.Attribute.html#property_getter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getValue", "url": "YAHOO.util.Attribute.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#method_hasChildNodes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#method_initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_initialConfig", "url": "YAHOO.util.Attribute.html#property__initialConfig", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "method", "url": "YAHOO.util.Attribute.html#property_method", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "name", "url": "YAHOO.util.Attribute.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "owner", "url": "YAHOO.util.Attribute.html#property_owner", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "readOnly", "url": "YAHOO.util.Attribute.html#property_readOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "refresh", "url": "YAHOO.util.Attribute.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "refresh", "url": "YAHOO.util.AttributeProvider.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "register", "url": "YAHOO.util.AttributeProvider.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#method_removeChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeDelegate", "url": "YAHOO.util.Element.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#method_replaceChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "resetAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_resetAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetConfig", "url": "YAHOO.util.Attribute.html#method_resetConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetValue", "url": "YAHOO.util.Attribute.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "resetValue", "url": "YAHOO.util.AttributeProvider.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "set", "url": "YAHOO.util.AttributeProvider.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_setAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributes", "url": "YAHOO.util.AttributeProvider.html#method_setAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.util.Element", "name": "_setHTMLAttrConfig", "url": "YAHOO.util.Element.html#method__setHTMLAttrConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setter", "url": "YAHOO.util.Attribute.html#property_setter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setValue", "url": "YAHOO.util.Attribute.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "validator", "url": "YAHOO.util.Attribute.html#property_validator", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "value", "url": "YAHOO.util.Attribute.html#property_value", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "writeOnce", "url": "YAHOO.util.Attribute.html#property_writeOnce", "type": "property"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_written", "url": "YAHOO.util.Attribute.html#property__written", "type": "property"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

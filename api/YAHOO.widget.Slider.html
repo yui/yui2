@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html" title="slider">slider</a>
                  &gt; YAHOO.widget.Slider 
@@ -137,6 +137,40 @@ clicked.
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:property" resource="#property__mouseDown">
+                                    <h4><a name="property__mouseDown" property="yui:name">_mouseDown</a>
+                                        - <code>private <span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Tracks the state of the mouse button to aid in when events are fired.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__silent">
+                                    <h4><a name="property__silent" property="yui:name">_silent</a>
+                                        - <code>private <span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates whether or not events will be supressed for the current
+slide operation
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_animate">
                                     <h4><a name="property_animate" property="yui:name">animate</a>
                                         - <code><span property="yui:type">boolean</span></code>
@@ -228,6 +262,21 @@ operation.
                                     <div class="detail">
                                         <div class="description" property="yui:description">
                                             Enables the arrow, home and end keys, defaults to true.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_isTarget">
+                                    <h4><a name="property_isTarget" property="yui:name">isTarget</a>
+                                        - <code>private <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Overrides the isTarget property in YAHOO.util.DragDrop
                                         </div>
                                     </div>
      
@@ -501,6 +550,14 @@ when dealing with one source or another.
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property___ygDragDrop">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property___ygDragDrop" property="yui:name" title="__ygDragDrop">__ygDragDrop</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property__domRef">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property__domRef" property="yui:name" title="_domRef">_domRef</a><span class="private">,</span>
+                                        </span>
+                                    
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_available">
                                         <a class="" href="YAHOO.util.DragDrop.html#property_available" property="yui:name" title="available">available</a><span class="">,</span>
                                         </span>
@@ -509,8 +566,28 @@ when dealing with one source or another.
                                         <a class="" href="YAHOO.util.DragDrop.html#property_config" property="yui:name" title="config">config</a><span class="">,</span>
                                         </span>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_constrainX">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_constrainX" property="yui:name" title="constrainX">constrainX</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_constrainY">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_constrainY" property="yui:name" title="constrainY">constrainY</a><span class="private">,</span>
+                                        </span>
+                                    
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_cursorIsOver">
                                         <a class="" href="YAHOO.util.DragDrop.html#property_cursorIsOver" property="yui:name" title="cursorIsOver">cursorIsOver</a><span class="">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_deltaX">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_deltaX" property="yui:name" title="deltaX">deltaX</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_deltaY">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_deltaY" property="yui:name" title="deltaY">deltaY</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_dragElId">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_dragElId" property="yui:name" title="dragElId">dragElId</a><span class="private">,</span>
                                         </span>
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_dragOnly">
@@ -523,6 +600,10 @@ when dealing with one source or another.
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_groups">
                                         <a class="" href="YAHOO.util.DragDrop.html#property_groups" property="yui:name" title="groups">groups</a><span class="">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_handleElId">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_handleElId" property="yui:name" title="handleElId">handleElId</a><span class="private">,</span>
                                         </span>
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_hasOuterHandles">
@@ -549,8 +630,28 @@ when dealing with one source or another.
                                         <a class="" href="YAHOO.util.DragDrop.html#property_isTarget" property="yui:name" title="isTarget">isTarget</a><span class="">,</span>
                                         </span>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_locked">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_locked" property="yui:name" title="locked">locked</a><span class="private">,</span>
+                                        </span>
+                                    
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_maintainOffset">
                                         <a class="" href="YAHOO.util.DragDrop.html#property_maintainOffset" property="yui:name" title="maintainOffset">maintainOffset</a><span class="">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_maxX">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_maxX" property="yui:name" title="maxX">maxX</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_maxY">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_maxY" property="yui:name" title="maxY">maxY</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_minX">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_minX" property="yui:name" title="minX">minX</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_minY">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_minY" property="yui:name" title="minY">minY</a><span class="private">,</span>
                                         </span>
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_overlap">
@@ -563,6 +664,14 @@ when dealing with one source or another.
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_primaryButtonOnly">
                                         <a class="" href="YAHOO.util.DragDrop.html#property_primaryButtonOnly" property="yui:name" title="primaryButtonOnly">primaryButtonOnly</a><span class="">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_startPageX">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_startPageX" property="yui:name" title="startPageX">startPageX</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_startPageY">
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_startPageY" property="yui:name" title="startPageY">startPageY</a><span class="private">,</span>
                                         </span>
                                     
                                         <span rel="yui:property" resource="YAHOO.util.DragDrop.html#property_useShim">
@@ -584,6 +693,14 @@ when dealing with one source or another.
                             <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
                             <div class="content" rel="yui:properties">
                                 <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
+                                        </span>
                                     
                                 </code>
                             </div>
@@ -611,6 +728,66 @@ when dealing with one source or another.
                                         
                                         <div class="description" property="yui:description">
                                             Sets up the listeners for keydown and key press events.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getNextX">
+                                    <h4>
+                                        <a name="method__getNextX">_getNextX</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_getNextX</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the next X tick value based on the current coord and the target coord.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getNextY">
+                                    <h4>
+                                        <a name="method__getNextY">_getNextY</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_getNextY</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the next Y tick value based on the current coord and the target coord.
                                         </div>
 
                                         <div class="description">
@@ -815,6 +992,147 @@ for this move action (but not others).</span>
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">true if the move was performed, false if it failed</dd>
                                                 </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_b4MouseDown">
+                                    <h4>
+                                        <a name="method_b4MouseDown">b4MouseDown</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">b4MouseDown</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Resets the constraints before moving the thumb.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_endMove">
+                                    <h4>
+                                        <a name="method_endMove">endMove</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">endMove</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fired when the slider movement ends
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_fireEvents">
+                                    <h4>
+                                        <a name="method_fireEvents">fireEvents</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">fireEvents</strong>
+                                           (
+                                                
+                                                        
+                                                         thumbEvent
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires the change event if the value has been changed.  Ignored if we are in
+the middle of an animation as the event will fire when the animation is
+complete
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">thumbEvent</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> set to true if this event is fired from an event
+that occurred on the thumb.  If it is, the state of the
+thumb dd object should be correct.  Otherwise, the event
+originated on the background, so the thumb state needs to
+be refreshed before proceeding.</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_focus">
+                                    <h4>
+                                        <a name="method_focus">focus</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">focus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Try to focus the element when clicked so we can add
+accessibility features
+                                        </div>
+
+                                        <div class="description">
+
+
 
 
              
@@ -1183,6 +1501,128 @@ happens in handleKeyDown.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_moveOneTick">
+                                    <h4>
+                                        <a name="method_moveOneTick">moveOneTick</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">moveOneTick</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Move the slider one tick mark towards its final coordinate.  Used
+for the animation when tick marks are defined
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">the</span>
+                                                        &lt;<span property="yui:type">int[]</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> destination coordinate</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_moveThumb">
+                                    <h4>
+                                        <a name="method_moveThumb">moveThumb</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">moveThumb</strong>
+                                           (
+                                                
+                                                        
+                                                         x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         midMove
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Move the associated slider moved to a timeout to try to get around the 
+mousedown stealing moz does when I move the slider element between the 
+cursor and the background during the mouseup event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">x</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the X coordinate of the click</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">y</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the Y coordinate of the click</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipAnim</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> don't animate if the move happend onDrag</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">midMove</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> set to true if this is not terminating
+the slider movement</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_onAvailable">
                                     <h4>
                                         <a name="method_onAvailable">onAvailable</a></h4>
@@ -1267,6 +1707,66 @@ offset, the second the vertical.</span>
                                             <div class="deprecated">
                                                 <strong>Deprecated</strong> use instance.subscribe("change") instead
                                             </div>        
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_onDrag">
+                                    <h4>
+                                        <a name="method_onDrag">onDrag</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">onDrag</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Handles the onDrag event for the slider background
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_onMouseDown">
+                                    <h4>
+                                        <a name="method_onMouseDown">onMouseDown</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">onMouseDown</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Handles the mousedown event for the slider background
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
 
                                         </div>
 
@@ -1600,6 +2100,36 @@ for this move action (but not others).</span>
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">true if the move was performed, false if it failed</dd>
                                                 </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_thumbMouseUp">
+                                    <h4>
+                                        <a name="method_thumbMouseUp">thumbMouseUp</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">thumbMouseUp</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Handles mouseup event on the thumb
+                                        </div>
+
+                                        <div class="description">
+
+
 
 
              
@@ -2238,6 +2768,27 @@ should move a certain number pixels at a time.</span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_applyConfig">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_applyConfig" property="yui:name" title="applyConfig">applyConfig</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4Drag">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4Drag" property="yui:name" title="b4Drag">b4Drag</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4DragDrop">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragDrop" property="yui:name" title="b4DragDrop">b4DragDrop</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4DragOut">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragOut" property="yui:name" title="b4DragOut">b4DragOut</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4DragOver">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragOver" property="yui:name" title="b4DragOver">b4DragOver</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4EndDrag">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4EndDrag" property="yui:name" title="b4EndDrag">b4EndDrag</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4MouseDown">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4MouseDown" property="yui:name" title="b4MouseDown">b4MouseDown</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_b4StartDrag">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4StartDrag" property="yui:name" title="b4StartDrag">b4StartDrag</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_clearConstraints">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_clearConstraints" property="yui:name" title="clearConstraints">clearConstraints</a><span class="">,</span>
                                             </span>
@@ -2255,6 +2806,18 @@ should move a certain number pixels at a time.</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_getEl">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_getEl" property="yui:name" title="getEl">getEl</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_getTargetCoord">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_getTargetCoord" property="yui:name" title="getTargetCoord">getTargetCoord</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_getTick">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_getTick" property="yui:name" title="getTick">getTick</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_handleMouseDown">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_handleMouseDown" property="yui:name" title="handleMouseDown">handleMouseDown</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_handleOnAvailable">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_handleOnAvailable" property="yui:name" title="handleOnAvailable">handleOnAvailable</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_init">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_init" property="yui:name" title="init">init</a><span class="">,</span>
@@ -2322,17 +2885,29 @@ should move a certain number pixels at a time.</span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setHandleElId">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_setHandleElId" property="yui:name" title="setHandleElId">setHandleElId</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setInitialPosition">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setInitialPosition" property="yui:name" title="setInitialPosition">setInitialPosition</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setOuterHandleElId">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_setOuterHandleElId" property="yui:name" title="setOuterHandleElId">setOuterHandleElId</a><span class="">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setPadding">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_setPadding" property="yui:name" title="setPadding">setPadding</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setStartPosition">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setStartPosition" property="yui:name" title="setStartPosition">setStartPosition</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setXConstraint">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_setXConstraint" property="yui:name" title="setXConstraint">setXConstraint</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setXTicks">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setXTicks" property="yui:name" title="setXTicks">setXTicks</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setYConstraint">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_setYConstraint" property="yui:name" title="setYConstraint">setYConstraint</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_setYTicks">                                        
+                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setYTicks" property="yui:name" title="setYTicks">setYTicks</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.DragDrop.html#method_startDrag">                                        
                                             <a class="" href="YAHOO.util.DragDrop.html#method_startDrag" property="yui:name" title="startDrag">startDrag</a><span class="">,</span>
@@ -2649,12 +3224,15 @@ x offset for region sliders</span>
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#property__mouseDown" title="_mouseDown">_mouseDown</a></li>
+                                <li class="private"><a href="#property__silent" title="_silent">_silent</a></li>
                                 <li class=""><a href="#property_animate" title="animate">animate</a></li>
                                 <li class=""><a href="#property_animationDuration" title="animationDuration">animationDuration</a></li>
                                 <li class=""><a href="#property_backgroundEnabled" title="backgroundEnabled">backgroundEnabled</a></li>
                                 <li class=""><a href="#property_baselinePos" title="baselinePos">baselinePos</a></li>
                                 <li class=""><a href="#property_dragOnly" title="dragOnly">dragOnly</a></li>
                                 <li class=""><a href="#property_enableKeys" title="enableKeys">enableKeys</a></li>
+                                <li class="private"><a href="#property_isTarget" title="isTarget">isTarget</a></li>
                                 <li class=""><a href="#property_keyIncrement" title="keyIncrement">keyIncrement</a></li>
                                 <li class=""><a href="#property_lastOffset" title="lastOffset">lastOffset</a></li>
                                 <li class=" deprecated"><a href="#property_moveComplete" title="moveComplete">moveComplete</a></li>
@@ -2676,8 +3254,14 @@ x offset for region sliders</span>
                         <h4>Methods</h4>
                         <ul class="content">        
                                 <li class="protected"><a href="#method__bindKeyEvents" title="_bindKeyEvents">_bindKeyEvents</a></li>
+                                <li class="private"><a href="#method__getNextX" title="_getNextX">_getNextX</a></li>
+                                <li class="private"><a href="#method__getNextY" title="_getNextY">_getNextY</a></li>
                                 <li class="protected"><a href="#method__setRegionValue" title="_setRegionValue">_setRegionValue</a></li>
                                 <li class="protected"><a href="#method__setValue" title="_setValue">_setValue</a></li>
+                                <li class="private"><a href="#method_b4MouseDown" title="b4MouseDown">b4MouseDown</a></li>
+                                <li class="private"><a href="#method_endMove" title="endMove">endMove</a></li>
+                                <li class="private"><a href="#method_fireEvents" title="fireEvents">fireEvents</a></li>
+                                <li class="private"><a href="#method_focus" title="focus">focus</a></li>
                                 <li class=""><a href="#method_getThumb" title="getThumb">getThumb</a></li>
                                 <li class=""><a href="#method_getValue" title="getValue">getValue</a></li>
                                 <li class=""><a href="#method_getXValue" title="getXValue">getXValue</a></li>
@@ -2687,8 +3271,12 @@ x offset for region sliders</span>
                                 <li class=""><a href="#method_initSlider" title="initSlider">initSlider</a></li>
                                 <li class=""><a href="#method_initThumb" title="initThumb">initThumb</a></li>
                                 <li class=""><a href="#method_lock" title="lock">lock</a></li>
+                                <li class="private"><a href="#method_moveOneTick" title="moveOneTick">moveOneTick</a></li>
+                                <li class="private"><a href="#method_moveThumb" title="moveThumb">moveThumb</a></li>
                                 <li class=""><a href="#method_onAvailable" title="onAvailable">onAvailable</a></li>
                                 <li class=" deprecated"><a href="#method_onChange" title="onChange">onChange</a></li>
+                                <li class="private"><a href="#method_onDrag" title="onDrag">onDrag</a></li>
+                                <li class="private"><a href="#method_onMouseDown" title="onMouseDown">onMouseDown</a></li>
                                 <li class=" deprecated"><a href="#method_onSliderEnd" title="onSliderEnd">onSliderEnd</a></li>
                                 <li class=" deprecated"><a href="#method_onSlideStart" title="onSlideStart">onSlideStart</a></li>
                                 <li class="protected"><a href="#method_resetThumbConstraints" title="resetThumbConstraints">resetThumbConstraints</a></li>
@@ -2696,6 +3284,7 @@ x offset for region sliders</span>
                                 <li class=""><a href="#method_setStartSliderState" title="setStartSliderState">setStartSliderState</a></li>
                                 <li class=""><a href="#method_setThumbCenterPoint" title="setThumbCenterPoint">setThumbCenterPoint</a></li>
                                 <li class=""><a href="#method_setValue" title="setValue">setValue</a></li>
+                                <li class="private"><a href="#method_thumbMouseUp" title="thumbMouseUp">thumbMouseUp</a></li>
                                 <li class=""><a href="#method_toString" title="toString">toString</a></li>
                                 <li class=""><a href="#method_unlock" title="unlock">unlock</a></li>
                                 <li class=""><a href="#method_verifyOffset" title="verifyOffset">verifyOffset</a></li>
@@ -2726,7 +3315,7 @@ x offset for region sliders</span>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.DualSlider", "name": "activeSlider", "url": "YAHOO.widget.DualSlider.html#property_activeSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_bindKeyEvents", "url": "YAHOO.widget.DualSlider.html#method__bindKeyEvents", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_bindKeyEvents", "url": "YAHOO.widget.Slider.html#method__bindKeyEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "change", "url": "YAHOO.widget.DualSlider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyDown", "url": "YAHOO.widget.DualSlider.html#method__handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyPress", "url": "YAHOO.widget.DualSlider.html#method__handleKeyPress", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseDown", "url": "YAHOO.widget.DualSlider.html#method__handleMouseDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseUp", "url": "YAHOO.widget.DualSlider.html#method__handleMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "isHoriz", "url": "YAHOO.widget.DualSlider.html#property_isHoriz", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxSlider", "url": "YAHOO.widget.DualSlider.html#property_maxSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxVal", "url": "YAHOO.widget.DualSlider.html#property_maxVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minRange", "url": "YAHOO.widget.DualSlider.html#property_minRange", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minSlider", "url": "YAHOO.widget.DualSlider.html#property_minSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minVal", "url": "YAHOO.widget.DualSlider.html#property_minVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "ready", "url": "YAHOO.widget.DualSlider.html#event_ready", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMaxValue", "url": "YAHOO.widget.DualSlider.html#method_setMaxValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMinValue", "url": "YAHOO.widget.DualSlider.html#method_setMinValue", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setRegionValue", "url": "YAHOO.widget.Slider.html#method__setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setValue", "url": "YAHOO.widget.Slider.html#method__setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setValues", "url": "YAHOO.widget.DualSlider.html#method_setValues", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideEnd", "url": "YAHOO.widget.DualSlider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_KEY_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_KEY_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideStart", "url": "YAHOO.widget.DualSlider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.DualSlider", "name": "activeSlider", "url": "YAHOO.widget.DualSlider.html#property_activeSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "b4MouseDown", "url": "YAHOO.widget.Slider.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_bindKeyEvents", "url": "YAHOO.widget.DualSlider.html#method__bindKeyEvents", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_bindKeyEvents", "url": "YAHOO.widget.Slider.html#method__bindKeyEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "change", "url": "YAHOO.widget.DualSlider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_cleanEvent", "url": "YAHOO.widget.DualSlider.html#method__cleanEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "endMove", "url": "YAHOO.widget.Slider.html#method_endMove", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "fireEvents", "url": "YAHOO.widget.Slider.html#method_fireEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "focus", "url": "YAHOO.widget.Slider.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextX", "url": "YAHOO.widget.Slider.html#method__getNextX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextY", "url": "YAHOO.widget.Slider.html#method__getNextY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleDrag", "url": "YAHOO.widget.DualSlider.html#method__handleDrag", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyDown", "url": "YAHOO.widget.DualSlider.html#method__handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyPress", "url": "YAHOO.widget.DualSlider.html#method__handleKeyPress", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMaxChange", "url": "YAHOO.widget.DualSlider.html#method__handleMaxChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMinChange", "url": "YAHOO.widget.DualSlider.html#method__handleMinChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseDown", "url": "YAHOO.widget.DualSlider.html#method__handleMouseDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseUp", "url": "YAHOO.widget.DualSlider.html#method__handleMouseUp", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideEnd", "url": "YAHOO.widget.DualSlider.html#method__handleSlideEnd", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideStart", "url": "YAHOO.widget.DualSlider.html#method__handleSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "isHoriz", "url": "YAHOO.widget.DualSlider.html#property_isHoriz", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "isTarget", "url": "YAHOO.widget.Slider.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxSlider", "url": "YAHOO.widget.DualSlider.html#property_maxSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxVal", "url": "YAHOO.widget.DualSlider.html#property_maxVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minRange", "url": "YAHOO.widget.DualSlider.html#property_minRange", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minSlider", "url": "YAHOO.widget.DualSlider.html#property_minSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minVal", "url": "YAHOO.widget.DualSlider.html#property_minVal", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_mouseDown", "url": "YAHOO.widget.Slider.html#property__mouseDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveOneTick", "url": "YAHOO.widget.Slider.html#method_moveOneTick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveThumb", "url": "YAHOO.widget.Slider.html#method_moveThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onDrag", "url": "YAHOO.widget.Slider.html#method_onDrag", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_oneTimeCallback", "url": "YAHOO.widget.DualSlider.html#method__oneTimeCallback", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onMouseDown", "url": "YAHOO.widget.Slider.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "ready", "url": "YAHOO.widget.DualSlider.html#event_ready", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "selectActiveSlider", "url": "YAHOO.widget.DualSlider.html#method_selectActiveSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMaxValue", "url": "YAHOO.widget.DualSlider.html#method_setMaxValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMinValue", "url": "YAHOO.widget.DualSlider.html#method_setMinValue", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setRegionValue", "url": "YAHOO.widget.Slider.html#method__setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setValue", "url": "YAHOO.widget.Slider.html#method__setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setValues", "url": "YAHOO.widget.DualSlider.html#method_setValues", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_silent", "url": "YAHOO.widget.Slider.html#property__silent", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideEnd", "url": "YAHOO.widget.DualSlider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_KEY_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_KEY_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideStart", "url": "YAHOO.widget.DualSlider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp", "url": "YAHOO.widget.Slider.html#method_thumbMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "updateValue", "url": "YAHOO.widget.DualSlider.html#method_updateValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

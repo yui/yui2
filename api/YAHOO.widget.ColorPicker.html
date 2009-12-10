@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>colorpicker&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>colorpicker&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_colorpicker.html" title="colorpicker">colorpicker</a>
                  &gt; YAHOO.widget.ColorPicker 
@@ -655,6 +655,10 @@ the complete list to the constructor for the "txt" attribute.
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.AttributeProvider.html#property__configs">
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs" property="yui:name" title="_configs">_configs</a>
+                                        </span>
+                                    
                                 </code>
                             </div>
                         </div>
@@ -662,6 +666,14 @@ the complete list to the constructor for the "txt" attribute.
                             <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
                             <div class="content" rel="yui:properties">
                                 <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
+                                        </span>
                                     
                                 </code>
                             </div>
@@ -1937,6 +1949,9 @@ moves the sliders to the proper positions
                                 <h4>Methods inherited from <a href="YAHOO.util.Element.html" property="yui:name" title="YAHOO.util.Element">YAHOO.util.Element</a>:</h4>
                                 <div class="content" rel="yui:methods">
                                     <code>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method__setHTMLAttrConfig">                                        
+                                            <a class="private" href="YAHOO.util.Element.html#method__setHTMLAttrConfig" property="yui:name" title="_setHTMLAttrConfig">_setHTMLAttrConfig</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_addClass">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_addClass" property="yui:name" title="addClass">addClass</a><span class="">,</span>
                                             </span>
@@ -2022,6 +2037,9 @@ moves the sliders to the proper positions
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_get">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_get" property="yui:name" title="get">get</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig" property="yui:name" title="getAttributeConfig">getAttributeConfig</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys" property="yui:name" title="getAttributeKeys">getAttributeKeys</a><span class="">,</span>
                                             </span>
@@ -2030,6 +2048,9 @@ moves the sliders to the proper positions
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_register">                                        
                                             <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_register" property="yui:name" title="register">register</a><span class=" deprecated">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig" property="yui:name" title="resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetValue">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue" property="yui:name" title="resetValue">resetValue</a><span class="">,</span>
@@ -2078,6 +2099,886 @@ moves the sliders to the proper positions
                         <div class="section method details">
                             <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="" rel="yui:event" resource="#event_beforeBlueChange">
+                                    <h4>
+                                        <a name="event_beforeBlueChange">beforeBlueChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeBlueChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'blue' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeContainerChange">
+                                    <h4>
+                                        <a name="event_beforeContainerChange">beforeContainerChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeContainerChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'container' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeElementsChange">
+                                    <h4>
+                                        <a name="event_beforeElementsChange">beforeElementsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeElementsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'elements' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeGreenChange">
+                                    <h4>
+                                        <a name="event_beforeGreenChange">beforeGreenChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeGreenChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'green' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeHexChange">
+                                    <h4>
+                                        <a name="event_beforeHexChange">beforeHexChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeHexChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'hex' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeHueChange">
+                                    <h4>
+                                        <a name="event_beforeHueChange">beforeHueChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeHueChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'hue' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeIdsChange">
+                                    <h4>
+                                        <a name="event_beforeIdsChange">beforeIdsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeIdsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'ids' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeImagesChange">
+                                    <h4>
+                                        <a name="event_beforeImagesChange">beforeImagesChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeImagesChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'images' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforePickersizeChange">
+                                    <h4>
+                                        <a name="event_beforePickersizeChange">beforePickersizeChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforePickersizeChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'pickersize' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeRedChange">
+                                    <h4>
+                                        <a name="event_beforeRedChange">beforeRedChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeRedChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'red' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeSaturationChange">
+                                    <h4>
+                                        <a name="event_beforeSaturationChange">beforeSaturationChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeSaturationChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'saturation' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowcontrolsChange">
+                                    <h4>
+                                        <a name="event_beforeShowcontrolsChange">beforeShowcontrolsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowcontrolsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showcontrols' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowhexcontrolsChange">
+                                    <h4>
+                                        <a name="event_beforeShowhexcontrolsChange">beforeShowhexcontrolsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowhexcontrolsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showhexcontrols' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowhexsummaryChange">
+                                    <h4>
+                                        <a name="event_beforeShowhexsummaryChange">beforeShowhexsummaryChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowhexsummaryChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showhexsummary' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowhsvcontrolsChange">
+                                    <h4>
+                                        <a name="event_beforeShowhsvcontrolsChange">beforeShowhsvcontrolsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowhsvcontrolsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showhsvcontrols' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowrgbcontrolsChange">
+                                    <h4>
+                                        <a name="event_beforeShowrgbcontrolsChange">beforeShowrgbcontrolsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowrgbcontrolsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showrgbcontrols' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeShowwebsafeChange">
+                                    <h4>
+                                        <a name="event_beforeShowwebsafeChange">beforeShowwebsafeChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeShowwebsafeChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'showwebsafe' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeTxtChange">
+                                    <h4>
+                                        <a name="event_beforeTxtChange">beforeTxtChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeTxtChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'txt' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeValueChange">
+                                    <h4>
+                                        <a name="event_beforeValueChange">beforeValueChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeValueChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'value' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeWebsafeChange">
+                                    <h4>
+                                        <a name="event_beforeWebsafeChange">beforeWebsafeChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeWebsafeChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'websafe' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:event" resource="#event_blueChange">
                                     <h4>
                                         <a name="event_blueChange">blueChange</a></h4>
@@ -2099,7 +3000,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'blue' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'blue' changes.
                                         </div>
 
                                         <div class="description">
@@ -2109,9 +3010,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2143,7 +3044,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'container' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'container' changes.
                                         </div>
 
                                         <div class="description">
@@ -2153,9 +3054,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2187,7 +3088,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'elements' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'elements' changes.
                                         </div>
 
                                         <div class="description">
@@ -2197,9 +3098,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2231,7 +3132,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'green' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'green' changes.
                                         </div>
 
                                         <div class="description">
@@ -2241,9 +3142,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2275,7 +3176,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'hex' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'hex' changes.
                                         </div>
 
                                         <div class="description">
@@ -2285,9 +3186,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2319,7 +3220,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'hue' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'hue' changes.
                                         </div>
 
                                         <div class="description">
@@ -2329,9 +3230,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2363,7 +3264,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'ids' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'ids' changes.
                                         </div>
 
                                         <div class="description">
@@ -2373,9 +3274,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2407,7 +3308,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'images' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'images' changes.
                                         </div>
 
                                         <div class="description">
@@ -2417,9 +3318,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2451,7 +3352,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'pickersize' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'pickersize' changes.
                                         </div>
 
                                         <div class="description">
@@ -2461,9 +3362,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2495,7 +3396,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'red' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'red' changes.
                                         </div>
 
                                         <div class="description">
@@ -2505,9 +3406,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2539,7 +3440,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'saturation' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'saturation' changes.
                                         </div>
 
                                         <div class="description">
@@ -2549,9 +3450,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2583,7 +3484,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showcontrols' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showcontrols' changes.
                                         </div>
 
                                         <div class="description">
@@ -2593,9 +3494,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2627,7 +3528,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showhexcontrols' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showhexcontrols' changes.
                                         </div>
 
                                         <div class="description">
@@ -2637,9 +3538,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2671,7 +3572,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showhexsummary' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showhexsummary' changes.
                                         </div>
 
                                         <div class="description">
@@ -2681,9 +3582,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2715,7 +3616,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showhsvcontrols' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showhsvcontrols' changes.
                                         </div>
 
                                         <div class="description">
@@ -2725,9 +3626,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2759,7 +3660,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showrgbcontrols' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showrgbcontrols' changes.
                                         </div>
 
                                         <div class="description">
@@ -2769,9 +3670,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2803,7 +3704,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'showwebsafe' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'showwebsafe' changes.
                                         </div>
 
                                         <div class="description">
@@ -2813,9 +3714,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2847,7 +3748,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'txt' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'txt' changes.
                                         </div>
 
                                         <div class="description">
@@ -2857,9 +3758,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2891,7 +3792,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'value' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'value' changes.
                                         </div>
 
                                         <div class="description">
@@ -2901,9 +3802,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2935,7 +3836,7 @@ moves the sliders to the proper positions
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'websafe' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'websafe' changes.
                                         </div>
 
                                         <div class="description">
@@ -2945,9 +3846,9 @@ moves the sliders to the proper positions
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2975,6 +3876,9 @@ moves the sliders to the proper positions
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeAppendTo">
                                         <a class="" href="YAHOO.util.Element.html#event_beforeAppendTo" property="yui:name" title="beforeAppendTo">beforeAppendTo</a><span class="">,</span>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeElementChange">
+                                        <a class="" href="YAHOO.util.Element.html#event_beforeElementChange" property="yui:name" title="beforeElementChange">beforeElementChange</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_contentReady">
                                         <a class="" href="YAHOO.util.Element.html#event_contentReady" property="yui:name" title="contentReady">contentReady</a><span class="">,</span>
@@ -3469,6 +4373,26 @@ is this.TXT
                     <div id="eventsList" class="module">
                         <h4>Events</h4>
                         <ul class="content">        
+                                <li class=""><a href="#event_beforeBlueChange" title="beforeBlueChange">beforeBlueChange</a></li>
+                                <li class=""><a href="#event_beforeContainerChange" title="beforeContainerChange">beforeContainerChange</a></li>
+                                <li class=""><a href="#event_beforeElementsChange" title="beforeElementsChange">beforeElementsChange</a></li>
+                                <li class=""><a href="#event_beforeGreenChange" title="beforeGreenChange">beforeGreenChange</a></li>
+                                <li class=""><a href="#event_beforeHexChange" title="beforeHexChange">beforeHexChange</a></li>
+                                <li class=""><a href="#event_beforeHueChange" title="beforeHueChange">beforeHueChange</a></li>
+                                <li class=""><a href="#event_beforeIdsChange" title="beforeIdsChange">beforeIdsChange</a></li>
+                                <li class=""><a href="#event_beforeImagesChange" title="beforeImagesChange">beforeImagesChange</a></li>
+                                <li class=""><a href="#event_beforePickersizeChange" title="beforePickersizeChange">beforePickersizeChange</a></li>
+                                <li class=""><a href="#event_beforeRedChange" title="beforeRedChange">beforeRedChange</a></li>
+                                <li class=""><a href="#event_beforeSaturationChange" title="beforeSaturationChange">beforeSaturationChange</a></li>
+                                <li class=""><a href="#event_beforeShowcontrolsChange" title="beforeShowcontrolsChange">beforeShowcontrolsChange</a></li>
+                                <li class=""><a href="#event_beforeShowhexcontrolsChange" title="beforeShowhexcontrolsChange">beforeShowhexcontrolsChange</a></li>
+                                <li class=""><a href="#event_beforeShowhexsummaryChange" title="beforeShowhexsummaryChange">beforeShowhexsummaryChange</a></li>
+                                <li class=""><a href="#event_beforeShowhsvcontrolsChange" title="beforeShowhsvcontrolsChange">beforeShowhsvcontrolsChange</a></li>
+                                <li class=""><a href="#event_beforeShowrgbcontrolsChange" title="beforeShowrgbcontrolsChange">beforeShowrgbcontrolsChange</a></li>
+                                <li class=""><a href="#event_beforeShowwebsafeChange" title="beforeShowwebsafeChange">beforeShowwebsafeChange</a></li>
+                                <li class=""><a href="#event_beforeTxtChange" title="beforeTxtChange">beforeTxtChange</a></li>
+                                <li class=""><a href="#event_beforeValueChange" title="beforeValueChange">beforeValueChange</a></li>
+                                <li class=""><a href="#event_beforeWebsafeChange" title="beforeWebsafeChange">beforeWebsafeChange</a></li>
                                 <li class=""><a href="#event_blueChange" title="blueChange">blueChange</a></li>
                                 <li class=""><a href="#event_containerChange" title="containerChange">containerChange</a></li>
                                 <li class=""><a href="#event_elementsChange" title="elementsChange">elementsChange</a></li>
@@ -3527,7 +4451,7 @@ is this.TXT
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_bindUI", "url": "YAHOO.widget.ColorPicker.html#method__bindUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blue", "url": "YAHOO.widget.ColorPicker.html#config_blue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blueChange", "url": "YAHOO.widget.ColorPicker.html#event_blueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "container", "url": "YAHOO.widget.ColorPicker.html#config_container", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "containerChange", "url": "YAHOO.widget.ColorPicker.html#event_containerChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_createHostElement", "url": "YAHOO.widget.ColorPicker.html#method__createHostElement", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "dec2hex", "url": "YAHOO.util.Color.html#method_dec2hex", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "DEFAULT", "url": "YAHOO.widget.ColorPicker.html#property_DEFAULT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elements", "url": "YAHOO.widget.ColorPicker.html#config_elements", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elementsChange", "url": "YAHOO.widget.ColorPicker.html#event_elementsChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getCommand", "url": "YAHOO.widget.ColorPicker.html#method__getCommand", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "getElement", "url": "YAHOO.widget.ColorPicker.html#method_getElement", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getH", "url": "YAHOO.widget.ColorPicker.html#method__getH", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getS", "url": "YAHOO.widget.ColorPicker.html#method__getS", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getV", "url": "YAHOO.widget.ColorPicker.html#method__getV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getValuesFromSliders", "url": "YAHOO.widget.ColorPicker.html#method__getValuesFromSliders", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "green", "url": "YAHOO.widget.ColorPicker.html#config_green", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "greenChange", "url": "YAHOO.widget.ColorPicker.html#event_greenChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hex", "url": "YAHOO.widget.ColorPicker.html#config_hex", "type": "config"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2dec", "url": "YAHOO.util.Color.html#method_hex2dec", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2rgb", "url": "YAHOO.util.Color.html#method_hex2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hexChange", "url": "YAHOO.widget.ColorPicker.html#event_hexChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__hexFieldKeypress", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexOnly", "url": "YAHOO.widget.ColorPicker.html#method__hexOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hideShowEl", "url": "YAHOO.widget.ColorPicker.html#method__hideShowEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hsv2rgb", "url": "YAHOO.util.Color.html#method_hsv2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hue", "url": "YAHOO.widget.ColorPicker.html#config_hue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueChange", "url": "YAHOO.widget.ColorPicker.html#event_hueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueSlider", "url": "YAHOO.widget.ColorPicker.html#property_hueSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID", "url": "YAHOO.widget.ColorPicker.html#property_ID", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B", "url": "YAHOO.widget.ColorPicker.html#property_ID.B", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.B_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS_LABEL", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS_LABEL", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G", "url": "YAHOO.widget.ColorPicker.html#property_ID.G", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.G_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.H", "url": "YAHOO.widget.ColorPicker.html#property_ID.H", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_SUMMARY", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_SUMMARY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HSV_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HSV_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R", "url": "YAHOO.widget.ColorPicker.html#property_ID.R", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.RGB_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.RGB_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.R_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.S", "url": "YAHOO.widget.ColorPicker.html#property_ID.S", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ids", "url": "YAHOO.widget.ColorPicker.html#config_ids", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "idsChange", "url": "YAHOO.widget.ColorPicker.html#event_idsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.V", "url": "YAHOO.widget.ColorPicker.html#property_ID.V", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.WEBSAFE_SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.WEBSAFE_SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "IMAGE", "url": "YAHOO.widget.ColorPicker.html#property_IMAGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "images", "url": "YAHOO.widget.ColorPicker.html#config_images", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "imagesChange", "url": "YAHOO.widget.ColorPicker.html#event_imagesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initAttributes", "url": "YAHOO.widget.ColorPicker.html#method_initAttributes", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initElements", "url": "YAHOO.widget.ColorPicker.html#method__initElements", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initPicker", "url": "YAHOO.widget.ColorPicker.html#method_initPicker", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initSliders", "url": "YAHOO.widget.ColorPicker.html#method__initSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_numbersOnly", "url": "YAHOO.widget.ColorPicker.html#method__numbersOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onHueSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onHueSliderChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onPickerSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onPickerSliderChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "OPT", "url": "YAHOO.widget.ColorPicker.html#property_OPT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersize", "url": "YAHOO.widget.ColorPicker.html#config_pickersize", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersizeChange", "url": "YAHOO.widget.ColorPicker.html#event_pickersizeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickerSlider", "url": "YAHOO.widget.ColorPicker.html#property_pickerSlider", "type": "property"}, {"access": "", "host": "YAHOO.util.Color", "name": "real2dec", "url": "YAHOO.util.Color.html#method_real2dec", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "red", "url": "YAHOO.widget.ColorPicker.html#config_red", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "redChange", "url": "YAHOO.widget.ColorPicker.html#event_redChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hex", "url": "YAHOO.util.Color.html#method_rgb2hex", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hsv", "url": "YAHOO.util.Color.html#method_rgb2hsv", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_rgbFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__rgbFieldKeypress", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturation", "url": "YAHOO.widget.ColorPicker.html#config_saturation", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturationChange", "url": "YAHOO.widget.ColorPicker.html#event_saturationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "setValue", "url": "YAHOO.widget.ColorPicker.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhexcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummary", "url": "YAHOO.widget.ColorPicker.html#config_showhexsummary", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummaryChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexsummaryChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhsvcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhsvcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showrgbcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showrgbcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafe", "url": "YAHOO.widget.ColorPicker.html#config_showwebsafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_showwebsafeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "skipAnim", "url": "YAHOO.widget.ColorPicker.html#property_skipAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "syncUI", "url": "YAHOO.widget.ColorPicker.html#method_syncUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "TXT", "url": "YAHOO.widget.ColorPicker.html#property_TXT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txt", "url": "YAHOO.widget.ColorPicker.html#config_txt", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txtChange", "url": "YAHOO.widget.ColorPicker.html#event_txtChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateFormFields", "url": "YAHOO.widget.ColorPicker.html#method__updateFormFields", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHex", "url": "YAHOO.widget.ColorPicker.html#method__updateHex", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHueSlider", "url": "YAHOO.widget.ColorPicker.html#method__updateHueSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updatePickerSlider", "url": "YAHOO.widget.ColorPicker.html#method__updatePickerSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGB", "url": "YAHOO.widget.ColorPicker.html#method__updateRGB", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGBFromHSV", "url": "YAHOO.widget.ColorPicker.html#method__updateRGBFromHSV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSliders", "url": "YAHOO.widget.ColorPicker.html#method__updateSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSwatch", "url": "YAHOO.widget.ColorPicker.html#method__updateSwatch", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_useFieldValue", "url": "YAHOO.widget.ColorPicker.html#method__useFieldValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "value", "url": "YAHOO.widget.ColorPicker.html#config_value", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "valueChange", "url": "YAHOO.widget.ColorPicker.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "websafe", "url": "YAHOO.util.Color.html#method_websafe", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafe", "url": "YAHOO.widget.ColorPicker.html#config_websafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafeChange", "url": "YAHOO.widget.ColorPicker.html#event_websafeChange", "type": "event"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeBlueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeBlueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeContainerChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeContainerChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeElementsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeElementsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeGreenChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeGreenChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeHexChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeHexChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeHueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeHueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeIdsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeIdsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeImagesChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeImagesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforePickersizeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforePickersizeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeRedChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeRedChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeSaturationChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeSaturationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhexcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhexcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhexsummaryChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhexsummaryChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhsvcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhsvcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowrgbcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowrgbcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowwebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowwebsafeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeTxtChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeTxtChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeValueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeWebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeWebsafeChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_bindUI", "url": "YAHOO.widget.ColorPicker.html#method__bindUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blue", "url": "YAHOO.widget.ColorPicker.html#config_blue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blueChange", "url": "YAHOO.widget.ColorPicker.html#event_blueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "container", "url": "YAHOO.widget.ColorPicker.html#config_container", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "containerChange", "url": "YAHOO.widget.ColorPicker.html#event_containerChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_createHostElement", "url": "YAHOO.widget.ColorPicker.html#method__createHostElement", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "dec2hex", "url": "YAHOO.util.Color.html#method_dec2hex", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "DEFAULT", "url": "YAHOO.widget.ColorPicker.html#property_DEFAULT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elements", "url": "YAHOO.widget.ColorPicker.html#config_elements", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elementsChange", "url": "YAHOO.widget.ColorPicker.html#event_elementsChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getCommand", "url": "YAHOO.widget.ColorPicker.html#method__getCommand", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "getElement", "url": "YAHOO.widget.ColorPicker.html#method_getElement", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getH", "url": "YAHOO.widget.ColorPicker.html#method__getH", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getS", "url": "YAHOO.widget.ColorPicker.html#method__getS", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getV", "url": "YAHOO.widget.ColorPicker.html#method__getV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getValuesFromSliders", "url": "YAHOO.widget.ColorPicker.html#method__getValuesFromSliders", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "green", "url": "YAHOO.widget.ColorPicker.html#config_green", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "greenChange", "url": "YAHOO.widget.ColorPicker.html#event_greenChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hex", "url": "YAHOO.widget.ColorPicker.html#config_hex", "type": "config"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2dec", "url": "YAHOO.util.Color.html#method_hex2dec", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2rgb", "url": "YAHOO.util.Color.html#method_hex2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hexChange", "url": "YAHOO.widget.ColorPicker.html#event_hexChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__hexFieldKeypress", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexOnly", "url": "YAHOO.widget.ColorPicker.html#method__hexOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hideShowEl", "url": "YAHOO.widget.ColorPicker.html#method__hideShowEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hsv2rgb", "url": "YAHOO.util.Color.html#method_hsv2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hue", "url": "YAHOO.widget.ColorPicker.html#config_hue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueChange", "url": "YAHOO.widget.ColorPicker.html#event_hueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueSlider", "url": "YAHOO.widget.ColorPicker.html#property_hueSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID", "url": "YAHOO.widget.ColorPicker.html#property_ID", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B", "url": "YAHOO.widget.ColorPicker.html#property_ID.B", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.B_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS_LABEL", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS_LABEL", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G", "url": "YAHOO.widget.ColorPicker.html#property_ID.G", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.G_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.H", "url": "YAHOO.widget.ColorPicker.html#property_ID.H", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_SUMMARY", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_SUMMARY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HSV_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HSV_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R", "url": "YAHOO.widget.ColorPicker.html#property_ID.R", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.RGB_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.RGB_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.R_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.S", "url": "YAHOO.widget.ColorPicker.html#property_ID.S", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ids", "url": "YAHOO.widget.ColorPicker.html#config_ids", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "idsChange", "url": "YAHOO.widget.ColorPicker.html#event_idsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.V", "url": "YAHOO.widget.ColorPicker.html#property_ID.V", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.WEBSAFE_SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.WEBSAFE_SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "IMAGE", "url": "YAHOO.widget.ColorPicker.html#property_IMAGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "images", "url": "YAHOO.widget.ColorPicker.html#config_images", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "imagesChange", "url": "YAHOO.widget.ColorPicker.html#event_imagesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initAttributes", "url": "YAHOO.widget.ColorPicker.html#method_initAttributes", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initElements", "url": "YAHOO.widget.ColorPicker.html#method__initElements", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initPicker", "url": "YAHOO.widget.ColorPicker.html#method_initPicker", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initSliders", "url": "YAHOO.widget.ColorPicker.html#method__initSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_numbersOnly", "url": "YAHOO.widget.ColorPicker.html#method__numbersOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onHueSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onHueSliderChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onPickerSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onPickerSliderChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "OPT", "url": "YAHOO.widget.ColorPicker.html#property_OPT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersize", "url": "YAHOO.widget.ColorPicker.html#config_pickersize", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersizeChange", "url": "YAHOO.widget.ColorPicker.html#event_pickersizeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickerSlider", "url": "YAHOO.widget.ColorPicker.html#property_pickerSlider", "type": "property"}, {"access": "", "host": "YAHOO.util.Color", "name": "real2dec", "url": "YAHOO.util.Color.html#method_real2dec", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "red", "url": "YAHOO.widget.ColorPicker.html#config_red", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "redChange", "url": "YAHOO.widget.ColorPicker.html#event_redChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hex", "url": "YAHOO.util.Color.html#method_rgb2hex", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hsv", "url": "YAHOO.util.Color.html#method_rgb2hsv", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_rgbFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__rgbFieldKeypress", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturation", "url": "YAHOO.widget.ColorPicker.html#config_saturation", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturationChange", "url": "YAHOO.widget.ColorPicker.html#event_saturationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "setValue", "url": "YAHOO.widget.ColorPicker.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhexcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummary", "url": "YAHOO.widget.ColorPicker.html#config_showhexsummary", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummaryChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexsummaryChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhsvcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhsvcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showrgbcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showrgbcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafe", "url": "YAHOO.widget.ColorPicker.html#config_showwebsafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_showwebsafeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "skipAnim", "url": "YAHOO.widget.ColorPicker.html#property_skipAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "syncUI", "url": "YAHOO.widget.ColorPicker.html#method_syncUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "TXT", "url": "YAHOO.widget.ColorPicker.html#property_TXT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txt", "url": "YAHOO.widget.ColorPicker.html#config_txt", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txtChange", "url": "YAHOO.widget.ColorPicker.html#event_txtChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateFormFields", "url": "YAHOO.widget.ColorPicker.html#method__updateFormFields", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHex", "url": "YAHOO.widget.ColorPicker.html#method__updateHex", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHueSlider", "url": "YAHOO.widget.ColorPicker.html#method__updateHueSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updatePickerSlider", "url": "YAHOO.widget.ColorPicker.html#method__updatePickerSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGB", "url": "YAHOO.widget.ColorPicker.html#method__updateRGB", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGBFromHSV", "url": "YAHOO.widget.ColorPicker.html#method__updateRGBFromHSV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSliders", "url": "YAHOO.widget.ColorPicker.html#method__updateSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSwatch", "url": "YAHOO.widget.ColorPicker.html#method__updateSwatch", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_useFieldValue", "url": "YAHOO.widget.ColorPicker.html#method__useFieldValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "value", "url": "YAHOO.widget.ColorPicker.html#config_value", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "valueChange", "url": "YAHOO.widget.ColorPicker.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "websafe", "url": "YAHOO.util.Color.html#method_websafe", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafe", "url": "YAHOO.widget.ColorPicker.html#config_websafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafeChange", "url": "YAHOO.widget.ColorPicker.html#event_websafeChange", "type": "event"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

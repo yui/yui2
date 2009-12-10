@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>paginator&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>paginator&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_paginator.html" title="paginator">paginator</a>
                  &gt; YAHOO.widget.Paginator.ui.NextPageLink 
@@ -93,6 +93,56 @@
                     </div>
                     
                     <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private" rel="yui:property" resource="#property_current">
+                                    <h4><a name="property_current" property="yui:name">current</a>
+                                        - <code>private <span property="yui:type">HTMLElement</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Currently placed HTMLElement node
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_link">
+                                    <h4><a name="property_link" property="yui:name">link</a>
+                                        - <code>private <span property="yui:type">HTMLElement</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Link node
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_span">
+                                    <h4><a name="property_span" property="yui:name">span</a>
+                                        - <code>private <span property="yui:type">HTMLElement</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Span node (inactive link)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -100,6 +150,36 @@
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method_destroy">
+                                    <h4>
+                                        <a name="method_destroy">destroy</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Removes the link/span node and clears event listeners
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_init">
                                     <h4>
                                         <a name="method_init">init</a></h4>
@@ -287,6 +367,94 @@ pagination state.
                         <div class="section method details">
                             <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="" rel="yui:event" resource="#event_beforeNextPageLinkClassChange">
+                                    <h4>
+                                        <a name="event_beforeNextPageLinkClassChange">beforeNextPageLinkClassChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeNextPageLinkClassChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'nextPageLinkClass' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeNextPageLinkLabelChange">
+                                    <h4>
+                                        <a name="event_beforeNextPageLinkLabelChange">beforeNextPageLinkLabelChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeNextPageLinkLabelChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'nextPageLinkLabel' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:event" resource="#event_nextPageLinkClassChange">
                                     <h4>
                                         <a name="event_nextPageLinkClassChange">nextPageLinkClassChange</a></h4>
@@ -308,7 +476,7 @@ pagination state.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'nextPageLinkClass' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'nextPageLinkClass' changes.
                                         </div>
 
                                         <div class="description">
@@ -318,9 +486,9 @@ pagination state.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -352,7 +520,7 @@ pagination state.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'nextPageLinkLabel' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'nextPageLinkLabel' changes.
                                         </div>
 
                                         <div class="description">
@@ -362,9 +530,9 @@ pagination state.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -514,10 +682,19 @@ pagination state.
                         </ul>
                     </div>
 
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#property_current" title="current">current</a></li>
+                                <li class="private"><a href="#property_link" title="link">link</a></li>
+                                <li class="private"><a href="#property_span" title="span">span</a></li>
+                        </ul>
+                    </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method_destroy" title="destroy">destroy</a></li>
                                 <li class=""><a href="#method_init" title="init">init</a></li>
                                 <li class=""><a href="#method_onClick" title="onClick">onClick</a></li>
                                 <li class=""><a href="#method_render" title="render">render</a></li>
@@ -528,6 +705,8 @@ pagination state.
                     <div id="eventsList" class="module">
                         <h4>Events</h4>
                         <ul class="content">        
+                                <li class=""><a href="#event_beforeNextPageLinkClassChange" title="beforeNextPageLinkClassChange">beforeNextPageLinkClassChange</a></li>
+                                <li class=""><a href="#event_beforeNextPageLinkLabelChange" title="beforeNextPageLinkLabelChange">beforeNextPageLinkLabelChange</a></li>
                                 <li class=""><a href="#event_nextPageLinkClassChange" title="nextPageLinkClassChange">nextPageLinkClassChange</a></li>
                                 <li class=""><a href="#event_nextPageLinkLabelChange" title="nextPageLinkLabelChange">nextPageLinkLabelChange</a></li>
                         </ul>
@@ -550,7 +729,7 @@ pagination state.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClass", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "init", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClass", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClass", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClass", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplate", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenarator", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportValueGenarator", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportValueGenaratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "render", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "sprintf", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_sprintf", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "update", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_update", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportValueGenaratorChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClass", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "init", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClass", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkLabelChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "na", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_na", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClass", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClass", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplate", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenarator", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportValueGenarator", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportValueGenaratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "render", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "span", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_span", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "sprintf", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_sprintf", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "update", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_update", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

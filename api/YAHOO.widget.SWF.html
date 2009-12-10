@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>SWF Utility&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>SWF Utility&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_swf.html" title="swf">swf</a>
                  &gt; YAHOO.widget.SWF 
@@ -132,6 +132,21 @@ to be passed to the SWF.</span>
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property__instances">
+                                    <h4><a name="property__instances" property="yui:name">_instances</a>
+                                        - <code>private <span property="yui:type">Object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The static collection of all instances of the SWFs on the page.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -153,6 +168,10 @@ to be passed to the SWF.</span>
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
+                                        <span rel="yui:property" resource="YAHOO.util.AttributeProvider.html#property__configs">
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs" property="yui:name" title="_configs">_configs</a>
+                                        </span>
+                                    
                                 </code>
                             </div>
                         </div>
@@ -160,6 +179,14 @@ to be passed to the SWF.</span>
                             <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
                             <div class="content" rel="yui:properties">
                                 <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
+                                        </span>
                                     
                                 </code>
                             </div>
@@ -226,6 +253,61 @@ ExternalInterface.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_eventHandler">
+                                    <h4>
+                                        <a name="method_eventHandler">eventHandler</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">eventHandler</strong>
+                                           (
+                                                
+                                                        
+                                                         swfid
+                                                    
+                                                
+                                                        , 
+                                                         event
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Handles an event coming from within the SWF and delegate it
+to a specific instance of SWF.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">swfid</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  the id of the SWF dispatching the event</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">event</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  the event being transmitted.</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_toString">
                                     <h4>
                                         <a name="method_toString">toString</a></h4>
@@ -271,6 +353,9 @@ ExternalInterface.
                                 <h4>Methods inherited from <a href="YAHOO.util.Element.html" property="yui:name" title="YAHOO.util.Element">YAHOO.util.Element</a>:</h4>
                                 <div class="content" rel="yui:methods">
                                     <code>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method__setHTMLAttrConfig">                                        
+                                            <a class="private" href="YAHOO.util.Element.html#method__setHTMLAttrConfig" property="yui:name" title="_setHTMLAttrConfig">_setHTMLAttrConfig</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_addClass">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_addClass" property="yui:name" title="addClass">addClass</a><span class="">,</span>
                                             </span>
@@ -356,6 +441,9 @@ ExternalInterface.
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_get">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_get" property="yui:name" title="get">get</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig" property="yui:name" title="getAttributeConfig">getAttributeConfig</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys" property="yui:name" title="getAttributeKeys">getAttributeKeys</a><span class="">,</span>
                                             </span>
@@ -364,6 +452,9 @@ ExternalInterface.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_register">                                        
                                             <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_register" property="yui:name" title="register">register</a><span class=" deprecated">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">                                        
+                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig" property="yui:name" title="resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetValue">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue" property="yui:name" title="resetValue">resetValue</a><span class="">,</span>
@@ -424,6 +515,9 @@ ExternalInterface.
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeAppendTo">
                                         <a class="" href="YAHOO.util.Element.html#event_beforeAppendTo" property="yui:name" title="beforeAppendTo">beforeAppendTo</a><span class="">,</span>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeElementChange">
+                                        <a class="" href="YAHOO.util.Element.html#event_beforeElementChange" property="yui:name" title="beforeElementChange">beforeElementChange</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_contentReady">
                                         <a class="" href="YAHOO.util.Element.html#event_contentReady" property="yui:name" title="contentReady">contentReady</a><span class="">,</span>
@@ -532,6 +626,7 @@ ExternalInterface.
                         <h4>Properties</h4>
                         <ul class="content">        
                                 <li class=""><a href="#property__id" title="_id">_id</a></li>
+                                <li class="private"><a href="#property__instances" title="_instances">_instances</a></li>
                         </ul>
                     </div>
 
@@ -539,6 +634,7 @@ ExternalInterface.
                         <h4>Methods</h4>
                         <ul class="content">        
                                 <li class=""><a href="#method_callSWF" title="callSWF">callSWF</a></li>
+                                <li class="private"><a href="#method_eventHandler" title="eventHandler">eventHandler</a></li>
                                 <li class=""><a href="#method_toString" title="toString">toString</a></li>
                         </ul>
                     </div>
@@ -554,7 +650,7 @@ ExternalInterface.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "toString", "url": "YAHOO.widget.SWF.html#method_toString", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "eventHandler", "url": "YAHOO.widget.SWF.html#method_eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "_instances", "url": "YAHOO.widget.SWF.html#property__instances", "type": "property"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "toString", "url": "YAHOO.widget.SWF.html#method_toString", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>paginator&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>paginator&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_paginator.html" title="paginator">paginator</a>
                  &gt; YAHOO.widget.Paginator 
@@ -118,6 +118,22 @@ configuration.</span>
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property__containers">
+                                    <h4><a name="property__containers" property="yui:name">_containers</a>
+                                        - <code>private <span property="yui:type">Array(HTMLElement)</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Array of nodes in which to render pagination controls.  This is set via
+the &quot;containers&quot; attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="protected" rel="yui:property" resource="#property__pageChanged">
                                     <h4><a name="property__pageChanged" property="yui:name">_pageChanged</a>
                                         - <code>protected <span property="yui:type">boolean</span></code>
@@ -141,6 +157,36 @@ configuration.</span>
                                         <div class="description" property="yui:description">
                                             Temporary state cache used by setState to keep track of the previous
 state for eventual pageChange event firing
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_Paginator.id">
+                                    <h4><a name="property_Paginator.id" property="yui:name">Paginator.id</a>
+                                        - <code>private static <span property="yui:type">number</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Incrementing index used to give instances unique ids.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_Paginator.ID_BASE">
+                                    <h4><a name="property_Paginator.ID_BASE" property="yui:name">Paginator.ID_BASE</a>
+                                        - <code>private static <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Base of id strings used for ui components.
                                         </div>
                                     </div>
      
@@ -982,6 +1028,97 @@ YAHOO.widget.Paginator.VALUE_UNLIMITED.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_initConfig">
+                                    <h4>
+                                        <a name="method_initConfig">initConfig</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">initConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Initialize the Paginator's attributes (see YAHOO.util.Element class
+AttributeProvider).
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_initEvents">
+                                    <h4>
+                                        <a name="method_initEvents">initEvents</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">initEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Initialize this instance's CustomEvents.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_initUIComponents">
+                                    <h4>
+                                        <a name="method_initUIComponents">initUIComponents</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">initUIComponents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Initialize registered ui components onto this instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_Paginator.isNumeric">
                                     <h4>
                                         <a name="method_Paginator.isNumeric">Paginator.isNumeric</a></h4>
@@ -1503,7 +1640,7 @@ there is more than one page worth of data or alwaysVisible is turned on.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'alwaysVisible' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'alwaysVisible' changes.
                                         </div>
 
                                         <div class="description">
@@ -1513,9 +1650,141 @@ there is more than one page worth of data or alwaysVisible is turned on.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeAlwaysVisibleChange">
+                                    <h4>
+                                        <a name="event_beforeAlwaysVisibleChange">beforeAlwaysVisibleChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeAlwaysVisibleChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'alwaysVisible' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeContainerClassChange">
+                                    <h4>
+                                        <a name="event_beforeContainerClassChange">beforeContainerClassChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeContainerClassChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'containerClass' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeContainersChange">
+                                    <h4>
+                                        <a name="event_beforeContainersChange">beforeContainersChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeContainersChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'containers' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1548,6 +1817,358 @@ there is more than one page worth of data or alwaysVisible is turned on.
                                         <div class="description">
 
 
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeIdChange">
+                                    <h4>
+                                        <a name="event_beforeIdChange">beforeIdChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeIdChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'id' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeInitialPageChange">
+                                    <h4>
+                                        <a name="event_beforeInitialPageChange">beforeInitialPageChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeInitialPageChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'initialPage' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeRecordOffsetChange">
+                                    <h4>
+                                        <a name="event_beforeRecordOffsetChange">beforeRecordOffsetChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeRecordOffsetChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'recordOffset' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeRenderedChange">
+                                    <h4>
+                                        <a name="event_beforeRenderedChange">beforeRenderedChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeRenderedChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'rendered' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeRowsPerPageChange">
+                                    <h4>
+                                        <a name="event_beforeRowsPerPageChange">beforeRowsPerPageChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeRowsPerPageChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'rowsPerPage' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeTemplateChange">
+                                    <h4>
+                                        <a name="event_beforeTemplateChange">beforeTemplateChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeTemplateChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'template' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeTotalRecordsChange">
+                                    <h4>
+                                        <a name="event_beforeTotalRecordsChange">beforeTotalRecordsChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeTotalRecordsChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'totalRecords' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_beforeUpdateOnChangeChange">
+                                    <h4>
+                                        <a name="event_beforeUpdateOnChangeChange">beforeUpdateOnChangeChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeUpdateOnChangeChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'updateOnChange' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
 
 
                                         </div>
@@ -1618,7 +2239,7 @@ The proposed state object will contain the following keys:
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'containerClass' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'containerClass' changes.
                                         </div>
 
                                         <div class="description">
@@ -1628,9 +2249,9 @@ The proposed state object will contain the following keys:
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1662,7 +2283,7 @@ The proposed state object will contain the following keys:
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'containers' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'containers' changes.
                                         </div>
 
                                         <div class="description">
@@ -1672,9 +2293,9 @@ The proposed state object will contain the following keys:
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1735,7 +2356,7 @@ The proposed state object will contain the following keys:
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'id' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'id' changes.
                                         </div>
 
                                         <div class="description">
@@ -1745,9 +2366,9 @@ The proposed state object will contain the following keys:
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1779,7 +2400,7 @@ The proposed state object will contain the following keys:
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'initialPage' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'initialPage' changes.
                                         </div>
 
                                         <div class="description">
@@ -1789,9 +2410,9 @@ The proposed state object will contain the following keys:
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1853,7 +2474,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'recordOffset' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'recordOffset' changes.
                                         </div>
 
                                         <div class="description">
@@ -1863,9 +2484,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1958,7 +2579,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'rendered' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'rendered' changes.
                                         </div>
 
                                         <div class="description">
@@ -1968,9 +2589,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2002,7 +2623,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'rowsPerPage' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'rowsPerPage' changes.
                                         </div>
 
                                         <div class="description">
@@ -2012,9 +2633,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2046,7 +2667,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'template' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'template' changes.
                                         </div>
 
                                         <div class="description">
@@ -2056,9 +2677,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2090,7 +2711,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'totalRecords' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'totalRecords' changes.
                                         </div>
 
                                         <div class="description">
@@ -2100,9 +2721,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2134,7 +2755,7 @@ current page changing.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'updateOnChange' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
+                                            Fires when the value for the configuration attribute 'updateOnChange' changes.
                                         </div>
 
                                         <div class="description">
@@ -2144,9 +2765,9 @@ current page changing.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2453,8 +3074,11 @@ new values in the paginator to trigger repaint.
                         <h4>Properties</h4>
                         <ul class="content">        
                                 <li class="protected"><a href="#property__batch" title="_batch">_batch</a></li>
+                                <li class="private"><a href="#property__containers" title="_containers">_containers</a></li>
                                 <li class="protected"><a href="#property__pageChanged" title="_pageChanged">_pageChanged</a></li>
                                 <li class="protected"><a href="#property__state" title="_state">_state</a></li>
+                                <li class="private"><a href="#property_Paginator.id" title="Paginator.id">Paginator.id</a></li>
+                                <li class="private"><a href="#property_Paginator.ID_BASE" title="Paginator.ID_BASE">Paginator.ID_BASE</a></li>
                                 <li class=""><a href="#property_Paginator.TEMPLATE_DEFAULT" title="Paginator.TEMPLATE_DEFAULT">Paginator.TEMPLATE_DEFAULT</a></li>
                                 <li class=""><a href="#property_Paginator.TEMPLATE_ROWS_PER_PAGE" title="Paginator.TEMPLATE_ROWS_PER_PAGE">Paginator.TEMPLATE_ROWS_PER_PAGE</a></li>
                                 <li class=""><a href="#property_Paginator.ui" title="Paginator.ui">Paginator.ui</a></li>
@@ -2484,6 +3108,9 @@ new values in the paginator to trigger repaint.
                                 <li class=""><a href="#method_hasNextPage" title="hasNextPage">hasNextPage</a></li>
                                 <li class=""><a href="#method_hasPage" title="hasPage">hasPage</a></li>
                                 <li class=""><a href="#method_hasPreviousPage" title="hasPreviousPage">hasPreviousPage</a></li>
+                                <li class="private"><a href="#method_initConfig" title="initConfig">initConfig</a></li>
+                                <li class="private"><a href="#method_initEvents" title="initEvents">initEvents</a></li>
+                                <li class="private"><a href="#method_initUIComponents" title="initUIComponents">initUIComponents</a></li>
                                 <li class=""><a href="#method_Paginator.isNumeric" title="Paginator.isNumeric">Paginator.isNumeric</a></li>
                                 <li class=""><a href="#method_Paginator.toNumber" title="Paginator.toNumber">Paginator.toNumber</a></li>
                                 <li class=""><a href="#method_render" title="render">render</a></li>
@@ -2501,7 +3128,18 @@ new values in the paginator to trigger repaint.
                         <h4>Events</h4>
                         <ul class="content">        
                                 <li class=""><a href="#event_alwaysVisibleChange" title="alwaysVisibleChange">alwaysVisibleChange</a></li>
+                                <li class=""><a href="#event_beforeAlwaysVisibleChange" title="beforeAlwaysVisibleChange">beforeAlwaysVisibleChange</a></li>
+                                <li class=""><a href="#event_beforeContainerClassChange" title="beforeContainerClassChange">beforeContainerClassChange</a></li>
+                                <li class=""><a href="#event_beforeContainersChange" title="beforeContainersChange">beforeContainersChange</a></li>
                                 <li class=""><a href="#event_beforeDestroy" title="beforeDestroy">beforeDestroy</a></li>
+                                <li class=""><a href="#event_beforeIdChange" title="beforeIdChange">beforeIdChange</a></li>
+                                <li class=""><a href="#event_beforeInitialPageChange" title="beforeInitialPageChange">beforeInitialPageChange</a></li>
+                                <li class=""><a href="#event_beforeRecordOffsetChange" title="beforeRecordOffsetChange">beforeRecordOffsetChange</a></li>
+                                <li class=""><a href="#event_beforeRenderedChange" title="beforeRenderedChange">beforeRenderedChange</a></li>
+                                <li class=""><a href="#event_beforeRowsPerPageChange" title="beforeRowsPerPageChange">beforeRowsPerPageChange</a></li>
+                                <li class=""><a href="#event_beforeTemplateChange" title="beforeTemplateChange">beforeTemplateChange</a></li>
+                                <li class=""><a href="#event_beforeTotalRecordsChange" title="beforeTotalRecordsChange">beforeTotalRecordsChange</a></li>
+                                <li class=""><a href="#event_beforeUpdateOnChangeChange" title="beforeUpdateOnChangeChange">beforeUpdateOnChangeChange</a></li>
                                 <li class=""><a href="#event_changeRequest" title="changeRequest">changeRequest</a></li>
                                 <li class=""><a href="#event_containerClassChange" title="containerClassChange">containerClassChange</a></li>
                                 <li class=""><a href="#event_containersChange" title="containersChange">containersChange</a></li>
@@ -2546,7 +3184,7 @@ new values in the paginator to trigger repaint.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisible", "url": "YAHOO.widget.Paginator.html#config_alwaysVisible", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisibleChange", "url": "YAHOO.widget.Paginator.html#event_alwaysVisibleChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_batch", "url": "YAHOO.widget.Paginator.html#property__batch", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeDestroy", "url": "YAHOO.widget.Paginator.html#event_beforeDestroy", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "calculateRange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_calculateRange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "changeRequest", "url": "YAHOO.widget.Paginator.html#event_changeRequest", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClass", "url": "YAHOO.widget.Paginator.html#config_containerClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClassChange", "url": "YAHOO.widget.Paginator.html#event_containerClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containers", "url": "YAHOO.widget.Paginator.html#config_containers", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containersChange", "url": "YAHOO.widget.Paginator.html#event_containersChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_currentPageClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_currentPageClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#event_destroy", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_firePageChange", "url": "YAHOO.widget.Paginator.html#method__firePageChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClass", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getContainerNodes", "url": "YAHOO.widget.Paginator.html#method_getContainerNodes", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getCurrentPage", "url": "YAHOO.widget.Paginator.html#method_getCurrentPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getNextPage", "url": "YAHOO.widget.Paginator.html#method_getNextPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPageRecords", "url": "YAHOO.widget.Paginator.html#method_getPageRecords", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPreviousPage", "url": "YAHOO.widget.Paginator.html#method_getPreviousPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_getRowsPerPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getStartIndex", "url": "YAHOO.widget.Paginator.html#method_getStartIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getState", "url": "YAHOO.widget.Paginator.html#method_getState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalPages", "url": "YAHOO.widget.Paginator.html#method_getTotalPages", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalRecords", "url": "YAHOO.widget.Paginator.html#method_getTotalRecords", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_handleStateChange", "url": "YAHOO.widget.Paginator.html#method__handleStateChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasNextPage", "url": "YAHOO.widget.Paginator.html#method_hasNextPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPage", "url": "YAHOO.widget.Paginator.html#method_hasPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPreviousPage", "url": "YAHOO.widget.Paginator.html#method_hasPreviousPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "id", "url": "YAHOO.widget.Paginator.html#config_id", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "idChange", "url": "YAHOO.widget.Paginator.html#event_idChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "init", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "init", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPage", "url": "YAHOO.widget.Paginator.html#config_initialPage", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPageChange", "url": "YAHOO.widget.Paginator.html#event_initialPageChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClass", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClass", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "pageChange", "url": "YAHOO.widget.Paginator.html#event_pageChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_pageChanged", "url": "YAHOO.widget.Paginator.html#property__pageChanged", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilder", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLabelBuilder", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilderChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLabelBuilderChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinks", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinks", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinksContainerClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksContainerClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClass", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplate", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenarator", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportValueGenarator", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportValueGenaratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.isNumeric", "url": "YAHOO.widget.Paginator.html#method_Paginator.isNumeric", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.TEMPLATE_DEFAULT", "url": "YAHOO.widget.Paginator.html#property_Paginator.TEMPLATE_DEFAULT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.TEMPLATE_ROWS_PER_PAGE", "url": "YAHOO.widget.Paginator.html#property_Paginator.TEMPLATE_ROWS_PER_PAGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.toNumber", "url": "YAHOO.widget.Paginator.html#method_Paginator.toNumber", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.ui", "url": "YAHOO.widget.Paginator.html#property_Paginator.ui", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.VALUE_UNLIMITED", "url": "YAHOO.widget.Paginator.html#property_Paginator.VALUE_UNLIMITED", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "rebuild", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_rebuild", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffset", "url": "YAHOO.widget.Paginator.html#config_recordOffset", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffsetChange", "url": "YAHOO.widget.Paginator.html#event_recordOffsetChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "render", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "render", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#event_render", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#event_rendered", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#config_rendered", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "renderedChange", "url": "YAHOO.widget.Paginator.html#event_renderedChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_renderTemplate", "url": "YAHOO.widget.Paginator.html#method__renderTemplate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "renderUIComponent", "url": "YAHOO.widget.Paginator.html#method_renderUIComponent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPage", "url": "YAHOO.widget.Paginator.html#config_rowsPerPage", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPageChange", "url": "YAHOO.widget.Paginator.html#event_rowsPerPageChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_selfSubscribe", "url": "YAHOO.widget.Paginator.html#method__selfSubscribe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setPage", "url": "YAHOO.widget.Paginator.html#method_setPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_setRowsPerPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setStartIndex", "url": "YAHOO.widget.Paginator.html#method_setStartIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setState", "url": "YAHOO.widget.Paginator.html#method_setState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setTotalRecords", "url": "YAHOO.widget.Paginator.html#method_setTotalRecords", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "sprintf", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_sprintf", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_state", "url": "YAHOO.widget.Paginator.html#property__state", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_syncRecordOffset", "url": "YAHOO.widget.Paginator.html#method__syncRecordOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "template", "url": "YAHOO.widget.Paginator.html#config_template", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "templateChange", "url": "YAHOO.widget.Paginator.html#event_templateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecords", "url": "YAHOO.widget.Paginator.html#config_totalRecords", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecordsChange", "url": "YAHOO.widget.Paginator.html#event_totalRecordsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "update", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "update", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChange", "url": "YAHOO.widget.Paginator.html#config_updateOnChange", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChangeChange", "url": "YAHOO.widget.Paginator.html#event_updateOnChangeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateVisibility", "url": "YAHOO.widget.Paginator.html#method_updateVisibility", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisible", "url": "YAHOO.widget.Paginator.html#config_alwaysVisible", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisibleChange", "url": "YAHOO.widget.Paginator.html#event_alwaysVisibleChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_batch", "url": "YAHOO.widget.Paginator.html#property__batch", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeAlwaysVisibleChange", "url": "YAHOO.widget.Paginator.html#event_beforeAlwaysVisibleChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeContainerClassChange", "url": "YAHOO.widget.Paginator.html#event_beforeContainerClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeContainersChange", "url": "YAHOO.widget.Paginator.html#event_beforeContainersChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforeCurrentPageClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforeCurrentPageClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeDestroy", "url": "YAHOO.widget.Paginator.html#event_beforeDestroy", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeIdChange", "url": "YAHOO.widget.Paginator.html#event_beforeIdChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeInitialPageChange", "url": "YAHOO.widget.Paginator.html#event_beforeInitialPageChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLabelBuilderChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLabelBuilderChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinksChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinksChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinksContainerClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinksContainerClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportValueGenaratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRecordOffsetChange", "url": "YAHOO.widget.Paginator.html#event_beforeRecordOffsetChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRenderedChange", "url": "YAHOO.widget.Paginator.html#event_beforeRenderedChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRowsPerPageChange", "url": "YAHOO.widget.Paginator.html#event_beforeRowsPerPageChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeTemplateChange", "url": "YAHOO.widget.Paginator.html#event_beforeTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeTotalRecordsChange", "url": "YAHOO.widget.Paginator.html#event_beforeTotalRecordsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeUpdateOnChangeChange", "url": "YAHOO.widget.Paginator.html#event_beforeUpdateOnChangeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "calculateRange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_calculateRange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "changeRequest", "url": "YAHOO.widget.Paginator.html#event_changeRequest", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "container", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#property_container", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClass", "url": "YAHOO.widget.Paginator.html#config_containerClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClassChange", "url": "YAHOO.widget.Paginator.html#event_containerClassChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "_containers", "url": "YAHOO.widget.Paginator.html#property__containers", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containers", "url": "YAHOO.widget.Paginator.html#config_containers", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containersChange", "url": "YAHOO.widget.Paginator.html#event_containersChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_current", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "current", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#property_current", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_currentPageClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_currentPageClassChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#event_destroy", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_firePageChange", "url": "YAHOO.widget.Paginator.html#method__firePageChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClass", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getContainerNodes", "url": "YAHOO.widget.Paginator.html#method_getContainerNodes", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getCurrentPage", "url": "YAHOO.widget.Paginator.html#method_getCurrentPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getNextPage", "url": "YAHOO.widget.Paginator.html#method_getNextPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPageRecords", "url": "YAHOO.widget.Paginator.html#method_getPageRecords", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPreviousPage", "url": "YAHOO.widget.Paginator.html#method_getPreviousPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_getRowsPerPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getStartIndex", "url": "YAHOO.widget.Paginator.html#method_getStartIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getState", "url": "YAHOO.widget.Paginator.html#method_getState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalPages", "url": "YAHOO.widget.Paginator.html#method_getTotalPages", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalRecords", "url": "YAHOO.widget.Paginator.html#method_getTotalRecords", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_handleStateChange", "url": "YAHOO.widget.Paginator.html#method__handleStateChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasNextPage", "url": "YAHOO.widget.Paginator.html#method_hasNextPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPage", "url": "YAHOO.widget.Paginator.html#method_hasPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPreviousPage", "url": "YAHOO.widget.Paginator.html#method_hasPreviousPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "id", "url": "YAHOO.widget.Paginator.html#config_id", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "idChange", "url": "YAHOO.widget.Paginator.html#event_idChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "init", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "init", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initConfig", "url": "YAHOO.widget.Paginator.html#method_initConfig", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initEvents", "url": "YAHOO.widget.Paginator.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPage", "url": "YAHOO.widget.Paginator.html#config_initialPage", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPageChange", "url": "YAHOO.widget.Paginator.html#event_initialPageChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initUIComponents", "url": "YAHOO.widget.Paginator.html#method_initUIComponents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClass", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkLabelChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_link", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "na", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_na", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClass", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkLabelChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "pageChange", "url": "YAHOO.widget.Paginator.html#event_pageChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_pageChanged", "url": "YAHOO.widget.Paginator.html#property__pageChanged", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilder", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLabelBuilder", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilderChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLabelBuilderChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinkClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinkClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinks", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinks", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinksContainerClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksContainerClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClass", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportClass", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportClassChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplate", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenarator", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportValueGenarator", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportValueGenaratorChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "Paginator.id", "url": "YAHOO.widget.Paginator.html#property_Paginator.id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "Paginator.ID_BASE", "url": "YAHOO.widget.Paginator.html#property_Paginator.ID_BASE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.isNumeric", "url": "YAHOO.widget.Paginator.html#method_Paginator.isNumeric", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.TEMPLATE_DEFAULT", "url": "YAHOO.widget.Paginator.html#property_Paginator.TEMPLATE_DEFAULT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.TEMPLATE_ROWS_PER_PAGE", "url": "YAHOO.widget.Paginator.html#property_Paginator.TEMPLATE_ROWS_PER_PAGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.toNumber", "url": "YAHOO.widget.Paginator.html#method_Paginator.toNumber", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.ui", "url": "YAHOO.widget.Paginator.html#property_Paginator.ui", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "Paginator.VALUE_UNLIMITED", "url": "YAHOO.widget.Paginator.html#property_Paginator.VALUE_UNLIMITED", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "rebuild", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_rebuild", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffset", "url": "YAHOO.widget.Paginator.html#config_recordOffset", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffsetChange", "url": "YAHOO.widget.Paginator.html#event_recordOffsetChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "render", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "render", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#event_render", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#event_rendered", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#config_rendered", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "renderedChange", "url": "YAHOO.widget.Paginator.html#event_renderedChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_renderTemplate", "url": "YAHOO.widget.Paginator.html#method__renderTemplate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "renderUIComponent", "url": "YAHOO.widget.Paginator.html#method_renderUIComponent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPage", "url": "YAHOO.widget.Paginator.html#config_rowsPerPage", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPageChange", "url": "YAHOO.widget.Paginator.html#event_rowsPerPageChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_selfSubscribe", "url": "YAHOO.widget.Paginator.html#method__selfSubscribe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setPage", "url": "YAHOO.widget.Paginator.html#method_setPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_setRowsPerPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setStartIndex", "url": "YAHOO.widget.Paginator.html#method_setStartIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setState", "url": "YAHOO.widget.Paginator.html#method_setState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setTotalRecords", "url": "YAHOO.widget.Paginator.html#method_setTotalRecords", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "span", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_span", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_span", "type": "property"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "sprintf", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_sprintf", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_state", "url": "YAHOO.widget.Paginator.html#property__state", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_syncRecordOffset", "url": "YAHOO.widget.Paginator.html#method__syncRecordOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "template", "url": "YAHOO.widget.Paginator.html#config_template", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "templateChange", "url": "YAHOO.widget.Paginator.html#event_templateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecords", "url": "YAHOO.widget.Paginator.html#config_totalRecords", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecordsChange", "url": "YAHOO.widget.Paginator.html#event_totalRecordsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "update", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "update", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_update", "type": "method"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChange", "url": "YAHOO.widget.Paginator.html#config_updateOnChange", "type": "config"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChangeChange", "url": "YAHOO.widget.Paginator.html#event_updateOnChangeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateVisibility", "url": "YAHOO.widget.Paginator.html#method_updateVisibility", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

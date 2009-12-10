@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>cookie&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>cookie&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_cookie.html" title="cookie">cookie</a>
                  &gt; YAHOO.util.Cookie 
@@ -71,6 +71,250 @@
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method__createCookieHashString">
+                                    <h4>
+                                        <a name="method__createCookieHashString">_createCookieHashString</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        String
+                                            <strong property="yui:name">_createCookieHashString</strong>
+                                           (
+                                                
+                                                        
+                                                         hash
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Formats a cookie value for an object containing multiple values.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">hash</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object of key-value pairs to create a string for.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            String
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">A string suitable for use as a cookie value.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__createCookieString">
+                                    <h4>
+                                        <a name="method__createCookieString">_createCookieString</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        String
+                                            <strong property="yui:name">_createCookieString</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                                        , 
+                                                         encodeValue
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Creates a cookie string that can be assigned into document.cookie.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the cookie.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">value</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The value of the cookie.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">encodeValue</span>
+                                                        &lt;<span property="yui:type">Boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> True to encode the value, false to leave as-is.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (Optional) Options for the cookie.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            String
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The formatted cookie string.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__parseCookieHash">
+                                    <h4>
+                                        <a name="method__parseCookieHash">_parseCookieHash</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Object
+                                            <strong property="yui:name">_parseCookieHash</strong>
+                                           (
+                                                
+                                                        
+                                                         text
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Parses a cookie hash string into an object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">text</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The cookie hash string to parse. The string should already be URL-decoded.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Object
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">An object containing entries for each cookie value.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__parseCookieString">
+                                    <h4>
+                                        <a name="method__parseCookieString">_parseCookieString</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Object
+                                            <strong property="yui:name">_parseCookieString</strong>
+                                           (
+                                                
+                                                        
+                                                         text
+                                                    
+                                                
+                                                        , 
+                                                         decode
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Parses a cookie string into an object representing all accessible cookies.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">text</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The cookie string to parse.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">decode</span>
+                                                        &lt;<span property="yui:type">Boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (Optional) Indicates if the cookie values should be decoded or not. Default is true.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Object
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">An object containing entries for each accessible cookie.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_exists">
                                     <h4>
                                         <a name="method_exists">exists</a></h4>
@@ -777,6 +1021,10 @@ and secure (true/false).</span>
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method__createCookieHashString" title="_createCookieHashString">_createCookieHashString</a></li>
+                                <li class="private"><a href="#method__createCookieString" title="_createCookieString">_createCookieString</a></li>
+                                <li class="private"><a href="#method__parseCookieHash" title="_parseCookieHash">_parseCookieHash</a></li>
+                                <li class="private"><a href="#method__parseCookieString" title="_parseCookieString">_parseCookieString</a></li>
                                 <li class=""><a href="#method_exists" title="exists">exists</a></li>
                                 <li class=""><a href="#method_get" title="get">get</a></li>
                                 <li class=""><a href="#method_getSub" title="getSub">getSub</a></li>
@@ -800,7 +1048,7 @@ and secure (true/false).</span>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Cookie", "name": "exists", "url": "YAHOO.util.Cookie.html#method_exists", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "get", "url": "YAHOO.util.Cookie.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "getSub", "url": "YAHOO.util.Cookie.html#method_getSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "getSubs", "url": "YAHOO.util.Cookie.html#method_getSubs", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "remove", "url": "YAHOO.util.Cookie.html#method_remove", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "removeSub", "url": "YAHOO.util.Cookie.html#method_removeSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "set", "url": "YAHOO.util.Cookie.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "setSub", "url": "YAHOO.util.Cookie.html#method_setSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "setSubs", "url": "YAHOO.util.Cookie.html#method_setSubs", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.util.Cookie", "name": "_createCookieHashString", "url": "YAHOO.util.Cookie.html#method__createCookieHashString", "type": "method"}, {"access": "private", "host": "YAHOO.util.Cookie", "name": "_createCookieString", "url": "YAHOO.util.Cookie.html#method__createCookieString", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "exists", "url": "YAHOO.util.Cookie.html#method_exists", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "get", "url": "YAHOO.util.Cookie.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "getSub", "url": "YAHOO.util.Cookie.html#method_getSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "getSubs", "url": "YAHOO.util.Cookie.html#method_getSubs", "type": "method"}, {"access": "private", "host": "YAHOO.util.Cookie", "name": "_parseCookieHash", "url": "YAHOO.util.Cookie.html#method__parseCookieHash", "type": "method"}, {"access": "private", "host": "YAHOO.util.Cookie", "name": "_parseCookieString", "url": "YAHOO.util.Cookie.html#method__parseCookieString", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "remove", "url": "YAHOO.util.Cookie.html#method_remove", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "removeSub", "url": "YAHOO.util.Cookie.html#method_removeSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "set", "url": "YAHOO.util.Cookie.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "setSub", "url": "YAHOO.util.Cookie.html#method_setSub", "type": "method"}, {"access": "", "host": "YAHOO.util.Cookie", "name": "setSubs", "url": "YAHOO.util.Cookie.html#method_setSubs", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

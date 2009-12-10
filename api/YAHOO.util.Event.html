@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Event Utility&nbsp; <span class="subtitle">-s</span></h3>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html" title="event">event</a>
                  &gt; YAHOO.util.Event 
@@ -69,6 +69,51 @@ registers during the unload event.
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:property" resource="#property__dri">
+                                    <h4><a name="property__dri" property="yui:name">_dri</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            document readystate poll handle
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__interval">
+                                    <h4><a name="property__interval" property="yui:name">_interval</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            poll handle
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property__specialTypes">
+                                    <h4><a name="property__specialTypes" property="yui:name">_specialTypes</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Map of special event types
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_ADJ_SCOPE">
                                     <h4><a name="property_ADJ_SCOPE" property="yui:name">ADJ_SCOPE</a>
                                         - <code>static final <span property="yui:type">int</span></code>
@@ -92,6 +137,21 @@ on or the custom object passed in by the listener, int constant
                                     <div class="detail">
                                         <div class="description" property="yui:description">
                                             The original capture parameter passed into addListener
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_counter">
+                                    <h4><a name="property_counter" property="yui:name">counter</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Counter for auto id generation
                                         </div>
                                     </div>
      
@@ -130,6 +190,28 @@ on or the custom object passed in by the listener, int constant
 
                                     <hr />
                                     </div>
+                                    <div class="private deprecated" rel="yui:property" resource="#property_elCache
+DOM element cache">
+                                    <h4><a name="property_elCache
+DOM element cache" property="yui:name">elCache
+DOM element cache</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> Elements are not cached due to issues that arise when
+elements are removed and re-added
+                                    </div>        
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_FN">
                                     <h4><a name="property_FN" property="yui:name">FN</a>
                                         - <code>static final <span property="yui:type">int</span></code>
@@ -142,6 +224,42 @@ on or the custom object passed in by the listener, int constant
      
                                         
 
+
+                                    <hr />
+                                    </div>
+                                    <div class="private deprecated" rel="yui:property" resource="#property_isIE">
+                                    <h4><a name="property_isIE" property="yui:name">isIE</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            IE detection
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> use YAHOO.env.ua.ie
+                                    </div>        
+
+                                    <hr />
+                                    </div>
+                                    <div class="private deprecated" rel="yui:property" resource="#property_isSafari">
+                                    <h4><a name="property_isSafari" property="yui:name">isSafari</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Safari detection
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> use YAHOO.env.ua.webkit
+                                    </div>        
 
                                     <hr />
                                     </div>
@@ -162,6 +280,36 @@ is set
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property_listeners">
+                                    <h4><a name="property_listeners" property="yui:name">listeners</a>
+                                        - <code>private static <span property="yui:type">array</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Cache of wrapped listeners
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_loadComplete">
+                                    <h4><a name="property_loadComplete" property="yui:name">loadComplete</a>
+                                        - <code>private static <span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            True after the onload event has fired
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_OBJ">
                                     <h4><a name="property_OBJ" property="yui:name">OBJ</a>
                                         - <code>static final <span property="yui:type">int</span></code>
@@ -171,6 +319,21 @@ is set
                                             Object passed in by the user that will be returned as a 
 parameter to the callback, int constant.  Specific to
 unload listeners
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_onAvailStack">
+                                    <h4><a name="property_onAvailStack" property="yui:name">onAvailStack</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            onAvailable listeners
                                         </div>
                                     </div>
      
@@ -228,6 +391,23 @@ for 20 seconds or until all outstanding handlers are bound
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property_retryCount">
+                                    <h4><a name="property_retryCount" property="yui:name">retryCount</a>
+                                        - <code>private static <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The number of times to poll after window.onload.  This number is
+increased if additional late-bound handlers are requested after
+the page load.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_throwErrors">
                                     <h4><a name="property_throwErrors" property="yui:name">throwErrors</a>
                                         - <code><span property="yui:type">boolean</span></code>
@@ -264,6 +444,55 @@ error.
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property_unloadListeners">
+                                    <h4><a name="property_unloadListeners" property="yui:name">unloadListeners</a>
+                                        - <code>private static <span property="yui:type">array</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            User-defined unload function that will be fired before all events
+are detached
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private deprecated" rel="yui:property" resource="#property_webkit">
+                                    <h4><a name="property_webkit" property="yui:name">webkit</a>
+                                        - <code>private static <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            webkit version
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> use YAHOO.env.ua.webkit
+                                    </div>        
+
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:property" resource="#property_webkitKeymap">
+                                    <h4><a name="property_webkitKeymap" property="yui:name">webkitKeymap</a>
+                                        - <code>private static final <span property="yui:type">{int: int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Normalized keycodes for webkit/safari
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_WFN">
                                     <h4><a name="property_WFN" property="yui:name">WFN</a>
                                         - <code>static final <span property="yui:type">int</span></code>
@@ -288,6 +517,778 @@ error.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method__addListener">
+                                    <h4>
+                                        <a name="method__addListener">_addListener</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Boolean
+                                            <strong property="yui:name">_addListener</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         overrideContext
+                                                    
+                                                
+                                                        , 
+                                                         capture
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Appends an event handler
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">el</span>
+                                                        &lt;<span property="yui:type">String|HTMLElement|Array|NodeList</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An id, an element 
+reference, or a collection of ids and/or elements to assign the 
+listener to.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">sType</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">     The type of event to append</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">        The method the event invokes</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">obj</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">    An arbitrary object that will be 
+passed as a parameter to the handler</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">overrideContext</span>
+                                                        &lt;<span property="yui:type">Boolean|object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  If true, the obj passed in becomes
+the execution context of the listener. If an
+object, this object becomes the execution
+context.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">capture</span>
+                                                        &lt;<span property="yui:type">boolen</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> capture or bubble phase</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">True if the action was successful or defered,
+false if one or more of the elements 
+could not have the listener attached,
+or if the operation throws an exception.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__createDelegate">
+                                    <h4>
+                                        <a name="method__createDelegate">_createDelegate</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Function
+                                            <strong property="yui:name">_createDelegate</strong>
+                                           (
+                                                
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         filter
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         overrideContext
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Creates a delegate function used to call event listeners specified 
+via the <code>YAHOO.util.Event.delegate</code> method.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">        The method (event listener) to call.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">filter</span>
+                                                        &lt;<span property="yui:type">Function|string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Function or CSS selector used to 
+determine for what element(s) the event listener should be called.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">obj</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">	An arbitrary object that will be 
+passed as a parameter to the listener.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">overrideContext</span>
+                                                        &lt;<span property="yui:type">Boolean|object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  If true, the value of the 
+obj parameter becomes the execution context
+of the listener. If an object, this object
+becomes the execution context.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Function
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Function that will call the event listener 
+specified by the <code>YAHOO.util.Event.delegate</code> method.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__createMouseDelegate">
+                                    <h4>
+                                        <a name="method__createMouseDelegate">_createMouseDelegate</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Function
+                                            <strong property="yui:name">_createMouseDelegate</strong>
+                                           (
+                                                
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         overrideContext
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Creates a delegate function used to call mouseover and mouseleave 
+event listeners specified via the 
+<code>YAHOO.util.Event.addListener</code> 
+or <code>YAHOO.util.Event.on</code> method.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">        The method (event listener) to call</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">obj</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">    An arbitrary object that will be 
+passed as a parameter to the listener</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">overrideContext</span>
+                                                        &lt;<span property="yui:type">Boolean|object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  If true, the value of the 
+obj parameter becomes the execution context
+of the listener. If an object, this object
+becomes the execution context.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Function
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Function that will call the event listener 
+specified by either the <code>YAHOO.util.Event.addListener</code> 
+or <code>YAHOO.util.Event.on</code> method.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getCacheIndex">
+                                    <h4>
+                                        <a name="method__getCacheIndex">_getCacheIndex</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_getCacheIndex</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Locating the saved event handler data by function ref
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getScroll">
+                                    <h4>
+                                        <a name="method__getScroll">_getScroll</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_getScroll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the scrollTop and scrollLeft.  Used to calculate the 
+pageX and pageY in Internet Explorer
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getScrollLeft">
+                                    <h4>
+                                        <a name="method__getScrollLeft">_getScrollLeft</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_getScrollLeft</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns scrollLeft
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getScrollTop">
+                                    <h4>
+                                        <a name="method__getScrollTop">_getScrollTop</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_getScrollTop</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns scrollTop
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__getType">
+                                    <h4>
+                                        <a name="method__getType">_getType</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_getType</strong>
+                                           (
+                                                
+                                                        
+                                                         sType
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Checks to see if the type requested is a special type 
+(as defined by the _specialTypes hash), and (if so) returns 
+the special type name.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">sType</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">     The type to look up</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__isValidCollection">
+                                    <h4>
+                                        <a name="method__isValidCollection">_isValidCollection</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        boolean
+                                            <strong property="yui:name">_isValidCollection</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            We want to be able to use getElementsByTagName as a collection
+to attach a group of events to.  Unfortunately, different 
+browsers return different types of collections.  This function
+tests to determine if the object is array-like.  It will also 
+fail if the object is an array, but is empty.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">o</span>
+                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the object to test</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">true if the object is array-like and populated</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__load">
+                                    <h4>
+                                        <a name="method__load">_load</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_load</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            hook up any deferred listeners
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__ready">
+                                    <h4>
+                                        <a name="method__ready">_ready</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_ready</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires the DOMReady event listeners the first time the document is
+usable.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__simpleAdd">
+                                    <h4>
+                                        <a name="method__simpleAdd">_simpleAdd</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_simpleAdd</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         capture
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Adds a DOM event directly without the caching, cleanup, context adj, etc
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">el</span>
+                                                        &lt;<span property="yui:type">HTMLElement</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">      the element to bind the handler to</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">sType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">   the type of event handler</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">      the callback to invoke</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">capture</span>
+                                                        &lt;<span property="yui:type">boolen</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> capture or bubble phase</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__simpleRemove">
+                                    <h4>
+                                        <a name="method__simpleRemove">_simpleRemove</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_simpleRemove</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         capture
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Basic remove listener
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">el</span>
+                                                        &lt;<span property="yui:type">HTMLElement</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">      the element to bind the handler to</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">sType</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">   the type of event handler</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">      the callback to invoke</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">capture</span>
+                                                        &lt;<span property="yui:type">boolen</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> capture or bubble phase</span>
+                                                        </dd>
+                                                </dl>
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__tryPreloadAttach">
+                                    <h4>
+                                        <a name="method__tryPreloadAttach">_tryPreloadAttach</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_tryPreloadAttach</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Polling function that runs before the onload event fires, 
+attempting to attach to DOM Nodes as soon as they are 
+available
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__unload">
+                                    <h4>
+                                        <a name="method__unload">_unload</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">_unload</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Removes all listeners registered by pe.event.  Called 
+automatically during the unload event.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class=" deprecated" rel="yui:method" resource="#method_addBlurListener">
                                     <h4>
                                         <a name="method_addBlurListener">addBlurListener</a></h4>
@@ -578,6 +1579,39 @@ or if the operation throws an exception.</dd>
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private deprecated" rel="yui:method" resource="#method_clearCache">
+                                    <h4>
+                                        <a name="method_clearCache">clearCache</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">clearCache</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Clears the element cache
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> Elements are not cached any longer
+                                            </div>        
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_delegate">
                                     <h4>
                                         <a name="method_delegate">delegate</a></h4>
@@ -795,6 +1829,40 @@ have one.
 
 
              
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private deprecated" rel="yui:method" resource="#method_getEl">
+                                    <h4>
+                                        <a name="method_getEl">getEl</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">getEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            We cache elements bound by id because when the unload event 
+fires, we can no longer use document.getElementById
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> Elements are not cached any longer
+                                            </div>        
 
                                         </div>
 
@@ -1794,6 +2862,40 @@ left out, all listeners will be removed</span>
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private deprecated" rel="yui:method" resource="#method_regCE">
+                                    <h4>
+                                        <a name="method_regCE">regCE</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">regCE</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Used by old versions of CustomEvent, restored for backwards
+compatibility
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> still here for backwards compatibility
+                                            </div>        
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class=" deprecated" rel="yui:method" resource="#method_removeBlurListener">
                                     <h4>
                                         <a name="method_removeBlurListener">removeBlurListener</a></h4>
@@ -2148,6 +3250,36 @@ the element's parent node.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_startInterval">
+                                    <h4>
+                                        <a name="method_startInterval">startInterval</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong property="yui:name">startInterval</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_stopEvent">
                                     <h4>
                                         <a name="method_stopEvent">stopEvent</a></h4>
@@ -2367,18 +3499,35 @@ the element's parent node.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#property__dri" title="_dri">_dri</a></li>
+                                <li class="private"><a href="#property__interval" title="_interval">_interval</a></li>
+                                <li class="private"><a href="#property__specialTypes" title="_specialTypes">_specialTypes</a></li>
                                 <li class=""><a href="#property_ADJ_SCOPE" title="ADJ_SCOPE">ADJ_SCOPE</a></li>
                                 <li class=""><a href="#property_CAPTURE" title="CAPTURE">CAPTURE</a></li>
+                                <li class="private"><a href="#property_counter" title="counter">counter</a></li>
                                 <li class=""><a href="#property_DOMReady" title="DOMReady">DOMReady</a></li>
                                 <li class=""><a href="#property_EL" title="EL">EL</a></li>
+                                <li class="private deprecated"><a href="#property_elCache
+DOM element cache" title="elCache
+DOM element cache">elCache
+DOM element cache</a></li>
                                 <li class=""><a href="#property_FN" title="FN">FN</a></li>
+                                <li class="private deprecated"><a href="#property_isIE" title="isIE">isIE</a></li>
+                                <li class="private deprecated"><a href="#property_isSafari" title="isSafari">isSafari</a></li>
                                 <li class=""><a href="#property_lastError" title="lastError">lastError</a></li>
+                                <li class="private"><a href="#property_listeners" title="listeners">listeners</a></li>
+                                <li class="private"><a href="#property_loadComplete" title="loadComplete">loadComplete</a></li>
                                 <li class=""><a href="#property_OBJ" title="OBJ">OBJ</a></li>
+                                <li class="private"><a href="#property_onAvailStack" title="onAvailStack">onAvailStack</a></li>
                                 <li class=""><a href="#property_OVERRIDE" title="OVERRIDE">OVERRIDE</a></li>
                                 <li class=""><a href="#property_POLL_INTERVAL" title="POLL_INTERVAL">POLL_INTERVAL</a></li>
                                 <li class=""><a href="#property_POLL_RETRYS" title="POLL_RETRYS">POLL_RETRYS</a></li>
+                                <li class="private"><a href="#property_retryCount" title="retryCount">retryCount</a></li>
                                 <li class=""><a href="#property_throwErrors" title="throwErrors">throwErrors</a></li>
                                 <li class=""><a href="#property_TYPE" title="TYPE">TYPE</a></li>
+                                <li class="private"><a href="#property_unloadListeners" title="unloadListeners">unloadListeners</a></li>
+                                <li class="private deprecated"><a href="#property_webkit" title="webkit">webkit</a></li>
+                                <li class="private"><a href="#property_webkitKeymap" title="webkitKeymap">webkitKeymap</a></li>
                                 <li class=""><a href="#property_WFN" title="WFN">WFN</a></li>
                         </ul>
                     </div>
@@ -2386,12 +3535,29 @@ the element's parent node.
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method__addListener" title="_addListener">_addListener</a></li>
+                                <li class="private"><a href="#method__createDelegate" title="_createDelegate">_createDelegate</a></li>
+                                <li class="private"><a href="#method__createMouseDelegate" title="_createMouseDelegate">_createMouseDelegate</a></li>
+                                <li class="private"><a href="#method__getCacheIndex" title="_getCacheIndex">_getCacheIndex</a></li>
+                                <li class="private"><a href="#method__getScroll" title="_getScroll">_getScroll</a></li>
+                                <li class="private"><a href="#method__getScrollLeft" title="_getScrollLeft">_getScrollLeft</a></li>
+                                <li class="private"><a href="#method__getScrollTop" title="_getScrollTop">_getScrollTop</a></li>
+                                <li class="private"><a href="#method__getType" title="_getType">_getType</a></li>
+                                <li class="private"><a href="#method__isValidCollection" title="_isValidCollection">_isValidCollection</a></li>
+                                <li class="private"><a href="#method__load" title="_load">_load</a></li>
+                                <li class="private"><a href="#method__ready" title="_ready">_ready</a></li>
+                                <li class="private"><a href="#method__simpleAdd" title="_simpleAdd">_simpleAdd</a></li>
+                                <li class="private"><a href="#method__simpleRemove" title="_simpleRemove">_simpleRemove</a></li>
+                                <li class="private"><a href="#method__tryPreloadAttach" title="_tryPreloadAttach">_tryPreloadAttach</a></li>
+                                <li class="private"><a href="#method__unload" title="_unload">_unload</a></li>
                                 <li class=" deprecated"><a href="#method_addBlurListener" title="addBlurListener">addBlurListener</a></li>
                                 <li class=" deprecated"><a href="#method_addFocusListener" title="addFocusListener">addFocusListener</a></li>
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
+                                <li class="private deprecated"><a href="#method_clearCache" title="clearCache">clearCache</a></li>
                                 <li class=""><a href="#method_delegate" title="delegate">delegate</a></li>
                                 <li class=""><a href="#method_generateId" title="generateId">generateId</a></li>
                                 <li class=""><a href="#method_getCharCode" title="getCharCode">getCharCode</a></li>
+                                <li class="private deprecated"><a href="#method_getEl" title="getEl">getEl</a></li>
                                 <li class=""><a href="#method_getEvent" title="getEvent">getEvent</a></li>
                                 <li class=""><a href="#method_getListeners" title="getListeners">getListeners</a></li>
                                 <li class=""><a href="#method_getPageX" title="getPageX">getPageX</a></li>
@@ -2408,11 +3574,13 @@ the element's parent node.
                                 <li class=" deprecated"><a href="#method_onFocus" title="onFocus">onFocus</a></li>
                                 <li class=""><a href="#method_preventDefault" title="preventDefault">preventDefault</a></li>
                                 <li class=""><a href="#method_purgeElement" title="purgeElement">purgeElement</a></li>
+                                <li class="private deprecated"><a href="#method_regCE" title="regCE">regCE</a></li>
                                 <li class=" deprecated"><a href="#method_removeBlurListener" title="removeBlurListener">removeBlurListener</a></li>
                                 <li class=""><a href="#method_removeDelegate" title="removeDelegate">removeDelegate</a></li>
                                 <li class=" deprecated"><a href="#method_removeFocusListener" title="removeFocusListener">removeFocusListener</a></li>
                                 <li class=""><a href="#method_removeListener" title="removeListener">removeListener</a></li>
                                 <li class=""><a href="#method_resolveTextNode" title="resolveTextNode">resolveTextNode</a></li>
+                                <li class="private"><a href="#method_startInterval" title="startInterval">startInterval</a></li>
                                 <li class=""><a href="#method_stopEvent" title="stopEvent">stopEvent</a></li>
                                 <li class=""><a href="#method_stopPropagation" title="stopPropagation">stopPropagation</a></li>
                         </ul>
@@ -2435,7 +3603,7 @@ the element's parent node.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Event", "name": "addBlurListener", "url": "YAHOO.util.Event.html#method_addBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addFocusListener", "url": "YAHOO.util.Event.html#method_addFocusListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addListener", "url": "YAHOO.util.Event.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE", "url": "YAHOO.util.Event.html#property_ADJ_SCOPE", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "CAPTURE", "url": "YAHOO.util.Event.html#property_CAPTURE", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "contains", "url": "YAHOO.util.Subscriber.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "delegate", "url": "YAHOO.util.Event.html#method_delegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReady", "url": "YAHOO.util.Event.html#property_DOMReady", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReadyEvent", "url": "YAHOO.util.Event.html#event_DOMReadyEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Event", "name": "EL", "url": "YAHOO.util.Event.html#property_EL", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fired", "url": "YAHOO.util.CustomEvent.html#property_fired", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "firedWith", "url": "YAHOO.util.CustomEvent.html#property_firedWith", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fireOnce", "url": "YAHOO.util.CustomEvent.html#property_fireOnce", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "fn", "url": "YAHOO.util.Subscriber.html#property_fn", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "FN", "url": "YAHOO.util.Event.html#property_FN", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "generateId", "url": "YAHOO.util.Event.html#method_generateId", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getCharCode", "url": "YAHOO.util.Event.html#method_getCharCode", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getEvent", "url": "YAHOO.util.Event.html#method_getEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getListeners", "url": "YAHOO.util.Event.html#method_getListeners", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageX", "url": "YAHOO.util.Event.html#method_getPageX", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageY", "url": "YAHOO.util.Event.html#method_getPageY", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getRelatedTarget", "url": "YAHOO.util.Event.html#method_getRelatedTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "getScope", "url": "YAHOO.util.Subscriber.html#method_getScope", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTarget", "url": "YAHOO.util.Event.html#method_getTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTime", "url": "YAHOO.util.Event.html#method_getTime", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getXY", "url": "YAHOO.util.Event.html#method_getXY", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "lastError", "url": "YAHOO.util.Event.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "obj", "url": "YAHOO.util.Subscriber.html#property_obj", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "OBJ", "url": "YAHOO.util.Event.html#property_OBJ", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "on", "url": "YAHOO.util.Event.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onAvailable", "url": "YAHOO.util.Event.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onBlur", "url": "YAHOO.util.Event.html#method_onBlur", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onContentReady", "url": "YAHOO.util.Event.html#method_onContentReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onDOMReady", "url": "YAHOO.util.Event.html#method_onDOMReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onFocus", "url": "YAHOO.util.Event.html#method_onFocus", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "OVERRIDE", "url": "YAHOO.util.Event.html#property_OVERRIDE", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "overrideContext", "url": "YAHOO.util.Subscriber.html#property_overrideContext", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL", "url": "YAHOO.util.Event.html#property_POLL_INTERVAL", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_RETRYS", "url": "YAHOO.util.Event.html#property_POLL_RETRYS", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "preventDefault", "url": "YAHOO.util.Event.html#method_preventDefault", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "purgeElement", "url": "YAHOO.util.Event.html#method_purgeElement", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeBlurListener", "url": "YAHOO.util.Event.html#method_removeBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeDelegate", "url": "YAHOO.util.Event.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeFocusListener", "url": "YAHOO.util.Event.html#method_removeFocusListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeListener", "url": "YAHOO.util.Event.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "resolveTextNode", "url": "YAHOO.util.Event.html#method_resolveTextNode", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopEvent", "url": "YAHOO.util.Event.html#method_stopEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopPropagation", "url": "YAHOO.util.Event.html#method_stopPropagation", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "throwErrors", "url": "YAHOO.util.Event.html#property_throwErrors", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "toString", "url": "YAHOO.util.Subscriber.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "TYPE", "url": "YAHOO.util.Event.html#property_TYPE", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "WFN", "url": "YAHOO.util.Event.html#property_WFN", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Event", "name": "addBlurListener", "url": "YAHOO.util.Event.html#method_addBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addFocusListener", "url": "YAHOO.util.Event.html#method_addFocusListener", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_addListener", "url": "YAHOO.util.Event.html#method__addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addListener", "url": "YAHOO.util.Event.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE", "url": "YAHOO.util.Event.html#property_ADJ_SCOPE", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "CAPTURE", "url": "YAHOO.util.Event.html#property_CAPTURE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "clearCache", "url": "YAHOO.util.Event.html#method_clearCache", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "contains", "url": "YAHOO.util.Subscriber.html#method_contains", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "counter", "url": "YAHOO.util.Event.html#property_counter", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_createDelegate", "url": "YAHOO.util.Event.html#method__createDelegate", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_createMouseDelegate", "url": "YAHOO.util.Event.html#method__createMouseDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "delegate", "url": "YAHOO.util.Event.html#method_delegate", "type": "method"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReady", "url": "YAHOO.util.Event.html#property_DOMReady", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReadyEvent", "url": "YAHOO.util.Event.html#event_DOMReadyEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_dri", "url": "YAHOO.util.Event.html#property__dri", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "EL", "url": "YAHOO.util.Event.html#property_EL", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "elCache\nDOM element cache", "url": "YAHOO.util.Event.html#property_elCache\nDOM element cache", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fired", "url": "YAHOO.util.CustomEvent.html#property_fired", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "firedWith", "url": "YAHOO.util.CustomEvent.html#property_firedWith", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fireOnce", "url": "YAHOO.util.CustomEvent.html#property_fireOnce", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "fn", "url": "YAHOO.util.Subscriber.html#property_fn", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "FN", "url": "YAHOO.util.Event.html#property_FN", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "generateId", "url": "YAHOO.util.Event.html#method_generateId", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getCacheIndex", "url": "YAHOO.util.Event.html#method__getCacheIndex", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getCharCode", "url": "YAHOO.util.Event.html#method_getCharCode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getEl", "url": "YAHOO.util.Event.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getEvent", "url": "YAHOO.util.Event.html#method_getEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getListeners", "url": "YAHOO.util.Event.html#method_getListeners", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageX", "url": "YAHOO.util.Event.html#method_getPageX", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageY", "url": "YAHOO.util.Event.html#method_getPageY", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getRelatedTarget", "url": "YAHOO.util.Event.html#method_getRelatedTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "getScope", "url": "YAHOO.util.Subscriber.html#method_getScope", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScroll", "url": "YAHOO.util.Event.html#method__getScroll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollLeft", "url": "YAHOO.util.Event.html#method__getScrollLeft", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollTop", "url": "YAHOO.util.Event.html#method__getScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTarget", "url": "YAHOO.util.Event.html#method_getTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTime", "url": "YAHOO.util.Event.html#method_getTime", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getType", "url": "YAHOO.util.Event.html#method__getType", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getXY", "url": "YAHOO.util.Event.html#method_getXY", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_interval", "url": "YAHOO.util.Event.html#property__interval", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isIE", "url": "YAHOO.util.Event.html#property_isIE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isSafari", "url": "YAHOO.util.Event.html#property_isSafari", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_isValidCollection", "url": "YAHOO.util.Event.html#method__isValidCollection", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "lastError", "url": "YAHOO.util.Event.html#property_lastError", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "listeners", "url": "YAHOO.util.Event.html#property_listeners", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_load", "url": "YAHOO.util.Event.html#method__load", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "loadComplete", "url": "YAHOO.util.Event.html#property_loadComplete", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "obj", "url": "YAHOO.util.Subscriber.html#property_obj", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "OBJ", "url": "YAHOO.util.Event.html#property_OBJ", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "on", "url": "YAHOO.util.Event.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onAvailable", "url": "YAHOO.util.Event.html#method_onAvailable", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "onAvailStack", "url": "YAHOO.util.Event.html#property_onAvailStack", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "onBlur", "url": "YAHOO.util.Event.html#method_onBlur", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onContentReady", "url": "YAHOO.util.Event.html#method_onContentReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onDOMReady", "url": "YAHOO.util.Event.html#method_onDOMReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onFocus", "url": "YAHOO.util.Event.html#method_onFocus", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "OVERRIDE", "url": "YAHOO.util.Event.html#property_OVERRIDE", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "overrideContext", "url": "YAHOO.util.Subscriber.html#property_overrideContext", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL", "url": "YAHOO.util.Event.html#property_POLL_INTERVAL", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_RETRYS", "url": "YAHOO.util.Event.html#property_POLL_RETRYS", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "preventDefault", "url": "YAHOO.util.Event.html#method_preventDefault", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "purgeElement", "url": "YAHOO.util.Event.html#method_purgeElement", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_ready", "url": "YAHOO.util.Event.html#method__ready", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "regCE", "url": "YAHOO.util.Event.html#method_regCE", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeBlurListener", "url": "YAHOO.util.Event.html#method_removeBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeDelegate", "url": "YAHOO.util.Event.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeFocusListener", "url": "YAHOO.util.Event.html#method_removeFocusListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeListener", "url": "YAHOO.util.Event.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "resolveTextNode", "url": "YAHOO.util.Event.html#method_resolveTextNode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "retryCount", "url": "YAHOO.util.Event.html#property_retryCount", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleAdd", "url": "YAHOO.util.Event.html#method__simpleAdd", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleRemove", "url": "YAHOO.util.Event.html#method__simpleRemove", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_specialTypes", "url": "YAHOO.util.Event.html#property__specialTypes", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "startInterval", "url": "YAHOO.util.Event.html#method_startInterval", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopEvent", "url": "YAHOO.util.Event.html#method_stopEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopPropagation", "url": "YAHOO.util.Event.html#method_stopPropagation", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "throwErrors", "url": "YAHOO.util.Event.html#property_throwErrors", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "toString", "url": "YAHOO.util.Subscriber.html#method_toString", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_tryPreloadAttach", "url": "YAHOO.util.Event.html#method__tryPreloadAttach", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "TYPE", "url": "YAHOO.util.Event.html#property_TYPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_unload", "url": "YAHOO.util.Event.html#method__unload", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "unloadListeners", "url": "YAHOO.util.Event.html#property_unloadListeners", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkit", "url": "YAHOO.util.Event.html#property_webkit", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkitKeymap", "url": "YAHOO.util.Event.html#property_webkitKeymap", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "WFN", "url": "YAHOO.util.Event.html#property_WFN", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}];
     YAHOO.yuidoc.init();
 </script>
 </body>
