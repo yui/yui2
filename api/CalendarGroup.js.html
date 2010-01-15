@@ -219,12 +219,6 @@
 
         <span class="k">this</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">fireQueue</span><span class="p">();</span>
 
-        <span class="c1">// OPERA HACK FOR MISWRAPPED FLOATS</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">opera</span><span class="p">){</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">renderEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_fixWidth</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_fixWidth</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-        <span class="p">}</span>
-
         <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Initialized &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">pages</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;-page CalendarGroup&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">);</span>
     <span class="p">},</span>
 
