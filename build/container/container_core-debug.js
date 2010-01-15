@@ -1853,13 +1853,15 @@
         configVisible: function (type, args, obj) {
             var visible = args[0];
             if (visible) {
-                this.beforeShowEvent.fire();
-                Dom.setStyle(this.element, "display", "block");
-                this.showEvent.fire();
+                if(this.beforeShowEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "block");
+                    this.showEvent.fire();
+                }
             } else {
-                this.beforeHideEvent.fire();
-                Dom.setStyle(this.element, "display", "none");
-                this.hideEvent.fire();
+                if (this.beforeHideEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "none");
+                    this.hideEvent.fire();
+                }
             }
         },
 
@@ -2776,35 +2778,35 @@
                 if (effect) { // Animate in
                     if (visible) { // Animate in if not showing
                         if (currentVis != "visible" || currentVis === "") {
-                            this.beforeShowEvent.fire();
-                            nEffectInstances = effectInstances.length;
-
-                            for (j = 0; j < nEffectInstances; j++) {
-                                ei = effectInstances[j];
-                                if (j === 0 && !alreadySubscribed(
-                                        ei.animateInCompleteEvent, 
-                                        this.showEvent.fire, this.showEvent)) {
-
-                                    /*
-                                         Delegate showEvent until end 
-                                         of animateInComplete
-                                    */
-
-                                    ei.animateInCompleteEvent.subscribe(
-                                     this.showEvent.fire, this.showEvent, true);
+                            if (this.beforeShowEvent.fire()) {
+                                nEffectInstances = effectInstances.length;
+    
+                                for (j = 0; j < nEffectInstances; j++) {
+                                    ei = effectInstances[j];
+                                    if (j === 0 && !alreadySubscribed(
+                                            ei.animateInCompleteEvent, 
+                                            this.showEvent.fire, this.showEvent)) {
+    
+                                        /*
+                                             Delegate showEvent until end 
+                                             of animateInComplete
+                                        */
+    
+                                        ei.animateInCompleteEvent.subscribe(
+                                         this.showEvent.fire, this.showEvent, true);
+                                    }
+                                    ei.animateIn();
                                 }
-                                ei.animateIn();
                             }
                         }
                     }
                 } else { // Show
                     if (currentVis != "visible" || currentVis === "") {
-                        this.beforeShowEvent.fire();
-
-                        this._setDomVisibility(true);
-
-                        this.cfg.refireEvent("iframe");
-                        this.showEvent.fire();
+                        if (this.beforeShowEvent.fire()) {
+                            this._setDomVisibility(true);
+                            this.cfg.refireEvent("iframe");
+                            this.showEvent.fire();
+                        }
                     } else {
                         this._setDomVisibility(true);
                     }
@@ -2817,26 +2819,26 @@
 
                 if (effect) { // Animate out if showing
                     if (currentVis == "visible") {
-                        this.beforeHideEvent.fire();
-
-                        nEffectInstances = effectInstances.length;
-                        for (k = 0; k < nEffectInstances; k++) {
-                            h = effectInstances[k];
-    
-                            if (k === 0 && !alreadySubscribed(
-                                h.animateOutCompleteEvent, this.hideEvent.fire, 
-                                this.hideEvent)) {
-    
-                                /*
-                                     Delegate hideEvent until end 
-                                     of animateOutComplete
-                                */
-    
-                                h.animateOutCompleteEvent.subscribe(
-                                    this.hideEvent.fire, this.hideEvent, true);
-    
+                        if (this.beforeHideEvent.fire()) {
+                            nEffectInstances = effectInstances.length;
+                            for (k = 0; k < nEffectInstances; k++) {
+                                h = effectInstances[k];
+        
+                                if (k === 0 && !alreadySubscribed(
+                                    h.animateOutCompleteEvent, this.hideEvent.fire, 
+                                    this.hideEvent)) {
+        
+                                    /*
+                                         Delegate hideEvent until end 
+                                         of animateOutComplete
+                                    */
+        
+                                    h.animateOutCompleteEvent.subscribe(
+                                        this.hideEvent.fire, this.hideEvent, true);
+        
+                                }
+                                h.animateOut();
                             }
-                            h.animateOut();
                         }
 
                     } else if (currentVis === "") {
@@ -2846,9 +2848,10 @@
                 } else { // Simple hide
 
                     if (currentVis == "visible" || currentVis === "") {
-                        this.beforeHideEvent.fire();
-                        this._setDomVisibility(false);
-                        this.hideEvent.fire();
+                        if (this.beforeHideEvent.fire()) {
+                            this._setDomVisibility(false);
+                            this.hideEvent.fire();
+                        }
                     } else {
                         this._setDomVisibility(false);
                     }
