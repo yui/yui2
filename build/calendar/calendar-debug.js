@@ -4780,10 +4780,10 @@ CalendarGroup.prototype = {
         this.cfg.fireQueue();
 
         // OPERA HACK FOR MISWRAPPED FLOATS
-        if (YAHOO.env.ua.opera){
-            this.renderEvent.subscribe(this._fixWidth, this, true);
-            this.showEvent.subscribe(this._fixWidth, this, true);
-        }
+        // if (YAHOO.env.ua.opera){
+        //     this.renderEvent.subscribe(this._fixWidth, this, true);
+        //    this.showEvent.subscribe(this._fixWidth, this, true);
+        // }
 
         this.logger.log("Initialized " + this.pages.length + "-page CalendarGroup", "info");
     },
