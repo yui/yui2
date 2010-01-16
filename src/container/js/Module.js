@@ -1161,13 +1161,15 @@
         configVisible: function (type, args, obj) {
             var visible = args[0];
             if (visible) {
-                this.beforeShowEvent.fire();
-                Dom.setStyle(this.element, "display", "block");
-                this.showEvent.fire();
+                if(this.beforeShowEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "block");
+                    this.showEvent.fire();
+                }
             } else {
-                this.beforeHideEvent.fire();
-                Dom.setStyle(this.element, "display", "none");
-                this.hideEvent.fire();
+                if (this.beforeHideEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "none");
+                    this.hideEvent.fire();
+                }
             }
         },
 
