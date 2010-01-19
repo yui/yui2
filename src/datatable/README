@@ -1,5 +1,12 @@
 DataTable Release Notes
 
+*** version 2.NEXT ***
+
+* Added className property to CellEditor for custom class assignment.
+* Added useIFrame property to CellEditor for IE6 select bleed-through workaround.
+
+
+
 **** 2.8.0 ****
 
 * DropdownCellEditor now supports multiple and size properties.

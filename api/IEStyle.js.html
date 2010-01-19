@@ -47,235 +47,235 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-<span class="c">/**</span>
-<span class="c"> * Internal methods used to add style management functionality to DOM.</span>
-<span class="c"> * @module dom</span>
-<span class="c"> * @class IEStyle</span>
-<span class="c"> * @namespace YAHOO.util.Dom</span>
-<span class="c"> */</span>
+                        <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="cm">/**</span>
+<span class="cm"> * Internal methods used to add style management functionality to DOM.</span>
+<span class="cm"> * @module dom</span>
+<span class="cm"> * @class IEStyle</span>
+<span class="cm"> * @namespace YAHOO.util.Dom</span>
+<span class="cm"> */</span>
 
-<span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span> 
-    <span class="nx">CLIENT_TOP</span> <span class="o">=</span> <span class="s1">&#39;clientTop&#39;</span><span class="o">,</span>
-    <span class="nx">CLIENT_LEFT</span> <span class="o">=</span> <span class="s1">&#39;clientLeft&#39;</span><span class="o">,</span>
-    <span class="nx">PARENT_NODE</span> <span class="o">=</span> <span class="s1">&#39;parentNode&#39;</span><span class="o">,</span>
-    <span class="nx">RIGHT</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="o">,</span>
-    <span class="nx">HAS_LAYOUT</span> <span class="o">=</span> <span class="s1">&#39;hasLayout&#39;</span><span class="o">,</span>
-    <span class="nx">PX</span> <span class="o">=</span> <span class="s1">&#39;px&#39;</span><span class="o">,</span>
-    <span class="nx">OPACITY</span> <span class="o">=</span> <span class="s1">&#39;opacity&#39;</span><span class="o">,</span>
-    <span class="nx">AUTO</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="o">,</span>
-    <span class="nx">BORDER_LEFT_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderLeftWidth&#39;</span><span class="o">,</span>
-    <span class="nx">BORDER_TOP_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderTopWidth&#39;</span><span class="o">,</span>
-    <span class="nx">BORDER_RIGHT_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderRightWidth&#39;</span><span class="o">,</span>
-    <span class="nx">BORDER_BOTTOM_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderBottomWidth&#39;</span><span class="o">,</span>
-    <span class="nx">VISIBLE</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="o">,</span>
-    <span class="nx">TRANSPARENT</span> <span class="o">=</span> <span class="s1">&#39;transparent&#39;</span><span class="o">,</span>
-    <span class="nx">HEIGHT</span> <span class="o">=</span> <span class="s1">&#39;height&#39;</span><span class="o">,</span>
-    <span class="nx">WIDTH</span> <span class="o">=</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span>
-    <span class="nx">STYLE</span> <span class="o">=</span> <span class="s1">&#39;style&#39;</span><span class="o">,</span>
-    <span class="nx">CURRENT_STYLE</span> <span class="o">=</span> <span class="s1">&#39;currentStyle&#39;</span><span class="o">,</span>
+<span class="kd">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">,</span> 
+    <span class="nx">CLIENT_TOP</span> <span class="o">=</span> <span class="s1">&#39;clientTop&#39;</span><span class="p">,</span>
+    <span class="nx">CLIENT_LEFT</span> <span class="o">=</span> <span class="s1">&#39;clientLeft&#39;</span><span class="p">,</span>
+    <span class="nx">PARENT_NODE</span> <span class="o">=</span> <span class="s1">&#39;parentNode&#39;</span><span class="p">,</span>
+    <span class="nx">RIGHT</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
+    <span class="nx">HAS_LAYOUT</span> <span class="o">=</span> <span class="s1">&#39;hasLayout&#39;</span><span class="p">,</span>
+    <span class="nx">PX</span> <span class="o">=</span> <span class="s1">&#39;px&#39;</span><span class="p">,</span>
+    <span class="nx">OPACITY</span> <span class="o">=</span> <span class="s1">&#39;opacity&#39;</span><span class="p">,</span>
+    <span class="nx">AUTO</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+    <span class="nx">BORDER_LEFT_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderLeftWidth&#39;</span><span class="p">,</span>
+    <span class="nx">BORDER_TOP_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderTopWidth&#39;</span><span class="p">,</span>
+    <span class="nx">BORDER_RIGHT_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderRightWidth&#39;</span><span class="p">,</span>
+    <span class="nx">BORDER_BOTTOM_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;borderBottomWidth&#39;</span><span class="p">,</span>
+    <span class="nx">VISIBLE</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="p">,</span>
+    <span class="nx">TRANSPARENT</span> <span class="o">=</span> <span class="s1">&#39;transparent&#39;</span><span class="p">,</span>
+    <span class="nx">HEIGHT</span> <span class="o">=</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span>
+    <span class="nx">WIDTH</span> <span class="o">=</span> <span class="s1">&#39;width&#39;</span><span class="p">,</span>
+    <span class="nx">STYLE</span> <span class="o">=</span> <span class="s1">&#39;style&#39;</span><span class="p">,</span>
+    <span class="nx">CURRENT_STYLE</span> <span class="o">=</span> <span class="s1">&#39;currentStyle&#39;</span><span class="p">,</span>
 
-<span class="c">// IE getComputedStyle</span>
-<span class="c">// TODO: unit-less lineHeight (e.g. 1.22)</span>
-<span class="c"></span>    <span class="nx">re_size</span> <span class="o">=</span> <span class="sr">/^width|height$/</span><span class="o">,</span>
-    <span class="nx">re_unit</span> <span class="o">=</span> <span class="sr">/^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i</span><span class="o">,</span>
+<span class="c1">// IE getComputedStyle</span>
+<span class="c1">// TODO: unit-less lineHeight (e.g. 1.22)</span>
+    <span class="nx">re_size</span> <span class="o">=</span> <span class="sr">/^width|height$/</span><span class="p">,</span>
+    <span class="nx">re_unit</span> <span class="o">=</span> <span class="sr">/^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i</span><span class="p">,</span>
 
-    <span class="nx">ComputedStyle</span> <span class="o">=</span> <span class="o">{</span>
-        <span class="c">/**</span>
-<span class="c">        * @method get</span>
-<span class="c">        * @description Method used by DOM to get style information for IE</span>
-<span class="c">        * @param {HTMLElement} el The element to check</span>
-<span class="c">        * @param {String} property The property to check</span>
-<span class="c">        * @returns {String} The computed style</span>
-<span class="c">        */</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">,</span>
-                <span class="nx">current</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">property</span><span class="o">];</span>
+    <span class="nx">ComputedStyle</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method get</span>
+<span class="cm">        * @description Method used by DOM to get style information for IE</span>
+<span class="cm">        * @param {HTMLElement} el The element to check</span>
+<span class="cm">        * @param {String} property The property to check</span>
+<span class="cm">        * @returns {String} The computed style</span>
+<span class="cm">        */</span>
+        <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">property</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="nx">current</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">property</span><span class="p">];</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">property</span> <span class="o">===</span> <span class="nx">OPACITY</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">OPACITY</span><span class="o">);</span>        
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="nx">current</span> <span class="o">||</span> <span class="o">(</span><span class="nx">current</span><span class="o">.</span><span class="nx">indexOf</span> <span class="o">&amp;&amp;</span> <span class="nx">current</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">PX</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span> <span class="c">// no need to convert</span>
-<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="nx">current</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE_COMPUTED</span><span class="o">[</span><span class="nx">property</span><span class="o">])</span> <span class="o">{</span> <span class="c">// use compute function</span>
-<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE_COMPUTED</span><span class="o">[</span><span class="nx">property</span><span class="o">](</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">re_unit</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">current</span><span class="o">))</span> <span class="o">{</span> <span class="c">// convert to pixel</span>
-<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE</span><span class="o">.</span><span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getPixel</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">current</span><span class="o">;</span>
-            <span class="o">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">property</span> <span class="o">===</span> <span class="nx">OPACITY</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">OPACITY</span><span class="p">);</span>        
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">current</span> <span class="o">||</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">indexOf</span> <span class="o">&amp;&amp;</span> <span class="nx">current</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">PX</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// no need to convert</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">current</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE_COMPUTED</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// use compute function</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE_COMPUTED</span><span class="p">[</span><span class="nx">property</span><span class="p">](</span><span class="nx">el</span><span class="p">,</span> <span class="nx">property</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">re_unit</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">current</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// convert to pixel</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE</span><span class="p">.</span><span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getPixel</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">property</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">current</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            <span class="k">return</span> <span class="nx">value</span><span class="o">;</span>
-        <span class="o">},</span>
-        <span class="c">/**</span>
-<span class="c">        * @method getOffset</span>
-<span class="c">        * @description Determine the offset of an element</span>
-<span class="c">        * @param {HTMLElement} el The element to check</span>
-<span class="c">        * @param {String} prop The property to check.</span>
-<span class="c">        * @return {String} The offset</span>
-<span class="c">        */</span>
-        <span class="nx">getOffset</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">prop</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">prop</span><span class="o">],</span>                        <span class="c">// value of &quot;width&quot;, &quot;top&quot;, etc.</span>
-<span class="c"></span>                <span class="nx">capped</span> <span class="o">=</span> <span class="nx">prop</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">+</span> <span class="nx">prop</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">),</span> <span class="c">// &quot;Width&quot;, &quot;Top&quot;, etc.</span>
-<span class="c"></span>                <span class="nx">offset</span> <span class="o">=</span> <span class="s1">&#39;offset&#39;</span> <span class="o">+</span> <span class="nx">capped</span><span class="o">,</span>                             <span class="c">// &quot;offsetWidth&quot;, &quot;offsetTop&quot;, etc.</span>
-<span class="c"></span>                <span class="nx">pixel</span> <span class="o">=</span> <span class="s1">&#39;pixel&#39;</span> <span class="o">+</span> <span class="nx">capped</span><span class="o">,</span>                               <span class="c">// &quot;pixelWidth&quot;, &quot;pixelTop&quot;, etc.</span>
-<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">,</span>
-                <span class="nx">actual</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getOffset</span>
+<span class="cm">        * @description Determine the offset of an element</span>
+<span class="cm">        * @param {HTMLElement} el The element to check</span>
+<span class="cm">        * @param {String} prop The property to check.</span>
+<span class="cm">        * @return {String} The offset</span>
+<span class="cm">        */</span>
+        <span class="nx">getOffset</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">prop</span><span class="p">],</span>                        <span class="c1">// value of &quot;width&quot;, &quot;top&quot;, etc.</span>
+                <span class="nx">capped</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="c1">// &quot;Width&quot;, &quot;Top&quot;, etc.</span>
+                <span class="nx">offset</span> <span class="o">=</span> <span class="s1">&#39;offset&#39;</span> <span class="o">+</span> <span class="nx">capped</span><span class="p">,</span>                             <span class="c1">// &quot;offsetWidth&quot;, &quot;offsetTop&quot;, etc.</span>
+                <span class="nx">pixel</span> <span class="o">=</span> <span class="s1">&#39;pixel&#39;</span> <span class="o">+</span> <span class="nx">capped</span><span class="p">,</span>                               <span class="c1">// &quot;pixelWidth&quot;, &quot;pixelTop&quot;, etc.</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="nx">actual</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">current</span> <span class="o">==</span> <span class="nx">AUTO</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">actual</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">offset</span><span class="o">];</span> <span class="c">// offsetHeight/Top etc.</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">actual</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">{</span> <span class="c">// likely &quot;right&quot; or &quot;bottom&quot;</span>
-<span class="c"></span>                    <span class="nx">value</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-                <span class="o">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">current</span> <span class="o">==</span> <span class="nx">AUTO</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">actual</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">offset</span><span class="p">];</span> <span class="c1">// offsetHeight/Top etc.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">actual</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// likely &quot;right&quot; or &quot;bottom&quot;</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
 
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">actual</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">re_size</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">prop</span><span class="o">))</span> <span class="o">{</span> <span class="c">// account for box model diff </span>
-<span class="c"></span>                    <span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">actual</span><span class="o">;</span> 
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">offset</span><span class="o">]</span> <span class="o">&gt;</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c">// the difference is padding + border (works in Standards &amp; Quirks modes)</span>
-<span class="c"></span>                        <span class="nx">value</span> <span class="o">=</span> <span class="nx">actual</span> <span class="o">-</span> <span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">offset</span><span class="o">]</span> <span class="o">-</span> <span class="nx">actual</span><span class="o">);</span>
-                    <span class="o">}</span>
-                    <span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">AUTO</span><span class="o">;</span> <span class="c">// revert to auto</span>
-<span class="c"></span>                <span class="o">}</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// convert units to px</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">pixel</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">prop</span><span class="o">])</span> <span class="o">{</span> <span class="c">// need to map style.width to currentStyle (no currentStyle.pixelWidth)</span>
-<span class="c"></span>                    <span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">current</span><span class="o">;</span>              <span class="c">// no style.pixelWidth if no style.width</span>
-<span class="c"></span>                <span class="o">}</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">pixel</span><span class="o">];</span>
-            <span class="o">}</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">PX</span><span class="o">;</span>
-        <span class="o">},</span>
-        <span class="c">/**</span>
-<span class="c">        * @method getBorderWidth</span>
-<span class="c">        * @description Try to determine the width of an elements border</span>
-<span class="c">        * @param {HTMLElement} el The element to check</span>
-<span class="c">        * @param {String} property The property to check</span>
-<span class="c">        * @return {String} The elements border width</span>
-<span class="c">        */</span>
-        <span class="nx">getBorderWidth</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">property</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)</span>
-<span class="c"></span>            <span class="c">// clientTop/Left = borderWidth</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">HAS_LAYOUT</span><span class="o">])</span> <span class="o">{</span> <span class="c">// TODO: unset layout?</span>
-<span class="c"></span>                <span class="nx">el</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">].</span><span class="nx">zoom</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span> <span class="c">// need layout to measure client</span>
-<span class="c"></span>            <span class="o">}</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">actual</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">re_size</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// account for box model diff </span>
+                    <span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">actual</span><span class="p">;</span> 
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">[</span><span class="nx">offset</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">actual</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="c1">// the difference is padding + border (works in Standards &amp; Quirks modes)</span>
+                        <span class="nx">value</span> <span class="o">=</span> <span class="nx">actual</span> <span class="o">-</span> <span class="p">(</span><span class="nx">el</span><span class="p">[</span><span class="nx">offset</span><span class="p">]</span> <span class="o">-</span> <span class="nx">actual</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">AUTO</span><span class="p">;</span> <span class="c1">// revert to auto</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// convert units to px</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">pixel</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">prop</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// need to map style.width to currentStyle (no currentStyle.pixelWidth)</span>
+                    <span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">current</span><span class="p">;</span>              <span class="c1">// no style.pixelWidth if no style.width</span>
+                <span class="p">}</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">pixel</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">PX</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getBorderWidth</span>
+<span class="cm">        * @description Try to determine the width of an elements border</span>
+<span class="cm">        * @param {HTMLElement} el The element to check</span>
+<span class="cm">        * @param {String} property The property to check</span>
+<span class="cm">        * @return {String} The elements border width</span>
+<span class="cm">        */</span>
+        <span class="nx">getBorderWidth</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">property</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)</span>
+            <span class="c1">// clientTop/Left = borderWidth</span>
+            <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">el</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">HAS_LAYOUT</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// TODO: unset layout?</span>
+                <span class="nx">el</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">].</span><span class="nx">zoom</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// need layout to measure client</span>
+            <span class="p">}</span>
 
-            <span class="nx">switch</span><span class="o">(</span><span class="nx">property</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">case</span> <span class="nx">BORDER_TOP_WIDTH</span><span class="o">:</span>
-                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CLIENT_TOP</span><span class="o">];</span>
-                    <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="nx">BORDER_BOTTOM_WIDTH</span><span class="o">:</span>
-                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">-</span> <span class="nx">el</span><span class="o">.</span><span class="nx">clientHeight</span> <span class="o">-</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CLIENT_TOP</span><span class="o">];</span>
-                    <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="nx">BORDER_LEFT_WIDTH</span><span class="o">:</span>
-                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CLIENT_LEFT</span><span class="o">];</span>
-                    <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="nx">BORDER_RIGHT_WIDTH</span><span class="o">:</span>
-                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">-</span> <span class="nx">el</span><span class="o">.</span><span class="nx">clientWidth</span> <span class="o">-</span> <span class="nx">el</span><span class="o">[</span><span class="nx">CLIENT_LEFT</span><span class="o">];</span>
-                    <span class="k">break</span><span class="o">;</span>
-            <span class="o">}</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">PX</span><span class="o">;</span>
-        <span class="o">},</span>
-        <span class="c">/**</span>
-<span class="c">        * @method getPixel</span>
-<span class="c">        * @description Get the pixel value from a style property</span>
-<span class="c">        * @param {HTMLElement} node The element to check</span>
-<span class="c">        * @param {String} att The attribute to check</span>
-<span class="c">        * @return {String} The pixel value</span>
-<span class="c">        */</span>
-        <span class="nx">getPixel</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// use pixelRight to convert to px</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
-                <span class="nx">styleRight</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">RIGHT</span><span class="o">],</span>
-                <span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">att</span><span class="o">];</span>
+            <span class="k">switch</span><span class="p">(</span><span class="nx">property</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="nx">BORDER_TOP_WIDTH</span><span class="o">:</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CLIENT_TOP</span><span class="p">];</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="nx">BORDER_BOTTOM_WIDTH</span><span class="o">:</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">offsetHeight</span> <span class="o">-</span> <span class="nx">el</span><span class="p">.</span><span class="nx">clientHeight</span> <span class="o">-</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CLIENT_TOP</span><span class="p">];</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="nx">BORDER_LEFT_WIDTH</span><span class="o">:</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CLIENT_LEFT</span><span class="p">];</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="nx">BORDER_RIGHT_WIDTH</span><span class="o">:</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">offsetWidth</span> <span class="o">-</span> <span class="nx">el</span><span class="p">.</span><span class="nx">clientWidth</span> <span class="o">-</span> <span class="nx">el</span><span class="p">[</span><span class="nx">CLIENT_LEFT</span><span class="p">];</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">PX</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getPixel</span>
+<span class="cm">        * @description Get the pixel value from a style property</span>
+<span class="cm">        * @param {HTMLElement} node The element to check</span>
+<span class="cm">        * @param {String} att The attribute to check</span>
+<span class="cm">        * @return {String} The pixel value</span>
+<span class="cm">        */</span>
+        <span class="nx">getPixel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// use pixelRight to convert to px</span>
+            <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+                <span class="nx">styleRight</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">RIGHT</span><span class="p">],</span>
+                <span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">att</span><span class="p">];</span>
 
-            <span class="nx">node</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">RIGHT</span><span class="o">]</span> <span class="o">=</span> <span class="nx">current</span><span class="o">;</span>
-            <span class="nx">val</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">].</span><span class="nx">pixelRight</span><span class="o">;</span>
-            <span class="nx">node</span><span class="o">[</span><span class="nx">STYLE</span><span class="o">][</span><span class="nx">RIGHT</span><span class="o">]</span> <span class="o">=</span> <span class="nx">styleRight</span><span class="o">;</span> <span class="c">// revert</span>
-<span class="c"></span>
-            <span class="k">return</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">PX</span><span class="o">;</span>
-        <span class="o">},</span>
+            <span class="nx">node</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">RIGHT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">current</span><span class="p">;</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">].</span><span class="nx">pixelRight</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">[</span><span class="nx">STYLE</span><span class="p">][</span><span class="nx">RIGHT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">styleRight</span><span class="p">;</span> <span class="c1">// revert</span>
 
-        <span class="c">/**</span>
-<span class="c">        * @method getMargin</span>
-<span class="c">        * @description Get the margin value from a style property</span>
-<span class="c">        * @param {HTMLElement} node The element to check</span>
-<span class="c">        * @param {String} att The attribute to check</span>
-<span class="c">        * @return {String} The margin value</span>
-<span class="c">        */</span>
-        <span class="nx">getMargin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">val</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">att</span><span class="o">]</span> <span class="o">==</span> <span class="nx">AUTO</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">val</span> <span class="o">=</span> <span class="m">0</span> <span class="o">+</span> <span class="nx">PX</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE</span><span class="o">.</span><span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getPixel</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">);</span>
-            <span class="o">}</span>
-            <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
-        <span class="o">},</span>
+            <span class="k">return</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">PX</span><span class="p">;</span>
+        <span class="p">},</span>
 
-        <span class="c">/**</span>
-<span class="c">        * @method getVisibility</span>
-<span class="c">        * @description Get the visibility of an element</span>
-<span class="c">        * @param {HTMLElement} node The element to check</span>
-<span class="c">        * @param {String} att The attribute to check</span>
-<span class="c">        * @return {String} The value</span>
-<span class="c">        */</span>
-        <span class="nx">getVisibility</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">current</span><span class="o">;</span>
-            <span class="k">while</span> <span class="o">(</span> <span class="o">(</span><span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">])</span> <span class="o">&amp;&amp;</span> <span class="nx">current</span><span class="o">[</span><span class="nx">att</span><span class="o">]</span> <span class="o">==</span> <span class="s1">&#39;inherit&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="c">// NOTE: assignment in test</span>
-<span class="c"></span>                <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">PARENT_NODE</span><span class="o">];</span>
-            <span class="o">}</span>
-            <span class="k">return</span> <span class="o">(</span><span class="nx">current</span><span class="o">)</span> <span class="o">?</span> <span class="nx">current</span><span class="o">[</span><span class="nx">att</span><span class="o">]</span> <span class="o">:</span> <span class="nx">VISIBLE</span><span class="o">;</span>
-        <span class="o">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getMargin</span>
+<span class="cm">        * @description Get the margin value from a style property</span>
+<span class="cm">        * @param {HTMLElement} node The element to check</span>
+<span class="cm">        * @param {String} att The attribute to check</span>
+<span class="cm">        * @return {String} The margin value</span>
+<span class="cm">        */</span>
+        <span class="nx">getMargin</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">val</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">att</span><span class="p">]</span> <span class="o">==</span> <span class="nx">AUTO</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">val</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">+</span> <span class="nx">PX</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE</span><span class="p">.</span><span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getPixel</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">val</span><span class="p">;</span>
+        <span class="p">},</span>
 
-        <span class="c">/**</span>
-<span class="c">        * @method getColor</span>
-<span class="c">        * @description Get the color of an element</span>
-<span class="c">        * @param {HTMLElement} node The element to check</span>
-<span class="c">        * @param {String} att The attribute to check</span>
-<span class="c">        * @return {String} The value</span>
-<span class="c">        */</span>
-        <span class="nx">getColor</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">Color</span><span class="o">.</span><span class="nx">toRGB</span><span class="o">(</span><span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">][</span><span class="nx">att</span><span class="o">])</span> <span class="o">||</span> <span class="nx">TRANSPARENT</span><span class="o">;</span>
-        <span class="o">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getVisibility</span>
+<span class="cm">        * @description Get the visibility of an element</span>
+<span class="cm">        * @param {HTMLElement} node The element to check</span>
+<span class="cm">        * @param {String} att The attribute to check</span>
+<span class="cm">        * @return {String} The value</span>
+<span class="cm">        */</span>
+        <span class="nx">getVisibility</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">current</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span> <span class="p">(</span><span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nx">current</span><span class="p">[</span><span class="nx">att</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;inherit&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// NOTE: assignment in test</span>
+                <span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">PARENT_NODE</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">current</span><span class="p">)</span> <span class="o">?</span> <span class="nx">current</span><span class="p">[</span><span class="nx">att</span><span class="p">]</span> <span class="o">:</span> <span class="nx">VISIBLE</span><span class="p">;</span>
+        <span class="p">},</span>
 
-        <span class="c">/**</span>
-<span class="c">        * @method getBorderColor</span>
-<span class="c">        * @description Get the bordercolor of an element</span>
-<span class="c">        * @param {HTMLElement} node The element to check</span>
-<span class="c">        * @param {String} att The attribute to check</span>
-<span class="c">        * @return {String} The value</span>
-<span class="c">        */</span>
-        <span class="nx">getBorderColor</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">att</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="o">[</span><span class="nx">CURRENT_STYLE</span><span class="o">],</span>
-                <span class="nx">val</span> <span class="o">=</span> <span class="nx">current</span><span class="o">[</span><span class="nx">att</span><span class="o">]</span> <span class="o">||</span> <span class="nx">current</span><span class="o">.</span><span class="nx">color</span><span class="o">;</span>
-            <span class="k">return</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">Color</span><span class="o">.</span><span class="nx">toRGB</span><span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">Color</span><span class="o">.</span><span class="nx">toHex</span><span class="o">(</span><span class="nx">val</span><span class="o">));</span>
-        <span class="o">}</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getColor</span>
+<span class="cm">        * @description Get the color of an element</span>
+<span class="cm">        * @param {HTMLElement} node The element to check</span>
+<span class="cm">        * @param {String} att The attribute to check</span>
+<span class="cm">        * @return {String} The value</span>
+<span class="cm">        */</span>
+        <span class="nx">getColor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">Color</span><span class="p">.</span><span class="nx">toRGB</span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">][</span><span class="nx">att</span><span class="p">])</span> <span class="o">||</span> <span class="nx">TRANSPARENT</span><span class="p">;</span>
+        <span class="p">},</span>
 
-    <span class="o">},</span>
+        <span class="cm">/**</span>
+<span class="cm">        * @method getBorderColor</span>
+<span class="cm">        * @description Get the bordercolor of an element</span>
+<span class="cm">        * @param {HTMLElement} node The element to check</span>
+<span class="cm">        * @param {String} att The attribute to check</span>
+<span class="cm">        * @return {String} The value</span>
+<span class="cm">        */</span>
+        <span class="nx">getBorderColor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">att</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">CURRENT_STYLE</span><span class="p">],</span>
+                <span class="nx">val</span> <span class="o">=</span> <span class="nx">current</span><span class="p">[</span><span class="nx">att</span><span class="p">]</span> <span class="o">||</span> <span class="nx">current</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">Color</span><span class="p">.</span><span class="nx">toRGB</span><span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">Color</span><span class="p">.</span><span class="nx">toHex</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
+        <span class="p">}</span>
 
-<span class="c">//fontSize: getPixelFont,</span>
-<span class="c"></span>    <span class="nx">IEComputed</span> <span class="o">=</span> <span class="o">{};</span>
+    <span class="p">},</span>
 
-<span class="nx">IEComputed</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">right</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> 
-        <span class="nx">IEComputed</span><span class="o">[</span><span class="nx">WIDTH</span><span class="o">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">[</span><span class="nx">HEIGHT</span><span class="o">]</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getOffset</span><span class="o">;</span>
+<span class="c1">//fontSize: getPixelFont,</span>
+    <span class="nx">IEComputed</span> <span class="o">=</span> <span class="p">{};</span>
 
-<span class="nx">IEComputed</span><span class="o">.</span><span class="nx">color</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getColor</span><span class="o">;</span>
+<span class="nx">IEComputed</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">bottom</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> 
+        <span class="nx">IEComputed</span><span class="p">[</span><span class="nx">WIDTH</span><span class="p">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">[</span><span class="nx">HEIGHT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getOffset</span><span class="p">;</span>
 
-<span class="nx">IEComputed</span><span class="o">[</span><span class="nx">BORDER_TOP_WIDTH</span><span class="o">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">[</span><span class="nx">BORDER_RIGHT_WIDTH</span><span class="o">]</span> <span class="o">=</span>
-        <span class="nx">IEComputed</span><span class="o">[</span><span class="nx">BORDER_BOTTOM_WIDTH</span><span class="o">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">[</span><span class="nx">BORDER_LEFT_WIDTH</span><span class="o">]</span> <span class="o">=</span>
-        <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getBorderWidth</span><span class="o">;</span>
+<span class="nx">IEComputed</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getColor</span><span class="p">;</span>
 
-<span class="nx">IEComputed</span><span class="o">.</span><span class="nx">marginTop</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">marginRight</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">marginBottom</span> <span class="o">=</span>
-        <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">marginLeft</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getMargin</span><span class="o">;</span>
+<span class="nx">IEComputed</span><span class="p">[</span><span class="nx">BORDER_TOP_WIDTH</span><span class="p">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">[</span><span class="nx">BORDER_RIGHT_WIDTH</span><span class="p">]</span> <span class="o">=</span>
+        <span class="nx">IEComputed</span><span class="p">[</span><span class="nx">BORDER_BOTTOM_WIDTH</span><span class="p">]</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">[</span><span class="nx">BORDER_LEFT_WIDTH</span><span class="p">]</span> <span class="o">=</span>
+        <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getBorderWidth</span><span class="p">;</span>
 
-<span class="nx">IEComputed</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getVisibility</span><span class="o">;</span>
-<span class="nx">IEComputed</span><span class="o">.</span><span class="nx">borderColor</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">borderTopColor</span> <span class="o">=</span>
-        <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">borderRightColor</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">borderBottomColor</span> <span class="o">=</span>
-        <span class="nx">IEComputed</span><span class="o">.</span><span class="nx">borderLeftColor</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">.</span><span class="nx">getBorderColor</span><span class="o">;</span>
+<span class="nx">IEComputed</span><span class="p">.</span><span class="nx">marginTop</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">marginRight</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">marginBottom</span> <span class="o">=</span>
+        <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">marginLeft</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getMargin</span><span class="p">;</span>
 
-<span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE_COMPUTED</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="o">;</span>
-<span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">IE_ComputedStyle</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="o">;</span>
-<span class="o">})();</span>
+<span class="nx">IEComputed</span><span class="p">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getVisibility</span><span class="p">;</span>
+<span class="nx">IEComputed</span><span class="p">.</span><span class="nx">borderColor</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">borderTopColor</span> <span class="o">=</span>
+        <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">borderRightColor</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">borderBottomColor</span> <span class="o">=</span>
+        <span class="nx">IEComputed</span><span class="p">.</span><span class="nx">borderLeftColor</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">.</span><span class="nx">getBorderColor</span><span class="p">;</span>
+
+<span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE_COMPUTED</span> <span class="o">=</span> <span class="nx">IEComputed</span><span class="p">;</span>
+<span class="nx">Y</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">IE_ComputedStyle</span> <span class="o">=</span> <span class="nx">ComputedStyle</span><span class="p">;</span>
+<span class="p">})();</span>
 </pre></div>
 
                     </div>
@@ -368,11 +368,12 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Region", "name": "0", "url": "YAHOO.util.Region.html#property_0", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "1", "url": "YAHOO.util.Region.html#property_1", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "addClass", "url": "YAHOO.util.Dom.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "batch", "url": "YAHOO.util.Dom.html#method_batch", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "bottom", "url": "YAHOO.util.Region.html#property_bottom", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "contains", "url": "YAHOO.util.Region.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "generateId", "url": "YAHOO.util.Dom.html#method_generateId", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "get", "url": "YAHOO.util.Dom.IEStyle.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "get", "url": "YAHOO.util.Dom.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorBy", "url": "YAHOO.util.Dom.html#method_getAncestorBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByClassName", "url": "YAHOO.util.Dom.html#method_getAncestorByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByTagName", "url": "YAHOO.util.Dom.html#method_getAncestorByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getArea", "url": "YAHOO.util.Region.html#method_getArea", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAttribute", "url": "YAHOO.util.Dom.html#method_getAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderColor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderWidth", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildren", "url": "YAHOO.util.Dom.html#method_getChildren", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildrenBy", "url": "YAHOO.util.Dom.html#method_getChildrenBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientHeight", "url": "YAHOO.util.Dom.html#method_getClientHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientRegion", "url": "YAHOO.util.Dom.html#method_getClientRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientWidth", "url": "YAHOO.util.Dom.html#method_getClientWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getColor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentHeight", "url": "YAHOO.util.Dom.html#method_getDocumentHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollLeft", "url": "YAHOO.util.Dom.html#method_getDocumentScrollLeft", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollTop", "url": "YAHOO.util.Dom.html#method_getDocumentScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentWidth", "url": "YAHOO.util.Dom.html#method_getDocumentWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementBy", "url": "YAHOO.util.Dom.html#method_getElementBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsBy", "url": "YAHOO.util.Dom.html#method_getElementsBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsByClassName", "url": "YAHOO.util.Dom.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChild", "url": "YAHOO.util.Dom.html#method_getFirstChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChildBy", "url": "YAHOO.util.Dom.html#method_getFirstChildBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChild", "url": "YAHOO.util.Dom.html#method_getLastChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChildBy", "url": "YAHOO.util.Dom.html#method_getLastChildBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getMargin", "url": "YAHOO.util.Dom.IEStyle.html#method_getMargin", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSibling", "url": "YAHOO.util.Dom.html#method_getNextSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSiblingBy", "url": "YAHOO.util.Dom.html#method_getNextSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getOffset", "url": "YAHOO.util.Dom.IEStyle.html#method_getOffset", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getPixel", "url": "YAHOO.util.Dom.IEStyle.html#method_getPixel", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSibling", "url": "YAHOO.util.Dom.html#method_getPreviousSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSiblingBy", "url": "YAHOO.util.Dom.html#method_getPreviousSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getRegion", "url": "YAHOO.util.Region.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getRegion", "url": "YAHOO.util.Dom.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getStyle", "url": "YAHOO.util.Dom.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportHeight", "url": "YAHOO.util.Dom.html#method_getViewportHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportWidth", "url": "YAHOO.util.Dom.html#method_getViewportWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getVisibility", "url": "YAHOO.util.Dom.IEStyle.html#method_getVisibility", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getX", "url": "YAHOO.util.Dom.html#method_getX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getXY", "url": "YAHOO.util.Dom.html#method_getXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getY", "url": "YAHOO.util.Dom.html#method_getY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "hasClass", "url": "YAHOO.util.Dom.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "height", "url": "YAHOO.util.Region.html#property_height", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "inDocument", "url": "YAHOO.util.Dom.html#method_inDocument", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertAfter", "url": "YAHOO.util.Dom.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertBefore", "url": "YAHOO.util.Dom.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "intersect", "url": "YAHOO.util.Region.html#method_intersect", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "isAncestor", "url": "YAHOO.util.Dom.html#method_isAncestor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "KEYWORDS", "url": "YAHOO.util.Dom.Color.html#property_KEYWORDS", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "left", "url": "YAHOO.util.Region.html#property_left", "type": "property"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex", "url": "YAHOO.util.Dom.Color.html#property_re_hex", "type": "property"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex3", "url": "YAHOO.util.Dom.Color.html#property_re_hex3", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "removeClass", "url": "YAHOO.util.Dom.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "replaceClass", "url": "YAHOO.util.Dom.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_RGB", "url": "YAHOO.util.Dom.Color.html#property_re_RGB", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "right", "url": "YAHOO.util.Region.html#property_right", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setAttribute", "url": "YAHOO.util.Dom.html#method_setAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setStyle", "url": "YAHOO.util.Dom.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setX", "url": "YAHOO.util.Dom.html#method_setX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setXY", "url": "YAHOO.util.Dom.html#method_setXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setY", "url": "YAHOO.util.Dom.html#method_setY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toHex", "url": "YAHOO.util.Dom.Color.html#method_toHex", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "top", "url": "YAHOO.util.Region.html#property_top", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toRGB", "url": "YAHOO.util.Dom.Color.html#method_toRGB", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "toString", "url": "YAHOO.util.Region.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "union", "url": "YAHOO.util.Region.html#method_union", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "width", "url": "YAHOO.util.Region.html#property_width", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "x", "url": "YAHOO.util.Region.html#property_x", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "y", "url": "YAHOO.util.Region.html#property_y", "type": "property"}];
+
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Region", "name": "0", "url": "YAHOO.util.Region.html#property_0", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "1", "url": "YAHOO.util.Region.html#property_1", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "addClass", "url": "YAHOO.util.Dom.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "batch", "url": "YAHOO.util.Dom.html#method_batch", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "bottom", "url": "YAHOO.util.Region.html#property_bottom", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "contains", "url": "YAHOO.util.Region.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "generateId", "url": "YAHOO.util.Dom.html#method_generateId", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "get", "url": "YAHOO.util.Dom.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "get", "url": "YAHOO.util.Dom.IEStyle.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorBy", "url": "YAHOO.util.Dom.html#method_getAncestorBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByClassName", "url": "YAHOO.util.Dom.html#method_getAncestorByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByTagName", "url": "YAHOO.util.Dom.html#method_getAncestorByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getArea", "url": "YAHOO.util.Region.html#method_getArea", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAttribute", "url": "YAHOO.util.Dom.html#method_getAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderColor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderWidth", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildren", "url": "YAHOO.util.Dom.html#method_getChildren", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildrenBy", "url": "YAHOO.util.Dom.html#method_getChildrenBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientHeight", "url": "YAHOO.util.Dom.html#method_getClientHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientRegion", "url": "YAHOO.util.Dom.html#method_getClientRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientWidth", "url": "YAHOO.util.Dom.html#method_getClientWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getColor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentHeight", "url": "YAHOO.util.Dom.html#method_getDocumentHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollLeft", "url": "YAHOO.util.Dom.html#method_getDocumentScrollLeft", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollTop", "url": "YAHOO.util.Dom.html#method_getDocumentScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentWidth", "url": "YAHOO.util.Dom.html#method_getDocumentWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementBy", "url": "YAHOO.util.Dom.html#method_getElementBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsBy", "url": "YAHOO.util.Dom.html#method_getElementsBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsByClassName", "url": "YAHOO.util.Dom.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChild", "url": "YAHOO.util.Dom.html#method_getFirstChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChildBy", "url": "YAHOO.util.Dom.html#method_getFirstChildBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChild", "url": "YAHOO.util.Dom.html#method_getLastChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChildBy", "url": "YAHOO.util.Dom.html#method_getLastChildBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getMargin", "url": "YAHOO.util.Dom.IEStyle.html#method_getMargin", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSibling", "url": "YAHOO.util.Dom.html#method_getNextSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSiblingBy", "url": "YAHOO.util.Dom.html#method_getNextSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getOffset", "url": "YAHOO.util.Dom.IEStyle.html#method_getOffset", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getPixel", "url": "YAHOO.util.Dom.IEStyle.html#method_getPixel", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSibling", "url": "YAHOO.util.Dom.html#method_getPreviousSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSiblingBy", "url": "YAHOO.util.Dom.html#method_getPreviousSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getRegion", "url": "YAHOO.util.Dom.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getRegion", "url": "YAHOO.util.Region.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getStyle", "url": "YAHOO.util.Dom.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportHeight", "url": "YAHOO.util.Dom.html#method_getViewportHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportWidth", "url": "YAHOO.util.Dom.html#method_getViewportWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getVisibility", "url": "YAHOO.util.Dom.IEStyle.html#method_getVisibility", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getX", "url": "YAHOO.util.Dom.html#method_getX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getXY", "url": "YAHOO.util.Dom.html#method_getXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getY", "url": "YAHOO.util.Dom.html#method_getY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "hasClass", "url": "YAHOO.util.Dom.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "height", "url": "YAHOO.util.Region.html#property_height", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "inDocument", "url": "YAHOO.util.Dom.html#method_inDocument", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertAfter", "url": "YAHOO.util.Dom.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertBefore", "url": "YAHOO.util.Dom.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "intersect", "url": "YAHOO.util.Region.html#method_intersect", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "isAncestor", "url": "YAHOO.util.Dom.html#method_isAncestor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "KEYWORDS", "url": "YAHOO.util.Dom.Color.html#property_KEYWORDS", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "left", "url": "YAHOO.util.Region.html#property_left", "type": "property"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex", "url": "YAHOO.util.Dom.Color.html#property_re_hex", "type": "property"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex3", "url": "YAHOO.util.Dom.Color.html#property_re_hex3", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "removeClass", "url": "YAHOO.util.Dom.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "replaceClass", "url": "YAHOO.util.Dom.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_RGB", "url": "YAHOO.util.Dom.Color.html#property_re_RGB", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "right", "url": "YAHOO.util.Region.html#property_right", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setAttribute", "url": "YAHOO.util.Dom.html#method_setAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setStyle", "url": "YAHOO.util.Dom.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setX", "url": "YAHOO.util.Dom.html#method_setX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setXY", "url": "YAHOO.util.Dom.html#method_setXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setY", "url": "YAHOO.util.Dom.html#method_setY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toHex", "url": "YAHOO.util.Dom.Color.html#method_toHex", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "top", "url": "YAHOO.util.Region.html#property_top", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toRGB", "url": "YAHOO.util.Dom.Color.html#method_toRGB", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "toString", "url": "YAHOO.util.Region.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "union", "url": "YAHOO.util.Region.html#method_union", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "width", "url": "YAHOO.util.Region.html#property_width", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "x", "url": "YAHOO.util.Region.html#property_x", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "y", "url": "YAHOO.util.Region.html#property_y", "type": "property"}];
 </script>
 </body>
 </html>
