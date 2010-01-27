@@ -212,7 +212,9 @@ initAttributes : function(oConfigs) {
         value: "#F2F2F2",
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.backgroundColor = oParam;
+            if(this._elHdContainer) {
+                this._elHdContainer.style.backgroundColor = oParam;
+            }
         }
     });
 },

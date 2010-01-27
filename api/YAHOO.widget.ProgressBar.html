@@ -99,33 +99,13 @@ It allows for highly customized styles including animation, vertical or horizont
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__barSizeFunction">
-                                    <h4><a name="property__barSizeFunction" property="yui:name">_barSizeFunction</a>
-                                        - <code>private <span property="yui:type">{function}</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Function to be used to calculate bar size.  
-It is picked from <a href="#property_barSizeFunctions">_barSizeFunctions</a>
-depending on direction and whether animation is active.
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default" property="yui:defaultValue">
-                                        Default Value: null
-                                    </div>        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="private" rel="yui:property" resource="#property__barSizeFunctions">
                                     <h4><a name="property__barSizeFunctions" property="yui:name">_barSizeFunctions</a>
-                                        - <code>private <span property="yui:type">{collection of functions}</span></code>
+                                        - <code>private static <span property="yui:type">{collection of functions}</span></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            Collection of functions used by to calculate the size of the bar.
+                                            Collection of functions used to calculate the size of the bar.
 One of this will be used depending on direction and whether animation is active.
                                         </div>
                                     </div>
@@ -235,6 +215,22 @@ One of this will be used depending on direction and whether animation is active.
                                 </code>
                             </div>
                         </div>
+                        <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.EventProvider.html">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content" rel="yui:properties">
+                                <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
+                                        </span>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
+                                        </span>
+                                    
+                                </code>
+                            </div>
+                        </div>
                         </div>
                     </div>
 
@@ -242,6 +238,42 @@ One of this will be used depending on direction and whether animation is active.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private" rel="yui:method" resource="#method__animComplete">
+                                    <h4>
+                                        <a name="method__animComplete">_animComplete</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">_animComplete</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Called when the animation signals it has completed.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">void</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="private" rel="yui:method" resource="#method__animSetter">
                                     <h4>
                                         <a name="method__animSetter">_animSetter</a></h4>
@@ -253,6 +285,11 @@ One of this will be used depending on direction and whether animation is active.
                                         
                                             <strong property="yui:name">_animSetter</strong>
                                            (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -263,6 +300,15 @@ It creates and sets up or destroys the instance of the animation utility that wi
 
                                         <div class="description">
 
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">value</span>
+                                                        &lt;<span property="yui:type">boolean ,YAHOO.util.Anim</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Enable animation or set to specific instance</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -459,6 +505,11 @@ It is called after <a href="#method_initAttributes">initAttributes</a>
                                         
                                             <strong property="yui:name">_setAriaText</strong>
                                            (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -468,6 +519,15 @@ It is called after <a href="#method_initAttributes">initAttributes</a>
 
                                         <div class="description">
 
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">value</span>
+                                                        &lt;<span property="yui:type">number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Value to be voiced</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -495,6 +555,15 @@ It is called after <a href="#method_initAttributes">initAttributes</a>
                                         
                                             <strong property="yui:name">_valueChange</strong>
                                            (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                                        , 
+                                                         noAnim
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -505,6 +574,21 @@ Moves the bar to reflect the new value
 
                                         <div class="description">
 
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">value</span>
+                                                        &lt;<span property="yui:type">number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  New value to be set</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">noAnim</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Disable animation for this redraw</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -662,6 +746,11 @@ Moves the bar to reflect the new value
                                         
                                             <strong property="yui:name">redraw</strong>
                                            (
+                                                
+                                                        
+                                                         noAnim
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -671,6 +760,15 @@ Moves the bar to reflect the new value
 
                                         <div class="description">
 
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">noAnim</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Don't use animation to redraw</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -869,6 +967,31 @@ The method is chainable since it returns a reference to this instance.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_setAttributes">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributes" property="yui:name" title="setAttributes">setAttributes</a>
+                                            </span>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.EventProvider.html">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content" rel="yui:methods">
+                                    <code>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_createEvent">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent" property="yui:name" title="createEvent">createEvent</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_fireEvent">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent" property="yui:name" title="fireEvent">fireEvent</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_hasEvent">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent" property="yui:name" title="hasEvent">hasEvent</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_subscribe">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe" property="yui:name" title="subscribe">subscribe</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_unsubscribe">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe" property="yui:name" title="unsubscribe">unsubscribe</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.EventProvider.html#method_unsubscribeAll">                                        
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll" property="yui:name" title="unsubscribeAll">unsubscribeAll</a>
                                             </span>
                                     </code>
                                 </div>
@@ -1937,7 +2060,7 @@ If animation is not active, it will fire only once providing the end value
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            it accepts either a boolean (recommended) or an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>.
+                                            It accepts either a boolean (recommended) or an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>.
 If a boolean, it will enable/disable animation creating its own instance of the animation utility.  
 If given an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a> it will use that instance.
 The <a href="YAHOO.util.Anim.html">animation</a> utility needs to be loaded.
@@ -1994,7 +2117,7 @@ It can use the placeholders {value}, {minValue} and {maxValue}
                                         <div class="description" property="yui:description">
                                             Direction of movement of the bar.  
 It can be any of 'ltr' (left to right), 'rtl' (the reverse) , 'ttb' (top to bottom) or 'btt'.
-Can only be set once and only before rendering.
+Can only be set before rendering.
                                         </div>
                                     </div>
  
@@ -2125,7 +2248,7 @@ It will always be returned as a string including units.
                             <div class="content" rel="yui:attributes">
                                 <code>
                                         <span rel="yui:attribute" resource="YAHOO.util.Element.html#config_element">                                        
-                                        <a class="" href="YAHOO.util.Element.html#config_element" property="yui:name" title="element">element</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.Element.html#config_element" property="yui:name" title="element">element</a>
                                         </span>
                                         
                                 </code>
@@ -2210,7 +2333,6 @@ It will always be returned as a string including units.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property__barSizeFunction" title="_barSizeFunction">_barSizeFunction</a></li>
                                 <li class="private"><a href="#property__barSizeFunctions" title="_barSizeFunctions">_barSizeFunctions</a></li>
                                 <li class="private"><a href="#property__barSpace" title="_barSpace">_barSpace</a></li>
                                 <li class="private"><a href="#property__previousValue" title="_previousValue">_previousValue</a></li>
@@ -2222,6 +2344,7 @@ It will always be returned as a string including units.
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="private"><a href="#method__animComplete" title="_animComplete">_animComplete</a></li>
                                 <li class="private"><a href="#method__animSetter" title="_animSetter">_animSetter</a></li>
                                 <li class="private"><a href="#method__fixEdges" title="_fixEdges">_fixEdges</a></li>
                                 <li class="private"><a href="#method__heightChange" title="_heightChange">_heightChange</a></li>
@@ -2287,11 +2410,12 @@ It will always be returned as a string including units.
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunction", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunction", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
+
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animComplete", "url": "YAHOO.widget.ProgressBar.html#method__animComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
 </script>
 </body>
 </html>

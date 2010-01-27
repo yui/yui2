@@ -2767,6 +2767,17 @@ lang.augmentObject(DT, {
     CLASS_EDITOR : "yui-dt-editor",
 
     /**
+     * Class name assigned to CellEditor container shim.
+     *
+     * @property DataTable.CLASS_EDITOR_SHIM
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-editor-shim"
+     */
+    CLASS_EDITOR_SHIM : "yui-dt-editor-shim",
+
+    /**
      * Class name assigned to paginator container elements.
      *
      * @property DataTable.CLASS_PAGINATOR
@@ -4003,7 +4014,7 @@ initAttributes : function(oConfigs) {
      
     /**
      * @attribute currencySymbol
-     * @deprecated
+     * @deprecated Use currencyOptions.
      */
     this.setAttributeConfig("currencySymbol", {
         value: "$",
@@ -4276,6 +4287,14 @@ _elTrTemplate : null,
  */
 _aDynFunctions : [],
 
+/**
+ * Disabled state.
+ *
+ * @property _disabled
+ * @type Boolean
+ * @private
+ */
+_disabled : false,
 
 
 
@@ -4957,7 +4976,7 @@ _initThEl : function(elTh, oColumn) {
 /**
  * Outputs markup into the given TH based on given Column.
  *
- * @method DataTable.formatTheadCell
+ * @method formatTheadCell
  * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
  * not the liner DIV element.     
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -7395,10 +7414,12 @@ render : function() {
  * @method disable
  */
 disable : function() {
+    this._disabled = true;
     var elTable = this._elTable;
     var elMask = this._elMask;
     elMask.style.width = elTable.offsetWidth + "px";
     elMask.style.height = elTable.offsetHeight + "px";
+    elMask.style.left = elTable.offsetLeft + "px";
     elMask.style.display = "";
     this.fireEvent("disableEvent");
 },
@@ -7409,8 +7430,19 @@ disable : function() {
  * @method undisable
  */
 undisable : function() {
+    this._disabled = false;
     this._elMask.style.display = "none";
     this.fireEvent("undisableEvent");
+},
+
+ /**
+ * Returns disabled state.
+ *
+ * @method isDisabled
+ * @return {Boolean} True if UI is disabled, otherwise false
+ */
+isDisabled : function() {
+    return this._disabled;
 },
 
 /**
@@ -12287,7 +12319,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
  *
  * @method _initCellEditorEl
  * @private
- * @deprecated 
+ * @deprecated Use BaseCellEditor class.
  */
 _initCellEditorEl : function() {
     // Attach Cell Editor container element as first child of body
@@ -12582,7 +12614,7 @@ onEditorUnblockEvent : function(oArgs) {
  *
  * @method doBeforeLoadData
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} additional arguments
  * @return {Boolean} Return true to continue loading data into RecordSet and
  * updating DataTable with new Records, false to cancel.
@@ -12850,7 +12882,9 @@ onEventFormatCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventShowCellEditor : function(oArgs) {
-    this.showCellEditor(oArgs.target);
+    if(!this.isDisabled()) {
+        this.showCellEditor(oArgs.target);
+    }
 },
 
 /**
@@ -12893,7 +12927,7 @@ onEventCancelCellEditor : function(oArgs) {
  *
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
@@ -12911,7 +12945,7 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnReplaceRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
@@ -12959,7 +12993,7 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
@@ -12993,7 +13027,7 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
@@ -13027,7 +13061,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnUpdateRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
  */
 onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
@@ -13058,7 +13092,7 @@ onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
@@ -13107,21 +13141,22 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  *  
  * @method handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values.
  * @return oPayload {MIXED} State values.
  */
 handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    return oPayload;
+    return oPayload || {};
 },
 
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method handleDataReturnPayload
+ * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values
+ * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -14226,12 +14261,6 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * @method DataTable.formatTheadCell
- * @deprecated  Use formatTheadCell.
- */
-DT.formatTheadCell = function() {};
-
-/**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.
  */
@@ -14483,7 +14512,9 @@ initAttributes : function(oConfigs) {
         value: "#F2F2F2",
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.backgroundColor = oParam;
+            if(this._elHdContainer) {
+                this._elHdContainer.style.backgroundColor = oParam;
+            }
         }
     });
 },
@@ -15760,7 +15791,69 @@ _initEvents : function() {
     this.createEvent("unblockEvent");
 },
 
+/**
+ * Initialize container element.
+ *
+ * @method _initContainerEl
+ * @private
+ */
+_initContainerEl : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
 
+    var elContainer = document.createElement("div");
+    elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
+    elContainer.style.display = "none";
+    elContainer.tabIndex = 0;
+    
+    this.className = lang.isArray(this.className) ? this.className : this.className ? [this.className] : [];
+    this.className[this.className.length] = DT.CLASS_EDITOR;
+    elContainer.className = this.className.join(" ");
+    
+    document.body.insertBefore(elContainer, document.body.firstChild);
+    this._elContainer = elContainer;
+},
+
+/**
+ * Initialize container shim element.
+ *
+ * @method _initShimEl
+ * @private
+ */
+_initShimEl : function() {
+    // Iframe shim
+    if(this.useIFrame) {
+        if(!this._elIFrame) {
+            var elIFrame = document.createElement("iframe");
+            elIFrame.src = "javascript:false";
+            elIFrame.frameBorder = 0;
+            elIFrame.scrolling = "no";
+            elIFrame.style.display = "none";
+            elIFrame.className = DT.CLASS_EDITOR_SHIM;
+            elIFrame.tabIndex = -1;
+            elIFrame.role = "presentation";
+            elIFrame.title = "Presentational iframe shim";
+            document.body.insertBefore(elIFrame, document.body.firstChild);
+            this._elIFrame = elIFrame;
+        }
+    }
+},
+
+/**
+ * Hides CellEditor UI at end of interaction.
+ *
+ * @method _hide
+ */
+_hide : function() {
+    this.getContainerEl().style.display = "none";
+    if(this._elIFrame) {
+        this._elIFrame.style.display = "none";
+    }
+    this.isActive = false;
+    this.getDataTable()._oCellEditor =  null;
+},
 
 
 
@@ -15862,7 +15955,22 @@ LABEL_CANCEL : "Cancel",
  */
 disableBtns : false,
 
+/**
+ * True if iframe shim for container element should be enabled.
+ *
+ * @property useIFrame
+ * @type Boolean
+ * @default false
+ */
+useIFrame : false,
 
+/**
+ * Custom CSS class or array of classes applied to the container element.
+ *
+ * @property className
+ * @type String || String[]
+ */
+className : null,
 
 
 
@@ -15979,22 +16087,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
-    if(this._elContainer) {
-        YAHOO.util.Event.purgeElement(this._elContainer, true);
-        this._elContainer.innerHTML = "";
-    }
+    this._initContainerEl();
+    this._initShimEl();
 
-    // Render Cell Editor container element as first child of body
-    var elContainer = document.createElement("div");
-    elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
-    elContainer.style.display = "none";
-    elContainer.tabIndex = 0;
-    elContainer.className = DT.CLASS_EDITOR;
-    document.body.insertBefore(elContainer, document.body.firstChild);
-    this._elContainer = elContainer;
-    
     // Handle ESC key
-    Ev.addListener(elContainer, "keydown", function(e, oSelf) {
+    Ev.addListener(this.getContainerEl(), "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             var target = Ev.getTarget(e);
@@ -16006,9 +16103,9 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
-    
+
     this.renderForm();
 
     // Show Save/Cancel buttons
@@ -16112,6 +16209,11 @@ move : function() {
 
     elContainer.style.left = x + "px";
     elContainer.style.top = y + "px";
+
+    if(this._elIFrame) {
+        this._elIFrame.style.left = x + "px";
+        this._elIFrame.style.top = y + "px";
+    }
 },
 
 /**
@@ -16120,9 +16222,16 @@ move : function() {
  * @method show
  */
 show : function() {
+    var elContainer = this.getContainerEl(),
+        elIFrame = this._elIFrame;
     this.resetForm();
     this.isActive = true;
-    this.getContainerEl().style.display = "";
+    elContainer.style.display = "";
+    if(elIFrame) {
+        elIFrame.style.width = elContainer.offsetWidth + "px";
+        elIFrame.style.height = elContainer.offsetHeight + "px";
+        elIFrame.style.display = "";
+    }
     this.focus();
     this.fireEvent("showEvent", {editor:this});
     YAHOO.log("CellEditor shown", "info", this.toString()); 
@@ -16182,9 +16291,7 @@ save : function() {
             oSelf.getDataTable().updateCell(oSelf.getRecord(), oSelf.getColumn(), oNewValue);
             
             // Hide CellEditor
-            oSelf.getContainerEl().style.display = "none";
-            oSelf.isActive = false;
-            oSelf.getDataTable()._oCellEditor =  null;
+            oSelf._hide();
             
             oSelf.fireEvent("saveEvent",
                     {editor:oSelf, oldData:oOrigValue, newData:oSelf.value});
@@ -16216,9 +16323,7 @@ save : function() {
  */
 cancel : function() {
     if(this.isActive) {
-        this.getContainerEl().style.display = "none";
-        this.isActive = false;
-        this.getDataTable()._oCellEditor =  null;
+        this._hide();
         this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
@@ -16610,6 +16715,9 @@ renderForm : function() {
                 calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
+        
+        // Bug 2528576
+        calendar.hideEvent.subscribe(function() {this.cancel();}, this, true);
 
         if(ua.ie) {
             var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
@@ -16651,6 +16759,8 @@ resetForm : function() {
     var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
     this.calendar.cfg.setProperty("selected",selectedValue,false);
 	this.calendar.render();
+	// Bug 2528576
+	this.calendar.show();
 },
 
 /**

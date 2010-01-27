@@ -17,27 +17,22 @@ public class ContainerTooltip extends SelNGBase {
 		//assertEquals(session().getTitle(), "");
 
 		// Check tt1
-		assertTrue(hasAttribute("tt1", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("tt1", "style", "visibility: hidden;"));
 		session().mouseOver("ctx");
-		assertTrue(hasAttribute("tt1", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("tt1", "style", "visibility: visible;"));
 		// check the autodismissdelay default of 5 seconds
 		Thread.sleep(6000);
-		assertTrue(hasAttribute("tt1", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("tt1", "style", "visibility: hidden;"));
 		
 		// Check tt2
-		assertTrue(hasAttribute("tt2", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("tt2", "style", "visibility: hidden;"));
 		session().mouseOver("link");
-		assertTrue(hasAttribute("tt2", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("tt2", "style", "visibility: visible;"));
 		// check the autodismissdelay default of 5 seconds
 		Thread.sleep(6000);
-		assertTrue(hasAttribute("tt2", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("tt2", "style", "visibility: hidden;"));
 
 	}
 	
-	public static boolean hasAttribute(String elXpath, String attributeName, String attributeValue) {
-		
-		String attribute = session().getAttribute(elXpath + "@" + attributeName);
-		return ((attribute != null) && (attribute.contains(attributeValue)));
-	}
 
 }

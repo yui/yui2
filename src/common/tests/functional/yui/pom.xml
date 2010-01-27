@@ -268,7 +268,7 @@
     <dependency>
       <groupId>yahoo.yinst.selng</groupId>
       <artifactId>framework</artifactId>
-      <version>1.0.7_03</version>
+      <version>1.0.8_09</version>
       <scope>test</scope>
     </dependency>
     <dependency>

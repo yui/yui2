@@ -8,10 +8,10 @@ import static org.testng.Assert.*;
 
 public class ContainerPanelResize extends SelNGBase {
 	
-	private static final int MOVE_X = 200;
-	private static final int MOVE_Y = 100;
-	private static final int RESIZE_X = 40;
-	private static final int RESIZE_Y = 60;
+	private static final int MOVE_X = 100;
+	private static final int MOVE_Y = 50;
+	private static final int RESIZE_X = 20;
+	private static final int RESIZE_Y = 30;
 
 
 	public static void containerTest() {
@@ -20,7 +20,7 @@ public class ContainerPanelResize extends SelNGBase {
 		//assertEquals(session().getTitle(), "Basic Drag and Drop");
 
 		// Check initial state
-		assertTrue(hasAttribute("resizablepanel_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("resizablepanel_c", "style", "visibility: visible;"));
 
 		// Get the initial size and position of the Panel
 		Number X = session().getElementPositionLeft("resizablepanel_c");
@@ -34,8 +34,8 @@ public class ContainerPanelResize extends SelNGBase {
 		Number newY = session().getElementPositionTop("resizablepanel_c");
 		int deltaX = X.intValue() + MOVE_X;
 		int deltaY = Y.intValue() + MOVE_Y;
-		assertEquals(newX+"", deltaX+"");
-		assertEquals(newY+"", deltaY+"");
+		assertEquals(newX, deltaX);
+		assertEquals(newY, deltaY);
 		
 		// Resize the Panel
 		session().dragAndDrop("yui-gen0", "+" + RESIZE_X + ",+" + RESIZE_Y);
@@ -43,23 +43,22 @@ public class ContainerPanelResize extends SelNGBase {
 		Number newHeight = session().getElementHeight("resizablepanel");
 		deltaX = width.intValue() + RESIZE_X -8;  // the -8 is a fudge factor due to the size of the resize element
 		deltaY = height.intValue() + RESIZE_Y -8;
-		assertEquals(newWidth+"", deltaX+"");
-		assertEquals(newHeight+"", deltaY+"");
+		int fudgeX = newWidth.intValue() - deltaX;
+		int fudgeY = newHeight.intValue() - deltaY;
+		assertTrue(fudgeX > -10 && fudgeX < 10);
+		assertTrue(fudgeY > -10 && fudgeY < 10);
+		//assertEquals(newWidth, deltaX);
+		//assertEquals(newHeight, deltaY);
 		
 		// Close (hide) the panel
 		session().click("//a[@class='container-close']");
-		assertTrue(hasAttribute("resizablepanel_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("resizablepanel_c", "style", "visibility: hidden"));
 		
 		// Click the show button
 		session().click("showbtn");
-		assertTrue(hasAttribute("resizablepanel_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("resizablepanel_c", "style", "visibility: visible"));
 		
 	}
 	
-	public static boolean hasAttribute(String elXpath, String attributeName, String attributeValue) {
-		
-		String attribute = session().getAttribute(elXpath + "@" + attributeName);
-		return ((attribute != null) && (attribute.contains(attributeValue)));
-	}
 
 }

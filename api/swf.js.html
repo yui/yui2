@@ -47,286 +47,286 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-                        <div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;widget&quot;</span><span class="o">);</span>
+                        <div class="highlight"><pre><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;widget&quot;</span><span class="p">);</span>
 
-<span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+<span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 	
-	<span class="k">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">UA</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">sF</span> <span class="o">=</span> <span class="s2">&quot;ShockwaveFlash&quot;</span><span class="o">;</span>
+	<span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">UA</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">sF</span> <span class="o">=</span> <span class="s2">&quot;ShockwaveFlash&quot;</span><span class="p">;</span>
 
-	 	<span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
-			   <span class="k">if</span> <span class="o">((</span><span class="nx">mF</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">mimeTypes</span><span class="o">[</span><span class="s1">&#39;application/x-shockwave-flash&#39;</span><span class="o">]))</span> <span class="o">{</span>
-			      <span class="k">if</span> <span class="o">((</span><span class="nx">eP</span> <span class="o">=</span> <span class="nx">mF</span><span class="o">.</span><span class="nx">enabledPlugin</span><span class="o">))</span> <span class="o">{</span>
-					 <span class="k">var</span> <span class="nx">vS</span> <span class="o">=</span> <span class="o">[];</span>
-			         <span class="nx">vS</span> <span class="o">=</span> <span class="nx">eP</span><span class="o">.</span><span class="nx">description</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\s[rd]/g</span><span class="o">,</span> <span class="s1">&#39;.&#39;</span><span class="o">).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/[A-Za-z\s]+/g</span><span class="o">,</span> <span class="s1">&#39;&#39;</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;.&#39;</span><span class="o">);</span>
-			        <span class="nx">version</span> <span class="o">=</span> <span class="nx">vS</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="o">;</span>
-					<span class="nx">switch</span><span class="o">((</span><span class="nx">vS</span><span class="o">[</span><span class="m">2</span><span class="o">].</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">length</span><span class="o">)</span>
-					<span class="o">{</span>
-						<span class="nx">case</span> <span class="m">1</span><span class="o">:</span>
-						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="o">;</span>
-						<span class="k">break</span><span class="o">;</span>
-						<span class="nx">case</span> <span class="m">2</span><span class="o">:</span> 
-						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
-						<span class="k">break</span><span class="o">;</span>
-					<span class="o">}</span>
-			 		<span class="nx">version</span> <span class="o">+=</span>  <span class="nx">vS</span><span class="o">[</span><span class="m">2</span><span class="o">];</span>
-					<span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span>
-			      <span class="o">}</span>
-			   <span class="o">}</span>
-			<span class="o">}</span>
-			<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+	 	<span class="k">if</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">gecko</span> <span class="o">||</span> <span class="nx">UA</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">||</span> <span class="nx">UA</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span>
+			   <span class="k">if</span> <span class="p">((</span><span class="nx">mF</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mimeTypes</span><span class="p">[</span><span class="s1">&#39;application/x-shockwave-flash&#39;</span><span class="p">]))</span> <span class="p">{</span>
+			      <span class="k">if</span> <span class="p">((</span><span class="nx">eP</span> <span class="o">=</span> <span class="nx">mF</span><span class="p">.</span><span class="nx">enabledPlugin</span><span class="p">))</span> <span class="p">{</span>
+					 <span class="kd">var</span> <span class="nx">vS</span> <span class="o">=</span> <span class="p">[];</span>
+			         <span class="nx">vS</span> <span class="o">=</span> <span class="nx">eP</span><span class="p">.</span><span class="nx">description</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\s[rd]/g</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[A-Za-z\s]+/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">);</span>
+			        <span class="nx">version</span> <span class="o">=</span> <span class="nx">vS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">;</span>
+					<span class="k">switch</span><span class="p">((</span><span class="nx">vS</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">toString</span><span class="p">()).</span><span class="nx">length</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="p">;</span>
+						<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="mi">2</span><span class="o">:</span> 
+						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
+						<span class="k">break</span><span class="p">;</span>
+					<span class="p">}</span>
+			 		<span class="nx">version</span> <span class="o">+=</span>  <span class="nx">vS</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+					<span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">version</span><span class="p">);</span>
+			      <span class="p">}</span>
+			   <span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">ie</span><span class="p">)</span> <span class="p">{</span>
 			    <span class="k">try</span>
-			    <span class="o">{</span>
-			        <span class="k">var</span> <span class="nx">ax6</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.6&quot;</span><span class="o">);</span>
-			        <span class="nx">ax6</span><span class="o">.</span><span class="nx">AllowScriptAccess</span> <span class="o">=</span> <span class="s2">&quot;always&quot;</span><span class="o">;</span>
-			    <span class="o">}</span>
-			    <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span>
-			    <span class="o">{</span>
-			        <span class="k">if</span><span class="o">(</span><span class="nx">ax6</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-			        <span class="o">{</span>
-			            <span class="nx">version</span> <span class="o">=</span> <span class="m">6</span><span class="o">.</span><span class="m">0</span><span class="o">;</span>
-			        <span class="o">}</span>
-			    <span class="o">}</span>
-			    <span class="k">if</span> <span class="o">(</span><span class="nx">version</span> <span class="o">==</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			    <span class="p">{</span>
+			        <span class="kd">var</span> <span class="nx">ax6</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="p">(</span><span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.6&quot;</span><span class="p">);</span>
+			        <span class="nx">ax6</span><span class="p">.</span><span class="nx">AllowScriptAccess</span> <span class="o">=</span> <span class="s2">&quot;always&quot;</span><span class="p">;</span>
+			    <span class="p">}</span>
+			    <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+			    <span class="p">{</span>
+			        <span class="k">if</span><span class="p">(</span><span class="nx">ax6</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span>
+			        <span class="p">{</span>
+			            <span class="nx">version</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">;</span>
+			        <span class="p">}</span>
+			    <span class="p">}</span>
+			    <span class="k">if</span> <span class="p">(</span><span class="nx">version</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 			    <span class="k">try</span>
-			    <span class="o">{</span>
-			        <span class="k">var</span> <span class="nx">ax</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">sF</span><span class="o">);</span>
-			       	<span class="k">var</span> <span class="nx">vS</span> <span class="o">=</span> <span class="o">[];</span>
-			        <span class="nx">vS</span> <span class="o">=</span> <span class="nx">ax</span><span class="o">.</span><span class="nx">GetVariable</span><span class="o">(</span><span class="s2">&quot;$version&quot;</span><span class="o">).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/[A-Za-z\s]+/g</span><span class="o">,</span> <span class="s1">&#39;&#39;</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">);</span>
-			        <span class="nx">version</span> <span class="o">=</span> <span class="nx">vS</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="o">;</span>
-					<span class="nx">switch</span><span class="o">((</span><span class="nx">vS</span><span class="o">[</span><span class="m">2</span><span class="o">].</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">length</span><span class="o">)</span>
-					<span class="o">{</span>
-						<span class="nx">case</span> <span class="m">1</span><span class="o">:</span>
-						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="o">;</span>
-						<span class="k">break</span><span class="o">;</span>
-						<span class="nx">case</span> <span class="m">2</span><span class="o">:</span> 
-						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
-						<span class="k">break</span><span class="o">;</span>
-					<span class="o">}</span>
-			 		<span class="nx">version</span> <span class="o">+=</span>  <span class="nx">vS</span><span class="o">[</span><span class="m">2</span><span class="o">];</span>
-					<span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span>
+			    <span class="p">{</span>
+			        <span class="kd">var</span> <span class="nx">ax</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="p">(</span><span class="nx">sF</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nx">sF</span><span class="p">);</span>
+			       	<span class="kd">var</span> <span class="nx">vS</span> <span class="o">=</span> <span class="p">[];</span>
+			        <span class="nx">vS</span> <span class="o">=</span> <span class="nx">ax</span><span class="p">.</span><span class="nx">GetVariable</span><span class="p">(</span><span class="s2">&quot;$version&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[A-Za-z\s]+/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">);</span>
+			        <span class="nx">version</span> <span class="o">=</span> <span class="nx">vS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">;</span>
+					<span class="k">switch</span><span class="p">((</span><span class="nx">vS</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">toString</span><span class="p">()).</span><span class="nx">length</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="p">;</span>
+						<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="mi">2</span><span class="o">:</span> 
+						<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
+						<span class="k">break</span><span class="p">;</span>
+					<span class="p">}</span>
+			 		<span class="nx">version</span> <span class="o">+=</span>  <span class="nx">vS</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+					<span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">version</span><span class="p">);</span>
 
-			    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{}</span>
-			    <span class="o">}</span>
-			<span class="o">}</span>
+			    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{}</span>
+			    <span class="p">}</span>
+			<span class="p">}</span>
 
-			<span class="nx">UA</span><span class="o">.</span><span class="nx">flash</span> <span class="o">=</span> <span class="nx">version</span><span class="o">;</span>
+			<span class="nx">UA</span><span class="p">.</span><span class="nx">flash</span> <span class="o">=</span> <span class="nx">version</span><span class="p">;</span>
 
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">SWFDetect</span> <span class="o">=</span> <span class="o">{</span>		
-			<span class="nx">getFlashVersion</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-				<span class="k">return</span> <span class="nx">version</span><span class="o">;</span>
-			<span class="o">},</span>
+	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SWFDetect</span> <span class="o">=</span> <span class="p">{</span>		
+			<span class="nx">getFlashVersion</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="nx">version</span><span class="p">;</span>
+			<span class="p">},</span>
 
-			<span class="nx">isFlashVersionAtLeast</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ver</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">return</span> <span class="nx">version</span> <span class="o">&gt;=</span> <span class="nx">ver</span><span class="o">;</span>
-			<span class="o">},</span>
+			<span class="nx">isFlashVersionAtLeast</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ver</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="nx">version</span> <span class="o">&gt;=</span> <span class="nx">ver</span><span class="p">;</span>
+			<span class="p">},</span>
 			
-			<span class="nx">parseFlashVersion</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ver</span><span class="o">)</span>
-			<span class="o">{</span>
-				<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">ver</span><span class="o">;</span>
-				<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">ver</span><span class="o">))</span>
-				<span class="o">{</span>
-					<span class="k">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">ver</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
-					<span class="k">if</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">2</span><span class="o">)</span>
-					<span class="o">{</span>
-						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
-						<span class="nx">flashVersion</span> <span class="o">+=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">*</span> <span class="o">.</span><span class="m">001</span><span class="o">;</span>
-					<span class="o">}</span>
+			<span class="nx">parseFlashVersion</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ver</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">ver</span><span class="p">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">ver</span><span class="p">))</span>
+				<span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">ver</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">);</span>
+					<span class="k">if</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span>
+					<span class="p">{</span>
+						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+						<span class="nx">flashVersion</span> <span class="o">+=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="p">.</span><span class="mi">001</span><span class="p">;</span>
+					<span class="p">}</span>
 					<span class="k">else</span>
-					<span class="o">{</span>
-						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">ver</span><span class="o">);</span>
-					<span class="o">}</span>					
-				<span class="o">}</span>
-				<span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">flashVersion</span><span class="o">)</span> <span class="o">?</span> <span class="nx">flashVersion</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
-			<span class="o">}</span>	
-		<span class="o">};</span>	
+					<span class="p">{</span>
+						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">ver</span><span class="p">);</span>
+					<span class="p">}</span>					
+				<span class="p">}</span>
+				<span class="k">return</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">flashVersion</span><span class="p">)</span> <span class="o">?</span> <span class="nx">flashVersion</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+			<span class="p">}</span>	
+		<span class="p">};</span>	
 	
-	<span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
-        <span class="nx">SWFDetect</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">SWFDetect</span><span class="o">,</span>
-        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+	<span class="kd">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="p">,</span>
+        <span class="nx">SWFDetect</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SWFDetect</span><span class="p">,</span>
+        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">,</span>
 
-		<span class="c">// private</span>
-<span class="c"></span>		<span class="nx">FLASH_CID</span> <span class="o">=</span> <span class="s2">&quot;clsid:d27cdb6e-ae6d-11cf-96b8-444553540000&quot;</span><span class="o">,</span>
-		<span class="nx">FLASH_TYPE</span> <span class="o">=</span> <span class="s2">&quot;application/x-shockwave-flash&quot;</span><span class="o">,</span>
-		<span class="nx">FLASH_VER</span> <span class="o">=</span> <span class="s2">&quot;10.22&quot;</span><span class="o">,</span>
-		<span class="nx">EXPRESS_INSTALL_URL</span> <span class="o">=</span> <span class="s2">&quot;http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?&quot;</span> <span class="o">+</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">random</span><span class="o">(),</span>
-		<span class="nx">EVENT_HANDLER</span> <span class="o">=</span> <span class="s2">&quot;YAHOO.widget.SWF.eventHandler&quot;</span><span class="o">,</span>
-		<span class="nx">possibleAttributes</span> <span class="o">=</span> <span class="o">{</span><span class="nx">align</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">base</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">bgcolor</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">menu</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">quality</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">salign</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">tabindex</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">};</span>
+		<span class="c1">// private</span>
+		<span class="nx">FLASH_CID</span> <span class="o">=</span> <span class="s2">&quot;clsid:d27cdb6e-ae6d-11cf-96b8-444553540000&quot;</span><span class="p">,</span>
+		<span class="nx">FLASH_TYPE</span> <span class="o">=</span> <span class="s2">&quot;application/x-shockwave-flash&quot;</span><span class="p">,</span>
+		<span class="nx">FLASH_VER</span> <span class="o">=</span> <span class="s2">&quot;10.22&quot;</span><span class="p">,</span>
+		<span class="nx">EXPRESS_INSTALL_URL</span> <span class="o">=</span> <span class="s2">&quot;http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?&quot;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">(),</span>
+		<span class="nx">EVENT_HANDLER</span> <span class="o">=</span> <span class="s2">&quot;YAHOO.widget.SWF.eventHandler&quot;</span><span class="p">,</span>
+		<span class="nx">possibleAttributes</span> <span class="o">=</span> <span class="p">{</span><span class="nx">align</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">base</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">bgcolor</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">menu</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">quality</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">salign</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">tabindex</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nx">wmode</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">};</span>
 		
-		<span class="c">/**</span>
-<span class="c">		 * The SWF utility is a tool for embedding Flash applications in HTMl pages.</span>
-<span class="c">		 * @module swf</span>
-<span class="c">		 * @title SWF Utility</span>
-<span class="c">		 * @requires yahoo, dom, event</span>
-<span class="c">		 * @namespace YAHOO.widget</span>
-<span class="c">		 */</span>
+		<span class="cm">/**</span>
+<span class="cm">		 * The SWF utility is a tool for embedding Flash applications in HTMl pages.</span>
+<span class="cm">		 * @module swf</span>
+<span class="cm">		 * @title SWF Utility</span>
+<span class="cm">		 * @requires yahoo, dom, event</span>
+<span class="cm">		 * @namespace YAHOO.widget</span>
+<span class="cm">		 */</span>
 
-		<span class="c">/**</span>
-<span class="c">		 * Creates the SWF instance and keeps the configuration data</span>
-<span class="c">		 *</span>
-<span class="c">		 * @class SWF</span>
-<span class="c">		 * @extends YAHOO.util.Element</span>
-<span class="c">		 * @constructor</span>
-<span class="c">		 * @param {String|HTMLElement} id The id of the element, or the element itself that the SWF will be inserted into.  </span>
-<span class="c">		 *        The width and height of the SWF will be set to the width and height of this container element.</span>
-<span class="c">		 * @param {String} swfURL The URL of the SWF to be embedded into the page.</span>
-<span class="c">		 * @param {Object} p_oAttributes (optional) Configuration parameters for the Flash application and values for Flashvars</span>
-<span class="c">		 *        to be passed to the SWF.</span>
-<span class="c">		 */</span>
+		<span class="cm">/**</span>
+<span class="cm">		 * Creates the SWF instance and keeps the configuration data</span>
+<span class="cm">		 *</span>
+<span class="cm">		 * @class SWF</span>
+<span class="cm">		 * @extends YAHOO.util.Element</span>
+<span class="cm">		 * @constructor</span>
+<span class="cm">		 * @param {String|HTMLElement} id The id of the element, or the element itself that the SWF will be inserted into.  </span>
+<span class="cm">		 *        The width and height of the SWF will be set to the width and height of this container element.</span>
+<span class="cm">		 * @param {String} swfURL The URL of the SWF to be embedded into the page.</span>
+<span class="cm">		 * @param {Object} p_oAttributes (optional) Configuration parameters for the Flash application and values for Flashvars</span>
+<span class="cm">		 *        to be passed to the SWF.</span>
+<span class="cm">		 */</span>
 				
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_oElement</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">swfURL</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">p_oAttributes</span> <span class="c">/*:Object*/</span> <span class="o">)</span> <span class="o">{</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">p_oElement</span> <span class="cm">/*:String*/</span><span class="p">,</span> <span class="nx">swfURL</span> <span class="cm">/*:String*/</span><span class="p">,</span> <span class="nx">p_oAttributes</span> <span class="cm">/*:Object*/</span> <span class="p">)</span> <span class="p">{</span>
 	
-	<span class="k">this</span><span class="o">.</span><span class="nx">_queue</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span> <span class="o">||</span> <span class="o">[];</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_events</span> <span class="o">||</span> <span class="o">{};</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">_queue</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_queue</span> <span class="o">||</span> <span class="p">[];</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">_events</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span> <span class="o">||</span> <span class="p">{};</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">_configs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="p">{};</span>
 	
-	<span class="c">/**</span>
-<span class="c">     * The DOM id of this instance of the element. Automatically generated.</span>
-<span class="c">     * @property _id</span>
-<span class="c">     * @type String</span>
-<span class="c">     */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuiswf&quot;</span><span class="o">);</span>
+	<span class="cm">/**</span>
+<span class="cm">     * The DOM id of this instance of the element. Automatically generated.</span>
+<span class="cm">     * @property _id</span>
+<span class="cm">     * @type String</span>
+<span class="cm">     */</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">generateId</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;yuiswf&quot;</span><span class="p">);</span>
 	
-	<span class="k">if</span><span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">host</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">=</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">host</span><span class="o">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">host</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_host</span> <span class="o">=</span> <span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">host</span><span class="p">;</span>
 	
-	<span class="k">var</span> <span class="nx">_id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">);</span>
-	<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="o">.</span><span class="nx">parseFlashVersion</span><span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;version&quot;</span><span class="o">])</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">isFlashVersionRight</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="o">.</span><span class="nx">isFlashVersionAtLeast</span><span class="o">(</span><span class="nx">flashVersion</span><span class="o">);</span>
-	<span class="k">var</span> <span class="nx">canExpressInstall</span> <span class="o">=</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">flash</span> <span class="o">&gt;=</span> <span class="m">8</span><span class="o">.</span><span class="m">0</span><span class="o">);</span>
-	<span class="k">var</span> <span class="nx">shouldExpressInstall</span> <span class="o">=</span> <span class="nx">canExpressInstall</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isFlashVersionRight</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;useExpressInstall&quot;</span><span class="o">];</span>
-	<span class="k">var</span> <span class="nx">flashURL</span> <span class="o">=</span> <span class="o">(</span><span class="nx">shouldExpressInstall</span><span class="o">)?</span><span class="nx">EXPRESS_INSTALL_URL</span><span class="o">:</span><span class="nx">swfURL</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">objstring</span> <span class="o">=</span> <span class="s1">&#39;&lt;object &#39;</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">h</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">flashvarstring</span> <span class="o">=</span> <span class="s2">&quot;YUISwfId=&quot;</span> <span class="o">+</span> <span class="nx">_id</span> <span class="o">+</span> <span class="s2">&quot;&amp;YUIBridgeCallback=&quot;</span> <span class="o">+</span> <span class="nx">EVENT_HANDLER</span><span class="o">;</span>
+	<span class="kd">var</span> <span class="nx">_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">p_oElement</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="p">.</span><span class="nx">parseFlashVersion</span><span class="p">(</span><span class="nx">p_oAttributes</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">])</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">isFlashVersionRight</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="p">.</span><span class="nx">isFlashVersionAtLeast</span><span class="p">(</span><span class="nx">flashVersion</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">canExpressInstall</span> <span class="o">=</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">flash</span> <span class="o">&gt;=</span> <span class="mf">8.0</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">shouldExpressInstall</span> <span class="o">=</span> <span class="nx">canExpressInstall</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isFlashVersionRight</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oAttributes</span><span class="p">[</span><span class="s2">&quot;useExpressInstall&quot;</span><span class="p">];</span>
+	<span class="kd">var</span> <span class="nx">flashURL</span> <span class="o">=</span> <span class="p">(</span><span class="nx">shouldExpressInstall</span><span class="p">)</span><span class="o">?</span><span class="nx">EXPRESS_INSTALL_URL</span><span class="o">:</span><span class="nx">swfURL</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">objstring</span> <span class="o">=</span> <span class="s1">&#39;&lt;object &#39;</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">flashvarstring</span> <span class="o">=</span> <span class="s2">&quot;YUISwfId=&quot;</span> <span class="o">+</span> <span class="nx">_id</span> <span class="o">+</span> <span class="s2">&quot;&amp;YUIBridgeCallback=&quot;</span> <span class="o">+</span> <span class="nx">EVENT_HANDLER</span><span class="p">;</span>
 	
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">_instances</span><span class="o">[</span><span class="nx">_id</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">_instances</span><span class="p">[</span><span class="nx">_id</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
-    <span class="k">if</span> <span class="o">(</span><span class="nx">oElement</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">isFlashVersionRight</span> <span class="o">||</span> <span class="nx">shouldExpressInstall</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">flashURL</span><span class="o">)</span> <span class="o">{</span>
-				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">_id</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span><span class="o">;</span> 
-				<span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">oElement</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">isFlashVersionRight</span> <span class="o">||</span> <span class="nx">shouldExpressInstall</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">flashURL</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">_id</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span><span class="p">;</span> 
+				<span class="k">if</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">ie</span><span class="p">)</span> <span class="p">{</span>
 					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;classid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">FLASH_CID</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span>
-				<span class="o">}</span>
-				<span class="k">else</span> <span class="o">{</span>
-					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;type=&quot;&#39;</span> <span class="o">+</span> <span class="nx">FLASH_TYPE</span> <span class="o">+</span> <span class="s1">&#39;&quot; data=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashURL</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span><span class="o">;</span>
-				<span class="o">}</span>
+				<span class="p">}</span>
+				<span class="k">else</span> <span class="p">{</span>
+					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;type=&quot;&#39;</span> <span class="o">+</span> <span class="nx">FLASH_TYPE</span> <span class="o">+</span> <span class="s1">&#39;&quot; data=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashURL</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span><span class="p">;</span>
+				<span class="p">}</span>
 				
-                <span class="nx">w</span> <span class="o">=</span> <span class="s2">&quot;100%&quot;</span><span class="o">;</span>
-				<span class="nx">h</span> <span class="o">=</span> <span class="s2">&quot;100%&quot;</span><span class="o">;</span>
+                <span class="nx">w</span> <span class="o">=</span> <span class="s2">&quot;100%&quot;</span><span class="p">;</span>
+				<span class="nx">h</span> <span class="o">=</span> <span class="s2">&quot;100%&quot;</span><span class="p">;</span>
 				
-				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;width=&quot;&#39;</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;&quot; height=&quot;&#39;</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;width=&quot;&#39;</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;&quot; height=&quot;&#39;</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">;</span>
 				
-				<span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
-					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;movie&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="o">;</span>
-				<span class="o">}</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">ie</span><span class="p">)</span> <span class="p">{</span>
+					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;movie&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">;</span>
+				<span class="p">}</span>
 				
-				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">attribute</span> <span class="k">in</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">fixedAttributes</span><span class="o">)</span> <span class="o">{</span>
-					<span class="k">if</span> <span class="o">(</span><span class="nx">possibleAttributes</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">attribute</span><span class="o">))</span> <span class="o">{</span>
-						<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;&#39;</span> <span class="o">+</span> <span class="nx">attribute</span> <span class="o">+</span> <span class="s1">&#39;&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">fixedAttributes</span><span class="o">[</span><span class="nx">attribute</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="o">;</span>
-					<span class="o">}</span>
-				<span class="o">}</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">attribute</span> <span class="k">in</span> <span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">fixedAttributes</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">if</span> <span class="p">(</span><span class="nx">possibleAttributes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">attribute</span><span class="p">))</span> <span class="p">{</span>
+						<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;&#39;</span> <span class="o">+</span> <span class="nx">attribute</span> <span class="o">+</span> <span class="s1">&#39;&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">fixedAttributes</span><span class="p">[</span><span class="nx">attribute</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">;</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
 
-				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">flashvar</span> <span class="k">in</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">flashVars</span><span class="o">)</span> <span class="o">{</span>
-					<span class="k">var</span> <span class="nx">fvar</span> <span class="o">=</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">flashVars</span><span class="o">[</span><span class="nx">flashvar</span><span class="o">];</span>
-					<span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">fvar</span><span class="o">))</span> <span class="o">{</span>
-						<span class="nx">flashvarstring</span> <span class="o">+=</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">+</span> <span class="nx">flashvar</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">fvar</span><span class="o">);</span>
-					<span class="o">}</span>
-				<span class="o">}</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">flashvar</span> <span class="k">in</span> <span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">flashVars</span><span class="p">)</span> <span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">fvar</span> <span class="o">=</span> <span class="nx">p_oAttributes</span><span class="p">.</span><span class="nx">flashVars</span><span class="p">[</span><span class="nx">flashvar</span><span class="p">];</span>
+					<span class="k">if</span> <span class="p">(</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">fvar</span><span class="p">))</span> <span class="p">{</span>
+						<span class="nx">flashvarstring</span> <span class="o">+=</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">+</span> <span class="nx">flashvar</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">fvar</span><span class="p">);</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
 				
-				<span class="k">if</span> <span class="o">(</span><span class="nx">flashvarstring</span><span class="o">)</span> <span class="o">{</span>
-					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;flashVars&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashvarstring</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="o">;</span>
-				<span class="o">}</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nx">flashvarstring</span><span class="p">)</span> <span class="p">{</span>
+					<span class="nx">objstring</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;flashVars&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">flashvarstring</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">;</span>
+				<span class="p">}</span>
 				
-				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/object&gt;&quot;</span><span class="o">;</span> 
+				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/object&gt;&quot;</span><span class="p">;</span> 
 
-				<span class="nx">oElement</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">objstring</span><span class="o">;</span>
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">_id</span><span class="o">));</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">_id</span><span class="o">);</span>
-			<span class="o">}</span>				
-<span class="o">};</span>
+				<span class="nx">oElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">objstring</span><span class="p">;</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">));</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">);</span>
+			<span class="p">}</span>				
+<span class="p">};</span>
 
-<span class="c">/**</span>
-<span class="c"> * The static collection of all instances of the SWFs on the page.</span>
-<span class="c"> * @property _instances</span>
-<span class="c"> * @private</span>
-<span class="c"> * @type Object</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * The static collection of all instances of the SWFs on the page.</span>
+<span class="cm"> * @property _instances</span>
+<span class="cm"> * @private</span>
+<span class="cm"> * @type Object</span>
+<span class="cm"> */</span>
 
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">_instances</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">_instances</span> <span class="o">||</span> <span class="o">{};</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">_instances</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">_instances</span> <span class="o">||</span> <span class="p">{};</span>
 
-<span class="c">/**</span>
-<span class="c"> * Handles an event coming from within the SWF and delegate it</span>
-<span class="c"> * to a specific instance of SWF.</span>
-<span class="c"> * @method eventHandler</span>
-<span class="c"> * @param swfid {String} the id of the SWF dispatching the event</span>
-<span class="c"> * @param event {Object} the event being transmitted.</span>
-<span class="c"> * @private</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">eventHandler</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">swfid</span><span class="o">,</span> <span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">.</span><span class="nx">_instances</span><span class="o">[</span><span class="nx">swfid</span><span class="o">].</span><span class="nx">_eventHandler</span><span class="o">(</span><span class="nx">event</span><span class="o">);</span>
-<span class="o">};</span>
+<span class="cm">/**</span>
+<span class="cm"> * Handles an event coming from within the SWF and delegate it</span>
+<span class="cm"> * to a specific instance of SWF.</span>
+<span class="cm"> * @method eventHandler</span>
+<span class="cm"> * @param swfid {String} the id of the SWF dispatching the event</span>
+<span class="cm"> * @param event {Object} the event being transmitted.</span>
+<span class="cm"> * @private</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">eventHandler</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">swfid</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">_instances</span><span class="p">[</span><span class="nx">swfid</span><span class="p">].</span><span class="nx">_eventHandler</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">};</span>
 
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Element</span><span class="o">,</span> <span class="o">{</span>
-	<span class="nx">_eventHandler</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">event</span><span class="o">)</span>
-	<span class="o">{</span>
-		<span class="k">if</span> <span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">)</span> 
-		<span class="o">{</span>
-			<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">fireOnce</span><span class="o">:</span><span class="kc">true</span><span class="o">});</span>
-	     	<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
-        <span class="o">}</span>
-		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="o">)</span>
-		<span class="o">{</span>
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span> <span class="nx">event</span><span class="o">.</span><span class="nx">category</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
-		<span class="o">}</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Element</span><span class="p">,</span> <span class="p">{</span>
+	<span class="nx">_eventHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;swfReady&quot;</span><span class="p">)</span> 
+		<span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;swfReady&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">fireOnce</span><span class="o">:</span><span class="kc">true</span><span class="p">});</span>
+	     	<span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;swfReady&quot;</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+        <span class="p">}</span>
+		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">category</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_host</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">_host</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+		<span class="p">}</span>
         <span class="k">else</span> 
-		<span class="o">{</span>
-	    	<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">)</span> 
-			<span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
-			<span class="o">}</span>
+		<span class="p">{</span>
+	    	<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_host</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_host</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">)</span> 
+			<span class="p">{</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_host</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+			<span class="p">}</span>
 			<span class="k">else</span>
-			<span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
-			<span class="o">}</span>
-        <span class="o">}</span> 
-	<span class="o">},</span>
+			<span class="p">{</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+			<span class="p">}</span>
+        <span class="p">}</span> 
+	<span class="p">},</span>
 		
-	<span class="c">/**</span>
-<span class="c">	 * Calls a specific function exposed by the SWF&#39;s</span>
-<span class="c">	 * ExternalInterface.</span>
-<span class="c">	 * @method callSWF</span>
-<span class="c">	 * @param func {String} the name of the function to call</span>
-<span class="c">	 * @param args {Object} the set of arguments to pass to the function.</span>
-<span class="c">	 */</span>
-	<span class="nx">callSWF</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">func</span><span class="o">,</span> <span class="nx">args</span><span class="o">)</span>
-	<span class="o">{</span>
-		<span class="k">if</span> <span class="o">(!</span><span class="nx">args</span><span class="o">)</span> <span class="o">{</span> 
-			  <span class="nx">args</span><span class="o">=</span> <span class="o">[];</span> 
-		<span class="o">};</span>
+	<span class="cm">/**</span>
+<span class="cm">	 * Calls a specific function exposed by the SWF&#39;s</span>
+<span class="cm">	 * ExternalInterface.</span>
+<span class="cm">	 * @method callSWF</span>
+<span class="cm">	 * @param func {String} the name of the function to call</span>
+<span class="cm">	 * @param args {Object} the set of arguments to pass to the function.</span>
+<span class="cm">	 */</span>
+	<span class="nx">callSWF</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span> 
+			  <span class="nx">args</span><span class="o">=</span> <span class="p">[];</span> 
+		<span class="p">};</span>
 		
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">[</span><span class="nx">func</span><span class="o">])</span> <span class="o">{</span>
-		<span class="k">return</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">[</span><span class="nx">func</span><span class="o">].</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">,</span> <span class="nx">args</span><span class="o">));</span>
-	    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-	    <span class="o">}</span>
-	<span class="o">},</span>
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_swf</span><span class="p">[</span><span class="nx">func</span><span class="p">])</span> <span class="p">{</span>
+		<span class="k">return</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_swf</span><span class="p">[</span><span class="nx">func</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_swf</span><span class="p">,</span> <span class="nx">args</span><span class="p">));</span>
+	    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+	    <span class="p">}</span>
+	<span class="p">},</span>
 	
-	<span class="c">/**</span>
-<span class="c">	 * Public accessor to the unique name of the SWF instance.</span>
-<span class="c">	 *</span>
-<span class="c">	 * @method toString</span>
-<span class="c">	 * @return {String} Unique name of the SWF instance.</span>
-<span class="c">	 */</span>
-	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
-	<span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;SWF &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
-	<span class="o">}</span>
-<span class="o">});</span>
+	<span class="cm">/**</span>
+<span class="cm">	 * Public accessor to the unique name of the SWF instance.</span>
+<span class="cm">	 *</span>
+<span class="cm">	 * @method toString</span>
+<span class="cm">	 * @return {String} Unique name of the SWF instance.</span>
+<span class="cm">	 */</span>
+	<span class="nx">toString</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="s2">&quot;SWF &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">});</span>
 
 	
-<span class="o">})();</span>
+<span class="p">})();</span>
 </pre></div>
 
                     </div>
@@ -412,11 +412,12 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "eventHandler", "url": "YAHOO.widget.SWF.html#method_eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "_instances", "url": "YAHOO.widget.SWF.html#property__instances", "type": "property"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "toString", "url": "YAHOO.widget.SWF.html#method_toString", "type": "method"}];
+
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "eventHandler", "url": "YAHOO.widget.SWF.html#method_eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "_instances", "url": "YAHOO.widget.SWF.html#property__instances", "type": "property"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "toString", "url": "YAHOO.widget.SWF.html#method_toString", "type": "method"}];
 </script>
 </body>
 </html>
