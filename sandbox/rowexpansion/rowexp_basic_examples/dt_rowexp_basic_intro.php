@@ -1,2 +1,2 @@
 <!-- Introductory text -->
-<p>A demonstration of the DataTable's row expansion feature, using a string based template. This is a list of "Interestingness" from Flickr. The list shows the images title and the photo can be seen in the expansion along with a link to the Flickr users photo-stream.</p>
+<p>A demonstration of the DataTable's row expansion feature to display a list of "Interestingness" from <a href="http://www.flickr.com">Flickr</a>. When the table first loads, it displays a list of image titles. When a row is expanded the photo is displayed in the expansion area along with a link to the Flickr user's photostream. This example uses a simple string-based template to format the row expansion area.</p>

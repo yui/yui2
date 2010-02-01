@@ -2640,17 +2640,16 @@ lang.augmentObject(util.DataSource, DS);
         n   = +n;
         cfg = YAHOO.lang.merge(YAHOO.util.Number.format.defaults, (cfg || {}));
 
-        if (!cfg.negativeFormat) {
-            cfg.negativeFormat = '-' + cfg.format;
-        } else if (cfg.negativeFormat.indexOf('#') > -1) {
-            // for backward compatibility of negativeFormat supporting '-#'
-            cfg.negativeFormat = cfg.negativeFormat.replace(/#/, cfg.format);
-        }
-
         var absN   = Math.abs(n),
             places = cfg.decimalPlaces,
             sep    = cfg.thousandsSeparator,
+            negFmt = cfg.negativeFormat || ('-' + cfg.format),
             s, bits, i;
+
+        if (negFmt.indexOf('#') > -1) {
+            // for backward compatibility of negativeFormat supporting '-#'
+            negFmt = negFmt.replace(/#/, cfg.format);
+        }
 
         if (places < 0) {
             // Get rid of the decimal info
@@ -2684,7 +2683,7 @@ lang.augmentObject(util.DataSource, DS);
         }
 
         return YAHOO.util.Number.format._applyFormat(
-            (n < 0 ? cfg.negativeFormat : cfg.format),
+            (n < 0 ? negFmt : cfg.format),
             bits.join(cfg.decimalSeparator),
             cfg);
     }
