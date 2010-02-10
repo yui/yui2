@@ -274,6 +274,38 @@
 
 					},										
 
+
+    				test_direct_descendant_combinator: function () {
+
+                        var matchID = null;
+
+                        Event.delegate("list-2", "click", function (e, matchedEl, container) {
+                            matchID = matchedEl.id;
+                        }, ">li");				    
+    					
+    					UserAction.click(Dom.get('list-3-li-1'));
+    										
+                        Assert.areEqual('list-2-li-3', matchID, "The currentTarget is an incorrect node, should be the matching node.");
+
+
+    				    matchID = null;
+
+                        Event.delegate("div-1", "click", function (e, matchedEl, container) {
+                            matchID = matchedEl.id;
+                        }, ">.div-b");				    
+    					
+    					UserAction.click(Dom.get('div-1-1-1'));
+    					
+                        Assert.areEqual('div-1-1', matchID, "The currentTarget is an incorrect node, should be the matching node.");
+
+    				    matchID = null;
+    					
+    					UserAction.click(Dom.get('div-1-2-1'));
+				
+                        Assert.isNull(matchID, "The currentTarget is an incorrect node, should be the matching node.");
+
+    				},
+
 					test_delegation_of_focus: function () {
 						
 						var foo = false, 
@@ -334,6 +366,32 @@
 				<p>another paragraph with a complex link <a href="#" id="secondlink"><strong>strong within link</strong><img alt="fake image" id="fakeimage" /> - complex <span id="spanwithinlink">link</span></a></p>
 			</div>
 		</div>
+
+        <ul id="list-2">
+            <li id="list-2-li-1"><em><em>Item One</em></em></li>
+            <li id="list-2-li-2"><em>Item Two</em></li>
+            <li id="list-2-li-3"><em>Item Three</em>
+                <ul id="list-3">
+                    <li id="list-3-li-1"><em>Item Three - One</em></li>
+                    <li id="list-3-li-1"><em>Item Three - Two</em></li>
+                    <li id="list-3-li-1"><em>Item Three - Three</em></li>
+                </ul>            
+            </li>        
+        </ul>
+        
+        <div id="div-1" class="div-a">
+            <div id="div-1-1" class="div-b">
+              <div id="div-1-1-1" class="div-c"><em>Item One</em></div>
+            </div>
+            <div id="div-1-2" class="div-x">
+                <em>Item Two</em>
+                <div id="div-1-2-1" class="div-b">
+                    <em>Item Two - One</em>
+                    <div id="div-1-2-1-1" class="div-c"><em>Item Two - Two</em></div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 
