@@ -7,7 +7,7 @@
 
     <target name="simpleeditor_build_subtask" depends="build, minify" />
 
-    <target name="-concatskins" if="component.skins.exist">
+    <target name="-concatskins">
         <concatsource destfile="${component.builddir}/assets/skins/sam/${component}.css" sourcedir="${component.assets.base}" sourcefiles="editor-core.css, skins/sam/editor-skin.css" />
         <yuicompress src="${component.builddir}/assets/skins/sam/${component}.css" dest="${component.builddir}/assets/skins/sam/${component}.css" args="${yuicompressor.css.args.internal}" />
     </target>
