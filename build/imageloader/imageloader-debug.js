@@ -94,8 +94,15 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	 */
 	this._classImageEls = null;
 
-	// add a listener to set the time limit in the onload
-	YAHOO.util.Event.addListener(window, 'load', this._onloadTasks, this, true);
+	// add a listener to set the time limit on DOM ready
+	// if DOM is already ready, do so immediately
+	if (YAHOO.util.Event.DOMReady) {
+		this._onloadTasks();
+	}
+	else {
+		YAHOO.util.Event.onDOMReady(this._onloadTasks, this, true);
+	}
+
 	// add the trigger
 	this.addTrigger(trigEl, trigAct);
 
