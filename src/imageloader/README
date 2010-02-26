@@ -1,6 +1,8 @@
 ImageLoader - Release Notes
 
 Development Master
+   * Time limit setting and first fold check done via onDOMReady instead of window load
+   * Fix so time limits work with Loader
 
 2.8.0
    * @requires for module
