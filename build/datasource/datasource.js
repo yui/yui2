@@ -2474,33 +2474,26 @@ util.DataSource = function(oLiveData, oConfigs) {
     var dataType = oConfigs.dataType;
     if(dataType) {
         if(dataType == DS.TYPE_LOCAL) {
-            lang.augmentObject(util.DataSource, util.LocalDataSource);
-            return new util.LocalDataSource(oLiveData, oConfigs);            
+            return new util.LocalDataSource(oLiveData, oConfigs);
         }
         else if(dataType == DS.TYPE_XHR) {
-            lang.augmentObject(util.DataSource, util.XHRDataSource);
             return new util.XHRDataSource(oLiveData, oConfigs);            
         }
         else if(dataType == DS.TYPE_SCRIPTNODE) {
-            lang.augmentObject(util.DataSource, util.ScriptNodeDataSource);
             return new util.ScriptNodeDataSource(oLiveData, oConfigs);            
         }
         else if(dataType == DS.TYPE_JSFUNCTION) {
-            lang.augmentObject(util.DataSource, util.FunctionDataSource);
             return new util.FunctionDataSource(oLiveData, oConfigs);            
         }
     }
     
     if(YAHOO.lang.isString(oLiveData)) { // strings default to xhr
-        lang.augmentObject(util.DataSource, util.XHRDataSource);
         return new util.XHRDataSource(oLiveData, oConfigs);
     }
     else if(YAHOO.lang.isFunction(oLiveData)) {
-        lang.augmentObject(util.DataSource, util.FunctionDataSource);
         return new util.FunctionDataSource(oLiveData, oConfigs);
     }
     else { // ultimate default is local
-        lang.augmentObject(util.DataSource, util.LocalDataSource);
         return new util.LocalDataSource(oLiveData, oConfigs);
     }
 };
