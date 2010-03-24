@@ -3450,6 +3450,7 @@ lang.augmentObject(DT, {
      */
     formatLink : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -16756,8 +16757,6 @@ handleDisabledBtns : function() {
  */
 resetForm : function() {
     var value = this.value;
-    //var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
-    //this.calendar.cfg.setProperty("selected",selectedValue,false);
     this.calendar.select(value);
     this.calendar.cfg.setProperty("pagedate",value,false);
 	this.calendar.render();

@@ -919,6 +919,7 @@ lang.augmentObject(DT, {
      */
     formatEmail : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -938,6 +939,7 @@ lang.augmentObject(DT, {
      */
     formatLink : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
         }
         else {
