@@ -3176,6 +3176,12 @@ lang.augmentObject(DT, {
         if(o instanceof YAHOO.widget.BaseCellEditor) {
             copy = o;
         }
+        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
+            var flags = "";
+            if (o.global) flags += "g";
+            if (o.ignoreCase) flags += "i";
+            copy = new RegExp(o.source, flags);
+        }
         else if(lang.isFunction(o)) {
             copy = o;
         }
@@ -3431,6 +3437,7 @@ lang.augmentObject(DT, {
      */
     formatEmail : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
         }
         else {
