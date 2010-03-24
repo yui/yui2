@@ -1,5 +1,13 @@
 Container Release Notes
 
+*** Development Master ***
+
+New Features:
+------------
+
+* Hide or Show can now be prevented by returning false from beforeHide, 
+  and beforeShow subscribers respectively.
+
 *** version 2.8.0 ***
 
 Bug Fixes:

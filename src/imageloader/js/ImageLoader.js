@@ -94,8 +94,15 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	 */
 	this._classImageEls = null;
 
-	// add a listener to set the time limit in the onload
-	YAHOO.util.Event.addListener(window, 'load', this._onloadTasks, this, true);
+	// add a listener to set the time limit on DOM ready
+	// if DOM is already ready, do so immediately
+	if (YAHOO.util.Event.DOMReady) {
+		this._onloadTasks();
+	}
+	else {
+		YAHOO.util.Event.onDOMReady(this._onloadTasks, this, true);
+	}
+
 	// add the trigger
 	this.addTrigger(trigEl, trigAct);
 
@@ -214,13 +221,15 @@ YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url,
 YAHOO.util.ImageLoader.group.prototype.fetch = function() {
 	YAHOO.log('Fetching images in group: "' + this.name + '".', 'info', 'imageloader');
 
+	var i, len, id;
+
 	clearTimeout(this._timeout);
 	// remove all listeners
-	for (var i=0, len = this._triggers.length; i < len; i++) {
+	for (i=0, len = this._triggers.length; i < len; i++) {
 		YAHOO.util.Event.removeListener(this._triggers[i][0], this._triggers[i][1], this._triggers[i][2]);
 	}
 	// remove custom event subscriptions
-	for (var i=0, len = this._customTriggers.length; i < len; i++) {
+	for (i=0, len = this._customTriggers.length; i < len; i++) {
 		this._customTriggers[i][0].unsubscribe(this._customTriggers[i][1], this);
 	}
 
@@ -228,7 +237,7 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
 	this._fetchByClass();
 
 	// fetch registered images
-	for (var id in this._imgObjs) {
+	for (id in this._imgObjs) {
 		if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
 			this._imgObjs[id].fetch();
 		}
@@ -242,15 +251,16 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
  */
 YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 	YAHOO.log('Checking for images above the fold in group: "' + this.name + '"', 'info', 'imageloader');
-	var scrollTop = (document.compatMode != 'CSS1Compat') ? document.body.scrollTop : document.documentElement.scrollTop;
-	var viewHeight = YAHOO.util.Dom.getViewportHeight();
-	var hLimit = scrollTop + viewHeight;
-	var scrollLeft = (document.compatMode != 'CSS1Compat') ? document.body.scrollLeft : document.documentElement.scrollLeft;
-	var viewWidth = YAHOO.util.Dom.getViewportWidth();
-	var wLimit = scrollLeft + viewWidth;
-	for (var id in this._imgObjs) {
+	var scrollTop = (document.compatMode != 'CSS1Compat') ? document.body.scrollTop : document.documentElement.scrollTop,
+	    viewHeight = YAHOO.util.Dom.getViewportHeight(),
+	    hLimit = scrollTop + viewHeight,
+	    scrollLeft = (document.compatMode != 'CSS1Compat') ? document.body.scrollLeft : document.documentElement.scrollLeft,
+	    viewWidth = YAHOO.util.Dom.getViewportWidth(),
+	    wLimit = scrollLeft + viewWidth,
+			id, elPos, i, len;
+	for (id in this._imgObjs) {
 		if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
-			var elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
+			elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
 				YAHOO.log('Image with id "' + this._imgObjs[id].domId + '" is above the fold. Fetching image.', 'info', 'imageloader');
 				this._imgObjs[id].fetch();
@@ -260,8 +270,8 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 	// and by class
 	if (this.className) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
-		for (var i=0, len = this._classImageEls.length; i < len; i++) {
-			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
+		for (i=0, len = this._classImageEls.length; i < len; i++) {
+			elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
 				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
 				YAHOO.util.Dom.removeClass(this._classImageEls[i], this.className);
@@ -470,8 +480,8 @@ YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.img
  */
 YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
 	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod;
-		var enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
+		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod,
+		    enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
 		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="' + sizingMethod + '", enabled="' + enabled + '")';
 	}
 	else {
