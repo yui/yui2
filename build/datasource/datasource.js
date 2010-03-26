@@ -1644,7 +1644,7 @@ parseJSONData : function(oRequest, oFullResponse) {
 
                         for (j = fieldParsers.length - 1; j >= 0; --j) {
                             var p = fieldParsers[j].key;
-                            rec[p] = fieldParsers[j].parser(rec[p]);
+                            rec[p] = fieldParsers[j].parser.call(this, rec[p]);
                             if (rec[p] === undefined) {
                                 rec[p] = null;
                             }
