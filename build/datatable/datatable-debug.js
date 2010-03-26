@@ -3132,26 +3132,6 @@ lang.augmentObject(DT, {
      */
     _oDynStyles : {},
 
-    /**
-     * Element reference to shared Column drag target.
-     *
-     * @property DataTable._elColumnDragTarget
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnDragTarget : null,
-
-    /**
-     * Element reference to shared Column resizer proxy.
-     *
-     * @property DataTable._elColumnResizerProxy
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnResizerProxy : null,
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static methods
@@ -3206,85 +3186,6 @@ lang.augmentObject(DT, {
         }
     
         return copy;
-    },
-
-    /**
-     * Destroys shared Column drag target.
-     *
-     * @method DataTable._destroyColumnDragTargetEl
-     * @private
-     * @static 
-     */
-    _destroyColumnDragTargetEl : function() {
-        if(DT._elColumnDragTarget) {
-            var el = DT._elColumnDragTarget;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnDragTarget = null;
-            
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column drag target.
-     *
-     * @method DataTable._initColumnDragTargetEl
-     * @return {HTMLElement} Reference to Column drag target. 
-     * @private
-     * @static 
-     */
-    _initColumnDragTargetEl : function() {
-        if(!DT._elColumnDragTarget) {
-            // Attach Column drag target element as first child of body
-            var elColumnDragTarget = document.createElement('div');
-            elColumnDragTarget.className = DT.CLASS_COLTARGET;
-            elColumnDragTarget.style.display = "none";
-            document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
-
-            // Internal tracker of Column drag target
-            DT._elColumnDragTarget = elColumnDragTarget;
-            
-        }
-        return DT._elColumnDragTarget;
-    },
-
-    /**
-     * Destroys shared Column resizer proxy.
-     *
-     * @method DataTable._destroyColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _destroyColumnResizerProxyEl : function() {
-        if(DT._elColumnResizerProxy) {
-            var el = DT._elColumnResizerProxy;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnResizerProxy = null;
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column resizer proxy.
-     *
-     * @method DataTable._initColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _initColumnResizerProxyEl : function() {
-        if(!DT._elColumnResizerProxy) {
-            // Attach Column resizer element as first child of body
-            var elColumnResizerProxy = document.createElement("div");
-            elColumnResizerProxy.id = "yui-dt-colresizerproxy"; // Needed for ColumnResizer
-            elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
-            document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
-
-            // Internal tracker of Column resizer proxy
-            DT._elColumnResizerProxy = elColumnResizerProxy;
-        }
-        return DT._elColumnResizerProxy;
     },
 
     /**
@@ -4220,6 +4121,24 @@ _elMsgTr : null,
 _elMsgTd : null,
 
 /**
+ * Element reference to shared Column drag target.
+ *
+ * @property _elColumnDragTarget
+ * @type HTMLElement
+ * @private
+ */
+_elColumnDragTarget : null,
+
+/**
+ * Element reference to shared Column resizer proxy.
+ *
+ * @property _elColumnResizerProxy
+ * @type HTMLElement
+ * @private
+ */
+_elColumnResizerProxy : null,
+
+/**
  * DataSource instance for the DataTable instance.
  *
  * @property _oDataSource
@@ -5032,6 +4951,9 @@ _destroyDraggableColumns : function() {
             Dom.removeClass(oColumn.getThEl(), DT.CLASS_DRAGGABLE);       
         }
     }
+    
+    // Destroy column drag proxy
+    this._destroyColumnDragTargetEl();
 },
 
 /**
@@ -5048,13 +4970,51 @@ _initDraggableColumns : function() {
             oColumn = this._oColumnSet.tree[0][i];
             elTh = oColumn.getThEl();
             Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
-            elDragTarget = DT._initColumnDragTargetEl();
+            elDragTarget = this._initColumnDragTargetEl();
             oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
         }
     }
     else {
         YAHOO.log("Could not find DragDrop for draggable Columns", "warn", this.toString());
     }
+},
+
+/**
+ * Destroys shared Column drag target.
+ *
+ * @method _destroyColumnDragTargetEl
+ * @private
+ */
+_destroyColumnDragTargetEl : function() {
+    if(this._elColumnDragTarget) {
+        var el = this._elColumnDragTarget;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnDragTarget = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column drag target.
+ *
+ * @method _initColumnDragTargetEl
+ * @return {HTMLElement} Reference to Column drag target.
+ * @private
+ */
+_initColumnDragTargetEl : function() {
+    if(!this._elColumnDragTarget) {
+        // Attach Column drag target element as first child of body
+        var elColumnDragTarget = document.createElement('div');
+        elColumnDragTarget.id = this.getId() + "-coltarget";
+        elColumnDragTarget.className = DT.CLASS_COLTARGET;
+        elColumnDragTarget.style.display = "none";
+        document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
+
+        // Internal tracker of Column drag target
+        this._elColumnDragTarget = elColumnDragTarget;
+
+    }
+    return this._elColumnDragTarget;
 },
 
 /**
@@ -5071,6 +5031,9 @@ _destroyResizeableColumns : function() {
             Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
         }
     }
+
+    // Destroy resizer proxy
+    this._destroyColumnResizerProxyEl();
 },
 
 /**
@@ -5104,8 +5067,8 @@ _initResizeableColumns : function() {
                 elThResizer.className = DT.CLASS_RESIZER;
                 oColumn._elResizer = elThResizer;
 
-                // Create the resizer proxy, once globally
-                elResizerProxy = DT._initColumnResizerProxyEl();
+                // Create the resizer proxy, once per instance
+                elResizerProxy = this._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
                 cancelClick = function(e) {
@@ -5118,6 +5081,43 @@ _initResizeableColumns : function() {
     else {
         YAHOO.log("Could not find DragDrop for resizeable Columns", "warn", this.toString());
     }
+},
+
+/**
+ * Destroys shared Column resizer proxy.
+ *
+ * @method _destroyColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_destroyColumnResizerProxyEl : function() {
+    if(this._elColumnResizerProxy) {
+        var el = this._elColumnResizerProxy;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnResizerProxy = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column resizer proxy.
+ *
+ * @method _initColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_initColumnResizerProxyEl : function() {
+    if(!this._elColumnResizerProxy) {
+        // Attach Column resizer element as first child of body
+        var elColumnResizerProxy = document.createElement("div");
+        elColumnResizerProxy.id = this.getId() + "-colresizerproxy"; // Needed for ColumnResizer
+        elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
+        document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
+
+        // Internal tracker of Column resizer proxy
+        this._elColumnResizerProxy = elColumnResizerProxy;
+    }
+    return this._elColumnResizerProxy;
 },
 
 /**
@@ -7463,10 +7463,6 @@ destroy : function() {
     var instanceName = this.toString();
 
     this._oChainRender.stop();
-    
-    // Destroy static resizer proxy and column proxy
-    DT._destroyColumnDragTargetEl();
-    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
