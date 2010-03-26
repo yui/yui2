@@ -4,6 +4,11 @@ DataTable Release Notes
 
 * Added className property to CellEditor for custom class assignment.
 * Added useIFrame property to CellEditor for IE6 select bleed-through workaround.
+* DateCellEditors now correctly display selected date.
+* Regexes now supported as custom Column config data.
+* DragDrop proxies for Column resizer and draggable Column target are now created
+and destroyed for each instance instead of being shared globally.
+
 
 
 
