@@ -3095,10 +3095,7 @@ lang.augmentObject(DT, {
             copy = o;
         }
         else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
-            var flags = "";
-            if (o.global) flags += "g";
-            if (o.ignoreCase) flags += "i";
-            copy = new RegExp(o.source, flags);
+            copy = o;
         }
         else if(lang.isFunction(o)) {
             copy = o;
