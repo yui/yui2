@@ -9744,6 +9744,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
                 oCellEditor = oColumn.editor;
                 var ok = oCellEditor.attach(this, elCell);
                 if(ok) {
+                    oCellEditor.render();
                     oCellEditor.move();
                     ok = this.doBeforeShowCellEditor(oCellEditor);
                     if(ok) {

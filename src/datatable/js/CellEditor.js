@@ -34,8 +34,8 @@ widget.BaseCellEditor = function(sType, oConfigs) {
     // Create Custom Events
     this._initEvents();
              
-    // Draw UI
-    this.render();
+    // UI needs to be drawn
+    this._needsRender = true;
 };
 
 var BCE = widget.BaseCellEditor;
@@ -497,8 +497,10 @@ destroy : function() {
     }
     
     var elContainer = this.getContainerEl();
-    Ev.purgeElement(elContainer, true);
-    elContainer.parentNode.removeChild(elContainer);
+    if (elContainer) {
+        Ev.purgeElement(elContainer, true);
+        elContainer.parentNode.removeChild(elContainer);
+    }
 },
 
 /**
@@ -507,6 +509,10 @@ destroy : function() {
  * @method render
  */
 render : function() {
+    if (!this._needsRender) {
+        return;
+    }
+
     this._initContainerEl();
     this._initShimEl();
 
@@ -534,6 +540,7 @@ render : function() {
     }
     
     this.doAfterRender();
+    this._needsRender = false;
 },
 
 /**
