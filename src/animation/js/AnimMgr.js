@@ -44,7 +44,7 @@ YAHOO.util.AnimMgr = new function() {
      * @type Int
      * 
      */
-    this.delay = 1;
+    this.delay = 20;
 
     /**
      * Adds an animation instance to the animation queue.

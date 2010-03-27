@@ -335,7 +335,7 @@ function _stringify(o,w,space) {
             i = 0;
 
             for (k in keys) {
-                if (keys.hasOwnProperty(k)) {
+                if (l.hasOwnProperty(keys, k)) {
                     v = _serialize(value, k);
                     if (v) {
                         a[i++] = _string(k) + colon + v;
