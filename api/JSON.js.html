@@ -384,7 +384,7 @@
             <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="nx">k</span> <span class="k">in</span> <span class="nx">keys</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">k</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="nx">k</span><span class="p">))</span> <span class="p">{</span>
                     <span class="nx">v</span> <span class="o">=</span> <span class="nx">_serialize</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">k</span><span class="p">);</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
                         <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_string</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="o">+</span> <span class="nx">colon</span> <span class="o">+</span> <span class="nx">v</span><span class="p">;</span>

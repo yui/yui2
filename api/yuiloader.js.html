@@ -1172,7 +1172,9 @@
                             <span class="nx">smod</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_addSkin</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">skin</span><span class="p">.</span><span class="nx">defaultSkin</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>
                         <span class="p">}</span>
 
-                        <span class="nx">m</span><span class="p">.</span><span class="nx">requires</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">smod</span><span class="p">);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">YUI</span><span class="p">.</span><span class="nx">ArrayUtil</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">requires</span><span class="p">,</span> <span class="nx">smod</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">m</span><span class="p">.</span><span class="nx">requires</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">smod</span><span class="p">);</span>
+                        <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
 
@@ -1517,15 +1519,6 @@
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
-
-                <span class="c1">// var ss=me.getProvides(bb, true);</span>
-                <span class="c1">// if (ss) {</span>
-                <span class="c1">//     for (ii in ss) {</span>
-                <span class="c1">//         if (requires(aa, ii)) {</span>
-                <span class="c1">//             return true;</span>
-                <span class="c1">//         }</span>
-                <span class="c1">//     }</span>
-                <span class="c1">// }</span>
 
                 <span class="c1">// external css files should be sorted below yui css</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">mm</span><span class="p">.</span><span class="nx">ext</span> <span class="o">&amp;&amp;</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s1">&#39;css&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">other</span><span class="p">.</span><span class="nx">ext</span> <span class="o">&amp;&amp;</span> <span class="nx">other</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s1">&#39;css&#39;</span><span class="p">)</span> <span class="p">{</span>

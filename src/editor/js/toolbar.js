@@ -985,10 +985,10 @@ var Dom = YAHOO.util.Dom,
                     } else {
                         //Stop the mousedown event so we can trap the selection in the editor!
                         tmp.on('mousedown', function(ev) {
-                            YAHOO.util.Event.stopEvent(ev);
+                            //YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('click', function(ev) {
-                            YAHOO.util.Event.stopEvent(ev);
+                            //YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('change', function(ev) {
                             if (!ev.target) {

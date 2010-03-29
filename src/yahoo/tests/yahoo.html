@@ -421,6 +421,12 @@ are output in the logger to the right. <br />View the source to see how it's don
         test_augmentProto: function() {
         },
 
+        test_hasownprop: function() {
+            var el = Dom.get('xframe');
+
+            // Assert.isTrue(YAHOO.lang.hasOwnProperty(el, 'id'));
+        },
+
         test_to_fail : function (){
             Assert.isNull("not null");;
         }
