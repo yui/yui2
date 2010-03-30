@@ -8,7 +8,8 @@ DataTable Release Notes
 * Regexes now supported as custom Column config data.
 * DragDrop proxies for Column resizer and draggable Column target are now created
 and destroyed for each instance instead of being shared globally.
-
+* Added new method load(), a convenience method that calls DataSource's
+sendRequest() method under the hood.
 
 
 
@@ -20,6 +21,7 @@ and destroyed for each instance instead of being shared globally.
 * Added clearScrollPositions() and scrollTo() to ScrollingDataTable.
 * Performance improvements for ScrollingDataTable in IE.
 * Bug fixes for DataTables rendered within table markup.
+
 
 
 **** version 2.7.0 ***

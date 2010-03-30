@@ -7245,6 +7245,37 @@ getTrIndex : function(row) {
 // TABLE FUNCTIONS
 
 /**
+ * Loads new data. Convenience method that calls DataSource's sendRequest()
+ * method under the hood.
+ *
+ * @method load
+ * @param oConfig {object} Optional configuration parameters:
+ *
+ * <dl>
+ * <dt>request</dt><dd>Pass in a new request, or initialRequest is used.</dd>
+ * <dt>callback</dt><dd>Pass in DataSource sendRequest() callback object, or the following is used:
+ *    <dl>
+ *      <dt>success</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>failure</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>scope</dt><dd>datatable</dd>
+ *      <dt>argument</dt><dd>datatable.getState()</dd>
+ *    </dl>
+ * </dd>
+ * <dt>datasource</dt><dd>Pass in a new DataSource instance to override the current DataSource for this transaction.</dd>
+ * </dl>
+ */
+load : function(oConfig) {
+    oConfig = oConfig || {};
+
+    (oConfig.datasource || this._oDataSource).sendRequest(oConfig.request || this.initialRequest, oConfig.callback || {
+        success: this.onDataReturnInitializeTable,
+        failure: this.onDataReturnInitializeTable,
+        scope: this,
+        argument: this.getState()
+    });
+},
+
+/**
  * Resets a RecordSet with the given data and populates the page view
  * with the new data. Any previous data, and selection and sort states are
  * cleared. New data should be added as a separate step. 
