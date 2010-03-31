@@ -443,6 +443,62 @@
     /**
      *
      *
+     * Tests data load APIs.
+     *
+     *
+     */
+    var dtDataLoadTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Data Load Tests",
+
+        testDefaults: function() {
+            var dt = this.createInstance();
+            Assert.areSame(true, dt.get("initialLoad"), "Expected initialLoad default value");
+            Assert.areSame(null, dt.get("initialRequest"), "Expected initialRequest default value");
+            Assert.areNotSame(0, dt.getRecordSet().getLength(), "Expected non-empty RecordSet");
+        },
+
+        testNoLoad: function() {
+            var dt = this.createInstance(null,{initialLoad:false});
+            Assert.areSame(false, dt.get("initialLoad"), "Expected initialLoad false");
+            Assert.areSame(null, dt.get("initialRequest"), "Expected initialRequest default value");
+            Assert.areSame(0, dt.getRecordSet().getLength(), "Expected emtpy RecordSet");
+        },
+
+        testNonInitialLoad: function() {
+            var dt = this.createInstance(null,{initialLoad:false});
+            Assert.areSame(0, dt.getRecordSet().getLength(), "Expected empty RecordSet to start");
+            
+            this.datasource.liveData = [{a:"4a",b:"4b",c:"4c"}];
+            this.datasource.sendRequest(null, {
+                success: dt.onDataReturnInitializeTable,
+                failure: dt.onDataReturnInitializeTable,
+                scope: dt
+            });
+            Assert.areSame(1, dt.getRecordSet().getLength(), "RecordSet should now have 1 Record");
+        },
+        
+        testLoad: function() {
+            var dt = this.createInstance(null,{initialLoad:false});
+            dt.load();
+            Assert.areSame(4, dt.getRecordSet().getLength(), "Expected 4 Records");
+
+            var newDS = new YAHOO.util.LocalDataSource([[{a:"4a",b:"4b",c:"4c"}]]);
+            dt.load({
+                datasource:newDS,
+                callback:{
+                    success:dt.onDataReturnAppendRows,
+                    failure:dt.onDataReturnAppendRows,
+                    scope:dt
+                }
+            });
+            Assert.areSame(5, dt.getRecordSet().getLength(), "Expected 5 Records");
+        }
+    });
+    var dtDataLoadTest = new DataTableTestCase(dtDataLoadTemplate);
+
+    /**
+     *
+     *
      * Tests row mutation APIs.
      *
      *
@@ -1918,12 +1974,14 @@
         var datatablesuite = new TestSuite("DataTable Test Suite");
         datatablesuite.add(dtConstructionTest);
         datatablesuite.add(dtDomAccessorsTest);
+        datatablesuite.add(dtDataLoadTest);
         datatablesuite.add(dtRowMutationTest);
         datatablesuite.add(dtSortingTest);
         datatablesuite.add(dtRowSelectionTest);
         datatablesuite.add(dtCellSelectionTest);
         datatablesuite.add(dtPaginationTest);
         datatablesuite.add(dtCloneObjectTest);
+
         
         TestRunner.add(datatablesuite);
     });

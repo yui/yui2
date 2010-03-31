@@ -2962,7 +2962,9 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                             smod = this._addSkin(this.skin.defaultSkin, name);
                         }
 
-                        m.requires.push(smod);
+                        if (YUI.ArrayUtil.indexOf(m.requires, smod) == -1) {
+                            m.requires.push(smod);
+                        }
                     }
                 }
 
@@ -3307,15 +3309,6 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                         }
                     }
                 }
-
-                // var ss=me.getProvides(bb, true);
-                // if (ss) {
-                //     for (ii in ss) {
-                //         if (requires(aa, ii)) {
-                //             return true;
-                //         }
-                //     }
-                // }
 
                 // external css files should be sorted below yui css
                 if (mm.ext && mm.type == 'css' && !other.ext && other.type == 'css') {
