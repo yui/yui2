@@ -101,7 +101,7 @@ _unsetProperty = workerStyle.borderLeft ?
  * 
  * @class StyleSheet
  * @constructor
- * @param seed {String|HTMLElement} a style or link node, its id, or a name or
+ * @param seed {String|&lt;style&gt; element} a style or link node, its id, or a name or
  *              yuiSSID of a StyleSheet, or a string of css text (see above)
  * @param name {String} OPTIONAL name to register instance for future static
  *              access
@@ -218,7 +218,7 @@ function StyleSheet(seed, name) {
         getId : function () { return node.yuiSSID; },
 
         /**
-         * The HTMLElement that this instance encapsulates
+         * The &lt;style&gt; element that this instance encapsulates
          *
          * @property node
          * @type HTMLElement
