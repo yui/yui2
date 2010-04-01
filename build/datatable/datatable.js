@@ -7164,7 +7164,7 @@ getTrIndex : function(row) {
 load : function(oConfig) {
     oConfig = oConfig || {};
 
-    (oConfig.datasource || this._oDataSource).sendRequest(oConfig.request || this.initialRequest, oConfig.callback || {
+    (oConfig.datasource || this._oDataSource).sendRequest(oConfig.request || this.get("initialRequest"), oConfig.callback || {
         success: this.onDataReturnInitializeTable,
         failure: this.onDataReturnInitializeTable,
         scope: this,
