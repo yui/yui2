@@ -2,6 +2,9 @@ Calendar Release Notes
 
 *** Development Master ***
 
++ Fixed renderStack application when multiple renderers applied to
+  the same date.
+
 + Removed Opera Width Fix. No longer required. Opera handles floats 
   correclty
 
