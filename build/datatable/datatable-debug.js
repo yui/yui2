@@ -7317,6 +7317,29 @@ _runRenderChain : function() {
 },
 
 /**
+ * Returns array of Records for current view. For example, if paginated, it
+ * returns the subset of Records for current page.
+ *
+ * @method _getViewRecords
+ * @protected
+ * @return {Array} Array of Records to display in current view.
+ */
+_getViewRecords : function() {
+    // Paginator is enabled, show a subset of Records
+    var oPaginator = this.get('paginator');
+    if(oPaginator) {
+        return this._oRecordSet.getRecords(
+                        oPaginator.getStartIndex(),
+                        oPaginator.getRowsPerPage());
+    }
+    // Not paginated, show all records
+    else {
+        return this._oRecordSet.getRecords();
+    }
+
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -7331,19 +7354,9 @@ render : function() {
     this.fireEvent("beforeRenderEvent");
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
-    var i, j, k, len, allRecords;
+    var i, j, k, len,
+        allRecords = this._getViewRecords();
 
-    var oPaginator = this.get('paginator');
-    // Paginator is enabled, show a subset of Records and update Paginator UI
-    if(oPaginator) {
-        allRecords = this._oRecordSet.getRecords(
-                        oPaginator.getStartIndex(),
-                        oPaginator.getRowsPerPage());
-    }
-    // Not paginated, show all records
-    else {
-        allRecords = this._oRecordSet.getRecords();
-    }
 
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
