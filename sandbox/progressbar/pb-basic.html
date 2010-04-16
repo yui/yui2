@@ -29,7 +29,7 @@
 #valueSet,#rangeSet,#sizeSet {
 	float:left;
 	clear:left;
-	width:50%;
+	width:45%;
 }
 
 #animSet{
@@ -39,6 +39,14 @@
 
 #basic .yui-pb{
 	margin:0 auto;
+}
+
+.gradient .yui-pb-ltr .yui-pb-bar, .gradient .yui-pb-rtl .yui-pb-bar {
+	background-image: url(hgradient.png);
+}
+
+.gradient .yui-pb-ttb .yui-pb-bar, .gradient .yui-pb-btt .yui-pb-bar {
+	background-image: url(vgradient.png);
 }
 
 fieldset {
@@ -147,6 +155,16 @@ code {
 					<p> 
 						<label>Duration <span id="duration">200</span> second(s)</label>
 					</p>
+					<fieldset id="accelerationSet">
+						<legend>Acceleration</legend>
+						<p><input type="checkbox" id="acc" /> Enable acceleration</p>
+						Speed<div id="sliderAcceleration" class="yui-h-slider" tabindex="-1" title="Acceleration slider">
+							<div id="sliderAccelerationThumb" class="yui-slider-thumb"><img src="../../build/slider/assets/thumb-n.gif"></div>
+						</div>
+						<p> 
+							<label>Speed: <span id="acceleration">1</span> </label>
+						</p>
+					</fieldset>
 					<fieldset id="easing">
 						<legend>Easing</legend>
 						<input type="radio" name="easing" value="easeNone" id="easeNone"/> easeNone<br/>
@@ -182,8 +200,8 @@ code {
 			Leaving aside all the interface details, these are the statements that deal with those settings:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				pb.set('value',valueSlider.getValue());
-				pb.set('minValue',rangeSlider.minValue);
-				pb.set('maxValue',rangeSlider.minValue);
+				pb.set('minValue',rangeSlider.minVal);
+				pb.set('maxValue',rangeSlider.maxVal);
 				pb.set('width',widthSlider.getValue());
 				pb.set('height',heightSlider.getValue());
 				
@@ -313,6 +331,32 @@ code {
 			if (anim) { anim.duration = value; }
 		});
 
+		Dom.get('acc').checked = false;
+		Event.on('acc','click',function(ev) {
+			var checked = Event.getTarget(ev).checked;
+			if (checked) {
+				Dom.addClass('basic','gradient');
+				pb.set('accelerator',accelerationSlider.getValue() / 100);
+			} else {
+				Dom.removeClass('basic','gradient');
+				pb.set('accelerator',null);
+			}
+		});
+			
+		var accelerationSlider = YAHOO.widget.Slider.getHorizSlider('sliderAcceleration',  
+            'sliderAccelerationThumb', 0, 200, 0
+		);
+		accelerationSlider.animate = false;
+		accelerationSlider.setValue(100);
+		accelerationSlider.subscribe("change", function(offsetFromStart) {
+			var value = offsetFromStart / 100;
+			Dom.get('acceleration').innerHTML = value;
+		});
+		accelerationSlider.subscribe("slideEnd", function() {
+			pb.set('accelerator',accelerationSlider.getValue() / 100);
+		});
+		
+		
 		Dom.get('easeNone').checked = true;
 		Event.on('easing','click',function(ev) {
 			var anim = pb.get('anim');
