@@ -573,37 +573,37 @@
 
 
 			if (anim) {
-				if (!this.oldSetAttribute) {
-					this.oldSetAttribute = anim.setAttribute;
+				if (!this._oldSetAttribute) {
+					this._oldSetAttribute = anim.setAttribute;
 				}
 				var	pb = this;
 				switch(this.get(DIRECTION)) {
 					case DIRECTION_LTR:
 						anim.setAttribute = function(attr , val , unit) {
 							val = Math.round(val);
-							pb.oldSetAttribute.call(this,attr,val,unit);
+							pb._oldSetAttribute.call(this,attr,val,unit);
 							if (attr == WIDTH) {
-								pb.oldSetAttribute.call(this,BG_POSITION,-val * acc,PX);
+								pb._oldSetAttribute.call(this,BG_POSITION,-val * acc,PX);
 							}
 						};
 						break;
 					case DIRECTION_RTL:
 						anim.setAttribute = function(attr , val , unit) {
 							val = Math.round(val);
-							pb.oldSetAttribute.call(this,attr,val,unit);
+							pb._oldSetAttribute.call(this,attr,val,unit);
 							if (attr == WIDTH) {
 								var left = pb._barSpace - val;
-								pb.oldSetAttribute.call(this,'left',left, PX);
-								pb.oldSetAttribute.call(this, BG_POSITION, -left +  val * acc, PX);
+								pb._oldSetAttribute.call(this,'left',left, PX);
+								pb._oldSetAttribute.call(this, BG_POSITION, -left +  val * acc, PX);
 							}
 						};
 						break;
 					case DIRECTION_TTB:
 						anim.setAttribute = function(attr , val , unit) {
 							val = Math.round(val);
-							pb.oldSetAttribute.call(this,attr,val,unit);
+							pb._oldSetAttribute.call(this,attr,val,unit);
 							if (attr == HEIGHT) {
-								pb.oldSetAttribute.call(this,BG_POSITION,'center ' + (- val * acc),PX);
+								pb._oldSetAttribute.call(this,BG_POSITION,'center ' + (- val * acc),PX);
 							}
 						};
 						break;
@@ -611,11 +611,11 @@
 					case DIRECTION_BTT:
 						anim.setAttribute = function(attr , val , unit) {
 							val = Math.round(val);
-							pb.oldSetAttribute.call(this,attr,val,unit);
+							pb._oldSetAttribute.call(this,attr,val,unit);
 							if (attr == HEIGHT) {
 								var top = pb._barSpace - val;
-								pb.oldSetAttribute.call(this,'top',top, PX);
-								pb.oldSetAttribute.call(this, BG_POSITION,'center ' + (val * acc - top), PX);
+								pb._oldSetAttribute.call(this,'top',top, PX);
+								pb._oldSetAttribute.call(this, BG_POSITION,'center ' + (val * acc - top), PX);
 							}
 						};
 						break;
