@@ -225,7 +225,12 @@
 
         <span class="kd">var</span> <span class="nx">html</span><span class="p">,</span> <span class="nx">doc</span><span class="p">;</span>
 
-        <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&lt;div id=&quot;state&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">fqstate</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&lt;div id=&quot;state&quot;&gt;&#39;</span> <span class="o">+</span>
+                   <span class="nx">fqstate</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;/g</span><span class="p">,</span><span class="s1">&#39;&amp;amp;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;/g</span><span class="p">,</span><span class="s1">&#39;&amp;lt;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;/g</span><span class="p">,</span><span class="s1">&#39;&amp;gt;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span><span class="s1">&#39;&amp;quot;&#39;</span><span class="p">)</span> <span class="o">+</span>
+               <span class="s1">&#39;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">;</span>
 
         <span class="k">try</span> <span class="p">{</span>
             <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_histFrame</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">;</span>
