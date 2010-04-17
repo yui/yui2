@@ -176,7 +176,12 @@ YAHOO.util.History = (function () {
 
         var html, doc;
 
-        html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
+        html = '<html><body><div id="state">' +
+                   fqstate.replace(/&/g,'&amp;').
+                           replace(/</g,'&lt;').
+                           replace(/>/g,'&gt;').
+                           replace(/"/g,'&quot;') +
+               '</div></body></html>';
 
         try {
             doc = _histFrame.contentWindow.document;
