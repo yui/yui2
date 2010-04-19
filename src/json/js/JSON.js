@@ -75,7 +75,7 @@ var l = YAHOO.lang,
      * @static
      * @private
      */
-    _UNSAFE  = /^[\],:{}\s]*$/,
+    _UNSAFE  = /[^\],:{}\s]/,
 
 
 /* Variables used by stringify */
@@ -201,7 +201,7 @@ function _prepare(s) {
 
 function _isSafe(str) {
     return l.isString(str) &&
-            _UNSAFE.test(str.replace(_ESCAPES,'@').
+            !_UNSAFE.test(str.replace(_ESCAPES,'@').
                              replace(_VALUES,']').
                              replace(_BRACKETS,''));
 }
@@ -335,7 +335,7 @@ function _stringify(o,w,space) {
             i = 0;
 
             for (k in keys) {
-                if (keys.hasOwnProperty(k)) {
+                if (l.hasOwnProperty(keys, k)) {
                     v = _serialize(value, k);
                     if (v) {
                         a[i++] = _string(k) + colon + v;

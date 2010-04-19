@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title>Progress Bar examples -  - Going in all directions</title>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
+
+
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
+
+<!-- js -->
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+
+<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
+<style type="text/css">
+#ttb .yui-pb, #btt .yui-pb {
+	width:20px;
+	height:200px;
+}
+
+#ltr,#rtl, #ttb, #btt {
+	margin:1em;
+	border:thin solid silver;
+	padding:1em;
+}
+.yui-pb-caption {
+	visibility:visible;
+}
+
+.yui-skin-sam .yui-pb-ltr .yui-pb-bar, .yui-skin-sam  .yui-pb-rtl .yui-pb-bar {
+	background-image: url(hgradient.png);
+}
+
+.yui-skin-sam .yui-pb-ttb .yui-pb-bar, .yui-skin-sam  .yui-pb-btt .yui-pb-bar {
+	background-image: url(vgradient.png);
+}
+
+.left {
+	float:left;
+}
+</style>
+</head>
+<body class="yui-skin-sam">
+
+	<div id="doc">
+		<div id="hd">
+			<h1>Progress Bar examples - Going in all directions</h1>
+			<p>An assortment of ProgressBars, each going in a different direction, all accelerated.</p>
+		</div>
+		<div id="bd">
+			<div class="left">
+				<div id="ltr"></div>
+				<div id="rtl"></div>
+			</div>
+			<div class="left" id="ttb"></div>
+			<div class="left" id="btt"></div>
+		</div>
+	</div>
+	<script  type="text/javascript">
+
+
+	YAHOO.util.Event.onDOMReady( function () {
+		var pb = [];
+		var acc = 0.3, duration = 3;
+		pb[0] = new YAHOO.widget.ProgressBar({direction:'ltr',value:0, anim:true, accelerator:acc}).render('ltr');
+		pb[1] = new YAHOO.widget.ProgressBar({direction:'rtl',value:0, anim:true, accelerator:acc}).render('rtl');
+		pb[2] = new YAHOO.widget.ProgressBar({direction:'ttb',value:0, anim:true, accelerator:acc}).render('ttb');
+		pb[3] = new YAHOO.widget.ProgressBar({direction:'btt',value:0, anim:true, accelerator:acc}).render('btt');
+		
+		pb[0].get('anim').duration = duration;
+		pb[1].get('anim').duration = duration;
+		pb[2].get('anim').duration = duration;
+		pb[3].get('anim').duration = duration;
+
+		var move = function() {
+			for (var i = 0; i < pb.length; i++) {
+				pb[i].set('value',100 - pb[i].get('value'));
+			}
+		};
+		move();
+		window.setInterval(move, duration * 1000 + 500);
+		
+		
+			
+	});
+</script>
+
+</body>
+</html>

@@ -3050,26 +3050,6 @@ lang.augmentObject(DT, {
      */
     _oDynStyles : {},
 
-    /**
-     * Element reference to shared Column drag target.
-     *
-     * @property DataTable._elColumnDragTarget
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnDragTarget : null,
-
-    /**
-     * Element reference to shared Column resizer proxy.
-     *
-     * @property DataTable._elColumnResizerProxy
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnResizerProxy : null,
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static methods
@@ -3092,6 +3072,9 @@ lang.augmentObject(DT, {
         var copy = {};
         
         if(o instanceof YAHOO.widget.BaseCellEditor) {
+            copy = o;
+        }
+        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
             copy = o;
         }
         else if(lang.isFunction(o)) {
@@ -3121,85 +3104,6 @@ lang.augmentObject(DT, {
         }
     
         return copy;
-    },
-
-    /**
-     * Destroys shared Column drag target.
-     *
-     * @method DataTable._destroyColumnDragTargetEl
-     * @private
-     * @static 
-     */
-    _destroyColumnDragTargetEl : function() {
-        if(DT._elColumnDragTarget) {
-            var el = DT._elColumnDragTarget;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnDragTarget = null;
-            
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column drag target.
-     *
-     * @method DataTable._initColumnDragTargetEl
-     * @return {HTMLElement} Reference to Column drag target. 
-     * @private
-     * @static 
-     */
-    _initColumnDragTargetEl : function() {
-        if(!DT._elColumnDragTarget) {
-            // Attach Column drag target element as first child of body
-            var elColumnDragTarget = document.createElement('div');
-            elColumnDragTarget.className = DT.CLASS_COLTARGET;
-            elColumnDragTarget.style.display = "none";
-            document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
-
-            // Internal tracker of Column drag target
-            DT._elColumnDragTarget = elColumnDragTarget;
-            
-        }
-        return DT._elColumnDragTarget;
-    },
-
-    /**
-     * Destroys shared Column resizer proxy.
-     *
-     * @method DataTable._destroyColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _destroyColumnResizerProxyEl : function() {
-        if(DT._elColumnResizerProxy) {
-            var el = DT._elColumnResizerProxy;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnResizerProxy = null;
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column resizer proxy.
-     *
-     * @method DataTable._initColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _initColumnResizerProxyEl : function() {
-        if(!DT._elColumnResizerProxy) {
-            // Attach Column resizer element as first child of body
-            var elColumnResizerProxy = document.createElement("div");
-            elColumnResizerProxy.id = "yui-dt-colresizerproxy"; // Needed for ColumnResizer
-            elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
-            document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
-
-            // Internal tracker of Column resizer proxy
-            DT._elColumnResizerProxy = elColumnResizerProxy;
-        }
-        return DT._elColumnResizerProxy;
     },
 
     /**
@@ -3349,6 +3253,7 @@ lang.augmentObject(DT, {
      */
     formatEmail : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -3368,6 +3273,7 @@ lang.augmentObject(DT, {
      */
     formatLink : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -4130,6 +4036,24 @@ _elMsgTr : null,
  * @private
  */
 _elMsgTd : null,
+
+/**
+ * Element reference to shared Column drag target.
+ *
+ * @property _elColumnDragTarget
+ * @type HTMLElement
+ * @private
+ */
+_elColumnDragTarget : null,
+
+/**
+ * Element reference to shared Column resizer proxy.
+ *
+ * @property _elColumnResizerProxy
+ * @type HTMLElement
+ * @private
+ */
+_elColumnResizerProxy : null,
 
 /**
  * DataSource instance for the DataTable instance.
@@ -4938,6 +4862,9 @@ _destroyDraggableColumns : function() {
             Dom.removeClass(oColumn.getThEl(), DT.CLASS_DRAGGABLE);       
         }
     }
+    
+    // Destroy column drag proxy
+    this._destroyColumnDragTargetEl();
 },
 
 /**
@@ -4954,12 +4881,50 @@ _initDraggableColumns : function() {
             oColumn = this._oColumnSet.tree[0][i];
             elTh = oColumn.getThEl();
             Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
-            elDragTarget = DT._initColumnDragTargetEl();
+            elDragTarget = this._initColumnDragTargetEl();
             oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
         }
     }
     else {
     }
+},
+
+/**
+ * Destroys shared Column drag target.
+ *
+ * @method _destroyColumnDragTargetEl
+ * @private
+ */
+_destroyColumnDragTargetEl : function() {
+    if(this._elColumnDragTarget) {
+        var el = this._elColumnDragTarget;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnDragTarget = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column drag target.
+ *
+ * @method _initColumnDragTargetEl
+ * @return {HTMLElement} Reference to Column drag target.
+ * @private
+ */
+_initColumnDragTargetEl : function() {
+    if(!this._elColumnDragTarget) {
+        // Attach Column drag target element as first child of body
+        var elColumnDragTarget = document.createElement('div');
+        elColumnDragTarget.id = this.getId() + "-coltarget";
+        elColumnDragTarget.className = DT.CLASS_COLTARGET;
+        elColumnDragTarget.style.display = "none";
+        document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
+
+        // Internal tracker of Column drag target
+        this._elColumnDragTarget = elColumnDragTarget;
+
+    }
+    return this._elColumnDragTarget;
 },
 
 /**
@@ -4976,6 +4941,9 @@ _destroyResizeableColumns : function() {
             Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
         }
     }
+
+    // Destroy resizer proxy
+    this._destroyColumnResizerProxyEl();
 },
 
 /**
@@ -5009,8 +4977,8 @@ _initResizeableColumns : function() {
                 elThResizer.className = DT.CLASS_RESIZER;
                 oColumn._elResizer = elThResizer;
 
-                // Create the resizer proxy, once globally
-                elResizerProxy = DT._initColumnResizerProxyEl();
+                // Create the resizer proxy, once per instance
+                elResizerProxy = this._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
                 cancelClick = function(e) {
@@ -5022,6 +4990,43 @@ _initResizeableColumns : function() {
     }
     else {
     }
+},
+
+/**
+ * Destroys shared Column resizer proxy.
+ *
+ * @method _destroyColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_destroyColumnResizerProxyEl : function() {
+    if(this._elColumnResizerProxy) {
+        var el = this._elColumnResizerProxy;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnResizerProxy = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column resizer proxy.
+ *
+ * @method _initColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_initColumnResizerProxyEl : function() {
+    if(!this._elColumnResizerProxy) {
+        // Attach Column resizer element as first child of body
+        var elColumnResizerProxy = document.createElement("div");
+        elColumnResizerProxy.id = this.getId() + "-colresizerproxy"; // Needed for ColumnResizer
+        elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
+        document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
+
+        // Internal tracker of Column resizer proxy
+        this._elColumnResizerProxy = elColumnResizerProxy;
+    }
+    return this._elColumnResizerProxy;
 },
 
 /**
@@ -7137,6 +7142,37 @@ getTrIndex : function(row) {
 // TABLE FUNCTIONS
 
 /**
+ * Loads new data. Convenience method that calls DataSource's sendRequest()
+ * method under the hood.
+ *
+ * @method load
+ * @param oConfig {object} Optional configuration parameters:
+ *
+ * <dl>
+ * <dt>request</dt><dd>Pass in a new request, or initialRequest is used.</dd>
+ * <dt>callback</dt><dd>Pass in DataSource sendRequest() callback object, or the following is used:
+ *    <dl>
+ *      <dt>success</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>failure</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>scope</dt><dd>datatable</dd>
+ *      <dt>argument</dt><dd>datatable.getState()</dd>
+ *    </dl>
+ * </dd>
+ * <dt>datasource</dt><dd>Pass in a new DataSource instance to override the current DataSource for this transaction.</dd>
+ * </dl>
+ */
+load : function(oConfig) {
+    oConfig = oConfig || {};
+
+    (oConfig.datasource || this._oDataSource).sendRequest(oConfig.request || this.get("initialRequest"), oConfig.callback || {
+        success: this.onDataReturnInitializeTable,
+        failure: this.onDataReturnInitializeTable,
+        scope: this,
+        argument: this.getState()
+    });
+},
+
+/**
  * Resets a RecordSet with the given data and populates the page view
  * with the new data. Any previous data, and selection and sort states are
  * cleared. New data should be added as a separate step. 
@@ -7178,6 +7214,29 @@ _runRenderChain : function() {
 },
 
 /**
+ * Returns array of Records for current view. For example, if paginated, it
+ * returns the subset of Records for current page.
+ *
+ * @method _getViewRecords
+ * @protected
+ * @return {Array} Array of Records to display in current view.
+ */
+_getViewRecords : function() {
+    // Paginator is enabled, show a subset of Records
+    var oPaginator = this.get('paginator');
+    if(oPaginator) {
+        return this._oRecordSet.getRecords(
+                        oPaginator.getStartIndex(),
+                        oPaginator.getRowsPerPage());
+    }
+    // Not paginated, show all records
+    else {
+        return this._oRecordSet.getRecords();
+    }
+
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -7191,19 +7250,9 @@ render : function() {
 
     this.fireEvent("beforeRenderEvent");
 
-    var i, j, k, len, allRecords;
+    var i, j, k, len,
+        allRecords = this._getViewRecords();
 
-    var oPaginator = this.get('paginator');
-    // Paginator is enabled, show a subset of Records and update Paginator UI
-    if(oPaginator) {
-        allRecords = this._oRecordSet.getRecords(
-                        oPaginator.getStartIndex(),
-                        oPaginator.getRowsPerPage());
-    }
-    // Not paginated, show all records
-    else {
-        allRecords = this._oRecordSet.getRecords();
-    }
 
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
@@ -7354,10 +7403,6 @@ destroy : function() {
     var instanceName = this.toString();
 
     this._oChainRender.stop();
-    
-    // Destroy static resizer proxy and column proxy
-    DT._destroyColumnDragTargetEl();
-    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
@@ -16519,8 +16564,8 @@ handleDisabledBtns : function() {
  */
 resetForm : function() {
     var value = this.value;
-    var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
-    this.calendar.cfg.setProperty("selected",selectedValue,false);
+    this.calendar.select(value);
+    this.calendar.cfg.setProperty("pagedate",value,false);
 	this.calendar.render();
 	// Bug 2528576
 	this.calendar.show();

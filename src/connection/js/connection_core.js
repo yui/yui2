@@ -14,7 +14,7 @@
  * The Connection Manager singleton provides methods for creating and managing
  * asynchronous transactions.
  *
- * @class Connect
+ * @class YAHOO.util.Connect
  */
 
 YAHOO.util.Connect =

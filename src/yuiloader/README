@@ -1,5 +1,8 @@
 yuiloader - Release Notes
 
+2.9.0
+ * Fixed iterative skin requirement leak.
+
 2.8.0
  * Fixed uploader -min file resolution.
  * added datemath module, updated calendar metadata accordingly.

@@ -1,5 +1,13 @@
 Container Release Notes
 
+*** Development Master ***
+
+New Features:
+------------
+
+* Hide or Show can now be prevented by returning false from beforeHide, 
+  and beforeShow subscribers respectively.
+
 *** version 2.8.0 ***
 
 Bug Fixes:
@@ -70,6 +78,7 @@ Changes:
         // Display is used here as an example, you could also
         // set the height, or margin, or position for the table to 
         // hide it if required.
+
         display:none;
     }
 

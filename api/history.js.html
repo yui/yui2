@@ -164,10 +164,6 @@
         <span class="p">}</span>
 
         <span class="nx">_stateField</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="nx">currentStates</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">_stateField</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="nx">_fqstates</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">);</span>
-        <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="cm">/**</span>
@@ -229,7 +225,12 @@
 
         <span class="kd">var</span> <span class="nx">html</span><span class="p">,</span> <span class="nx">doc</span><span class="p">;</span>
 
-        <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&lt;div id=&quot;state&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">fqstate</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&lt;div id=&quot;state&quot;&gt;&#39;</span> <span class="o">+</span>
+                   <span class="nx">fqstate</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;/g</span><span class="p">,</span><span class="s1">&#39;&amp;amp;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;/g</span><span class="p">,</span><span class="s1">&#39;&amp;lt;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;/g</span><span class="p">,</span><span class="s1">&#39;&amp;gt;&#39;</span><span class="p">).</span>
+                           <span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span><span class="s1">&#39;&amp;quot;&#39;</span><span class="p">)</span> <span class="o">+</span>
+               <span class="s1">&#39;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">;</span>
 
         <span class="k">try</span> <span class="p">{</span>
             <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_histFrame</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">;</span>
@@ -416,16 +417,6 @@
             <span class="c1">// YAHOO.util.History.navigate has been called or after</span>
             <span class="c1">// the user has hit the back/forward button.</span>
 
-            <span class="c1">// On Safari 1.x and 2.0, the only way to catch a back/forward</span>
-            <span class="c1">// operation is to watch history.length... We basically exploit</span>
-            <span class="c1">// what I consider to be a bug (history.length is not supposed</span>
-            <span class="c1">// to change when going back/forward in the history...) This is</span>
-            <span class="c1">// why, in the following thread, we first compare the hash,</span>
-            <span class="c1">// because the hash thing will be fixed in the next major</span>
-            <span class="c1">// version of Safari. So even if they fix the history.length</span>
-            <span class="c1">// bug, all this will still work!</span>
-            <span class="nx">counter</span> <span class="o">=</span> <span class="nx">history</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-
             <span class="c1">// On Gecko and Opera, we just need to watch the hash...</span>
             <span class="nx">hash</span> <span class="o">=</span> <span class="nx">_getHash</span><span class="p">();</span>
 
@@ -434,17 +425,9 @@
                 <span class="kd">var</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">newHash</span><span class="p">,</span> <span class="nx">newCounter</span><span class="p">;</span>
 
                 <span class="nx">newHash</span> <span class="o">=</span> <span class="nx">_getHash</span><span class="p">();</span>
-                <span class="nx">newCounter</span> <span class="o">=</span> <span class="nx">history</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">newHash</span> <span class="o">!==</span> <span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">hash</span> <span class="o">=</span> <span class="nx">newHash</span><span class="p">;</span>
-                    <span class="nx">counter</span> <span class="o">=</span> <span class="nx">newCounter</span><span class="p">;</span>
                     <span class="nx">_handleFQStateChange</span><span class="p">(</span><span class="nx">hash</span><span class="p">);</span>
-                    <span class="nx">_storeStates</span><span class="p">();</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">newCounter</span> <span class="o">!==</span> <span class="nx">counter</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">hash</span> <span class="o">=</span> <span class="nx">newHash</span><span class="p">;</span>
-                    <span class="nx">counter</span> <span class="o">=</span> <span class="nx">newCounter</span><span class="p">;</span>
-                    <span class="nx">state</span> <span class="o">=</span> <span class="nx">_fqstates</span><span class="p">[</span><span class="nx">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-                    <span class="nx">_handleFQStateChange</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
                     <span class="nx">_storeStates</span><span class="p">();</span>
                 <span class="p">}</span>
 
@@ -717,18 +700,8 @@
                 <span class="c1">// we&#39;ll consider this an acceptable bug, and hope that Apple</span>
                 <span class="c1">// comes out with their next version of Safari very soon.</span>
                 <span class="nx">top</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="c1">// The following two lines are only useful for Safari 1.x</span>
-                    <span class="c1">// and 2.0. Recent nightly builds of WebKit do not require</span>
-                    <span class="c1">// that, but unfortunately, it is not easy to differentiate</span>
-                    <span class="c1">// between the two. Once Safari 2.0 departs the A-grade</span>
-                    <span class="c1">// list, we can remove the following two lines...</span>
-                    <span class="nx">_fqstates</span><span class="p">[</span><span class="nx">history</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="p">;</span>
-                    <span class="nx">_storeStates</span><span class="p">();</span>
-                <span class="p">}</span>
 
                 <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-
             <span class="p">}</span>
         <span class="p">},</span>
 
@@ -928,11 +901,12 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.util.History", "name": "_checkIframeLoaded", "url": "YAHOO.util.History.html#method__checkIframeLoaded", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_fqstates", "url": "YAHOO.util.History.html#property__fqstates", "type": "property"}, {"access": "", "host": "YAHOO.util.History", "name": "getBookmarkedState", "url": "YAHOO.util.History.html#method_getBookmarkedState", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "getCurrentState", "url": "YAHOO.util.History.html#method_getCurrentState", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_getHash", "url": "YAHOO.util.History.html#method__getHash", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "getQueryStringParameter", "url": "YAHOO.util.History.html#method_getQueryStringParameter", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_handleFQStateChange", "url": "YAHOO.util.History.html#method__handleFQStateChange", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_histFrame", "url": "YAHOO.util.History.html#property__histFrame", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_initialize", "url": "YAHOO.util.History.html#method__initialize", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "initialize", "url": "YAHOO.util.History.html#method_initialize", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_initialized", "url": "YAHOO.util.History.html#property__initialized", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_modules", "url": "YAHOO.util.History.html#property__modules", "type": "property"}, {"access": "", "host": "YAHOO.util.History", "name": "multiNavigate", "url": "YAHOO.util.History.html#method_multiNavigate", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "navigate", "url": "YAHOO.util.History.html#method_navigate", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "onLoadEvent", "url": "YAHOO.util.History.html#event_onLoadEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.History", "name": "onReady", "url": "YAHOO.util.History.html#method_onReady", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "register", "url": "YAHOO.util.History.html#method_register", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_stateField", "url": "YAHOO.util.History.html#property__stateField", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_storeStates", "url": "YAHOO.util.History.html#method__storeStates", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_updateIFrame", "url": "YAHOO.util.History.html#method__updateIFrame", "type": "method"}];
+
+    var ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.util.History", "name": "_checkIframeLoaded", "url": "YAHOO.util.History.html#method__checkIframeLoaded", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_fqstates", "url": "YAHOO.util.History.html#property__fqstates", "type": "property"}, {"access": "", "host": "YAHOO.util.History", "name": "getBookmarkedState", "url": "YAHOO.util.History.html#method_getBookmarkedState", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "getCurrentState", "url": "YAHOO.util.History.html#method_getCurrentState", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_getHash", "url": "YAHOO.util.History.html#method__getHash", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "getQueryStringParameter", "url": "YAHOO.util.History.html#method_getQueryStringParameter", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_handleFQStateChange", "url": "YAHOO.util.History.html#method__handleFQStateChange", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_histFrame", "url": "YAHOO.util.History.html#property__histFrame", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_initialize", "url": "YAHOO.util.History.html#method__initialize", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "initialize", "url": "YAHOO.util.History.html#method_initialize", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_initialized", "url": "YAHOO.util.History.html#property__initialized", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_modules", "url": "YAHOO.util.History.html#property__modules", "type": "property"}, {"access": "", "host": "YAHOO.util.History", "name": "multiNavigate", "url": "YAHOO.util.History.html#method_multiNavigate", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "navigate", "url": "YAHOO.util.History.html#method_navigate", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "onLoadEvent", "url": "YAHOO.util.History.html#event_onLoadEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.History", "name": "onReady", "url": "YAHOO.util.History.html#method_onReady", "type": "method"}, {"access": "", "host": "YAHOO.util.History", "name": "register", "url": "YAHOO.util.History.html#method_register", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_stateField", "url": "YAHOO.util.History.html#property__stateField", "type": "property"}, {"access": "private", "host": "YAHOO.util.History", "name": "_storeStates", "url": "YAHOO.util.History.html#method__storeStates", "type": "method"}, {"access": "private", "host": "YAHOO.util.History", "name": "_updateIFrame", "url": "YAHOO.util.History.html#method__updateIFrame", "type": "method"}];
 </script>
 </body>
 </html>
