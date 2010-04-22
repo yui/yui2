@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<yuitest>
+<yuitest version="2">
     <tests base="@TEST_ARTIFACTS_BASE@" timeout="500000">
         <url>calendar/tests/calendar.html</url>
     </tests>
