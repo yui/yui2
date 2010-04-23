@@ -216,10 +216,10 @@
 		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;allowedDomain&quot;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hostname</span><span class="p">);</span>
 
 		<span class="c1">//tell the SWF which HTML element it is in</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;elementID&quot;</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;YUISwfId&quot;</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">);</span>
 
 		<span class="c1">// set the name of the function to call when the swf has an event</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;eventHandler&quot;</span><span class="p">,</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.eventHandler&quot;</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;YUIBridgeCallback&quot;</span><span class="p">,</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.eventHandler&quot;</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nx">buttonSkin</span><span class="p">)</span> <span class="p">{</span>
 		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;buttonSkin&quot;</span><span class="p">,</span> <span class="nx">buttonSkin</span><span class="p">);</span>
 		<span class="p">}</span>
