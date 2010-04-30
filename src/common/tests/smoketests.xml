@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<yuitest version="2">
+    <tests base="@TEST_ARTIFACTS_BASE@" timeout="120000">
+        <url>calendar/tests/calendar.html</url>
+    </tests>
+</yuitest>
