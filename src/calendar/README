@@ -1,5 +1,10 @@
 Calendar Release Notes
 
+*** version 2.8.1 ***
+
++ No changes
+
+
 *** version 2.8.0 ***
 
 + DateMath extracted to standalone module. However, it continues to

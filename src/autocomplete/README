@@ -1,5 +1,9 @@
 AutoComplete Release Notes
 
+*** version 2.8.1 ***
+* No changes.
+
+
 *** version 2.8.0 ***
 
 * Refactored the "isFocused" model to more simply and accurately describe if

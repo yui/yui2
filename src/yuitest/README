@@ -1,5 +1,9 @@
 YUI Library - YUITest - Release Notes
 
+2.8.1
+
+  * No changes
+
 2.8.0
 
   * Fixed issues with ArrayAssert methods (trac #2528121)

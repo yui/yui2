@@ -1,5 +1,8 @@
 YAHOO Global - Release Notes
 
+2.8.1
+  * No change
+
 2.8.0
   * User agent detection is more granular.  e.g., FireFox 3.5 reports gecko 1.91 rather than 1.9.
   * Added 'os' and 'secure' properties to Env.

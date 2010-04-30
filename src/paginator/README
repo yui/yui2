@@ -1,6 +1,7 @@
 Paginator Release Notes
 
-Development master
+2.8.1
+    * No changes
 
 2.8.0
     * Replaced non-breaking space entity with regular space in next, previous,

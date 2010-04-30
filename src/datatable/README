@@ -1,5 +1,10 @@
 DataTable Release Notes
 
+**** 2.8.1 ****
+
+* No changes.
+
+
 **** 2.8.0 ****
 
 * DropdownCellEditor now supports multiple and size properties.
