@@ -663,6 +663,11 @@ TV.prototype = {
             this.logger.log("onLabelClick " + node.label);
             this.fireEvent('labelClick',node);
         }
+		// http://yuilibrary.com/projects/yui2/ticket/2528946
+		// Ensures that any open editor is closed.  
+		// Since the editor is in a separate source which might not be included, 
+		// we first need to ensure we have the _closeEditor method available
+		if (this._closeEditor) { this._closeEditor(false); }
         
         //  If it is a toggle cell, toggle
         if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
