@@ -3166,11 +3166,15 @@ Calendar.prototype = {
                         Dom.addClass(cell, workingDayPrefix + workingDate.getDay());
                         Dom.addClass(cell, dayPrefix + workingDate.getDate());
 
-                        for (var s=0;s<this.renderStack.length;++s) {
+                        // Concat, so that we're not splicing from an array 
+                        // which we're also iterating
+                        var rs = this.renderStack.concat();
+
+                        for (var s=0, l = rs.length; s < l; ++s) {
 
                             renderer = null;
 
-                            var rArray = this.renderStack[s],
+                            var rArray = rs[s],
                                 type = rArray[0],
                                 month,
                                 day,
@@ -3186,6 +3190,7 @@ Calendar.prototype = {
                                         renderer = rArray[2];
                                         this.renderStack.splice(s,1);
                                     }
+
                                     break;
                                 case Calendar.MONTH_DAY:
                                     month = rArray[1][0];
@@ -4778,12 +4783,6 @@ CalendarGroup.prototype = {
         }
 
         this.cfg.fireQueue();
-
-        // OPERA HACK FOR MISWRAPPED FLOATS
-        if (YAHOO.env.ua.opera){
-            this.renderEvent.subscribe(this._fixWidth, this, true);
-            this.showEvent.subscribe(this._fixWidth, this, true);
-        }
 
         this.logger.log("Initialized " + this.pages.length + "-page CalendarGroup", "info");
     },

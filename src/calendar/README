@@ -1,5 +1,13 @@
 Calendar Release Notes
 
+*** Development Master ***
+
++ Fixed renderStack application when multiple renderers applied to
+  the same date.
+
++ Removed Opera Width Fix. No longer required. Opera handles floats 
+  correclty
+
 *** version 2.8.0 ***
 
 + DateMath extracted to standalone module. However, it continues to
@@ -128,7 +136,8 @@ Calendar Release Notes
     day of the week. Default is 0 (Sunday).
 
     janDate is the date in the first week of January, which
-    identifies the first week of the year. 
+    identifies the first week of the year.
+ 
     Default is YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE (1)
 
   NOTE: Calendar instances themselves do not currently expose a 

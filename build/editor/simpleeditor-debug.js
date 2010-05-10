@@ -123,9 +123,11 @@ var Dom = YAHOO.util.Dom,
         checkValue: function(value) {
             if (this.get('type') == 'menu') {
                 var opts = this._button.options;
-                for (var i = 0; i < opts.length; i++) {
-                    if (opts[i].value == value) {
-                        opts.selectedIndex = i;
+                if (opts) {
+                    for (var i = 0; i < opts.length; i++) {
+                        if (opts[i].value == value) {
+                            opts.selectedIndex = i;
+                        }
                     }
                 }
             }
@@ -1309,10 +1311,10 @@ var Dom = YAHOO.util.Dom,
                     } else {
                         //Stop the mousedown event so we can trap the selection in the editor!
                         tmp.on('mousedown', function(ev) {
-                            YAHOO.util.Event.stopEvent(ev);
+                            //YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('click', function(ev) {
-                            YAHOO.util.Event.stopEvent(ev);
+                            //YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('change', function(ev) {
                             if (!ev.target) {

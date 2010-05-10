@@ -3119,8 +3119,8 @@ YAHOO.tool.TestReporter.prototype = {
 
 /*Stub for future compatibility*/
 YUITest = {
-    Runner: YAHOO.tool.TestRunner,
-    ResultsFormat: YAHOO.tool.TestFormat,
+    TestRunner:     YAHOO.tool.TestRunner,
+    ResultsFormat:  YAHOO.tool.TestFormat,
     CoverageFormat: YAHOO.tool.CoverageFormat
 };
 

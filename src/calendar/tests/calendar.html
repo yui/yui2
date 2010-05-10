@@ -153,7 +153,7 @@
         });
 
         /**
-         * API Tests Template
+         * API Template
          */
         var apiTemplate = {
 
@@ -429,7 +429,7 @@
         };
 
         /**
-         * DOM Tests Template
+         * DOM Template
          */
         var domTemplate = {
 
@@ -1276,8 +1276,6 @@
 
         function runTests() {
             configureTests();
-
-            logger.clearConsole();
             YAHOO.tool.TestRunner.run();
         }
 
@@ -1293,8 +1291,16 @@
         }
 
         YAHOO.util.Event.addListener(window, "load", function() {
-            logger = new YAHOO.tool.TestLogger();
-            YAHOO.util.Event.addListener("btnRun", "click", runTests);
+
+            YAHOO.util.Event.addListener("btnRun", "click", function() {
+                if (!logger) {
+                    logger = new YAHOO.tool.TestLogger();
+                }
+                logger.clearConsole();
+                runTests();
+            });
+
+            runTests();
 
             if (parent && parent != window) {
                 configureTests();
