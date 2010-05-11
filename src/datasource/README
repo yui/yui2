@@ -1,11 +1,15 @@
 DataSource Release Notes
 
 **** Development Master ****
+
 * Fixed YAHOO.util.Number.format regression for custom decimal separators in
 numbers smaller than 1000
 * For consistency, JSON parser functions are now called with DataSource instance
 as the context.
 
+**** version 2.8.1 ****
+
+* No changes.
 
 
 **** version 2.8.0 ****

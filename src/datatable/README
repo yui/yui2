@@ -11,6 +11,9 @@ and destroyed for each instance instead of being shared globally.
 * Added new method load(), a convenience method that calls DataSource's
 sendRequest() method under the hood.
 
+**** 2.8.1 ****
+
+* No changes.
 
 
 **** 2.8.0 ****

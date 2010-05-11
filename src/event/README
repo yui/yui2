@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.8.1
+  * No changes.
+
 2.8.0
   * Added fireOnce support for custom events.
   * Added onreadystatechange fork for IE onDOMReady when YUI is running in an iframe.

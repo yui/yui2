@@ -1,5 +1,8 @@
 Element Release Notes
 
+*** version 2.8.1 ***
+* No changes
+
 *** version 2.8.0 ***
 * Returning value from DEFAULT_SETTER
 * Added support for mouseenter and mouseleave events (requires the event-mouseenter module)

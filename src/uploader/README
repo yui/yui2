@@ -1,5 +1,9 @@
 YUI Library - Uploader - Release Notes
 
+2.8.1
+  * Bug fixes
+     * Corrected the version of the Uploader SWF that is included in the /build directory
+
 2.8.0
   * Bug fixes
      * The queue for uploadAll() has been reimplemented (contribution by Jordan Brough) to work as a proper queue.
