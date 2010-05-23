@@ -1,5 +1,9 @@
 YUI Library - Profiler - Release Notes
 
+2.8.1
+
+  * No changes
+  
 2.8.0
 
   * Changed profiler so that unregistering a function/object no longer deletes all recorded data.

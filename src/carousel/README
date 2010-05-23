@@ -2,6 +2,10 @@ Carousel Release Notes
 
 *** version 2.8.0 ***
 
+* No changes.
+
+*** version 2.8.0 ***
+
 * IMPORTANT CHANGE: Beginning with this release, the widget requires the
   dimensions (both height and width) of a single Carousel item.
 

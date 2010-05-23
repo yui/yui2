@@ -1,5 +1,8 @@
 TabView Release Notes
 
+*** version 2.8.1 ***
+* No change
+
 *** version 2.8.0 ***
 * Removing event listeners when a Tab is removed
 * Fixed CSS overflow issue
