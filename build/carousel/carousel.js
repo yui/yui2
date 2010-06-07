@@ -11,7 +11,7 @@
  */
 (function () {
 
-    var WidgetName;             // forward declaration
+    var WidgetName = "Carousel"; // forward declaration
 
     /**
      * The Carousel widget.
@@ -33,25 +33,19 @@
      */
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
-    var Carousel    = YAHOO.widget.Carousel,
-        Dom         = YAHOO.util.Dom,
-        Event       = YAHOO.util.Event,
-        JS          = YAHOO.lang;
-
-    /**
-     * The widget name.
-     * @private
-     * @static
-     */
-    WidgetName = "Carousel";
+    var
+    Carousel    = YAHOO.widget.Carousel,
+    Dom         = YAHOO.util.Dom,
+    Event       = YAHOO.util.Event,
+    JS          = YAHOO.lang,
 
     /**
      * The internal table of Carousel instances.
      * @private
      * @static
      */
-    var instances = {},
-        syncUiOnItemInsert = true,
+    instances = {},
+    syncUiOnItemInsert = true,
 
     /*
      * Custom events of the Carousel component
@@ -452,19 +446,24 @@
             child,
             item,
             size     = 0,
-            first = carousel.get("firstVisible"),
             vertical = false;
 
+        if (carousel._itemAttrCache[which]) {
+            return carousel._itemAttrCache[which];
+        }
+        
         if (carousel._itemsTable.numItems === 0) {
             return 0;
         }
 
-        item = carousel._itemsTable.items[first] ||
-               carousel._itemsTable.loading[first];
+        // get first loaded item
+        item = carousel._findClosestSibling(-1);
 
         if (JS.isUndefined(item)) {
             return 0;
         }
+
+        child = Dom.get(item.id);
 
         if (typeof which == "undefined") {
             vertical = carousel.get("isVertical");
@@ -472,18 +471,15 @@
             vertical = which == "height";
         }
 
-        if (this._itemAttrCache[which]) {
-            return this._itemAttrCache[which];
-        }
-
-        child = Dom.get(item.id);
         if (vertical) {
             size = getStyle(child, "height");
         } else {
             size = getStyle(child, "width");
         }
 
-        this._itemAttrCache[which] = size;
+        if (size) {
+            carousel._itemAttrCache[which] = size;
+        }
 
         return size;
     }
@@ -521,29 +517,17 @@
             itemsCol,
             itemsRow,
             sentinel,
-            delta = 0,
             top,
             left,
             rsz,
+            delta,
             styles = {},
-            index = 0,
-            itemsTable = carousel._itemsTable,
-            items = itemsTable.items,
-            loading = itemsTable.loading;
+            itemsTable = carousel._itemsTable;
 
         isVertical = carousel.get("isVertical");
         sz  = getCarouselItemSize.call(carousel,
                 isVertical ? "height" : "width");
         rsz = getRevealSize.call(carousel);
-
-        // adjust for items not yet loaded
-        while (index < pos) {
-            if (!items[index] && !loading[index]) {
-                delta++;
-            }
-            index++;
-        }
-        pos -= delta;
 
         if (itemsPerCol) {
             page = this.getPageForItem(pos);
@@ -576,13 +560,13 @@
                 styles.top  = top + "px";
             }
         } else {
-        if (isVertical) {
-            styles.left = 0;
-            styles.top  = ((pos * sz) + rsz) + "px";
-        } else {
-            styles.top  = 0;
-            styles.left = ((pos * sz) + rsz) + "px";
-        }
+            if (isVertical) {
+                styles.left = 0;
+                styles.top  = ((pos * sz) + rsz) + "px";
+            } else {
+                styles.top  = 0;
+                styles.left = ((pos * sz) + rsz) + "px";
+            }
         }
 
         return styles;
@@ -614,6 +598,7 @@
             size     = 0;
 
         itemSize = getCarouselItemSize.call(this);
+
         size = itemSize * delta;
 
         return size;
@@ -658,7 +643,6 @@
             cssClass   = carousel.CLASSES,
             el,
             firstItem  = carousel._firstItem,
-            isCircular = carousel.get("isCircular"),
             numItems   = carousel.get("numItems"),
             numVisible = carousel.get("numVisible"),
             position   = oldpos,
@@ -1279,6 +1263,14 @@
             PREV_PAGE: "yui-carousel-prev",
 
             /**
+             * The class name of the item.
+             *
+             * @property ITEM
+             * @default "yui-carousel-item"
+             */
+            ITEM: "yui-carousel-item",
+
+            /**
              * The class name of the selected item.
              *
              * @property SELECTED_ITEM
@@ -1468,7 +1460,7 @@
                 return false;
             }
 
-            className = item.className || "";
+            className = carousel.CLASSES.ITEM + (item.className ? " " + item.className : "");
             elId      = item.id ? item.id : Dom.generateId();
 
             if (JS.isUndefined(index)) {
@@ -2257,6 +2249,7 @@
          */
         removeItem: function (index) {
             var carousel = this,
+                itemsTable = carousel._itemsTable,
                 item,
                 num      = carousel.get("numItems");
 
@@ -2264,9 +2257,12 @@
                 return false;
             }
 
-            item = carousel._itemsTable.items.splice(index, 1);
+            item = itemsTable.items.splice(index, 1);
             if (item && item.length == 1) {
-                carousel._itemsTable.numItems--;
+                if(itemsTable.numItems){
+                    itemsTable.numItems--;
+                }
+
                 carousel.set("numItems", num - 1);
 
                 carousel.fireEvent(itemRemovedEvent,
@@ -2327,7 +2323,7 @@
 
                 carousel._itemsTable.items.splice(index, 1, {
                     item      : content,
-                    className : item.className || "",
+                    className : carousel.CLASSES.ITEM + (item.className ? " " + item.className : ""),
                     id        : Dom.generateId()
                 });
 
@@ -2500,14 +2496,12 @@
          */
         scrollTo: function (item, dontSelect) {
             var carousel   = this, animate, animCfg, isCircular, isVertical,
-                rows, delta, direction, firstItem, lastItem, itemsPerRow,
+                delta, direction, firstItem, lastItem, itemsPerRow,
                 itemsPerCol, numItems, numPerPage, offset, page, rv, sentinel,
                 index, stopAutoScroll,
-                itemsTable = carousel._itemsTable,
-                items = itemsTable.items,
-                loading = itemsTable.loading;
+                itemsTable = carousel._itemsTable;
 
-            if (JS.isUndefined(item) || item == carousel._firstItem ||
+            if (itemsTable.numItems === 0 || item == carousel._firstItem ||
                 carousel.isAnimating()) {
                 return; // nothing to do!
             }
@@ -2576,15 +2570,6 @@
                 } else {
                     delta = parseInt(delta / itemsPerCol, 10);
                 }
-            }
-
-            // adjust for items not yet loaded
-            index = 0;
-            while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
-                if (!items[index] && !loading[index]) {
-                    delta++;
-                }
-                index += itemsPerCol ? itemsPerCol : 1;
             }
 
             carousel._firstItem = item;
@@ -2915,7 +2900,6 @@
          */
         _createCarouselItem: function (obj) {
             var attr, carousel = this;
-                //styles = getCarouselItemPosition.call(carousel, obj.pos);
 
             return createElement(carousel.get("carouselItemEl"), {
                     className : obj.className,
@@ -3228,6 +3212,7 @@
                         } else {
                             elId = Dom.generateId();
                             child.setAttribute("id", elId);
+                            Dom.addClass(child, carousel.CLASSES.ITEM);
                         }
                         carousel.addItem(child,index);
                         index++;
@@ -3325,7 +3310,10 @@
          * @protected
          */
         _refreshUi: function () {
-            var carousel = this, i, isVertical = carousel.get("isVertical"), firstVisible = carousel.get("firstVisible"), item, n, rsz, sz;
+            var carousel = this,
+                isVertical = carousel.get("isVertical"),
+                firstVisible = carousel.get("firstVisible"),
+                i, item, n, rsz, sz;
 
             if (carousel._itemsTable.numItems < 1) {
                 return;
@@ -3795,35 +3783,39 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                oel,
+                posUndefined = JS.isUndefined(obj.pos),
+                oel = posUndefined ? null : itemsTable.items[obj.pos+1],
                 pos,
                 sibling,
                 styles;
 
-            pos  = JS.isUndefined(obj.pos) ?
-                   obj.newPos || itemsTable.numItems - 1 : obj.pos;
-
-            if (!oel) {
+            pos = posUndefined ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
                 item = itemsTable.items[pos] || {};
+            
                 el = carousel._createCarouselItem({
                         className : item.className,
-                        styles    : item.styles,
+                    styles    : {},
                         content   : item.item,
-                        id        : item.id,
-                        pos       : pos
+                    id        : item.id
                 });
-                if (JS.isUndefined(obj.pos)) {
-                    if (!JS.isUndefined(itemsTable.loading[pos])) {
-                        oel = itemsTable.loading[pos];
-                        // if oel is null, it is a problem ...
-                    }
-                    if (oel) {
-                        // replace the node
-                        carouselEl.replaceChild(el, oel);
-                        // ... and remove the item from the data structure
+            
+            if (!oel) {
+                if (posUndefined) {
+                    oel = itemsTable.loading[pos] || {};
+                    if ((oel = Dom.get(oel.id))) { // testing assignment
+                        oel.className = item.className;
+                        oel.styles = item.styles;
+                        oel.innerHTML = item.item;
+
+                        itemsTable.items[pos] = el;
+
+                        if (itemsTable.loading[pos]) {
+                            itemsTable.numItems++;
                         delete itemsTable.loading[pos];
+                        }
                     } else {
                         carouselEl.appendChild(el);
+                        itemsTable.items[pos] = el;
                     }
                 } else {
                     if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
@@ -3835,17 +3827,9 @@
                     }
                 }
             } else {
-                if (JS.isUndefined(obj.pos)) {
-                    if (!Dom.isAncestor(carousel._carouselEl, oel)) {
-                        carouselEl.appendChild(oel);
-                    }
-                } else {
-                    if (!Dom.isAncestor(carouselEl, oel)) {
-                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
-                            carouselEl.insertBefore(oel,
-                                    Dom.get(itemsTable.items[obj.pos + 1].id));
-                        }
-                    }
+                oel = Dom.get(oel.id);
+                if (Dom.isAncestor(carouselEl, oel)) {
+                    carouselEl.insertBefore(el,oel);
                 }
             }
 
@@ -3879,25 +3863,26 @@
                 className : item.className,
                 styles    : item.styles,
                 content   : item.item,
-                id        : item.id,
-                pos       : pos
+                id        : oel.id
             });
 
-            if(el && oel) {
-                Event.purgeElement(oel, true);
-                carouselEl.replaceChild(el, Dom.get(oel.id));
-                if (!JS.isUndefined(itemsTable.loading[pos])) {
+            // replace the current item's attributes
+            if ((oel = Dom.get(oel.id))) { // testing assignment
+                oel.className = item.className;
+                oel.styles = item.styles;
+                oel.innerHTML = item.item;
+                
+                itemsTable.items[pos] = el;
+                
+                if (itemsTable.loading[pos]) {
                     itemsTable.numItems++;
                     delete itemsTable.loading[pos];
                 }
             }
             // TODO: should we add the item if oel is undefined?
 
-            if (!carousel._hasRendered) {
-                carousel._refreshUi();
-            }
-
-            carousel._syncUiItems();
+            // sync shouldn't be necessary since we're replacing items that are already positioned
+            //carousel._syncUiItems();
         },
 
         /**
@@ -3921,6 +3906,7 @@
                     carouselEl.removeChild(el);
                 }
 
+                // nothing is done w/ pos after this, should we remove it?
                 if (carousel.get("selectedItem") == pos) {
                     pos = pos >= num ? num - 1 : pos;
                 }
@@ -3931,7 +3917,28 @@
         },
 
         /**
-         * Synchronize and redraw the UI for lazy loading.
+         * Find the closest sibling to insert before
+         *
+         * @method _findClosestSibling
+         * @protected
+         */
+        _findClosestSibling: function (pos) {
+            var carousel   = this,
+                itemsTable = carousel._itemsTable,
+                len        = itemsTable.items.length,
+                j          = pos,
+                sibling;
+
+            // attempt to find the next closest sibling
+            while (j<len && !sibling) {
+                sibling = itemsTable.items[++j];
+            }
+            
+            return sibling;
+        },
+
+        /**
+         * Synchronize the items table for lazy loading.
          *
          * @method _syncUiForLazyLoading
          * @protected
@@ -3941,26 +3948,21 @@
                 carouselEl = carousel._carouselEl,
                 itemsTable = carousel._itemsTable,
                 len = itemsTable.items.length,
-                sibling = itemsTable.items[obj.last + 1],
+                sibling = carousel._findClosestSibling(obj.last),
+                last = obj.last,
+                // only add DOM nodes for the currently visible items
+                // this eliminates uneccessary performance overhead
+                // but still allows loading styles to be applied to the items
+                first = last - carousel.get("numVisible"),
                 el,
                 j;
 
-            // attempt to find the next closest sibling
-            if(!sibling && obj.last < len){
-                j = obj.first;
-                do {
-                    sibling = itemsTable.items[j];
-                    j++;
-                } while (j<len && !sibling);
-            }
-
-            for (var i = obj.first; i <= obj.last; i++) {
-                if(JS.isUndefined(itemsTable.loading[i]) && JS.isUndefined(itemsTable.items[i])){
+            for (var i = first; i <= last; i++) {
+                if(!itemsTable.loading[i] && !itemsTable.items[i]){
                     el = carousel._createCarouselItem({
-                            className : carousel.CLASSES.ITEM_LOADING,
+                            className : carousel.CLASSES.ITEM + " " + carousel.CLASSES.ITEM_LOADING,
                             content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
-                            id        : Dom.generateId(),
-                            pos       : i
+                            id        : Dom.generateId()
                     });
                     if (el) {
                         if (sibling) {
