@@ -3988,7 +3988,7 @@
                 // only add DOM nodes for the currently visible items
                 // this eliminates uneccessary performance overhead
                 // but still allows loading styles to be applied to the items
-                first = last - carousel.get("numVisible"),
+                first = last - carousel.get("numVisible") + 1,
                 el,
                 j;
 
