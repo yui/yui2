@@ -609,7 +609,7 @@ YAHOO.util.History = (function () {
             }
 
             for (moduleName in states) {
-                if (!_modules[moduleName]) {
+                if (!_modules[escape(moduleName)]) {
                     throw new Error("The following module has not been registered: " + moduleName);
                 }
             }
