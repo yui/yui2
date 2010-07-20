@@ -712,6 +712,11 @@
             <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;onLabelClick &quot;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">label</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;labelClick&#39;</span><span class="p">,</span><span class="nx">node</span><span class="p">);</span>
         <span class="p">}</span>
+		<span class="c1">// http://yuilibrary.com/projects/yui2/ticket/2528946</span>
+		<span class="c1">// Ensures that any open editor is closed.  </span>
+		<span class="c1">// Since the editor is in a separate source which might not be included, </span>
+		<span class="c1">// we first need to ensure we have the _closeEditor method available</span>
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_closeEditor</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">_closeEditor</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span> <span class="p">}</span>
         
         <span class="c1">//  If it is a toggle cell, toggle</span>
         <span class="k">if</span> <span class="p">(</span><span class="sr">/\bygtv[tl][mp]h?h?/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">td</span><span class="p">.</span><span class="nx">className</span><span class="p">))</span> <span class="p">{</span>
