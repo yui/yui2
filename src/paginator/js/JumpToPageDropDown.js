@@ -85,7 +85,7 @@ Paginator.ui.JumpToPageDropdown.prototype = {
         var p       = this.paginator,
             sel     = this.select,
             numPages = p.getTotalPages(),
-            opt,cfg,val,i,len;
+            opt,i,len;
 
         this.all = null;
 
@@ -154,3 +154,4 @@ Paginator.ui.JumpToPageDropdown.prototype = {
     }
 };
 
+})();
