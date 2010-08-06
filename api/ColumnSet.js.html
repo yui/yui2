@@ -1219,6 +1219,8 @@
 <span class="cm">     * @param b {Object} Second sort argument.</span>
 <span class="cm">     * @param desc {Boolean} True if sort direction is descending, false if</span>
 <span class="cm">     * sort direction is ascending.</span>
+<span class="cm">     * @return {Boolean} Return -1 when a &lt; b. Return 0 when a = b.</span>
+<span class="cm">     * Return 1 when a &gt; b.</span>
 <span class="cm">     */</span>
     <span class="nx">compare</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">desc</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span><span class="p">((</span><span class="nx">a</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">a</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">))</span> <span class="p">{</span>
