@@ -2124,7 +2124,15 @@ _initTableEl : function(elContainer) {
         if(this.get("caption")) {
             this._initCaptionEl(this.get("caption"));
         }
-    } 
+
+        // Set up mouseover/mouseout events via mouseenter/mouseleave delegation
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-message>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-message>tr>td", this);
+    }
 },
 
 /**
@@ -2266,11 +2274,12 @@ _initTheadEl : function(elTable) {
         // Set up DOM events for THEAD
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
-        Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elThead, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
+        
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
 
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
@@ -2667,14 +2676,15 @@ _initTbodyEl : function(elTable) {
     
         // Set up DOM events for TBODY
         Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
-        
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
+
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
         ///Ev.addListener(elTbody, "dblclick", this._onTableDblclick, this);
@@ -2730,13 +2740,14 @@ _initMsgTbodyEl : function(elTable) {
 
         // Set up DOM events for TBODY
         Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
     }
 },
 
@@ -3447,11 +3458,13 @@ _onTbodyFocus : function(e, oSelf) {
  *
  * @method _onTableMouseover
  * @param e {HTMLEvent} The mouseover event.
+ * @param origTarget {HTMLElement} The mouseenter delegated element.
+ * @param container {HTMLElement} The mouseenter delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseover : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseover : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
         var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
         while(elTarget && (elTag != "table")) {
@@ -3506,11 +3519,13 @@ _onTableMouseover : function(e, oSelf) {
  *
  * @method _onTableMouseout
  * @param e {HTMLEvent} The mouseout event.
+ * @param origTarget {HTMLElement} The mouseleave delegated element.
+ * @param container {HTMLElement} The mouseleave delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseout : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseout : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
@@ -10269,10 +10284,7 @@ onEventSelectColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightColumn(oArgs.target);
-    }
+    this.highlightColumn(oArgs.target);
 },
 
 /**
@@ -10284,10 +10296,7 @@ onEventHighlightColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightColumn(oArgs.target);
-    }
+    this.unhighlightColumn(oArgs.target);
 },
 
 /**
@@ -10336,10 +10345,7 @@ onEventSelectCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightRow(oArgs.target);
-    }
+    this.highlightRow(oArgs.target);
 },
 
 /**
@@ -10351,10 +10357,7 @@ onEventHighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightRow(oArgs.target);
-    }
+    this.unhighlightRow(oArgs.target);
 },
 
 /**
@@ -10366,10 +10369,7 @@ onEventUnhighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightCell(oArgs.target);
-    }
+    this.highlightCell(oArgs.target);
 },
 
 /**
@@ -10381,10 +10381,7 @@ onEventHighlightCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightCell(oArgs.target);
-    }
+    this.unhighlightCell(oArgs.target);
 },
 
 /**
