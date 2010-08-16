@@ -1255,17 +1255,17 @@
     <span class="p">});</span>
 
     <span class="cm">/**</span>
-<span class="cm">    * @attribute renderLoopSize  </span>
+<span class="cm">    * @attribute renderLoopSize 	 </span>
 <span class="cm">    * @description A value greater than 0 enables DOM rendering of rows to be</span>
 <span class="cm">    * executed from a non-blocking timeout queue and sets how many rows to be</span>
 <span class="cm">    * rendered per timeout. Recommended for very large data sets.     </span>
-<span class="cm">    * @type Number  </span>
-<span class="cm">    * @default 0  </span>
-<span class="cm">    */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;renderLoopSize&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>  
-         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span>  
-     <span class="p">});</span>  
+<span class="cm">    * @type Number 	 </span>
+<span class="cm">    * @default 0 	 </span>
+<span class="cm">    */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;renderLoopSize&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> 	 
+         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span> 	 
+     <span class="p">});</span> 	 
 
     <span class="cm">/**</span>
 <span class="cm">    * @attribute formatRow</span>
@@ -1383,46 +1383,46 @@
     <span class="p">});</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * @attribute MSG_EMPTY  </span>
+<span class="cm">     * @attribute MSG_EMPTY 	 </span>
 <span class="cm">     * @description Message to display if DataTable has no data.     </span>
-<span class="cm">     * @type String  </span>
-<span class="cm">     * @default &quot;No records found.&quot;  </span>
-<span class="cm">     */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_EMPTY&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;No records found.&quot;</span><span class="p">,</span>  
-         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span>  
-     <span class="p">});</span>  
+<span class="cm">     * @type String 	 </span>
+<span class="cm">     * @default &quot;No records found.&quot; 	 </span>
+<span class="cm">     */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_EMPTY&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;No records found.&quot;</span><span class="p">,</span> 	 
+         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span> 	 
+     <span class="p">});</span> 	 
 
     <span class="cm">/**</span>
-<span class="cm">     * @attribute MSG_LOADING </span>
+<span class="cm">     * @attribute MSG_LOADING	 </span>
 <span class="cm">     * @description Message to display while DataTable is loading data.</span>
-<span class="cm">     * @type String  </span>
-<span class="cm">     * @default &quot;Loading...&quot;  </span>
-<span class="cm">     */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_LOADING&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Loading...&quot;</span><span class="p">,</span>  
-         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span>  
-     <span class="p">});</span>  
+<span class="cm">     * @type String 	 </span>
+<span class="cm">     * @default &quot;Loading...&quot; 	 </span>
+<span class="cm">     */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_LOADING&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Loading...&quot;</span><span class="p">,</span> 	 
+         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span> 	 
+     <span class="p">});</span> 	 
 
     <span class="cm">/**</span>
-<span class="cm">     * @attribute MSG_ERROR </span>
+<span class="cm">     * @attribute MSG_ERROR	 </span>
 <span class="cm">     * @description Message to display while DataTable has data error.</span>
-<span class="cm">     * @type String  </span>
-<span class="cm">     * @default &quot;Data error.&quot;  </span>
-<span class="cm">     */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_ERROR&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Data error.&quot;</span><span class="p">,</span>  
-         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span>  
-     <span class="p">});</span>  
+<span class="cm">     * @type String 	 </span>
+<span class="cm">     * @default &quot;Data error.&quot; 	 </span>
+<span class="cm">     */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_ERROR&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Data error.&quot;</span><span class="p">,</span> 	 
+         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span> 	 
+     <span class="p">});</span> 	 
 
     <span class="cm">/**</span>
 <span class="cm">     * @attribute MSG_SORTASC </span>
 <span class="cm">     * @description Message to display in tooltip to sort Column in ascending order.</span>
-<span class="cm">     * @type String  </span>
-<span class="cm">     * @default &quot;Click to sort ascending&quot;  </span>
-<span class="cm">     */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_SORTASC&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Click to sort ascending&quot;</span><span class="p">,</span>  
+<span class="cm">     * @type String 	 </span>
+<span class="cm">     * @default &quot;Click to sort ascending&quot; 	 </span>
+<span class="cm">     */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_SORTASC&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Click to sort ascending&quot;</span><span class="p">,</span> 	 
          <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">,</span>
          <span class="nx">method</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sParam</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
@@ -1438,11 +1438,11 @@
     <span class="cm">/**</span>
 <span class="cm">     * @attribute MSG_SORTDESC </span>
 <span class="cm">     * @description Message to display in tooltip to sort Column in descending order.</span>
-<span class="cm">     * @type String  </span>
-<span class="cm">     * @default &quot;Click to sort descending&quot;  </span>
-<span class="cm">     */</span>  
-     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_SORTDESC&quot;</span><span class="p">,</span> <span class="p">{</span>  
-         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Click to sort descending&quot;</span><span class="p">,</span>  
+<span class="cm">     * @type String 	 </span>
+<span class="cm">     * @default &quot;Click to sort descending&quot; 	 </span>
+<span class="cm">     */</span> 	 
+     <span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;MSG_SORTDESC&quot;</span><span class="p">,</span> <span class="p">{</span> 	 
+         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;Click to sort descending&quot;</span><span class="p">,</span> 	 
          <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">,</span>
          <span class="nx">method</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sParam</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
@@ -1800,13 +1800,13 @@
 <span class="nx">clearTextSelection</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">sel</span><span class="p">;</span>
     <span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">sel</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">();</span>
+    	<span class="nx">sel</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">sel</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">();</span>
+    	<span class="nx">sel</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">selection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">sel</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">selection</span><span class="p">;</span>
+    	<span class="nx">sel</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">selection</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">sel</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">sel</span><span class="p">.</span><span class="nx">empty</span><span class="p">)</span> <span class="p">{</span>
@@ -2173,7 +2173,15 @@
         <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">_initCaptionEl</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">));</span>
         <span class="p">}</span>
-    <span class="p">}</span> 
+
+        <span class="c1">// Set up mouseover/mouseout events via mouseenter/mouseleave delegation</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseenter&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="s2">&quot;thead .&quot;</span><span class="o">+</span><span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseleave&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="s2">&quot;thead .&quot;</span><span class="o">+</span><span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseenter&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="s2">&quot;tbody.yui-dt-data&gt;tr&gt;td&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseleave&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="s2">&quot;tbody.yui-dt-data&gt;tr&gt;td&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseenter&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="s2">&quot;tbody.yui-dt-message&gt;tr&gt;td&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">,</span> <span class="s2">&quot;mouseleave&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="s2">&quot;tbody.yui-dt-message&gt;tr&gt;td&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -2315,11 +2323,12 @@
         <span class="c1">// Set up DOM events for THEAD</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;focus&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTheadFocus</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;keydown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTheadKeydown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMousedown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseup</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elThead</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTheadClick</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        
+        <span class="c1">// Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave</span>
+        <span class="c1">// delegation at the TABLE level</span>
 
         <span class="c1">// Since we can&#39;t listen for click and dblclick on the same element...</span>
         <span class="c1">// Attach separately to THEAD and TBODY</span>
@@ -2716,14 +2725,15 @@
     
         <span class="c1">// Set up DOM events for TBODY</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;focus&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyFocus</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMousedown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseup</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;keydown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyKeydown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;keypress&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableKeypress</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elTbody</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyClick</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        
+
+        <span class="c1">// Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave</span>
+        <span class="c1">// delegation at the TABLE level</span>
+
         <span class="c1">// Since we can&#39;t listen for click and dblclick on the same element...</span>
         <span class="c1">// Attach separately to THEAD and TBODY</span>
         <span class="c1">///Ev.addListener(elTbody, &quot;dblclick&quot;, this._onTableDblclick, this);</span>
@@ -2779,13 +2789,14 @@
 
         <span class="c1">// Set up DOM events for TBODY</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;focus&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyFocus</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-        <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMousedown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseup</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;keydown&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyKeydown</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;keypress&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableKeypress</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="nx">Ev</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">elMsgTbody</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTbodyClick</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+
+        <span class="c1">// Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave</span>
+        <span class="c1">// delegation at the TABLE level</span>
     <span class="p">}</span>
 <span class="p">},</span>
 
@@ -2815,14 +2826,14 @@
     <span class="k">this</span><span class="p">.</span><span class="nx">_initCellEditing</span><span class="p">();</span>
 <span class="p">},</span>
 
-<span class="cm">/**  </span>
-<span class="cm">  * Initializes Column sorting.  </span>
-<span class="cm">  *  </span>
-<span class="cm">  * @method _initColumnSort  </span>
-<span class="cm">  * @private  </span>
-<span class="cm">  */</span>  
+<span class="cm">/** 	 </span>
+<span class="cm">  * Initializes Column sorting. 	 </span>
+<span class="cm">  * 	 </span>
+<span class="cm">  * @method _initColumnSort 	 </span>
+<span class="cm">  * @private 	 </span>
+<span class="cm">  */</span> 	 
 <span class="nx">_initColumnSort</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;theadCellClickEvent&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onEventSortColumn</span><span class="p">);</span>  
+    <span class="k">this</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;theadCellClickEvent&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onEventSortColumn</span><span class="p">);</span> 	 
 
     <span class="c1">// Backward compatibility</span>
     <span class="kd">var</span> <span class="nx">oSortedBy</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;sortedBy&quot;</span><span class="p">);</span>
@@ -2836,12 +2847,12 @@
     <span class="p">}</span>
 <span class="p">},</span>
 
-<span class="cm">/**  </span>
-<span class="cm">  * Initializes CellEditor integration.  </span>
-<span class="cm">  *  </span>
-<span class="cm">  * @method _initCellEditing  </span>
-<span class="cm">  * @private  </span>
-<span class="cm">  */</span>  
+<span class="cm">/** 	 </span>
+<span class="cm">  * Initializes CellEditor integration. 	 </span>
+<span class="cm">  * 	 </span>
+<span class="cm">  * @method _initCellEditing 	 </span>
+<span class="cm">  * @private 	 </span>
+<span class="cm">  */</span> 	 
 <span class="nx">_initCellEditing</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;editorBlurEvent&quot;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">onEditorBlurEvent</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">arguments</span><span class="p">);</span>
@@ -3496,23 +3507,23 @@
 <span class="cm"> *</span>
 <span class="cm"> * @method _onTableMouseover</span>
 <span class="cm"> * @param e {HTMLEvent} The mouseover event.</span>
+<span class="cm"> * @param origTarget {HTMLElement} The mouseenter delegated element.</span>
+<span class="cm"> * @param container {HTMLElement} The mouseenter delegation container.</span>
 <span class="cm"> * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.</span>
 <span class="cm"> * @private</span>
 <span class="cm"> */</span>
-<span class="nx">_onTableMouseover</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">oSelf</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="p">.</span><span class="nx">getTarget</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="nx">_onTableMouseover</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">origTarget</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">oSelf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">origTarget</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
         <span class="kd">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">elTarget</span> <span class="o">!==</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">switch</span><span class="p">(</span><span class="nx">elTag</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
                      <span class="k">return</span><span class="p">;</span>
                 <span class="k">case</span> <span class="s2">&quot;a&quot;</span><span class="o">:</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="s2">&quot;td&quot;</span><span class="o">:</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="p">}</span>
+                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="s2">&quot;span&quot;</span><span class="o">:</span>
                     <span class="k">if</span><span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">,</span> <span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">))</span> <span class="p">{</span>
@@ -3522,18 +3533,17 @@
                     <span class="p">}</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="s2">&quot;th&quot;</span><span class="o">:</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                        <span class="c1">// Backward compatibility</span>
-                        <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="p">}</span>
+                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+                    <span class="c1">// Backward compatibility</span>
+                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="s2">&quot;tr&quot;</span><span class="o">:</span>
-                    <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;thead&quot;</span><span class="p">)</span> <span class="p">{</span>
                         <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadRowMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                         <span class="c1">// Backward compatibility</span>
                         <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerRowMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>
                         <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;rowMouseoverEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="p">}</span>
                     <span class="k">break</span><span class="p">;</span>
@@ -3558,23 +3568,23 @@
 <span class="cm"> *</span>
 <span class="cm"> * @method _onTableMouseout</span>
 <span class="cm"> * @param e {HTMLEvent} The mouseout event.</span>
+<span class="cm"> * @param origTarget {HTMLElement} The mouseleave delegated element.</span>
+<span class="cm"> * @param container {HTMLElement} The mouseleave delegation container.</span>
 <span class="cm"> * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.</span>
 <span class="cm"> * @private</span>
 <span class="cm"> */</span>
-<span class="nx">_onTableMouseout</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">oSelf</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="p">.</span><span class="nx">getTarget</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="nx">_onTableMouseout</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">origTarget</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">oSelf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">origTarget</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">elTarget</span> <span class="o">!==</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">switch</span><span class="p">(</span><span class="nx">elTag</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;a&quot;</span><span class="o">:</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;td&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;span&quot;</span><span class="o">:</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">,</span> <span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">))</span> <span class="p">{</span>
@@ -3584,18 +3594,17 @@
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;th&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="c1">// Backward compatibility</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+                <span class="c1">// Backward compatibility</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;tr&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;thead&quot;</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadRowMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="c1">// Backward compatibility</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerRowMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;rowMouseoutEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
@@ -3627,16 +3636,14 @@
     <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="p">.</span><span class="nx">getTarget</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">elTarget</span> <span class="o">!==</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">switch</span><span class="p">(</span><span class="nx">elTag</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;a&quot;</span><span class="o">:</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;td&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;span&quot;</span><span class="o">:</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">,</span> <span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">))</span> <span class="p">{</span>
@@ -3646,18 +3653,17 @@
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;th&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="c1">// Backward compatibility</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+                <span class="c1">// Backward compatibility</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;tr&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;thead&quot;</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadRowMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="c1">// Backward compatibility</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerRowMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;rowMousedownEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
@@ -3689,16 +3695,14 @@
     <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="p">.</span><span class="nx">getTarget</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">elTarget</span> <span class="o">!==</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">switch</span><span class="p">(</span><span class="nx">elTag</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;a&quot;</span><span class="o">:</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;td&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;span&quot;</span><span class="o">:</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">,</span> <span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">))</span> <span class="p">{</span>
@@ -3708,18 +3712,17 @@
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;th&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="c1">// Backward compatibility</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+                <span class="c1">// Backward compatibility</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;tr&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;thead&quot;</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadRowMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="c1">// Backward compatibility</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerRowMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;rowMouseupEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
@@ -3751,14 +3754,12 @@
     <span class="kd">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="p">.</span><span class="nx">getTarget</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="nx">elTarget</span> <span class="o">!==</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTable</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">switch</span><span class="p">(</span><span class="nx">elTag</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;td&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;cellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;span&quot;</span><span class="o">:</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">,</span> <span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">))</span> <span class="p">{</span>
@@ -3768,18 +3769,17 @@
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;th&quot;</span><span class="o">:</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                    <span class="c1">// Backward compatibility</span>
-                    <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadCellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+                <span class="c1">// Backward compatibility</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerCellDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;tr&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elThead</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;thead&quot;</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;theadRowDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                     <span class="c1">// Backward compatibility</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;headerRowDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">elTarget</span><span class="p">.</span><span class="nx">parentNode</span> <span class="o">===</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
                     <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;rowDblclickEvent&quot;</span><span class="p">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="p">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
@@ -10333,10 +10333,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventHighlightColumn</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">highlightColumn</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">highlightColumn</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -10348,10 +10345,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventUnhighlightColumn</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightColumn</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightColumn</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -10400,10 +10394,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventHighlightRow</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">highlightRow</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">highlightRow</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -10415,10 +10406,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventUnhighlightRow</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightRow</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightRow</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -10430,10 +10418,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventHighlightCell</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">highlightCell</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">highlightCell</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>
@@ -10445,10 +10430,7 @@
 <span class="cm"> * @param oArgs.target {HTMLElement} Target element.</span>
 <span class="cm"> */</span>
 <span class="nx">onEventUnhighlightCell</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">//TODO: filter for all spurious events at a lower level</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">Ev</span><span class="p">.</span><span class="nx">getRelatedTarget</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">event</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightCell</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">unhighlightCell</span><span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
 <span class="p">},</span>
 
 <span class="cm">/**</span>

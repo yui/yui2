@@ -409,7 +409,11 @@
     
         <span class="c1">// Create TABLE</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">_elHdTable</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_elHdContainer</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">));</span>   
-    <span class="p">}</span> 
+
+        <span class="c1">// Set up mouseover/mouseout events via mouseenter/mouseleave delegation</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elHdTable</span><span class="p">,</span> <span class="s2">&quot;mouseenter&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseover</span><span class="p">,</span> <span class="s2">&quot;thead .&quot;</span><span class="o">+</span><span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Ev</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elHdTable</span><span class="p">,</span> <span class="s2">&quot;mouseleave&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_onTableMouseout</span><span class="p">,</span> <span class="s2">&quot;thead .&quot;</span><span class="o">+</span><span class="nx">DT</span><span class="p">.</span><span class="nx">CLASS_LABEL</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
     <span class="c1">// Body TABLE</span>
     <span class="nx">SDT</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">_initTableEl</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_elBdContainer</span><span class="p">);</span>
 <span class="p">},</span>
