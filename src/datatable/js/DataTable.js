@@ -3461,9 +3461,7 @@ _onTableMouseover : function(e, oSelf) {
                 case "a":
                     break;
                 case "td":
-                    if (elTarget.parentNode.parentNode === oSelf._elTbody) {
-                        bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-                    }
+                    bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
                     break;
                 case "span":
                     if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -3473,18 +3471,17 @@ _onTableMouseover : function(e, oSelf) {
                     }
                     break;
                 case "th":
-                    if (elTarget.parentNode.parentNode === oSelf._elThead) {
-                        bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
-                        // Backward compatibility
-                        bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
-                    }
+                    bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
                     break;
                 case "tr":
-                    if(elTarget.parentNode === oSelf._elThead) {
+                    if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                         bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
                         // Backward compatibility
                         bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
-                    } else if (elTarget.parentNode === oSelf._elTbody) {
+                    }
+                    else {
                         bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
                     }
                     break;
@@ -3523,9 +3520,7 @@ _onTableMouseout : function(e, oSelf) {
             case "a":
                 break;
             case "td":
-                if (elTarget.parentNode.parentNode === oSelf._elTbody) {
-                    bKeepBubbling = oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -3535,18 +3530,17 @@ _onTableMouseout : function(e, oSelf) {
                 }
                 break;
             case "th":
-                if (elTarget.parentNode.parentNode === oSelf._elThead) {
-                    bKeepBubbling = oSelf.fireEvent("theadCellMouseoutEvent",{target:elTarget,event:e});
-                    // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseoutEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode === oSelf._elThead) {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMouseoutEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMouseoutEvent",{target:elTarget,event:e});
-                } else if (elTarget.parentNode === oSelf._elTbody) {
+                }
+                else {
                     bKeepBubbling = oSelf.fireEvent("rowMouseoutEvent",{target:elTarget,event:e});
                 }
                 break;
@@ -3585,9 +3579,7 @@ _onTableMousedown : function(e, oSelf) {
             case "a":
                 break;
             case "td":
-                if (elTarget.parentNode.parentNode === oSelf._elTbody) {
-                    bKeepBubbling = oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -3597,18 +3589,17 @@ _onTableMousedown : function(e, oSelf) {
                 }
                 break;
             case "th":
-                if (elTarget.parentNode.parentNode === oSelf._elThead) {
-                    bKeepBubbling = oSelf.fireEvent("theadCellMousedownEvent",{target:elTarget,event:e});
-                    // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("theadCellMousedownEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode === oSelf._elThead) {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMousedownEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMousedownEvent",{target:elTarget,event:e});
-                } else if (elTarget.parentNode === oSelf._elTbody) {
+                }
+                else {
                     bKeepBubbling = oSelf.fireEvent("rowMousedownEvent",{target:elTarget,event:e});
                 }
                 break;
@@ -3647,9 +3638,7 @@ _onTableMouseup : function(e, oSelf) {
             case "a":
                 break;
             case "td":
-                if (elTarget.parentNode.parentNode === oSelf._elTbody) {
-                    bKeepBubbling = oSelf.fireEvent("cellMouseupEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("cellMouseupEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -3659,18 +3648,17 @@ _onTableMouseup : function(e, oSelf) {
                 }
                 break;
             case "th":
-                if (elTarget.parentNode.parentNode === oSelf._elThead) {
-                    bKeepBubbling = oSelf.fireEvent("theadCellMouseupEvent",{target:elTarget,event:e});
-                    // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerCellMouseupEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseupEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseupEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode === oSelf._elThead) {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMouseupEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMouseupEvent",{target:elTarget,event:e});
-                } else if (elTarget.parentNode === oSelf._elTbody) {
+                }
+                else {
                     bKeepBubbling = oSelf.fireEvent("rowMouseupEvent",{target:elTarget,event:e});
                 }
                 break;
@@ -3707,9 +3695,7 @@ _onTableDblclick : function(e, oSelf) {
             case "body":
                 return;
             case "td":
-                if (elTarget.parentNode.parentNode === oSelf._elTbody) {
-                    bKeepBubbling = oSelf.fireEvent("cellDblclickEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("cellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -3719,18 +3705,17 @@ _onTableDblclick : function(e, oSelf) {
                 }
                 break;
             case "th":
-                if (elTarget.parentNode.parentNode === oSelf._elThead) {
-                    bKeepBubbling = oSelf.fireEvent("theadCellDblclickEvent",{target:elTarget,event:e});
-                    // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
-                }
+                bKeepBubbling = oSelf.fireEvent("theadCellDblclickEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode === oSelf._elThead) {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowDblclickEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowDblclickEvent",{target:elTarget,event:e});
-                } else if (elTarget.parentNode === oSelf._elTbody) {
+                }
+                else {
                     bKeepBubbling = oSelf.fireEvent("rowDblclickEvent",{target:elTarget,event:e});
                 }
                 break;
