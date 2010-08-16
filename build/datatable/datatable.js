@@ -163,6 +163,7 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1626,6 +1627,7 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2430,6 +2432,7 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -3634,17 +3637,17 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * @attribute renderLoopSize  
+    * @attribute renderLoopSize 	 
     * @description A value greater than 0 enables DOM rendering of rows to be
     * executed from a non-blocking timeout queue and sets how many rows to be
     * rendered per timeout. Recommended for very large data sets.     
-    * @type Number  
-    * @default 0  
-    */  
-     this.setAttributeConfig("renderLoopSize", {  
-         value: 0,  
-         validator: lang.isNumber  
-     });  
+    * @type Number 	 
+    * @default 0 	 
+    */ 	 
+     this.setAttributeConfig("renderLoopSize", { 	 
+         value: 0, 	 
+         validator: lang.isNumber 	 
+     }); 	 
 
     /**
     * @attribute formatRow
@@ -3762,46 +3765,46 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-     * @attribute MSG_EMPTY  
+     * @attribute MSG_EMPTY 	 
      * @description Message to display if DataTable has no data.     
-     * @type String  
-     * @default "No records found."  
-     */  
-     this.setAttributeConfig("MSG_EMPTY", {  
-         value: "No records found.",  
-         validator: lang.isString  
-     });  
+     * @type String 	 
+     * @default "No records found." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_EMPTY", { 	 
+         value: "No records found.", 	 
+         validator: lang.isString 	 
+     }); 	 
 
     /**
-     * @attribute MSG_LOADING 
+     * @attribute MSG_LOADING	 
      * @description Message to display while DataTable is loading data.
-     * @type String  
-     * @default "Loading..."  
-     */  
-     this.setAttributeConfig("MSG_LOADING", {  
-         value: "Loading...",  
-         validator: lang.isString  
-     });  
+     * @type String 	 
+     * @default "Loading..." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_LOADING", { 	 
+         value: "Loading...", 	 
+         validator: lang.isString 	 
+     }); 	 
 
     /**
-     * @attribute MSG_ERROR 
+     * @attribute MSG_ERROR	 
      * @description Message to display while DataTable has data error.
-     * @type String  
-     * @default "Data error."  
-     */  
-     this.setAttributeConfig("MSG_ERROR", {  
-         value: "Data error.",  
-         validator: lang.isString  
-     });  
+     * @type String 	 
+     * @default "Data error." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_ERROR", { 	 
+         value: "Data error.", 	 
+         validator: lang.isString 	 
+     }); 	 
 
     /**
      * @attribute MSG_SORTASC 
      * @description Message to display in tooltip to sort Column in ascending order.
-     * @type String  
-     * @default "Click to sort ascending"  
-     */  
-     this.setAttributeConfig("MSG_SORTASC", {  
-         value: "Click to sort ascending",  
+     * @type String 	 
+     * @default "Click to sort ascending" 	 
+     */ 	 
+     this.setAttributeConfig("MSG_SORTASC", { 	 
+         value: "Click to sort ascending", 	 
          validator: lang.isString,
          method: function(sParam) {
             if(this._elThead) {
@@ -3817,11 +3820,11 @@ initAttributes : function(oConfigs) {
     /**
      * @attribute MSG_SORTDESC 
      * @description Message to display in tooltip to sort Column in descending order.
-     * @type String  
-     * @default "Click to sort descending"  
-     */  
-     this.setAttributeConfig("MSG_SORTDESC", {  
-         value: "Click to sort descending",  
+     * @type String 	 
+     * @default "Click to sort descending" 	 
+     */ 	 
+     this.setAttributeConfig("MSG_SORTDESC", { 	 
+         value: "Click to sort descending", 	 
          validator: lang.isString,
          method: function(sParam) {
             if(this._elThead) {
@@ -4179,13 +4182,13 @@ _disabled : false,
 clearTextSelection : function() {
     var sel;
     if(window.getSelection) {
-    sel = window.getSelection();
+    	sel = window.getSelection();
     }
     else if(document.getSelection) {
-    sel = document.getSelection();
+    	sel = document.getSelection();
     }
     else if(document.selection) {
-    sel = document.selection;
+    	sel = document.selection;
     }
     if(sel) {
         if(sel.empty) {
@@ -5186,14 +5189,14 @@ _initEvents : function () {
     this._initCellEditing();
 },
 
-/**  
-  * Initializes Column sorting.  
-  *  
-  * @method _initColumnSort  
-  * @private  
-  */  
+/** 	 
+  * Initializes Column sorting. 	 
+  * 	 
+  * @method _initColumnSort 	 
+  * @private 	 
+  */ 	 
 _initColumnSort : function() {
-    this.subscribe("theadCellClickEvent", this.onEventSortColumn);  
+    this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
 
     // Backward compatibility
     var oSortedBy = this.get("sortedBy");
@@ -5207,12 +5210,12 @@ _initColumnSort : function() {
     }
 },
 
-/**  
-  * Initializes CellEditor integration.  
-  *  
-  * @method _initCellEditing  
-  * @private  
-  */  
+/** 	 
+  * Initializes CellEditor integration. 	 
+  * 	 
+  * @method _initCellEditing 	 
+  * @private 	 
+  */ 	 
 _initCellEditing : function() {
     this.subscribe("editorBlurEvent",function () {
         this.onEditorBlurEvent.apply(this,arguments);
@@ -5871,7 +5874,7 @@ _onTableMouseover : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
         var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
-        while(elTarget && elTarget !== oSelf._elTable) {
+        while(elTarget && (elTag != "table")) {
             switch(elTag) {
                 case "body":
                      return;
@@ -5930,7 +5933,7 @@ _onTableMouseout : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
-    while(elTarget && elTarget !== oSelf._elTable) {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
@@ -5989,7 +5992,7 @@ _onTableMousedown : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
-    while(elTarget && elTarget !== oSelf._elTable) {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
@@ -6048,7 +6051,7 @@ _onTableMouseup : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
-    while(elTarget && elTarget !== oSelf._elTable) {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
@@ -6107,7 +6110,7 @@ _onTableDblclick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
-    while(elTarget && elTarget !== oSelf._elTable) {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
@@ -14123,6 +14126,7 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15396,6 +15400,7 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17264,4 +17269,5 @@ lang.augmentObject(CE, BCE);
 
 
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
