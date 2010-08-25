@@ -1165,7 +1165,7 @@ YAHOO.util.Connect =
     * @static
     * @type CustomEvent
     */
-	YCM.uploadEvent = new YAHOO.util.CustomEvent('upload'),
+	YCM.uploadEvent = new YAHOO.util.CustomEvent('upload');
 
    /**
 	* @description Determines whether YAHOO.util.Event is available and returns true or false.
@@ -1517,7 +1517,7 @@ YAHOO.util.Connect =
 
 			obj = {
 			    tId : o.tId,
-			    argument : callback.argument
+			    argument : args
             };
 
 			try
