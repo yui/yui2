@@ -82,6 +82,7 @@ var Dom = YAHOO.util.Dom,
                     tmp.push(this._undoCache[i]);
                 }
                 this._undoCache = tmp;
+                this._undoLevel = this._undoCache.length;
             }
         },
         /**
