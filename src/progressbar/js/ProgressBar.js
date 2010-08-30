@@ -34,7 +34,7 @@
 		BAR_EL = 'barEl',
 		MASK_EL = 'maskEl',
 		ARIA_TEXT_TEMPLATE = 'ariaTextTemplate',
-		ACC = 'accelerator',
+		ACC = 'animAcceleration',
 		BG_POSITION = 'background-position',
 		PX = 'px',
 		// Events
@@ -314,12 +314,12 @@
 			});
 			
 			/**
-			 * @attribute accelerator
+			 * @attribute animAcceleration
 			 * @description It accepts a number or null to cancel.  
 			 * If a number, it is how fast the background image for the bar will move in the 
 			 * opposite direction to the bar itself. null or 0 means the background won't move.
 			 * Negative values will make the background move along the bar.
-			 * Only valid with animation active and requires a suitable background image to make it evident.
+			 * Only valid with animation active and it requires a suitable background image to make it evident.
 			 * @default null
 			 * @type {number} or {null}
 			 */
@@ -561,11 +561,11 @@
 		/** 
 		 * Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved.
 		 * Also fixes: http://yuilibrary.com/projects/yui2/ticket/2528919.
-		 * It also handles moving the background as per the accelerator configuration attribute
+		 * It also handles moving the background as per the animAcceleration configuration attribute
 		 * since it turned out to be the best place to handle it.
 		 * @method _fixAnim
 		 * @param anim {YAHOO.util.Anim} Instance of Animation to fix
-		 * @param acc {number} Value of accelerator attribute
+		 * @param acc {number} Value of animAcceleration attribute
 		 * @return  void
 		 * @private
 		 */	
