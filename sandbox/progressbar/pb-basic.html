@@ -216,11 +216,16 @@ code {
 				if (anim) { 
 					anim.method = YAHOO.util.Easing[inputEl.value]; 
 				}
+				
+				pb.set('animAcceleration',accelerationSlider.getValue());
 			</textarea>
 			<p>In all cases, the scaling factors from the pixel range of the Sliders to the values used for the ProgressBar have been omitted.
 			Most values are set directly, those related to animation are set depending on the existence of an Anim object.  The <code>anim</code>
-			attribute, while it receives a boolean it returns the current instance of Anim.   The <code>value</code> attribute of the radio buttons
-			for selecting the easing method, have been set to the actual names of the methods 
+			attribute, while it receives a boolean it returns the current instance of Anim.   The <code>animAcceleration</code> is set unconditionally
+			though the ProgressBar will ignore it if animation is not enabled.  The background is also changed from the default solid one to one with ripples.
+			Acceleration values of 0.2 to 0.3 seem to work best.</p>
+			
+			<p>The <code>value</code> attribute of the radio buttons for selecting the easing method, have been set to the actual names of the methods 
 			so it is easy to locate them in the <code>YAHOO.util.Easing</code> object.  The ProgressBar rejects values outside of the range
 			given by <code>minValue</code> and <code>maxValue</code> so the slider goes back to whichever the actual value was read from the ProgressBar itself.</p>
 		</div>
@@ -353,7 +358,7 @@ code {
 			Dom.get('acceleration').innerHTML = value;
 		});
 		accelerationSlider.subscribe("slideEnd", function() {
-			pb.set('accelerator',accelerationSlider.getValue() / 100);
+			pb.set('animAcceleration',accelerationSlider.getValue() / 100);
 		});
 		
 		

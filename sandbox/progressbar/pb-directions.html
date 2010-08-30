@@ -9,6 +9,7 @@
 
 
 <link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
+<link rel="stylesheet" type="text/css" href="http://developer.yahoo.com/yui/assets/dpSyntaxHighlighter.css">
 
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -31,16 +32,25 @@
 	visibility:visible;
 }
 
-.yui-skin-sam .yui-pb-ltr .yui-pb-bar, .yui-skin-sam  .yui-pb-rtl .yui-pb-bar {
+.yui-skin-sam .yui-pb-ltr .yui-pb-anim, .yui-skin-sam  .yui-pb-rtl .yui-pb-anim {
 	background-image: url(hgradient.png);
 }
 
-.yui-skin-sam .yui-pb-ttb .yui-pb-bar, .yui-skin-sam  .yui-pb-btt .yui-pb-bar {
+.yui-skin-sam .yui-pb-ttb .yui-pb-anim, .yui-skin-sam  .yui-pb-btt .yui-pb-anim {
 	background-image: url(vgradient.png);
 }
 
 .left {
 	float:left;
+}
+
+.dp-highlighter th, .dp-highlighter td {
+	border:0;
+	padding:0;
+}
+.dp-highlighter .line1, .dp-highlighter  .line2 {
+	padding-left:10px;
+	white-space:nowrap;
 }
 </style>
 </head>
@@ -59,22 +69,58 @@
 			<div class="left" id="ttb"></div>
 			<div class="left" id="btt"></div>
 		</div>
+		<div id="ft">
+			<p>The four bars above were created with the following code:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				var dirs = ['ltr','rtl','ttb','btt'], pb = [], i;
+				
+				for (i = 0 ; i < dirs.length; i++) {
+					pb[i] = new YAHOO.widget.ProgressBar({direction:dirs[i],value:0, anim:true, animAcceleration: 0.3}).render(dirs[i]);
+					pb[i].get('anim').duration = 3;
+				}
+			</textarea>
+			<p>They are rendered into <em>divs</em> with their ids  set to the direction of the bar each will contain.  
+			The movement of the bars is produced by the following code:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				var move = function() {
+					for (var i = 0; i < pb.length; i++) {
+						pb[i].set('value',100 - pb[i].get('value'));
+					}
+				};
+				move();
+				window.setInterval(move, 4000);
+			</textarea>
+			<p>None of this code deals with switching the background from a rippling one when it is moving to a solid one when is at rest.
+			The ProgressBar adds a <code>.yui-pb-anim</code> class name to the bar when it is being animated, which helps us switch the background:</p>
+			<textarea name="code" class="CSS" cols="60" rows="1">
+			.yui-skin-sam .yui-pb-ltr .yui-pb-anim, 
+			.yui-skin-sam .yui-pb-rtl .yui-pb-anim {
+				background-image: url(hgradient.png);
+			}
+
+			.yui-skin-sam .yui-pb-ttb .yui-pb-anim, 
+			.yui-skin-sam .yui-pb-btt .yui-pb-anim {
+				background-image: url(vgradient.png);
+			}
+			</textarea>
+			<p>The ProgressBar also adds a class name signaling the direction the bar will move, which allows us to use a background
+			with the ripples going in the right direction.  These background images are not animated by themselves, they are not animated GIFs or such, 
+			the ProgressBar	offsets those images by using the <code>background-position</code> CSS attribute, which lets us control speed and direction,
+			and lets them repeat.  These are the background images used:</p>
+			<div style="border:thin solid silver;float:left;padding:0.5em"><img style="border:thin solid silver" src="hgradient.png" /> hgradient.png</div>
+			<div style="border:thin solid silver;float:left;padding:0.5em"><img style="border:thin solid silver" src="vgradient.png" /> vgradient.png</div>
+		</div>
 	</div>
 	<script  type="text/javascript">
 
 
 	YAHOO.util.Event.onDOMReady( function () {
-		var pb = [];
-		var acc = 0.3, duration = 3;
-		pb[0] = new YAHOO.widget.ProgressBar({direction:'ltr',value:0, anim:true, accelerator:acc}).render('ltr');
-		pb[1] = new YAHOO.widget.ProgressBar({direction:'rtl',value:0, anim:true, accelerator:acc}).render('rtl');
-		pb[2] = new YAHOO.widget.ProgressBar({direction:'ttb',value:0, anim:true, accelerator:acc}).render('ttb');
-		pb[3] = new YAHOO.widget.ProgressBar({direction:'btt',value:0, anim:true, accelerator:acc}).render('btt');
+		var dirs = ['ltr','rtl','ttb','btt'], pb = [], i;
 		
-		pb[0].get('anim').duration = duration;
-		pb[1].get('anim').duration = duration;
-		pb[2].get('anim').duration = duration;
-		pb[3].get('anim').duration = duration;
+		for (i = 0 ; i < dirs.length; i++) {
+			pb[i] = new YAHOO.widget.ProgressBar({direction:dirs[i],value:0, anim:true, animAcceleration: 0.3}).render(dirs[i]);
+			pb[i].get('anim').duration = 3;
+		}
 
 		var move = function() {
 			for (var i = 0; i < pb.length; i++) {
@@ -82,12 +128,11 @@
 			}
 		};
 		move();
-		window.setInterval(move, duration * 1000 + 500);
+		window.setInterval(move, 4000);
 		
-		
-			
 	});
 </script>
-
+<script type="text/javascript" src="http://developer.yahoo.com/yui/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript" language="javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
 </body>
 </html>
