@@ -193,6 +193,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
         this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
         this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
+        this.dataRequestCancelEvent = new YAHOO.util.CustomEvent("dataRequestCancel", this);
         this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
         this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
         this.containerPopulateEvent = new YAHOO.util.CustomEvent("containerPopulate", this);
@@ -498,7 +499,7 @@ YAHOO.widget.AutoComplete.prototype.resultTypeList = true;
  * For XHR DataSources, AutoComplete will automatically insert a "?" between the server URI and 
  * the "query" param/value pair. To prevent this behavior, implementers should
  * set this value to false. To more fully customize the query syntax, implementers
- * should override the generateRequest() method. 
+ * should override the generateRequest() method.
  *
  * @property queryQuestionMark
  * @type Boolean
@@ -1063,6 +1064,15 @@ YAHOO.widget.AutoComplete.prototype.textboxKeyEvent = null;
  * @param oRequest {Object} The request.
  */
 YAHOO.widget.AutoComplete.prototype.dataRequestEvent = null;
+
+/**
+ * Fired when the AutoComplete request to the DataSource is canceled.
+ *
+ * @event dataRequestCancelEvent
+ * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sQuery {String} The query string.
+ */
+YAHOO.widget.AutoComplete.prototype.dataRequestCancelEvent = null;
 
 /**
  * Fired when the AutoComplete instance receives query results from the data
@@ -1798,17 +1808,24 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
     
     var sRequest = this.generateRequest(sQuery);
-    this.dataRequestEvent.fire(this, sQuery, sRequest);
-    YAHOO.log("Sending query \"" + sRequest + "\"", "info", this.toString());
+    
+    if(sRequest !== undefined) {
+        this.dataRequestEvent.fire(this, sQuery, sRequest);
+        YAHOO.log("Sending query \"" + sRequest + "\"", "info", this.toString());
 
-    this.dataSource.sendRequest(sRequest, {
-            success : this.handleResponse,
-            failure : this.handleResponse,
-            scope   : this,
-            argument: {
-                query: sQuery
-            }
-    });
+        this.dataSource.sendRequest(sRequest, {
+                success : this.handleResponse,
+                failure : this.handleResponse,
+                scope   : this,
+                argument: {
+                    query: sQuery
+                }
+        });
+    }
+    else {
+        this.dataRequestCancelEvent.fire(this, sQuery);
+        YAHOO.log("Canceled query \"" + sQuery + "\"", "info", this.toString());
+    }
 };
 
 /**

@@ -147,7 +147,8 @@
             <span class="nx">editorData</span><span class="p">.</span><span class="nx">active</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="nx">editorData</span><span class="p">.</span><span class="nx">whoHasIt</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">editorData</span><span class="p">.</span><span class="nx">nodeType</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">editorData</span><span class="p">.</span><span class="nx">editorPanel</span> <span class="o">=</span> <span class="nx">ed</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
+				<span class="c1">// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945</span>
+                <span class="nx">editorData</span><span class="p">.</span><span class="nx">editorPanel</span> <span class="o">=</span> <span class="nx">ed</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getEl</span><span class="p">().</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
                 <span class="nx">Dom</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39;ygtv-label-editor&#39;</span><span class="p">);</span>
 
                 <span class="nx">buttons</span> <span class="o">=</span> <span class="nx">editorData</span><span class="p">.</span><span class="nx">buttonsContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
@@ -206,10 +207,10 @@
                 <span class="nx">Dom</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39;ygtv-edit-&#39;</span> <span class="o">+</span> <span class="nx">editorData</span><span class="p">.</span><span class="nx">nodeType</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="nx">Dom</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39; ygtv-edit-&#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">_type</span><span class="p">);</span>
-            <span class="nx">topLeft</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">getContentEl</span><span class="p">());</span>
-            <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="nx">topLeft</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="p">);</span>
-            <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="nx">topLeft</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="p">);</span>
+			<span class="c1">// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945</span>
             <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="s1">&#39;display&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">);</span>
+			<span class="nx">Dom</span><span class="p">.</span><span class="nx">setXY</span><span class="p">(</span><span class="nx">ed</span><span class="p">,</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">getContentEl</span><span class="p">()));</span>
+			<span class="c1">// up to here</span>
             <span class="nx">ed</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">fillEditorContainer</span><span class="p">(</span><span class="nx">editorData</span><span class="p">);</span>
 
@@ -222,7 +223,7 @@
 <span class="cm">    *  It calls the corresponding node editNode method.</span>
 <span class="cm">    * @method onEventEditNode</span>
 <span class="cm">    * @param oArgs {object} Object passed as arguments to TreeView event listeners</span>
-<span class="cm">     * @for YAHOO.widget.TreeView</span>
+<span class="cm">    * @for YAHOO.widget.TreeView</span>
 <span class="cm">    */</span>
 
     <span class="nx">TVproto</span><span class="p">.</span><span class="nx">onEventEditNode</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">oArgs</span><span class="p">)</span> <span class="p">{</span>
@@ -231,6 +232,7 @@
         <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">oArgs</span><span class="p">.</span><span class="nx">node</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">oArgs</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">editNode</span><span class="p">();</span>
         <span class="p">}</span>
+		<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">};</span>
     
     <span class="cm">/**</span>
@@ -245,6 +247,10 @@
         <span class="kd">var</span> <span class="nx">ed</span> <span class="o">=</span> <span class="nx">TV</span><span class="p">.</span><span class="nx">editorData</span><span class="p">,</span> 
             <span class="nx">node</span> <span class="o">=</span> <span class="nx">ed</span><span class="p">.</span><span class="nx">node</span><span class="p">,</span>
             <span class="nx">close</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+		<span class="c1">// http://yuilibrary.com/projects/yui2/ticket/2528946</span>
+		<span class="c1">// _closeEditor might now be called at any time, even when there is no label editor open</span>
+		<span class="c1">// so we need to ensure there is one.</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">save</span><span class="p">)</span> <span class="p">{</span> 
             <span class="nx">close</span> <span class="o">=</span> <span class="nx">ed</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">saveEditorValue</span><span class="p">(</span><span class="nx">ed</span><span class="p">)</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">;</span> 
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>

@@ -1940,7 +1940,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // forward the return value to the handler
     
     
-    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest);
+    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest, oCallback, oCaller);
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
@@ -2573,6 +2573,7 @@ util.DataSource = function(oLiveData, oConfigs) {
 lang.augmentObject(util.DataSource, DS);
 
 })();
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -3110,4 +3111,5 @@ var xPad=function (x, pad, r)
  YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
 
 })();
+
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});

@@ -62,7 +62,7 @@
     * @static
     * @type CustomEvent
     */
-	YCM.uploadEvent = new YAHOO.util.CustomEvent('upload'),
+	YCM.uploadEvent = new YAHOO.util.CustomEvent('upload');
 
    /**
 	* @description Determines whether YAHOO.util.Event is available and returns true or false.
@@ -414,7 +414,7 @@
 
 			obj = {
 			    tId : o.tId,
-			    argument : callback.argument
+			    argument : args
             };
 
 			try

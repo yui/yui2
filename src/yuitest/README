@@ -15,6 +15,10 @@ YUI Library - YUITest - Release Notes
     TestSuite becomes the root. This may affect the reporting of test results if you're using TestReporter.
     To run tests in the old way, call TestRunner.run(true).
 
+2.8.1
+
+  * No changes
+
 2.8.0
 
   * Fixed issues with ArrayAssert methods (trac #2528121)

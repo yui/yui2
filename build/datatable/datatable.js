@@ -1292,6 +1292,8 @@ YAHOO.util.Sort = {
      * @param b {Object} Second sort argument.
      * @param desc {Boolean} True if sort direction is descending, false if
      * sort direction is ascending.
+     * @return {Boolean} Return -1 when a < b. Return 0 when a = b.
+     * Return 1 when a > b.
      */
     compare: function(a, b, desc) {
         if((a === null) || (typeof a == "undefined")) {
@@ -4548,7 +4550,15 @@ _initTableEl : function(elContainer) {
         if(this.get("caption")) {
             this._initCaptionEl(this.get("caption"));
         }
-    } 
+
+        // Set up mouseover/mouseout events via mouseenter/mouseleave delegation
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-message>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-message>tr>td", this);
+    }
 },
 
 /**
@@ -4690,11 +4700,12 @@ _initTheadEl : function(elTable) {
         // Set up DOM events for THEAD
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
-        Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elThead, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
+        
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
 
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
@@ -5088,14 +5099,15 @@ _initTbodyEl : function(elTable) {
     
         // Set up DOM events for TBODY
         Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
-        
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
+
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
         ///Ev.addListener(elTbody, "dblclick", this._onTableDblclick, this);
@@ -5151,13 +5163,14 @@ _initMsgTbodyEl : function(elTable) {
 
         // Set up DOM events for TBODY
         Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
     }
 },
 
@@ -5865,11 +5878,13 @@ _onTbodyFocus : function(e, oSelf) {
  *
  * @method _onTableMouseover
  * @param e {HTMLEvent} The mouseover event.
+ * @param origTarget {HTMLElement} The mouseenter delegated element.
+ * @param container {HTMLElement} The mouseenter delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseover : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseover : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
         var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
         while(elTarget && (elTag != "table")) {
@@ -5924,11 +5939,13 @@ _onTableMouseover : function(e, oSelf) {
  *
  * @method _onTableMouseout
  * @param e {HTMLEvent} The mouseout event.
+ * @param origTarget {HTMLElement} The mouseleave delegated element.
+ * @param container {HTMLElement} The mouseleave delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseout : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseout : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
@@ -7214,6 +7231,29 @@ _runRenderChain : function() {
 },
 
 /**
+ * Returns array of Records for current view. For example, if paginated, it
+ * returns the subset of Records for current page.
+ *
+ * @method _getViewRecords
+ * @protected
+ * @return {Array} Array of Records to display in current view.
+ */
+_getViewRecords : function() {
+    // Paginator is enabled, show a subset of Records
+    var oPaginator = this.get('paginator');
+    if(oPaginator) {
+        return this._oRecordSet.getRecords(
+                        oPaginator.getStartIndex(),
+                        oPaginator.getRowsPerPage());
+    }
+    // Not paginated, show all records
+    else {
+        return this._oRecordSet.getRecords();
+    }
+
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -7227,19 +7267,9 @@ render : function() {
 
     this.fireEvent("beforeRenderEvent");
 
-    var i, j, k, len, allRecords;
+    var i, j, k, len,
+        allRecords = this._getViewRecords();
 
-    var oPaginator = this.get('paginator');
-    // Paginator is enabled, show a subset of Records and update Paginator UI
-    if(oPaginator) {
-        allRecords = this._oRecordSet.getRecords(
-                        oPaginator.getStartIndex(),
-                        oPaginator.getRowsPerPage());
-    }
-    // Not paginated, show all records
-    else {
-        allRecords = this._oRecordSet.getRecords();
-    }
 
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
@@ -12570,10 +12600,7 @@ onEventSelectColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightColumn(oArgs.target);
-    }
+    this.highlightColumn(oArgs.target);
 },
 
 /**
@@ -12585,10 +12612,7 @@ onEventHighlightColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightColumn(oArgs.target);
-    }
+    this.unhighlightColumn(oArgs.target);
 },
 
 /**
@@ -12637,10 +12661,7 @@ onEventSelectCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightRow(oArgs.target);
-    }
+    this.highlightRow(oArgs.target);
 },
 
 /**
@@ -12652,10 +12673,7 @@ onEventHighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightRow(oArgs.target);
-    }
+    this.unhighlightRow(oArgs.target);
 },
 
 /**
@@ -12667,10 +12685,7 @@ onEventUnhighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightCell(oArgs.target);
-    }
+    this.highlightCell(oArgs.target);
 },
 
 /**
@@ -12682,10 +12697,7 @@ onEventHighlightCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightCell(oArgs.target);
-    }
+    this.unhighlightCell(oArgs.target);
 },
 
 /**
@@ -14473,7 +14485,11 @@ _initTableEl : function() {
     
         // Create TABLE
         this._elHdTable = this._elHdContainer.appendChild(document.createElement("table"));   
-    } 
+
+        // Set up mouseover/mouseout events via mouseenter/mouseleave delegation
+        Ev.delegate(this._elHdTable, "mouseenter", this._onTableMouseover, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elHdTable, "mouseleave", this._onTableMouseout, "thead ."+DT.CLASS_LABEL, this);
+    }
     // Body TABLE
     SDT.superclass._initTableEl.call(this, this._elBdContainer);
 },

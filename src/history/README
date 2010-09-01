@@ -1,5 +1,13 @@
 YUI Library - History - Release Notes
 
+2.9.0
+  * Fixed a bug in which escaped module names caused navigate() calls to fail.
+    (See YUILibrary Bug #2529015)
+
+2.8.1
+  * Fixed a bug in which HTML characters were not properly escaped before being
+    inserted into an iframe in IE6/7, which had the potential to be used as an
+    XSS vector. (See YUILibrary Bug #2528437)
 
 2.8.0 No change.
 
