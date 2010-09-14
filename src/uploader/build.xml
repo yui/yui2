@@ -8,7 +8,7 @@
 
     <!-- custom properties -->
 
-	<property name="flexbin" value="/Applications/Adobe Flex Builder 3/sdks/3.0.0/bin"/>
+	<property name="flexbin" value="/flex_sdk_3.4/bin"/>
 	<property name="astra.srcdir" value="{$component.basedir}/as"/>
 		
 	<target name="build" depends="YuiModuleTargets.build, swfbuild" />
