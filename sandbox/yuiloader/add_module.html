@@ -3,7 +3,7 @@
 <head>
 <title>yui.js</title>
 
-<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-debug.js"></script>
 
 <script type="text/javascript">
 
@@ -32,8 +32,10 @@
                         type: "css",
                         fullpath: "http://www.json.org/json.css",
                         //requires: ["datatable", "skin-sam-datatable"]
-                        //requires: ["skin-sam-datatable"]
-                        requires: ["datatable"]
+                        //requires: ["skin-sam-datatable"],
+                        // after: ["reset-fonts-grids", "reset", "fonts", "grids"],
+                        after: ["reset-fonts-grids"],
+                        requires: ["reset-fonts-grids"]
                         });
 
                     loader.addModule({
@@ -44,7 +46,7 @@
                         //skinnable: true
                         });
 
-                    loader.require("tabview", "treeview", "json", "datatable");
+                    loader.require("tabview", "treeview", "json","reset-fonts-grids", "datatable");
 
                     loader.filter = 'debug';
                     loader.base = '/build/';
