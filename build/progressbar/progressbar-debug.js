@@ -34,7 +34,9 @@
 		BAR_EL = 'barEl',
 		MASK_EL = 'maskEl',
 		ARIA_TEXT_TEMPLATE = 'ariaTextTemplate',
-		
+		ACC = 'animAcceleration',
+		BG_POSITION = 'background-position',
+		PX = 'px',
 		// Events
 		START = 'start',
 		PROGRESS = 'progress',
@@ -311,6 +313,26 @@
 				setter: this._animSetter
 			});
 			
+			/**
+			 * @attribute animAcceleration
+			 * @description It accepts a number or null to cancel.  
+			 * If a number, it is how fast the background image for the bar will move in the 
+			 * opposite direction to the bar itself. null or 0 means the background won't move.
+			 * Negative values will make the background move along the bar.
+			 * Only valid with animation active and it requires a suitable background image to make it evident.
+			 * @default null
+			 * @type {number} or {null}
+			 */
+			
+			this.setAttributeConfig(ACC, {
+				value:null,
+				validator: function(value) {
+					return Lang.isNumber(value) || Lang.isNull(value);
+				},
+				method: function(value) {
+					this._fixAnim(this.get(ANIM),value);
+				}
+			});
 			
 		},
 		/** 
@@ -425,7 +447,7 @@
 		 */
 		_heightChange: function(value) {
 			if (Lang.isNumber(value)) {
-				value += 'px';
+				value += PX;
 			}
 			this.setStyle(HEIGHT,value);
 			this._fixEdges();
@@ -441,7 +463,7 @@
 		 */
 		_widthChange: function(value) {
 			if (Lang.isNumber(value)) {
-				value += 'px';
+				value += PX;
 			}
 			this.setStyle(WIDTH,value);
 			this._fixEdges();
@@ -464,12 +486,12 @@
 				blEl = Dom.getElementsByClassName(CLASS_BL,undefined,maskEl)[0],
 				brEl = Dom.getElementsByClassName(CLASS_BR,undefined,maskEl)[0],
 				newSize = (parseInt(Dom.getStyle(maskEl,HEIGHT),10) -
-				parseInt(Dom.getStyle(tlEl,HEIGHT),10)) + 'px';
+				parseInt(Dom.getStyle(tlEl,HEIGHT),10)) + PX;
 				
 			Dom.setStyle(blEl,HEIGHT,newSize);
 			Dom.setStyle(brEl,HEIGHT,newSize);
 			newSize = (parseInt(Dom.getStyle(maskEl,WIDTH),10) -
-				parseInt(Dom.getStyle(tlEl,WIDTH),10)) + 'px';
+				parseInt(Dom.getStyle(tlEl,WIDTH),10)) + PX;
 			Dom.setStyle(trEl,WIDTH,newSize);
 			Dom.setStyle(brEl,WIDTH,newSize);
 		},
@@ -523,27 +545,8 @@
 				anim.onTween.subscribe(this._animOnTween,this,true);
 				anim.onComplete.subscribe(this._animComplete,this,true);
 				
-				// Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved:
-				var oldSetAttribute = anim.setAttribute,
-					pb = this;
-				switch(this.get(DIRECTION)) {
-					case DIRECTION_BTT:
-						anim.setAttribute = function(attr , val , unit) {
-							val = Math.round(val);
-							oldSetAttribute.call(this,attr,val,unit);
-							Dom.setStyle(barEl,'top',(pb._barSpace - val) + 'px');
-						};
-						break;
-					case DIRECTION_RTL:
-						anim.setAttribute = function(attr , val , unit) {
-							val = Math.round(val);
-							oldSetAttribute.call(this,attr,val,unit);
-							Dom.setStyle(barEl,'left',(pb._barSpace - val) + 'px');
-						};
-						break;
-				}
-				// up to here
-
+				this._fixAnim(anim,this.get(ACC));
+				
 			} else {
 				YAHOO.log('Turning animation off','info','ProgressBar');
 				anim = this.get(ANIM);
@@ -555,7 +558,71 @@
 			}
 			return anim;
 		},
-		
+		/** 
+		 * Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved.
+		 * Also fixes: http://yuilibrary.com/projects/yui2/ticket/2528919.
+		 * It also handles moving the background as per the animAcceleration configuration attribute
+		 * since it turned out to be the best place to handle it.
+		 * @method _fixAnim
+		 * @param anim {YAHOO.util.Anim} Instance of Animation to fix
+		 * @param acc {number} Value of animAcceleration attribute
+		 * @return  void
+		 * @private
+		 */	
+		_fixAnim: function(anim, acc) {
+
+
+			if (anim) {
+				if (!this._oldSetAttribute) {
+					this._oldSetAttribute = anim.setAttribute;
+				}
+				var	pb = this;
+				switch(this.get(DIRECTION)) {
+					case DIRECTION_LTR:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							pb._oldSetAttribute.call(this,attr,val,unit);
+							if (attr == WIDTH) {
+								pb._oldSetAttribute.call(this,BG_POSITION,-val * acc,PX);
+							}
+						};
+						break;
+					case DIRECTION_RTL:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							pb._oldSetAttribute.call(this,attr,val,unit);
+							if (attr == WIDTH) {
+								var left = pb._barSpace - val;
+								pb._oldSetAttribute.call(this,'left',left, PX);
+								pb._oldSetAttribute.call(this, BG_POSITION, -left +  val * acc, PX);
+							}
+						};
+						break;
+					case DIRECTION_TTB:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							pb._oldSetAttribute.call(this,attr,val,unit);
+							if (attr == HEIGHT) {
+								pb._oldSetAttribute.call(this,BG_POSITION,'center ' + (- val * acc),PX);
+							}
+						};
+						break;
+					
+					case DIRECTION_BTT:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							pb._oldSetAttribute.call(this,attr,val,unit);
+							if (attr == HEIGHT) {
+								var top = pb._barSpace - val;
+								pb._oldSetAttribute.call(this,'top',top, PX);
+								pb._oldSetAttribute.call(this, BG_POSITION,'center ' + (val * acc - top), PX);
+							}
+						};
+						break;
+				}
+				// up to here
+			}
+		},
 		/** 
 		 * Called when the animation signals it has completed.
 		 * @method _animComplete
@@ -643,24 +710,24 @@
 	Prog._barSizeFunctions = b;
 	
 	b[0][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
-		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
+		Dom.setStyle(barEl,WIDTH,  pixelValue + PX);
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_RTL] = function(value, pixelValue, barEl, anim) {
-		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
-		Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
+		Dom.setStyle(barEl,WIDTH,  pixelValue + PX);
+		Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + PX);
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_TTB] = function(value, pixelValue, barEl, anim) {
-		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
+		Dom.setStyle(barEl,HEIGHT,  pixelValue + PX);
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_BTT] = function(value, pixelValue, barEl, anim) {
-		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
-		Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
+		Dom.setStyle(barEl,HEIGHT,  pixelValue + PX);
+		Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + PX);
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
@@ -670,14 +737,14 @@
 		anim.attributes = {width:{ to: pixelValue }}; 
 		anim.animate();
 	};
-	b[1][DIRECTION_RTL] =  b[1][DIRECTION_LTR];
-	b[1][DIRECTION_TTB] =  function(value, pixelValue, barEl, anim) {
+	b[1][DIRECTION_RTL] = b[1][DIRECTION_LTR]; 
+	b[1][DIRECTION_TTB] = function(value, pixelValue, barEl, anim) {
 		Dom.addClass(barEl,CLASS_ANIM);
 		this._tweenFactor = (value - this._previousValue) / anim.totalFrames  / anim.duration;
 		anim.attributes = {height:{to: pixelValue}};
 		anim.animate();
 	};
-	b[1][DIRECTION_BTT] =  b[1][DIRECTION_TTB];
+	b[1][DIRECTION_BTT] = b[1][DIRECTION_TTB]; 
 				
 })();
 

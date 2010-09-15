@@ -1,5 +1,8 @@
 TreeView - Release Notes
 
+2.8.1
+  * No change
+
 2.8.0
   * No new features were added
   * Fixed #2527720: TextNode with href didn't navigate to location

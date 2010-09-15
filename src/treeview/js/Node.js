@@ -1298,12 +1298,12 @@ YAHOO.widget.Node.prototype = {
 
         if (this.expanded) {defs.expanded = this.expanded; }
         if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
-        if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
+        if (this.renderHidden) { defs.renderHidden = this.renderHidden; }
         if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
         if (this.nowrap) { defs.nowrap = this.nowrap; }
         if (this.className) { defs.className = this.className; }
         if (this.editable) { defs.editable = this.editable; }
-        if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
+        if (!this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
         if (this.highlightState) { defs.highlightState = this.highlightState; }
         if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
         if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }

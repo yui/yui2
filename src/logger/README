@@ -1,7 +1,9 @@
 Logger Release Notes
 
+*** version 2.8.1 ***
 
-Development master
+* No changes.
+
 
 *** version 2.8.0 ***
 
@@ -12,6 +14,7 @@ Development master
 * General clean up and code reduction.
 * Fixed yui-log-container class not being applied when constructed with a
   render target.
+
 
 *** version 2.7.0 ***
 

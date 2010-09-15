@@ -1,5 +1,8 @@
 Animation Release Notes
 
+*** version 2.8.1 ***
+* no change
+
 *** version 2.8.0 ***
 * Re-enabled multiple animations (when starting from the same value)
 

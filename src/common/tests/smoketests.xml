@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<yuitest version="2">
+    <tests base="@TEST_ARTIFACTS_BASE@" timeout="120000">
+        <url>autocomplete/tests/autocomplete.html</url>
+        <url>calendar/tests/calendar.html</url>
+        <url>datasource/tests/datasource.html</url>
+        <!--
+           JS Error on Firefox (probably all browsers) 
+	   <url>datatable/tests/datatable.html</url>
+        -->
+    </tests>
+</yuitest>
