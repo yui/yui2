@@ -351,7 +351,7 @@ It creates and sets up or destroys the instance of the animation utility that wi
                                         <div class="description" property="yui:description">
                                             Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved.
 Also fixes: http://yuilibrary.com/projects/yui2/ticket/2528919.
-It also handles moving the background as per the accelerator configuration attribute
+It also handles moving the background as per the animAcceleration configuration attribute
 since it turned out to be the best place to handle it.
                                         </div>
 
@@ -369,7 +369,7 @@ since it turned out to be the best place to handle it.
                                                         <code><span property="yui:name">acc</span>
                                                         &lt;<span property="yui:type">number</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  Value of accelerator attribute</span>
+                                                        <span property="yui:description">  Value of animAcceleration attribute</span>
                                                         </dd>
                                                 </dl>
 
@@ -1066,15 +1066,15 @@ The method is chainable since it returns a reference to this instance.
                         <div class="section method details">
                             <h3 id="events">Events</h3>
                             <div class="content">
-                                    <div class="" rel="yui:event" resource="#event_acceleratorChange">
+                                    <div class="" rel="yui:event" resource="#event_animAccelerationChange">
                                     <h4>
-                                        <a name="event_acceleratorChange">acceleratorChange</a></h4>
+                                        <a name="event_animAccelerationChange">animAccelerationChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
                                         
                                         
-                                            <strong property="yui:name">acceleratorChange</strong>
+                                            <strong property="yui:name">animAccelerationChange</strong>
 
                                             (
                                                 
@@ -1087,7 +1087,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'accelerator' changes.
+                                            Fires when the value for the configuration attribute 'animAcceleration' changes.
                                         </div>
 
                                         <div class="description">
@@ -1242,15 +1242,15 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeAcceleratorChange">
+                                    <div class="" rel="yui:event" resource="#event_beforeAnimAccelerationChange">
                                     <h4>
-                                        <a name="event_beforeAcceleratorChange">beforeAcceleratorChange</a></h4>
+                                        <a name="event_beforeAnimAccelerationChange">beforeAnimAccelerationChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
                                         
                                         
-                                            <strong property="yui:name">beforeAcceleratorChange</strong>
+                                            <strong property="yui:name">beforeAnimAccelerationChange</strong>
 
                                             (
                                                 
@@ -1263,7 +1263,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'accelerator' changes. Return false to cancel the attribute change.
+                                            Fires before the value for the configuration attribute 'animAcceleration' changes. Return false to cancel the attribute change.
                                         </div>
 
                                         <div class="description">
@@ -2205,27 +2205,6 @@ If animation is not active, it will fire only once providing the end value
                         <div class="section field details">
                             <h3 id="configattributes">Configuration Attributes</h3>
                             <div class="content">
-                                    <div class="" rel="yui:attribute" resource="#config_accelerator">
-                                    <h4><a name="config_accelerator">accelerator</a>
-                                        <code>- <span property="yui:type">{number} or {null}</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            It accepts a number or null to cancel.  
-If a number, it is how fast the background image for the bar will move in the 
-opposite direction to the bar itself. null or 0 means the background won't move.
-Negative values will make the background move along the bar.
-Only valid with animation active and requires a suitable background image to make it evident.
-                                        </div>
-                                    </div>
- 
-     
-                                    <div class="default">
-                                        Default Value: null
-                                    </div>        
-
-                                    <hr />
-                                    </div>        
                                     <div class="" rel="yui:attribute" resource="#config_anim">
                                     <h4><a name="config_anim">anim</a>
                                         <code>- <span property="yui:type">{boolean} or {instance of YAHOO.util.Anim}</span></code>
@@ -2238,6 +2217,27 @@ If given an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a> it wi
 The <a href="YAHOO.util.Anim.html">animation</a> utility needs to be loaded.
 When read, it returns the instance of the animation utility in use or null if none.  
 It can be used to set the animation parameters such as easing methods or duration.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="" rel="yui:attribute" resource="#config_animAcceleration">
+                                    <h4><a name="config_animAcceleration">animAcceleration</a>
+                                        <code>- <span property="yui:type">{number} or {null}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            It accepts a number or null to cancel.  
+If a number, it is how fast the background image for the bar will move in the 
+opposite direction to the bar itself. null or 0 means the background won't move.
+Negative values will make the background move along the bar.
+Only valid with animation active and it requires a suitable background image to make it evident.
                                         </div>
                                     </div>
  
@@ -2536,11 +2536,11 @@ It will always be returned as a string including units.
                     <div id="eventsList" class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li class=""><a href="#event_acceleratorChange" title="acceleratorChange">acceleratorChange</a></li>
+                                <li class=""><a href="#event_animAccelerationChange" title="animAccelerationChange">animAccelerationChange</a></li>
                                 <li class=""><a href="#event_animChange" title="animChange">animChange</a></li>
                                 <li class=""><a href="#event_ariaTextTemplateChange" title="ariaTextTemplateChange">ariaTextTemplateChange</a></li>
                                 <li class=""><a href="#event_barElChange" title="barElChange">barElChange</a></li>
-                                <li class=""><a href="#event_beforeAcceleratorChange" title="beforeAcceleratorChange">beforeAcceleratorChange</a></li>
+                                <li class=""><a href="#event_beforeAnimAccelerationChange" title="beforeAnimAccelerationChange">beforeAnimAccelerationChange</a></li>
                                 <li class=""><a href="#event_beforeAnimChange" title="beforeAnimChange">beforeAnimChange</a></li>
                                 <li class=""><a href="#event_beforeAriaTextTemplateChange" title="beforeAriaTextTemplateChange">beforeAriaTextTemplateChange</a></li>
                                 <li class=""><a href="#event_beforeBarElChange" title="beforeBarElChange">beforeBarElChange</a></li>
@@ -2567,8 +2567,8 @@ It will always be returned as a string including units.
                     <div id="configList" class="module">
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
-                                <li class=""><a href="#config_accelerator" title="accelerator">accelerator</a></li>
                                 <li class=""><a href="#config_anim" title="anim">anim</a></li>
+                                <li class=""><a href="#config_animAcceleration" title="animAcceleration">animAcceleration</a></li>
                                 <li class=""><a href="#config_ariaTextTemplate" title="ariaTextTemplate">ariaTextTemplate</a></li>
                                 <li class=""><a href="#config_barEl" title="barEl">barEl</a></li>
                                 <li class=""><a href="#config_direction" title="direction">direction</a></li>
@@ -2591,7 +2591,7 @@ It will always be returned as a string including units.
 </div>
 <script type="text/javascript">
 
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "accelerator", "url": "YAHOO.widget.ProgressBar.html#config_accelerator", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "acceleratorChange", "url": "YAHOO.widget.ProgressBar.html#event_acceleratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animComplete", "url": "YAHOO.widget.ProgressBar.html#method__animComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAcceleratorChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAcceleratorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixAnim", "url": "YAHOO.widget.ProgressBar.html#method__fixAnim", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animAcceleration", "url": "YAHOO.widget.ProgressBar.html#config_animAcceleration", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animAccelerationChange", "url": "YAHOO.widget.ProgressBar.html#event_animAccelerationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animComplete", "url": "YAHOO.widget.ProgressBar.html#method__animComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimAccelerationChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimAccelerationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixAnim", "url": "YAHOO.widget.ProgressBar.html#method__fixAnim", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
 </script>
 </body>
 </html>
