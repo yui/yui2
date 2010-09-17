@@ -3563,6 +3563,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 				// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
                 editorData.editorPanel = ed = this.getEl().appendChild(document.createElement('div'));
                 Dom.addClass(ed,'ygtv-label-editor');
+				ed.tabIndex = 0;
 
                 buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
                 Dom.addClass(buttons,'ygtv-button-container');
@@ -3573,37 +3574,40 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 Dom.addClass(button,'ygtvcancel');
                 button.innerHTML = ' ';
                 Event.on(buttons, 'click', function (ev) {
-                    var target = Event.getTarget(ev);
-                    var node = TV.editorData.node;
+                    var target = Event.getTarget(ev),
+						editorData = TV.editorData,
+						node = editorData.node,
+						self = editorData.whoHasIt;
                     if (Dom.hasClass(target,'ygtvok')) {
                         Event.stopEvent(ev);
-                        this._closeEditor(true);
+                        self._closeEditor(true);
                     }
                     if (Dom.hasClass(target,'ygtvcancel')) {
                         Event.stopEvent(ev);
-                        this._closeEditor(false);
+                        self._closeEditor(false);
                     }
-                }, this, true);
+                });
 
                 editorData.inputContainer = ed.appendChild(document.createElement('div'));
                 Dom.addClass(editorData.inputContainer,'ygtv-input');
                 
                 Event.on(ed,'keydown',function (ev) {
                     var editorData = TV.editorData,
-                        KEY = YAHOO.util.KeyListener.KEY;
+                        KEY = YAHOO.util.KeyListener.KEY,
+						self = editorData.whoHasIt;
                     switch (ev.keyCode) {
                         case KEY.ENTER:
                             Event.stopEvent(ev);
                             if (editorData.saveOnEnter) { 
-                                this._closeEditor(true);
+                                self._closeEditor(true);
                             }
                             break;
                         case KEY.ESCAPE:
                             Event.stopEvent(ev);
-                            this._closeEditor(false);
+                            self._closeEditor(false);
                             break;
                     }
-                },this,true);
+                });
 
 
                 
@@ -3658,7 +3662,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		// http://yuilibrary.com/projects/yui2/ticket/2528946
 		// _closeEditor might now be called at any time, even when there is no label editor open
 		// so we need to ensure there is one.
-		if (!node) { return; }
+		if (!node || !ed.active) { return; }
         if (save) { 
             close = ed.node.saveEditorValue(ed) !== false; 
         } else {
