@@ -254,6 +254,8 @@ YAHOO.util.Connect =
     {
         if(typeof b == 'string'){
             this._default_post_header = b;
+			this._use_default_post_header = true;
+
         }
         else if(typeof b == 'boolean'){
             this._use_default_post_header = b;
@@ -406,7 +408,7 @@ YAHOO.util.Connect =
 
             if(this._isFormSubmit){
                 if(this._isFileUpload){
-                    YAHOO.env.ua.webkit ? window.setTimeout(function(){YCM.uploadFile(o, callback, uri, postData)}, 10) : this.uploadFile(o, callback, uri, postData);
+                    window.setTimeout(function(){YCM.uploadFile(o, callback, uri, postData);}, 10);
                     return o;
                 }
 
