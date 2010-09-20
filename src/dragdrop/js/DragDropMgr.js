@@ -827,8 +827,8 @@ YAHOO.util.DragDropMgr = function() {
                 // var button = e.which || e.button;
                 // YAHOO.log("which: " + e.which + ", button: "+ e.button);
 
-                // check for IE mouseup outside of page boundary
-                if (YAHOO.util.Event.isIE && !e.button) {
+                // check for IE < 9 mouseup outside of page boundary
+                if ((YAHOO.util.Event.isIE < 9) && !e.button) {
                     YAHOO.log("button failure", "info", "DragDropMgr");
                     this.stopEvent(e);
                     return this.handleMouseUp(e);

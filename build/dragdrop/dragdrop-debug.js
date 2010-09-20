@@ -827,8 +827,8 @@ YAHOO.util.DragDropMgr = function() {
                 // var button = e.which || e.button;
                 // YAHOO.log("which: " + e.which + ", button: "+ e.button);
 
-                // check for IE mouseup outside of page boundary
-                if (YAHOO.util.Event.isIE && !e.button) {
+                // check for IE < 9 mouseup outside of page boundary
+                if ((YAHOO.util.Event.isIE < 9) && !e.button) {
                     YAHOO.log("button failure", "info", "DragDropMgr");
                     this.stopEvent(e);
                     return this.handleMouseUp(e);
@@ -2985,6 +2985,7 @@ YAHOO.augment(YAHOO.util.DragDrop, YAHOO.util.EventProvider);
  * mouse cursor during a drag.
  * @class DD
  * @extends YAHOO.util.DragDrop
+ * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked element 
  * @param {String} sGroup the group of related DragDrop items
@@ -3361,6 +3362,7 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
  *
  * @class DDProxy
  * @extends YAHOO.util.DD
+ * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked html element
  * @param {String} sGroup the group of related DragDrop objects
@@ -3681,6 +3683,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
  * event listener and the callbacks.
  * @class DDTarget
  * @extends YAHOO.util.DragDrop 
+ * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the element that is a drop target
  * @param {String} sGroup the group of related DragDrop objects
