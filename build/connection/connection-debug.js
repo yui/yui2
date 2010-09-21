@@ -255,6 +255,8 @@ YAHOO.util.Connect =
     {
         if(typeof b == 'string'){
             this._default_post_header = b;
+			this._use_default_post_header = true;
+
             YAHOO.log('Default POST header set to  ' + b, 'info', 'Connection');
         }
         else if(typeof b == 'boolean'){
@@ -413,7 +415,7 @@ YAHOO.util.Connect =
 
             if(this._isFormSubmit){
                 if(this._isFileUpload){
-                    YAHOO.env.ua.webkit ? window.setTimeout(function(){YCM.uploadFile(o, callback, uri, postData)}, 10) : this.uploadFile(o, callback, uri, postData);
+                    window.setTimeout(function(){YCM.uploadFile(o, callback, uri, postData);}, 10);
                     return o;
                 }
 
@@ -1106,7 +1108,8 @@ YAHOO.util.Connect =
   */
 (function(){
 	var YCM = YAHOO.util.Connect,
-		YE = YAHOO.util.Event;
+		YE = YAHOO.util.Event,
+		dM = document.documentMode ? document.documentMode : false;
    /**
 	* @description Property modified by setForm() to determine if the data
 	* should be submitted as an HTML form.
@@ -1357,8 +1360,10 @@ YAHOO.util.Connect =
 		// properties via createElement().  A different iframe creation
 		// pattern is required for IE.
 		var frameId = 'yuiIO' + this._transaction_id,
+			ie9 = (dM === 9) ? true : false,
 			io;
-		if(YAHOO.env.ua.ie){
+
+		if(YAHOO.env.ua.ie && !ie9){
 			io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
 
 			// IE will throw a security exception in an SSL environment if the
@@ -1427,7 +1432,7 @@ YAHOO.util.Connect =
 		var frameId = 'yuiIO' + o.tId,
 		    uploadEncoding = 'multipart/form-data',
 		    io = document.getElementById(frameId),
-		    ie8 = (document.documentMode && document.documentMode === 8) ? true : false,
+		    ie8 = (dM >= 8) ? true : false,
 		    oConn = this,
 			args = (callback && callback.argument)?callback.argument:null,
             oElements,i,prop,obj, rawFormAttributes, uploadCallback;
