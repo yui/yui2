@@ -6821,9 +6821,11 @@ var Dom = YAHOO.util.Dom,
 
             //Convert b and i tags to strong and em tags
             if ((markup == 'semantic') || (markup == 'xhtml')) {
-                html = html.replace(/<i(\s+[^>]*)?>/gi, '<em$1>');
+                //html = html.replace(/<i(\s+[^>]*)?>/gi, "<em$1>");
+                html = html.replace(/<i([^>]*)>/gi, "<em$1>");
                 html = html.replace(/<\/i>/gi, '</em>');
-                html = html.replace(/<b(\s+[^>]*)?>/gi, '<strong$1>');
+                //html = html.replace(/<b(\s+[^>]*)?>/gi, "<strong$1>");
+                html = html.replace(/<b([^>]*)>/gi, "<strong$1>");
                 html = html.replace(/<\/b>/gi, '</strong>');
             }
 
