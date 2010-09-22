@@ -654,7 +654,6 @@ Element.prototype = {
     addListener: function(type, fn, obj, scope) {
 
         scope = scope || this;
-        this._events = this._events || {};
 
         var Event = YAHOO.util.Event,
 			el = this.get('element') || this.get('id'),
@@ -892,10 +891,8 @@ Element.prototype = {
     },
 
     set: function(key, value, silent) {
-        var dav = this;
         var el = this.get('element');
         if (!el) {
-            this._queue = this._queue || [];
             this._queue[this._queue.length] = ['set', arguments];
             if (this._configs[key]) {
                 this._configs[key].value = value; // so "get" works while queueing
