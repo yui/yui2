@@ -594,6 +594,16 @@ var XMLDocument = function(rootTagName, namespaceURL) {
 
         output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
         Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
+        output = YAHOO.util.Number.format(77.7, {decimalPlaces:-1});
+        Assert.areSame("80", output, "Incorrect decimal rounding: expected -1 places rounded up");
+
+        // Bug BZ4002772
+        output = YAHOO.util.Number.format(0.007, {decimalPlaces:2});
+        Assert.areSame("0.01", output, "Incorrect output for 0.007");
+        output = YAHOO.util.Number.format(0.0007, {decimalPlaces:3});
+        Assert.areSame("0.001", output, "Incorrect output for 0.0007");
+        output = YAHOO.util.Number.format(0.00007, {decimalPlaces:4});
+        Assert.areSame("0.0001", output, "Incorrect output for 0.00007");
 
         // Bug 2528567
         output = YAHOO.util.Number.format(new Number(1000), {thousandsSeparator:','});

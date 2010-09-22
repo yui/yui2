@@ -1940,7 +1940,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // forward the return value to the handler
     
     
-    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest, oCallback, oCaller);
+    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this, oCallback) : this.liveData(oRequest, oCallback);
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
@@ -2634,11 +2634,12 @@ lang.augmentObject(util.DataSource, DS);
         n   = +n;
         cfg = YAHOO.lang.merge(YAHOO.util.Number.format.defaults, (cfg || {}));
 
-        var absN   = Math.abs(n),
-            places = cfg.decimalPlaces,
+        var stringN = n+'',
+            absN   = Math.abs(n),
+            places = cfg.decimalPlaces || 0,
             sep    = cfg.thousandsSeparator,
             negFmt = cfg.negativeFormat || ('-' + cfg.format),
-            s, bits, i;
+            s, bits, i, precision;
 
         if (negFmt.indexOf('#') > -1) {
             // for backward compatibility of negativeFormat supporting '-#'
@@ -2663,7 +2664,13 @@ lang.augmentObject(util.DataSource, DS);
             // There is a bug in IE's toFixed implementation:
             // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
             // instead of -1 and 1. Manually handle that case.
-            s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
+            if(absN === 0 || absN >= 1) {
+                s = absN.toFixed(places);
+            }
+            else {
+                precision = (Math.pow(10,stringN.length-stringN.indexOf('.')-2));
+                s = Math.round(absN * precision)/precision+'';
+            }
         }
 
         bits  = s.split(/\D/);
