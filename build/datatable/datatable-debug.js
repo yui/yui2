@@ -5587,7 +5587,16 @@ _updateTrEl : function(elTr, oRecord) {
         elTr.style.display = '';
     }
     
-    elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
+     // Record-to-TR association and tracking of FIRST/LAST
+    var oldId = elTr.id,
+        newId = oRecord.getId();
+    if(this._sFirstTrId === oldId) {
+        this._sFirstTrId = newId;
+    }
+    if(this._sLastTrId === oldId) {
+        this._sLastTrId = newId;
+    }
+    elTr.id = newId;
     return elTr;
 },
 
@@ -9383,7 +9392,7 @@ updateRows : function(startrow, aData) {
                     // Update the TR elements
                     var loopN = this.get("renderLoopSize"),
                         rowCount = aData.length, // how many needed
-                        lastRowIndex = this._elTbody.rows.length,
+                        lastRowIndex = oRecordSet.getLength()-1,//this._elTbody.rows.length,
                         isLast = (lastIndex >= lastRowIndex),
                         isAdding = (lastIndex > lastRowIndex);
                                            
