@@ -346,7 +346,7 @@
         if (!el) {
             return 0;
         }
-        
+
         function getStyleIntVal(el, style) {
             var val;
 
@@ -451,7 +451,7 @@
         if (carousel._itemAttrCache[which]) {
             return carousel._itemAttrCache[which];
         }
-        
+
         if (carousel._itemsTable.numItems === 0) {
             return 0;
         }
@@ -979,7 +979,7 @@
          * @private
          */
         _hasFocus: false,
-        
+
         /**
          * Is the Carousel rendered already?
          *
@@ -1460,8 +1460,9 @@
                 return false;
             }
 
-            className = carousel.CLASSES.ITEM + (item.className ? " " + item.className : "");
-            elId      = item.id ? item.id : Dom.generateId();
+            className = carousel.CLASSES.ITEM +
+                    (item.className ? " " + item.className : "");
+            elId = item.id ? item.id : Dom.generateId();
 
             if (JS.isUndefined(index)) {
                 carousel._itemsTable.items.push({
@@ -1470,14 +1471,14 @@
                         id        : elId
                 });
                 // Add newIndex as workaround for undefined pos
-                newIndex = carousel._itemsTable.items.length-1;
+                newIndex = carousel._itemsTable.items.length - 1;
             } else {
                 if (index < 0 || index > numItems) {
                     return false;
                 }
 
                 // make sure we splice into the correct position
-                if(!carousel._itemsTable.items[index]){
+                if (!carousel._itemsTable.items[index]) {
                     carousel._itemsTable.items[index] = undefined;
                     replaceItems = 1;
                 }
@@ -1495,7 +1496,8 @@
             }
 
             // Add newPos as workaround for undefined pos
-            carousel.fireEvent(itemAddedEvent, { pos: index, ev: itemAddedEvent, newPos:newIndex });
+            carousel.fireEvent(itemAddedEvent,
+                    { pos: index, ev: itemAddedEvent, newPos: newIndex });
 
             return true;
         },
@@ -1525,7 +1527,7 @@
                 }
             }
             syncUiOnItemInsert = true;
-            
+
             this._syncUiItems();
 
             return rv;
@@ -3789,16 +3791,17 @@
                 sibling,
                 styles;
 
-            pos = posUndefined ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
-                item = itemsTable.items[pos] || {};
-            
-                el = carousel._createCarouselItem({
-                        className : item.className,
+            pos = posUndefined ?
+                      obj.newPos || itemsTable.numItems - 1 : obj.pos;
+            item = itemsTable.items[pos] || {};
+
+            el = carousel._createCarouselItem({
+                    className : item.className,
                     styles    : {},
-                        content   : item.item,
+                    content   : item.item,
                     id        : item.id
-                });
-            
+            });
+
             if (!oel) {
                 if (posUndefined) {
                     oel = itemsTable.loading[pos] || {};
@@ -3807,15 +3810,12 @@
                         oel.styles = item.styles;
                         oel.innerHTML = item.item;
 
-                        itemsTable.items[pos] = el;
-
                         if (itemsTable.loading[pos]) {
                             itemsTable.numItems++;
-                        delete itemsTable.loading[pos];
+                            delete itemsTable.loading[pos];
                         }
                     } else {
                         carouselEl.appendChild(el);
-                        itemsTable.items[pos] = el;
                     }
                 } else {
                     if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
@@ -3829,7 +3829,7 @@
             } else {
                 oel = Dom.get(oel.id);
                 if (Dom.isAncestor(carouselEl, oel)) {
-                    carouselEl.insertBefore(el,oel);
+                    carouselEl.insertBefore(el, oel);
                 }
             }
 
@@ -3871,9 +3871,9 @@
                 oel.className = item.className;
                 oel.styles = item.styles;
                 oel.innerHTML = item.item;
-                
+
                 itemsTable.items[pos] = el;
-                
+
                 if (itemsTable.loading[pos]) {
                     itemsTable.numItems++;
                     delete itemsTable.loading[pos];
@@ -3933,7 +3933,7 @@
             while (j<len && !sibling) {
                 sibling = itemsTable.items[++j];
             }
-            
+
             return sibling;
         },
 
@@ -4007,16 +4007,16 @@
 
             for (i = 0; i < numItems; i++) {
                 item = items[i] || loading[i];
-                
+
                 if (item && item.id) {
                     styles = getCarouselItemPosition.call(carousel, i);
                     item.styles = item.styles || {};
-                    
+
                     for (attr in styles) {
                         if(item.styles[attr] !== styles[attr])
                         {
                             updateStyles = true;
-                            item.styles[attr] = styles[attr];                            
+                            item.styles[attr] = styles[attr];
                         }
                     }
                     if(updateStyles)
