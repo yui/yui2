@@ -3246,14 +3246,16 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
  * for dynamic nodes.
  * (deprecated; use oData.hasIcon) 
  */
-YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
+var HN =  function(oData, oParent, expanded, hasIcon) {
     if (oData) { 
         this.init(oData, oParent, expanded);
         this.initContent(oData, hasIcon);
     }
 };
 
-YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
+
+YAHOO.widget.HTMLNode = HN;
+YAHOO.extend(HN, YAHOO.widget.Node, {
 
     /**
      * The CSS class for the html content container.  Defaults to ygtvhtml, but 
@@ -3298,22 +3300,42 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     /**
      * Synchronizes the node.html, and the node's content
      * @property setHtml
-     * @param o {object} An html string or object containing an html property
+     * @param o {object |string | HTMLElement } An html string, an object containing an html property or an HTML element
      */
     setHtml: function(o) {
-
-        this.html = (typeof o === "string") ? o : o.html;
+		this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
 
         var el = this.getContentEl();
         if (el) {
-            el.innerHTML = this.html;
+			if (o.nodeType && o.nodeType == 1 && o.tagName) {
+				el.innerHTML = "";
+			} else {
+				el.innerHTML = this.html;
+			}
         }
 
     },
 
     // overrides YAHOO.widget.Node
+	// If property html is a string, it sets the innerHTML for the node
+	// If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
     getContentHtml: function() { 
-        return this.html;
+		if (typeof this.html === "string") {
+			return this.html;
+		} else {
+			
+			HN._deferredNodes.push(this);
+			if (!HN._timer) {
+				HN._timer = window.setTimeout(function () {
+					var n;
+					while((n = HN._deferredNodes.pop())) {
+						n.getContentEl().appendChild(n.html);
+					}
+					HN._timer = null;
+				},0);
+			}
+			return "";			
+		}
     },
     
       /**
@@ -3324,13 +3346,33 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
      */
     getNodeDefinition: function() {
-        var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
+        var def = HN.superclass.getNodeDefinition.call(this);
         if (def === false) { return false; }
         def.html = this.html;
         return def;
     
     }
 });
+
+    /**
+    * An array of HTMLNodes created with HTML Elements that had their rendering
+	* deferred until the basic tree structure is rendered.
+    * @property _deferredNodes
+    * @type YAHOO.widget.HTMLNode[]
+    * @default []
+    * @private
+	* @static
+    */	
+HN._deferredNodes = [];
+    /**
+    * A system timer value used to mark whether a deferred operation is pending.
+    * @property _timer
+    * @type System Timer
+    * @default null
+    * @private
+	* @static
+    */	
+HN._timer = null;
 })();
 
 (function () {
@@ -3583,6 +3625,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 				// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
                 editorData.editorPanel = ed = this.getEl().appendChild(document.createElement('div'));
                 Dom.addClass(ed,'ygtv-label-editor');
+				ed.tabIndex = 0;
 
                 buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
                 Dom.addClass(buttons,'ygtv-button-container');
@@ -3593,42 +3636,45 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 Dom.addClass(button,'ygtvcancel');
                 button.innerHTML = ' ';
                 Event.on(buttons, 'click', function (ev) {
-                    this.logger.log('click on editor');
-                    var target = Event.getTarget(ev);
-                    var node = TV.editorData.node;
+                    var target = Event.getTarget(ev),
+						editorData = TV.editorData,
+						node = editorData.node,
+						self = editorData.whoHasIt;
+                    self.logger.log('click on editor');
                     if (Dom.hasClass(target,'ygtvok')) {
                         node.logger.log('ygtvok');
                         Event.stopEvent(ev);
-                        this._closeEditor(true);
+                        self._closeEditor(true);
                     }
                     if (Dom.hasClass(target,'ygtvcancel')) {
                         node.logger.log('ygtvcancel');
                         Event.stopEvent(ev);
-                        this._closeEditor(false);
+                        self._closeEditor(false);
                     }
-                }, this, true);
+                });
 
                 editorData.inputContainer = ed.appendChild(document.createElement('div'));
                 Dom.addClass(editorData.inputContainer,'ygtv-input');
                 
                 Event.on(ed,'keydown',function (ev) {
                     var editorData = TV.editorData,
-                        KEY = YAHOO.util.KeyListener.KEY;
+                        KEY = YAHOO.util.KeyListener.KEY,
+						self = editorData.whoHasIt;
                     switch (ev.keyCode) {
                         case KEY.ENTER:
-                            this.logger.log('ENTER');
+                            self.logger.log('ENTER');
                             Event.stopEvent(ev);
                             if (editorData.saveOnEnter) { 
-                                this._closeEditor(true);
+                                self._closeEditor(true);
                             }
                             break;
                         case KEY.ESCAPE:
-                            this.logger.log('ESC');
+                            self.logger.log('ESC');
                             Event.stopEvent(ev);
-                            this._closeEditor(false);
+                            self._closeEditor(false);
                             break;
                     }
-                },this,true);
+                });
 
 
                 
@@ -3683,7 +3729,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		// http://yuilibrary.com/projects/yui2/ticket/2528946
 		// _closeEditor might now be called at any time, even when there is no label editor open
 		// so we need to ensure there is one.
-		if (!node) { return; }
+		if (!node || !ed.active) { return; }
         if (save) { 
             close = ed.node.saveEditorValue(ed) !== false; 
         } else {
