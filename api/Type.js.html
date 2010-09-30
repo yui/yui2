@@ -107,11 +107,12 @@
         <span class="nx">n</span>   <span class="o">=</span> <span class="o">+</span><span class="nx">n</span><span class="p">;</span>
         <span class="nx">cfg</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nb">Number</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="p">(</span><span class="nx">cfg</span> <span class="o">||</span> <span class="p">{}));</span>
 
-        <span class="kd">var</span> <span class="nx">absN</span>   <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">n</span><span class="p">),</span>
-            <span class="nx">places</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalPlaces</span><span class="p">,</span>
+        <span class="kd">var</span> <span class="nx">stringN</span> <span class="o">=</span> <span class="nx">n</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="nx">absN</span>   <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">n</span><span class="p">),</span>
+            <span class="nx">places</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalPlaces</span> <span class="o">||</span> <span class="mi">0</span><span class="p">,</span>
             <span class="nx">sep</span>    <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">thousandsSeparator</span><span class="p">,</span>
             <span class="nx">negFmt</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span> <span class="o">||</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">),</span>
-            <span class="nx">s</span><span class="p">,</span> <span class="nx">bits</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+            <span class="nx">s</span><span class="p">,</span> <span class="nx">bits</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">precision</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">negFmt</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// for backward compatibility of negativeFormat supporting &#39;-#&#39;</span>
@@ -136,7 +137,13 @@
             <span class="c1">// There is a bug in IE&#39;s toFixed implementation:</span>
             <span class="c1">// for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0</span>
             <span class="c1">// instead of -1 and 1. Manually handle that case.</span>
-            <span class="nx">s</span> <span class="o">=</span> <span class="nx">absN</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">absN</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">places</span> <span class="o">?</span> <span class="s1">&#39;1&#39;</span> <span class="o">:</span> <span class="nx">absN</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="nx">places</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">absN</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">absN</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">s</span> <span class="o">=</span> <span class="nx">absN</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="nx">places</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">precision</span> <span class="o">=</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nx">stringN</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">stringN</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">));</span>
+                <span class="nx">s</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">absN</span> <span class="o">*</span> <span class="nx">precision</span><span class="p">)</span><span class="o">/</span><span class="nx">precision</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="nx">bits</span>  <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\D/</span><span class="p">);</span>

@@ -396,7 +396,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
         <span class="p">}</span>
-        
+
         <span class="kd">function</span> <span class="nx">getStyleIntVal</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">val</span><span class="p">;</span>
 
@@ -501,7 +501,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemAttrCache</span><span class="p">[</span><span class="nx">which</span><span class="p">])</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemAttrCache</span><span class="p">[</span><span class="nx">which</span><span class="p">];</span>
         <span class="p">}</span>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">numItems</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
         <span class="p">}</span>
@@ -1029,7 +1029,7 @@
 <span class="cm">         * @private</span>
 <span class="cm">         */</span>
         <span class="nx">_hasFocus</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-        
+
         <span class="cm">/**</span>
 <span class="cm">         * Is the Carousel rendered already?</span>
 <span class="cm">         *</span>
@@ -1511,8 +1511,9 @@
                 <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="nx">className</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">CLASSES</span><span class="p">.</span><span class="nx">ITEM</span> <span class="o">+</span> <span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">item</span><span class="p">.</span><span class="nx">className</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
-            <span class="nx">elId</span>      <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span> <span class="o">?</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">generateId</span><span class="p">();</span>
+            <span class="nx">className</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">CLASSES</span><span class="p">.</span><span class="nx">ITEM</span> <span class="o">+</span>
+                    <span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">item</span><span class="p">.</span><span class="nx">className</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
+            <span class="nx">elId</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span> <span class="o">?</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">generateId</span><span class="p">();</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">JS</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
                 <span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
@@ -1521,7 +1522,7 @@
                         <span class="nx">id</span>        <span class="o">:</span> <span class="nx">elId</span>
                 <span class="p">});</span>
                 <span class="c1">// Add newIndex as workaround for undefined pos</span>
-                <span class="nx">newIndex</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="nx">newIndex</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">index</span> <span class="o">&gt;</span> <span class="nx">numItems</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Index out of bounds&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">WidgetName</span><span class="p">);</span>
@@ -1529,7 +1530,7 @@
                 <span class="p">}</span>
 
                 <span class="c1">// make sure we splice into the correct position</span>
-                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">index</span><span class="p">]){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span> <span class="p">{</span>
                     <span class="nx">carousel</span><span class="p">.</span><span class="nx">_itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
                     <span class="nx">replaceItems</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
                 <span class="p">}</span>
@@ -1547,7 +1548,8 @@
             <span class="p">}</span>
 
             <span class="c1">// Add newPos as workaround for undefined pos</span>
-            <span class="nx">carousel</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="nx">itemAddedEvent</span><span class="p">,</span> <span class="p">{</span> <span class="nx">pos</span><span class="o">:</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">ev</span><span class="o">:</span> <span class="nx">itemAddedEvent</span><span class="p">,</span> <span class="nx">newPos</span><span class="o">:</span><span class="nx">newIndex</span> <span class="p">});</span>
+            <span class="nx">carousel</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="nx">itemAddedEvent</span><span class="p">,</span>
+                    <span class="p">{</span> <span class="nx">pos</span><span class="o">:</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">ev</span><span class="o">:</span> <span class="nx">itemAddedEvent</span><span class="p">,</span> <span class="nx">newPos</span><span class="o">:</span> <span class="nx">newIndex</span> <span class="p">});</span>
 
             <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">},</span>
@@ -1577,7 +1579,7 @@
                 <span class="p">}</span>
             <span class="p">}</span>
             <span class="nx">syncUiOnItemInsert</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            
+
             <span class="k">this</span><span class="p">.</span><span class="nx">_syncUiItems</span><span class="p">();</span>
 
             <span class="k">return</span> <span class="nx">rv</span><span class="p">;</span>
@@ -3871,16 +3873,17 @@
                 <span class="nx">sibling</span><span class="p">,</span>
                 <span class="nx">styles</span><span class="p">;</span>
 
-            <span class="nx">pos</span> <span class="o">=</span> <span class="nx">posUndefined</span> <span class="o">?</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">newPos</span> <span class="o">||</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">numItems</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">pos</span><span class="p">;</span>
-                <span class="nx">item</span> <span class="o">=</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">||</span> <span class="p">{};</span>
-            
-                <span class="nx">el</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">_createCarouselItem</span><span class="p">({</span>
-                        <span class="nx">className</span> <span class="o">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">className</span><span class="p">,</span>
+            <span class="nx">pos</span> <span class="o">=</span> <span class="nx">posUndefined</span> <span class="o">?</span>
+                      <span class="nx">obj</span><span class="p">.</span><span class="nx">newPos</span> <span class="o">||</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">numItems</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">pos</span><span class="p">;</span>
+            <span class="nx">item</span> <span class="o">=</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">||</span> <span class="p">{};</span>
+
+            <span class="nx">el</span> <span class="o">=</span> <span class="nx">carousel</span><span class="p">.</span><span class="nx">_createCarouselItem</span><span class="p">({</span>
+                    <span class="nx">className</span> <span class="o">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">className</span><span class="p">,</span>
                     <span class="nx">styles</span>    <span class="o">:</span> <span class="p">{},</span>
-                        <span class="nx">content</span>   <span class="o">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">item</span><span class="p">,</span>
+                    <span class="nx">content</span>   <span class="o">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">item</span><span class="p">,</span>
                     <span class="nx">id</span>        <span class="o">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span>
-                <span class="p">});</span>
-            
+            <span class="p">});</span>
+
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">oel</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">posUndefined</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">oel</span> <span class="o">=</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">||</span> <span class="p">{};</span>
@@ -3889,15 +3892,12 @@
                         <span class="nx">oel</span><span class="p">.</span><span class="nx">styles</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span><span class="p">;</span>
                         <span class="nx">oel</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">item</span><span class="p">;</span>
 
-                        <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">;</span>
-
                         <span class="k">if</span> <span class="p">(</span><span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">])</span> <span class="p">{</span>
                             <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">numItems</span><span class="o">++</span><span class="p">;</span>
-                        <span class="k">delete</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">];</span>
+                            <span class="k">delete</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">];</span>
                         <span class="p">}</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="nx">carouselEl</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
-                        <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">;</span>
                     <span class="p">}</span>
                 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JS</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">obj</span><span class="p">.</span><span class="nx">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
@@ -3912,7 +3912,7 @@
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">oel</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">oel</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">isAncestor</span><span class="p">(</span><span class="nx">carouselEl</span><span class="p">,</span> <span class="nx">oel</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">carouselEl</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span><span class="nx">oel</span><span class="p">);</span>
+                    <span class="nx">carouselEl</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">oel</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
@@ -3954,9 +3954,9 @@
                 <span class="nx">oel</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
                 <span class="nx">oel</span><span class="p">.</span><span class="nx">styles</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span><span class="p">;</span>
                 <span class="nx">oel</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">item</span><span class="p">;</span>
-                
+
                 <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">;</span>
-                
+
                 <span class="k">if</span> <span class="p">(</span><span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">])</span> <span class="p">{</span>
                     <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">numItems</span><span class="o">++</span><span class="p">;</span>
                     <span class="k">delete</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">loading</span><span class="p">[</span><span class="nx">pos</span><span class="p">];</span>
@@ -4017,7 +4017,7 @@
             <span class="k">while</span> <span class="p">(</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">sibling</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">sibling</span> <span class="o">=</span> <span class="nx">itemsTable</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="o">++</span><span class="nx">j</span><span class="p">];</span>
             <span class="p">}</span>
-            
+
             <span class="k">return</span> <span class="nx">sibling</span><span class="p">;</span>
         <span class="p">},</span>
 
@@ -4093,16 +4093,16 @@
 
             <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">numItems</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">||</span> <span class="nx">loading</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-                
+
                 <span class="k">if</span> <span class="p">(</span><span class="nx">item</span> <span class="o">&amp;&amp;</span> <span class="nx">item</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">styles</span> <span class="o">=</span> <span class="nx">getCarouselItemPosition</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">carousel</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
                     <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span> <span class="o">||</span> <span class="p">{};</span>
-                    
+
                     <span class="k">for</span> <span class="p">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">styles</span><span class="p">)</span> <span class="p">{</span>
                         <span class="k">if</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">])</span>
                         <span class="p">{</span>
                             <span class="nx">updateStyles</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                            <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">];</span>                            
+                            <span class="nx">item</span><span class="p">.</span><span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">styles</span><span class="p">[</span><span class="nx">attr</span><span class="p">];</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                     <span class="k">if</span><span class="p">(</span><span class="nx">updateStyles</span><span class="p">)</span>

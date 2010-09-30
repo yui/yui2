@@ -234,7 +234,7 @@ if insert is called again.
                                             A filter to apply to result urls.  This filter will modify the default
 path for all modules.  The default path for the YUI library is the
 minified version of the files (e.g., event-min.js).  The filter property
-can be a predefined filter or a custom filter.  The valid predefined 
+can be a predefined filter or a custom filter.  The valid predefined
 filters are:
 <dl>
 <dt>DEBUG</dt>
@@ -243,11 +243,11 @@ This option will automatically include the logger widget</dd>
 <dt>RAW</dt>
 <dd>Selects the non-minified version of the library (e.g., event.js).
 </dl>
-You can also define a custom filter, which must be an object literal 
+You can also define a custom filter, which must be an object literal
 containing a search expression and a replace string:
 <pre>
-myFilter: &#123; 
-'searchExp': "-min\\.js", 
+myFilter: &#123;
+'searchExp': "-min\\.js",
 'replaceStr': "-debug.js"
 &#125;
 </pre>
@@ -327,7 +327,7 @@ they turn up in the dependency tree
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            Set when beginning to compute the dependency tree. 
+                                            Set when beginning to compute the dependency tree.
 Composed of what YAHOO reports to be loaded combined
 with what has been loaded by the tool
                                         </div>
@@ -344,7 +344,7 @@ with what has been loaded by the tool
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            Whether or not to load optional dependencies for 
+                                            Whether or not to load optional dependencies for
 the requested modules
                                         </div>
                                     </div>
@@ -454,7 +454,7 @@ skin: {
 // The default skin, which is automatically applied if not
 // overriden by a component-specific skin definition.
 // Change this in to apply a different skin globally
-defaultSkin: 'sam', 
+defaultSkin: 'sam',
 // This is combined with the loader base property to get
 // the default root directory for a skin. ex:
 // http://yui.yahooapis.com/2.3.0/build/assets/skins/sam/
@@ -522,10 +522,10 @@ a timeout occurs.
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            The name of the variable in a sandbox or script node 
+                                            The name of the variable in a sandbox or script node
 (for external script support in Safari 2.x and earlier)
-to reference when the load is complete.  If this variable 
-is not available in the specified scripts, the operation will 
+to reference when the load is complete.  If this variable
+is not available in the specified scripts, the operation will
 fail.
                                         </div>
                                     </div>
@@ -620,8 +620,8 @@ fail.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Inspects the required modules list looking for additional 
-dependencies.  Expands the required list to include all 
+                                            Inspects the required modules list looking for additional
+dependencies.  Expands the required list to include all
 required modules.  Called by calculate()
                                         </div>
 
@@ -918,7 +918,7 @@ method _url
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Add a new module to the component metadata.         
+                                            Add a new module to the component metadata.
 <dl>
 <dt>name:</dt>       <dd>required, the component name</dd>
 <dt>type:</dt>       <dd>required, the component type (js or css)</dd>
@@ -950,7 +950,7 @@ method _url
                                                     <code property="yui:return">
                                                             boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">true if the module was added, false if 
+                                                    <dd property="yui:returnInfo">true if the module was added, false if
 the object passed in did not provide all required attributes</dd>
                                                 </dl>
 
@@ -982,7 +982,7 @@ the object passed in did not provide all required attributes</dd>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Calculates the dependency tree, the result is stored in the sorted 
+                                            Calculates the dependency tree, the result is stored in the sorted
 property
                                         </div>
 
@@ -1032,7 +1032,7 @@ property
                                         
                                         <div class="description" property="yui:description">
                                             Returns the skin module name for the specified skin name.  If a
-module name is supplied, the returned skin module name is 
+module name is supplied, the returned skin module name is
 specific to the module passed in.
                                         </div>
 
@@ -1199,8 +1199,8 @@ in order to load the requested module
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            inserts the requested modules and their dependencies.  
-<code>type</code> can be "js" or "css".  Both script and 
+                                            inserts the requested modules and their dependencies.
+<code>type</code> can be "js" or "css".  Both script and
 css are inserted if type is not provided.
                                         </div>
 
@@ -1442,7 +1442,7 @@ module name if the string matches the pattern for skins.
                                                     <code property="yui:return">
                                                             skin: string, module: string
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">the parsed skin name 
+                                                    <dd property="yui:returnInfo">the parsed skin name
 and module name, or null if the supplied string does not match
 the skin pattern</dd>
                                                 </dl>

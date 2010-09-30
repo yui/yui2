@@ -54,7 +54,7 @@
 <span class="cm"> * and yahoo-dom-event.js), and will automatically use these when</span>
 <span class="cm"> * appropriate in order to minimize the number of http connections</span>
 <span class="cm"> * required to load all of the dependencies.</span>
-<span class="cm"> * </span>
+<span class="cm"> *</span>
 <span class="cm"> * @module yuiloader</span>
 <span class="cm"> * @namespace YAHOO.util</span>
 <span class="cm"> */</span>
@@ -70,7 +70,7 @@
     <span class="kd">var</span> <span class="nx">Y</span><span class="o">=</span><span class="nx">YAHOO</span><span class="p">,</span> <span class="nx">util</span><span class="o">=</span><span class="nx">Y</span><span class="p">.</span><span class="nx">util</span><span class="p">,</span> <span class="nx">lang</span><span class="o">=</span><span class="nx">Y</span><span class="p">.</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">env</span><span class="o">=</span><span class="nx">Y</span><span class="p">.</span><span class="nx">env</span><span class="p">,</span>
         <span class="nx">PROV</span> <span class="o">=</span> <span class="s2">&quot;_provides&quot;</span><span class="p">,</span> <span class="nx">SUPER</span> <span class="o">=</span> <span class="s2">&quot;_supersedes&quot;</span><span class="p">,</span>
         <span class="nx">REQ</span> <span class="o">=</span> <span class="s2">&quot;expanded&quot;</span><span class="p">,</span> <span class="nx">AFTER</span> <span class="o">=</span> <span class="s2">&quot;_after&quot;</span><span class="p">;</span>
- 
+
     <span class="kd">var</span> <span class="nx">YUI</span> <span class="o">=</span> <span class="p">{</span>
 
         <span class="nx">dupsAllowed</span><span class="o">:</span> <span class="p">{</span><span class="s1">&#39;yahoo&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
@@ -179,7 +179,7 @@
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="p">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;container/container-min.js&#39;</span><span class="p">,</span>
             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;dom&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">],</span>
-            <span class="c1">// button is also optional, but this creates a circular </span>
+            <span class="c1">// button is also optional, but this creates a circular</span>
             <span class="c1">// dependency when loadOptional is specified.  button</span>
             <span class="c1">// optionally includes menu, menu requires container.</span>
             <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="p">,</span> <span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="s1">&#39;connection&#39;</span><span class="p">],</span>
@@ -210,7 +210,7 @@
         <span class="s1">&#39;datatable&#39;</span><span class="o">:</span> <span class="p">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="p">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;datatable/datatable-min.js&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">,</span> <span class="s1">&#39;datasource&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">,</span> <span class="s1">&#39;datasource&#39;</span><span class="p">,</span> <span class="s1">&#39;event-delegate&#39;</span><span class="p">],</span>
             <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;calendar&#39;</span><span class="p">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="p">,</span> <span class="s1">&#39;paginator&#39;</span><span class="p">],</span>
             <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
         <span class="p">},</span>
@@ -329,7 +329,7 @@
              <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">],</span>
              <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="p">,</span> <span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="s1">&#39;selector&#39;</span><span class="p">],</span>
              <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
-         <span class="p">},</span> 
+         <span class="p">},</span>
 
         <span class="s1">&#39;logger&#39;</span><span class="o">:</span> <span class="p">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="p">,</span>
@@ -520,7 +520,7 @@
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
- <span class="p">,</span> 
+ <span class="p">,</span>
 
         <span class="nx">ObjectUtil</span><span class="o">:</span> <span class="p">{</span>
             <span class="nx">appendArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
@@ -660,11 +660,11 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
         <span class="cm">/**</span>
-<span class="cm">         * The name of the variable in a sandbox or script node </span>
+<span class="cm">         * The name of the variable in a sandbox or script node</span>
 <span class="cm">         * (for external script support in Safari 2.x and earlier)</span>
-<span class="cm">         * to reference when the load is complete.  If this variable </span>
-<span class="cm">         * is not available in the specified scripts, the operation will </span>
-<span class="cm">         * fail.  </span>
+<span class="cm">         * to reference when the load is complete.  If this variable</span>
+<span class="cm">         * is not available in the specified scripts, the operation will</span>
+<span class="cm">         * fail.</span>
 <span class="cm">         * @property varName</span>
 <span class="cm">         * @type string</span>
 <span class="cm">         */</span>
@@ -744,7 +744,7 @@
 <span class="cm">         * A filter to apply to result urls.  This filter will modify the default</span>
 <span class="cm">         * path for all modules.  The default path for the YUI library is the</span>
 <span class="cm">         * minified version of the files (e.g., event-min.js).  The filter property</span>
-<span class="cm">         * can be a predefined filter or a custom filter.  The valid predefined </span>
+<span class="cm">         * can be a predefined filter or a custom filter.  The valid predefined</span>
 <span class="cm">         * filters are:</span>
 <span class="cm">         * &lt;dl&gt;</span>
 <span class="cm">         *  &lt;dt&gt;DEBUG&lt;/dt&gt;</span>
@@ -753,11 +753,11 @@
 <span class="cm">         *  &lt;dt&gt;RAW&lt;/dt&gt;</span>
 <span class="cm">         *  &lt;dd&gt;Selects the non-minified version of the library (e.g., event.js).</span>
 <span class="cm">         * &lt;/dl&gt;</span>
-<span class="cm">         * You can also define a custom filter, which must be an object literal </span>
+<span class="cm">         * You can also define a custom filter, which must be an object literal</span>
 <span class="cm">         * containing a search expression and a replace string:</span>
 <span class="cm">         * &lt;pre&gt;</span>
-<span class="cm">         *  myFilter: &amp;#123; </span>
-<span class="cm">         *      &#39;searchExp&#39;: &quot;-min\\.js&quot;, </span>
+<span class="cm">         *  myFilter: &amp;#123;</span>
+<span class="cm">         *      &#39;searchExp&#39;: &quot;-min\\.js&quot;,</span>
 <span class="cm">         *      &#39;replaceStr&#39;: &quot;-debug.js&quot;</span>
 <span class="cm">         *  &amp;#125;</span>
 <span class="cm">         * &lt;/pre&gt;</span>
@@ -786,7 +786,7 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">rollups</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
         <span class="cm">/**</span>
-<span class="cm">         * Whether or not to load optional dependencies for </span>
+<span class="cm">         * Whether or not to load optional dependencies for</span>
 <span class="cm">         * the requested modules</span>
 <span class="cm">         * @property loadOptional</span>
 <span class="cm">         * @type boolean</span>
@@ -804,7 +804,7 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">sorted</span> <span class="o">=</span> <span class="p">[];</span>
 
         <span class="cm">/**</span>
-<span class="cm">         * Set when beginning to compute the dependency tree. </span>
+<span class="cm">         * Set when beginning to compute the dependency tree.</span>
 <span class="cm">         * Composed of what YAHOO reports to be loaded combined</span>
 <span class="cm">         * with what has been loaded by the tool</span>
 <span class="cm">         * @propery loaded</span>
@@ -840,7 +840,7 @@
 <span class="cm">         *      // The default skin, which is automatically applied if not</span>
 <span class="cm">         *      // overriden by a component-specific skin definition.</span>
 <span class="cm">         *      // Change this in to apply a different skin globally</span>
-<span class="cm">         *      defaultSkin: &#39;sam&#39;, </span>
+<span class="cm">         *      defaultSkin: &#39;sam&#39;,</span>
 <span class="cm">         *</span>
 <span class="cm">         *      // This is combined with the loader base property to get</span>
 <span class="cm">         *      // the default root directory for a skin. ex:</span>
@@ -876,7 +876,7 @@
             <span class="p">}</span>
         <span class="p">});</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">skin</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">YUI</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">skin</span><span class="p">);</span> 
+        <span class="k">this</span><span class="p">.</span><span class="nx">skin</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">YUI</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">skin</span><span class="p">);</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">_config</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span>
 
@@ -885,12 +885,12 @@
     <span class="nx">Y</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">YUILoader</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
 
         <span class="nx">FILTERS</span><span class="o">:</span> <span class="p">{</span>
-            <span class="nx">RAW</span><span class="o">:</span> <span class="p">{</span> 
-                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="p">,</span> 
+            <span class="nx">RAW</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="p">,</span>
                 <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;.js&quot;</span>
             <span class="p">},</span>
-            <span class="nx">DEBUG</span><span class="o">:</span> <span class="p">{</span> 
-                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="p">,</span> 
+            <span class="nx">DEBUG</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="p">,</span>
                 <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;-debug.js&quot;</span>
             <span class="p">}</span>
         <span class="p">},</span>
@@ -938,7 +938,7 @@
 
         <span class="p">},</span>
 
-        <span class="cm">/** Add a new module to the component metadata.         </span>
+        <span class="cm">/** Add a new module to the component metadata.</span>
 <span class="cm">         * &lt;dl&gt;</span>
 <span class="cm">         *     &lt;dt&gt;name:&lt;/dt&gt;       &lt;dd&gt;required, the component name&lt;/dd&gt;</span>
 <span class="cm">         *     &lt;dt&gt;type:&lt;/dt&gt;       &lt;dd&gt;required, the component type (js or css)&lt;/dd&gt;</span>
@@ -953,7 +953,7 @@
 <span class="cm">         * &lt;/dl&gt;</span>
 <span class="cm">         * @method addModule</span>
 <span class="cm">         * @param o An object containing the module data</span>
-<span class="cm">         * @return {boolean} true if the module was added, false if </span>
+<span class="cm">         * @return {boolean} true if the module was added, false if</span>
 <span class="cm">         * the object passed in did not provide all required attributes</span>
 <span class="cm">         */</span>
         <span class="nx">addModule</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
@@ -1092,11 +1092,11 @@
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">done</span><span class="p">[</span><span class="nx">mm</span><span class="p">])</span> <span class="p">{</span>
                     <span class="c1">// Y.log(name + &#39; provides worker trying: &#39; + mm);</span>
                     <span class="nx">done</span><span class="p">[</span><span class="nx">mm</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                    <span class="c1">// we always want the return value normal behavior </span>
+                    <span class="c1">// we always want the return value normal behavior</span>
                     <span class="c1">// (provides) for superseded modules.</span>
                     <span class="nx">lang</span><span class="p">.</span><span class="nx">augmentObject</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">me</span><span class="p">.</span><span class="nx">getProvides</span><span class="p">(</span><span class="nx">mm</span><span class="p">));</span>
-                <span class="p">}</span> 
-                
+                <span class="p">}</span>
+
                 <span class="c1">// else {</span>
                 <span class="c1">// Y.log(name + &#39; provides worker skipping done: &#39; + mm);</span>
                 <span class="c1">// }</span>
@@ -1123,7 +1123,7 @@
 
 
         <span class="cm">/**</span>
-<span class="cm">         * Calculates the dependency tree, the result is stored in the sorted </span>
+<span class="cm">         * Calculates the dependency tree, the result is stored in the sorted</span>
 <span class="cm">         * property</span>
 <span class="cm">         * @method calculate</span>
 <span class="cm">         * @param o optional options object</span>
@@ -1181,7 +1181,7 @@
             <span class="p">}</span>
 
             <span class="kd">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">inserted</span><span class="p">);</span> <span class="c1">// shallow clone</span>
-            
+
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_sandbox</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">l</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">env</span><span class="p">.</span><span class="nx">modules</span><span class="p">);</span>
             <span class="p">}</span>
@@ -1215,11 +1215,11 @@
             <span class="k">this</span><span class="p">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="nx">l</span><span class="p">;</span>
 
         <span class="p">},</span>
-        
+
 
         <span class="cm">/**</span>
-<span class="cm">         * Inspects the required modules list looking for additional </span>
-<span class="cm">         * dependencies.  Expands the required list to include all </span>
+<span class="cm">         * Inspects the required modules list looking for additional</span>
+<span class="cm">         * dependencies.  Expands the required list to include all</span>
 <span class="cm">         * required modules.  Called by calculate()</span>
 <span class="cm">         * @method _explode</span>
 <span class="cm">         * @private</span>
@@ -1248,12 +1248,12 @@
 <span class="cm">         * @private</span>
 <span class="cm">         * @deprecated</span>
 <span class="cm">         */</span>
-        <span class="nx">_skin</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+        <span class="nx">_skin</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="p">},</span>
 
         <span class="cm">/**</span>
 <span class="cm">         * Returns the skin module name for the specified skin name.  If a</span>
-<span class="cm">         * module name is supplied, the returned skin module name is </span>
+<span class="cm">         * module name is supplied, the returned skin module name is</span>
 <span class="cm">         * specific to the module passed in.</span>
 <span class="cm">         * @method formatSkin</span>
 <span class="cm">         * @param skin {string} the name of the skin</span>
@@ -1268,22 +1268,22 @@
 
             <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
         <span class="p">},</span>
-        
+
         <span class="cm">/**</span>
 <span class="cm">         * Reverses &lt;code&gt;formatSkin&lt;/code&gt;, providing the skin name and</span>
 <span class="cm">         * module name if the string matches the pattern for skins.</span>
 <span class="cm">         * @method parseSkin</span>
 <span class="cm">         * @param mod {string} the module name to parse</span>
-<span class="cm">         * @return {skin: string, module: string} the parsed skin name </span>
+<span class="cm">         * @return {skin: string, module: string} the parsed skin name</span>
 <span class="cm">         * and module name, or null if the supplied string does not match</span>
 <span class="cm">         * the skin pattern</span>
 <span class="cm">         */</span>
         <span class="nx">parseSkin</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mod</span><span class="p">)</span> <span class="p">{</span>
-            
+
             <span class="k">if</span> <span class="p">(</span><span class="nx">mod</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">SKIN_PREFIX</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                 <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">mod</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">);</span>
                 <span class="k">return</span> <span class="p">{</span><span class="nx">skin</span><span class="o">:</span> <span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">module</span><span class="o">:</span> <span class="nx">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
-            <span class="p">}</span> 
+            <span class="p">}</span>
 
             <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
         <span class="p">},</span>
@@ -1320,7 +1320,7 @@
                 <span class="kd">var</span> <span class="nx">rolled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
                 <span class="c1">// go through the rollup candidates</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">rollups</span><span class="p">)</span> <span class="p">{</span> 
+                <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">rollups</span><span class="p">)</span> <span class="p">{</span>
 
                     <span class="c1">// there can be only one</span>
                     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">r</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">loaded</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
@@ -1400,7 +1400,7 @@
             <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
 
                 <span class="c1">// remove if already loaded</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">loaded</span><span class="p">)</span> <span class="p">{</span> 
+                <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">loaded</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">delete</span> <span class="nx">r</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
 
                 <span class="c1">// remove anything this module supersedes</span>
@@ -1466,7 +1466,7 @@
                 <span class="p">});</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        
+
         <span class="cm">/**</span>
 <span class="cm">         * Sorts the dependency tree.  The last step of calculate()</span>
 <span class="cm">         * @method _sort</span>
@@ -1487,9 +1487,9 @@
                     <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
                 <span class="p">}</span>
 
-                <span class="kd">var</span> <span class="nx">ii</span><span class="p">,</span> 
-                    <span class="nx">rr</span> <span class="o">=</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">expanded</span><span class="p">,</span> 
-                    <span class="nx">after</span> <span class="o">=</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">after</span><span class="p">,</span> 
+                <span class="kd">var</span> <span class="nx">ii</span><span class="p">,</span>
+                    <span class="nx">rr</span> <span class="o">=</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">expanded</span><span class="p">,</span>
+                    <span class="nx">after</span> <span class="o">=</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">after</span><span class="p">,</span>
                     <span class="nx">other</span> <span class="o">=</span> <span class="nx">info</span><span class="p">[</span><span class="nx">bb</span><span class="p">],</span>
                     <span class="nx">optional</span> <span class="o">=</span> <span class="nx">mm</span><span class="p">.</span><span class="nx">optional</span><span class="p">;</span>
 
@@ -1537,11 +1537,11 @@
             <span class="p">}</span>
 
             <span class="c1">// pointer to the first unsorted item</span>
-            <span class="kd">var</span> <span class="nx">p</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> 
+            <span class="kd">var</span> <span class="nx">p</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 
             <span class="c1">// keep going until we make a pass without moving anything</span>
             <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
-               
+
                 <span class="kd">var</span> <span class="nx">l</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">moved</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
 
                 <span class="c1">// start the loop after items that are already sorted</span>
@@ -1559,7 +1559,7 @@
                             <span class="c1">// extract the dependency so we can move it up</span>
                             <span class="nx">b</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
-                            <span class="c1">// insert the dependency above the item that </span>
+                            <span class="c1">// insert the dependency above the item that</span>
                             <span class="c1">// requires it</span>
                             <span class="nx">s</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 
@@ -1577,7 +1577,7 @@
                     <span class="p">}</span>
                 <span class="p">}</span>
 
-                <span class="c1">// when we make it here and moved is false, we are </span>
+                <span class="c1">// when we make it here and moved is false, we are</span>
                 <span class="c1">// finished sorting</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">moved</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">break</span><span class="p">;</span>
@@ -1603,14 +1603,14 @@
 
         <span class="nx">_combine</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-                <span class="k">this</span><span class="p">.</span><span class="nx">_combining</span> <span class="o">=</span> <span class="p">[];</span> 
+                <span class="k">this</span><span class="p">.</span><span class="nx">_combining</span> <span class="o">=</span> <span class="p">[];</span>
 
                 <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
                     <span class="nx">s</span><span class="o">=</span><span class="k">this</span><span class="p">.</span><span class="nx">sorted</span><span class="p">,</span>
                     <span class="nx">len</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
                     <span class="nx">js</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">comboBase</span><span class="p">,</span>
                     <span class="nx">css</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">comboBase</span><span class="p">,</span>
-                    <span class="nx">target</span><span class="p">,</span> 
+                    <span class="nx">target</span><span class="p">,</span>
                     <span class="nx">startLen</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
                     <span class="nx">i</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">type</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">loadType</span><span class="p">;</span>
 
@@ -1653,8 +1653,8 @@
                         <span class="p">}</span>
 
                         <span class="k">this</span><span class="p">.</span><span class="nx">loadNext</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-                    <span class="p">},</span> 
-                    
+                    <span class="p">},</span>
+
                     <span class="nx">loadScript</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                         <span class="c1">// YAHOO.log(&#39;combining js: &#39; + js);</span>
                         <span class="k">if</span> <span class="p">(</span><span class="nx">js</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">startLen</span><span class="p">)</span> <span class="p">{</span>
@@ -1666,7 +1666,7 @@
                                 <span class="nx">insertBefore</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">,</span>
                                 <span class="nx">charset</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">charset</span><span class="p">,</span>
                                 <span class="nx">timeout</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">timeout</span><span class="p">,</span>
-                                <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span> 
+                                <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span>
                             <span class="p">});</span>
                         <span class="p">}</span>
                     <span class="p">};</span>
@@ -1682,7 +1682,7 @@
                             <span class="nx">insertBefore</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">,</span>
                             <span class="nx">charset</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">charset</span><span class="p">,</span>
                             <span class="nx">timeout</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">,</span>
-                            <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span> 
+                            <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span>
                         <span class="p">});</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="nx">loadScript</span><span class="p">();</span>
@@ -1694,11 +1694,11 @@
                     <span class="c1">// this._combineComplete = true;</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">loadNext</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_loading</span><span class="p">);</span>
                 <span class="p">}</span>
-        <span class="p">},</span> 
+        <span class="p">},</span>
 
         <span class="cm">/**</span>
-<span class="cm">         * inserts the requested modules and their dependencies.  </span>
-<span class="cm">         * &lt;code&gt;type&lt;/code&gt; can be &quot;js&quot; or &quot;css&quot;.  Both script and </span>
+<span class="cm">         * inserts the requested modules and their dependencies.</span>
+<span class="cm">         * &lt;code&gt;type&lt;/code&gt; can be &quot;js&quot; or &quot;css&quot;.  Both script and</span>
 <span class="cm">         * css are inserted if type is not provided.</span>
 <span class="cm">         * @method insert</span>
 <span class="cm">         * @param o optional options object</span>
@@ -1836,14 +1836,14 @@
                 <span class="kd">var</span> <span class="nx">xhrData</span> <span class="o">=</span> <span class="p">{</span>
 
                     <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
-                        
+
                         <span class="kd">var</span> <span class="nx">idx</span><span class="o">=</span><span class="nx">o</span><span class="p">.</span><span class="nx">argument</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">name</span><span class="o">=</span><span class="nx">o</span><span class="p">.</span><span class="nx">argument</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 
                         <span class="c1">// store the response in the position it was requested</span>
-                        <span class="k">this</span><span class="p">.</span><span class="nx">_scriptText</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span> 
-                        
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_scriptText</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+
                         <span class="c1">// YAHOO.log(&quot;received: &quot; + o.responseText.substr(0, 100) + &quot;, &quot; + idx);</span>
-                    
+
                         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onProgress</span><span class="p">)</span> <span class="p">{</span>
                             <span class="k">this</span><span class="p">.</span><span class="nx">onProgress</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">scope</span><span class="p">,</span> <span class="p">{</span>
                                         <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
@@ -1863,7 +1863,7 @@
 
                             <span class="c1">// wrap the contents of the requested modules in an anonymous function</span>
                             <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="s2">&quot;(function() {\n&quot;</span><span class="p">;</span>
-                        
+
                             <span class="c1">// return the locally scoped reference.</span>
                             <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="s2">&quot;\nreturn &quot;</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">+</span> <span class="s2">&quot;;\n})();&quot;</span><span class="p">;</span>
 
@@ -1984,7 +1984,7 @@
 
                     <span class="kd">var</span> <span class="nx">fn</span><span class="o">=</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;css&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">util</span><span class="p">.</span><span class="nx">Get</span><span class="p">.</span><span class="nx">css</span> <span class="o">:</span> <span class="nx">util</span><span class="p">.</span><span class="nx">Get</span><span class="p">.</span><span class="nx">script</span><span class="p">,</span>
                         <span class="nx">url</span> <span class="o">=</span> <span class="nx">m</span><span class="p">.</span><span class="nx">fullpath</span><span class="p">,</span>
-                        <span class="nx">self</span><span class="o">=</span><span class="k">this</span><span class="p">,</span> 
+                        <span class="nx">self</span><span class="o">=</span><span class="k">this</span><span class="p">,</span>
                         <span class="nx">c</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
                             <span class="nx">self</span><span class="p">.</span><span class="nx">loadNext</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
                         <span class="p">};</span>
@@ -1992,7 +1992,7 @@
                         <span class="nx">url</span> <span class="o">=</span> <span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">_filter</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_url</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">path</span><span class="p">);</span>
 
                     <span class="c1">// safari 2.x or lower, script, and part of YUI</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&lt;</span> <span class="mi">420</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;js&quot;</span> <span class="o">&amp;&amp;</span> 
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&lt;</span> <span class="mi">420</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;js&quot;</span> <span class="o">&amp;&amp;</span>
                           <span class="o">!</span><span class="nx">m</span><span class="p">.</span><span class="nx">varName</span><span class="p">)</span> <span class="p">{</span>
                           <span class="c1">//YUI.info.moduleInfo[s[i]]) {</span>
                           <span class="c1">//YAHOO.log(&quot;using YAHOO env &quot; + s[i] + &quot;, &quot; + m.varName);</span>
@@ -2009,7 +2009,7 @@
                         <span class="nx">charset</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">charset</span><span class="p">,</span>
                         <span class="nx">timeout</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">,</span>
                         <span class="nx">varName</span><span class="o">:</span> <span class="nx">m</span><span class="p">.</span><span class="nx">varName</span><span class="p">,</span>
-                        <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span> 
+                        <span class="nx">scope</span><span class="o">:</span> <span class="nx">self</span>
                     <span class="p">});</span>
 
                     <span class="k">return</span><span class="p">;</span>
