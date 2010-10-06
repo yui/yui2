@@ -994,6 +994,9 @@ YAHOO.widget.Column.prototype = {
         oDefinition.sortable = this.sortable;
         oDefinition.sortOptions = this.sortOptions;
         oDefinition.width = this.width;
+        
+        // Bug 2529147
+        oDefinition._calculatedWidth = this._calculatedWidth;
 
         return oDefinition;
     },

@@ -98,10 +98,9 @@
                     els.push(children[i]);
                 }
 
-                return ObjectAssert.propertiesAreEqual({ className: "",
-                                                         id: els[2].id,
-                                                         item: "Seven" },
-                                                       carousel.getItem(2));
+                return ObjectAssert.propertiesAreEqual({
+                        className: "", id: els[2].id, item: "Seven" },
+                        carousel.getItem(2));
             },
 
             testgetItems: function () {
@@ -117,13 +116,14 @@
                 }
 
                 for (i in children) {
-                    expected.push({ className: "", id: children[i].id,
-                                    item: children[i].innerHTML });
+                    if (children.hasOwnProperty(i)) {
+                        expected.push({ className: "yui-carousel-item",
+                            id: children[i].id, item: children[i].innerHTML });
+                    }
                 }
 
                 return ArrayAssert.itemsAreEquivalent(expected,
-                                                      carousel.getItems(),
-                                                      compareItems);
+                        carousel.getItems(), compareItems);
             },
 
             testgetItemPositionById: function () {

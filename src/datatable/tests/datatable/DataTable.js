@@ -671,6 +671,14 @@
 
             oData = dt._oRecordSet._records[0].getData();
             Assert.areSame(newData.a, oData.a, "Failed to update by TR el reference");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
 
         testUpdateInvalidRow: function() {
@@ -703,6 +711,14 @@
                 oTestData = oTestRecords[i].getData();
                 Assert.areNotSame(oData.a, oTestData.a, "Out of range Record "+i+"should not have updated");
             }
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
 
         testUpdateRows: function() {
@@ -722,6 +738,14 @@
             Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
             oData = dt._oRecordSet._records[4].getData();
             Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
 
         testUpdateInvalidRows: function() {
@@ -742,7 +766,15 @@
             for(i=0; i<oTestRecords.length; i++) {
                 oTestData = oTestRecords[i].getData();
                 Assert.areNotSame(newData[0].a, oTestData.a, "Out of range Record "+i+" should not have updated");
-            }            
+            }
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
 
         testUpdateRowsRenderLoopSize: function() {
@@ -762,6 +794,22 @@
             Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
             oData = dt._oRecordSet._records[4].getData();
             Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+            
+            dt.on("postRenderEvent", function() {
+                this.resume(function(){
+                    var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+                    Assert.areSame(1, aFirstRows.length, "Expected one first row");
+                    Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+                    var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+                    Assert.areSame(1, aLastRows.length, "Expected one last row");
+                    Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
+                });
+
+            }, this, true);
+
+
+            this.wait(1000);
         },
         
         testUpdateRowsPaginated: function() {
@@ -782,7 +830,36 @@
             Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
             oData = dt._oRecordSet._records[4].getData();
             Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
+
+        testUpdateAddRow: function() {
+            var dt = this.createInstance();
+            dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
+            dt.updateRow(0, {a:"5a",b:"5b",c:"5c"});
+            dt.addRow({a:"5a",b:"5b",c:"5c"}, 0);
+
+            var oTestRecord = dt._oRecordSet._records[0];
+            var elRow = dt.getFirstTrEl();
+            Assert.areSame(oTestRecord.getId(), elRow.id, "Unexpected DOM ID");
+            DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
+        },
+
 
         testDeleteRow: function() {
             //TODO: Test all the arg sigs of deleteRow() method
@@ -1108,6 +1185,14 @@
             nTrElsLength = dt.getTbodyEl().rows.length;
             Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
             Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
         
         testDeleteInvalidRows: function() {
@@ -1131,7 +1216,15 @@
             nRecordsLength = dt.getRecordSet().getLength();
             nTrElsLength = dt.getTbodyEl().rows.length;
             Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
-            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");        
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+
+            var aFirstRows = Dom.getElementsByClassName("yui-dt-first", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aFirstRows.length, "Expected one first row");
+            Assert.areSame(0, aFirstRows[0].sectionRowIndex, "Expected row in first position");
+
+            var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
+            Assert.areSame(1, aLastRows.length, "Expected one last row");
+            Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         }
     });
     var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);

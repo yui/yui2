@@ -4,9 +4,6 @@
         <url>autocomplete/tests/autocomplete.html</url>
         <url>calendar/tests/calendar.html</url>
         <url>datasource/tests/datasource.html</url>
-        <!--
-           JS Error on Firefox (probably all browsers) 
-	   <url>datatable/tests/datatable.html</url>
-        -->
+	    <url>datatable/tests/datatable.html</url>
     </tests>
 </yuitest>

@@ -3119,7 +3119,16 @@
         <span class="nx">elTr</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="p">}</span>
     
-    <span class="nx">elTr</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="p">.</span><span class="nx">getId</span><span class="p">();</span> <span class="c1">// Needed for Record association and tracking of FIRST/LAST</span>
+     <span class="c1">// Record-to-TR association and tracking of FIRST/LAST</span>
+    <span class="kd">var</span> <span class="nx">oldId</span> <span class="o">=</span> <span class="nx">elTr</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+        <span class="nx">newId</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="p">.</span><span class="nx">getId</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFirstTrId</span> <span class="o">===</span> <span class="nx">oldId</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_sFirstTrId</span> <span class="o">=</span> <span class="nx">newId</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sLastTrId</span> <span class="o">===</span> <span class="nx">oldId</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_sLastTrId</span> <span class="o">=</span> <span class="nx">newId</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">elTr</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">newId</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">elTr</span><span class="p">;</span>
 <span class="p">},</span>
 
@@ -6915,7 +6924,7 @@
                     <span class="c1">// Update the TR elements</span>
                     <span class="kd">var</span> <span class="nx">loopN</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;renderLoopSize&quot;</span><span class="p">),</span>
                         <span class="nx">rowCount</span> <span class="o">=</span> <span class="nx">aData</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="c1">// how many needed</span>
-                        <span class="nx">lastRowIndex</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_elTbody</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+                        <span class="nx">lastRowIndex</span> <span class="o">=</span> <span class="nx">oRecordSet</span><span class="p">.</span><span class="nx">getLength</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="c1">// DOM is unreliable source of truth</span>
                         <span class="nx">isLast</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lastIndex</span> <span class="o">&gt;=</span> <span class="nx">lastRowIndex</span><span class="p">),</span>
                         <span class="nx">isAdding</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lastIndex</span> <span class="o">&gt;</span> <span class="nx">lastRowIndex</span><span class="p">);</span>
                                            

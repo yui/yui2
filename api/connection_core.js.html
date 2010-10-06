@@ -304,6 +304,8 @@
     <span class="p">{</span>
         <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">_default_post_header</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_use_default_post_header</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
             <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Default POST header set to  &#39;</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">&#39;boolean&#39;</span><span class="p">){</span>
@@ -462,7 +464,7 @@
 
             <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_isFormSubmit</span><span class="p">){</span>
                 <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_isFileUpload</span><span class="p">){</span>
-                    <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">YCM</span><span class="p">.</span><span class="nx">uploadFile</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">uri</span><span class="p">,</span> <span class="nx">postData</span><span class="p">)},</span> <span class="mi">10</span><span class="p">)</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">uploadFile</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">uri</span><span class="p">,</span> <span class="nx">postData</span><span class="p">);</span>
+                    <span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">YCM</span><span class="p">.</span><span class="nx">uploadFile</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">uri</span><span class="p">,</span> <span class="nx">postData</span><span class="p">);},</span> <span class="mi">10</span><span class="p">);</span>
                     <span class="k">return</span> <span class="nx">o</span><span class="p">;</span>
                 <span class="p">}</span>
 
