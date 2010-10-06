@@ -5,15 +5,6 @@
 	var YCM = YAHOO.util.Connect,
 		YE = YAHOO.util.Event,
 		dM = document.documentMode ? document.documentMode : false;
-   /**
-	* @description Property modified by setForm() to determine if the data
-	* should be submitted as an HTML form.
-	* @property _isFormSubmit
-	* @private
-	* @static
-	* @type boolean
-	*/
-	YCM._isFormSubmit = false;
 
    /**
 	* @description Property modified by setForm() to determine if a file(s)

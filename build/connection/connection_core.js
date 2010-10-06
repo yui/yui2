@@ -115,6 +115,16 @@ YAHOO.util.Connect =
     _has_default_headers:true,
 
  /**
+   * @description Property modified by setForm() to determine if the data
+   * should be submitted as an HTML form.
+   * @property _isFormSubmit
+   * @private
+   * @static
+   * @type boolean
+   */
+	_isFormSubmit:false,
+
+ /**
   * @description Determines if custom, default headers
   * are set for each transaction.
   * @property _has_default_header
