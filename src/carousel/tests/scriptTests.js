@@ -150,7 +150,8 @@
                 }
 
                 for (i in children) {
-                    expected.push({ className: "", id: children[i].id,
+                    expected.push({ className: "yui-carousel-item",
+                                    id: children[i].id,
                                     item: children[i].innerHTML });
                 }
 
