@@ -2449,19 +2449,18 @@
          * @public
          */
         scrollPageBackward: function () {
-            var carousel = this,
-                isVertical = carousel.get("isVertical"),
-                cols       = carousel._cols,
-                item     = carousel._firstItem - carousel.get("numVisible");
+            var carousel     = this,
+                isVertical   = carousel.get("isVertical"),
+                cols         = carousel._cols,
+                firstVisible = carousel.get("firstVisible"),
+                item         = firstVisible - carousel.get("numVisible");
 
-            if (item < 0) { // only account for multi-row when scrolling backwards from item 0
+            if (item < 0) {
+                // Only account for multi-row when scrolling backwards from
+                // item 0
                 if (cols) {
-                    item = carousel._firstItem - cols;
+                    item = firstVisible - cols;
                 }
-            }
-
-            if (carousel.get("selectOnScroll")) {
-                carousel._selectedItem = carousel._getSelectedItem(item);
             }
 
             carousel.scrollTo(item);
@@ -2526,7 +2525,12 @@
 
             if (item < 0) {
                 if (isCircular) {
-                    item = numItems + item;
+                    // Normalize the offset so that it doesn't scroll to a
+                    // different index when number of items is not a factor of
+                    // the number of visible items
+                    if (numItems % numPerPage !== 0) {
+                        item = numItems + (numItems%numPerPage) - numPerPage-1;
+                    }
                 } else {
                     stopAutoScroll.call(carousel);
                     return;
@@ -2576,6 +2580,10 @@
 
             carousel._firstItem = item;
             carousel.set("firstVisible", item);
+
+            if (carousel.get("selectOnScroll")) {
+                carousel._selectedItem = item;
+            }
 
 
             sentinel  = item + numPerPage;
@@ -3562,18 +3570,29 @@
                 if(cols) {
                     size = size * cols;
                 }
-                Dom.setStyle(carousel._carouselEl, "width", size + "px");// Bug fix for vertical carousel (goes in conjunction with .yui-carousel-element {... 3200px removed from styles), and allows for multirows in IEs).
+                // Bug fix for vertical carousel (goes in conjunction with
+                // .yui-carousel-element {... 3200px removed from styles), and
+                // allows for multirows in IEs).
+                Dom.setStyle(carousel._carouselEl, "width", size + "px");
                 if (size < config.VERT_MIN_WIDTH) {
                     size = config.VERT_MIN_WIDTH;
-                    carousel.addClass(cssClass.MIN_WIDTH);// set a min width on vertical carousel, don't see why this shouldn't always be set...
+                    // set a min width on vertical carousel, don't see why this
+                    // shouldn't always be set...
+                    carousel.addClass(cssClass.MIN_WIDTH);
                 }
                 carousel.setStyle("width",  size + "px");
             } else {
-                if(rows) {
-                    size = getCarouselItemSize.call(carousel, "height");
+                /*
+                 * Fix for automatically computing the height and width in IE.
+                 * Many thanks to ErisDS for the fix.
+                 * For more information visit,
+                 * http://erisds.co.uk/code/yui2-javascript-carousel-an-update-about-version-2-8
+                 */
+                size = getCarouselItemSize.call(carousel, "height");
+                if (rows) {
                     size = size * rows;
-                    Dom.setStyle(carousel._carouselEl, "height", size + "px");
                 }
+                Dom.setStyle(carousel._carouselEl, "height", size + "px");
             }
         },
 
