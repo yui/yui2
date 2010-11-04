@@ -211,7 +211,69 @@ _initEvents : function() {
     this.createEvent("unblockEvent");
 },
 
+/**
+ * Initialize container element.
+ *
+ * @method _initContainerEl
+ * @private
+ */
+_initContainerEl : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
 
+    var elContainer = document.createElement("div");
+    elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
+    elContainer.style.display = "none";
+    elContainer.tabIndex = 0;
+    
+    this.className = lang.isArray(this.className) ? this.className : this.className ? [this.className] : [];
+    this.className[this.className.length] = DT.CLASS_EDITOR;
+    elContainer.className = this.className.join(" ");
+    
+    document.body.insertBefore(elContainer, document.body.firstChild);
+    this._elContainer = elContainer;
+},
+
+/**
+ * Initialize container shim element.
+ *
+ * @method _initShimEl
+ * @private
+ */
+_initShimEl : function() {
+    // Iframe shim
+    if(this.useIFrame) {
+        if(!this._elIFrame) {
+            var elIFrame = document.createElement("iframe");
+            elIFrame.src = "javascript:false";
+            elIFrame.frameBorder = 0;
+            elIFrame.scrolling = "no";
+            elIFrame.style.display = "none";
+            elIFrame.className = DT.CLASS_EDITOR_SHIM;
+            elIFrame.tabIndex = -1;
+            elIFrame.role = "presentation";
+            elIFrame.title = "Presentational iframe shim";
+            document.body.insertBefore(elIFrame, document.body.firstChild);
+            this._elIFrame = elIFrame;
+        }
+    }
+},
+
+/**
+ * Hides CellEditor UI at end of interaction.
+ *
+ * @method _hide
+ */
+_hide : function() {
+    this.getContainerEl().style.display = "none";
+    if(this._elIFrame) {
+        this._elIFrame.style.display = "none";
+    }
+    this.isActive = false;
+    this.getDataTable()._oCellEditor =  null;
+},
 
 
 
@@ -313,7 +375,22 @@ LABEL_CANCEL : "Cancel",
  */
 disableBtns : false,
 
+/**
+ * True if iframe shim for container element should be enabled.
+ *
+ * @property useIFrame
+ * @type Boolean
+ * @default false
+ */
+useIFrame : false,
 
+/**
+ * Custom CSS class or array of classes applied to the container element.
+ *
+ * @property className
+ * @type String || String[]
+ */
+className : null,
 
 
 
@@ -430,22 +507,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
-    if(this._elContainer) {
-        YAHOO.util.Event.purgeElement(this._elContainer, true);
-        this._elContainer.innerHTML = "";
-    }
+    this._initContainerEl();
+    this._initShimEl();
 
-    // Render Cell Editor container element as first child of body
-    var elContainer = document.createElement("div");
-    elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
-    elContainer.style.display = "none";
-    elContainer.tabIndex = 0;
-    elContainer.className = DT.CLASS_EDITOR;
-    document.body.insertBefore(elContainer, document.body.firstChild);
-    this._elContainer = elContainer;
-    
     // Handle ESC key
-    Ev.addListener(elContainer, "keydown", function(e, oSelf) {
+    Ev.addListener(this.getContainerEl(), "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             var target = Ev.getTarget(e);
@@ -457,9 +523,9 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
-    
+
     this.renderForm();
 
     // Show Save/Cancel buttons
@@ -563,6 +629,11 @@ move : function() {
 
     elContainer.style.left = x + "px";
     elContainer.style.top = y + "px";
+
+    if(this._elIFrame) {
+        this._elIFrame.style.left = x + "px";
+        this._elIFrame.style.top = y + "px";
+    }
 },
 
 /**
@@ -571,9 +642,16 @@ move : function() {
  * @method show
  */
 show : function() {
+    var elContainer = this.getContainerEl(),
+        elIFrame = this._elIFrame;
     this.resetForm();
     this.isActive = true;
-    this.getContainerEl().style.display = "";
+    elContainer.style.display = "";
+    if(elIFrame) {
+        elIFrame.style.width = elContainer.offsetWidth + "px";
+        elIFrame.style.height = elContainer.offsetHeight + "px";
+        elIFrame.style.display = "";
+    }
     this.focus();
     this.fireEvent("showEvent", {editor:this});
     YAHOO.log("CellEditor shown", "info", this.toString()); 
@@ -633,9 +711,7 @@ save : function() {
             oSelf.getDataTable().updateCell(oSelf.getRecord(), oSelf.getColumn(), oNewValue);
             
             // Hide CellEditor
-            oSelf.getContainerEl().style.display = "none";
-            oSelf.isActive = false;
-            oSelf.getDataTable()._oCellEditor =  null;
+            oSelf._hide();
             
             oSelf.fireEvent("saveEvent",
                     {editor:oSelf, oldData:oOrigValue, newData:oSelf.value});
@@ -667,9 +743,7 @@ save : function() {
  */
 cancel : function() {
     if(this.isActive) {
-        this.getContainerEl().style.display = "none";
-        this.isActive = false;
-        this.getDataTable()._oCellEditor =  null;
+        this._hide();
         this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
@@ -1061,6 +1135,9 @@ renderForm : function() {
                 calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
+        
+        // Bug 2528576
+        calendar.hideEvent.subscribe(function() {this.cancel();}, this, true);
 
         if(ua.ie) {
             var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
@@ -1099,9 +1176,11 @@ handleDisabledBtns : function() {
  */
 resetForm : function() {
     var value = this.value;
-    var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
-    this.calendar.cfg.setProperty("selected",selectedValue,false);
+    this.calendar.select(value);
+    this.calendar.cfg.setProperty("pagedate",value,false);
 	this.calendar.render();
+	// Bug 2528576
+	this.calendar.show();
 },
 
 /**

@@ -213,7 +213,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
- * @optional event-simulte
+ * @optional event-simulate
  */
 
 
@@ -278,7 +278,8 @@ YAHOO.tool.TestRunner = (function(){
             passed : 0,
             failed : 0,
             total : 0,
-            ignored : 0
+            ignored : 0,
+            duration: 0
         };
         
         //initialize results
@@ -332,7 +333,7 @@ YAHOO.tool.TestRunner = (function(){
          * @private
          * @static
          */
-        this.masterSuite = new YAHOO.tool.TestSuite("YUI Test Results");        
+        this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());        
 
         /**
          * Pointer to the current node in the test tree.
@@ -341,7 +342,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property _cur
          * @static
          */
-        this._cur = null;
+        this._cur = null;                
         
         /**
          * Pointer to the root node in the test tree.
@@ -450,7 +451,32 @@ YAHOO.tool.TestRunner = (function(){
          * Fires when the run() method is called.
          * @event begin
          */        
-        BEGIN_EVENT /*:String*/ : "begin",    
+        BEGIN_EVENT /*:String*/ : "begin",                
+        
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------   
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },        
+        
         
         //-------------------------------------------------------------------------
         // State-Related Methods
@@ -485,6 +511,52 @@ YAHOO.tool.TestRunner = (function(){
             } else {
                 return null;
             }
+        },
+
+        /**
+         * Returns the coverage report for the files that have been executed.
+         * This returns only coverage information for files that have been
+         * instrumented using YUI Test Coverage and only those that were run
+         * in the same pass.
+         * @param {Function} format (Optional) A coverage format to return results in.
+         * @return {Object|String} Either the coverage object or, if a coverage
+         *      format is specified, a string representing the results in that format.
+         * @method getCoverage
+         */
+        getCoverage: function(format){
+            if (!this._running && typeof _yuitest_coverage == "object"){
+                if (YAHOO.lang.isFunction(format)){
+                    return format(_yuitest_coverage);                    
+                } else {
+                    return _yuitest_coverage;
+                }
+            } else {
+                return null;
+            }            
+        },
+        
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
         },
 
         //-------------------------------------------------------------------------
@@ -550,7 +622,7 @@ YAHOO.tool.TestRunner = (function(){
         _buildTestTree : function () /*:Void*/ {
         
             this._root = new TestNode(this.masterSuite);
-            this._cur = this._root;
+            //this._cur = this._root;
             
             //iterate over the items in the master suite
             for (var i=0; i < this.masterSuite.items.length; i++){
@@ -586,8 +658,10 @@ YAHOO.tool.TestRunner = (function(){
             
                 if (node.testObject instanceof YAHOO.tool.TestSuite){
                     node.testObject.tearDown();
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: node.testObject, results: node.results});
                 } else if (node.testObject instanceof YAHOO.tool.TestCase){
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
                 }      
             } 
@@ -605,8 +679,10 @@ YAHOO.tool.TestRunner = (function(){
          * @method _next
          */
         _next : function () /*:TestNode*/ {
-        
-            if (this._cur.firstChild) {
+                
+            if (this._cur === null){
+                this._cur = this._root;
+            } else if (this._cur.firstChild) {
                 this._cur = this._cur.firstChild;
             } else if (this._cur.next) {
                 this._cur = this._cur.next;            
@@ -619,7 +695,7 @@ YAHOO.tool.TestRunner = (function(){
                 if (this._cur == this._root){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
-                    this._cur.results.duration = (new Date()) - this._cur.results.duration;
+                    this._cur.results.duration = (new Date()) - this._cur._start;                       
                     this._lastResults = this._cur.results;
                     this._running = false;
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._lastResults});
@@ -664,9 +740,11 @@ YAHOO.tool.TestRunner = (function(){
                 if (YAHOO.lang.isObject(testObject)){
                     if (testObject instanceof YAHOO.tool.TestSuite){
                         this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testObject });
+                        node._start = new Date();
                         testObject.setUp();
                     } else if (testObject instanceof YAHOO.tool.TestCase){
                         this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testObject });
+                        node._start = new Date();
                     }
                     
                     //some environments don't support setTimeout
@@ -791,13 +869,17 @@ YAHOO.tool.TestRunner = (function(){
             
             //run the tear down
             testCase.tearDown();
+        
+            //calculate duration
+            var duration = (new Date()) - node._start;            
             
             //update results
             node.parent.results[testName] = { 
                 result: failed ? "fail" : "pass",
                 message: error ? error.getMessage() : "Test passed",
                 type: "test",
-                name: testName
+                name: testName,
+                duration: duration
             };
             
             if (failed){
@@ -863,6 +945,9 @@ YAHOO.tool.TestRunner = (function(){
 
             } else {
             
+                //mark the start time
+                node._start = new Date();
+            
                 //run the setup
                 testCase.setUp();
                 
@@ -891,7 +976,7 @@ YAHOO.tool.TestRunner = (function(){
             data.type = type;
             TestRunner.superclass.fireEvent.call(this, type, data);
         },
-        
+
         //-------------------------------------------------------------------------
         // Public Methods
         //-------------------------------------------------------------------------   
@@ -914,7 +999,7 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         clear : function () /*:Void*/ {
-            this.masterSuite.items = [];
+            this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());
         },
         
         /**
@@ -931,21 +1016,28 @@ YAHOO.tool.TestRunner = (function(){
     
         /**
          * Runs the test suite.
+         * @param {Boolean} oldMode (Optional) Specifies that the <= 2.8 way of
+         *      internally managing test suites should be used.
          * @return {Void}
          * @method run
          * @static
          */
-        run : function (testObject /*:Object*/) /*:Void*/ {
+        run : function (oldMode) {
             
             //pointer to runner to avoid scope issues 
             var runner = YAHOO.tool.TestRunner;
+            
+            //if there's only one suite on the masterSuite, move it up
+            if (!oldMode && this.masterSuite.items.length == 1 && this.masterSuite.items[0] instanceof YAHOO.tool.TestSuite){
+                this.masterSuite = this.masterSuite.items[0];
+            }
 
             //build the test tree
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).getTime();
-            
+            runner._root._start = new Date();
+                            
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
        
@@ -2036,6 +2128,13 @@ YAHOO.util.DateAssert = {
         }
     }
     
+};
+
+/*Stub for future compatibility*/
+YUITest = {
+    TestRunner:     YAHOO.tool.TestRunner,
+    ResultsFormat:  YAHOO.tool.TestFormat,
+    CoverageFormat: YAHOO.tool.CoverageFormat
 };
 
 YAHOO.register("yuitest_core", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

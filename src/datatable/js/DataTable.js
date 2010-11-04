@@ -255,6 +255,17 @@ lang.augmentObject(DT, {
     CLASS_EDITOR : "yui-dt-editor",
 
     /**
+     * Class name assigned to CellEditor container shim.
+     *
+     * @property DataTable.CLASS_EDITOR_SHIM
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-editor-shim"
+     */
+    CLASS_EDITOR_SHIM : "yui-dt-editor-shim",
+
+    /**
      * Class name assigned to paginator container elements.
      *
      * @property DataTable.CLASS_PAGINATOR
@@ -609,26 +620,6 @@ lang.augmentObject(DT, {
      */
     _oDynStyles : {},
 
-    /**
-     * Element reference to shared Column drag target.
-     *
-     * @property DataTable._elColumnDragTarget
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnDragTarget : null,
-
-    /**
-     * Element reference to shared Column resizer proxy.
-     *
-     * @property DataTable._elColumnResizerProxy
-     * @type HTMLElement
-     * @private
-     * @static 
-     */
-    _elColumnResizerProxy : null,
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static methods
@@ -651,6 +642,9 @@ lang.augmentObject(DT, {
         var copy = {};
         
         if(o instanceof YAHOO.widget.BaseCellEditor) {
+            copy = o;
+        }
+        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
             copy = o;
         }
         else if(lang.isFunction(o)) {
@@ -680,85 +674,6 @@ lang.augmentObject(DT, {
         }
     
         return copy;
-    },
-
-    /**
-     * Destroys shared Column drag target.
-     *
-     * @method DataTable._destroyColumnDragTargetEl
-     * @private
-     * @static 
-     */
-    _destroyColumnDragTargetEl : function() {
-        if(DT._elColumnDragTarget) {
-            var el = DT._elColumnDragTarget;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnDragTarget = null;
-            
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column drag target.
-     *
-     * @method DataTable._initColumnDragTargetEl
-     * @return {HTMLElement} Reference to Column drag target. 
-     * @private
-     * @static 
-     */
-    _initColumnDragTargetEl : function() {
-        if(!DT._elColumnDragTarget) {
-            // Attach Column drag target element as first child of body
-            var elColumnDragTarget = document.createElement('div');
-            elColumnDragTarget.className = DT.CLASS_COLTARGET;
-            elColumnDragTarget.style.display = "none";
-            document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
-
-            // Internal tracker of Column drag target
-            DT._elColumnDragTarget = elColumnDragTarget;
-            
-        }
-        return DT._elColumnDragTarget;
-    },
-
-    /**
-     * Destroys shared Column resizer proxy.
-     *
-     * @method DataTable._destroyColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _destroyColumnResizerProxyEl : function() {
-        if(DT._elColumnResizerProxy) {
-            var el = DT._elColumnResizerProxy;
-            YAHOO.util.Event.purgeElement(el);
-            el.parentNode.removeChild(el);
-            DT._elColumnResizerProxy = null;
-        }
-    },
-
-    /**
-     * Creates HTML markup for shared Column resizer proxy.
-     *
-     * @method DataTable._initColumnResizerProxyEl
-     * @return {HTMLElement} Reference to Column resizer proxy.
-     * @private 
-     * @static 
-     */
-    _initColumnResizerProxyEl : function() {
-        if(!DT._elColumnResizerProxy) {
-            // Attach Column resizer element as first child of body
-            var elColumnResizerProxy = document.createElement("div");
-            elColumnResizerProxy.id = "yui-dt-colresizerproxy"; // Needed for ColumnResizer
-            elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
-            document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
-
-            // Internal tracker of Column resizer proxy
-            DT._elColumnResizerProxy = elColumnResizerProxy;
-        }
-        return DT._elColumnResizerProxy;
     },
 
     /**
@@ -908,6 +823,7 @@ lang.augmentObject(DT, {
      */
     formatEmail : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -927,6 +843,7 @@ lang.augmentObject(DT, {
      */
     formatLink : function(el, oRecord, oColumn, oData) {
         if(lang.isString(oData)) {
+            oData = oData.replace(/"/g, "&#34;");
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
         }
         else {
@@ -1491,7 +1408,7 @@ initAttributes : function(oConfigs) {
      
     /**
      * @attribute currencySymbol
-     * @deprecated
+     * @deprecated Use currencyOptions.
      */
     this.setAttributeConfig("currencySymbol", {
         value: "$",
@@ -1692,6 +1609,24 @@ _elMsgTr : null,
 _elMsgTd : null,
 
 /**
+ * Element reference to shared Column drag target.
+ *
+ * @property _elColumnDragTarget
+ * @type HTMLElement
+ * @private
+ */
+_elColumnDragTarget : null,
+
+/**
+ * Element reference to shared Column resizer proxy.
+ *
+ * @property _elColumnResizerProxy
+ * @type HTMLElement
+ * @private
+ */
+_elColumnResizerProxy : null,
+
+/**
  * DataSource instance for the DataTable instance.
  *
  * @property _oDataSource
@@ -1764,6 +1699,14 @@ _elTrTemplate : null,
  */
 _aDynFunctions : [],
 
+/**
+ * Disabled state.
+ *
+ * @property _disabled
+ * @type Boolean
+ * @private
+ */
+_disabled : false,
 
 
 
@@ -2181,7 +2124,15 @@ _initTableEl : function(elContainer) {
         if(this.get("caption")) {
             this._initCaptionEl(this.get("caption"));
         }
-    } 
+
+        // Set up mouseover/mouseout events via mouseenter/mouseleave delegation
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-data>tr>td", this);
+        Ev.delegate(this._elTable, "mouseenter", this._onTableMouseover, "tbody.yui-dt-message>tr>td", this);
+        Ev.delegate(this._elTable, "mouseleave", this._onTableMouseout, "tbody.yui-dt-message>tr>td", this);
+    }
 },
 
 /**
@@ -2323,11 +2274,12 @@ _initTheadEl : function(elTable) {
         // Set up DOM events for THEAD
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
-        Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elThead, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
+        
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
 
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
@@ -2445,7 +2397,7 @@ _initThEl : function(elTh, oColumn) {
 /**
  * Outputs markup into the given TH based on given Column.
  *
- * @method DataTable.formatTheadCell
+ * @method formatTheadCell
  * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
  * not the liner DIV element.     
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -2496,6 +2448,9 @@ _destroyDraggableColumns : function() {
             Dom.removeClass(oColumn.getThEl(), DT.CLASS_DRAGGABLE);       
         }
     }
+    
+    // Destroy column drag proxy
+    this._destroyColumnDragTargetEl();
 },
 
 /**
@@ -2512,13 +2467,51 @@ _initDraggableColumns : function() {
             oColumn = this._oColumnSet.tree[0][i];
             elTh = oColumn.getThEl();
             Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
-            elDragTarget = DT._initColumnDragTargetEl();
+            elDragTarget = this._initColumnDragTargetEl();
             oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
         }
     }
     else {
         YAHOO.log("Could not find DragDrop for draggable Columns", "warn", this.toString());
     }
+},
+
+/**
+ * Destroys shared Column drag target.
+ *
+ * @method _destroyColumnDragTargetEl
+ * @private
+ */
+_destroyColumnDragTargetEl : function() {
+    if(this._elColumnDragTarget) {
+        var el = this._elColumnDragTarget;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnDragTarget = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column drag target.
+ *
+ * @method _initColumnDragTargetEl
+ * @return {HTMLElement} Reference to Column drag target.
+ * @private
+ */
+_initColumnDragTargetEl : function() {
+    if(!this._elColumnDragTarget) {
+        // Attach Column drag target element as first child of body
+        var elColumnDragTarget = document.createElement('div');
+        elColumnDragTarget.id = this.getId() + "-coltarget";
+        elColumnDragTarget.className = DT.CLASS_COLTARGET;
+        elColumnDragTarget.style.display = "none";
+        document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
+
+        // Internal tracker of Column drag target
+        this._elColumnDragTarget = elColumnDragTarget;
+
+    }
+    return this._elColumnDragTarget;
 },
 
 /**
@@ -2535,6 +2528,9 @@ _destroyResizeableColumns : function() {
             Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
         }
     }
+
+    // Destroy resizer proxy
+    this._destroyColumnResizerProxyEl();
 },
 
 /**
@@ -2568,8 +2564,8 @@ _initResizeableColumns : function() {
                 elThResizer.className = DT.CLASS_RESIZER;
                 oColumn._elResizer = elThResizer;
 
-                // Create the resizer proxy, once globally
-                elResizerProxy = DT._initColumnResizerProxyEl();
+                // Create the resizer proxy, once per instance
+                elResizerProxy = this._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
                 cancelClick = function(e) {
@@ -2582,6 +2578,43 @@ _initResizeableColumns : function() {
     else {
         YAHOO.log("Could not find DragDrop for resizeable Columns", "warn", this.toString());
     }
+},
+
+/**
+ * Destroys shared Column resizer proxy.
+ *
+ * @method _destroyColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_destroyColumnResizerProxyEl : function() {
+    if(this._elColumnResizerProxy) {
+        var el = this._elColumnResizerProxy;
+        YAHOO.util.Event.purgeElement(el);
+        el.parentNode.removeChild(el);
+        this._elColumnResizerProxy = null;
+    }
+},
+
+/**
+ * Creates HTML markup for shared Column resizer proxy.
+ *
+ * @method _initColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private
+ */
+_initColumnResizerProxyEl : function() {
+    if(!this._elColumnResizerProxy) {
+        // Attach Column resizer element as first child of body
+        var elColumnResizerProxy = document.createElement("div");
+        elColumnResizerProxy.id = this.getId() + "-colresizerproxy"; // Needed for ColumnResizer
+        elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
+        document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
+
+        // Internal tracker of Column resizer proxy
+        this._elColumnResizerProxy = elColumnResizerProxy;
+    }
+    return this._elColumnResizerProxy;
 },
 
 /**
@@ -2643,14 +2676,15 @@ _initTbodyEl : function(elTable) {
     
         // Set up DOM events for TBODY
         Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
-        
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
+
         // Since we can't listen for click and dblclick on the same element...
         // Attach separately to THEAD and TBODY
         ///Ev.addListener(elTbody, "dblclick", this._onTableDblclick, this);
@@ -2706,13 +2740,14 @@ _initMsgTbodyEl : function(elTable) {
 
         // Set up DOM events for TBODY
         Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
-        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
-        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
+
+        // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
+        // delegation at the TABLE level
     }
 },
 
@@ -3423,11 +3458,13 @@ _onTbodyFocus : function(e, oSelf) {
  *
  * @method _onTableMouseover
  * @param e {HTMLEvent} The mouseover event.
+ * @param origTarget {HTMLElement} The mouseenter delegated element.
+ * @param container {HTMLElement} The mouseenter delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseover : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseover : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
         var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
         while(elTarget && (elTag != "table")) {
@@ -3482,11 +3519,13 @@ _onTableMouseover : function(e, oSelf) {
  *
  * @method _onTableMouseout
  * @param e {HTMLEvent} The mouseout event.
+ * @param origTarget {HTMLElement} The mouseleave delegated element.
+ * @param container {HTMLElement} The mouseleave delegation container.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
-_onTableMouseout : function(e, oSelf) {
-    var elTarget = Ev.getTarget(e);
+_onTableMouseout : function(e, origTarget, container, oSelf) {
+    var elTarget = origTarget;
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
@@ -4709,6 +4748,37 @@ getTrIndex : function(row) {
 // TABLE FUNCTIONS
 
 /**
+ * Loads new data. Convenience method that calls DataSource's sendRequest()
+ * method under the hood.
+ *
+ * @method load
+ * @param oConfig {object} Optional configuration parameters:
+ *
+ * <dl>
+ * <dt>request</dt><dd>Pass in a new request, or initialRequest is used.</dd>
+ * <dt>callback</dt><dd>Pass in DataSource sendRequest() callback object, or the following is used:
+ *    <dl>
+ *      <dt>success</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>failure</dt><dd>datatable.onDataReturnInitializeTable</dd>
+ *      <dt>scope</dt><dd>datatable</dd>
+ *      <dt>argument</dt><dd>datatable.getState()</dd>
+ *    </dl>
+ * </dd>
+ * <dt>datasource</dt><dd>Pass in a new DataSource instance to override the current DataSource for this transaction.</dd>
+ * </dl>
+ */
+load : function(oConfig) {
+    oConfig = oConfig || {};
+
+    (oConfig.datasource || this._oDataSource).sendRequest(oConfig.request || this.get("initialRequest"), oConfig.callback || {
+        success: this.onDataReturnInitializeTable,
+        failure: this.onDataReturnInitializeTable,
+        scope: this,
+        argument: this.getState()
+    });
+},
+
+/**
  * Resets a RecordSet with the given data and populates the page view
  * with the new data. Any previous data, and selection and sort states are
  * cleared. New data should be added as a separate step. 
@@ -4750,6 +4820,29 @@ _runRenderChain : function() {
 },
 
 /**
+ * Returns array of Records for current view. For example, if paginated, it
+ * returns the subset of Records for current page.
+ *
+ * @method _getViewRecords
+ * @protected
+ * @return {Array} Array of Records to display in current view.
+ */
+_getViewRecords : function() {
+    // Paginator is enabled, show a subset of Records
+    var oPaginator = this.get('paginator');
+    if(oPaginator) {
+        return this._oRecordSet.getRecords(
+                        oPaginator.getStartIndex(),
+                        oPaginator.getRowsPerPage());
+    }
+    // Not paginated, show all records
+    else {
+        return this._oRecordSet.getRecords();
+    }
+
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -4764,19 +4857,9 @@ render : function() {
     this.fireEvent("beforeRenderEvent");
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
-    var i, j, k, len, allRecords;
+    var i, j, k, len,
+        allRecords = this._getViewRecords();
 
-    var oPaginator = this.get('paginator');
-    // Paginator is enabled, show a subset of Records and update Paginator UI
-    if(oPaginator) {
-        allRecords = this._oRecordSet.getRecords(
-                        oPaginator.getStartIndex(),
-                        oPaginator.getRowsPerPage());
-    }
-    // Not paginated, show all records
-    else {
-        allRecords = this._oRecordSet.getRecords();
-    }
 
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
@@ -4883,10 +4966,12 @@ render : function() {
  * @method disable
  */
 disable : function() {
+    this._disabled = true;
     var elTable = this._elTable;
     var elMask = this._elMask;
     elMask.style.width = elTable.offsetWidth + "px";
     elMask.style.height = elTable.offsetHeight + "px";
+    elMask.style.left = elTable.offsetLeft + "px";
     elMask.style.display = "";
     this.fireEvent("disableEvent");
 },
@@ -4897,8 +4982,19 @@ disable : function() {
  * @method undisable
  */
 undisable : function() {
+    this._disabled = false;
     this._elMask.style.display = "none";
     this.fireEvent("undisableEvent");
+},
+
+ /**
+ * Returns disabled state.
+ *
+ * @method isDisabled
+ * @return {Boolean} True if UI is disabled, otherwise false
+ */
+isDisabled : function() {
+    return this._disabled;
 },
 
 /**
@@ -4914,10 +5010,6 @@ destroy : function() {
     var instanceName = this.toString();
 
     this._oChainRender.stop();
-    
-    // Destroy static resizer proxy and column proxy
-    DT._destroyColumnDragTargetEl();
-    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
@@ -9775,7 +9867,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
  *
  * @method _initCellEditorEl
  * @private
- * @deprecated 
+ * @deprecated Use BaseCellEditor class.
  */
 _initCellEditorEl : function() {
     // Attach Cell Editor container element as first child of body
@@ -10070,7 +10162,7 @@ onEditorUnblockEvent : function(oArgs) {
  *
  * @method doBeforeLoadData
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} additional arguments
  * @return {Boolean} Return true to continue loading data into RecordSet and
  * updating DataTable with new Records, false to cancel.
@@ -10192,10 +10284,7 @@ onEventSelectColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightColumn(oArgs.target);
-    }
+    this.highlightColumn(oArgs.target);
 },
 
 /**
@@ -10207,10 +10296,7 @@ onEventHighlightColumn : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightColumn : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightColumn(oArgs.target);
-    }
+    this.unhighlightColumn(oArgs.target);
 },
 
 /**
@@ -10259,10 +10345,7 @@ onEventSelectCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightRow(oArgs.target);
-    }
+    this.highlightRow(oArgs.target);
 },
 
 /**
@@ -10274,10 +10357,7 @@ onEventHighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightRow : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightRow(oArgs.target);
-    }
+    this.unhighlightRow(oArgs.target);
 },
 
 /**
@@ -10289,10 +10369,7 @@ onEventUnhighlightRow : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.highlightCell(oArgs.target);
-    }
+    this.highlightCell(oArgs.target);
 },
 
 /**
@@ -10304,10 +10381,7 @@ onEventHighlightCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightCell : function(oArgs) {
-    //TODO: filter for all spurious events at a lower level
-    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
-        this.unhighlightCell(oArgs.target);
-    }
+    this.unhighlightCell(oArgs.target);
 },
 
 /**
@@ -10338,7 +10412,9 @@ onEventFormatCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventShowCellEditor : function(oArgs) {
-    this.showCellEditor(oArgs.target);
+    if(!this.isDisabled()) {
+        this.showCellEditor(oArgs.target);
+    }
 },
 
 /**
@@ -10381,7 +10457,7 @@ onEventCancelCellEditor : function(oArgs) {
  *
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
@@ -10399,7 +10475,7 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnReplaceRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
@@ -10447,7 +10523,7 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
@@ -10481,7 +10557,7 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
@@ -10515,7 +10591,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnUpdateRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
  */
 onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
@@ -10546,7 +10622,7 @@ onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
@@ -10595,21 +10671,22 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  *  
  * @method handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values.
  * @return oPayload {MIXED} State values.
  */
 handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    return oPayload;
+    return oPayload || {};
 },
 
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method handleDataReturnPayload
+ * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values
+ * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -11713,12 +11790,6 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 // Deprecated static APIs
 //
 /////////////////////////////////////////////////////////////////////////////
-/**
- * @method DataTable.formatTheadCell
- * @deprecated  Use formatTheadCell.
- */
-DT.formatTheadCell = function() {};
-
 /**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.

@@ -1692,7 +1692,7 @@ parseJSONData : function(oRequest, oFullResponse) {
 
                         for (j = fieldParsers.length - 1; j >= 0; --j) {
                             var p = fieldParsers[j].key;
-                            rec[p] = fieldParsers[j].parser(rec[p]);
+                            rec[p] = fieldParsers[j].parser.call(this, rec[p]);
                             if (rec[p] === undefined) {
                                 rec[p] = null;
                             }
@@ -1940,7 +1940,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // forward the return value to the handler
     
     
-    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest);
+    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this, oCallback) : this.liveData(oRequest, oCallback);
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
@@ -2545,33 +2545,26 @@ util.DataSource = function(oLiveData, oConfigs) {
     var dataType = oConfigs.dataType;
     if(dataType) {
         if(dataType == DS.TYPE_LOCAL) {
-            lang.augmentObject(util.DataSource, util.LocalDataSource);
-            return new util.LocalDataSource(oLiveData, oConfigs);            
+            return new util.LocalDataSource(oLiveData, oConfigs);
         }
         else if(dataType == DS.TYPE_XHR) {
-            lang.augmentObject(util.DataSource, util.XHRDataSource);
             return new util.XHRDataSource(oLiveData, oConfigs);            
         }
         else if(dataType == DS.TYPE_SCRIPTNODE) {
-            lang.augmentObject(util.DataSource, util.ScriptNodeDataSource);
             return new util.ScriptNodeDataSource(oLiveData, oConfigs);            
         }
         else if(dataType == DS.TYPE_JSFUNCTION) {
-            lang.augmentObject(util.DataSource, util.FunctionDataSource);
             return new util.FunctionDataSource(oLiveData, oConfigs);            
         }
     }
     
     if(YAHOO.lang.isString(oLiveData)) { // strings default to xhr
-        lang.augmentObject(util.DataSource, util.XHRDataSource);
         return new util.XHRDataSource(oLiveData, oConfigs);
     }
     else if(YAHOO.lang.isFunction(oLiveData)) {
-        lang.augmentObject(util.DataSource, util.FunctionDataSource);
         return new util.FunctionDataSource(oLiveData, oConfigs);
     }
     else { // ultimate default is local
-        lang.augmentObject(util.DataSource, util.LocalDataSource);
         return new util.LocalDataSource(oLiveData, oConfigs);
     }
 };

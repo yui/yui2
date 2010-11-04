@@ -108,7 +108,7 @@ YAHOO.util.Event.onDOMReady(function() {
 <script src="js/simple-editor.js?bust=<?php echo(mktime()); ?>"></script>
 <script>
 YAHOO.util.Event.on(window, 'load', function() {
-    var logger = new YAHOO.widget.LogReader(null, { logReaderEnabled: true });
+    //var logger = new YAHOO.widget.LogReader(null, { logReaderEnabled: true });
 });
 </script>
 <script>

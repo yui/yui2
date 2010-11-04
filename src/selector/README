@@ -1,5 +1,8 @@
 YUI Library - Selector - Release Notes
 
+2.8.1   
+  * Fixed nth-of-type selector
+
 2.8.0   
   * Fixed nth-of-type selector
 

@@ -98,7 +98,8 @@
             editorData.active = true;
             editorData.whoHasIt = this;
             if (!editorData.nodeType) {
-                editorData.editorPanel = ed = document.body.appendChild(document.createElement('div'));
+				// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
+                editorData.editorPanel = ed = this.getEl().appendChild(document.createElement('div'));
                 Dom.addClass(ed,'ygtv-label-editor');
 
                 buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
@@ -157,10 +158,10 @@
                 Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
             }
             Dom.addClass(ed,' ygtv-edit-' + node._type);
-            topLeft = Dom.getXY(node.getContentEl());
-            Dom.setStyle(ed,'left',topLeft[0] + 'px');
-            Dom.setStyle(ed,'top',topLeft[1] + 'px');
+			// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
             Dom.setStyle(ed,'display','block');
+			Dom.setXY(ed,Dom.getXY(node.getContentEl()));
+			// up to here
             ed.focus();
             node.fillEditorContainer(editorData);
 
@@ -173,7 +174,7 @@
     *  It calls the corresponding node editNode method.
     * @method onEventEditNode
     * @param oArgs {object} Object passed as arguments to TreeView event listeners
-     * @for YAHOO.widget.TreeView
+    * @for YAHOO.widget.TreeView
     */
 
     TVproto.onEventEditNode = function (oArgs) {
@@ -182,6 +183,7 @@
         } else if (oArgs.node instanceof YAHOO.widget.Node) {
             oArgs.node.editNode();
         }
+		return false;
     };
     
     /**
@@ -196,6 +198,10 @@
         var ed = TV.editorData, 
             node = ed.node,
             close = true;
+		// http://yuilibrary.com/projects/yui2/ticket/2528946
+		// _closeEditor might now be called at any time, even when there is no label editor open
+		// so we need to ensure there is one.
+		if (!node) { return; }
         if (save) { 
             close = ed.node.saveEditorValue(ed) !== false; 
         } else {

@@ -1,5 +1,11 @@
 get - Release Notes
 
+next
+    * charset defaults to utf-8 again
+
+2.8.1
+    * No change
+
 2.8.0
     * Added 'attributes' config, which is a hash of attributes to apply to dynamic nodes.  deprecated charset
 

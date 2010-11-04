@@ -1,5 +1,21 @@
 DataTable Release Notes
 
+*** version 2.NEXT ***
+
+* Added className property to CellEditor for custom class assignment.
+* Added useIFrame property to CellEditor for IE6 select bleed-through workaround.
+* DateCellEditors now correctly display selected date.
+* Regexes now supported as custom Column config data.
+* DragDrop proxies for Column resizer and draggable Column target are now created
+and destroyed for each instance instead of being shared globally.
+* Added new method load(), a convenience method that calls DataSource's
+sendRequest() method under the hood.
+
+**** 2.8.1 ****
+
+* No changes.
+
+
 **** 2.8.0 ****
 
 * DropdownCellEditor now supports multiple and size properties.
@@ -8,6 +24,7 @@ DataTable Release Notes
 * Added clearScrollPositions() and scrollTo() to ScrollingDataTable.
 * Performance improvements for ScrollingDataTable in IE.
 * Bug fixes for DataTables rendered within table markup.
+
 
 
 **** version 2.7.0 ***

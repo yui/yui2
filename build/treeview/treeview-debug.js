@@ -663,6 +663,11 @@ TV.prototype = {
             this.logger.log("onLabelClick " + node.label);
             this.fireEvent('labelClick',node);
         }
+		// http://yuilibrary.com/projects/yui2/ticket/2528946
+		// Ensures that any open editor is closed.  
+		// Since the editor is in a separate source which might not be included, 
+		// we first need to ensure we have the _closeEditor method available
+		if (this._closeEditor) { this._closeEditor(false); }
         
         //  If it is a toggle cell, toggle
         if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
@@ -2138,6 +2143,14 @@ YAHOO.widget.Node.prototype = {
                 el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
+		el = Dom.get('ygtvtableel' + this.index);
+        if (el) {
+			if (this.expanded) {
+				Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
+			} else {
+				Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
+			}
+        }
     },
 
     /**
@@ -2499,6 +2512,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+		sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
@@ -2643,7 +2657,6 @@ YAHOO.widget.Node.prototype = {
                         aEl.focus();
                         self._focusedItem = aEl;
                         Event.on(aEl,'blur',function () {
-                            //console.log('f1');
                             self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
                             self.tree.currentFocus = null;
                             self._removeFocus();
@@ -2655,11 +2668,9 @@ YAHOO.widget.Node.prototype = {
             }
         );
         if (focused) { 
-                            //console.log('f2');
             this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
             this.tree.currentFocus = this;
         } else {
-                            //console.log('f3');
             this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
             this.tree.currentFocus = null;
             this._removeFocus(); 
@@ -2696,12 +2707,12 @@ YAHOO.widget.Node.prototype = {
 
         if (this.expanded) {defs.expanded = this.expanded; }
         if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
-        if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
+        if (this.renderHidden) { defs.renderHidden = this.renderHidden; }
         if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
         if (this.nowrap) { defs.nowrap = this.nowrap; }
         if (this.className) { defs.className = this.className; }
         if (this.editable) { defs.editable = this.editable; }
-        if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
+        if (!this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
         if (this.highlightState) { defs.highlightState = this.highlightState; }
         if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
         if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }
@@ -3569,7 +3580,8 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             editorData.active = true;
             editorData.whoHasIt = this;
             if (!editorData.nodeType) {
-                editorData.editorPanel = ed = document.body.appendChild(document.createElement('div'));
+				// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
+                editorData.editorPanel = ed = this.getEl().appendChild(document.createElement('div'));
                 Dom.addClass(ed,'ygtv-label-editor');
 
                 buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
@@ -3628,10 +3640,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
             }
             Dom.addClass(ed,' ygtv-edit-' + node._type);
-            topLeft = Dom.getXY(node.getContentEl());
-            Dom.setStyle(ed,'left',topLeft[0] + 'px');
-            Dom.setStyle(ed,'top',topLeft[1] + 'px');
+			// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
             Dom.setStyle(ed,'display','block');
+			Dom.setXY(ed,Dom.getXY(node.getContentEl()));
+			// up to here
             ed.focus();
             node.fillEditorContainer(editorData);
 
@@ -3644,7 +3656,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
     *  It calls the corresponding node editNode method.
     * @method onEventEditNode
     * @param oArgs {object} Object passed as arguments to TreeView event listeners
-     * @for YAHOO.widget.TreeView
+    * @for YAHOO.widget.TreeView
     */
 
     TVproto.onEventEditNode = function (oArgs) {
@@ -3653,6 +3665,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         } else if (oArgs.node instanceof YAHOO.widget.Node) {
             oArgs.node.editNode();
         }
+		return false;
     };
     
     /**
@@ -3667,6 +3680,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         var ed = TV.editorData, 
             node = ed.node,
             close = true;
+		// http://yuilibrary.com/projects/yui2/ticket/2528946
+		// _closeEditor might now be called at any time, even when there is no label editor open
+		// so we need to ensure there is one.
+		if (!node) { return; }
         if (save) { 
             close = ed.node.saveEditorValue(ed) !== false; 
         } else {

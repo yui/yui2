@@ -699,6 +699,9 @@
 
                     oIFrame.id = "_yuiResizeMonitor";
                     oIFrame.title = "Text Resize Monitor";
+                    oIFrame.tabIndex = -1;
+                    oIFrame.setAttribute("role", "presentation");
+
                     /*
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
@@ -1161,13 +1164,15 @@
         configVisible: function (type, args, obj) {
             var visible = args[0];
             if (visible) {
-                this.beforeShowEvent.fire();
-                Dom.setStyle(this.element, "display", "block");
-                this.showEvent.fire();
+                if(this.beforeShowEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "block");
+                    this.showEvent.fire();
+                }
             } else {
-                this.beforeHideEvent.fire();
-                Dom.setStyle(this.element, "display", "none");
-                this.hideEvent.fire();
+                if (this.beforeHideEvent.fire()) {
+                    Dom.setStyle(this.element, "display", "none");
+                    this.hideEvent.fire();
+                }
             }
         },
 

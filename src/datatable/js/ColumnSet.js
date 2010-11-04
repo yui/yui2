@@ -1170,6 +1170,8 @@ YAHOO.util.Sort = {
      * @param b {Object} Second sort argument.
      * @param desc {Boolean} True if sort direction is descending, false if
      * sort direction is ascending.
+     * @return {Boolean} Return -1 when a < b. Return 0 when a = b.
+     * Return 1 when a > b.
      */
     compare: function(a, b, desc) {
         if((a === null) || (typeof a == "undefined")) {

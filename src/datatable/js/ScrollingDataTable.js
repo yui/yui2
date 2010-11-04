@@ -212,7 +212,9 @@ initAttributes : function(oConfigs) {
         value: "#F2F2F2",
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.backgroundColor = oParam;
+            if(this._elHdContainer) {
+                this._elHdContainer.style.backgroundColor = oParam;
+            }
         }
     });
 },
@@ -358,7 +360,11 @@ _initTableEl : function() {
     
         // Create TABLE
         this._elHdTable = this._elHdContainer.appendChild(document.createElement("table"));   
-    } 
+
+        // Set up mouseover/mouseout events via mouseenter/mouseleave delegation
+        Ev.delegate(this._elHdTable, "mouseenter", this._onTableMouseover, "thead ."+DT.CLASS_LABEL, this);
+        Ev.delegate(this._elHdTable, "mouseleave", this._onTableMouseout, "thead ."+DT.CLASS_LABEL, this);
+    }
     // Body TABLE
     SDT.superclass._initTableEl.call(this, this._elBdContainer);
 },

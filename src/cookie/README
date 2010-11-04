@@ -1,5 +1,9 @@
 YUI Library - Cookie Utility - Release Notes
 
+2.8.1
+
+  * No changes.
+  
 2.8.0
  
   * Changed behavior for Boolean cookies (those that don't contain an equals sign). Previously, calling Cookie.get() on a Boolean cookie would return the name of the cookie. Now, it returns an empty string. This is necessary because IE doesn't store an equals sign when the cookie value is empty ("info=" becomes just "info").

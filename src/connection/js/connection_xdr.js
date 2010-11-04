@@ -1,5 +1,5 @@
 /**
-  * @for Connect
+  * @for YAHOO.util.Connect
   */
 (function() {
 	var YCM = YAHOO.util.Connect, _fn = {};

@@ -8,7 +8,7 @@ import static org.testng.Assert.*;
 
 public class ContainerPanel extends SelNGBase {
 
-	private static final int MOVE_X = 600;
+	private static final int MOVE_X = 100;
 	private static final int MOVE_Y = 150;
 
 	public static void containerTest() {
@@ -17,13 +17,13 @@ public class ContainerPanel extends SelNGBase {
 		//assertEquals(session().getTitle(), "Basic Drag and Drop");
 
 		// Check initial state
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 		
 		// Click on Show panel 1
 		session().click("show1");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 		Number X = session().getElementPositionLeft("panel1_c");
 		Number Y = session().getElementPositionTop("panel1_c");
 		session().dragAndDrop("panel1_h", "+" + MOVE_X + ",+" + MOVE_Y);
@@ -36,22 +36,22 @@ public class ContainerPanel extends SelNGBase {
 
 		// Click on Hide Panel 1
 		session().click("hide1");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 
 		// Click on Show panel 1
 		session().click("show1");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 		// Hide the panel with the 'close' icon
 		session().click("//a[@class='container-close']");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 		
 		// Click on Show Panel 2
 		session().click("show2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible"));
 
 		// Try to drag Panel 2
 		X = session().getElementPositionLeft("panel2_c");
@@ -64,28 +64,22 @@ public class ContainerPanel extends SelNGBase {
 		
 		// Click on Hide Panel 2
 		session().click("hide2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 		
 		// Open both panels
 		session().click("show1");
 		session().click("show2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible"));
 		
 		// Close both panels
 		session().click("hide1");
 		session().click("hide2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden"));
 
 	}
 	
-	public static boolean hasAttribute(String elXpath, String attributeName, String attributeValue) {
-		
-		String attribute = session().getAttribute(elXpath + "@" + attributeName);
-		return ((attribute != null) && (attribute.contains(attributeValue)));
-
-	}
 
 }

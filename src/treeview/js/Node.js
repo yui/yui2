@@ -734,6 +734,14 @@ YAHOO.widget.Node.prototype = {
                 el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
+		el = Dom.get('ygtvtableel' + this.index);
+        if (el) {
+			if (this.expanded) {
+				Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
+			} else {
+				Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
+			}
+        }
     },
 
     /**
@@ -1095,6 +1103,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+		sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
@@ -1289,12 +1298,12 @@ YAHOO.widget.Node.prototype = {
 
         if (this.expanded) {defs.expanded = this.expanded; }
         if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
-        if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
+        if (this.renderHidden) { defs.renderHidden = this.renderHidden; }
         if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
         if (this.nowrap) { defs.nowrap = this.nowrap; }
         if (this.className) { defs.className = this.className; }
         if (this.editable) { defs.editable = this.editable; }
-        if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
+        if (!this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
         if (this.highlightState) { defs.highlightState = this.highlightState; }
         if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
         if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }

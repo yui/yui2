@@ -193,6 +193,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
         this.textboxKeyEvent = new YAHOO.util.CustomEvent("textboxKey", this);
         this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
+        this.dataRequestCancelEvent = new YAHOO.util.CustomEvent("dataRequestCancel", this);
         this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
         this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
         this.containerPopulateEvent = new YAHOO.util.CustomEvent("containerPopulate", this);
@@ -498,7 +499,7 @@ YAHOO.widget.AutoComplete.prototype.resultTypeList = true;
  * For XHR DataSources, AutoComplete will automatically insert a "?" between the server URI and 
  * the "query" param/value pair. To prevent this behavior, implementers should
  * set this value to false. To more fully customize the query syntax, implementers
- * should override the generateRequest() method. 
+ * should override the generateRequest() method.
  *
  * @property queryQuestionMark
  * @type Boolean
@@ -928,7 +929,7 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
  *
  * @method handleResponse
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse, oPayload) {
@@ -942,7 +943,7 @@ YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse,
  *
  * @method doBeforeLoadData
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  * @return {Boolean} Return true to continue loading data, false to cancel.
  */
@@ -1063,6 +1064,15 @@ YAHOO.widget.AutoComplete.prototype.textboxKeyEvent = null;
  * @param oRequest {Object} The request.
  */
 YAHOO.widget.AutoComplete.prototype.dataRequestEvent = null;
+
+/**
+ * Fired when the AutoComplete request to the DataSource is canceled.
+ *
+ * @event dataRequestCancelEvent
+ * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sQuery {String} The query string.
+ */
+YAHOO.widget.AutoComplete.prototype.dataRequestCancelEvent = null;
 
 /**
  * Fired when the AutoComplete instance receives query results from the data
@@ -1798,17 +1808,24 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
     
     var sRequest = this.generateRequest(sQuery);
-    this.dataRequestEvent.fire(this, sQuery, sRequest);
-    YAHOO.log("Sending query \"" + sRequest + "\"", "info", this.toString());
+    
+    if(sRequest !== undefined) {
+        this.dataRequestEvent.fire(this, sQuery, sRequest);
+        YAHOO.log("Sending query \"" + sRequest + "\"", "info", this.toString());
 
-    this.dataSource.sendRequest(sRequest, {
-            success : this.handleResponse,
-            failure : this.handleResponse,
-            scope   : this,
-            argument: {
-                query: sQuery
-            }
-    });
+        this.dataSource.sendRequest(sRequest, {
+                success : this.handleResponse,
+                failure : this.handleResponse,
+                scope   : this,
+                argument: {
+                    query: sQuery
+                }
+        });
+    }
+    else {
+        this.dataRequestCancelEvent.fire(this, sQuery);
+        YAHOO.log("Canceled query \"" + sQuery + "\"", "info", this.toString());
+    }
 };
 
 /**
@@ -1830,7 +1847,7 @@ YAHOO.widget.AutoComplete.prototype._populateListItem = function(elListItem, oRe
  *
  * @method _populateList
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  * @private
  */
@@ -2047,6 +2064,8 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(elListItem, sQuery) {
                 var nEnd = elTextbox.value.length;
                 oSelf._selectText(elTextbox,nStart,nEnd);
                 var sPrefill = elTextbox.value.substr(nStart,nEnd);
+                // Bug 2528552: Store as a selection
+                oSelf._sCurQuery = elListItem._sResultMatch;
                 oSelf.typeAheadEvent.fire(oSelf,sQuery,sPrefill);
                 YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", oSelf.toString());
             },(this.typeAheadDelay*1000));            
@@ -2518,6 +2537,8 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         YAHOO.log("Item arrowed to " + elNewListItem._nItemIndex, "info", this.toString());
         if(this.typeAhead) {
             this._updateValue(elNewListItem);
+            // Bug 2528552: Store as a selection
+            this._sCurQuery = elNewListItem._sResultMatch;
         }
     }
 };

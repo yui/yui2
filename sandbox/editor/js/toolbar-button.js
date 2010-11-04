@@ -123,9 +123,11 @@ var Dom = YAHOO.util.Dom,
         checkValue: function(value) {
             if (this.get('type') == 'menu') {
                 var opts = this._button.options;
-                for (var i = 0; i < opts.length; i++) {
-                    if (opts[i].value == value) {
-                        opts.selectedIndex = i;
+                if (opts) {
+                    for (var i = 0; i < opts.length; i++) {
+                        if (opts[i].value == value) {
+                            opts.selectedIndex = i;
+                        }
                     }
                 }
             }

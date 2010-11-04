@@ -97,6 +97,7 @@ var myConfig = {
     animate: true,
     dompath: true,
     handleSubmit: true,
+    maxUndo: 15,
     //ptags: true,
     drag: true,
     resize: true,

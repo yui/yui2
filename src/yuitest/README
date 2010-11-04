@@ -6,6 +6,18 @@ YUI Library - YUITest - Release Notes
   * Added TAP test format.
   * Added getResults() method on YAHOO.tool.TestRunner.
   * Added isRunning() method on YAHOO.tool.TestRunner.
+  * Added coverage support, including getCoverage() on YAHOO.tool.TestRunner and YAHOO.tool.CoverageFormat.
+  * Added getName()/setName() method to allow setting overall results name.
+  * Changed master suite default name to be "yuitests" plus a timestamp.
+  * Changed functionality of TestRunner when there's only one suite to run. Internally, the TestRunner uses
+    a TestSuite to manage everything added via add(). Previously, this test suite was always represented
+    in the results. Now, if you've only added one TestSuite to the TestRunner via add(), the specified
+    TestSuite becomes the root. This may affect the reporting of test results if you're using TestReporter.
+    To run tests in the old way, call TestRunner.run(true).
+
+2.8.1
+
+  * No changes
 
 2.8.0
 
