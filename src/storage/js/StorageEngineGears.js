@@ -13,16 +13,16 @@
  */
 (function() {
 	// internal shorthand
-var Y = YAHOO.util,
-	YL = YAHOO.lang,
-	_SQL_STMT_LIMIT = 9948,
-	_TABLE_NAME = 'YUIStorageEngine',
+var Util = YAHOO.util,
+	Lang = YAHOO.lang,
+	SQL_STMT_LIMIT = 9948,
+	TABLE_NAME = 'YUIStorageEngine',
 
 	// local variables
-	_engine = null,
+	_driver = null,
 
 	eURI = encodeURIComponent,
-	dURI = decodeURIComponent;
+	dURI = decodeURIComponent,
 
 	/**
 	 * The StorageEngineGears class implements the Google Gears storage engine.
@@ -30,31 +30,34 @@ var Y = YAHOO.util,
 	 * @class StorageEngineGears
 	 * @constructor
 	 * @extend YAHOO.util.Storage
-	 * @param location {String} Required. The storage location.
-	 * @param conf {Object} Required. A configuration object.
+	 * @param sLocation {String} Required. The storage location.
+	 * @param oConf {Object} Required. A configuration object.
 	 */
-	Y.StorageEngineGears = function(location, conf) {
-		var _this = this;
-		Y.StorageEngineGears.superclass.constructor.call(_this, location, Y.StorageEngineGears.ENGINE_NAME, conf);
+	StorageEngineGears = function(sLocation, oConf) {
+		var that = this,
+            keyMap = {},
+            isSessionStorage, sessionKey, rs;
+        
+		StorageEngineGears.superclass.constructor.call(that, sLocation, StorageEngineGears.ENGINE_NAME, oConf);
 
-		if (! _engine) {
+		if (! _driver) {
 			// create the database
-			_engine = google.gears.factory.create(Y.StorageEngineGears.GEARS);
-			_engine.open(window.location.host + '-' + Y.StorageEngineGears.DATABASE);
-			_engine.execute('CREATE TABLE IF NOT EXISTS ' + _TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
+			_driver = google.gears.factory.create(StorageEngineGears.GEARS);
+			_driver.open(window.location.host + '-' + StorageEngineGears.DATABASE);
+			_driver.execute('CREATE TABLE IF NOT EXISTS ' + TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
 		}
 
-		var isSessionStorage = Y.StorageManager.LOCATION_SESSION === _this._location,
-			sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineGears.ENGINE_NAME);
+		isSessionStorage = Util.StorageManager.LOCATION_SESSION === that._location;
+		sessionKey = Util.Cookie.get('sessionKey' + StorageEngineGears.ENGINE_NAME);
 
 		if (! sessionKey) {
-			_engine.execute('BEGIN');
-			_engine.execute('DELETE FROM ' + _TABLE_NAME + ' WHERE location="' + eURI(Y.StorageManager.LOCATION_SESSION) + '"');
-			_engine.execute('COMMIT');
+			_driver.execute('BEGIN');
+			_driver.execute('DELETE FROM ' + TABLE_NAME + ' WHERE location="' + eURI(Util.StorageManager.LOCATION_SESSION) + '"');
+			_driver.execute('COMMIT');
 		}
 
-		var rs = _engine.execute('SELECT key FROM ' + _TABLE_NAME + ' WHERE location="' + eURI(_this._location) + '"'),
-			keyMap = {};
+		rs = _driver.execute('SELECT key FROM ' + TABLE_NAME + ' WHERE location="' + eURI(that._location) + '"');
+		keyMap = {};
 	
 		try {
 			// iterate on the rows and map the keys
@@ -63,57 +66,50 @@ var Y = YAHOO.util,
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
-					_this._addKey(fld);
+					that._addKey(fld);
 				}
 
 				rs.next();
 			}
-		}
-		finally {
+		} finally {
 			rs.close();
 		}
 
 		// this is session storage, ensure that the session key is set
 		if (isSessionStorage) {
-			Y.Cookie.set('sessionKey' + Y.StorageEngineGears.ENGINE_NAME, true);
+			Util.Cookie.set('sessionKey' + StorageEngineGears.ENGINE_NAME, true);
 		}
 
-		_this.length = _this._keys.length;
-		YL.later(250, _this, function() { // temporary solution so that CE_READY can be subscribed to after this object is created
-			_this.fireEvent(_this.CE_READY);
-		});
+        that.fireEvent(Util.Storage.CE_READY);
 	};
 
-	YL.extend(Y.StorageEngineGears, Y.StorageEngineKeyed, {
+	Lang.extend(StorageEngineGears, Util.StorageEngineKeyed, {
 
 		/*
 		 * Implementation to clear the values from the storage engine.
 		 * @see YAHOO.util.Storage._clear
 		 */
 		_clear: function() {
-			_engine.execute('BEGIN');
-			_engine.execute('DELETE FROM ' + _TABLE_NAME + ' WHERE location="' + eURI(this._location) + '"');
-			_engine.execute('COMMIT');
-			this._keys = [];
-			this.length = 0;
+			StorageEngineGears.superclass._clear.call(this);
+			_driver.execute('BEGIN');
+			_driver.execute('DELETE FROM ' + TABLE_NAME + ' WHERE location="' + eURI(this._location) + '"');
+			_driver.execute('COMMIT');
 		},
 
 		/*
 		 * Implementation to fetch an item from the storage engine.
 		 * @see YAHOO.util.Storage._getItem
 		 */
-		_getItem: function(key) {
-			var rs = _engine.execute('SELECT value FROM ' + _TABLE_NAME + ' WHERE key="' + eURI(key) + '" AND location="' + eURI(this._location) + '"'),
+		_getItem: function(sKey) {
+			var rs = _driver.execute('SELECT value FROM ' + TABLE_NAME + ' WHERE key="' + eURI(sKey) + '" AND location="' + eURI(this._location) + '"'),
 				value = '';
 
 			try {
 				while (rs.isValidRow()) {
-					var temp = rs.field(0);
 					value += rs.field(0);
 					rs.next();
 				}
-			}
-			finally {
+			} finally {
 				rs.close();
 			}
 
@@ -121,74 +117,68 @@ var Y = YAHOO.util,
 		},
 
 		/*
-		 * Implementation to fetch a key from the storage engine.
-		 * @see YAHOO.util.Storage.key
-		 */
-		_key: function(index) {return this._keys[index];},
-
-		/*
 		 * Implementation to remove an item from the storage engine.
 		 * @see YAHOO.util.Storage._removeItem
 		 */
-		_removeItem: function(key) {
-			YAHOO.log("removing " + key);
-			_engine.execute('BEGIN');
-			_engine.execute('DELETE FROM ' + _TABLE_NAME + ' WHERE key="' + eURI(key) + '" AND location="' + eURI(this._location) + '"');
-			_engine.execute('COMMIT');
-			this._removeKey(key);
+		_removeItem: function(sKey) {
+			YAHOO.log("removing gears key: " + sKey);
+			StorageEngineGears.superclass._removeItem.call(this, sKey);
+			_driver.execute('BEGIN');
+			_driver.execute('DELETE FROM ' + TABLE_NAME + ' WHERE key="' + eURI(sKey) + '" AND location="' + eURI(this._location) + '"');
+			_driver.execute('COMMIT');
 		},
 
 		/*
 		 * Implementation to remove an item from the storage engine.
 		 * @see YAHOO.util.Storage._setItem
 		 */
-		_setItem: function(key, data) {
-			YAHOO.log("SETTING " + data + " to " + key);
+		_setItem: function(sKey, oData) {
+			YAHOO.log("SETTING " + oData + " to " + sKey);
 
-			if (! this.hasKey(key)) {
-				this._addKey(key);
-			}
+			this._addKey(sKey);
 
-			var _key = eURI(key),
-				_location = eURI(this._location),
-				_value = eURI(data),
-				_values = [],
-				_len = _SQL_STMT_LIMIT - (_key + _location).length;
+			var sEscapedKey = eURI(sKey),
+				sEscapedLocation = eURI(this._location),
+				sEscapedValue = eURI(oData), // escaped twice, maybe not necessary
+				aValues = [],
+				nLen = SQL_STMT_LIMIT - (sEscapedKey + sEscapedLocation).length,
+                i=0, j;
 
 			// the length of the value exceeds the available space
-			if (_len < _value.length) {
-				for (var i = 0, j = _value.length; i < j; i += _len) {
-					_values.push(_value.substr(i, _len));
+			if (nLen < sEscapedValue.length) {
+				for (j = sEscapedValue.length; i < j; i += nLen) {
+					aValues.push(sEscapedValue.substr(i, nLen));
 				}
-			}
-			else {
-				_values.push(_value);
+			} else {
+				aValues.push(sEscapedValue);
 			}
 
 			// Google recommends using INSERT instead of update, because it is faster
-			_engine.execute('BEGIN');
-			_engine.execute('DELETE FROM ' + _TABLE_NAME + ' WHERE key="' + eURI(key) + '" AND location="' + eURI(this._location) + '"');
-			for (var m = 0, n = _values.length; m < n; m += 1) {
-				_engine.execute('INSERT INTO ' + _TABLE_NAME + ' VALUES ("' + _key + '", "' + _location + '", "' + _values[m] + '")');
+			_driver.execute('BEGIN');
+			_driver.execute('DELETE FROM ' + TABLE_NAME + ' WHERE key="' + sEscapedKey + '" AND location="' + sEscapedLocation + '"');
+			for (i = 0, j = aValues.length; i < j; i += 1) {
+				_driver.execute('INSERT INTO ' + TABLE_NAME + ' VALUES ("' + sEscapedKey + '", "' + sEscapedLocation + '", "' + aValues[i] + '")');
 			}
-			_engine.execute('COMMIT');
+			_driver.execute('COMMIT');
 			
 			return true;
 		}
 	});
 
 	// releases the engine when the page unloads
-	Y.Event.on('unload', function() {
-		if (_engine) {_engine.close();}
+	Util.Event.on('unload', function() {
+		if (_driver) {_driver.close();}
 	});
-	Y.StorageEngineGears.ENGINE_NAME = 'gears';
-	Y.StorageEngineGears.GEARS = 'beta.database';
-	Y.StorageEngineGears.DATABASE = 'yui.database';
-	Y.StorageEngineGears.isAvailable = function() {
-		if (window.google && window.google.gears) {
+
+    StorageEngineGears.ENGINE_NAME = 'gears';
+	StorageEngineGears.GEARS = 'beta.database';
+	StorageEngineGears.DATABASE = 'yui.database';
+
+	StorageEngineGears.isAvailable = function() {
+		if (('google' in window) && ('gears' in window.google)) {
 			try {
 				// this will throw an exception if the user denies gears
-				google.gears.factory.create(Y.StorageEngineGears.GEARS);
+				google.gears.factory.create(StorageEngineGears.GEARS);
 				return true;
 			}
 			catch (e) {
@@ -198,5 +188,7 @@ var Y = YAHOO.util,
 
 		return false;
 	};
-    Y.StorageManager.register(Y.StorageEngineGears);
+
+    Util.StorageManager.register(StorageEngineGears);
+	Util.StorageEngineGears = StorageEngineGears;
 }());

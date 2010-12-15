@@ -1,6 +1,5 @@
 (function() {
-var Y = YAHOO.util,
-	YL = YAHOO.lang;
+var Util = YAHOO.util;
 
 	/**
 	 * The StorageEngineKeyed class implements the interface necessary for managing keys.
@@ -9,13 +8,13 @@ var Y = YAHOO.util,
 	 * @constructor
 	 * @extend YAHOO.util.Storage
 	 */
-	Y.StorageEngineKeyed = function() {
-		Y.StorageEngineKeyed.superclass.constructor.apply(this, arguments);
+	Util.StorageEngineKeyed = function() {
+		Util.StorageEngineKeyed.superclass.constructor.apply(this, arguments);
 		this._keys = [];
 		this._keyMap = {};
 	};
 
-	YL.extend(Y.StorageEngineKeyed, Y.Storage, {
+	YAHOO.lang.extend(Util.StorageEngineKeyed, Util.Storage, {
 
 		/**
 		 * A collection of keys applicable to the current location. This should never be edited by the developer.
@@ -36,47 +35,65 @@ var Y = YAHOO.util,
 		/**
 		 * Adds the key to the set.
 		 * @method _addKey
-		 * @param key {String} Required. The key to evaluate.
+		 * @param sKey {String} Required. The key to evaluate.
 		 * @protected
 		 */
-		_addKey: function(key) {
-			this._keyMap[key] = this.length;
-			this._keys.push(key);
+		_addKey: function(sKey) {
+			this._keyMap[sKey] = this.length;
+			this._keys.push(sKey);
 			this.length = this._keys.length;
+		},
+
+		/*
+		 * Implementation to clear the values from the storage engine.
+		 * @see YAHOO.util.Storage._clear
+		 */
+		_clear: function() {
+			this._keys = [];
+			this.length = 0;
 		},
 
 		/**
 		 * Evaluates if a key exists in the keys array; indexOf does not work in all flavors of IE.
 		 * @method _indexOfKey
-		 * @param key {String} Required. The key to evaluate.
+		 * @param sKey {String} Required. The key to evaluate.
 		 * @protected
 		 */
-		_indexOfKey: function(key) {
-			var i = this._keyMap[key];
+		_indexOfKey: function(sKey) {
+			var i = this._keyMap[sKey];
 			return undefined === i ? -1 : i;
 		},
 
+		/*
+		 * Implementation to fetch a key from the storage engine.
+		 * @see YAHOO.util.Storage.key
+		 */
+		_key: function(nIndex) {return this._keys[nIndex];},
+
 		/**
 		 * Removes a key from the keys array.
-		 * @method _removeKey
-		 * @param key {String} Required. The key to remove.
+		 * @method _removeItem
+		 * @param sKey {String} Required. The key to remove.
 		 * @protected
 		 */
-		_removeKey: function(key) {
-			var j = this._indexOfKey(key),
-				rest = this._keys.slice(j + 1);
+		_removeItem: function(sKey) {
+			var that = this,
+                j = that._indexOfKey(sKey),
+				rest = that._keys.slice(j + 1),
+                k;
 
-			delete this._keyMap[key];
+			delete that._keyMap[sKey];
 
-			for (var k in this._keyMap) {
-				if (j < this._keyMap[k]) {
-					this._keyMap[k] -= 1;
+			// update values in keymap that are greater than current position
+			for (k in that._keyMap) {
+				if (j < that._keyMap[k]) {
+					that._keyMap[k] -= 1;
 				}
 			}
 			
-			this._keys.length = j;
-			this._keys = this._keys.concat(rest);
-			this.length = this._keys.length;
+			that._keys.length = j;
+			that._keys = that._keys.concat(rest);
+			that.length = that._keys.length;
 		}
 	});
 }());
