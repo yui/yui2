@@ -7,11 +7,15 @@
 
 	// internal shorthand
 var Y = YAHOO,
-	YU = Y.util,
-	YL = Y.lang,
-	_logOverwriteError;
+	Util = Y.util,
+	Lang = Y.lang,
+	_logOverwriteError,
+    Storage,
 
-if (! YU.Storage) {
+	RX_TYPE = /^type=(\w+)/i,
+	RX_VALUE = /&value=(.*)/i;
+
+if (! Util.Storage) {
 	_logOverwriteError = function(fxName) {
 		Y.log('Exception in YAHOO.util.Storage.?? - must be extended by a storage engine'.replace('??', fxName).replace('??', this.getName ? this.getName() : 'Unknown'), 'error');
 	};
@@ -21,30 +25,33 @@ if (! YU.Storage) {
 	 * @class Storage
 	 * @namespace YAHOO.util
 	 * @constructor
-	 * @param location {String} Required. The storage location.
-	 * @parm name {String} Required. The engine name.
-	 * @param conf {Object} Required. A configuration object.
+	 * @param sLocation {String} Required. The storage location.
+	 * @parm sName {String} Required. The engine name.
+	 * @param oConf {Object} Required. A configuration object.
 	 */
-	YU.Storage = function(location, name, conf) {
+	Storage = function(sLocation, sName, oConf) {
 		var that = this;
 		Y.env._id_counter += 1;
 
 		// protected variables
-		that._cfg = YL.isObject(conf) ? conf : {};
-		that._location = location;
-		that._name = name;
+		that._cfg = Lang.isObject(oConf) ? oConf : {};
+		that._location = sLocation;
+		that._name = sName;
 		that.isReady = false;
 
 		// public variables
-		that.createEvent(that.CE_READY, {scope: that});
-		that.createEvent(that.CE_CHANGE, {scope: that});
+		that.createEvent(Storage.CE_READY, {scope: that, fireOnce: true});
+		that.createEvent(Storage.CE_CHANGE, {scope: that, fireOnce: true});
 		
-		that.subscribe(that.CE_READY, function() {
+		that.subscribe(Storage.CE_READY, function() {
 			that.isReady = true;
 		});
 	};
 
-	YU.Storage.prototype = {
+    Storage.CE_READY = 'YUIStorageReady';
+    Storage.CE_CHANGE = 'YUIStorageChange';
+
+	Storage.prototype = {
 
 		/**
 		 * The event name for when the storage item is ready.
@@ -52,7 +59,7 @@ if (! YU.Storage) {
 		 * @type {String}
 		 * @public
 		 */
-		CE_READY: 'YUIStorageReady',
+		CE_READY: Storage.CE_READY,
 
 		/**
 		 * The event name for when the storage item has changed.
@@ -60,15 +67,7 @@ if (! YU.Storage) {
 		 * @type {String}
 		 * @public
 		 */
-		CE_CHANGE: 'YUIStorageChange',
-
-		/**
-		 * The delimiter uesed between the data type and the data.
-		 * @property DELIMITER
-		 * @type {String}
-		 * @public
-		 */
-		DELIMITER: '__',
+		CE_CHANGE: Storage.CE_CHANGE,
 
 		/**
 		 * The configuration of the engine.
@@ -123,14 +122,14 @@ if (! YU.Storage) {
 		/**
 		 * Fetches the data stored and the provided key.
 		 * @method getItem
-		 * @param key {String} Required. The key used to reference this value (DOMString in HTML 5 spec).
+		 * @param sKey {String} Required. The key used to reference this value (DOMString in HTML 5 spec).
 		 * @return {String|NULL} The value stored at the provided key (DOMString in HTML 5 spec).
 		 * @public
 		 */
-		getItem: function(key) {
-			Y.log("Fetching item at  " + key);
-			var item = this._getItem(key);
-			return YL.isValue(item) ? this._getValue(item) : null; // required by HTML 5 spec
+		getItem: function(sKey) {
+			Y.log("Fetching item at  " + sKey);
+			var oItem = this._getItem(sKey);
+			return Lang.isValue(oItem) ? this._getValue(oItem) : null; // required by HTML 5 spec
 		},
 
 		/**
@@ -144,47 +143,49 @@ if (! YU.Storage) {
 		/**
 		 * Tests if the key has been set (not in HTML 5 spec); should be overwritten by storage engine.
 		 * @method hasKey
-		 * @param key {String} Required. The key to search for.
+		 * @param sKey {String} Required. The key to search for.
 		 * @return {Boolean} True when key has been set.
 		 * @public
 		 */
-		hasKey: function(key) {
-			return YL.isString(key) && this._hasKey(key);
+		hasKey: function(sKey) {
+			return Lang.isString(sKey) && this._hasKey(sKey);
 		},
 
 		/**
 		 * Retrieve the key stored at the provided index; should be overwritten by storage engine.
 		 * @method key
-		 * @param index {Number} Required. The index to retrieve (unsigned long in HTML 5 spec).
+		 * @param nIndex {Number} Required. The index to retrieve (unsigned long in HTML 5 spec).
 		 * @return {String} Required. The key at the provided index (DOMString in HTML 5 spec).
 		 * @public
 		 */
-		key: function(index) {
-			Y.log("Fetching key at " + index);
+		key: function(nIndex) {
+			Y.log("Fetching key at " + nIndex);
 
-			if (YL.isNumber(index) && -1 < index && this.length > index) {
-				var value = this._key(index);
+			if (Lang.isNumber(nIndex) && -1 < nIndex && this.length > nIndex) {
+				var value = this._key(nIndex);
 				if (value) {return value;}
 			}
 
 			// this is thrown according to the HTML5 spec
-			throw('INDEX_SIZE_ERR - Storage.setItem - The provided index (' + index + ') is not available');
+			throw('INDEX_SIZE_ERR - Storage.setItem - The provided index (' + nIndex + ') is not available');
 		},
 
 		/**
 		 * Remove an item from the data storage.
-		 * @method setItem
-		 * @param key {String} Required. The key to remove (DOMString in HTML 5 spec).
+		 * @method removeItem
+		 * @param sKey {String} Required. The key to remove (DOMString in HTML 5 spec).
 		 * @public
 		 */
-		removeItem: function(key) {
-			Y.log("removing " + key);
+		removeItem: function(sKey) {
+			Y.log("removing " + sKey);
+            var that = this,
+                oOldValue;
 			
-			if (this.hasKey(key)) {
-                var oldValue = this._getItem(key);
-                if (! oldValue) {oldValue = null;}
-                this._removeItem(key);
-				this.fireEvent(this.CE_CHANGE, new YU.StorageEvent(this, key, oldValue, null, YU.StorageEvent.TYPE_REMOVE_ITEM));
+			if (that.hasKey(sKey)) {
+                oOldValue = that._getItem(sKey);
+                if (! oOldValue) {oOldValue = null;}
+                that._removeItem(sKey);
+				that.fireEvent(Storage.CE_CHANGE, new Util.StorageEvent(that, sKey, oOldValue, null, Util.StorageEvent.TYPE_REMOVE_ITEM));
 			}
 			else {
 				// HTML 5 spec says to do nothing
@@ -194,26 +195,28 @@ if (! YU.Storage) {
 		/**
 		 * Adds an item to the data storage.
 		 * @method setItem
-		 * @param key {String} Required. The key used to reference this value (DOMString in HTML 5 spec).
-		 * @param data {Object} Required. The data to store at key (DOMString in HTML 5 spec).
+		 * @param sKey {String} Required. The key used to reference this value (DOMString in HTML 5 spec).
+		 * @param oData {Object} Required. The data to store at key (DOMString in HTML 5 spec).
 		 * @public
 		 * @throws QUOTA_EXCEEDED_ERROR
 		 */
-		setItem: function(key, data) {
-			Y.log("SETTING " + data + " to " + key);
+		setItem: function(sKey, oData) {
+			Y.log("SETTING " + oData + " to " + sKey);
 			
-			if (YL.isString(key)) {
-				var eventType = this.hasKey(key) ? YU.StorageEvent.TYPE_UPDATE_ITEM : YU.StorageEvent.TYPE_ADD_ITEM,
-					oldValue = this._getItem(key);
-				if (! oldValue) {oldValue = null;}
+			if (Lang.isString(sKey)) {
+				var that = this,
+                    oOldValue = that._getItem(sKey);
 
-				if (this._setItem(key, this._createValue(data))) {
-					this.fireEvent(this.CE_CHANGE, new YU.StorageEvent(this, key, oldValue, data, eventType));
+				if (! oOldValue) {oOldValue = null;}
+
+				if (that._setItem(sKey, that._createValue(oData))) {
+					that.fireEvent(Storage.CE_CHANGE, new Util.StorageEvent(that, sKey, oOldValue, oData,
+                            that.hasKey(sKey) ? Util.StorageEvent.TYPE_UPDATE_ITEM : Util.StorageEvent.TYPE_ADD_ITEM));
 				}
 				else {
-					// this is thrown according to the HTML5 spec
+					// that is thrown according to the HTML5 spec
 					throw('QUOTA_EXCEEDED_ERROR - Storage.setItem - The choosen storage method (' +
-						  this.getName() + ') has exceeded capacity');
+						  that.getName() + ') has exceeded capacity');
 				}
 			}
 			else {
@@ -234,22 +237,22 @@ if (! YU.Storage) {
 		/**
 		 * Converts the object into a string, with meta data (type), so it can be restored later.
 		 * @method _createValue
-		 * @param s {Object} Required. An object to store.
+		 * @param o {Object} Required. An object to store.
 		 * @protected
 		 */
-		_createValue: function(s) {
-			var type = (YL.isNull(s) || YL.isUndefined(s)) ? ('' + s) : typeof s;
-			return 'string' === type ? s : type + this.DELIMITER + s;
+		_createValue: function(o) {
+			var sType = (Lang.isNull(o) || Lang.isUndefined(o)) ? ('' + o) : typeof o;
+			return 'type=' + sType + '&value=' + encodeURIComponent('' + o);
 		},
 
 		/**
 		 * Implementation of the getItem login; should be overwritten by storage engine.
 		 * @method _getItem
-		 * @param key {String} Required. The key used to reference this value.
+		 * @param sKey {String} Required. The key used to reference this value.
 		 * @return {String|NULL} The value stored at the provided key.
 		 * @protected
 		 */
-		_getItem: function(key) {
+		_getItem: function(sKey) {
 			_logOverwriteError('_getItem');
 			return '';
 		},
@@ -261,44 +264,43 @@ if (! YU.Storage) {
 		 * @protected
 		 */
 		_getValue: function(s) {
-			var a = s ? s.split(this.DELIMITER) : [];
-			if (1 == a.length) {return s;}
+			var sType = s.match(RX_TYPE)[1],
+				sValue = s.match(RX_VALUE)[1];
 
-			switch (a[0]) {
-				case 'boolean': return 'true' === a[1];
-				case 'number': return parseFloat(a[1]);
+			switch (sType) {
+				case 'boolean': return 'true' == sValue;
+				case 'number': return parseFloat(sValue);
 				case 'null': return null;
-				default: return a[1];
+				default: return decodeURIComponent(sValue);
 			}
 		},
 
 		/**
 		 * Implementation of the key logic; should be overwritten by storage engine.
 		 * @method _key
-		 * @param index {Number} Required. The index to retrieve (unsigned long in HTML 5 spec).
+		 * @param nIndex {Number} Required. The index to retrieve (unsigned long in HTML 5 spec).
 		 * @return {String|NULL} Required. The key at the provided index (DOMString in HTML 5 spec).
 		 * @protected
 		 */
-		_key: function(index) {
+		_key: function(nIndex) {
 			_logOverwriteError('_key');
 			return '';
 		},
 
 		/*
 		 * Implementation to fetch evaluate the existence of a key.
-		 * @see YAHOO.util.Storage._hasKey
 		 */
-		_hasKey: function(key) {
-			return null !== this._getItem(key);
+		_hasKey: function(sKey) {
+			return null !== this._getItem(sKey);
 		},
 
 		/**
 		 * Implementation of the removeItem login; should be overwritten by storage engine.
 		 * @method _removeItem
-		 * @param key {String} Required. The key to remove.
+		 * @param sKey {String} Required. The key to remove.
 		 * @protected
 		 */
-		_removeItem: function(key) {
+		_removeItem: function(sKey) {
 			_logOverwriteError('_removeItem');
 			return '';
 		},
@@ -306,18 +308,20 @@ if (! YU.Storage) {
 		/**
 		 * Implementation of the setItem login; should be overwritten by storage engine.
 		 * @method _setItem
-		 * @param key {String} Required. The key used to reference this value.
-		 * @param data {Object} Required. The data to storage at key.
+		 * @param sKey {String} Required. The key used to reference this value.
+		 * @param oData {Object} Required. The data to storage at key.
 		 * @return {Boolean} True when successful, false when size QUOTA exceeded.
 		 * @protected
 		 */
-		_setItem: function(key, data) {
+		_setItem: function(sKey, oData) {
 			_logOverwriteError('_setItem');
 			return '';
 		}
 	};
 
-	YL.augmentProto(YU.Storage, YU.EventProvider);
+	Lang.augmentProto(Storage, Util.EventProvider);
+
+    Util.Storage = Storage;
 }
 
 }());

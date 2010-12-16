@@ -5,29 +5,29 @@
  * @namespace YAHOO.util
  * @class StorageEvent
  * @constructor
- * @param storageArea {Object} Required. The Storage object that was affected.
- * @param key {String} Required. The key being changed; DOMString in HTML 5 spec.
- * @param oldValue {String} Required. The old value of the key being changed; DOMString in HTML 5 spec.
- * @param newValue {String} Required. The new value of the key being changed; DOMString in HTML 5 spec.
- * @param type {String} Required. The storage event type.
+ * @param oStorageArea {Object} Required. The Storage object that was affected.
+ * @param sKey {String} Required. The key being changed; DOMString in HTML 5 spec.
+ * @param oOldValue {Mixed} Required. The old value of the key being changed; DOMString in HTML 5 spec.
+ * @param oNewValue {Mixed} Required. The new value of the key being changed; DOMString in HTML 5 spec.
+ * @param sType {String} Required. The storage event type.
  */
-YAHOO.util.StorageEvent = function(storageArea, key, oldValue, newValue, type) {
-	this.key = key;
-	this.oldValue = oldValue;
-	this.newValue = newValue;
+function StorageEvent(oStorageArea, sKey, oOldValue, oNewValue, sType) {
+	this.key = sKey;
+	this.oldValue = oOldValue;
+	this.newValue = oNewValue;
 	this.url = window.location.href;
 	this.window = window; // todo: think about the CAJA and innocent code
-	this.storageArea = storageArea;
-	this.type = type;
-};
+	this.storageArea = oStorageArea;
+	this.type = sType;
+}
 
-YAHOO.lang.augmentObject(YAHOO.util.StorageEvent, {
+YAHOO.lang.augmentObject(StorageEvent, {
 	TYPE_ADD_ITEM: 'addItem',
 	TYPE_REMOVE_ITEM: 'removeItem',
 	TYPE_UPDATE_ITEM: 'updateItem'
 });
 
-YAHOO.util.StorageEvent.prototype = {
+StorageEvent.prototype = {
 
     /**
      * The 'key' attribute represents the key being changed.
@@ -41,7 +41,7 @@ YAHOO.util.StorageEvent.prototype = {
     /**
      * The 'newValue' attribute represents the new value of the key being changed.
      * @property newValue
-     * @type {String}
+     * @type {Mixed}
      * @static
      * @readonly
      */
@@ -50,7 +50,7 @@ YAHOO.util.StorageEvent.prototype = {
     /**
      * The 'oldValue' attribute represents the old value of the key being changed.
      * @property oldValue
-     * @type {String}
+     * @type {Mixed}
      * @static
      * @readonly
      */
@@ -92,5 +92,7 @@ YAHOO.util.StorageEvent.prototype = {
      */
     url: null
 };
+
+YAHOO.util.StorageEvent = StorageEvent;
 	
 }());
