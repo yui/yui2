@@ -491,7 +491,7 @@ var L = YAHOO.lang,
      * @param {any} o The object being testing
      * @return {boolean} the result
      */
-    isArray: function(o) { 
+    isArray: function(o) {
         return OP.toString.apply(o) === ARRAY_TOSTRING;
     },
 
@@ -504,7 +504,7 @@ var L = YAHOO.lang,
     isBoolean: function(o) {
         return typeof o === 'boolean';
     },
-    
+
     /**
      * Determines whether or not the provided object is a function.
      * Note: Internet Explorer thinks certain functions are objects:
@@ -525,7 +525,7 @@ var L = YAHOO.lang,
     isFunction: function(o) {
         return (typeof o === 'function') || OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
-        
+
     /**
      * Determines whether or not the provided object is null
      * @method isNull
@@ -535,7 +535,7 @@ var L = YAHOO.lang,
     isNull: function(o) {
         return o === null;
     },
-        
+
     /**
      * Determines whether or not the provided object is a legal number
      * @method isNumber
@@ -545,18 +545,18 @@ var L = YAHOO.lang,
     isNumber: function(o) {
         return typeof o === 'number' && isFinite(o);
     },
-      
+
     /**
      * Determines whether or not the provided object is of type object
      * or function
      * @method isObject
      * @param {any} o The object being testing
      * @return {boolean} the result
-     */  
+     */
     isObject: function(o) {
 return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
-        
+
     /**
      * Determines whether or not the provided object is a string
      * @method isString
@@ -566,7 +566,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     isString: function(o) {
         return typeof o === 'string';
     },
-        
+
     /**
      * Determines whether or not the provided object is undefined
      * @method isUndefined
@@ -576,12 +576,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     isUndefined: function(o) {
         return typeof o === 'undefined';
     },
-    
- 
+
+
     /**
      * IE will not enumerate native functions in a derived object even if the
-     * function was overridden.  This is a workaround for specific functions 
-     * we care about on the Object prototype. 
+     * function was overridden.  This is a workaround for specific functions
+     * we care about on the Object prototype.
      * @property _IEEnumFix
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
@@ -600,7 +600,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 }
             }
     } : function(){},
-       
+
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
@@ -612,7 +612,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {Function} superc the object to inherit
      * @param {Object} overrides  additional properties/methods to add to the
      *                              subclass prototype.  These will override the
-     *                              matching items obtained from the superclass 
+     *                              matching items obtained from the superclass
      *                              if present.
      */
     extend: function(subc, superc, overrides) {
@@ -628,7 +628,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         if (superc.prototype.constructor == OP.constructor) {
             superc.prototype.constructor=superc;
         }
-    
+
         if (overrides) {
             for (i in overrides) {
                 if (L.hasOwnProperty(overrides, i)) {
@@ -639,14 +639,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             L._IEEnumFix(subc.prototype, overrides);
         }
     },
-   
+
     /**
      * Applies all properties in the supplier to the receiver if the
-     * receiver does not have these properties yet.  Optionally, one or 
-     * more methods/properties can be specified (as additional 
-     * parameters).  This option will overwrite the property if receiver 
-     * has it already.  If true is passed as the third parameter, all 
-     * properties will be applied and _will_ overwrite properties in 
+     * receiver does not have these properties yet.  Optionally, one or
+     * more methods/properties can be specified (as additional
+     * parameters).  This option will overwrite the property if receiver
+     * has it already.  If true is passed as the third parameter, all
+     * properties will be applied and _will_ overwrite properties in
      * the receiver.
      *
      * @method augmentObject
@@ -654,7 +654,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @since 2.3.0
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods 
+     * @param {String*|boolean}  arguments zero or more properties methods
      *        to augment the receiver with.  If none specified, everything
      *        in the supplier will be used unless it would
      *        overwrite an existing property in the receiver. If true
@@ -672,16 +672,16 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 r[a[i]] = s[a[i]];
             }
         } else { // take everything, overwriting only if the third parameter is true
-            for (p in s) { 
+            for (p in s) {
                 if (overrideList || !(p in r)) {
                     r[p] = s[p];
                 }
             }
-            
+
             L._IEEnumFix(r, s);
         }
     },
- 
+
     /**
      * Same as YAHOO.lang.augmentObject, except it only applies prototype properties
      * @see YAHOO.lang.augmentObject
@@ -689,11 +689,11 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods 
-     *        to augment the receiver with.  If none specified, everything 
-     *        in the supplier will be used unless it would overwrite an existing 
-     *        property in the receiver.  if true is specified as the third 
-     *        parameter, all properties will be applied and will overwrite an 
+     * @param {String*|boolean}  arguments zero or more properties methods
+     *        to augment the receiver with.  If none specified, everything
+     *        in the supplier will be used unless it would overwrite an existing
+     *        property in the receiver.  if true is specified as the third
+     *        parameter, all properties will be applied and will overwrite an
      *        existing property in the receiver
      */
     augmentProto: function(r, s) {
@@ -708,7 +708,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         L.augmentObject.apply(this, a);
     },
 
-      
+
     /**
      * Returns a simple string representation of the object or array.
      * Other types of objects will be returned unprocessed.  Arrays
@@ -726,7 +726,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
         // Cast non-objects to string
         // Skip dates because the std toString is what we want
-        // Skip HTMLElement-like objects because trying to dump 
+        // Skip HTMLElement-like objects because trying to dump
         // an element will cause an unhandled exception in FF 2.x
         if (!L.isObject(o)) {
             return o + "";
@@ -778,19 +778,19 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
 
     /**
-     * Does variable substitution on a string. It scans through the string 
-     * looking for expressions enclosed in { } braces. If an expression 
+     * Does variable substitution on a string. It scans through the string
+     * looking for expressions enclosed in { } braces. If an expression
      * is found, it is used a key on the object.  If there is a space in
      * the key, the first word is used for the key and the rest is provided
      * to an optional function to be used to programatically determine the
-     * value (the extra information might be used for this decision). If 
+     * value (the extra information might be used for this decision). If
      * the value for the key in the object, or what is returned from the
-     * function has a string value, number value, or object value, it is 
+     * function has a string value, number value, or object value, it is
      * substituted for the bracket expression and it repeats.  If this
      * value is an object, it uses the Object's toString() if this has
      * been overridden, otherwise it does a shallow dump of the key/value
      * pairs.
-     * 
+     *
      * By specifying the recurse option, the string is rescanned after
      * every replacement, allowing for nested template substitutions.
      * The side effect of this option is that curly braces in the
@@ -823,7 +823,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 break;
             }
 
-            //Extract key and meta info 
+            //Extract key and meta info
             token = s.substring(i + 1, j);
             key = token;
             meta = null;
@@ -855,7 +855,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
                     objstr = v.toString();
 
-                    // use the toString if it is not the Object toString 
+                    // use the toString if it is not the Object toString
                     // and the 'dump' meta info was not found
                     if (objstr === OBJECT_TOSTRING || dump > -1) {
                         v = L.dump(v, parseInt(meta, 10));
@@ -889,7 +889,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
 
     /**
-     * Returns a string without any leading or trailing whitespace.  If 
+     * Returns a string without any leading or trailing whitespace.  If
      * the input is not a string, the input will be returned untouched.
      * @method trim
      * @since 2.3.0
@@ -922,28 +922,28 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
 
     /**
-     * Executes the supplied function in the context of the supplied 
-     * object 'when' milliseconds later.  Executes the function a 
+     * Executes the supplied function in the context of the supplied
+     * object 'when' milliseconds later.  Executes the function a
      * single time unless periodic is set to true.
      * @method later
      * @since 2.4.0
-     * @param when {int} the number of milliseconds to wait until the fn 
+     * @param when {int} the number of milliseconds to wait until the fn
      * is executed
      * @param o the context object
-     * @param fn {Function|String} the function to execute or the name of 
+     * @param fn {Function|String} the function to execute or the name of
      * the method in the 'o' object to execute
      * @param data [Array] data that is provided to the function.  This accepts
      * either a single item or an array.  If an array is provided, the
      * function is executed with one parameter for each array item.  If
      * you need to pass a single array parameter, it needs to be wrapped in
      * an array [myarray]
-     * @param periodic {boolean} if true, executes continuously at supplied 
+     * @param periodic {boolean} if true, executes continuously at supplied
      * interval until canceled
-     * @return a timer object. Call the cancel() method on this object to 
+     * @return a timer object. Call the cancel() method on this object to
      * stop the timer.
      */
     later: function(when, o, fn, data, periodic) {
-        when = when || 0; 
+        when = when || 0;
         o = o || {};
         var m=fn, d=data, f, r;
 
@@ -976,10 +976,10 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             }
         };
     },
-    
+
     /**
      * A convenience method for detecting a legitimate non-null value.
-     * Returns false for null/undefined/NaN, true for other values, 
+     * Returns false for null/undefined/NaN, true for other values,
      * including 0/false/''
      * @method isValue
      * @since 2.3.0
@@ -1016,9 +1016,9 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
  */
 L.hasOwnProperty = (OP.hasOwnProperty) ?
     function(o, prop) {
-        return o && o.hasOwnProperty(prop);
+        return o && o.hasOwnProperty && o.hasOwnProperty(prop);
     } : function(o, prop) {
-        return !L.isUndefined(o[prop]) && 
+        return !L.isUndefined(o[prop]) &&
                 o.constructor.prototype[prop] !== o[prop];
     };
 
@@ -1030,16 +1030,16 @@ OB.augmentObject(L, OB, true);
  * @class YAHOO.util.Lang
  */
 YAHOO.util.Lang = L;
- 
+
 /**
- * Same as YAHOO.lang.augmentObject, except it only applies prototype 
+ * Same as YAHOO.lang.augmentObject, except it only applies prototype
  * properties.  This is an alias for augmentProto.
  * @see YAHOO.lang.augmentObject
  * @method augment
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*|boolean}  arguments zero or more properties methods to 
+ * @param {String*|boolean}  arguments zero or more properties methods to
  *        augment the receiver with.  If none specified, everything
  *        in the supplier will be used unless it would
  *        overwrite an existing property in the receiver.  if true
@@ -1056,13 +1056,13 @@ L.augment = L.augmentProto;
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*}  arguments zero or more properties methods to 
+ * @param {String*}  arguments zero or more properties methods to
  *        augment the receiver with.  If none specified, everything
  *        in the supplier will be used unless it would
  *        overwrite an existing property in the receiver
  */
 YAHOO.augment = L.augmentProto;
-       
+
 /**
  * An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
  * @method extend
