@@ -215,6 +215,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
             L._IEEnumFix(r, s);
         }
+
+        return r;
     },
 
     /**
@@ -241,6 +243,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             a.push(arguments[i]);
         }
         L.augmentObject.apply(this, a);
+
+        return r;
     },
 
 
