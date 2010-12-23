@@ -43,7 +43,7 @@
             el = this._createHostElement(attr);
         }
 
-    	ColorPicker.superclass.constructor.call(this, el, attr); 
+        ColorPicker.superclass.constructor.call(this, el, attr); 
 
         this.initPicker();
     }
@@ -1149,7 +1149,7 @@
         },
 
         /**
-         * Wrapper for _updateRGB, but allows setting 
+         * Wrapper for _updateRGB, but allows non-animated update
          *
          * @method syncUI
          * @param skipAnim {Boolean} Omit Slider animation for this action
