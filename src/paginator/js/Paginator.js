@@ -646,6 +646,8 @@ Paginator.prototype = {
                 par.replaceChild(comp.render(id_base),marker);
             }
         }
+
+        return this;
     },
 
     /**
