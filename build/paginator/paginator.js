@@ -633,6 +633,8 @@ Paginator.prototype = {
      * @method renderUIComponent
      * @param marker {HTMLElement} the marker node to replace
      * @param id_base {String} string base the component's generated id
+     * @return the Paginator instance
+     * @chainable
      */
     renderUIComponent : function (marker, id_base) {
         var par    = marker.parentNode,
