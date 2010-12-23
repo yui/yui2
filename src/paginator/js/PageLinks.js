@@ -202,7 +202,7 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
-								titleBuilder = p.get('pageTitleBuilder'),
+                titleBuilder = p.get('pageTitleBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
@@ -213,22 +213,22 @@ Paginator.ui.PageLinks.prototype = {
                 linkTemplate,i,spanTemplate;
 
             linkTemplate = '<a href="#" class="{class}" page="{page}" title="{title}">{label}</a>';
-						spanTemplate = '<span class="{class}">{label}</span>';
+            spanTemplate = '<span class="{class}">{label}</span>';
             for (i = start; i <= end; ++i) {
 
                 if (i === currentPage) {
                     content += l.substitute(spanTemplate, {
-											'class' : p.get('currentPageClass') + ' ' + p.get('pageLinkClass'),
-											'label' : labelBuilder(i,p)
-										});
+                        'class' : p.get('currentPageClass') + ' ' + p.get('pageLinkClass'),
+                        'label' : labelBuilder(i,p)
+                    });
 
                 } else {
                     content += l.substitute(linkTemplate, {
-											'class' : p.get('pageLinkClass'),
-											'page' 	: i,
-											'label' : labelBuilder(i,p),
-											'title' : titleBuilder(i,p)
-										});
+                        'class' : p.get('pageLinkClass'),
+                        'page'  : i,
+                        'label' : labelBuilder(i,p),
+                        'title' : titleBuilder(i,p)
+                    });
                 }
             }
 

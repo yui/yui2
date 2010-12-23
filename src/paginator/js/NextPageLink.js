@@ -55,7 +55,7 @@ Paginator.ui.NextPageLink.init = function (p) {
         validator : l.isString
     });
 
-		/**
+    /**
      * Used as title for the next page link.
      * @attribute nextPageLinkTitle
      * @default 'Next Page'
@@ -106,7 +106,7 @@ Paginator.ui.NextPageLink.prototype = {
             c     = p.get('nextPageLinkClass'),
             label = p.get('nextPageLinkLabel'),
             last  = p.getTotalPages(),
-						title = p.get('nextPageLinkTitle');
+            title = p.get('nextPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -115,7 +115,7 @@ Paginator.ui.NextPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
-				this.link.title			= title;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-next-span';

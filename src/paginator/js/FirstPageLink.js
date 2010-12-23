@@ -104,7 +104,7 @@ Paginator.ui.FirstPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('firstPageLinkClass'),
             label = p.get('firstPageLinkLabel'),
-						title = p.get('firstPageLinkTitle');
+            title = p.get('firstPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -113,7 +113,7 @@ Paginator.ui.FirstPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
-				this.link.title 		= title;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-first-span';
