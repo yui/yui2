@@ -54,6 +54,17 @@ Paginator.ui.LastPageLink.init = function (p) {
         value : 'yui-pg-last',
         validator : l.isString
     });
+
+		/**
+     * Used as title for the last page link.
+     * @attribute lastPageLinkTitle
+     * @default 'Last Page'
+     */
+    p.setAttributeConfig('lastPageLinkTitle', {
+        value : 'Last Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.LastPageLink.prototype = {
@@ -103,7 +114,8 @@ Paginator.ui.LastPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('lastPageLinkClass'),
             label = p.get('lastPageLinkLabel'),
-            last  = p.getTotalPages();
+            last  = p.getTotalPages(),
+						title = p.get('lastPageLinkTitle');
 
         this.link = document.createElement('a');
         this.span = document.createElement('span');
@@ -113,6 +125,7 @@ Paginator.ui.LastPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title			= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-last-span';

@@ -88,6 +88,18 @@ Paginator.ui.PageLinks.init = function (p) {
         value : function (page, paginator) { return page; },
         validator : l.isFunction
     });
+
+    /**
+     * Function used generate the title for each page link.  The
+     * function receives as parameters the page number and a reference to the
+     * paginator object.
+     * @attribute pageTitleBuilder
+     * @default function (page, paginator) { return page; }
+     */
+    p.setAttributeConfig('pageTitleBuilder', {
+        value : function (page, paginator) { return "Page " + page; },
+        validator : l.isFunction
+    });
 };
 
 /**
@@ -190,6 +202,7 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
+								titleBuilder = p.get('pageTitleBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
@@ -197,19 +210,25 @@ Paginator.ui.PageLinks.prototype = {
                 start        = range[0],
                 end          = range[1],
                 content      = '',
-                linkTemplate,i;
+                linkTemplate,i,spanTemplate;
 
-            linkTemplate = '<a href="#" class="' + p.get('pageLinkClass') +
-                           '" page="';
+            linkTemplate = '<a href="#" class="{class}" page="{page}" title="{title}">{label}</a>';
+						spanTemplate = '<span class="{class}">{label}</span>';
             for (i = start; i <= end; ++i) {
+
                 if (i === currentPage) {
-                    content +=
-                        '<span class="' + p.get('currentPageClass') + ' ' +
-                                          p.get('pageLinkClass') + '">' +
-                        labelBuilder(i,p) + '</span>';
+                    content += l.substitute(spanTemplate, {
+											'class' : p.get('currentPageClass') + ' ' + p.get('pageLinkClass'),
+											'label' : labelBuilder(i,p)
+										});
+
                 } else {
-                    content +=
-                        linkTemplate + i + '">' + labelBuilder(i,p) + '</a>';
+                    content += l.substitute(linkTemplate, {
+											'class' : p.get('pageLinkClass'),
+											'page' 	: i,
+											'label' : labelBuilder(i,p),
+											'title' : titleBuilder(i,p)
+										});
                 }
             }
 

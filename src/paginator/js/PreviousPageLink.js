@@ -54,6 +54,17 @@ Paginator.ui.PreviousPageLink.init = function (p) {
         value : 'yui-pg-previous',
         validator : l.isString
     });
+
+		/**
+     * Used as title for the previous page link.
+     * @attribute previousPageLinkTitle
+     * @default 'Previous Page'
+     */
+    p.setAttributeConfig('previousPageLinkTitle', {
+        value : 'Previous Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.PreviousPageLink.prototype = {
@@ -93,7 +104,8 @@ Paginator.ui.PreviousPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('previousPageLinkClass'),
-            label = p.get('previousPageLinkLabel');
+            label = p.get('previousPageLinkLabel'),
+						title = p.get('previousPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -102,6 +114,7 @@ Paginator.ui.PreviousPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title			= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-prev-span';

@@ -54,6 +54,16 @@ Paginator.ui.FirstPageLink.init = function (p) {
         value : 'yui-pg-first',
         validator : l.isString
     });
+
+    /**
+     * Used as title for the first page link.
+     * @attribute firstPageLinkTitle
+     * @default 'First Page'
+     */
+    p.setAttributeConfig('firstPageLinkTitle', {
+        value : 'First Page',
+        validator : l.isString
+    });
 };
 
 // Instance members and methods
@@ -93,7 +103,8 @@ Paginator.ui.FirstPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('firstPageLinkClass'),
-            label = p.get('firstPageLinkLabel');
+            label = p.get('firstPageLinkLabel'),
+						title = p.get('firstPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -102,6 +113,7 @@ Paginator.ui.FirstPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title 		= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-first-span';
