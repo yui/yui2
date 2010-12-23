@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Paginator Test Page</title>
-    <link type="text/css" rel="stylesheet" href="/assets/dpSyntaxHighlighter.css">
     <link type="text/css" rel="stylesheet" href="../../../build/paginator/assets/skins/sam/paginator.css">
     <style type="text/css" class="highlight-ignore">
         h1 {
@@ -37,6 +36,9 @@
 <h2>rpp:10, tot:93, progressive enhance container and specific el</h2>
 <div id="p8-container"></div>
 <span id="p8-component" class="yui-pg-ui-NextPageLink"></span>
+
+<h2>rpp:10, tot: 53, JumpToPageDropdown</h2>
+<div id="p9"></div>
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
@@ -133,11 +135,19 @@ p8.on('changeRequest',update);
 p8._renderTemplate(document.getElementById('p8-container'),
     "{PageLinks} {RowsPerPageDropdown} {LastPageLink}",
     "p8_manual");
-p8._renderUIComponent(document.getElementById('p8-component'), 'p8_component');
+p8.renderUIComponent(document.getElementById('p8-component'), 'p8_component');
+
+var p9 = new Paginator({
+    rowsPerPage   :10,
+    totalRecords  :53,
+    containers    :'p9',
+    rowsPerPageOptions: [10, 25, 50],
+    template: '{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} RPP: {RowsPerPageDropdown} Jump to: {JumpToPageDropdown}'
+});
+p9.on('changeRequest',update);
+p9.render();
 
 });
 </script>
-<script type="text/javascript" src="/assets/dpSyntaxHighlighter.js"></script>
-<script type="text/javascript" src="/assets/dpSyntaxHighlightExample.js"></script>
 </body>
 </html>
