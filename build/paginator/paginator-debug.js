@@ -668,7 +668,7 @@ Paginator.prototype = {
      */
     updateVisibility : function (e) {
         var alwaysVisible = this.get('alwaysVisible'),
-            totalRecords,visible,rpp,rppOptions,i,len;
+            totalRecords, visible, rpp, rppOptions, i, len, opt;
 
         if (!e || e.type === 'alwaysVisibleChange' || !alwaysVisible) {
             totalRecords = this.get('totalRecords');
@@ -678,7 +678,11 @@ Paginator.prototype = {
 
             if (isArray(rppOptions)) {
                 for (i = 0, len = rppOptions.length; i < len; ++i) {
-                    rpp = Math.min(rpp,rppOptions[i]);
+                    opt = rppOptions[i];
+                    // account for value 'all'
+                    if (lang.isNumber(opt || opt.value)) {
+                        rpp = Math.min(rpp, (opt.value || opt));
+                    }
                 }
             }
 
