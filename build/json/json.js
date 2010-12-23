@@ -424,6 +424,10 @@ YAHOO.lang.JSON = {
      * @static
      */
     parse : function (s,reviver) {
+        if (typeof s !== 'string') {
+            s += '';
+        }
+
         return Native && YAHOO.lang.JSON.useNativeParse ?
             Native.parse(s,reviver) : _parse(s,reviver);
     },
