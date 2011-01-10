@@ -128,6 +128,9 @@
 
                 Assert.areEqual(document.getElementById('search'), Y.Dom.get('search'),
                         "Y.Dom.get('search')");
+
+                Assert.isNull(Y.Dom.get('fake-id-none-found'),
+                        "Y.Dom.get('fake-id')");
             },            
 
             test_getStyle: function() {

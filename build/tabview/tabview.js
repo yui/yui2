@@ -102,16 +102,18 @@
             
             tabs.splice(index, 0, tab);
 
-            if ( before ) {
+            if (before) {
                 tabParent.insertBefore(tabElement, before.get(ELEMENT));
+                if (contentEl) {
+                    contentParent.appendChild(contentEl);
+                }
             } else {
                 tabParent.appendChild(tabElement);
+                if (contentEl) {
+                    contentParent.appendChild(contentEl);
+                }
             }
 
-            if ( contentEl && !Dom.isAncestor(contentParent, contentEl) ) {
-                contentParent.appendChild(contentEl);
-            }
-            
             if ( !tab.get(ACTIVE) ) {
                 tab.set('contentVisible', false, true); /* hide if not active */
             } else {
