@@ -1209,7 +1209,8 @@
                     if (!this.header && close) {
                         this._createHeader();
                     }
-                    var c = Dom.getElementsByClassName('close', 'div', this.header)[0];
+                    var c = this.header ? Dom.getElementsByClassName('close', 'div', this.header)[0] : null;
+                    
                     if (close) {
                         //Force some header text if there isn't any
                         if (!this.get('header')) {
@@ -1246,7 +1247,8 @@
                     if (!this.header && collapse) {
                         this._createHeader();
                     }
-                    var c = Dom.getElementsByClassName('collapse', 'div', this.header)[0];
+                    var c = this.header ? Dom.getElementsByClassName('collapse', 'div', this.header)[0] : null;
+                    
                     if (collapse) {
                         //Force some header text if there isn't any
                         if (!this.get('header')) {
