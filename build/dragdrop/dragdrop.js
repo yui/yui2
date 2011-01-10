@@ -883,6 +883,7 @@ YAHOO.util.DragDropMgr = function() {
             
                 oldOvers = [], // cache the previous dragOver array
                 inGroupsObj  = {},
+                b4Results = {},
                 inGroups  = [],
                 data = {
                     outEvts: [],
@@ -983,10 +984,10 @@ YAHOO.util.DragDropMgr = function() {
                     if (this.mode) {
                         if (dc.events[b4]) {
                             dc[b4](e, tmp, inGroups);
-                            dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
+                            b4Results[ev] = dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
                             
                         }
-                        if (dc.events[check]) {
+                        if (dc.events[check] && (b4Results[ev] !== false)) {
                             dc[ev](e, tmp, inGroups);
                             dc.fireEvent(cev, { event: e, info: tmp, group: inGroups });
                         }
@@ -994,9 +995,9 @@ YAHOO.util.DragDropMgr = function() {
                         for (var b = 0, len = tmp.length; b < len; ++b) {
                             if (dc.events[b4]) {
                                 dc[b4](e, tmp[b].id, inGroups[0]);
-                                dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
+                                b4Results[ev] = dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
-                            if (dc.events[check]) {
+                            if (dc.events[check] && (b4Results[ev] !== false)) {
                                 dc[ev](e, tmp[b].id, inGroups[0]);
                                 dc.fireEvent(cev, { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
