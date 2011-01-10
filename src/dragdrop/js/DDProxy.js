@@ -10,7 +10,6 @@
  *
  * @class DDProxy
  * @extends YAHOO.util.DD
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked html element
  * @param {String} sGroup the group of related DragDrop objects

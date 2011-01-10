@@ -5,7 +5,6 @@
  * event listener and the callbacks.
  * @class DDTarget
  * @extends YAHOO.util.DragDrop 
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the element that is a drop target
  * @param {String} sGroup the group of related DragDrop objects
