@@ -725,7 +725,7 @@
              * @type String
              */
             this.setAttributeConfig(CONTENT, {
-                value: attr[CONTENT],
+                value: attr[CONTENT] || this.get(CONTENT_EL).innerHTML,
                 method: function(value) {
                     this.get(CONTENT_EL).innerHTML = value;
                 }
