@@ -1209,6 +1209,9 @@
                     if (!this.header && close) {
                         this._createHeader();
                     }
+                    if (!this.header) {
+                        return;
+                    }
                     var c = this.header ? Dom.getElementsByClassName('close', 'div', this.header)[0] : null;
                     
                     if (close) {
@@ -1246,6 +1249,9 @@
                     }
                     if (!this.header && collapse) {
                         this._createHeader();
+                    }
+                    if (!this.header) {
+                        return;
                     }
                     var c = this.header ? Dom.getElementsByClassName('collapse', 'div', this.header)[0] : null;
                     
