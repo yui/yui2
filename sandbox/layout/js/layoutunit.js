@@ -1514,7 +1514,7 @@
                 par.removeListener('resize', this.resize, this, true);
             }
             this.unsubscribeAll();
-            Event.purgeElement(this.get('element'));
+            Event.purgeElement(this.get('element'), true);
             this.get('parentNode').removeChild(this.get('element'));
 
             delete YAHOO.widget.LayoutUnit._instances[this.get('id')];
