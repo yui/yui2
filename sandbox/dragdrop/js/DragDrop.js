@@ -887,7 +887,12 @@ YAHOO.util.DragDrop.prototype = {
         var mDownReturn = this.onMouseDown(e),
             mDownReturn2 = true;
         if (this.events.mouseDown) {
-            mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            if (mDownReturn === false) {
+                //Fixes #2528759 - Mousedown function returned false, don't fire the event and cancel everything.
+                 mDownReturn2 = false;
+            } else {
+                mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            }
         }
 
         if ((b4Return === false) || (mDownReturn === false) || (b4Return2 === false) || (mDownReturn2 === false)) {
