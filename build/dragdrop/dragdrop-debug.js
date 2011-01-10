@@ -2469,7 +2469,12 @@ YAHOO.util.DragDrop.prototype = {
         var mDownReturn = this.onMouseDown(e),
             mDownReturn2 = true;
         if (this.events.mouseDown) {
-            mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            if (mDownReturn === false) {
+                //Fixes #2528759 - Mousedown function returned false, don't fire the event and cancel everything.
+                 mDownReturn2 = false;
+            } else {
+                mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            }
         }
 
         if ((b4Return === false) || (mDownReturn === false) || (b4Return2 === false) || (mDownReturn2 === false)) {
@@ -2985,7 +2990,6 @@ YAHOO.augment(YAHOO.util.DragDrop, YAHOO.util.EventProvider);
  * mouse cursor during a drag.
  * @class DD
  * @extends YAHOO.util.DragDrop
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked element 
  * @param {String} sGroup the group of related DragDrop items
@@ -3362,7 +3366,6 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
  *
  * @class DDProxy
  * @extends YAHOO.util.DD
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked html element
  * @param {String} sGroup the group of related DragDrop objects
@@ -3683,7 +3686,6 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
  * event listener and the callbacks.
  * @class DDTarget
  * @extends YAHOO.util.DragDrop 
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the element that is a drop target
  * @param {String} sGroup the group of related DragDrop objects
