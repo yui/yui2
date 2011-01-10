@@ -474,7 +474,7 @@
             }
 
             this._collapsing = true;
-            this.setStyle('zIndex', this.get('parent')._zIndex + 1);
+            this.setStyle('zIndex', this._zIndex);
 
             if (this._anim) {
                 this.setStyle('display', 'none');
@@ -527,7 +527,7 @@
                 };
                 var expand = function() {
                     this._collapsing = false;
-                    this.setStyle('zIndex', this.get('parent')._zIndex);
+                    this.setStyle('zIndex', this._zIndex);
                     this.set('width', this._lastWidth);
                     this.set('height', this._lastHeight);
                     this._collapsed = false;
@@ -547,6 +547,7 @@
                 this._collapsing = false;
                 this._toggleClip();
                 this._collapsed = false;
+                this._zIndex = this.getStyle('zIndex');
                 this.setStyle('zIndex', this.get('parent')._zIndex);
                 this.setStyle('display', 'block');
                 this.set('width', this._lastWidth);
@@ -595,6 +596,7 @@
                 this._lastLeft = 0;
                 this.set('left', 0);
             }
+            this._zIndex = this.getStyle('zIndex');
             this.setStyle('zIndex', this.get('parent')._zIndex + 1);
             var pos = this.get('position');
 
