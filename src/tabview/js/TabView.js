@@ -87,17 +87,18 @@
          */
         addTab: function(tab, index) {
             var tabs = this.get('tabs'),
-                before = this.getTab(index),
                 tabParent = this._tabParent,
                 contentParent = this._contentParent,
                 tabElement = tab.get(ELEMENT),
-                contentEl = tab.get(CONTENT_EL);
+                contentEl = tab.get(CONTENT_EL),
+                before;
 
             if (!tabs) { // not ready yet
                 this._queue[this._queue.length] = ['addTab', arguments];
                 return false;
             }
             
+            before = this.getTab(index);
             index = (index === undefined) ? tabs.length : index;
             
             tabs.splice(index, 0, tab);
