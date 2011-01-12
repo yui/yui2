@@ -903,6 +903,7 @@ YAHOO.util.DragDropMgr = function() {
             
                 oldOvers = [], // cache the previous dragOver array
                 inGroupsObj  = {},
+                b4Results = {},
                 inGroups  = [],
                 data = {
                     outEvts: [],
@@ -1006,10 +1007,10 @@ YAHOO.util.DragDropMgr = function() {
                         YAHOO.log(dc.id + ' ' + ev + ': ' + tmp, "info", "DragDropMgr");
                         if (dc.events[b4]) {
                             dc[b4](e, tmp, inGroups);
-                            dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
+                            b4Results[ev] = dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
                             
                         }
-                        if (dc.events[check]) {
+                        if (dc.events[check] && (b4Results[ev] !== false)) {
                             dc[ev](e, tmp, inGroups);
                             dc.fireEvent(cev, { event: e, info: tmp, group: inGroups });
                         }
@@ -1018,9 +1019,9 @@ YAHOO.util.DragDropMgr = function() {
                             YAHOO.log(dc.id + ' ' + ev + ': ' + tmp[b].id, "info", "DragDropMgr");
                             if (dc.events[b4]) {
                                 dc[b4](e, tmp[b].id, inGroups[0]);
-                                dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
+                                b4Results[ev] = dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
-                            if (dc.events[check]) {
+                            if (dc.events[check] && (b4Results[ev] !== false)) {
                                 dc[ev](e, tmp[b].id, inGroups[0]);
                                 dc.fireEvent(cev, { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
@@ -2469,7 +2470,12 @@ YAHOO.util.DragDrop.prototype = {
         var mDownReturn = this.onMouseDown(e),
             mDownReturn2 = true;
         if (this.events.mouseDown) {
-            mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            if (mDownReturn === false) {
+                //Fixes #2528759 - Mousedown function returned false, don't fire the event and cancel everything.
+                 mDownReturn2 = false;
+            } else {
+                mDownReturn2 = this.fireEvent('mouseDownEvent', e);
+            }
         }
 
         if ((b4Return === false) || (mDownReturn === false) || (b4Return2 === false) || (mDownReturn2 === false)) {
@@ -2985,7 +2991,6 @@ YAHOO.augment(YAHOO.util.DragDrop, YAHOO.util.EventProvider);
  * mouse cursor during a drag.
  * @class DD
  * @extends YAHOO.util.DragDrop
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked element 
  * @param {String} sGroup the group of related DragDrop items
@@ -3362,7 +3367,6 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
  *
  * @class DDProxy
  * @extends YAHOO.util.DD
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked html element
  * @param {String} sGroup the group of related DragDrop objects
@@ -3683,7 +3687,6 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
  * event listener and the callbacks.
  * @class DDTarget
  * @extends YAHOO.util.DragDrop 
- * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the element that is a drop target
  * @param {String} sGroup the group of related DragDrop objects

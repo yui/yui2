@@ -8,22 +8,22 @@
  */
 (function() {
 	// internal shorthand
-var Y = YAHOO.util,
-	YL = YAHOO.lang,
+var Util = YAHOO.util,
+	Lang = YAHOO.lang,
 
 	/*
 	 * Required for IE 8 to make synchronous.
 	 */
-	_beginTransaction = function(engine) {
-		if (engine.begin) {engine.begin();}
+	_beginTransaction = function(driver) {
+		driver.begin();
 	},
 
 	/*
 	 * Required for IE 8 to make synchronous.
 	 */
-	_commitTransaction = function(engine) {
-		if (engine.commit) {engine.commit();}
-	};
+	_commitTransaction = function(driver) {
+		driver.commit();
+	},
 
 	/**
 	 * The StorageEngineHTML5 class implements the HTML5 storage engine.
@@ -31,37 +31,43 @@ var Y = YAHOO.util,
 	 * @class StorageEngineHTML5
 	 * @constructor
 	 * @extend YAHOO.util.Storage
-	 * @param location {String} Required. The storage location.
-	 * @param conf {Object} Required. A configuration object.
+	 * @param sLocation {String} Required. The storage location.
+	 * @param oConf {Object} Required. A configuration object.
 	 */
-	Y.StorageEngineHTML5 = function(location, conf) {
-		var _this = this;
-		Y.StorageEngineHTML5.superclass.constructor.call(_this, location, Y.StorageEngineHTML5.ENGINE_NAME, conf);// not set, are cookies available
-		_this._engine = window[location];
-		_this.length = _this._engine.length;
-		YL.later(250, _this, function() { // temporary solution so that CE_READY can be subscribed to after this object is created
-			_this.fireEvent(_this.CE_READY);
-		});
+	StorageEngineHTML5 = function(sLocation, oConf) {
+		var that = this,
+            oDriver = window[sLocation];
+        
+		StorageEngineHTML5.superclass.constructor.call(that, sLocation, StorageEngineHTML5.ENGINE_NAME, oConf);// not set, are cookies available
+
+		// simplifieds the begin/commit functions, if not using IE; this provides a massive performance boost
+		if (! oDriver.begin) {_beginTransaction = function() {}; }
+		if (! oDriver.commit) {_commitTransaction = function() {}; }
+
+		that.length = oDriver.length;
+        that._driver = oDriver;
+        that.fireEvent(Util.Storage.CE_READY);
 	};
 
-	YAHOO.lang.extend(Y.StorageEngineHTML5, Y.Storage, {
+	Lang.extend(StorageEngineHTML5, Util.Storage, {
 
-		_engine: null,
+		_driver: null,
 
 		/*
 		 * Implementation to clear the values from the storage engine.
 		 * @see YAHOO.util.Storage._clear
 		 */
 		_clear: function() {
-			var _this = this;
-			if (_this._engine.clear) {
-				_this._engine.clear();
+			var that = this, i, sKey;
+
+			if (that._driver.clear) {
+				that._driver.clear();
 			}
 			// for FF 3, fixed in FF 3.5
 			else {
-				for (var i = _this.length, key; 0 <= i; i -= 1) {
-					key = _this._key(i);
-					_this._removeItem(key);
+				for (i = that.length; 0 <= i; i -= 1) {
+					sKey = that._key(i);
+					that._removeItem(sKey);
 				}
 			}
 		},
@@ -70,41 +76,41 @@ var Y = YAHOO.util,
 		 * Implementation to fetch an item from the storage engine.
 		 * @see YAHOO.util.Storage._getItem
 		 */
-		_getItem: function(key) {
-			var o = this._engine.getItem(key);
-			return YL.isObject(o) ? o.value : o; // for FF 3, fixed in FF 3.5
+		_getItem: function(sKey) {
+			var o = this._driver.getItem(sKey);
+			return Lang.isObject(o) ? o.value : o; // for FF 3, fixed in FF 3.5
 		},
 
 		/*
 		 * Implementation to fetch a key from the storage engine.
 		 * @see YAHOO.util.Storage._key
 		 */
-		_key: function(index) {return this._engine.key(index);},
+		_key: function(nIndex) {return this._driver.key(nIndex);},
 
 		/*
 		 * Implementation to remove an item from the storage engine.
 		 * @see YAHOO.util.Storage._removeItem
 		 */
-		_removeItem: function(key) {
-			var _this = this;
-			_beginTransaction(_this._engine);
-			_this._engine.removeItem(key);
-			_commitTransaction(_this._engine);
-			_this.length = _this._engine.length;
+		_removeItem: function(sKey) {
+			var oDriver = this._driver;
+			_beginTransaction(oDriver);
+			oDriver.removeItem(sKey);
+			_commitTransaction(oDriver);
+			this.length = oDriver.length;
 		},
 
 		/*
 		 * Implementation to remove an item from the storage engine.
 		 * @see YAHOO.util.Storage._setItem
 		 */
-		_setItem: function(key, value) {
-			var _this = this;
-			
+		_setItem: function(sKey, oValue) {
+			var oDriver = this._driver;
+
 			try {
-				_beginTransaction(_this._engine);
-				_this._engine.setItem(key, value);
-				_commitTransaction(_this._engine);
-				_this.length = _this._engine.length;
+				_beginTransaction(oDriver);
+				oDriver.setItem(sKey, oValue);
+				_commitTransaction(oDriver);
+				this.length = oDriver.length;
 				return true;
 			}
 			catch (e) {
@@ -113,9 +119,22 @@ var Y = YAHOO.util,
 		}
 	}, true);
 
-	Y.StorageEngineHTML5.ENGINE_NAME = 'html5';
-	Y.StorageEngineHTML5.isAvailable = function() {
-		return window.localStorage;
-	};
-    Y.StorageManager.register(Y.StorageEngineHTML5);
+	StorageEngineHTML5.ENGINE_NAME = 'html5';
+    
+	StorageEngineHTML5.isAvailable = function() {
+        try {
+            return ('localStorage' in window) && window['localStorage'] !== null &&
+                    ('sessionStorage' in window) && window['sessionStorage'] !== null;
+        }
+        catch (e) {
+            /*
+                In FireFox and maybe other browsers, you can disable storage in the configuration settings, which
+                will cause an error to be thrown instead of evaluating the simple if/else statement.
+             */
+            return false;
+        }
+    };
+
+    Util.StorageManager.register(StorageEngineHTML5);
+	Util.StorageEngineHTML5 = StorageEngineHTML5;
 }());

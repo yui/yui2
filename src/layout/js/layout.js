@@ -640,7 +640,7 @@
                 }
             }
 
-            Event.purgeElement(this.get('element'));
+            Event.purgeElement(this.get('element'), true);
             this.get('parentNode').removeChild(this.get('element'));
             
             delete YAHOO.widget.Layout._instances[this.get('id')];

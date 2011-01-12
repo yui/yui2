@@ -410,7 +410,8 @@ if(!YAHOO.widget.Logger) {
      * @private
      */
     YAHOO.widget.Logger._printToBrowserConsole = function(oEntry) {
-        if(window.console && console.log) {
+        if ((window.console && console.log) ||
+            (window.opera && opera.postError)) {
             var category = oEntry.category;
             var label = oEntry.category.substring(0,4).toUpperCase();
 
@@ -433,12 +434,11 @@ if(!YAHOO.widget.Logger) {
                 elapsedTime + "ms): " +
                 oEntry.source + ": ";
 
-            // for bug 1987607
-            if (YAHOO.env.ua.webkit) {
-                output += oEntry.msg;
+            if (window.console) {
+                console.log(output, oEntry.msg);
+            } else {
+                opera.postError(output + oEntry.msg);
             }
-
-            console.log(output, oEntry.msg);
         }
     };
 

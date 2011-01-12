@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Paginator Test Page</title>
-    <link type="text/css" rel="stylesheet" href="/assets/dpSyntaxHighlighter.css">
     <link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css">
     <link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css">
     <link type="text/css" rel="stylesheet" href="../../../build/paginator/assets/skins/sam/paginator.css">
@@ -142,6 +141,48 @@ suite.add(new TestCase({
     }
 }));
 
+suite.add(new TestCase({
+    name : "Bugs",
+
+    tearDown : function () {
+        if (this.paginator && this.paginator.destroy) {
+            this.paginator.destroy();
+        }
+        Event.purgeElement(testbed);
+        testbed.innerHTML = '';
+    },
+
+    // http://yuilibrary.com/projects/yui2/ticket/2528452
+    testVisibilityVsRowsPerPageOptions : function () {
+        this.paginator = new YAHOO.widget.Paginator({
+            rowsPerPage: 25,
+            totalRecords: 50,
+            alwaysVisible: false,
+            rowsPerPageOptions: [ 
+                { value: 25,  text: "Few" }, 
+                { value: 50,  text: "More" }, 
+                { value: 100, text: "Many" } 
+            ],
+            template: '{NextPageLink} {RowsPerPageDropdown}'
+        });
+        
+        this.paginator.set('containers',[testbed]);
+        this.paginator.render();
+
+        Assert.areNotEqual('none', Dom.getStyle(testbed, 'display'));
+
+        var links = testbed.getElementsByTagName('a');
+        Assert.areSame(1, links.length);
+
+        this.paginator.set('totalRecords', 10);
+
+        Assert.areEqual('none', Dom.getStyle(testbed, 'display'));
+
+        var links = Dom.getElementsByClassName('yui-pg-page', 'a', testbed);
+        Assert.areSame(0, links.length);
+    },
+}));
+
 /*
 Needed tests
 page links - current is centered
@@ -200,7 +241,5 @@ YAHOO.util.Event.onDOMReady(function () {
 
 })();
 </script>
-<script type="text/javascript" src="/assets/dpSyntaxHighlighter.js"></script>
-<script type="text/javascript" src="/assets/dpSyntaxHighlightExample.js"></script>
 </body>
 </html>

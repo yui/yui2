@@ -7315,4 +7315,8 @@ We should be lazy today, try to reuse as much</div>\
 </entry>\
 </feed>",
 	testNumber = 4,
-	testBoolean = false;
+	testBoolean = false,
+	testDate = new Date(),
+	testObject = {test: 1234},
+	testArray = [1, 2, 3],
+	testFunction = function() {return '1234';};

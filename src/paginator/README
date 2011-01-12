@@ -1,5 +1,12 @@
 Paginator Release Notes
 
+2.9.0
+    * alwaysVisible=false now works when rowsPerPageOptions is supplied
+      an array of objects (e.g. [{ label: 'A few', value: '5' }, ... ]
+    * Added JumpToPageDropdown UI Component (hat tip to Matt Parker)
+    * renderUIComponent is now chainable
+    * Add link title configuration attributes (hat tip to Pete Peterson)
+
 2.8.1
     * No changes
 

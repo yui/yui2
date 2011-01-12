@@ -633,6 +633,8 @@ Paginator.prototype = {
      * @method renderUIComponent
      * @param marker {HTMLElement} the marker node to replace
      * @param id_base {String} string base the component's generated id
+     * @return the Paginator instance
+     * @chainable
      */
     renderUIComponent : function (marker, id_base) {
         var par    = marker.parentNode,
@@ -646,6 +648,8 @@ Paginator.prototype = {
                 par.replaceChild(comp.render(id_base),marker);
             }
         }
+
+        return this;
     },
 
     /**
@@ -668,7 +672,7 @@ Paginator.prototype = {
      */
     updateVisibility : function (e) {
         var alwaysVisible = this.get('alwaysVisible'),
-            totalRecords,visible,rpp,rppOptions,i,len;
+            totalRecords, visible, rpp, rppOptions, i, len, opt;
 
         if (!e || e.type === 'alwaysVisibleChange' || !alwaysVisible) {
             totalRecords = this.get('totalRecords');
@@ -678,7 +682,11 @@ Paginator.prototype = {
 
             if (isArray(rppOptions)) {
                 for (i = 0, len = rppOptions.length; i < len; ++i) {
-                    rpp = Math.min(rpp,rppOptions[i]);
+                    opt = rppOptions[i];
+                    // account for value 'all'
+                    if (lang.isNumber(opt || opt.value)) {
+                        rpp = Math.min(rpp, (opt.value || opt));
+                    }
                 }
             }
 
@@ -1342,6 +1350,18 @@ Paginator.ui.PageLinks.init = function (p) {
         value : function (page, paginator) { return page; },
         validator : l.isFunction
     });
+
+    /**
+     * Function used generate the title for each page link.  The
+     * function receives as parameters the page number and a reference to the
+     * paginator object.
+     * @attribute pageTitleBuilder
+     * @default function (page, paginator) { return page; }
+     */
+    p.setAttributeConfig('pageTitleBuilder', {
+        value : function (page, paginator) { return "Page " + page; },
+        validator : l.isFunction
+    });
 };
 
 /**
@@ -1444,6 +1464,7 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
+                titleBuilder = p.get('pageTitleBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
@@ -1451,19 +1472,25 @@ Paginator.ui.PageLinks.prototype = {
                 start        = range[0],
                 end          = range[1],
                 content      = '',
-                linkTemplate,i;
+                linkTemplate,i,spanTemplate;
 
-            linkTemplate = '<a href="#" class="' + p.get('pageLinkClass') +
-                           '" page="';
+            linkTemplate = '<a href="#" class="{class}" page="{page}" title="{title}">{label}</a>';
+            spanTemplate = '<span class="{class}">{label}</span>';
             for (i = start; i <= end; ++i) {
+
                 if (i === currentPage) {
-                    content +=
-                        '<span class="' + p.get('currentPageClass') + ' ' +
-                                          p.get('pageLinkClass') + '">' +
-                        labelBuilder(i,p) + '</span>';
+                    content += l.substitute(spanTemplate, {
+                        'class' : p.get('currentPageClass') + ' ' + p.get('pageLinkClass'),
+                        'label' : labelBuilder(i,p)
+                    });
+
                 } else {
-                    content +=
-                        linkTemplate + i + '">' + labelBuilder(i,p) + '</a>';
+                    content += l.substitute(linkTemplate, {
+                        'class' : p.get('pageLinkClass'),
+                        'page'  : i,
+                        'label' : labelBuilder(i,p),
+                        'title' : titleBuilder(i,p)
+                    });
                 }
             }
 
@@ -1569,6 +1596,16 @@ Paginator.ui.FirstPageLink.init = function (p) {
         value : 'yui-pg-first',
         validator : l.isString
     });
+
+    /**
+     * Used as title for the first page link.
+     * @attribute firstPageLinkTitle
+     * @default 'First Page'
+     */
+    p.setAttributeConfig('firstPageLinkTitle', {
+        value : 'First Page',
+        validator : l.isString
+    });
 };
 
 // Instance members and methods
@@ -1608,7 +1645,8 @@ Paginator.ui.FirstPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('firstPageLinkClass'),
-            label = p.get('firstPageLinkLabel');
+            label = p.get('firstPageLinkLabel'),
+            title = p.get('firstPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -1617,6 +1655,7 @@ Paginator.ui.FirstPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-first-span';
@@ -1731,6 +1770,17 @@ Paginator.ui.LastPageLink.init = function (p) {
         value : 'yui-pg-last',
         validator : l.isString
     });
+
+   /**
+     * Used as title for the last page link.
+     * @attribute lastPageLinkTitle
+     * @default 'Last Page'
+     */
+    p.setAttributeConfig('lastPageLinkTitle', {
+        value : 'Last Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.LastPageLink.prototype = {
@@ -1780,7 +1830,8 @@ Paginator.ui.LastPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('lastPageLinkClass'),
             label = p.get('lastPageLinkLabel'),
-            last  = p.getTotalPages();
+            last  = p.getTotalPages(),
+            title = p.get('lastPageLinkTitle');
 
         this.link = document.createElement('a');
         this.span = document.createElement('span');
@@ -1790,6 +1841,7 @@ Paginator.ui.LastPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-last-span';
@@ -1917,6 +1969,17 @@ Paginator.ui.NextPageLink.init = function (p) {
         value : 'yui-pg-next',
         validator : l.isString
     });
+
+    /**
+     * Used as title for the next page link.
+     * @attribute nextPageLinkTitle
+     * @default 'Next Page'
+     */
+    p.setAttributeConfig('nextPageLinkTitle', {
+        value : 'Next Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.NextPageLink.prototype = {
@@ -1957,7 +2020,8 @@ Paginator.ui.NextPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('nextPageLinkClass'),
             label = p.get('nextPageLinkLabel'),
-            last  = p.getTotalPages();
+            last  = p.getTotalPages(),
+            title = p.get('nextPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -1966,6 +2030,7 @@ Paginator.ui.NextPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-next-span';
@@ -2082,6 +2147,17 @@ Paginator.ui.PreviousPageLink.init = function (p) {
         value : 'yui-pg-previous',
         validator : l.isString
     });
+
+    /**
+     * Used as title for the previous page link.
+     * @attribute previousPageLinkTitle
+     * @default 'Previous Page'
+     */
+    p.setAttributeConfig('previousPageLinkTitle', {
+        value : 'Previous Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.PreviousPageLink.prototype = {
@@ -2121,7 +2197,8 @@ Paginator.ui.PreviousPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('previousPageLinkClass'),
-            label = p.get('previousPageLinkLabel');
+            label = p.get('previousPageLinkLabel'),
+            title = p.get('previousPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -2130,6 +2207,7 @@ Paginator.ui.PreviousPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+        this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-prev-span';
@@ -2370,6 +2448,163 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             this.paginator.set('rowsPerPage',e.newValue);
         }
     },
+
+    /**
+     * Removes the select node and clears event listeners
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.select);
+        this.select.parentNode.removeChild(this.select);
+        this.select = null;
+    }
+};
+
+})();
+(function () {
+
+var Paginator = YAHOO.widget.Paginator,
+    l         = YAHOO.lang;
+
+/**
+ * ui Component to generate the jump-to-page dropdown
+ *
+ * @namespace YAHOO.widget.Paginator.ui
+ * @class JumpToPageDropdown
+ * @for YAHOO.widget.Paginator
+ *
+ * @constructor
+ * @param p {Pagintor} Paginator instance to attach to
+ */
+Paginator.ui.JumpToPageDropdown = function (p) {
+    this.paginator = p;
+
+    p.subscribe('rowsPerPageChange',this.rebuild,this,true);
+    p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
+    p.subscribe('pageChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.rebuild,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
+
+};
+
+/**
+ * Decorates Paginator instances with new attributes. Called during
+ * Paginator instantiation.
+ * @method init
+ * @param p {Paginator} Paginator instance to decorate
+ * @static
+ */
+Paginator.ui.JumpToPageDropdown.init = function (p) {
+
+
+
+    /**
+     * CSS class assigned to the select node
+     * @attribute jumpToPageDropdownClass
+     * @default 'yui-pg-jtp-options'
+     */
+    p.setAttributeConfig('jumpToPageDropdownClass', {
+        value : 'yui-pg-jtp-options',
+        validator : l.isString
+    });
+};
+
+Paginator.ui.JumpToPageDropdown.prototype = {
+
+    /**
+     * select node
+     * @property select
+     * @type HTMLElement
+     * @private
+     */
+    select  : null,
+
+
+
+    /**
+     * Generate the select and option nodes and returns the select node.
+     * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
+     * @return {HTMLElement}
+     */
+    render : function (id_base) {
+        this.select = document.createElement('select');
+        this.select.id        = id_base + '-jtp';
+        this.select.className = this.paginator.get('jumpToPageDropdownClass');
+        this.select.title = 'Jump to page';
+
+        YAHOO.util.Event.on(this.select,'change',this.onChange,this,true);
+
+        this.rebuild();
+
+        return this.select;
+    },
+
+    /**
+     * (Re)generate the select options.
+     * @method rebuild
+     */
+    rebuild : function (e) {
+        var p       = this.paginator,
+            sel     = this.select,
+            numPages = p.getTotalPages(),
+            opt,i,len;
+
+        this.all = null;
+
+        for (i = 0, len = numPages; i < len; ++i ) {
+            opt = sel.options[i] ||
+                  sel.appendChild(document.createElement('option'));
+
+            opt.innerHTML = i + 1;
+
+            opt.value = i + 1;
+
+
+        }
+
+        for ( i = numPages, len = sel.options.length ; i < len ; i++ ) {
+            sel.removeChild(sel.lastChild);
+        }
+
+        this.update();
+    },
+
+    /**
+     * Select the appropriate option if changed.
+     * @method update
+     * @param e {CustomEvent} The calling change event
+     */
+    update : function (e) {
+
+        if (e && e.prevValue === e.newValue) {
+            return;
+        }
+
+        var cp      = this.paginator.getCurrentPage()+'',
+            options = this.select.options,
+            i,len;
+
+        for (i = 0, len = options.length; i < len; ++i) {
+            if (options[i].value === cp) {
+                options[i].selected = true;
+                break;
+            }
+        }
+    },
+
+    /**
+     * Listener for the select's onchange event.  Sent to setPage method.
+     * @method onChange
+     * @param e {DOMEvent} The change event
+     */
+    onChange : function (e) {
+        this.paginator.setPage(
+                parseInt(this.select.options[this.select.selectedIndex].value,false));
+    },
+
+
 
     /**
      * Removes the select node and clears event listeners

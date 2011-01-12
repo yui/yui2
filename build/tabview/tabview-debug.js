@@ -87,31 +87,34 @@
          */
         addTab: function(tab, index) {
             var tabs = this.get('tabs'),
-                before = this.getTab(index),
                 tabParent = this._tabParent,
                 contentParent = this._contentParent,
                 tabElement = tab.get(ELEMENT),
-                contentEl = tab.get(CONTENT_EL);
+                contentEl = tab.get(CONTENT_EL),
+                before;
 
             if (!tabs) { // not ready yet
                 this._queue[this._queue.length] = ['addTab', arguments];
                 return false;
             }
             
+            before = this.getTab(index);
             index = (index === undefined) ? tabs.length : index;
             
             tabs.splice(index, 0, tab);
 
-            if ( before ) {
+            if (before) {
                 tabParent.insertBefore(tabElement, before.get(ELEMENT));
+                if (contentEl) {
+                    contentParent.appendChild(contentEl);
+                }
             } else {
                 tabParent.appendChild(tabElement);
+                if (contentEl) {
+                    contentParent.appendChild(contentEl);
+                }
             }
 
-            if ( contentEl && !Dom.isAncestor(contentParent, contentEl) ) {
-                contentParent.appendChild(contentEl);
-            }
-            
             if ( !tab.get(ACTIVE) ) {
                 tab.set('contentVisible', false, true); /* hide if not active */
             } else {
@@ -723,7 +726,7 @@
              * @type String
              */
             this.setAttributeConfig(CONTENT, {
-                value: attr[CONTENT],
+                value: attr[CONTENT] || this.get(CONTENT_EL).innerHTML,
                 method: function(value) {
                     this.get(CONTENT_EL).innerHTML = value;
                 }

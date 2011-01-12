@@ -236,7 +236,7 @@ YAHOO.util.Color = function() {
             el = this._createHostElement(attr);
         }
 
-    	ColorPicker.superclass.constructor.call(this, el, attr); 
+        ColorPicker.superclass.constructor.call(this, el, attr); 
 
         this.initPicker();
     }
@@ -1333,7 +1333,7 @@ YAHOO.util.Color = function() {
         },
 
         /**
-         * Wrapper for _updateRGB, but allows setting 
+         * Wrapper for _updateRGB, but allows non-animated update
          *
          * @method syncUI
          * @param skipAnim {Boolean} Omit Slider animation for this action

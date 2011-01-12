@@ -1755,7 +1755,7 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
-            var len = this._configuredButtons.length, j, i;
+            var len = this._configuredButtons.length, j, i, b;
             for(b = 0; b < len; b++) {
                 this.destroyButton(this._configuredButtons[b]);
             }
