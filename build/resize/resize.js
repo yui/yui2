@@ -1514,12 +1514,18 @@ var D = YAHOO.util.Dom,
                 value: attr.draggable || false,
                 validator: YAHOO.lang.isBoolean,
                 method: function(dd) {
-                    if (dd && this._wrap) {
+                    if (dd && this._wrap && !this.dd) {
                         this._setupDragDrop();
                     } else {
                         if (this.dd) {
-                            D.removeClass(this._wrap, this.CSS_DRAG);
-                            this.dd.unreg();
+                            if (dd) {
+                                //activating an old DD instance..
+                                D.addClass(this._wrap, this.CSS_DRAG);
+                                this.dd.DDM.regDragDrop(this.dd, "default");
+                            } else {
+                                D.removeClass(this._wrap, this.CSS_DRAG);
+                                this.dd.unreg();
+                            }
                         }
                     }
                 }
