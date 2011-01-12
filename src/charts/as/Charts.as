@@ -1643,9 +1643,10 @@ package
 		{
 			try
 			{
-				var versionString:String = Capabilities.version;		
-				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|WIN\s/gi, "")).replace(/,0,/g, ".")));
-				if(version >= 10) 
+				var versionString:String = Capabilities.version,
+                    versionCollection:Array = versionString.replace(/\s[rd]|,/g, '.').replace(/[A-Za-z\s]+/g, '').split('.'),
+                    version:Number = versionCollection[0];
+                if(version >= 10) 
 				{
 					var imageExport:ImageExport = new ImageExport(this);
 					imageExport.addImageType("jpg", "Chart");
