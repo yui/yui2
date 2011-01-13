@@ -130,7 +130,7 @@
 		 * @default English language strings for UI.
 		 */
 		STRINGS: {
-			title: "YUI Profiler (beta)",
+			title: "YUI ProfilerViewer",
 			buttons: {
 				viewprofiler: "View Profiler Data",
 				hideprofiler: "Hide Profiler Report",
