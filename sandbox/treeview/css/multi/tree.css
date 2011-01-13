@@ -6,7 +6,7 @@
 .ygtvtmh { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/tmh.gif) 0 0 no-repeat; }
 .ygtvtp { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/tp.gif) 0 0 no-repeat; }
 .ygtvtph { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/tph.gif) 0 0 no-repeat; }
-.ygtvln { width:16px; height:22px; background: url(../../img/default/ln.gif) 0 0 no-repeat; } 
+.ygtvln { width:16px; height:22px; background: url(../../img/default/ln.gif) 0 0 no-repeat; }
 .ygtvlm { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/lm.gif) 0 0 no-repeat; }
 .ygtvlmh { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/lmh.gif) 0 0 no-repeat; }
 .ygtvlp { width:16px; height:22px; cursor:pointer ; background: url(../../img/default/lp.gif) 0 0 no-repeat; }
@@ -14,10 +14,10 @@
 .ygtvloading { width:16px; height:22px; background: url(../../img/default/loading.gif) 0 0 no-repeat; }
 .ygtvdepthcell { width:16px; height:22px; background: url(../../img/default/vline.gif) 0 0 no-repeat; }
 .ygtvblankdepthcell { width:16px; height:22px; }
-.ygtvitem { }  
-.ygtvchildren {  }  
-* html .ygtvchildren { height:2%; }  
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+.ygtvitem { }
+.ygtvchildren {  }
+* html .ygtvchildren { height:2%; }
+.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover {
 	margin-left:2px;
 	text-decoration: none;
     background-color: white;
@@ -38,10 +38,10 @@
 #tree2 .ygtvloading { background: url(../../img/folders/loading.gif) 0 0 no-repeat; width:16px; height:22px; }
 #tree2 .ygtvdepthcell { background: url(../../img/folders/vline.gif) 0 0 no-repeat; width:17px; height:22px; }
 #tree2 .ygtvblankdepthcell { width:17px; height:22px; }
-#tree2 .ygtvitem { }  
-#tree2 .ygtvchildren { }  
-* html .ygtvchildren { height:1%; }  
-#tree2 .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+#tree2 .ygtvitem { }
+#tree2 .ygtvchildren { }
+* html .ygtvchildren { height:1%; }
+#tree2 .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover {
 	margin-left:2px;
 	text-decoration: none;
 }
@@ -60,9 +60,9 @@
 .treemenu .ygtvloading { background: url(../../img/menu/loading.gif) 0 6px no-repeat; width:1em; height:22px; }
 .treemenu .ygtvdepthcell { background: transparent; width:1em; height:20px; }
 .treemenu .ygtvblankdepthcell {background: transparent;  width:1em; height:20px; }
-.treemenu .ygtvitem { border: 0px solid grey; }  
-.treemenu .ygtvchildren { }  
-.treemenu .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+.treemenu .ygtvitem { border: 0px solid gray; }
+.treemenu .ygtvchildren { }
+.treemenu .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover {
 	font-size: 12px;
 }
 

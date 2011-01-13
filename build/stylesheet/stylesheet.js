@@ -101,7 +101,7 @@ _unsetProperty = workerStyle.borderLeft ?
  * 
  * @class StyleSheet
  * @constructor
- * @param seed {String|HTMLElement} a style or link node, its id, or a name or
+ * @param seed {String|&lt;style&gt; element} a style or link node, its id, or a name or
  *              yuiSSID of a StyleSheet, or a string of css text (see above)
  * @param name {String} OPTIONAL name to register instance for future static
  *              access
@@ -218,7 +218,7 @@ function StyleSheet(seed, name) {
         getId : function () { return node.yuiSSID; },
 
         /**
-         * The HTMLElement that this instance encapsulates
+         * The &lt;style&gt; element that this instance encapsulates
          *
          * @property node
          * @type HTMLElement
@@ -398,7 +398,7 @@ function StyleSheet(seed, name) {
          * @return {String}
          */
         getCssText : function (sel) {
-            var rule,css;
+            var rule, css, selector;
 
             if (lang.isString(sel)) {
                 // IE's addRule doesn't support multiple comma delimited
@@ -408,9 +408,9 @@ function StyleSheet(seed, name) {
                 return rule ? rule.style.cssText : null;
             } else {
                 css = [];
-                for (sel in cssRules) {
-                    if (cssRules.hasOwnProperty(sel)) {
-                        rule = cssRules[sel];
+                for (selector in cssRules) {
+                    if (cssRules.hasOwnProperty(selector)) {
+                        rule = cssRules[selector];
                         css.push(rule.selectorText+" {"+rule.style.cssText+"}");
                     }
                 }
@@ -425,7 +425,19 @@ _toCssText = function (css,base) {
     var f = css.styleFloat || css.cssFloat || css['float'],
         prop;
 
-    workerStyle.cssText = base || '';
+    // A very difficult to repro/isolate IE 9 beta (and Platform Preview 7) bug
+    // was reduced to this line throwing the error:
+    // "Invalid this pointer used as target for method call"
+    // It appears that the style collection is corrupted. The error is
+    // catchable, so in a best effort to work around it, replace the
+    // p and workerStyle and try the assignment again.
+    try {
+        workerStyle.cssText = base || '';
+    } catch (ex) {
+        p = d.createElement('p');
+        workerStyle = p.style;
+        workerStyle.cssText = base || '';
+    }
 
     if (lang.isString(css)) {
         // There is a danger here of incremental memory consumption in Opera

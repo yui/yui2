@@ -5,7 +5,7 @@
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css"></link>
 </head>
-  
+
 <body>
 <link rel="stylesheet" type="text/css" href="css/code.css"></link>
 <link rel="stylesheet" type="text/css" href="css/folders/tree.css"></link>
@@ -13,7 +13,7 @@
 <style type="text/css">
     #treewrapper {position:relative;}
 	#treediv {position:relative; width:250px;}
-	#figure1 {float:right;background-color:#FFFCE9;padding:1em;border:1px solid grey}
+	#figure1 {float:right;background-color:#FFFCE9;padding:1em;border:1px solid gray}
     .icon-ppt { display:block; padding-left: 20px; background: transparent url(img/icons.png) 0 0px no-repeat; }
     .icon-dmg { display:block; padding-left: 20px; background: transparent url(img/icons.png) 0 -36px no-repeat; }
     .icon-prv { display:block; padding-left: 20px; background: transparent url(img/icons.png) 0 -72px no-repeat; }
@@ -30,13 +30,13 @@
 //to keep out of the global namespace:
 (function(){
 	var init = function() {
-		
+
 		//create the TreeView instance:
 		var tree = new YAHOO.widget.TreeView("treediv");
-		
+
 		//get a reusable reference to the root node:
 		var root = tree.getRoot();
-		
+
 		//for Ahmed's documents, we'll use TextNodes.
 		//First, create a parent node for his documents:
 		var ahmedDocs = new YAHOO.widget.TextNode("Ahmed's Documents", root, true);
@@ -49,7 +49,7 @@
 			ahmedPpt.labelStyle = "icon-ppt";
 			var ahmedPdf = new YAHOO.widget.TextNode("Prospectus-PDF version", ahmedDocs, false);
 			ahmedPdf.labelStyle = "icon-prv";
-	
+
 		//for Susheela's documents, we'll use HTMLNodes.
 		//First, create a parent node for her documents:
 		var sushDocs = new YAHOO.widget.TextNode("Susheela's Documents", root, true);
@@ -64,7 +64,7 @@
 			sushGen.contentStyle = "icon-gen";
 			var sushJar = new YAHOO.widget.HTMLNode("JAR file", sushDocs, false, true);
 			sushJar.contentStyle = "icon-jar";
-	
+
 		tree.draw();
 	}
 	YAHOO.util.Event.on(window, "load", init);
@@ -106,9 +106,9 @@ seven images in a single HTTP request (<a
 The raw image is displayed to the right of the tree.</p>
 
 
-<p>With that image in place, we can now set up our style rules to identify icons for each file type.  
+<p>With that image in place, we can now set up our style rules to identify icons for each file type.
 We do that by positioning our <code>icons.png</code> image uniquely for each icon we want to display:</p>
-				
+
 <pre><textarea name="code" class="HTML" cols="60" rows="1"><style type="text/css">
 .icon-ppt { padding-left: 20px; background: transparent url(img/icons.png) 0 0px no-repeat; }
 .icon-dmg { padding-left: 20px; background: transparent url(img/icons.png) 0 -36px no-repeat; }
@@ -143,7 +143,7 @@ var ahmedDocs = new YAHOO.widget.TextNode("Ahmed's Documents", root, true);
 	ahmedPpt.labelStyle = "icon-ppt";
 	var ahmedPdf = new YAHOO.widget.TextNode("Prospectus-PDF version", ahmedDocs, false);
 	ahmedPdf.labelStyle = "icon-prv";</textarea></pre>
-	
+
 <p>The script for creating Susheela's part of the tree is very similar.  Here, we'll use HTMLNodes, and we'll use the <code>contentStyle</code> property to apply the icon style:</p>
 
 <pre><textarea name="code" class="JScript" cols="60" rows="1">//for Susheela's documents, we'll use HTMLNodes.
@@ -160,13 +160,13 @@ var sushDocs = new YAHOO.widget.TextNode("Susheela's Documents", root, true);
 	sushGen.contentStyle = "icon-gen";
 	var sushJar = new YAHOO.widget.HTMLNode("JAR file", sushDocs, false, true);
 	sushJar.contentStyle = "icon-jar";</textarea></pre>
-	
+
 <p>Note that in this example we're also applying <a href="http://developer.yahoo.com/yui/examples/treeview/css/folders/tree.css">the "folder style" CSS file</a> that is included with the TreeView Control's examples; you can find that file in <a href="http://developer.yahoo.com/yui/download/">the YUI distribution</a> under <code>/examples/treeview/css/folders/tree.css</code>.</p>
 </div>
 </div>
 	</div>
   </div>
-	
+
       <div id="footerContainer">
         <div id="footer">
           <p>&nbsp;</p>
