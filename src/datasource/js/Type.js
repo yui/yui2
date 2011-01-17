@@ -88,12 +88,12 @@
             // There is a bug in IE's toFixed implementation:
             // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
             // instead of -1 and 1. Manually handle that case.
-            if(absN === 0 || absN >= 1) {
-                s = absN.toFixed(places);
-            }
-            else {
-                precision = (Math.pow(10,stringN.length-stringN.indexOf('.')-2));
-                s = Math.round(absN * precision)/precision+'';
+            // Bug 2528976
+            if (absN < Math.pow(10, -1*places) && absN >= Math.pow(10, -1*places) * 0.5) {
+                s = Math.pow(10, -1*places)+'';
+            } else
+            {
+                s = absN.toFixed(places)+'';
             }
         }
 

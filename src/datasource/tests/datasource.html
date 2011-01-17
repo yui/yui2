@@ -687,6 +687,19 @@ var XMLDocument = function(rootTagName, namespaceURL) {
                 decimalPlaces:-2
             });
         Assert.areSame("(123,100)", output, "Incorrect negativeFormat template interpretation");
+
+        // bug 2528976
+        output = YAHOO.util.Number.format(0.5, {decimalPlaces:0, thousandsSeparator:","})// returns 1 (right)
+        Assert.areSame("1", output, "Incorrect rounding: expected 1");
+
+        output = YAHOO.util.Number.format(0.05, {decimalPlaces:1, thousandsSeparator:","})// returns 0.0 (wrong)
+        Assert.areSame("0.1", output, "Incorrect rounding: expected 0.1");
+
+        output = YAHOO.util.Number.format(0.005, {decimalPlaces:2, thousandsSeparator:","})// returns 0.00 (wrong)
+        Assert.areSame("0.01", output, "Incorrect rounding: expected 0.01");
+
+        output = YAHOO.util.Number.format(0.0005, {decimalPlaces:3, thousandsSeparator:","})// returns 0.000 (wrong)
+        Assert.areSame("0.001", output, "Incorrect rounding: expected 0.001");
     }
 });
 
