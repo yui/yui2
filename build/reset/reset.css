@@ -51,17 +51,21 @@ img {
 }
 
 address,
+button,
 caption,
 cite,
 code,
 dfn,
 em,
+input,
+optgroup,
+option,
+select,
 strong,
+textarea,
 th,
-var,
-optgroup {
-	font-style: inherit;
-	font-weight: inherit;
+var {
+    font:inherit;
 }
 
 del,
@@ -111,27 +115,3 @@ sub {
 legend {
 	color: #000;
 }
-
-input,
-button,
-textarea,
-select,
-optgroup,
-option {
-	font-family: inherit;
-	font-size: inherit;
-	font-style: inherit;
-	font-weight: inherit;
-}
-
-/*@purpose To enable resizing for IE */
-/*@branch For IE6-Win, IE7-Win */
-input,
-button,
-textarea,
-select {
-	*font-size: 100%;
-}
-
-
-
