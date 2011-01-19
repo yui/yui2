@@ -441,11 +441,9 @@ body {
 .yui-gd:after, 
 .yui-ge:after, 
 .yui-gf:after {
-	content: ".";
+	content: "";
 	display: block;
-	height: 0;
 	clear: both;
-	visibility: hidden;
 }
 
 #hd,
