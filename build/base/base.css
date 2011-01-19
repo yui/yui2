@@ -123,3 +123,9 @@ input[type="reset"],
 input[type="submit"] {
 	padding:1px;
 }
+
+/* make IE scale images properly */
+/* see http://code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/ */
+ img {
+    -ms-interpolation-mode:bicubic;
+}
