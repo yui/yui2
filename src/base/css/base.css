@@ -64,12 +64,12 @@ ol,ul,dl {
 	margin-left: 2em;
 }
 
-ol li {
+ol {
 	/* Giving OL's LIs generated numbers. */
 	list-style: decimal outside;
 }
 
-ul li {
+ul {
 	/* Giving UL's LIs generated disc markers. */
 	list-style: disc outside;
 }
