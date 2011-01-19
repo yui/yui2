@@ -75,7 +75,7 @@ ul {
 }
 
 dl dd {
-	/* Giving UL's LIs generated numbers. */
+	/* Giving DD default indent. */
 	margin-left: 1em;
 }
 
