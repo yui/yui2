@@ -33,21 +33,21 @@
 /* Loading icon */
 .ygtvloading { background: url(../../img/menu/loading.gif) 0 6px no-repeat; width:1em; height:22px; }
 
-/* the style for the empty cells that are used for rendering the depth 
+/* the style for the empty cells that are used for rendering the depth
  * of the node */
 .ygtvdepthcell { width:1em; height:20px; }
 
 .ygtvblankdepthcell { width:1em; height:20px; }
 
 /* the style of the div around each node */
-.ygtvitem { border: 0px solid grey; }  
+.ygtvitem { border: 0px solid gray; }
 
 /* the style of the div around each node's collection of children */
-.ygtvchildren { }  
-* html .ygtvchildren { height:1%; }  
+.ygtvchildren { }
+* html .ygtvchildren { height:1%; }
 
 /* the style of the text label in ygTextNode */
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover {
 	/*
 	margin-left:2px;
 	text-decoration: none;
