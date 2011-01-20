@@ -115,7 +115,7 @@
     
         if (Lang.isString(p_sType) && Lang.isString(p_sName)) {
         
-            if (UA.ie) {
+            if (UA.ie && (UA.ie < 9)) {
         
                 /*
                     For IE it is necessary to create the element with the 
@@ -2660,7 +2660,7 @@
                 }
         
         
-                if (UA.ie) {
+                if (UA.ie && (UA.ie < 9)) {
         
                     bSubmitForm = oForm.fireEvent("onsubmit");
         
