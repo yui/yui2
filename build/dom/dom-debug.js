@@ -358,11 +358,6 @@
                 currentXY,
                 newXY;
         
-            if (pos == 'static') { // default to relative
-                pos = RELATIVE;
-                setStyle(node, POSITION, pos);
-            }
-
             currentXY = Y.Dom._getXY(node);
 
             if (!xy || currentXY === false) { // has to be part of doc to have xy
@@ -370,6 +365,11 @@
                 return false; 
             }
             
+            if (pos == 'static') { // default to relative
+                pos = RELATIVE;
+                setStyle(node, POSITION, pos);
+            }
+
             if ( isNaN(delta[0]) ) {// in case of 'auto'
                 delta[0] = (pos == RELATIVE) ? 0 : node[OFFSET_LEFT];
             } 
