@@ -839,31 +839,31 @@
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
 
-            if (!root) {
-                return [];
-            }
-
-            var nodes = [],
-                elements = root.getElementsByTagName(tag);
+                var ret = (firstOnly) ? null : [],
+                    elements;
             
-            for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( method(elements[i]) ) {
-                    if (firstOnly) {
-                        nodes = elements[i]; 
-                        break;
-                    } else {
-                        nodes[nodes.length] = elements[i];
+            // in case Dom.get() returns null
+            if (root) {
+                elements = root.getElementsByTagName(tag);
+                for (var i = 0, len = elements.length; i < len; ++i) {
+                    if ( method(elements[i]) ) {
+                        if (firstOnly) {
+                            ret = elements[i]; 
+                            break;
+                        } else {
+                            ret[ret.length] = elements[i];
+                        }
                     }
+                }
+
+                if (apply) {
+                    Y.Dom.batch(ret, apply, o, overrides);
                 }
             }
 
-            if (apply) {
-                Y.Dom.batch(nodes, apply, o, overrides);
-            }
-
-            YAHOO.log('getElementsBy returning ' + nodes, 'info', 'Dom');
+            YAHOO.log('getElementsBy returning ' + ret, 'info', 'Dom');
             
-            return nodes;
+            return ret;
         },
         
         /**

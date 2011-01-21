@@ -8,7 +8,7 @@
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
-<script type="text/javascript" src="../../../build/dom/dom-min.js"></script> 
+<script type="text/javascript" src="../../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
@@ -186,6 +186,10 @@
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'our(class'), 'our(class should match element with our(class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', /our.clas+/), '/our.clas+/ should match element with our(class');  
                 Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+\\|'), "special chars in className");  
+
+                Assert.isFalse(Y.Dom.hasClass(document, 'dolor'),
+                        'hasClass failed with document node');
+
             },            
 
             test_addClass: function() {
@@ -273,6 +277,8 @@
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'hd').length, 'getBy failed for #hd div.mod'); 
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'moo'}).length, 'getBy failed for .moo'); 
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'fake-id').length, 'getBy failed for #fake-id div.mod'); 
+
+                Assert.isNull(Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'fake-id', null, null, null, true), 'getBy failed for #fake-id div.mod'); 
             },
 
             test_getElementBy: function() {
