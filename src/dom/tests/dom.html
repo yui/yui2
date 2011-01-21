@@ -86,6 +86,7 @@
                     <div class="ft"><a href="http://www.developer.yahoo.com">more</a></div>
                 </div>
             </div>
+            <div id="1">numbered id</div>
         </div>
         <div id="ft">
             <p>In hac habitasse platea dictumst. Sed sit amet ligula vitae justo consequat facilisis. Integer tortor. Integer erat. In hac habitasse platea dictumst. Phasellus convallis quam vitae turpis aliquam lobortis. Aliquam scelerisque condimentum lectus. Proin semper adipiscing leo. Nulla facilisi.</p>
@@ -100,7 +101,6 @@
         suite = new tool.TestSuite("yuisuite");
 
     Y.Event.onDOMReady(function() {
-alert(document.documentElement.clientTop);
         var logger = new YAHOO.tool.TestLogger(null, { height: '80%' });
 
         suite.add( new tool.TestCase({
@@ -135,6 +135,9 @@ alert(document.documentElement.clientTop);
 
                 Assert.isNull(Y.Dom.get('DOC'),
                         "Y.Dom.get('DOC')");
+
+                Assert.areEqual(document.getElementById(1).id, Y.Dom.get(1).id,
+                        "Y.Dom.get('search')");
             },            
 
             test_getStyle: function() {

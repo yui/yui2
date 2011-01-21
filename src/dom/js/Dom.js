@@ -93,8 +93,8 @@
                     return el;
                 }
 
-                if (typeof el === 'string') { // id
-                    id = el;
+                if (typeof el == 'string' || typeof el == 'number') { // id
+                    id = el + '';
                     el = document.getElementById(el);
                     attr = (el) ? el.attributes : null;
                     if (el && attr && attr.id && attr.id.value === id) { // IE: avoid false match on "name" attribute
