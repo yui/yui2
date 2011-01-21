@@ -178,6 +178,9 @@
 
                 Assert.isUndefined(Y.Dom.setStyle('fake-id', 'width', '200px'), "(Y.Dom.setStyle('fake-id', 'width', '200px')");
                 Assert.isUndefined(Y.Dom.setStyle(['fake-id'], 'width', '200px'), "(Y.Dom.setStyle(['fake-id'], 'width', '200px')");
+
+                Y.Dom.setStyle('ft', 'opacity', '');
+                Assert.areEqual('1', Y.Dom.getStyle('ft', 'opacity'), 'unsetting opacity');
             },            
 
             test_computedStyle: function() {

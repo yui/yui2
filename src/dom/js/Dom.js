@@ -213,7 +213,10 @@
                     if (el) {
                         switch (property) {
                             case 'opacity':
-                                if ( lang.isString(el.style.filter) ) { // in case not appended
+                                // remove filter if unsetting or full opacity
+                                if (val === '' || val === null || val === 1) {
+                                    el.style.removeAttribute('filter');
+                                } else if ( lang.isString(el.style.filter) ) { // in case not appended
                                     el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                                     
                                     if (!el[CURRENT_STYLE] || !el[CURRENT_STYLE].hasLayout) {
