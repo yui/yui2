@@ -115,7 +115,7 @@
     
         if (Lang.isString(p_sType) && Lang.isString(p_sName)) {
         
-            if (UA.ie) {
+            if (UA.ie && (UA.ie < 9)) {
         
                 /*
                     For IE it is necessary to create the element with the 
@@ -2112,7 +2112,7 @@
 				//	appears to have focus.	The following call to "setActive"
 				//	fixes this bug.
 
-				if (UA.ie && oTarget.focus) {
+                if (UA.ie && (UA.ie < 9) && oTarget.focus) {
 					oTarget.setActive();
 				}
         
@@ -2637,7 +2637,7 @@
                 }
         
         
-                if (UA.ie) {
+                if (UA.ie && (UA.ie < 9)) {
         
                     bSubmitForm = oForm.fireEvent("onsubmit");
         
