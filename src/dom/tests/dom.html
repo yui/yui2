@@ -79,6 +79,7 @@
                                     <input type="text" name="search-p" id="search-p">
                                     <input type="text" name="search-p">
                                     <input type="text" name="id">
+                                    <input type="checkbox" checked="true" name="test-checkbox" id="test-checkbox">
                                     <input type="submit" value="search">
                             </fieldset>
                         </form>
@@ -604,6 +605,9 @@
                 var bodyEl = new Y.Element(Y.Dom.generateId(document.body));
                 Y.Dom.addClass(bodyEl, 'dummy');
                 Assert.isTrue(Y.Dom.hasClass(document.body, 'dummy'), 'Y.Dom.addClass(Element, "dummy")');
+
+                el = document.getElementById('test-checkbox');
+                Assert.isTrue(Y.Dom.getAttribute(el, 'checked') == true, 'checkbox checked');
             }
 
         })); 
