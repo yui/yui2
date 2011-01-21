@@ -82,6 +82,7 @@
                                     <input type="submit" value="search">
                             </fieldset>
                         </form>
+                        <button id="test-button">foo</button>
                     </div>
                     <div class="ft"><a href="http://www.developer.yahoo.com">more</a></div>
                 </div>
@@ -586,6 +587,9 @@
                 Y.Dom.setAttribute(el, 'type', 'text');
                 Assert.areEqual('text', Y.Dom.getAttribute(el, 'type'), "Y.Dom.setAttribute(el, 'type', 'text')");
                 el.parentNode.removeChild(el);
+
+                el = document.getElementById('test-button');
+                Y.Dom.setAttribute(el, 'type', 'button');
             },
 
 

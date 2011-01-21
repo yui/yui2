@@ -1154,7 +1154,8 @@
                 val = args.val;
 
             if (el && el.setAttribute) {
-                if (Y.Dom.DOT_ATTRIBUTES[attr]) {
+                // set as DOM property, except for BUTTON, which errors on property setter
+                if (Y.Dom.DOT_ATTRIBUTES[attr] && el.tagName && el.tagName != 'BUTTON') {
                     el[attr] = val;
                 } else {
                     attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
@@ -1270,7 +1271,7 @@
 
     }
 
-    if (UA.ie && UA.ie >= 8 && document.documentElement.hasAttribute) { // IE 8 standards
+    if (UA.ie && UA.ie >= 8) {
         Y.Dom.DOT_ATTRIBUTES.type = true; // IE 8 errors on input.setAttribute('type')
     }
 })();
