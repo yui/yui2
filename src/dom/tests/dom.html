@@ -138,6 +138,14 @@
 
                 Assert.areEqual(document.getElementById(1).id, Y.Dom.get(1).id,
                         "Y.Dom.get('search')");
+
+                var element = new YAHOO.util.Element('search');
+                Assert.areEqual(element.get('element'), Y.Dom.get(element),
+                        "Y.Dom.get(new Y.Element('search'))");
+
+                var obj = {};
+                Assert.areEqual(obj, Y.Dom.get(obj),
+                        "Y.Dom.get(obj)");
             },            
 
             test_getStyle: function() {

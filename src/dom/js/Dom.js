@@ -86,13 +86,9 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            var id, nodes, c, i, len, attr;
+            var id, nodes, c, i, len, attr, ret = null;
 
             if (el) {
-                if (el[NODE_TYPE] || el.item) { // Node, or NodeList
-                    return el;
-                }
-
                 if (typeof el == 'string' || typeof el == 'number') { // id
                     id = el + '';
                     el = document.getElementById(el);
@@ -110,26 +106,21 @@
                             }
                         }
                     }
-                    return el;
-                }
-                
-                if (Y.Element && el instanceof Y.Element) {
+                } else if (Y.Element && el instanceof Y.Element) {
                     el = el.get('element');
-                }
-
-                if ('length' in el) { // array-like 
+                } else if (!el.nodeType && 'length' in el) { // array-like 
                     c = [];
                     for (i = 0, len = el.length; i < len; ++i) {
                         c[c.length] = Y.Dom.get(el[i]);
                     }
                     
-                    return c;
+                    el = c;
                 }
 
-                return el; // some other object, just pass it back
+                ret = el;
             }
 
-            return null;
+            return ret;
         },
     
         getComputedStyle: function(el, property) {
