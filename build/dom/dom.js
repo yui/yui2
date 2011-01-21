@@ -102,16 +102,18 @@
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
-                        for (i = 0, len = nodes.length; i < len; ++i) {
-                            if (nodes[i].id === id) {
-                                return nodes[i];
+                        if (nodes && nodes.length) {
+                            for (i = 0, len = nodes.length; i < len; ++i) {
+                                if (nodes[i].id === id) {
+                                    return nodes[i];
+                                }
                             }
                         }
                     }
                     return el;
                 }
                 
-                if (YAHOO.util.Element && el instanceof YAHOO.util.Element) {
+                if (Y.Element && el instanceof Y.Element) {
                     el = el.get('element');
                 }
 
