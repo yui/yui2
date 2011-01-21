@@ -266,127 +266,38 @@
             return ( Y.Dom._getStyle(el, 'display') !== 'none' && Y.Dom._inDoc(el) );
         },
 
-        _getXY: function() {
-            if (document[DOCUMENT_ELEMENT][GET_BOUNDING_CLIENT_RECT]) {
-                return function(node) {
-                    var scrollLeft, scrollTop, box, doc,
-                        off1, off2, mode, bLeft, bTop,
-                        floor = Math.floor, // TODO: round?
-                        xy = false;
+        _getXY: function(node) {
+            var scrollLeft, scrollTop, box, doc,
+                clientTop, clientLeft,
+                round = Math.round, // TODO: round?
+                xy = false;
 
-                    if (Y.Dom._canPosition(node)) {
-                        box = node[GET_BOUNDING_CLIENT_RECT]();
-                        doc = node[OWNER_DOCUMENT];
-                        scrollLeft = Y.Dom.getDocumentScrollLeft(doc);
-                        scrollTop = Y.Dom.getDocumentScrollTop(doc);
-                        xy = [floor(box[LEFT]), floor(box[TOP])];
+            if (Y.Dom._canPosition(node)) {
+                box = node[GET_BOUNDING_CLIENT_RECT]();
+                doc = node[OWNER_DOCUMENT];
+                scrollLeft = Y.Dom.getDocumentScrollLeft(doc);
+                scrollTop = Y.Dom.getDocumentScrollTop(doc);
+                xy = [box[LEFT], box[TOP]];
 
-                        if (isIE && UA.ie < 8) { // IE < 8: viewport off by 2
-                            off1 = 2;
-                            off2 = 2;
-                            mode = doc[COMPAT_MODE];
+                // remove IE default documentElement offset (border)
+                if (clientTop || clientLeft) {
+                    xy[0] -= clientLeft;
+                    xy[1] -= clientTop;
+                }
 
-                            if (UA.ie === 6) {
-                                if (mode !== _BACK_COMPAT) {
-                                    off1 = 0;
-                                    off2 = 0;
-                                }
-                            }
-                            
-                            if ((mode === _BACK_COMPAT)) {
-                                bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
-                                bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
-                                if (bLeft !== MEDIUM) {
-                                    off1 = parseInt(bLeft, 10);
-                                }
-                                if (bTop !== MEDIUM) {
-                                    off2 = parseInt(bTop, 10);
-                                }
-                            }
-                            
-                            xy[0] -= off1;
-                            xy[1] -= off2;
+                if ((scrollTop || scrollLeft)) {
+                    xy[0] += scrollLeft;
+                    xy[1] += scrollTop;
+                }
 
-                        }
-
-                        if ((scrollTop || scrollLeft)) {
-                            xy[0] += scrollLeft;
-                            xy[1] += scrollTop;
-                        }
-
-                        // gecko may return sub-pixel (non-int) values
-                        xy[0] = floor(xy[0]);
-                        xy[1] = floor(xy[1]);
-                    } else {
-                    }
-
-                    return xy;
-                };
+                // gecko may return sub-pixel (non-int) values
+                xy[0] = round(xy[0]);
+                xy[1] = round(xy[1]);
             } else {
-                return function(node) { // ff2, safari: manually calculate by crawling up offsetParents
-                    var docScrollLeft, docScrollTop,
-                        scrollTop, scrollLeft,
-                        bCheck,
-                        xy = false,
-                        parentNode = node;
-
-                    if  (Y.Dom._canPosition(node) ) {
-                        xy = [node[OFFSET_LEFT], node[OFFSET_TOP]];
-                        docScrollLeft = Y.Dom.getDocumentScrollLeft(node[OWNER_DOCUMENT]);
-                        docScrollTop = Y.Dom.getDocumentScrollTop(node[OWNER_DOCUMENT]);
-
-                        // TODO: refactor with !! or just falsey
-                        bCheck = ((isGecko || UA.webkit > 519) ? true : false);
-
-                        // TODO: worth refactoring for TOP/LEFT only?
-                        while ((parentNode = parentNode[OFFSET_PARENT])) {
-                            xy[0] += parentNode[OFFSET_LEFT];
-                            xy[1] += parentNode[OFFSET_TOP];
-                            if (bCheck) {
-                                xy = Y.Dom._calcBorders(parentNode, xy);
-                            }
-                        }
-
-                        // account for any scrolled ancestors
-                        if (Y.Dom._getStyle(node, POSITION) !== FIXED) {
-                            parentNode = node;
-
-                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME]) {
-                                scrollTop = parentNode[SCROLL_TOP];
-                                scrollLeft = parentNode[SCROLL_LEFT];
-
-                                //Firefox does something funky with borders when overflow is not visible.
-                                if (isGecko && (Y.Dom._getStyle(parentNode, 'overflow') !== 'visible')) {
-                                        xy = Y.Dom._calcBorders(parentNode, xy);
-                                }
-
-                                if (scrollTop || scrollLeft) {
-                                    xy[0] -= scrollLeft;
-                                    xy[1] -= scrollTop;
-                                }
-                            }
-                            xy[0] += docScrollLeft;
-                            xy[1] += docScrollTop;
-
-                        } else {
-                            //Fix FIXED position -- add scrollbars
-                            if (isOpera) {
-                                xy[0] -= docScrollLeft;
-                                xy[1] -= docScrollTop;
-                            } else if (isSafari || isGecko) {
-                                xy[0] += docScrollLeft;
-                                xy[1] += docScrollTop;
-                            }
-                        }
-                        //Round the numbers so we get sane data back
-                        xy[0] = Math.floor(xy[0]);
-                        xy[1] = Math.floor(xy[1]);
-                    } else {
-                    }
-                    return xy;                
-                };
             }
-        }(), // NOTE: Executing for loadtime branching
+
+            return xy;
+        },
         
         /**
          * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
