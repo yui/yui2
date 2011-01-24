@@ -317,9 +317,9 @@
                 value: attr.disabled || this.hasClass(this.DISABLED_CLASSNAME),
                 method: function(value) {
                     if (value === true) {
-                        Dom.addClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.addClass(this.DISABLED_CLASSNAME);
                     } else {
-                        Dom.removeClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.removeClass(this.DISABLED_CLASSNAME);
                     }
                 },
                 validator: Lang.isBoolean

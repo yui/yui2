@@ -8,7 +8,7 @@
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
-<script type="text/javascript" src="../../../build/dom/dom-min.js"></script> 
+<script type="text/javascript" src="../../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
@@ -57,6 +57,9 @@
             <div id="main" class="main">
                 <h2>Section Header</h2>
                 <em class="lorem ipsum ipsum" id="lorem-ipsum">lorem ipsum</em>
+                <em class="test class
+                line
+                break" id="test-class-line-break">lorem ipsum</em>
                 <div class="mod" id="foo">
                     <div class="hd foo" id="yui-gen1">
                         <h3>Module Header</h3>
@@ -79,13 +82,16 @@
                                     <input type="text" name="search-p" id="search-p">
                                     <input type="text" name="search-p">
                                     <input type="text" name="id">
+                                    <input type="checkbox" checked="true" name="test-checkbox" id="test-checkbox">
                                     <input type="submit" value="search">
                             </fieldset>
                         </form>
+                        <button id="test-button">foo</button>
                     </div>
                     <div class="ft"><a href="http://www.developer.yahoo.com">more</a></div>
                 </div>
             </div>
+            <div id="1">numbered id</div>
         </div>
         <div id="ft">
             <p>In hac habitasse platea dictumst. Sed sit amet ligula vitae justo consequat facilisis. Integer tortor. Integer erat. In hac habitasse platea dictumst. Phasellus convallis quam vitae turpis aliquam lobortis. Aliquam scelerisque condimentum lectus. Proin semper adipiscing leo. Nulla facilisi.</p>
@@ -131,6 +137,20 @@
 
                 Assert.isNull(Y.Dom.get('fake-id-none-found'),
                         "Y.Dom.get('fake-id')");
+
+                Assert.isNull(Y.Dom.get('DOC'),
+                        "Y.Dom.get('DOC')");
+
+                Assert.areEqual(document.getElementById(1).id, Y.Dom.get(1).id,
+                        "Y.Dom.get('search')");
+
+                var element = new YAHOO.util.Element('search');
+                Assert.areEqual(element.get('element'), Y.Dom.get(element),
+                        "Y.Dom.get(new Y.Element('search'))");
+
+                var obj = {};
+                Assert.areEqual(obj, Y.Dom.get(obj),
+                        "Y.Dom.get(obj)");
             },            
 
             test_getStyle: function() {
@@ -161,6 +181,9 @@
 
                 Assert.isUndefined(Y.Dom.setStyle('fake-id', 'width', '200px'), "(Y.Dom.setStyle('fake-id', 'width', '200px')");
                 Assert.isUndefined(Y.Dom.setStyle(['fake-id'], 'width', '200px'), "(Y.Dom.setStyle(['fake-id'], 'width', '200px')");
+
+                Y.Dom.setStyle('ft', 'opacity', '');
+                Assert.areEqual('1', Y.Dom.getStyle('ft', 'opacity'), 'unsetting opacity');
             },            
 
             test_computedStyle: function() {
@@ -186,6 +209,13 @@
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'our(class'), 'our(class should match element with our(class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', /our.clas+/), '/our.clas+/ should match element with our(class');  
                 Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+\\|'), "special chars in className");  
+
+                Assert.isFalse(Y.Dom.hasClass(document, 'dolor'),
+                        'hasClass failed with document node');
+
+                var el = document.getElementById('test-class-line-break');
+
+                Assert.isTrue(Y.Dom.hasClass(el, 'line'), 'test class line break');
             },            
 
             test_addClass: function() {
@@ -273,6 +303,8 @@
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'hd').length, 'getBy failed for #hd div.mod'); 
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'moo'}).length, 'getBy failed for .moo'); 
                 Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'fake-id').length, 'getBy failed for #fake-id div.mod'); 
+
+                Assert.isNull(Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'fake-id', null, null, null, true), 'getBy failed for #fake-id div.mod'); 
             },
 
             test_getElementBy: function() {
@@ -565,6 +597,9 @@
                 Y.Dom.setAttribute(el, 'type', 'text');
                 Assert.areEqual('text', Y.Dom.getAttribute(el, 'type'), "Y.Dom.setAttribute(el, 'type', 'text')");
                 el.parentNode.removeChild(el);
+
+                el = document.getElementById('test-button');
+                Y.Dom.setAttribute(el, 'type', 'button');
             },
 
 
@@ -579,6 +614,15 @@
                 var bodyEl = new Y.Element(Y.Dom.generateId(document.body));
                 Y.Dom.addClass(bodyEl, 'dummy');
                 Assert.isTrue(Y.Dom.hasClass(document.body, 'dummy'), 'Y.Dom.addClass(Element, "dummy")');
+
+                el = document.getElementById('test-checkbox');
+                Assert.isTrue(Y.Dom.getAttribute(el, 'checked') == true, 'checkbox checked');
+            },
+
+            test_toHex: function() {
+                var rbgValue = "rgb(97, 11, 56)", //610B38
+                    hexValue = YAHOO.util.Dom.Color.toHex(rbgValue);
+                Assert.areSame("#610B38", hexValue, " should be #610B38");
             }
 
         })); 

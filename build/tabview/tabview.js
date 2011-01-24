@@ -16,6 +16,7 @@
         ACTIVE = 'active',
         ACTIVE_INDEX = 'activeIndex',
         ACTIVE_TAB = 'activeTab',
+        DISABLED = 'disabled',
         CONTENT_EL = 'contentEl',
         ELEMENT = 'element',
     
@@ -127,7 +128,7 @@
 
         _initTabEvents: function(tab) {
             tab.addListener( tab.get('activationEvent'), tab._onActivate, this, tab);
-            tab.addListener( tab.get('activationEventChange'), tab._onActivationEventChange, this, tab);
+            tab.addListener('activationEventChange', tab._onActivationEventChange, this, tab);
         },
 
         _removeTabEvents: function(tab) {
@@ -263,8 +264,8 @@
             
             var el = this.get(ELEMENT);
 
-            if (!Dom.hasClass(el, this.CLASSNAME)) {
-                Dom.addClass(el, this.CLASSNAME);        
+            if (!this.hasClass(this.CLASSNAME)) {
+                this.addClass(this.CLASSNAME);        
             }
             
             /**
@@ -328,7 +329,7 @@
                 value: attr.activeIndex,
                 validator: function(value) {
                     var ret = true;
-                    if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled
+                    if (value && this.getTab(value).get(DISABLED)) { // cannot activate if disabled
                         ret = false;
                     }
                     return ret;
@@ -341,7 +342,7 @@
              * @type YAHOO.widget.Tab
              */
             this.setAttributeConfig(ACTIVE_TAB, {
-                value: attr.activeTab,
+                value: attr[ACTIVE_TAB],
                 method: function(tab) {
                     var activeTab = this.get(ACTIVE_TAB);
                     
@@ -361,7 +362,7 @@
                 },
                 validator: function(value) {
                     var ret = true;
-                    if (value && value.get('disabled')) { // cannot activate if disabled
+                    if (value && value.get(DISABLED)) { // cannot activate if disabled
                         ret = false;
                     }
                     return ret;
@@ -380,6 +381,7 @@
             this.DOM_EVENTS.submit = false;
             this.DOM_EVENTS.focus = false;
             this.DOM_EVENTS.blur = false;
+            this.DOM_EVENTS.change = false;
 
             for (var type in this.DOM_EVENTS) {
                 if ( YAHOO.lang.hasOwnProperty(this.DOM_EVENTS, type) ) {
@@ -394,8 +396,8 @@
          * @param {Int} index The tab index to deselect 
          */
         deselectTab: function(index) {
-            if (this.getTab(index) === this.get('activeTab')) {
-                this.set('activeTab', null);
+            if (this.getTab(index) === this.get(ACTIVE_TAB)) {
+                this.set(ACTIVE_TAB, null);
             }
         },
 
@@ -405,7 +407,7 @@
          * @param {Int} index The tab index to be made active
          */
         selectTab: function(index) {
-            this.set('activeTab', this.getTab(index));
+            this.set(ACTIVE_TAB, this.getTab(index));
         },
 
         _onActiveTabChange: function(e) {
@@ -461,8 +463,8 @@
             if (activeIndex) {
                 this.set(ACTIVE_TAB, this.getTab(activeIndex));
             } else {
-                this._configs.activeTab.value = active; // dont invoke method
-                this._configs.activeIndex.value = this.getTabIndex(active);
+                this._configs[ACTIVE_TAB].value = active; // dont invoke method
+                this._configs[ACTIVE_INDEX].value = this.getTabIndex(active);
             }
         },
 
@@ -824,9 +826,9 @@
                 value: attr.disabled || this.hasClass(this.DISABLED_CLASSNAME),
                 method: function(value) {
                     if (value === true) {
-                        Dom.addClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.addClass(this.DISABLED_CLASSNAME);
                     } else {
-                        Dom.removeClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.removeClass(this.DISABLED_CLASSNAME);
                     }
                 },
                 validator: Lang.isBoolean

@@ -438,7 +438,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		this.setAttributeConfig("legendLabelFunction",
 		{
 			method: this._setLegendLabelFunction,
-			getter: this._legendLabelFunction
+			getter: this._getLegendLabelFunction
 		});
 
 		/**
@@ -803,6 +803,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		}
 		this._swf.setLegendLabelFunction(value);
 	},
+
+    _getLegendLabelFunction: function()
+    {
+        return this._legendLabelFunction;
+    },
 
 	/**
 	 * Getter for the polling attribute.

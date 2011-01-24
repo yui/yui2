@@ -64,18 +64,18 @@ ol,ul,dl {
 	margin-left: 2em;
 }
 
-ol li {
+ol {
 	/* Giving OL's LIs generated numbers. */
 	list-style: decimal outside;
 }
 
-ul li {
+ul {
 	/* Giving UL's LIs generated disc markers. */
 	list-style: disc outside;
 }
 
 dl dd {
-	/* Giving UL's LIs generated numbers. */
+	/* Giving DD default indent. */
 	margin-left: 1em;
 }
 
@@ -122,4 +122,10 @@ input[type="radio"],
 input[type="reset"],
 input[type="submit"] {
 	padding:1px;
+}
+
+/* make IE scale images properly */
+/* see http://code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/ */
+ img {
+    -ms-interpolation-mode:bicubic;
 }

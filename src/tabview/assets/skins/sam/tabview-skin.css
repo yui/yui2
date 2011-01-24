@@ -32,7 +32,6 @@
 .yui-skin-sam .yui-navset .yui-navset-top .yui-nav a em {
     border:solid #a3a3a3;
     border-width:1px 0 0;
-    cursor:hand;
     padding:0.25em .75em;
     left:0; right: 0; bottom: 0; /* protect from other orientations */
     top:-1px; /* for 1px rounded corners */
