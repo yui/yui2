@@ -342,7 +342,7 @@
              * @type YAHOO.widget.Tab
              */
             this.setAttributeConfig(ACTIVE_TAB, {
-                value: attr.activeTab,
+                value: attr[ACTIVE_TAB],
                 method: function(tab) {
                     var activeTab = this.get(ACTIVE_TAB);
                     
@@ -462,8 +462,8 @@
             if (activeIndex) {
                 this.set(ACTIVE_TAB, this.getTab(activeIndex));
             } else {
-                this._configs.activeTab.value = active; // dont invoke method
-                this._configs.activeIndex.value = this.getTabIndex(active);
+                this._configs[ACTIVE_TAB].value = active; // dont invoke method
+                this._configs[ACTIVE_INDEX].value = this.getTabIndex(active);
             }
         },
 
