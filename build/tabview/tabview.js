@@ -16,6 +16,7 @@
         ACTIVE = 'active',
         ACTIVE_INDEX = 'activeIndex',
         ACTIVE_TAB = 'activeTab',
+        DISABLED = 'disabled',
         CONTENT_EL = 'contentEl',
         ELEMENT = 'element',
     
@@ -328,7 +329,7 @@
                 value: attr.activeIndex,
                 validator: function(value) {
                     var ret = true;
-                    if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled
+                    if (value && this.getTab(value).get(DISABLED)) { // cannot activate if disabled
                         ret = false;
                     }
                     return ret;
@@ -361,7 +362,7 @@
                 },
                 validator: function(value) {
                     var ret = true;
-                    if (value && value.get('disabled')) { // cannot activate if disabled
+                    if (value && value.get(DISABLED)) { // cannot activate if disabled
                         ret = false;
                     }
                     return ret;
@@ -394,8 +395,8 @@
          * @param {Int} index The tab index to deselect 
          */
         deselectTab: function(index) {
-            if (this.getTab(index) === this.get('activeTab')) {
-                this.set('activeTab', null);
+            if (this.getTab(index) === this.get(ACTIVE_TAB)) {
+                this.set(ACTIVE_TAB, null);
             }
         },
 
@@ -405,7 +406,7 @@
          * @param {Int} index The tab index to be made active
          */
         selectTab: function(index) {
-            this.set('activeTab', this.getTab(index));
+            this.set(ACTIVE_TAB, this.getTab(index));
         },
 
         _onActiveTabChange: function(e) {
