@@ -264,8 +264,8 @@
             
             var el = this.get(ELEMENT);
 
-            if (!Dom.hasClass(el, this.CLASSNAME)) {
-                Dom.addClass(el, this.CLASSNAME);        
+            if (!this.hasClass(this.CLASSNAME)) {
+                this.addClass(this.CLASSNAME);        
             }
             
             /**
@@ -826,9 +826,9 @@
                 value: attr.disabled || this.hasClass(this.DISABLED_CLASSNAME),
                 method: function(value) {
                     if (value === true) {
-                        Dom.addClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.addClass(this.DISABLED_CLASSNAME);
                     } else {
-                        Dom.removeClass(this.get(ELEMENT), this.DISABLED_CLASSNAME);
+                        this.removeClass(this.DISABLED_CLASSNAME);
                     }
                 },
                 validator: Lang.isBoolean

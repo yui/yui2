@@ -264,8 +264,8 @@
             
             var el = this.get(ELEMENT);
 
-            if (!Dom.hasClass(el, this.CLASSNAME)) {
-                Dom.addClass(el, this.CLASSNAME);        
+            if (!this.hasClass(this.CLASSNAME)) {
+                this.addClass(this.CLASSNAME);        
             }
             
             /**
