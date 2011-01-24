@@ -617,6 +617,12 @@
 
                 el = document.getElementById('test-checkbox');
                 Assert.isTrue(Y.Dom.getAttribute(el, 'checked') == true, 'checkbox checked');
+            },
+
+            test_toHex: function() {
+                var rbgValue = "rgb(97, 11, 56)", //610B38
+                    hexValue = YAHOO.util.Dom.Color.toHex(rbgValue);
+                Assert.areSame("#610B38", hexValue, " should be #610B38");
             }
 
         })); 
