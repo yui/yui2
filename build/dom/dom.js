@@ -508,6 +508,10 @@
             
             if (el && className) {
                 current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
+                if (current) { // convert line breaks, tabs and other delims to spaces
+                    current = current.replace(/\s+/g, SPACE);
+                }
+
                 if (className.exec) {
                     ret = className.test(current);
                 } else {
@@ -616,8 +620,9 @@
                 } else if (from !== to) { // else nothing to replace
                     // May need to lead with DBLSPACE?
                     current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
-                    className = (SPACE + current.replace(Y.Dom._getClassRegex(from), SPACE + to)).
-                               split(Y.Dom._getClassRegex(to));
+                    className = (SPACE + current.replace(Y.Dom._getClassRegex(from), SPACE + to).
+                            replace(/\s+/g, SPACE)). // normalize white space
+                            split(Y.Dom._getClassRegex(to));
 
                     // insert to into what would have been the first occurrence slot
                     className.splice(1, 0, SPACE + to);
@@ -1218,6 +1223,7 @@
                     if (!re) {
                         // escape special chars (".", "[", etc.)
                         className = className.replace(Y.Dom._patterns.CLASS_RE_TOKENS, '\\$1');
+                        className = className.replace(/\s+/g, SPACE); // convert line breaks and other delims
                         re = reCache[className] = new RegExp(C_START + className + C_END, G);
                     }
                 }

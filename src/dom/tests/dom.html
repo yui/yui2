@@ -57,6 +57,9 @@
             <div id="main" class="main">
                 <h2>Section Header</h2>
                 <em class="lorem ipsum ipsum" id="lorem-ipsum">lorem ipsum</em>
+                <em class="test class
+                line
+                break" id="test-class-line-break">lorem ipsum</em>
                 <div class="mod" id="foo">
                     <div class="hd foo" id="yui-gen1">
                         <h3>Module Header</h3>
@@ -210,6 +213,9 @@
                 Assert.isFalse(Y.Dom.hasClass(document, 'dolor'),
                         'hasClass failed with document node');
 
+                var el = document.getElementById('test-class-line-break');
+
+                Assert.isTrue(Y.Dom.hasClass(el, 'line'), 'test class line break');
             },            
 
             test_addClass: function() {
