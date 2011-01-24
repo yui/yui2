@@ -382,6 +382,7 @@
             this.DOM_EVENTS.submit = false;
             this.DOM_EVENTS.focus = false;
             this.DOM_EVENTS.blur = false;
+            this.DOM_EVENTS.change = false;
 
             for (var type in this.DOM_EVENTS) {
                 if ( YAHOO.lang.hasOwnProperty(this.DOM_EVENTS, type) ) {
