@@ -128,7 +128,7 @@
 
         _initTabEvents: function(tab) {
             tab.addListener( tab.get('activationEvent'), tab._onActivate, this, tab);
-            tab.addListener( tab.get('activationEventChange'), tab._onActivationEventChange, this, tab);
+            tab.addListener('activationEventChange', tab._onActivationEventChange, this, tab);
         },
 
         _removeTabEvents: function(tab) {
