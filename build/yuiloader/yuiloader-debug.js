@@ -8,10 +8,10 @@
  */
 
 /**
- * YAHOO_config is not included as part of the library.  Instead it is an 
- * object that can be defined by the implementer immediately before 
+ * YAHOO_config is not included as part of the library.  Instead it is an
+ * object that can be defined by the implementer immediately before
  * including the YUI library.  The properties included in this object
- * will be used to configure global properties needed as soon as the 
+ * will be used to configure global properties needed as soon as the
  * library begins to load.
  * @class YAHOO_config
  * @static
@@ -30,7 +30,7 @@
 
 /**
  * Set to true if the library will be dynamically loaded after window.onload.
- * Defaults to false 
+ * Defaults to false
  * @property injecting
  * @type boolean
  * @static
@@ -84,16 +84,16 @@ if (typeof YAHOO == "undefined" || !YAHOO) {
  *
  * For implementation code that uses YUI, do not create your components
  * in the namespaces defined by YUI (
- * <code>YAHOO.util</code>, 
- * <code>YAHOO.widget</code>, 
- * <code>YAHOO.lang</code>, 
- * <code>YAHOO.tool</code>, 
- * <code>YAHOO.example</code>, 
+ * <code>YAHOO.util</code>,
+ * <code>YAHOO.widget</code>,
+ * <code>YAHOO.lang</code>,
+ * <code>YAHOO.tool</code>,
+ * <code>YAHOO.example</code>,
  * <code>YAHOO.env</code>) -- create your own namespace (e.g., 'companyname').
  *
  * @method namespace
  * @static
- * @param  {String*} arguments 1-n namespaces to create 
+ * @param  {String*} arguments 1-n namespaces to create
  * @return {Object}  A reference to the last namespace object created
  */
 YAHOO.namespace = function() {
@@ -152,9 +152,9 @@ YAHOO.register = function(name, mainClass, data) {
     var mods = YAHOO.env.modules, m, v, b, ls, i;
 
     if (!mods[name]) {
-        mods[name] = { 
-            versions:[], 
-            builds:[] 
+        mods[name] = {
+            versions:[],
+            builds:[]
         };
     }
 
@@ -197,7 +197,7 @@ YAHOO.env = YAHOO.env || {
      * @type Object[]
      */
     modules: [],
-    
+
     /**
      * List of functions that should be executed every time a YUI module
      * reports itself.
@@ -216,7 +216,7 @@ YAHOO.env = YAHOO.env || {
  *      <dt>versions:</dt>  <dd>All versions that were registered</dd>
  *      <dt>builds:</dt>    <dd>All builds that were registered.</dd>
  *      <dt>mainClass:</dt> <dd>An object that was was stamped with the
- *                 current version and build. If 
+ *                 current version and build. If
  *                 mainClass.VERSION != version or mainClass.BUILD != build,
  *                 multiple versions of pieces of the library have been
  *                 loaded, potentially causing issues.</dd>
@@ -235,17 +235,25 @@ YAHOO.env.getVersion = function(name) {
  * Do not fork for a browser if it can be avoided.  Use feature detection when
  * you can.  Use the user agent as a last resort.  YAHOO.env.ua stores a version
  * number for the browser engine, 0 otherwise.  This value may or may not map
- * to the version number of the browser using the engine.  The value is 
- * presented as a float so that it can easily be used for boolean evaluation 
- * as well as for looking for a particular range of versions.  Because of this, 
- * some of the granularity of the version info may be lost (e.g., Gecko 1.8.0.9 
+ * to the version number of the browser using the engine.  The value is
+ * presented as a float so that it can easily be used for boolean evaluation
+ * as well as for looking for a particular range of versions.  Because of this,
+ * some of the granularity of the version info may be lost (e.g., Gecko 1.8.0.9
  * reports 1.8).
  * @class YAHOO.env.ua
  * @static
  */
-YAHOO.env.ua = function() {
 
-        var numberfy = function(s) {
+/**
+ * parses a user agent string (or looks for one in navigator to parse if
+ * not supplied).
+ * @method parseUA
+ * @since 2.9.0
+ * @static
+ */
+YAHOO.env.parseUA = function(agent) {
+
+        var numberify = function(s) {
             var c = 0;
             return parseFloat(s.replace(/\./g, function() {
                 return (c++ == 1) ? '' : '.';
@@ -260,6 +268,7 @@ YAHOO.env.ua = function() {
          * Internet Explorer version number or 0.  Example: 6
          * @property ie
          * @type float
+         * @static
          */
         ie: 0,
 
@@ -267,29 +276,32 @@ YAHOO.env.ua = function() {
          * Opera version number or 0.  Example: 9.2
          * @property opera
          * @type float
+         * @static
          */
         opera: 0,
 
         /**
-         * Gecko engine revision number.  Will evaluate to 1 if Gecko 
+         * Gecko engine revision number.  Will evaluate to 1 if Gecko
          * is detected but the revision could not be found. Other browsers
          * will be 0.  Example: 1.8
          * <pre>
          * Firefox 1.0.0.4: 1.7.8   <-- Reports 1.7
-         * Firefox 1.5.0.9: 1.8.0.9 <-- Reports 1.8
-         * Firefox 2.0.0.3: 1.8.1.3 <-- Reports 1.8
-         * Firefox 3 alpha: 1.9a4   <-- Reports 1.9
+         * Firefox 1.5.0.9: 1.8.0.9 <-- 1.8
+         * Firefox 2.0.0.3: 1.8.1.3 <-- 1.81
+         * Firefox 3.0   <-- 1.9
+         * Firefox 3.5   <-- 1.91
          * </pre>
          * @property gecko
          * @type float
+         * @static
          */
         gecko: 0,
 
         /**
-         * AppleWebKit version.  KHTML browsers that are not WebKit browsers 
-         * will evaluate to 1, other browsers 0.  Example: 418.9.1
+         * AppleWebKit version.  KHTML browsers that are not WebKit browsers
+         * will evaluate to 1, other browsers 0.  Example: 418.9
          * <pre>
-         * Safari 1.3.2 (312.6): 312.8.1 <-- Reports 312.8 -- currently the 
+         * Safari 1.3.2 (312.6): 312.8.1 <-- Reports 312.8 -- currently the
          *                                   latest available for Mac OSX 10.3.
          * Safari 2.0.2:         416     <-- hasOwnProperty introduced
          * Safari 2.0.4:         418     <-- preventDefault fixed
@@ -298,30 +310,37 @@ YAHOO.env.ua = function() {
          * Safari 2.0.4 (419.3): 419     <-- Tiger installations that have been
          *                                   updated, but not updated
          *                                   to the latest patch.
-         * Webkit 212 nightly:   522+    <-- Safari 3.0 precursor (with native SVG
-         *                                   and many major issues fixed).  
-         * 3.x yahoo.com, flickr:422     <-- Safari 3.x hacks the user agent
-         *                                   string when hitting yahoo.com and 
-         *                                   flickr.com.
-         * Safari 3.0.4 (523.12):523.12  <-- First Tiger release - automatic update
-         *                                   from 2.x via the 10.4.11 OS patch
+         * Webkit 212 nightly:   522+    <-- Safari 3.0 precursor (with native
+         * SVG and many major issues fixed).
+         * Safari 3.0.4 (523.12) 523.12  <-- First Tiger release - automatic
+         * update from 2.x via the 10.4.11 OS patch.
          * Webkit nightly 1/2008:525+    <-- Supports DOMContentLoaded event.
          *                                   yahoo.com user agent hack removed.
-         *                                   
          * </pre>
-         * http://developer.apple.com/internet/safari/uamatrix.html
+         * http://en.wikipedia.org/wiki/Safari_version_history
          * @property webkit
          * @type float
+         * @static
          */
         webkit: 0,
+
+        /**
+         * Chrome will be detected as webkit, but this property will also
+         * be populated with the Chrome version number
+         * @property chrome
+         * @type float
+         * @static
+         */
+        chrome: 0,
 
         /**
          * The mobile property will be set to a string containing any relevant
          * user agent information when a modern mobile browser is detected.
          * Currently limited to Safari on the iPhone/iPod Touch, Nokia N-series
-         * devices with the WebKit-based browser, and Opera Mini.  
-         * @property mobile 
+         * devices with the WebKit-based browser, and Opera Mini.
+         * @property mobile
          * @type string
+         * @static
          */
         mobile: null,
 
@@ -332,13 +351,55 @@ YAHOO.env.ua = function() {
          * @type float
          */
         air: 0,
+        /**
+         * Detects Apple iPad's OS version
+         * @property ipad
+         * @type float
+         * @static
+         */
+        ipad: 0,
+        /**
+         * Detects Apple iPhone's OS version
+         * @property iphone
+         * @type float
+         * @static
+         */
+        iphone: 0,
+        /**
+         * Detects Apples iPod's OS version
+         * @property ipod
+         * @type float
+         * @static
+         */
+        ipod: 0,
+        /**
+         * General truthy check for iPad, iPhone or iPod
+         * @property ios
+         * @type float
+         * @static
+         */
+        ios: null,
+        /**
+         * Detects Googles Android OS version
+         * @property android
+         * @type float
+         * @static
+         */
+        android: 0,
+        /**
+         * Detects Palms WebOS version
+         * @property webos
+         * @type float
+         * @static
+         */
+        webos: 0,
 
         /**
          * Google Caja version number or 0.
          * @property caja
          * @type float
          */
-        caja: nav.cajaVersion,
+        caja: nav && nav.cajaVersion,
 
         /**
          * Set to true if the page appears to be in SSL
@@ -358,12 +419,12 @@ YAHOO.env.ua = function() {
 
     },
 
-    ua = navigator && navigator.userAgent, 
-    
+    ua = agent || (navigator && navigator.userAgent),
+
     loc = window && window.location,
 
     href = loc && loc.href,
-    
+
     m;
 
     o.secure = href && (href.toLowerCase().indexOf("https") === 0);
@@ -374,55 +435,88 @@ YAHOO.env.ua = function() {
             o.os = 'windows';
         } else if ((/macintosh/i).test(ua)) {
             o.os = 'macintosh';
-        }
-    
-        // Modern KHTML browsers should qualify as Safari X-Grade
-        if ((/KHTML/).test(ua)) {
-            o.webkit=1;
+        } else if ((/rhino/i).test(ua)) {
+            o.os = 'rhino';
         }
 
+        // Modern KHTML browsers should qualify as Safari X-Grade
+        if ((/KHTML/).test(ua)) {
+            o.webkit = 1;
+        }
         // Modern WebKit browsers are at least X-Grade
-        m=ua.match(/AppleWebKit\/([^\s]*)/);
-        if (m&&m[1]) {
-            o.webkit=numberfy(m[1]);
+        m = ua.match(/AppleWebKit\/([^\s]*)/);
+        if (m && m[1]) {
+            o.webkit = numberify(m[1]);
 
             // Mobile browser check
             if (/ Mobile\//.test(ua)) {
-                o.mobile = "Apple"; // iPhone or iPod Touch
+                o.mobile = 'Apple'; // iPhone or iPod Touch
+
+                m = ua.match(/OS ([^\s]*)/);
+                if (m && m[1]) {
+                    m = numberify(m[1].replace('_', '.'));
+                }
+                o.ios = m;
+                o.ipad = o.ipod = o.iphone = 0;
+
+                m = ua.match(/iPad|iPod|iPhone/);
+                if (m && m[0]) {
+                    o[m[0].toLowerCase()] = o.ios;
+                }
             } else {
-                m=ua.match(/NokiaN[^\/]*/);
+                m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
                 if (m) {
-                    o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
+                    // Nokia N-series, Android, webOS, ex: NokiaN95
+                    o.mobile = m[0];
+                }
+                if (/webOS/.test(ua)) {
+                    o.mobile = 'WebOS';
+                    m = ua.match(/webOS\/([^\s]*);/);
+                    if (m && m[1]) {
+                        o.webos = numberify(m[1]);
+                    }
+                }
+                if (/ Android/.test(ua)) {
+                    o.mobile = 'Android';
+                    m = ua.match(/Android ([^\s]*);/);
+                    if (m && m[1]) {
+                        o.android = numberify(m[1]);
+                    }
+
                 }
             }
 
-            m=ua.match(/AdobeAIR\/([^\s]*)/);
-            if (m) {
-                o.air = m[0]; // Adobe AIR 1.0 or better
+            m = ua.match(/Chrome\/([^\s]*)/);
+            if (m && m[1]) {
+                o.chrome = numberify(m[1]); // Chrome
+            } else {
+                m = ua.match(/AdobeAIR\/([^\s]*)/);
+                if (m) {
+                    o.air = m[0]; // Adobe AIR 1.0 or better
+                }
             }
-
         }
 
         if (!o.webkit) { // not webkit
-            // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
-            m=ua.match(/Opera[\s\/]([^\s]*)/);
-            if (m&&m[1]) {
-                o.opera=numberfy(m[1]);
-                m=ua.match(/Opera Mini[^;]*/);
+// @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
+            m = ua.match(/Opera[\s\/]([^\s]*)/);
+            if (m && m[1]) {
+                o.opera = numberify(m[1]);
+                m = ua.match(/Opera Mini[^;]*/);
                 if (m) {
                     o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
                 }
             } else { // not opera or webkit
-                m=ua.match(/MSIE\s([^;]*)/);
-                if (m&&m[1]) {
-                    o.ie=numberfy(m[1]);
+                m = ua.match(/MSIE\s([^;]*)/);
+                if (m && m[1]) {
+                    o.ie = numberify(m[1]);
                 } else { // not opera, webkit, or ie
-                    m=ua.match(/Gecko\/([^\s]*)/);
+                    m = ua.match(/Gecko\/([^\s]*)/);
                     if (m) {
-                        o.gecko=1; // Gecko detected, look for revision
-                        m=ua.match(/rv:([^\s\)]*)/);
-                        if (m&&m[1]) {
-                            o.gecko=numberfy(m[1]);
+                        o.gecko = 1; // Gecko detected, look for revision
+                        m = ua.match(/rv:([^\s\)]*)/);
+                        if (m && m[1]) {
+                            o.gecko = numberify(m[1]);
                         }
                     }
                 }
@@ -431,7 +525,9 @@ YAHOO.env.ua = function() {
     }
 
     return o;
-}();
+};
+
+YAHOO.env.ua = YAHOO.env.parseUA();
 
 /*
  * Initializes the global by creating the default namespaces and applying
@@ -491,7 +587,7 @@ var L = YAHOO.lang,
      * @param {any} o The object being testing
      * @return {boolean} the result
      */
-    isArray: function(o) { 
+    isArray: function(o) {
         return OP.toString.apply(o) === ARRAY_TOSTRING;
     },
 
@@ -504,7 +600,7 @@ var L = YAHOO.lang,
     isBoolean: function(o) {
         return typeof o === 'boolean';
     },
-    
+
     /**
      * Determines whether or not the provided object is a function.
      * Note: Internet Explorer thinks certain functions are objects:
@@ -525,7 +621,7 @@ var L = YAHOO.lang,
     isFunction: function(o) {
         return (typeof o === 'function') || OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
-        
+
     /**
      * Determines whether or not the provided object is null
      * @method isNull
@@ -535,7 +631,7 @@ var L = YAHOO.lang,
     isNull: function(o) {
         return o === null;
     },
-        
+
     /**
      * Determines whether or not the provided object is a legal number
      * @method isNumber
@@ -545,18 +641,18 @@ var L = YAHOO.lang,
     isNumber: function(o) {
         return typeof o === 'number' && isFinite(o);
     },
-      
+
     /**
      * Determines whether or not the provided object is of type object
      * or function
      * @method isObject
      * @param {any} o The object being testing
      * @return {boolean} the result
-     */  
+     */
     isObject: function(o) {
 return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
-        
+
     /**
      * Determines whether or not the provided object is a string
      * @method isString
@@ -566,7 +662,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     isString: function(o) {
         return typeof o === 'string';
     },
-        
+
     /**
      * Determines whether or not the provided object is undefined
      * @method isUndefined
@@ -576,12 +672,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     isUndefined: function(o) {
         return typeof o === 'undefined';
     },
-    
- 
+
+
     /**
      * IE will not enumerate native functions in a derived object even if the
-     * function was overridden.  This is a workaround for specific functions 
-     * we care about on the Object prototype. 
+     * function was overridden.  This is a workaround for specific functions
+     * we care about on the Object prototype.
      * @property _IEEnumFix
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
@@ -600,7 +696,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 }
             }
     } : function(){},
-       
+
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
@@ -612,7 +708,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {Function} superc the object to inherit
      * @param {Object} overrides  additional properties/methods to add to the
      *                              subclass prototype.  These will override the
-     *                              matching items obtained from the superclass 
+     *                              matching items obtained from the superclass
      *                              if present.
      */
     extend: function(subc, superc, overrides) {
@@ -628,7 +724,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         if (superc.prototype.constructor == OP.constructor) {
             superc.prototype.constructor=superc;
         }
-    
+
         if (overrides) {
             for (i in overrides) {
                 if (L.hasOwnProperty(overrides, i)) {
@@ -639,14 +735,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             L._IEEnumFix(subc.prototype, overrides);
         }
     },
-   
+
     /**
      * Applies all properties in the supplier to the receiver if the
-     * receiver does not have these properties yet.  Optionally, one or 
-     * more methods/properties can be specified (as additional 
-     * parameters).  This option will overwrite the property if receiver 
-     * has it already.  If true is passed as the third parameter, all 
-     * properties will be applied and _will_ overwrite properties in 
+     * receiver does not have these properties yet.  Optionally, one or
+     * more methods/properties can be specified (as additional
+     * parameters).  This option will overwrite the property if receiver
+     * has it already.  If true is passed as the third parameter, all
+     * properties will be applied and _will_ overwrite properties in
      * the receiver.
      *
      * @method augmentObject
@@ -654,7 +750,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @since 2.3.0
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods 
+     * @param {String*|boolean}  arguments zero or more properties methods
      *        to augment the receiver with.  If none specified, everything
      *        in the supplier will be used unless it would
      *        overwrite an existing property in the receiver. If true
@@ -672,16 +768,18 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 r[a[i]] = s[a[i]];
             }
         } else { // take everything, overwriting only if the third parameter is true
-            for (p in s) { 
+            for (p in s) {
                 if (overrideList || !(p in r)) {
                     r[p] = s[p];
                 }
             }
-            
+
             L._IEEnumFix(r, s);
         }
+
+        return r;
     },
- 
+
     /**
      * Same as YAHOO.lang.augmentObject, except it only applies prototype properties
      * @see YAHOO.lang.augmentObject
@@ -689,11 +787,11 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods 
-     *        to augment the receiver with.  If none specified, everything 
-     *        in the supplier will be used unless it would overwrite an existing 
-     *        property in the receiver.  if true is specified as the third 
-     *        parameter, all properties will be applied and will overwrite an 
+     * @param {String*|boolean}  arguments zero or more properties methods
+     *        to augment the receiver with.  If none specified, everything
+     *        in the supplier will be used unless it would overwrite an existing
+     *        property in the receiver.  if true is specified as the third
+     *        parameter, all properties will be applied and will overwrite an
      *        existing property in the receiver
      */
     augmentProto: function(r, s) {
@@ -706,9 +804,11 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             a.push(arguments[i]);
         }
         L.augmentObject.apply(this, a);
+
+        return r;
     },
 
-      
+
     /**
      * Returns a simple string representation of the object or array.
      * Other types of objects will be returned unprocessed.  Arrays
@@ -726,7 +826,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
         // Cast non-objects to string
         // Skip dates because the std toString is what we want
-        // Skip HTMLElement-like objects because trying to dump 
+        // Skip HTMLElement-like objects because trying to dump
         // an element will cause an unhandled exception in FF 2.x
         if (!L.isObject(o)) {
             return o + "";
@@ -778,19 +878,19 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
 
     /**
-     * Does variable substitution on a string. It scans through the string 
-     * looking for expressions enclosed in { } braces. If an expression 
+     * Does variable substitution on a string. It scans through the string
+     * looking for expressions enclosed in { } braces. If an expression
      * is found, it is used a key on the object.  If there is a space in
      * the key, the first word is used for the key and the rest is provided
      * to an optional function to be used to programatically determine the
-     * value (the extra information might be used for this decision). If 
+     * value (the extra information might be used for this decision). If
      * the value for the key in the object, or what is returned from the
-     * function has a string value, number value, or object value, it is 
+     * function has a string value, number value, or object value, it is
      * substituted for the bracket expression and it repeats.  If this
      * value is an object, it uses the Object's toString() if this has
      * been overridden, otherwise it does a shallow dump of the key/value
      * pairs.
-     * 
+     *
      * By specifying the recurse option, the string is rescanned after
      * every replacement, allowing for nested template substitutions.
      * The side effect of this option is that curly braces in the
@@ -823,7 +923,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 break;
             }
 
-            //Extract key and meta info 
+            //Extract key and meta info
             token = s.substring(i + 1, j);
             key = token;
             meta = null;
@@ -855,7 +955,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
                     objstr = v.toString();
 
-                    // use the toString if it is not the Object toString 
+                    // use the toString if it is not the Object toString
                     // and the 'dump' meta info was not found
                     if (objstr === OBJECT_TOSTRING || dump > -1) {
                         v = L.dump(v, parseInt(meta, 10));
@@ -889,7 +989,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
 
     /**
-     * Returns a string without any leading or trailing whitespace.  If 
+     * Returns a string without any leading or trailing whitespace.  If
      * the input is not a string, the input will be returned untouched.
      * @method trim
      * @since 2.3.0
@@ -922,28 +1022,28 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
 
     /**
-     * Executes the supplied function in the context of the supplied 
-     * object 'when' milliseconds later.  Executes the function a 
+     * Executes the supplied function in the context of the supplied
+     * object 'when' milliseconds later.  Executes the function a
      * single time unless periodic is set to true.
      * @method later
      * @since 2.4.0
-     * @param when {int} the number of milliseconds to wait until the fn 
+     * @param when {int} the number of milliseconds to wait until the fn
      * is executed
      * @param o the context object
-     * @param fn {Function|String} the function to execute or the name of 
+     * @param fn {Function|String} the function to execute or the name of
      * the method in the 'o' object to execute
      * @param data [Array] data that is provided to the function.  This accepts
      * either a single item or an array.  If an array is provided, the
      * function is executed with one parameter for each array item.  If
      * you need to pass a single array parameter, it needs to be wrapped in
      * an array [myarray]
-     * @param periodic {boolean} if true, executes continuously at supplied 
+     * @param periodic {boolean} if true, executes continuously at supplied
      * interval until canceled
-     * @return a timer object. Call the cancel() method on this object to 
+     * @return a timer object. Call the cancel() method on this object to
      * stop the timer.
      */
     later: function(when, o, fn, data, periodic) {
-        when = when || 0; 
+        when = when || 0;
         o = o || {};
         var m=fn, d=data, f, r;
 
@@ -976,10 +1076,10 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             }
         };
     },
-    
+
     /**
      * A convenience method for detecting a legitimate non-null value.
-     * Returns false for null/undefined/NaN, true for other values, 
+     * Returns false for null/undefined/NaN, true for other values,
      * including 0/false/''
      * @method isValue
      * @since 2.3.0
@@ -1016,9 +1116,9 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
  */
 L.hasOwnProperty = (OP.hasOwnProperty) ?
     function(o, prop) {
-        return o && o.hasOwnProperty(prop);
+        return o && o.hasOwnProperty && o.hasOwnProperty(prop);
     } : function(o, prop) {
-        return !L.isUndefined(o[prop]) && 
+        return !L.isUndefined(o[prop]) &&
                 o.constructor.prototype[prop] !== o[prop];
     };
 
@@ -1030,16 +1130,16 @@ OB.augmentObject(L, OB, true);
  * @class YAHOO.util.Lang
  */
 YAHOO.util.Lang = L;
- 
+
 /**
- * Same as YAHOO.lang.augmentObject, except it only applies prototype 
+ * Same as YAHOO.lang.augmentObject, except it only applies prototype
  * properties.  This is an alias for augmentProto.
  * @see YAHOO.lang.augmentObject
  * @method augment
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*|boolean}  arguments zero or more properties methods to 
+ * @param {String*|boolean}  arguments zero or more properties methods to
  *        augment the receiver with.  If none specified, everything
  *        in the supplier will be used unless it would
  *        overwrite an existing property in the receiver.  if true
@@ -1056,13 +1156,13 @@ L.augment = L.augmentProto;
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*}  arguments zero or more properties methods to 
+ * @param {String*}  arguments zero or more properties methods to
  *        augment the receiver with.  If none specified, everything
  *        in the supplier will be used unless it would
  *        overwrite an existing property in the receiver
  */
 YAHOO.augment = L.augmentProto;
-       
+
 /**
  * An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
  * @method extend
@@ -1234,6 +1334,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     _finish = function(id) {
+        YAHOO.log("Finishing transaction " + id);
         var q = queues[id], msg, context;
         q.finished = true;
 
@@ -1257,6 +1358,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     _timeout = function(id) {
+        YAHOO.log("Timeout " + id, "info", "get");
         var q = queues[id], context;
         if (q.onTimeout) {
             context = q.scope || q;
@@ -1273,6 +1375,7 @@ YAHOO.util.Get = function() {
      */
     _next = function(id, loaded) {
 
+        YAHOO.log("_next: " + id + ", loaded: " + loaded, "info", "Get");
 
         var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], 
             n, msg, url, s, extra;
@@ -1333,9 +1436,11 @@ YAHOO.util.Get = function() {
         // if the url is undefined, this is probably a trailing comma problem in IE
         if (!url) {
             q.url.shift(); 
+            YAHOO.log('skipping empty url');
             return _next(id);
         }
 
+        YAHOO.log("attempting to load " + url, "info", "Get");
 
         if (q.timeout) {
             // Y.log('create timer');
@@ -1364,6 +1469,7 @@ YAHOO.util.Get = function() {
             h.appendChild(n);
         }
         
+        YAHOO.log("Appending node: " + url, "info", "Get");
 
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css 
@@ -1469,6 +1575,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
+                    YAHOO.log(id + " onload " + url, "info", "Get");
                     n.onreadystatechange = null;
                     f(id, url);
                 }
@@ -1483,6 +1590,7 @@ YAHOO.util.Get = function() {
                 if (ua.webkit >= 420) {
 
                     n.addEventListener("load", function() {
+                        YAHOO.log(id + " DOM2 onload " + url, "info", "Get");
                         f(id, url);
                     });
 
@@ -1500,6 +1608,7 @@ YAHOO.util.Get = function() {
                     q = queues[id];
                     if (q.varName) {
                         freq = YAHOO.util.Get.POLL_FREQ;
+                        YAHOO.log("Polling for " + q.varName[0]);
                         q.maxattempts = YAHOO.util.Get.TIMEOUT/freq;
                         q.attempts = 0;
                         q._cache = q.varName[0].split(".");
@@ -1517,11 +1626,13 @@ YAHOO.util.Get = function() {
                                         q.timer.cancel();
                                         _fail(id, msg);
                                     } else {
+                                        YAHOO.log(a[i] + " failed, retrying");
                                     }
                                     return;
                                 }
                             }
                             
+                            YAHOO.log("Safari poll complete");
 
                             q.timer.cancel();
                             f(id, url);
@@ -1538,6 +1649,7 @@ YAHOO.util.Get = function() {
         // nodes.
         } else { 
             n.onload = function() {
+                YAHOO.log(id + " onload " + url, "info", "Get");
                 f(id, url);
             };
         }
@@ -1552,6 +1664,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     _fail = function(id, msg) {
+        YAHOO.log("get failure: " + msg, "warn", "Get");
         var q = queues[id], context;
         // execute failure callback
         if (q.onFailure) {
@@ -1639,6 +1752,7 @@ YAHOO.util.Get = function() {
          * @private
          */
         _finalize: function(id) {
+            YAHOO.log(id + " finalized ", "info", "Get");
             lang.later(0, null, _finish, id);
         },
 
@@ -1652,6 +1766,7 @@ YAHOO.util.Get = function() {
             var id = (lang.isString(o)) ? o : o.tId,
                 q = queues[id];
             if (q) {
+                YAHOO.log("Aborting " + id, "info", "Get");
                 q.aborted = true;
             }
         }, 
@@ -1761,12 +1876,14 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;["http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js",
          * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js"], &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log(o.data); // foo
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log(o.nodes.length === 2) // true
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// o.purge(); // optionally remove the script nodes immediately
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;onFailure: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log("transaction failed");
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
          * &nbsp;&nbsp;&nbsp;&nbsp;timeout: 10000, // 10 second timeout
@@ -1827,6 +1944,7 @@ YAHOO.util.Get = function() {
          * </pre>
          * <pre>
          *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css",
+         *                          "http://yui.yahooapis.com/2.7.0/build/logger/assets/skins/sam/logger.css"]);
          * </pre>
          * @return {tId: string} an object containing info about the transaction
          */
@@ -1837,6 +1955,8 @@ YAHOO.util.Get = function() {
 }();
 
 YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
+/*jslint evil: true, strict: false, regexp: false*/
+
 /**
  * Provides dynamic loading for the YUI library.  It includes the dependency
  * info for the library, and will automatically pull in dependencies for
@@ -1857,9 +1977,20 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
  */
 (function() {
 
-    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env,
-        PROV = "_provides", SUPER = "_supersedes",
-        REQ = "expanded", AFTER = "_after";
+    var Y = YAHOO,
+        util = Y.util,
+        lang = Y.lang,
+        env = Y.env,
+        PROV = "_provides",
+        SUPER = "_supersedes",
+        REQ = "expanded",
+        AFTER = "_after",
+        VERSION = "@VERSION@";
+
+    // version hack for cdn testing
+    // if (/VERSION/.test(VERSION)) {
+        // VERSION = "2.8.2";
+    // }
 
     var YUI = {
 
@@ -1876,8 +2007,8 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
     // 'root': '2.5.2/build/',
     // 'base': 'http://yui.yahooapis.com/2.5.2/build/',
 
-    'root': '@VERSION@/build/',
-    'base': 'http://yui.yahooapis.com/@VERSION@/build/',
+    'root': VERSION + '/build/',
+    'base': 'http://yui.yahooapis.com/' + VERSION + '/build/',
 
     'comboBase': 'http://yui.yahooapis.com/combo?',
 
@@ -2000,7 +2131,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'datatable': {
             'type': 'js',
             'path': 'datatable/datatable-min.js',
-            'requires': ['element', 'datasource', 'event-delegate'],
+            'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
         },
@@ -2309,9 +2440,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'skinnable': true
         }
     }
-}
- ,
-
+},
         ObjectUtil: {
             appendArray: function(o, a) {
                 if (a) {
@@ -3553,23 +3682,78 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                 // YAHOO.log("sandbox: " + this.toString() + ", " + type);
             // }
 
-            this._config(o);
+            var self = this,
+                success = function(o) {
 
-            if (!this.onSuccess) {
+                    var idx=o.argument[0], name=o.argument[2];
+
+                    // store the response in the position it was requested
+                    self._scriptText[idx] = o.responseText;
+
+                    // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
+
+                    if (self.onProgress) {
+                        self.onProgress.call(self.scope, {
+                                    name: name,
+                                    scriptText: o.responseText,
+                                    xhrResponse: o,
+                                    data: self.data
+                                });
+                    }
+
+                    // only generate the sandbox once everything is loaded
+                    self._loadCount++;
+
+                    if (self._loadCount >= self._stopCount) {
+
+                        // the variable to find
+                        var v = self.varName || "YAHOO";
+
+                        // wrap the contents of the requested modules in an anonymous function
+                        var t = "(function() {\n";
+
+                        // return the locally scoped reference.
+                        var b = "\nreturn " + v + ";\n})();";
+
+                        var ref = eval(t + self._scriptText.join("\n") + b);
+
+                        self._pushEvents(ref);
+
+                        if (ref) {
+                            self.onSuccess.call(self.scope, {
+                                    reference: ref,
+                                    data: self.data
+                                });
+                        } else {
+                            self._onFailure.call(self.varName + " reference failure");
+                        }
+                    }
+                },
+
+                failure = function(o) {
+                    self.onFailure.call(self.scope, {
+                            msg: "XHR failure",
+                            xhrResponse: o,
+                            data: self.data
+                        });
+                };
+
+            self._config(o);
+
+            if (!self.onSuccess) {
 throw new Error("You must supply an onSuccess handler for your sandbox");
             }
 
-            this._sandbox = true;
+            self._sandbox = true;
 
-            var self = this;
 
             // take care of any css first (this can't be sandboxed)
             if (!type || type !== "js") {
-                this._internalCallback = function() {
+                self._internalCallback = function() {
                             self._internalCallback = null;
                             self.sandbox(null, "js");
                         };
-                this.insert(null, "css");
+                self.insert(null, "css");
                 return;
             }
 
@@ -3578,116 +3762,60 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // get a new loader instance to load connection.
                 var ld = new YAHOO.util.YUILoader();
                 ld.insert({
-                    base: this.base,
-                    filter: this.filter,
+                    base: self.base,
+                    filter: self.filter,
                     require: "connection",
-                    insertBefore: this.insertBefore,
-                    charset: this.charset,
+                    insertBefore: self.insertBefore,
+                    charset: self.charset,
                     onSuccess: function() {
-                        this.sandbox(null, "js");
+                        self.sandbox(null, "js");
                     },
-                    scope: this
+                    scope: self
                 }, "js");
                 return;
             }
 
-            this._scriptText = [];
-            this._loadCount = 0;
-            this._stopCount = this.sorted.length;
-            this._xhr = [];
+            self._scriptText = [];
+            self._loadCount = 0;
+            self._stopCount = self.sorted.length;
+            self._xhr = [];
 
-            this.calculate();
+            self.calculate();
 
-            var s=this.sorted, l=s.length, i, m, url;
+            var s=self.sorted, l=s.length, i, m, url;
 
             for (i=0; i<l; i=i+1) {
-                m = this.moduleInfo[s[i]];
+                m = self.moduleInfo[s[i]];
 
                 // undefined modules cause a failure
                 if (!m) {
-                    this._onFailure("undefined module " + m);
-                    for (var j=0;j<this._xhr.length;j=j+1) {
-                        this._xhr[j].abort();
+                    self._onFailure("undefined module " + m);
+                    for (var j=0;j<self._xhr.length;j=j+1) {
+                        self._xhr[j].abort();
                     }
                     return;
                 }
 
                 // css files should be done
                 if (m.type !== "js") {
-                    this._loadCount++;
+                    self._loadCount++;
                     continue;
                 }
 
                 url = m.fullpath;
-                url = (url) ? this._filter(url) : this._url(m.path);
+                url = (url) ? self._filter(url) : self._url(m.path);
 
                 // YAHOO.log("xhr request: " + url + ", " + i);
 
                 var xhrData = {
-
-                    success: function(o) {
-
-                        var idx=o.argument[0], name=o.argument[2];
-
-                        // store the response in the position it was requested
-                        this._scriptText[idx] = o.responseText;
-
-                        // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
-
-                        if (this.onProgress) {
-                            this.onProgress.call(this.scope, {
-                                        name: name,
-                                        scriptText: o.responseText,
-                                        xhrResponse: o,
-                                        data: this.data
-                                    });
-                        }
-
-                        // only generate the sandbox once everything is loaded
-                        this._loadCount++;
-
-                        if (this._loadCount >= this._stopCount) {
-
-                            // the variable to find
-                            var v = this.varName || "YAHOO";
-
-                            // wrap the contents of the requested modules in an anonymous function
-                            var t = "(function() {\n";
-
-                            // return the locally scoped reference.
-                            var b = "\nreturn " + v + ";\n})();";
-
-                            var ref = eval(t + this._scriptText.join("\n") + b);
-
-                            this._pushEvents(ref);
-
-                            if (ref) {
-                                this.onSuccess.call(this.scope, {
-                                        reference: ref,
-                                        data: this.data
-                                    });
-                            } else {
-                                this._onFailure.call(this.varName + " reference failure");
-                            }
-                        }
-                    },
-
-                    failure: function(o) {
-                        this.onFailure.call(this.scope, {
-                                msg: "XHR failure",
-                                xhrResponse: o,
-                                data: this.data
-                            });
-                    },
-
-                    scope: this,
-
-                    // module index, module name, sandbox name
+                    success: success,
+                    failure: failure,
+                    scope: self,
+                    // [module index, module name, sandbox name]
                     argument: [i, url, s[i]]
-
                 };
 
-                this._xhr.push(util.Connect.asyncRequest('GET', url, xhrData));
+                self._xhr.push(util.Connect.asyncRequest('GET', url, xhrData));
             }
         },
 
@@ -3709,6 +3837,11 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
             if (!this._loading) {
                 return;
             }
+
+            var self = this,
+                donext = function(o) {
+                    self.loadNext(o.data);
+                }, successfn, s = this.sorted, len=s.length, i, fn, m, url;
 
 
             if (mname) {
@@ -3736,7 +3869,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 //this.inserted = lang.merge(this.inserted, o);
             }
 
-            var s=this.sorted, len=s.length, i, m;
+
 
             for (i=0; i<len; i=i+1) {
 
@@ -3769,30 +3902,28 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // The load type is stored to offer the possibility to load
                 // the css separately from the script.
                 if (!this.loadType || this.loadType === m.type) {
+
+                    successfn = donext;
+
                     this._loading = s[i];
                     //YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
-                    var fn=(m.type === "css") ? util.Get.css : util.Get.script,
-                        url = m.fullpath,
-                        self=this,
-                        c=function(o) {
-                            self.loadNext(o.data);
-                        };
-
-                        url = (url) ? this._filter(url) : this._url(m.path);
+                    fn = (m.type === "css") ? util.Get.css : util.Get.script;
+                    url = m.fullpath;
+                    url = (url) ? this._filter(url) : this._url(m.path);
 
                     // safari 2.x or lower, script, and part of YUI
                     if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" &&
                           !m.varName) {
                           //YUI.info.moduleInfo[s[i]]) {
                           //YAHOO.log("using YAHOO env " + s[i] + ", " + m.varName);
-                        c = null;
+                        successfn = null;
                         this._useYahooListener = true;
                     }
 
                     fn(url, {
                         data: s[i],
-                        onSuccess: c,
+                        onSuccess: successfn,
                         onFailure: this._onFailure,
                         onTimeout: this._onTimeout,
                         insertBefore: this.insertBefore,

@@ -25,8 +25,7 @@
                     var loader = new YAHOO.util.YUILoader()
 
                     loader.allowRollup = false;
-                
-                
+
                     loader.addModule({
                         name: "jsoncss",
                         type: "css",
@@ -36,20 +35,22 @@
                         // after: ["reset-fonts-grids", "reset", "fonts", "grids"],
                         after: ["reset-fonts-grids"],
                         requires: ["reset-fonts-grids"]
-                        });
+                    });
 
                     loader.addModule({
                         name: "json",
                         type: "js",
-                        fullpath: "http://www.json.org/json-min.js",
+                        fullpath: "http://www.json.org/json.js",
                         requires: ["jsoncss"]
                         //skinnable: true
-                        });
+                    });
 
-                    loader.require("tabview", "treeview", "json","reset-fonts-grids", "datatable");
+                    // loader.require("tabview", "treeview", "json","reset-fonts-grids", "datatable");
+                    loader.require("tabview", "treeview", "json","reset-fonts-grids");
 
                     loader.filter = 'debug';
-                    loader.base = '/build/';
+                    loader.base = '../../build/';
+                    loader.combine = false;
 
                     loader.onSuccess = function() {
                                 log("insert callback");
@@ -66,24 +67,26 @@
                                     YAHOO.util.Event.on(window, "load", function(e) {
                                         log("onload");
                                     });
-                                                
+
                             };
-loader.insert();
+                    loader.insert();
 
                     log(loader.sorted);
 
 
 new YAHOO.util.YUILoader({
+    combine: false,
     require: ['datatable'],
     onSuccess: function() {
         var loader = new YAHOO.util.YUILoader();
         loader.require("treeview");
+        loader.combine = false;
         //loader.addModule(...);
         //loader.addModule(...);
         loader.insert();
-    }   
+    }
 }).insert();
- 
+
 
 
 </script>
@@ -98,7 +101,7 @@ new YAHOO.util.YUILoader({
 <h1>header</h1>
 <p>YAHOO is already on the page.  We will instantiate a YUILoader instance to load
 additional components.  Note that because YAHOO is already on the page, we are not
-able to take advantage of the automatic rollup capability (we load dom and event 
+able to take advantage of the automatic rollup capability (we load dom and event
 individually instead of yahoo-dom-event).</p>
 <div id="treediv"></div>
 <div id="doc"></div>
