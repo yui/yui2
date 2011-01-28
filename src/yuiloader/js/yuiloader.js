@@ -176,7 +176,6 @@
             'path': 'datatable/datatable-min.js',
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
-            'supersedes': ['event-delegate'],
             'skinnable': true
         },
 
@@ -1632,7 +1631,7 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                                 scope: self
                             });
                         } else {
-                            this.loadNext(this._loading);
+                            this.loadNext();
                         }
                     };
 
