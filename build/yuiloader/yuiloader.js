@@ -3587,6 +3587,8 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                                 timeout: self.timeout,
                                 scope: self
                             });
+                        } else {
+                            this.loadNext(this._loading);
                         }
                     };
 
