@@ -275,7 +275,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         for (i=0; i<len; ++i) {
             var s = subs[i];
-            if (!s) {
+            if (!s || !s.fn) {
                 rebuild=true;
             } else {
 
@@ -2072,8 +2072,8 @@ if (!YAHOO.util.Event) {
 
 }
 /**
- * EventProvider is designed to be used with YAHOO.augment to wrap 
- * CustomEvents in an interface that allows events to be subscribed to 
+ * EventProvider is designed to be used with YAHOO.augment to wrap
+ * CustomEvents in an interface that allows events to be subscribed to
  * and fired by name.  This makes it possible for implementing code to
  * subscribe to an event that either has not been created yet, or will
  * not be created at all.
@@ -2099,16 +2099,16 @@ YAHOO.util.EventProvider.prototype = {
      * @private
      */
     __yui_subscribers: null,
-    
+
     /**
      * Subscribe to a CustomEvent by event type
      *
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
-     * @param p_obj      {Object}   An object to be passed along when the event 
+     * @param p_obj      {Object}   An object to be passed along when the event
      *                              fires
-     * @param overrideContext {boolean}  If true, the obj passed in becomes the 
+     * @param overrideContext {boolean}  If true, the obj passed in becomes the
      *                              execution scope of the listener
      */
     subscribe: function(p_type, p_fn, p_obj, overrideContext) {
@@ -2164,7 +2164,7 @@ YAHOO.util.EventProvider.prototype = {
 
         return false;
     },
-    
+
     /**
      * Removes all listeners from the specified event.  If the event type
      * is not specified, all listeners from all hosted custom events will
@@ -2179,7 +2179,7 @@ YAHOO.util.EventProvider.prototype = {
     /**
      * Creates a new custom event of the specified type.  If a custom event
      * by that name already exists, it will not be re-created.  In either
-     * case the custom event is returned. 
+     * case the custom event is returned.
      *
      * @method createEvent
      *
@@ -2247,19 +2247,19 @@ YAHOO.util.EventProvider.prototype = {
 
    /**
      * Fire a custom event by name.  The callback functions will be executed
-     * from the scope specified when the event was created, and with the 
+     * from the scope specified when the event was created, and with the
      * following parameters:
      *   <ul>
      *   <li>The first argument fire() was executed with</li>
-     *   <li>The custom object (if any) that was passed into the subscribe() 
+     *   <li>The custom object (if any) that was passed into the subscribe()
      *       method</li>
      *   </ul>
      * @method fireEvent
      * @param p_type    {string}  the type, or name of the event
-     * @param arguments {Object*} an arbitrary set of parameters to pass to 
+     * @param arguments {Object*} an arbitrary set of parameters to pass to
      *                            the handler.
      * @return {boolean} the return value from CustomEvent.fire
-     *                   
+     *
      */
     fireEvent: function(p_type) {
 
@@ -2304,19 +2304,19 @@ YAHOO.util.EventProvider.prototype = {
 * @namespace YAHOO.util
 * @class KeyListener
 * @constructor
-* @param {HTMLElement} attachTo The element or element ID to which the key 
+* @param {HTMLElement} attachTo The element or element ID to which the key
 *                               event should be attached
 * @param {String}      attachTo The element or element ID to which the key
 *                               event should be attached
-* @param {Object}      keyData  The object literal representing the key(s) 
-*                               to detect. Possible attributes are 
-*                               shift(boolean), alt(boolean), ctrl(boolean) 
-*                               and keys(either an int or an array of ints 
+* @param {Object}      keyData  The object literal representing the key(s)
+*                               to detect. Possible attributes are
+*                               shift(boolean), alt(boolean), ctrl(boolean)
+*                               and keys(either an int or an array of ints
 *                               representing keycodes).
-* @param {Function}    handler  The CustomEvent handler to fire when the 
+* @param {Function}    handler  The CustomEvent handler to fire when the
 *                               key event is detected
-* @param {Object}      handler  An object literal representing the handler. 
-* @param {String}      event    Optional. The event (keydown or keyup) to 
+* @param {Object}      handler  An object literal representing the handler.
+* @param {String}      event    Optional. The event (keydown or keyup) to
 *                               listen for. Defaults automatically to keydown.
 *
 * @knownissue the "keypress" event is completely broken in Safari 2.x and below.
@@ -2332,8 +2332,8 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     if (!attachTo) {
     } else if (!keyData) {
     } else if (!handler) {
-    } 
-    
+    }
+
     if (!event) {
         event = YAHOO.util.KeyListener.KEYDOWN;
     }
@@ -2342,31 +2342,31 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * The CustomEvent fired internally when a key is pressed
     * @event keyEvent
     * @private
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
-    
+
     /**
-    * The CustomEvent fired when the KeyListener is enabled via the enable() 
+    * The CustomEvent fired when the KeyListener is enabled via the enable()
     * function
     * @event enabledEvent
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     this.enabledEvent = new YAHOO.util.CustomEvent("enabled");
 
     /**
-    * The CustomEvent fired when the KeyListener is disabled via the 
+    * The CustomEvent fired when the KeyListener is disabled via the
     * disable() function
     * @event disabledEvent
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
@@ -2389,10 +2389,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * @private
     */
     function handleKeyPress(e, obj) {
-        if (! keyData.shift) {  
-            keyData.shift = false; 
+        if (! keyData.shift) {
+            keyData.shift = false;
         }
-        if (! keyData.alt) {    
+        if (! keyData.alt) {
             keyData.alt = false;
         }
         if (! keyData.ctrl) {
@@ -2400,10 +2400,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
         }
 
         // check held down modifying keys first
-        if (e.shiftKey == keyData.shift && 
+        if (e.shiftKey == keyData.shift &&
             e.altKey   == keyData.alt &&
             e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
-            
+
             var dataItem, keys = keyData.keys, key;
 
             if (YAHOO.lang.isArray(keys)) {
@@ -2426,7 +2426,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     }
 
     /**
-    * Enables the KeyListener by attaching the DOM event listeners to the 
+    * Enables the KeyListener by attaching the DOM event listeners to the
     * target DOM element
     * @method enable
     */
@@ -2444,7 +2444,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     };
 
     /**
-    * Disables the KeyListener by removing the DOM event listeners from the 
+    * Disables the KeyListener by removing the DOM event listeners from the
     * target DOM element
     * @method disable
     */
@@ -2460,9 +2460,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * Returns a String representation of the object.
     * @method toString
     * @return {String}  The string representation of the KeyListener
-    */ 
+    */
     this.toString = function() {
-        return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + 
+        return "KeyListener [" + keyData.keys + "] " + attachTo.tagName +
                 (attachTo.id ? "[" + attachTo.id + "]" : "");
     };
 
@@ -2509,7 +2509,7 @@ KeyListener.KEY = {
     META         : 224,
     NUM_LOCK     : 144,
     PAGE_DOWN    : 34,
-    PAGE_UP      : 33, 
+    PAGE_UP      : 33,
     PAUSE        : 19,
     PRINTSCREEN  : 44,
     RIGHT        : 39,

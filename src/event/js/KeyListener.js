@@ -8,19 +8,19 @@
 * @namespace YAHOO.util
 * @class KeyListener
 * @constructor
-* @param {HTMLElement} attachTo The element or element ID to which the key 
+* @param {HTMLElement} attachTo The element or element ID to which the key
 *                               event should be attached
 * @param {String}      attachTo The element or element ID to which the key
 *                               event should be attached
-* @param {Object}      keyData  The object literal representing the key(s) 
-*                               to detect. Possible attributes are 
-*                               shift(boolean), alt(boolean), ctrl(boolean) 
-*                               and keys(either an int or an array of ints 
+* @param {Object}      keyData  The object literal representing the key(s)
+*                               to detect. Possible attributes are
+*                               shift(boolean), alt(boolean), ctrl(boolean)
+*                               and keys(either an int or an array of ints
 *                               representing keycodes).
-* @param {Function}    handler  The CustomEvent handler to fire when the 
+* @param {Function}    handler  The CustomEvent handler to fire when the
 *                               key event is detected
-* @param {Object}      handler  An object literal representing the handler. 
-* @param {String}      event    Optional. The event (keydown or keyup) to 
+* @param {Object}      handler  An object literal representing the handler.
+* @param {String}      event    Optional. The event (keydown or keyup) to
 *                               listen for. Defaults automatically to keydown.
 *
 * @knownissue the "keypress" event is completely broken in Safari 2.x and below.
@@ -39,8 +39,8 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
         YAHOO.log("No keyData specified", "error");
     } else if (!handler) {
         YAHOO.log("No handler specified", "error");
-    } 
-    
+    }
+
     if (!event) {
         event = YAHOO.util.KeyListener.KEYDOWN;
     }
@@ -49,31 +49,31 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * The CustomEvent fired internally when a key is pressed
     * @event keyEvent
     * @private
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
-    
+
     /**
-    * The CustomEvent fired when the KeyListener is enabled via the enable() 
+    * The CustomEvent fired when the KeyListener is enabled via the enable()
     * function
     * @event enabledEvent
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     this.enabledEvent = new YAHOO.util.CustomEvent("enabled");
 
     /**
-    * The CustomEvent fired when the KeyListener is disabled via the 
+    * The CustomEvent fired when the KeyListener is disabled via the
     * disable() function
     * @event disabledEvent
-    * @param {Object} keyData The object literal representing the key(s) to 
-    *                         detect. Possible attributes are shift(boolean), 
-    *                         alt(boolean), ctrl(boolean) and keys(either an 
+    * @param {Object} keyData The object literal representing the key(s) to
+    *                         detect. Possible attributes are shift(boolean),
+    *                         alt(boolean), ctrl(boolean) and keys(either an
     *                         int or an array of ints representing keycodes).
     */
     this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
@@ -96,10 +96,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * @private
     */
     function handleKeyPress(e, obj) {
-        if (! keyData.shift) {  
-            keyData.shift = false; 
+        if (! keyData.shift) {
+            keyData.shift = false;
         }
-        if (! keyData.alt) {    
+        if (! keyData.alt) {
             keyData.alt = false;
         }
         if (! keyData.ctrl) {
@@ -107,10 +107,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
         }
 
         // check held down modifying keys first
-        if (e.shiftKey == keyData.shift && 
+        if (e.shiftKey == keyData.shift &&
             e.altKey   == keyData.alt &&
             e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
-            
+
             var dataItem, keys = keyData.keys, key;
 
             if (YAHOO.lang.isArray(keys)) {
@@ -133,7 +133,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     }
 
     /**
-    * Enables the KeyListener by attaching the DOM event listeners to the 
+    * Enables the KeyListener by attaching the DOM event listeners to the
     * target DOM element
     * @method enable
     */
@@ -151,7 +151,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     };
 
     /**
-    * Disables the KeyListener by removing the DOM event listeners from the 
+    * Disables the KeyListener by removing the DOM event listeners from the
     * target DOM element
     * @method disable
     */
@@ -167,9 +167,9 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     * Returns a String representation of the object.
     * @method toString
     * @return {String}  The string representation of the KeyListener
-    */ 
+    */
     this.toString = function() {
-        return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + 
+        return "KeyListener [" + keyData.keys + "] " + attachTo.tagName +
                 (attachTo.id ? "[" + attachTo.id + "]" : "");
     };
 
@@ -216,7 +216,7 @@ KeyListener.KEY = {
     META         : 224,
     NUM_LOCK     : 144,
     PAGE_DOWN    : 34,
-    PAGE_UP      : 33, 
+    PAGE_UP      : 33,
     PAUSE        : 19,
     PRINTSCREEN  : 44,
     RIGHT        : 39,
