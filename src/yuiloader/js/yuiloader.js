@@ -176,6 +176,7 @@
             'path': 'datatable/datatable-min.js',
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
+            'supersedes': ['event-delegate'],
             'skinnable': true
         },
 
