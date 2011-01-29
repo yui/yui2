@@ -1025,7 +1025,7 @@ resetForm : function() {
     for(var i=0, j=this.checkboxes.length; i<j; i++) {
         this.checkboxes[i].checked = false;
         for(var k=0, len=originalValues.length; k<len; k++) {
-            if(this.checkboxes[i].value === originalValues[k]) {
+            if(this.checkboxes[i].value == originalValues[k]) {
                 this.checkboxes[i].checked = true;
             }
         }
@@ -1374,7 +1374,7 @@ resetForm : function() {
     // Only need to look for a single selection
     else {
         for(; i<j; i++) {
-            if(this.value === allOptions[i].value) {
+            if(this.value == allOptions[i].value) {
                 allOptions[i].selected = true;
             }
         }
@@ -1544,7 +1544,7 @@ handleDisabledBtns : function() {
 resetForm : function() {
     for(var i=0, j=this.radios.length; i<j; i++) {
         var elRadio = this.radios[i];
-        if(this.value === elRadio.value) {
+        if(this.value == elRadio.value) {
             elRadio.checked = true;
             return;
         }
