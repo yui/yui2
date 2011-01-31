@@ -16861,7 +16861,7 @@ handleDisabledBtns : function() {
  * @method resetForm
  */
 resetForm : function() {
-    var value = this.value;
+    var value = this.value || (new Date());
     this.calendar.select(value);
     this.calendar.cfg.setProperty("pagedate",value,false);
 	this.calendar.render();

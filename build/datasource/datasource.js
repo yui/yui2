@@ -449,7 +449,7 @@ parseDate : function(oData) {
     var date = null;
     
     //Convert to date
-    if(!(oData instanceof Date)) {
+    if(lang.isValue(oData) && !(oData instanceof Date)) {
         date = new Date(oData);
     }
     else {
