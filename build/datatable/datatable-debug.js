@@ -12499,6 +12499,24 @@ unhighlightCell : function(cell) {
 // INLINE EDITING
 
 /**
+ * Assigns CellEditor instance to existing Column.
+ * @method addCellEditor
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oEditor {YAHOO.wdiget.CellEditor} CellEditor instance.
+ */
+addCellEditor : function(oColumn, oEditor) {
+    oColumn.editor = oEditor;
+    oColumn.editor.subscribe("showEvent", this._onEditorShowEvent, this, true);
+    oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
+    oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
+    oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
+    oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
+    oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
+    oColumn.editor.subscribe("blockEvent", this._onEditorBlockEvent, this, true);
+    oColumn.editor.subscribe("unblockEvent", this._onEditorUnblockEvent, this, true);
+},
+
+/**
  * Returns current CellEditor instance, or null.
  * @method getCellEditor
  * @return {YAHOO.widget.CellEditor} CellEditor instance.
