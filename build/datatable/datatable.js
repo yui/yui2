@@ -16591,8 +16591,9 @@ lang.augmentProto(BCE, util.EventProvider);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CheckboxCellEditor = function(oConfigs) {
-    this._sId = "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.CheckboxCellEditor.superclass.constructor.call(this, "checkbox", oConfigs); 
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.CheckboxCellEditor.superclass.constructor.call(this, oConfigs.type || "checkbox", oConfigs);
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -16763,8 +16764,9 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DateCellEditor = function(oConfigs) {
-    this._sId = "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.DateCellEditor.superclass.constructor.call(this, "date", oConfigs); 
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.DateCellEditor.superclass.constructor.call(this, oConfigs.type || "date", oConfigs);
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -16915,8 +16917,9 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DropdownCellEditor = function(oConfigs) {
-    this._sId = "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs);
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.DropdownCellEditor.superclass.constructor.call(this, oConfigs.type || "dropdown", oConfigs);
 };
 
 // DropdownCellEditor extends BaseCellEditor
@@ -17119,8 +17122,9 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.RadioCellEditor = function(oConfigs) {
-    this._sId = "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.RadioCellEditor.superclass.constructor.call(this, "radio", oConfigs); 
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.RadioCellEditor.superclass.constructor.call(this, oConfigs.type || "radio", oConfigs);
 };
 
 // RadioCellEditor extends BaseCellEditor
@@ -17281,8 +17285,9 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextareaCellEditor = function(oConfigs) {
-    this._sId = "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.TextareaCellEditor.superclass.constructor.call(this, "textarea", oConfigs); 
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.TextareaCellEditor.superclass.constructor.call(this, oConfigs.type || "textarea", oConfigs);
 };
 
 // TextareaCellEditor extends BaseCellEditor
@@ -17403,8 +17408,9 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextboxCellEditor = function(oConfigs) {
-    this._sId = "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.TextboxCellEditor.superclass.constructor.call(this, "textbox", oConfigs); 
+    oConfigs = oConfigs || {};
+    this._sId = this._sId || "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    widget.TextboxCellEditor.superclass.constructor.call(this, oConfigs.type || "textbox", oConfigs);
 };
 
 // TextboxCellEditor extends BaseCellEditor
