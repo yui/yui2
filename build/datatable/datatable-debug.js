@@ -2620,7 +2620,7 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when a Record is deleted from the RecordSet.
  *
  * @event recordDeleteEvent
- * @param oArgs.data {Object} A copy of the data held by the Record,
+ * @param oArgs.data {Object} A copy of the data held by the deleted Record,
  * or an array of data object literals if multiple Records were deleted at once.
  * @param oArgs.index {Object} Index of the deleted Record.
  */
@@ -2629,8 +2629,7 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when multiple Records are deleted from the RecordSet at once.
  *
  * @event recordsDeleteEvent
- * @param oArgs.data {Object[]} An array of data object literals copied
- * from the Records.
+ * @param oArgs.data {Object[]} An array of deleted Records.
  * @param oArgs.index {Object} Index of the first deleted Record.
  */
 
