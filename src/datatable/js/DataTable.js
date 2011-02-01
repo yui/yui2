@@ -686,9 +686,10 @@ lang.augmentObject(DT, {
      * @param oData {HTML} Data value for the cell. By default, the value
      * is what gets written to the BUTTON. String values are treated as markup
      * and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatButton : function(el, oRecord, oColumn, oData) {
+    formatButton : function(el, oRecord, oColumn, oData, oDataTable) {
         var sValue = lang.isValue(oData) ? oData : "Click";
         //TODO: support YAHOO.widget.Button
         //if(YAHOO.widget.Button) {
@@ -711,9 +712,10 @@ lang.augmentObject(DT, {
      * Boolean to indicate whether checkbox is checked or not. Can be object literal
      * {checked:bBoolean, label:sLabel}. String values are treated as markup
      * and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatCheckbox : function(el, oRecord, oColumn, oData) {
+    formatCheckbox : function(el, oRecord, oColumn, oData, oDataTable) {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"checkbox\"" + bChecked +
@@ -728,10 +730,12 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Number} Data value for the cell.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatCurrency : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || this.get("currencyOptions"));
+    formatCurrency : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this;
+        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || oDT.get("currencyOptions"));
     },
 
     /**
@@ -743,10 +747,12 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} Data value for the cell, or null. String values are
      * treated as markup and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDate : function(el, oRecord, oColumn, oData) {
-        var oConfig = oColumn.dateOptions || this.get("dateOptions");
+    formatDate : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            oConfig = oColumn.dateOptions || oDT.get("dateOptions");
         el.innerHTML = util.Date.format(oData, oConfig, oConfig.locale);
     },
 
@@ -760,10 +766,12 @@ lang.augmentObject(DT, {
      * @param oData {Object} Data value for the cell, or null. String values may
      * be treated as markup and inserted into the DOM with innerHTML as element
      * label.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDropdown : function(el, oRecord, oColumn, oData) {
-        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
+    formatDropdown : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
             options = (lang.isArray(oColumn.dropdownOptions)) ?
                 oColumn.dropdownOptions : null,
 
@@ -778,7 +786,7 @@ lang.augmentObject(DT, {
             selectEl = el.appendChild(selectEl);
 
             // Add event listener
-            Ev.addListener(selectEl,"change",this._onDropdownChange,this);
+            Ev.addListener(selectEl,"change",oDT._onDropdownChange,oDT);
         }
 
         selectEl = collection[0];
@@ -824,9 +832,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {String} Data value for the cell, or null. Values are
      * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatEmail : function(el, oRecord, oColumn, oData) {
+    formatEmail : function(el, oRecord, oColumn, oData, oDataTable) {
         if(lang.isString(oData)) {
             oData = lang.escapeHTML(oData);
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
@@ -845,9 +854,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {String} Data value for the cell, or null. Values are
      * HTML-escaped
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatLink : function(el, oRecord, oColumn, oData) {
+    formatLink : function(el, oRecord, oColumn, oData, oDataTable) {
         if(lang.isString(oData)) {
             oData = lang.escapeHTML(oData);
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
@@ -865,10 +875,12 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} Data value for the cell, or null.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatNumber : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || this.get("numberOptions"));
+    formatNumber : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this;
+        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || oDT.get("numberOptions"));
     },
 
     /**
@@ -879,13 +891,15 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} (Optional) Data value for the cell.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatRadio : function(el, oRecord, oColumn, oData) {
-        var bChecked = oData;
+    formatRadio : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\""+this.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
+                " name=\""+oDT.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
@@ -898,9 +912,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {String} (Optional) Data value for the cell. Values are
      * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatText : function(el, oRecord, oColumn, oData) {
+    formatText : function(el, oRecord, oColumn, oData, oDataTable) {
         var value = (lang.isValue(oData)) ? oData : "";
         el.innerHTML = lang.escapeHTML(value.toString());
     },
@@ -914,9 +929,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} (Optional) Data value for the cell. Values are
      * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatTextarea : function(el, oRecord, oColumn, oData) {
+    formatTextarea : function(el, oRecord, oColumn, oData, oDataTable) {
         var value = (lang.isValue(oData)) ? lang.escapeHTML(oData.toString()) : "",
             markup = "<textarea>" + value + "</textarea>";
         el.innerHTML = markup;
@@ -931,9 +947,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} (Optional) Data value for the cell. Values are
      * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatTextbox : function(el, oRecord, oColumn, oData) {
+    formatTextbox : function(el, oRecord, oColumn, oData, oDataTable) {
         var value = (lang.isValue(oData)) ? lang.escapeHTML(oData.toString()) : "",
             markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
@@ -948,9 +965,10 @@ lang.augmentObject(DT, {
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {HTML} (Optional) Data value for the cell. String values are
      * treated as markup and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDefault : function(el, oRecord, oColumn, oData) {
+    formatDefault : function(el, oRecord, oColumn, oData, oDataTable) {
         el.innerHTML = oData === undefined ||
                        oData === null ||
                        (typeof oData === 'number' && isNaN(oData)) ?
