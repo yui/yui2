@@ -9075,7 +9075,7 @@ reorderColumn : function(oColumn, index) {
                     this._runRenderChain();
                 }
         
-                this.fireEvent("columnReorderEvent",{column:oNewColumn});
+                this.fireEvent("columnReorderEvent",{column:oNewColumn, oldIndex:nOrigTreeIndex});
                 YAHOO.log("Column \"" + oNewColumn.key + "\" reordered", "info", this.toString());
                 return oNewColumn;
             }
@@ -13944,7 +13944,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event columnReorderEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
-     * @param oArgs.oldIndex {Number} The previous index position.
+     * @param oArgs.oldIndex {Number} The previous tree index position.
      */
 
     /**
