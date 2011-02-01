@@ -480,6 +480,16 @@ var L = YAHOO.lang,
     OBJECT_TOSTRING = '[object Object]',
     NOTHING = [],
 
+    HTML_CHARS = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        '/': '&#x2F;',
+        '`': '&#x60;'
+    },
+
     // ADD = ["toString", "valueOf", "hasOwnProperty"],
     ADD = ["toString", "valueOf"],
 
@@ -600,7 +610,35 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 }
             }
     } : function(){},
-       
+
+    /**
+     * <p>
+     * Returns a copy of the specified string with special HTML characters
+     * escaped. The following characters will be converted to their
+     * corresponding character entities:
+     * <code>&amp; &lt; &gt; &quot; &#x27; &#x2F; &#x60;</code>
+     * </p>
+     *
+     * <p>
+     * This implementation is based on the
+     * <a href="http://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet">OWASP
+     * HTML escaping recommendations</a>. In addition to the characters
+     * in the OWASP recommendation, we also escape the <code>&#x60;</code>
+     * character, since IE interprets it as an attribute delimiter when used in
+     * innerHTML.
+     * </p>
+     *
+     * @method escapeHTML
+     * @param {String} html String to escape.
+     * @return {String} Escaped string.
+     * @static
+     */
+    escapeHTML: function (html) {
+        return html.replace(/[&<>"'\/`]/g, function (match) {
+            return HTML_CHARS[match];
+        });
+    },
+
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
@@ -1225,6 +1263,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _fail = function(id, msg) {
+        YAHOO.log("get failure: " + msg, "warn", "Get");
         var q = queues[id];
         // execute failure callback
         if (q.onFailure) {
@@ -1240,6 +1279,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _finish = function(id) {
+        YAHOO.log("Finishing transaction " + id);
         var q = queues[id];
         q.finished = true;
 
@@ -1263,6 +1303,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _timeout = function(id) {
+        YAHOO.log("Timeout " + id, "info", "get");
         var q = queues[id];
         if (q.onTimeout) {
             var sc=q.scope || q;
@@ -1278,6 +1319,7 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _next = function(id, loaded) {
+        YAHOO.log("_next: " + id + ", loaded: " + loaded, "info", "Get");
         var q = queues[id];
 
         if (q.timer) {
@@ -1337,9 +1379,11 @@ YAHOO.util.Get = function() {
         // if the url is undefined, this is probably a trailing comma problem in IE
         if (!url) {
             q.url.shift(); 
+            YAHOO.log('skipping empty url');
             return _next(id);
         }
 
+        YAHOO.log("attempting to load " + url, "info", "Get");
 
         if (q.timeout) {
             // Y.log('create timer');
@@ -1368,6 +1412,7 @@ YAHOO.util.Get = function() {
             h.appendChild(n);
         }
         
+        YAHOO.log("Appending node: " + url, "info", "Get");
 
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css 
@@ -1509,6 +1554,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
+                    YAHOO.log(id + " onload " + url, "info", "Get");
                     n.onreadystatechange = null;
                     f(id, url);
                 }
@@ -1523,6 +1569,7 @@ YAHOO.util.Get = function() {
                 if (ua.webkit >= 420) {
 
                     n.addEventListener("load", function() {
+                        YAHOO.log(id + " DOM2 onload " + url, "info", "Get");
                         f(id, url);
                     });
 
@@ -1540,6 +1587,7 @@ YAHOO.util.Get = function() {
                     var q = queues[id];
                     if (q.varName) {
                         var freq=YAHOO.util.Get.POLL_FREQ;
+                        YAHOO.log("Polling for " + q.varName[0]);
                         q.maxattempts = YAHOO.util.Get.TIMEOUT/freq;
                         q.attempts = 0;
                         q._cache = q.varName[0].split(".");
@@ -1555,11 +1603,13 @@ YAHOO.util.Get = function() {
                                         q.timer.cancel();
                                         _fail(id, msg);
                                     } else {
+                                        YAHOO.log(a[i] + " failed, retrying");
                                     }
                                     return;
                                 }
                             }
                             
+                            YAHOO.log("Safari poll complete");
 
                             q.timer.cancel();
                             f(id, url);
@@ -1576,6 +1626,7 @@ YAHOO.util.Get = function() {
         // nodes.
         } else { 
             n.onload = function() {
+                YAHOO.log(id + " onload " + url, "info", "Get");
                 f(id, url);
             };
         }
@@ -1618,6 +1669,7 @@ YAHOO.util.Get = function() {
          * @private
          */
         _finalize: function(id) {
+            YAHOO.log(id + " finalized ", "info", "Get");
             lang.later(0, null, _finish, id);
         },
 
@@ -1631,6 +1683,7 @@ YAHOO.util.Get = function() {
             var id = (lang.isString(o)) ? o : o.tId;
             var q = queues[id];
             if (q) {
+                YAHOO.log("Aborting " + id, "info", "Get");
                 q.aborted = true;
             }
         }, 
@@ -1740,12 +1793,14 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;["http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js",
          * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js"], &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log(o.data); // foo
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log(o.nodes.length === 2) // true
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// o.purge(); // optionally remove the script nodes immediately
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;onFailure: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log("transaction failed");
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
          * &nbsp;&nbsp;&nbsp;&nbsp;timeout: 10000, // 10 second timeout
@@ -1806,6 +1861,7 @@ YAHOO.util.Get = function() {
          * </pre>
          * <pre>
          *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css",
+         *                          "http://yui.yahooapis.com/2.7.0/build/logger/assets/skins/sam/logger.css"]);
          * </pre>
          * @return {tId: string} an object containing info about the transaction
          */
@@ -2819,21 +2875,6 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                 d.push(r[i]);
                 m = info[r[i]];
                 YUI.ArrayUtil.appendArray(d, this.getRequires(m));
-
-                // add existing skins for skinnable modules as well.  The only
-                // way to do this is go through the list of required items (this
-                // assumes that _skin is called before getRequires is called on
-                // the module.
-                // if (m.skinnable) {
-                //     var req=this.required, l=req.length;
-                //     for (var j=0; j<l; j=j+1) {
-                //         // YAHOO.log('checking ' + r[j]);
-                //         if (req[j].indexOf(r[j]) > -1) {
-                //             // YAHOO.log('adding ' + r[j]);
-                //             d.push(req[j]);
-                //         }
-                //     }
-                // }
             }
 
             if (o && this.loadOptional) {
@@ -2917,7 +2958,6 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                 this._config(o);
                 this._setup();
                 this._explode();
-                // this._skin(); // deprecated
                 if (this.allowRollup) {
                     this._rollup();
                 }
@@ -3026,17 +3066,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             }
         },
 
-        /**
-         * Sets up the requirements for the skin assets if any of the
-         * requested modules are skinnable
+        /*
          * @method _skin
          * @private
-         * @deprecated skin modules are generated for all skinnable
-         *             components during _setup(), and the components
-         *             are configured to require the skin.
+         * @deprecated
          */
-        _skin: function() {
-
+        _skin: function() { 
         },
 
         /**
