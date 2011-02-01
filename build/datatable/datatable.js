@@ -1929,21 +1929,7 @@ var lang   = YAHOO.lang,
  * @constructor
  */
 YAHOO.widget.RecordSet = function(data) {
-    // Internal variables
-    this._sId = "yui-rs" + widget.RecordSet._nCount;
-    widget.RecordSet._nCount++;
-    this._records = [];
-    //this._length = 0;
-
-    if(data) {
-        if(lang.isArray(data)) {
-            this.addRecords(data);
-        }
-        else if(lang.isObject(data)) {
-            this.addRecord(data);
-        }
-    }
-
+    this._init(data);
 };
 
 var RS = widget.RecordSet;
@@ -1989,6 +1975,51 @@ RS.prototype = {
     // Private methods
     //
     /////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Initializer.
+     *
+     * @method _init
+     * @param data {Object || Object[]} An object literal or an array of data.
+     * @private
+     */
+    _init : function(data) {
+        // Internal variables
+        this._sId = "yui-rs" + widget.RecordSet._nCount;
+        widget.RecordSet._nCount++;
+        this._records = [];
+        //this._length = 0;
+
+        this._initEvents();
+
+        if(data) {
+            if(lang.isArray(data)) {
+                this.addRecords(data);
+            }
+            else if(lang.isObject(data)) {
+                this.addRecord(data);
+            }
+        }
+
+    },
+    
+    /**
+     * Initializes custom events.
+     *
+     * @method _initEvents
+     * @private
+     */
+    _initEvents : function() {
+        this.createEvent("recordAddEvent");
+        this.createEvent("recordsAddEvent");
+        this.createEvent("recordSetEvent");
+        this.createEvent("recordsSetEvent");
+        this.createEvent("recordUpdateEvent");
+        this.createEvent("recordDeleteEvent");
+        this.createEvent("recordsDeleteEvent");
+        this.createEvent("resetEvent");
+        this.createEvent("recordValueUpdateEvent");
+    },
 
     /**
      * Adds one Record to the RecordSet at the given index. If index is null,
