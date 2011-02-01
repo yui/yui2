@@ -40,7 +40,7 @@ yuiloader - Release Notes
    * Added the get utility's support for 'insertBefore'.
    * Added the get utility's support for 'charset'.
    * Fixed profilerviewer's dependency list.
-   * Increased rollup threshold for reset-fonts-grids so reset-fonts will be 
+   * Increased rollup threshold for reset-fonts-grids so reset-fonts will be
      selected when appropriate.
    * yuiloader supersedes yahoo and get.
    * Modules now can have an 'after' property that can be used to specify
@@ -50,7 +50,7 @@ yuiloader - Release Notes
      will be included after all of the above.
    * Added a new rollup: yuiloader-dom-event (yuiloader includes yahoo and get as well).
    * utilities.js now includes yuiloader and get.
-   * loaded modules which supersede other modules but don't allow automatic 
+   * loaded modules which supersede other modules but don't allow automatic
      rollup work correctly (the superseded modules won't load).
    * Addessed a source order issue when logger is included after a component
      which tries to instantiate it at load time.
@@ -95,5 +95,5 @@ yuiloader - Release Notes
 
      yahoo.js
      get.js
-     
+
 

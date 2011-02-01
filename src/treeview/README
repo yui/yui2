@@ -9,7 +9,7 @@ TreeView - Release Notes
   * Fixed #2527920: When moving with right arrow to a dynamic
     node not already loaded, focus would pass to immediate
 	sibling instead of first child of loaded children
-  * Fixed #2455223: Opacity of nodes was not always restored once 
+  * Fixed #2455223: Opacity of nodes was not always restored once
     faded out
   * Fixed #2528017: On nodes loaded dynamically, highlight didn't
     propagate down.
@@ -18,15 +18,15 @@ TreeView - Release Notes
     when calling unhighlight, making it fire events.
 
 2.7.0
-  * Added node highlighting/selection with single and multi-node 
+  * Added node highlighting/selection with single and multi-node
     selection and propagation up and down
-  * Improved focus functionality: property currentFocus, 
+  * Improved focus functionality: property currentFocus,
     event focusChanged, methods _canHaveFocus and _removeFocus.
     The focus method has been improved so it can be safely called
     by the developer.  If called on a Node in a collapsed branch,
-    said branch will be expanded from the root so all unexpanded 
+    said branch will be expanded from the root so all unexpanded
     nodes will be rendered
-  * buildTreeFromObject:  type can also contain a reference 
+  * buildTreeFromObject:  type can also contain a reference
     to an actual object class
   * buildTreeFromMarkup: improved parsing.  It can read an
     HTML attribute called yuiConfig which can override any
@@ -39,7 +39,7 @@ TreeView - Release Notes
     _onMouseOutEvent and _onKeyDownEvent and helper function
     _getEventTargetTdEl
   * Configuration properties, the first argument to a Node constructor
-    will now go to either an actual Node property if it exists 
+    will now go to either an actual Node property if it exists
     or to member Node.data otherwise, not to both.
   * Methods getNodeByProperty and getNodesByProperty have been
     changed to look for property values either as native properties
@@ -50,16 +50,16 @@ TreeView - Release Notes
     to make it easier to identify elements in the generated HTML
   * getNodeDefinition:  fixed bug where original configuration
     would continue to be reported in its initial state
-    (initially expanded nodes would always report expanded 
+    (initially expanded nodes would always report expanded
     even when later collapsed).
-  * refresh method was overriden in TextNode to refresh 
+  * refresh method was overriden in TextNode to refresh
     the node label.
   * Node editor accepts a validator function which can convert
     the entered value and validate it, rejecting it by returning
-    undefined (not false, which might be a valid value).  
-    Method saveEditorValue can prevent the pop up editor from 
-    closing by returning false. If validator returns undefined, 
-    saveEditorValue will return false. 
+    undefined (not false, which might be a valid value).
+    Method saveEditorValue can prevent the pop up editor from
+    closing by returning false. If validator returns undefined,
+    saveEditorValue will return false.
   * Properties href and target were moved from Node to TextNode,
     which is the lowest point in the hierarchy that uses these
     properties.
@@ -69,7 +69,7 @@ TreeView - Release Notes
     all nodes of a branch or the whole tree.
   * JSON utility is now an optional dependency for TreeView when
     enhancing markup containing the yuiConfig attribute.
-  
+
 
 2.6.0
   * Keyboard Navigation
@@ -90,15 +90,15 @@ TreeView - Release Notes
 2.5.0
   * Added isLeaf property to Node that allows dynamically loaded trees to
     have nodes that are not dynamically loaded (without configuring dynamic
-    load for each individual dynamic node, which was the requirement previously).  
-    If set to true, dynamic loading will be disabled for the node and it 
+    load for each individual dynamic node, which was the requirement previously).
+    If set to true, dynamic loading will be disabled for the node and it
     will always have the leaf node presentation (rather than the expand icon).
   * Made CSS adjustments to work with base.css
   * HTMLNode: removed unused property 'content', and documented the correct
     property 'html'.
 
 2.4.0
-  * added TreeView getNodeByElement, which will return a YAHOO.widget.Node 
+  * added TreeView getNodeByElement, which will return a YAHOO.widget.Node
     reference for any ancestor HTML element of a node in the tree.
   * Added 'title' property to TextNode
   * Added treeview/tooltip example
@@ -160,7 +160,7 @@ TreeView - Release Notes
 0.12.1
 
   * Added custom events for expandComplete and collapseComplete.  These events are
-    needed in situations where the implementer needs to resize or reposition 
+    needed in situations where the implementer needs to resize or reposition
     something based on the new offset.
 
   * Added a "nowrap" property to Node, and set the default to false.  Specifies
@@ -206,16 +206,16 @@ TreeView - Release Notes
      node's children are preserved so the entire branch can be re-inserted
      into another part of the tree, or another tree.
 
-   * Added TreeView -> getNodesByProperty, which differs from 
+   * Added TreeView -> getNodesByProperty, which differs from
      getNodeByProperty by returning an array of all nodes that have the
      specified property rather than just the first one.
 
    * Added Node -> insertBefore, insertAfter, and appendTo.  These method
      can be used to reorganize the tree.
 
-   * removeChildren properly resets the node icon when executed against a 
+   * removeChildren properly resets the node icon when executed against a
      collpased node.
-     
+
    * Moved depth assignment from the constructor to appendChild so that the
      value is set properly if the node is moved within the tree.
 
@@ -232,7 +232,7 @@ TreeView - Release Notes
      changed appropriately.
 
    * Added TreeView removeChildren(node).  This will recursively purge the node's
-     children, and reset its dynamic load state.  
+     children, and reset its dynamic load state.
 
    * previousSibling and nextSibling are now adjusted correctly when a
      node is deleted.
@@ -264,17 +264,17 @@ TreeView - Release Notes
 
    * Added onCheckClick listener to the TaskNode example
 
-   * Added Node.iconMode, which is a property that configures the way 
-     dynamically loaded nodes are displayed when they are expanded and contain 
+   * Added Node.iconMode, which is a property that configures the way
+     dynamically loaded nodes are displayed when they are expanded and contain
      no children.
 
-   * TreeView/Node.setDynamicLoad now accepts an optional second parameter to 
+   * TreeView/Node.setDynamicLoad now accepts an optional second parameter to
      set the iconMode property.
 
    * Fixed an issue in the TaskNode.js example that prevented setting the checked
      state of a node through the constructor.
 
-   * Fixed an issue in HTMLNode that caused rendering issues when hasIcon was 
+   * Fixed an issue in HTMLNode that caused rendering issues when hasIcon was
      set to true.
 
    * Added TreeView.removeNode
