@@ -13062,7 +13062,7 @@ doBeforeLoadData : function(sRequest, oResponse, oPayload) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Overridable custom event handler to sort Column.
+ * Custom event handler to sort Column.
  *
  * @method onEventSortColumn
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13087,7 +13087,7 @@ onEventSortColumn : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to select Column.
+ * Custom event handler to select Column.
  *
  * @method onEventSelectColumn
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13098,7 +13098,7 @@ onEventSelectColumn : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to highlight Column. Accounts for spurious
+ * Custom event handler to highlight Column. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventHighlightColumn
@@ -13110,7 +13110,7 @@ onEventHighlightColumn : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to unhighlight Column. Accounts for spurious
+ * Custom event handler to unhighlight Column. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventUnhighlightColumn
@@ -13122,7 +13122,7 @@ onEventUnhighlightColumn : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to manage selection according to desktop paradigm.
+ * Custom event handler to manage selection according to desktop paradigm.
  *
  * @method onEventSelectRow
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13139,7 +13139,7 @@ onEventSelectRow : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to select cell.
+ * Custom event handler to select cell.
  *
  * @method onEventSelectCell
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13159,7 +13159,7 @@ onEventSelectCell : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to highlight row. Accounts for spurious
+ * Custom event handler to highlight row. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventHighlightRow
@@ -13171,7 +13171,7 @@ onEventHighlightRow : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to unhighlight row. Accounts for spurious
+ * Custom event handler to unhighlight row. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventUnhighlightRow
@@ -13183,7 +13183,7 @@ onEventUnhighlightRow : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to highlight cell. Accounts for spurious
+ * Custom event handler to highlight cell. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventHighlightCell
@@ -13195,7 +13195,7 @@ onEventHighlightCell : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to unhighlight cell. Accounts for spurious
+ * Custom event handler to unhighlight cell. Accounts for spurious
  * caused-by-child events. 
  *
  * @method onEventUnhighlightCell
@@ -13207,7 +13207,7 @@ onEventUnhighlightCell : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to format cell.
+ * Custom event handler to format cell.
  *
  * @method onEventFormatCell
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13227,7 +13227,7 @@ onEventFormatCell : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to edit cell.
+ * Custom event handler to edit cell.
  *
  * @method onEventShowCellEditor
  * @param oArgs.event {HTMLEvent} Event object.
@@ -13240,7 +13240,7 @@ onEventShowCellEditor : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to save active CellEditor input.
+ * Custom event handler to save active CellEditor input.
  *
  * @method onEventSaveCellEditor
  */
@@ -13257,7 +13257,7 @@ onEventSaveCellEditor : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to cancel active CellEditor.
+ * Custom event handler to cancel active CellEditor.
  *
  * @method onEventCancelCellEditor
  */
