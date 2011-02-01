@@ -5,7 +5,7 @@
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
 </head>
-  
+
 <body>
 
 <link rel="stylesheet" type="text/css" href="css/local/tree.css">
@@ -22,7 +22,7 @@
     <div class="newsItem">
       <h3>HTML Node</h3>
       <p>
-        
+
       </p>
 
       <div id="expandcontractdiv">
@@ -34,7 +34,7 @@
     </div>
     </form>
   </div>
-    
+
       <div id="footerContainer">
         <div id="footer">
           <p>&nbsp;</p>
@@ -94,13 +94,13 @@ function buildRandomHTMLBranch(node) {
 
     var id = "htmlnode_" + counter++;
 
-    var html = '<div id="' + id + '"' + 
+    var html = '<div id="' + id + '"' +
                 ' style="border:1px solid #aaaaaa; ' +
                 ' position:relative; ' +
                 ' height:100px; width:200px; ' +
                 ' margin-bottom:10px; ' +
                 ' background-color: #c5dbfc">' +
-                'Info ' + id + '</div>';
+                'Info ' + id + '<a href="http://www.yahoo.com">blah!</a></div>';
 
     // new YAHOO.widget.HTMLNode(html, node, false, true);
     htmlNode = new YAHOO.widget.HTMLNode(html, node, false, false);
@@ -112,4 +112,4 @@ YAHOO.util.Event.addListener(window, "load", treeInit);
 
 </body>
 </html>
- 
+
