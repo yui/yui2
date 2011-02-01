@@ -15,6 +15,16 @@ var L = YAHOO.lang,
     OBJECT_TOSTRING = '[object Object]',
     NOTHING = [],
 
+    HTML_CHARS = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        '/': '&#x2F;',
+        '`': '&#x60;'
+    },
+
     // ADD = ["toString", "valueOf", "hasOwnProperty"],
     ADD = ["toString", "valueOf"],
 
@@ -135,7 +145,36 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 }
             }
     } : function(){},
-       
+
+    /**
+     * <p>
+     * Returns a copy of the specified string with special HTML characters
+     * escaped. The following characters will be converted to their
+     * corresponding character entities:
+     * <code>&amp; &lt; &gt; &quot; &#x27; &#x2F; &#x60;</code>
+     * </p>
+     *
+     * <p>
+     * This implementation is based on the
+     * <a href="http://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet">OWASP
+     * HTML escaping recommendations</a>. In addition to the characters
+     * in the OWASP recommendation, we also escape the <code>&#x60;</code>
+     * character, since IE interprets it as an attribute delimiter when used in
+     * innerHTML.
+     * </p>
+     *
+     * @method escapeHTML
+     * @param {String} html String to escape.
+     * @return {String} Escaped string.
+     * @static
+     * @since 2.8.3
+     */
+    escapeHTML: function (html) {
+        return html.replace(/[&<>"'\/`]/g, function (match) {
+            return HTML_CHARS[match];
+        });
+    },
+
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
