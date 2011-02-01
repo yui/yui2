@@ -125,7 +125,6 @@ YAHOO.namespace("tool");
     };
 
 })();
-
 YAHOO.namespace("tool");
 
 
@@ -205,7 +204,6 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 /**
@@ -1049,7 +1047,6 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
-
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1110,7 +1107,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is equal to another. This uses the double equals sign
-     * so type cohersion may occur.
+     * so type coercion may occur.
      * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1125,7 +1122,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not equal to another. This uses the double equals sign
-     * so type cohersion may occur.
+     * so type coercion may occur.
      * @param {Object} unexpected The unexpected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1141,7 +1138,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not the same as another. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} unexpected The unexpected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1156,7 +1153,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is the same as another. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1175,7 +1172,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is false. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isFalse
@@ -1189,7 +1186,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is true. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isTrue
@@ -1234,7 +1231,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not null. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNotNull
@@ -1248,7 +1245,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is not undefined. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNotUndefined
@@ -1262,7 +1259,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is null. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNull
@@ -1276,7 +1273,7 @@ YAHOO.util.Assert = {
         
     /**
      * Asserts that a value is undefined. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isUndefined
@@ -1662,7 +1659,6 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
-
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1680,7 +1676,7 @@ YAHOO.util.ArrayAssert = {
 
     /**
      * Asserts that a value is present in an array. This uses the triple equals 
-     * sign so no type cohersion may occur.
+     * sign so no type coercion may occur.
      * @param {Object} needle The value that is expected in the array.
      * @param {Array} haystack An array of values.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1707,7 +1703,7 @@ YAHOO.util.ArrayAssert = {
 
     /**
      * Asserts that a set of values are present in an array. This uses the triple equals 
-     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * sign so no type coercion may occur. For this assertion to pass, all values must
      * be found.
      * @param {Object[]} needles An array of values that are expected in the array.
      * @param {Array} haystack An array of values to check.
@@ -1758,7 +1754,7 @@ YAHOO.util.ArrayAssert = {
 
     /**
      * Asserts that a value is not present in an array. This uses the triple equals 
-     * sign so no type cohersion may occur.
+     * sign so no type coercion may occur.
      * @param {Object} needle The value that is expected in the array.
      * @param {Array} haystack An array of values.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1785,7 +1781,7 @@ YAHOO.util.ArrayAssert = {
 
     /**
      * Asserts that a set of values are not present in an array. This uses the triple equals 
-     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * sign so no type coercion may occur. For this assertion to pass, all values must
      * not be found.
      * @param {Object[]} needles An array of values that are not expected in the array.
      * @param {Array} haystack An array of values to check.
@@ -1836,7 +1832,7 @@ YAHOO.util.ArrayAssert = {
         
     /**
      * Asserts that the given value is contained in an array at the specified index.
-     * This uses the triple equals sign so no type cohersion will occur.
+     * This uses the triple equals sign so no type coercion will occur.
      * @param {Object} needle The value to look for.
      * @param {Array} haystack The array to search in.
      * @param {int} index The index at which the value should exist.
@@ -1863,7 +1859,7 @@ YAHOO.util.ArrayAssert = {
     /**
      * Asserts that the values in an array are equal, and in the same position,
      * as values in another array. This uses the double equals sign
-     * so type cohersion may occur. Note that the array objects themselves
+     * so type coercion may occur. Note that the array objects themselves
      * need not be the same for this test to pass.
      * @param {Array} expected An array of the expected values.
      * @param {Array} actual Any array of the actual values.
@@ -1949,7 +1945,7 @@ YAHOO.util.ArrayAssert = {
     /**
      * Asserts that the values in an array are the same, and in the same position,
      * as values in another array. This uses the triple equals sign
-     * so no type cohersion will occur. Note that the array objects themselves
+     * so no type coercion will occur. Note that the array objects themselves
      * need not be the same for this test to pass.
      * @param {Array} expected An array of the expected values.
      * @param {Array} actual Any array of the actual values.
@@ -1974,7 +1970,7 @@ YAHOO.util.ArrayAssert = {
     /**
      * Asserts that the given value is contained in an array at the specified index,
      * starting from the back of the array.
-     * This uses the triple equals sign so no type cohersion will occur.
+     * This uses the triple equals sign so no type coercion will occur.
      * @param {Object} needle The value to look for.
      * @param {Array} haystack The array to search in.
      * @param {int} index The index at which the value should exist.
@@ -1999,7 +1995,6 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
-
 YAHOO.namespace("util");
 
 
@@ -2074,7 +2069,6 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
-
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -2129,7 +2123,6 @@ YAHOO.util.DateAssert = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2472,7 +2465,6 @@ YAHOO.tool.TestManager = {
 
 YAHOO.lang.augmentObject(YAHOO.tool.TestManager, YAHOO.util.EventProvider.prototype);
 
-
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2657,7 +2649,6 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
-
 YAHOO.namespace("tool.TestFormat");
 
 (function(){
@@ -2886,7 +2877,6 @@ YAHOO.namespace("tool.TestFormat");
     };   
 
 })();
-
 YAHOO.namespace("tool.CoverageFormat");
 
 /**
@@ -2922,7 +2912,6 @@ YAHOO.tool.CoverageFormat.XdebugJSON = function(coverage){
 
     return YAHOO.lang.JSON.stringify(report);        
 };
-
 
 YAHOO.namespace("tool");
 
@@ -3116,12 +3105,10 @@ YAHOO.tool.TestReporter.prototype = {
     }
 
 };
-
 /*Stub for future compatibility*/
 YUITest = {
     TestRunner:     YAHOO.tool.TestRunner,
     ResultsFormat:  YAHOO.tool.TestFormat,
     CoverageFormat: YAHOO.tool.CoverageFormat
 };
-
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});
