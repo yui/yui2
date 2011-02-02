@@ -324,7 +324,7 @@
      * Finally displays the newly edited value(s) in the tree.
      * Should be overridden by each node type.
      * @method displayEditedValue
-     * @param value {any} value to be displayed and stored in the node
+     * @param value {HTML} value to be displayed and stored in the node
      * This data is added to the node unescaped via the innerHTML property.
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      * @for YAHOO.widget.Node
