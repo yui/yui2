@@ -448,6 +448,7 @@ YAHOO.util.Color = function() {
          * Constants for any script-generated messages.  The values here
          * are the default messages.  They can be updated by providing
          * the complete list to the constructor for the "txt" attribute.
+         * Note: the strings are added to the DOM as HTML.
          * @property TXT
          * @final
          */
