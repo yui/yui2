@@ -152,7 +152,14 @@ package com.yahoo.yui
 		protected function initializeComponent():void
 		{	
 			this.elementID = this.loaderInfo.parameters.YUISwfId;
+
 			this.javaScriptEventHandler = this.loaderInfo.parameters.YUIBridgeCallback;
+			var jsCheck:RegExp = /^[A-Za-z0-9.]*$/g;
+			if (!jsCheck.test(this.javaScriptEventHandler)) {
+				this.javaScriptEventHandler = "";
+			}
+
+
 			
 			var allowedDomain:String = this.loaderInfo.parameters.allowedDomain;
 			if(allowedDomain)

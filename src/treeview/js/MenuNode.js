@@ -1,5 +1,5 @@
 /**
- * A menu-specific implementation that differs from TextNode in that only 
+ * A menu-specific implementation that differs from TextNode in that only
  * one sibling can be expanded at a time.
  * @namespace YAHOO.widget
  * @class MenuNode
@@ -13,7 +13,7 @@
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
  * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded)
  * @constructor
  */
 YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
