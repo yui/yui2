@@ -3217,7 +3217,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     /**
      * Synchronizes the node.html, and the node's content
      * @property setHtml
-     * @param o {object} An html string or object containing an html property
+     * @param o {HTML|object} An html string or object containing an html property
      */
     setHtml: function(o) {
 
@@ -3372,7 +3372,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
      * Finally displays the newly entered date in the tree.
      * Overrides Node.displayEditedValue.
      * @method displayEditedValue
-     * @param value {string} date to be displayed and stored in the node.
+     * @param value {HTML} date to be displayed and stored in the node.
      * This data is added to the node unescaped via the innerHTML property.
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      */
@@ -3720,7 +3720,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
      * Finally displays the newly edited value(s) in the tree.
      * Should be overridden by each node type.
      * @method displayEditedValue
-     * @param value {any} value to be displayed and stored in the node
+     * @param value {HTML} value to be displayed and stored in the node
      * This data is added to the node unescaped via the innerHTML property.
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      * @for YAHOO.widget.Node
