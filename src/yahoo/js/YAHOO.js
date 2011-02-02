@@ -115,6 +115,7 @@ YAHOO.namespace = function() {
 /**
  * Uses YAHOO.widget.Logger to output a log message, if the widget is
  * available.
+ * Note: LogReader adds the message, category, and source to the DOM as HTML.
  *
  * @method log
  * @static

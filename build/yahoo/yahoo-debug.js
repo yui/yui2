@@ -115,6 +115,7 @@ YAHOO.namespace = function() {
 /**
  * Uses YAHOO.widget.Logger to output a log message, if the widget is
  * available.
+ * Note: LogReader adds the message, category, and source to the DOM as HTML.
  *
  * @method log
  * @static
@@ -632,6 +633,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {String} html String to escape.
      * @return {String} Escaped string.
      * @static
+     * @since 2.8.3
      */
     escapeHTML: function (html) {
         return html.replace(/[&<>"'\/`]/g, function (match) {
