@@ -35,10 +35,6 @@ YAHOO.util.Get = function() {
      */
         nidx=0,
 
-        // ridx=0,
-
-        // sandboxFrame=null,
-
     /**
      * interal property used to prevent multiple simultaneous purge
      * processes
@@ -46,13 +42,17 @@ YAHOO.util.Get = function() {
      * @type boolean
      * @private
      */
-        purging=false,
+        _purging=false,
 
-        ua=YAHOO.env.ua,
-
-        lang=YAHOO.lang;
-
-    /**
+        ua=YAHOO.env.ua, 
+        
+        lang=YAHOO.lang,
+    
+    _fail, 
+    _purge, 
+    _track,
+    
+    /** 
      * Generates an HTML element, this is not appended to a document
      * @method _node
      * @param type {string} the type of element
@@ -61,17 +61,17 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _node = function(type, attr, win) {
-        var w = win || window, d=w.document, n=d.createElement(type);
+    _node = function(type, attr, win) {
+        var w = win || window, d=w.document, n=d.createElement(type), i;
 
-        for (var i in attr) {
-            if (attr[i] && YAHOO.lang.hasOwnProperty(attr, i)) {
+        for (i in attr) {
+            if (attr.hasOwnProperty(i)) {
                 n.setAttribute(i, attr[i]);
             }
         }
 
         return n;
-    };
+    },
 
     /**
      * Generates a link node
@@ -81,7 +81,7 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _linkNode = function(url, win, attributes) {
+    _linkNode = function(url, win, attributes) {
 
         var o = {
             id:   "yui__dyn_" + (nidx++),
@@ -95,7 +95,7 @@ YAHOO.util.Get = function() {
         }
 
         return _node("link", o, win);
-    };
+    },
 
     /**
      * Generates a script node
@@ -105,7 +105,7 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _scriptNode = function(url, win, attributes) {
+    _scriptNode = function(url, win, attributes) {
         var o = {
             id:   "yui__dyn_" + (nidx++),
             type: "text/javascript",
@@ -117,14 +117,14 @@ YAHOO.util.Get = function() {
         }
 
         return _node("script", o, win);
-    };
+    },
 
     /**
      * Returns the data payload for callback functions
      * @method _returnData
      * @private
      */
-    var _returnData = function(q, msg) {
+    _returnData = function(q, msg) {
         return {
                 tId: q.tId,
                 win: q.win,
@@ -135,9 +135,9 @@ YAHOO.util.Get = function() {
                     _purge(this.tId);
                 }
             };
-    };
+    },
 
-    var _get = function(nId, tId) {
+    _get = function(nId, tId) {
         var q = queues[tId],
             n = (lang.isString(nId)) ? q.win.document.getElementById(nId) : nId;
         if (!n) {
@@ -145,25 +145,8 @@ YAHOO.util.Get = function() {
         }
 
         return n;
-    };
+    },
 
-    /*
-     * The request failed, execute fail handler with whatever
-     * was accomplished.  There isn't a failure case at the
-     * moment unless you count aborted transactions
-     * @method _fail
-     * @param id {string} the id of the request
-     * @private
-     */
-    var _fail = function(id, msg) {
-        // YAHOO.log("get failure: " + msg, "warn", "Get");
-        var q = queues[id];
-        // execute failure callback
-        if (q.onFailure) {
-            var sc=q.scope || q.win;
-            q.onFailure.call(sc, _returnData(q, msg));
-        }
-    };
 
     /**
      * The request is complete, so executing the requester's callback
@@ -171,23 +154,23 @@ YAHOO.util.Get = function() {
      * @param id {string} the id of the request
      * @private
      */
-    var _finish = function(id) {
-        // YAHOO.log("Finishing transaction " + id);
-        var q = queues[id];
+    _finish = function(id) {
+        YAHOO.log("Finishing transaction " + id);
+        var q = queues[id], msg, context;
         q.finished = true;
 
         if (q.aborted) {
-            var msg = "transaction " + id + " was aborted";
+            msg = "transaction " + id + " was aborted";
             _fail(id, msg);
             return;
         }
 
         // execute success callback
         if (q.onSuccess) {
-            var sc=q.scope || q.win;
-            q.onSuccess.call(sc, _returnData(q));
+            context = q.scope || q.win;
+            q.onSuccess.call(context, _returnData(q));
         }
-    };
+    },
 
     /**
      * Timeout detected
@@ -195,14 +178,14 @@ YAHOO.util.Get = function() {
      * @param id {string} the id of the request
      * @private
      */
-    var _timeout = function(id) {
-        // YAHOO.log("Timeout " + id, "info", "get");
-        var q = queues[id];
+    _timeout = function(id) {
+        YAHOO.log("Timeout " + id, "info", "get");
+        var q = queues[id], context;
         if (q.onTimeout) {
-            var sc=q.scope || q;
-            q.onTimeout.call(sc, _returnData(q));
+            context = q.scope || q;
+            q.onTimeout.call(context, _returnData(q));
         }
-    };
+    },
 
     /**
      * Loads the next item for a given request
@@ -211,9 +194,12 @@ YAHOO.util.Get = function() {
      * @param loaded {string} the url that was just loaded, if any
      * @private
      */
-    var _next = function(id, loaded) {
-        // YAHOO.log("_next: " + id + ", loaded: " + loaded, "info", "Get");
-        var q = queues[id];
+    _next = function(id, loaded) {
+
+        YAHOO.log("_next: " + id + ", loaded: " + loaded, "info", "Get");
+
+        var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], 
+            n, msg, url, s, extra;
 
         if (q.timer) {
             // Y.log('cancel timer');
@@ -221,7 +207,7 @@ YAHOO.util.Get = function() {
         }
 
         if (q.aborted) {
-            var msg = "transaction " + id + " was aborted";
+            msg = "transaction " + id + " was aborted";
             _fail(id, msg);
             return;
         }
@@ -239,7 +225,6 @@ YAHOO.util.Get = function() {
             }
         }
 
-        var w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], n;
 
         if (q.url.length === 0) {
             // Safari 2.x workaround - There is no way to know when
@@ -255,7 +240,7 @@ YAHOO.util.Get = function() {
                 // arbitrary timeout.  It is possible that the browser does
                 // block subsequent script execution in this case for a limited
                 // time.
-                var extra = _scriptNode(null, q.win, q.attributes);
+                extra = _scriptNode(null, q.win, q.attributes);
                 extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
                 q.nodes.push(extra); h.appendChild(extra);
 
@@ -267,16 +252,16 @@ YAHOO.util.Get = function() {
         }
 
 
-        var url = q.url[0];
+        url = q.url[0];
 
         // if the url is undefined, this is probably a trailing comma problem in IE
         if (!url) {
-            q.url.shift();
-            // YAHOO.log('skipping empty url');
+            q.url.shift(); 
+            YAHOO.log('skipping empty url');
             return _next(id);
         }
 
-        // YAHOO.log("attempting to load " + url, "info", "Get");
+        YAHOO.log("attempting to load " + url, "info", "Get");
 
         if (q.timeout) {
             // Y.log('create timer');
@@ -297,15 +282,15 @@ YAHOO.util.Get = function() {
 
         // add it to the head or insert it before 'insertBefore'
         if (q.insertBefore) {
-            var s = _get(q.insertBefore, id);
+            s = _get(q.insertBefore, id);
             if (s) {
                 s.parentNode.insertBefore(n, s);
             }
         } else {
             h.appendChild(n);
         }
-
-        // YAHOO.log("Appending node: " + url, "info", "Get");
+        
+        YAHOO.log("Appending node: " + url, "info", "Get");
 
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css
@@ -314,69 +299,35 @@ YAHOO.util.Get = function() {
         if ((ua.webkit || ua.gecko) && q.type === "css") {
             _next(id, url);
         }
-    };
+    },
 
     /**
      * Removes processed queues and corresponding nodes
      * @method _autoPurge
      * @private
      */
-    var _autoPurge = function() {
+    _autoPurge = function() {
 
-        if (purging) {
+        if (_purging) {
             return;
         }
 
-        purging = true;
-        for (var i in queues) {
-            var q = queues[i];
-            if (q.autopurge && q.finished) {
-                _purge(q.tId);
-                delete queues[i];
+        _purging = true;
+
+        var i, q;
+
+        for (i in queues) {
+            if (queues.hasOwnProperty(i)) {
+                q = queues[i];
+                if (q.autopurge && q.finished) {
+                    _purge(q.tId);
+                    delete queues[i];
+                }
             }
         }
 
-        purging = false;
-    };
-
-    /**
-     * Removes the nodes for the specified queue
-     * @method _purge
-     * @private
-     */
-    var _purge = function(tId) {
-        if (queues[tId]) {
-
-            var q     = queues[tId],
-                nodes = q.nodes,
-                l     = nodes.length,
-                d     = q.win.document,
-                h     = d.getElementsByTagName("head")[0],
-                sib, i, node, attr;
-
-            if (q.insertBefore) {
-                sib = _get(q.insertBefore, tId);
-                if (sib) {
-                    h = sib.parentNode;
-                }
-            }
-
-            for (i=0; i<l; i=i+1) {
-                node = nodes[i];
-                if (node.clearAttributes) {
-                    node.clearAttributes();
-                } else {
-                    for (attr in node) {
-                        delete node[attr];
-                    }
-                }
-
-                h.removeChild(node);
-            }
-
-            q.nodes = [];
-        }
-    };
+        _purging = false;
+    },
 
     /**
      * Saves the state for the request and begins loading
@@ -387,9 +338,9 @@ YAHOO.util.Get = function() {
      * @param opts the hash of options for this request
      * @private
      */
-    var _queue = function(type, url, opts) {
+    _queue = function(type, url, opts) {
 
-        var id = "q" + (qidx++);
+        var id = "q" + (qidx++), q;
         opts = opts || {};
 
         if (qidx % YAHOO.util.Get.PURGE_THRESH === 0) {
@@ -405,16 +356,14 @@ YAHOO.util.Get = function() {
             nodes: []
         });
 
-        var q = queues[id];
+        q = queues[id];
         q.win = q.win || window;
         q.scope = q.scope || q.win;
         q.autopurge = ("autopurge" in q) ? q.autopurge :
                       (type === "script") ? true : false;
 
-        if (opts.charset) {
-            q.attributes = q.attributes || {};
-            q.attributes.charset = opts.charset;
-        }
+        q.attributes = q.attributes || {};
+        q.attributes.charset = opts.charset || q.attributes.charset || 'utf-8';
 
         lang.later(0, q, _next, id);
 
@@ -439,15 +388,15 @@ YAHOO.util.Get = function() {
      * the default is _next
      * @private
      */
-    var _track = function(type, n, id, url, win, qlength, trackfn) {
-        var f = trackfn || _next;
+    _track = function(type, n, id, url, win, qlength, trackfn) {
+        var f = trackfn || _next, rs, q, a, freq, w, l, i, msg;
 
         // IE supports the readystatechange event for script and css nodes
         if (ua.ie) {
             n.onreadystatechange = function() {
-                var rs = this.readyState;
+                rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
-                    // YAHOO.log(id + " onload " + url, "info", "Get");
+                    YAHOO.log(id + " onload " + url, "info", "Get");
                     n.onreadystatechange = null;
                     f(id, url);
                 }
@@ -462,7 +411,7 @@ YAHOO.util.Get = function() {
                 if (ua.webkit >= 420) {
 
                     n.addEventListener("load", function() {
-                        // YAHOO.log(id + " DOM2 onload " + url, "info", "Get");
+                        YAHOO.log(id + " DOM2 onload " + url, "info", "Get");
                         f(id, url);
                     });
 
@@ -477,32 +426,34 @@ YAHOO.util.Get = function() {
                 } else {
                     // Poll for the existence of the named variable, if it
                     // was supplied.
-                    var q = queues[id];
+                    q = queues[id];
                     if (q.varName) {
-                        var freq=YAHOO.util.Get.POLL_FREQ;
-                        // YAHOO.log("Polling for " + q.varName[0]);
+                        freq = YAHOO.util.Get.POLL_FREQ;
+                        YAHOO.log("Polling for " + q.varName[0]);
                         q.maxattempts = YAHOO.util.Get.TIMEOUT/freq;
                         q.attempts = 0;
                         q._cache = q.varName[0].split(".");
                         q.timer = lang.later(freq, q, function(o) {
-                            var a=this._cache, l=a.length, w=this.win, i;
+                            a = this._cache;
+                            l = a.length; 
+                            w = this.win;
                             for (i=0; i<l; i=i+1) {
                                 w = w[a[i]];
                                 if (!w) {
                                     // if we have exausted our attempts, give up
                                     this.attempts++;
                                     if (this.attempts++ > this.maxattempts) {
-                                        var msg = "Over retry limit, giving up";
+                                        msg = "Over retry limit, giving up";
                                         q.timer.cancel();
                                         _fail(id, msg);
                                     } else {
-                                        // YAHOO.log(a[i] + " failed, retrying");
+                                        YAHOO.log(a[i] + " failed, retrying");
                                     }
                                     return;
                                 }
                             }
-
-                            // YAHOO.log("Safari poll complete");
+                            
+                            YAHOO.log("Safari poll complete");
 
                             q.timer.cancel();
                             f(id, url);
@@ -519,11 +470,71 @@ YAHOO.util.Get = function() {
         // nodes.
         } else {
             n.onload = function() {
-                // YAHOO.log(id + " onload " + url, "info", "Get");
+                YAHOO.log(id + " onload " + url, "info", "Get");
                 f(id, url);
             };
         }
     };
+
+    /*
+     * The request failed, execute fail handler with whatever
+     * was accomplished.  There isn't a failure case at the
+     * moment unless you count aborted transactions
+     * @method _fail
+     * @param id {string} the id of the request
+     * @private
+     */
+    _fail = function(id, msg) {
+        YAHOO.log("get failure: " + msg, "warn", "Get");
+        var q = queues[id], context;
+        // execute failure callback
+        if (q.onFailure) {
+            context = q.scope || q.win;
+            q.onFailure.call(context, _returnData(q, msg));
+        }
+    };
+
+    /**
+     * Removes the nodes for the specified queue
+     * @method _purge
+     * @private
+     */
+    _purge = function(tId) {
+        if (queues[tId]) {
+
+            var q     = queues[tId],
+                nodes = q.nodes, 
+                l     = nodes.length, 
+                d     = q.win.document, 
+                h     = d.getElementsByTagName("head")[0],
+                sib, i, node, attr;
+
+            if (q.insertBefore) {
+                sib = _get(q.insertBefore, tId);
+                if (sib) {
+                    h = sib.parentNode;
+                }
+            }
+
+            for (i=0; i<l; i=i+1) {
+                node = nodes[i];
+                if (node.clearAttributes) {
+                    node.clearAttributes();
+                } else {
+                    for (attr in node) {
+                        if (node.hasOwnProperty(attr)) {
+                            delete node[attr];
+                        }
+                    }
+                }
+
+                h.removeChild(node);
+            }
+
+            q.nodes = [];
+        }
+    };
+
 
     return {
 
@@ -562,7 +573,7 @@ YAHOO.util.Get = function() {
          * @private
          */
         _finalize: function(id) {
-            // YAHOO.log(id + " finalized ", "info", "Get");
+            YAHOO.log(id + " finalized ", "info", "Get");
             lang.later(0, null, _finish, id);
         },
 
@@ -573,10 +584,10 @@ YAHOO.util.Get = function() {
          * script() or css()
          */
         abort: function(o) {
-            var id = (lang.isString(o)) ? o : o.tId;
-            var q = queues[id];
+            var id = (lang.isString(o)) ? o : o.tId,
+                q = queues[id];
             if (q) {
-                // YAHOO.log("Aborting " + id, "info", "Get");
+                YAHOO.log("Aborting " + id, "info", "Get");
                 q.aborted = true;
             }
         },
