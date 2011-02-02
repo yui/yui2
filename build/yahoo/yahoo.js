@@ -119,11 +119,11 @@ YAHOO.namespace = function() {
  *
  * @method log
  * @static
- * @param  {String}  msg  The message to log.
- * @param  {String}  cat  The log category for the message.  Default
+ * @param  {HTML}  msg  The message to log.
+ * @param  {HTML}  cat  The log category for the message.  Default
  *                        categories are "info", "warn", "error", time".
  *                        Custom categories can be used as well. (opt)
- * @param  {String}  src  The source of the the message (opt)
+ * @param  {HTML}  src  The source of the the message (opt)
  * @return {Boolean}      True if the log operation was successful.
  */
 YAHOO.log = function(msg, cat, src) {

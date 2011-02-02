@@ -101,8 +101,8 @@ YAHOO.widget.LogWriter.prototype.toString = function() {
  * Note: the LogReader adds the message and category to the DOM as HTML.
  *
  * @method log
- * @param sMsg {String} The log message.
- * @param sCategory {String} Category name.
+ * @param sMsg {HTML} The log message.
+ * @param sCategory {HTML} Category name.
  */
 YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
     YAHOO.widget.Logger.log(sMsg, sCategory, this._source);
@@ -289,9 +289,9 @@ if(!YAHOO.widget.Logger) {
      * as HTML.
      *
      * @method log
-     * @param sMsg {String} The log message.
-     * @param sCategory {String} Category of log message, or null.
-     * @param sSource {String} Source of LogWriter, or null if global.
+     * @param sMsg {HTML} The log message.
+     * @param sCategory {HTML} Category of log message, or null.
+     * @param sSource {HTML} Source of LogWriter, or null if global.
      */
     YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
         if(this.loggerEnabled) {
