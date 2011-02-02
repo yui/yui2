@@ -1,5 +1,9 @@
 Paginator Release Notes
 
+2.8.3
+    * RowsPerPageDropdown configuration rowsPerPageOptions text now assigned
+      to option.text rather than option.innerHTML.
+
 2.8.1
     * No changes
 
