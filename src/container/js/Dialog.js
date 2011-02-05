@@ -192,7 +192,7 @@
                 */
 
                 /**
-                * The arbitraty argument or arguments to pass to the Connection 
+                * The arbitrary argument or arguments to pass to the Connection 
                 * callback functions
                 * @property callback.argument
                 * @type Object
@@ -257,7 +257,8 @@
             *    <dt>text:</dt>
             *    <dd>
             *       The text that will display on the face of the button. The text can 
-            *       include HTML, as long as it is compliant with HTML Button specifications.
+            *       include HTML, as long as it is compliant with HTML Button specifications. The text is added to the DOM as HTML,
+            *       and should be escaped by the implementor if coming from an external source. 
             *    </dd>
             *    <dt>handler:</dt>
             *    <dd>Can be either:

@@ -113,7 +113,7 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             opt = sel.options[i] ||
                   sel.appendChild(document.createElement('option'));
             val = l.isValue(cfg.value) ? cfg.value : cfg;
-            opt.innerHTML = l.isValue(cfg.text) ? cfg.text : cfg;
+            opt.text = l.isValue(cfg.text) ? cfg.text : cfg;
 
             if (l.isString(val) && val.toLowerCase() === 'all') {
                 this.all  = opt;

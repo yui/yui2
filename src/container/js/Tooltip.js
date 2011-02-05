@@ -338,9 +338,9 @@
             });
 
             /**
-            * Specifies the Tooltip's text. 
+            * Specifies the Tooltip's text. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
             * @config text
-            * @type String
+            * @type HTML
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, {

@@ -150,9 +150,9 @@
             });
         
             /**
-            * Sets the text for the SimpleDialog
+            * Sets the text for the SimpleDialog. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * @config text
-            * @type String
+            * @type HTML
             * @default ""
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, { 
@@ -330,10 +330,13 @@
         * of a SimpleDialog with your own custom markup.</p>
         * 
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body. 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only child of the body element.
         * <em>OR</em>

@@ -7,6 +7,10 @@ Paginator Release Notes
     * renderUIComponent is now chainable
     * Add link title configuration attributes (hat tip to Pete Peterson)
 
+2.8.3
+    * RowsPerPageDropdown configuration rowsPerPageOptions text now assigned
+      to option.text rather than option.innerHTML.
+
 2.8.1
     * No changes
 

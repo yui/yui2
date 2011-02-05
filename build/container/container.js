@@ -818,7 +818,7 @@
     Module.CSS_MODULE = "yui-module";
     
     /**
-    * Constant representing the module header
+    * CSS classname representing the module header. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_HEADER
     * @static
     * @final
@@ -827,7 +827,7 @@
     Module.CSS_HEADER = "hd";
 
     /**
-    * Constant representing the module body
+    * CSS classname representing the module body. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_BODY
     * @static
     * @final
@@ -836,7 +836,7 @@
     Module.CSS_BODY = "bd";
     
     /**
-    * Constant representing the module footer
+    * CSS classname representing the module footer. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_FOOTER
     * @static
     * @final
@@ -1486,16 +1486,21 @@
         },
 
         /**
-        * Sets the Module's header content to the string specified, or appends 
-        * the passed element to the header. If no header is present, one will 
+        * Sets the Module's header content to the markup specified, or appends 
+        * the passed element to the header. 
+        * 
+        * If no header is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the header.
         * 
         * @method setHeader
-        * @param {String} headerContent The string used to set the header.
+        * @param {HTML} headerContent The markup used to set the header content.
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the header innerHTML
-        * set to their default toString implementations.
+        * set to their default toString implementations. 
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
         * <em>OR</em>
@@ -1546,10 +1551,13 @@
         * 
         * An empty string can be passed to the method to clear the contents of the body.
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body content 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only
         * child of the body element.
@@ -1593,17 +1601,20 @@
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Sets the Module's footer content to the HTML specified, or appends 
         * the passed element to the footer. If no footer is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the footer.
         * @method setFooter
-        * @param {String} footerContent The HTML used to set the footer 
+        * @param {HTML} footerContent The HTML used to set the footer 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the footer innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
@@ -5077,9 +5088,9 @@
             });
 
             /**
-            * Specifies the Tooltip's text. 
+            * Specifies the Tooltip's text. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
             * @config text
-            * @type String
+            * @type HTML
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, {
@@ -6258,13 +6269,13 @@
             });
 
             /**
-            * UI Strings used by the Panel
+            * UI Strings used by the Panel. The strings are inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * 
             * @config strings
             * @type Object
             * @default An object literal with the properties shown below:
             *     <dl>
-            *         <dt>close</dt><dd><em>String</em> : The string to use for the close icon. Defaults to "Close".</dd>
+            *         <dt>close</dt><dd><em>HTML</em> : The markup to use as the label for the close icon. Defaults to "Close".</dd>
             *     </dl>
             */
             this.cfg.addProperty(DEFAULT_CONFIG.STRINGS.key, { 
@@ -7274,7 +7285,7 @@
                 */
 
                 /**
-                * The arbitraty argument or arguments to pass to the Connection 
+                * The arbitrary argument or arguments to pass to the Connection 
                 * callback functions
                 * @property callback.argument
                 * @type Object
@@ -7339,7 +7350,8 @@
             *    <dt>text:</dt>
             *    <dd>
             *       The text that will display on the face of the button. The text can 
-            *       include HTML, as long as it is compliant with HTML Button specifications.
+            *       include HTML, as long as it is compliant with HTML Button specifications. The text is added to the DOM as HTML,
+            *       and should be escaped by the implementor if coming from an external source. 
             *    </dd>
             *    <dt>handler:</dt>
             *    <dd>Can be either:
@@ -8471,9 +8483,9 @@
             });
         
             /**
-            * Sets the text for the SimpleDialog
+            * Sets the text for the SimpleDialog. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * @config text
-            * @type String
+            * @type HTML
             * @default ""
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, { 
@@ -8651,10 +8663,13 @@
         * of a SimpleDialog with your own custom markup.</p>
         * 
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body. 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only child of the body element.
         * <em>OR</em>
