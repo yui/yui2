@@ -4,7 +4,7 @@
 /**
 * Creates an item for a menu bar.
 * 
-* @param {String} p_oObject String specifying the text of the menu bar item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the 
 * <code>&#60;li&#62;</code> element of the menu bar item.
@@ -36,7 +36,7 @@ YAHOO.lang.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 * @description The MenuBarItem class's initialization method. This method is 
 * automatically called by the constructor, and sets up all DOM references for 
 * pre-existing markup, and creates required markup if it is not already present.
-* @param {String} p_oObject String specifying the text of the menu bar item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the 
 * <code>&#60;li&#62;</code> element of the menu bar item.

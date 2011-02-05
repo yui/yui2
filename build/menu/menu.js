@@ -1871,8 +1871,8 @@ _getFirstEnabledItem: function () {
 * item belongs.
 * @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem 
 * instance to be added to the menu.
-* @param {String} p_oItem String specifying the text of the item to be added 
-* to the menu.
+* @param {HTML} p_oItem String or markup specifying the content of the item to be added 
+* to the menu. The item is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Object} p_oItem Object literal containing a set of menu item 
 * configuration properties.
 * @param {Number} p_nItemIndex Optional. Number indicating the index at 
@@ -5296,7 +5296,7 @@ toString: function () {
 /**
 * @method setItemGroupTitle
 * @description Sets the title of a group of menu items.
-* @param {String} p_sGroupTitle String specifying the title of the group.
+* @param {HTML} p_sGroupTitle String or markup specifying the title of the group. The title is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Number} p_nGroupIndex Optional. Number specifying the group to which
 * the title belongs.
 */
@@ -5365,8 +5365,8 @@ setItemGroupTitle: function (p_sGroupTitle, p_nGroupIndex) {
 * @description Appends an item to the menu.
 * @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem 
 * instance to be added to the menu.
-* @param {String} p_oItem String specifying the text of the item to be added 
-* to the menu.
+* @param {HTML} p_oItem String or markup specifying content of the item to be added 
+* to the menu. The item text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Object} p_oItem Object literal containing a set of menu item 
 * configuration properties.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to
@@ -5384,9 +5384,9 @@ addItem: function (p_oItem, p_nGroupIndex) {
 * @method addItems
 * @description Adds an array of items to the menu.
 * @param {Array} p_aItems Array of items to be added to the menu.  The array 
-* can contain strings specifying the text for each item to be created, object
+* can contain strings specifying the markup for the content of each item to be created, object
 * literals specifying each of the menu item configuration properties, 
-* or MenuItem instances.
+* or MenuItem instances. The item content if provided as a string is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Number} p_nGroupIndex Optional. Number specifying the group to 
 * which the items belongs.
 * @return {Array}
@@ -6463,7 +6463,7 @@ initDefaultConfig: function () {
 /**
 * Creates an item for a menu.
 * 
-* @param {String} p_oObject String specifying the text of the menu item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
 * the <code>&#60;li&#62;</code> element of the menu item.
@@ -7011,7 +7011,7 @@ MenuItem.prototype = {
     * automatically called by the constructor, and sets up all DOM references 
     * for pre-existing markup, and creates required markup if it is not 
     * already present.
-    * @param {String} p_oObject String specifying the text of the menu item.
+    * @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
     * the <code>&#60;li&#62;</code> element of the menu item.
@@ -8047,11 +8047,11 @@ MenuItem.prototype = {
 
         /**
         * @config text
-        * @description String specifying the text label for the menu item.  
+        * @description String or markup specifying the text label for the menu item.  
         * When building a menu from existing HTML the value of this property
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @default ""
-        * @type String
+        * @type HTML
         */
         oConfig.addProperty(
             TEXT_CONFIG.key, 
@@ -8066,13 +8066,13 @@ MenuItem.prototype = {
 
         /**
         * @config helptext
-        * @description String specifying additional instructional text to 
-        * accompany the text for the menu item.
+        * @description String or markup specifying additional instructional text to 
+        * accompany the text for the menu item. The helptext is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @deprecated Use "text" configuration property to add help text markup.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
         * class=\"helptext\"&#62;Ctrl + C&#60;/em&#62;");</code>
         * @default null
-        * @type String|<a href="http://www.w3.org/TR/
+        * @type HTML|<a href="http://www.w3.org/TR/
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
         * HTMLElement</a>
         */
@@ -8090,7 +8090,7 @@ MenuItem.prototype = {
         * @config url
         * @description String specifying the URL for the menu item's anchor's 
         * "href" attribute.  When building a menu from existing HTML the value 
-        * of this property will be interpreted from the menu's markup.
+        * of this property will be interpreted from the menu's markup. Markup for the menu item content. The url is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default "#"
         * @type String
         */        
@@ -8111,7 +8111,7 @@ MenuItem.prototype = {
         * require the user to click directly on the menu item's anchor node in
         * order to cause the browser to navigate to the specified URL.</strong> 
         * When building a menu from existing HTML the value of this property 
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The target is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default null
         * @type String
         */        
@@ -9686,7 +9686,7 @@ initDefaultConfig: function() {
 /**
 * Creates an item for a menu bar.
 * 
-* @param {String} p_oObject String specifying the text of the menu bar item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the 
 * <code>&#60;li&#62;</code> element of the menu bar item.
@@ -9718,7 +9718,7 @@ YAHOO.lang.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 * @description The MenuBarItem class's initialization method. This method is 
 * automatically called by the constructor, and sets up all DOM references for 
 * pre-existing markup, and creates required markup if it is not already present.
-* @param {String} p_oObject String specifying the text of the menu bar item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying the 
 * <code>&#60;li&#62;</code> element of the menu bar item.
