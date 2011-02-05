@@ -5,23 +5,35 @@
  * and yahoo-dom-event.js), and will automatically use these when
  * appropriate in order to minimize the number of http connections
  * required to load all of the dependencies.
- * 
+ *
+ * Note: the loader can be configured to fetch resources from any
+ * remote site.  This is done via the normal browser mechanisms
+ * for inserting these resources into the document and making the
+ * content available to the code that would access it.
+ * Be careful when retreiving remote resources.  Only use this
+ * utility to fetch files from sites you trust.
+ *
  * @module yuiloader
  * @namespace YAHOO.util
  */
 
 /**
  * YUILoader provides dynamic loading for YUI.
+ * Note: the loader can be configured to fetch resources from any
+ * remote site.  This is done via the normal browser mechanisms
+ * for inserting these resources into the document and making the
+ * content available to the code that would access it.
+ * Be careful when retreiving remote resources.  Only use this
+ * utility to fetch files from sites you trust.
  * @class YAHOO.util.YUILoader
  * @todo
- *      version management, automatic sandboxing
  */
 (function() {
 
     var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env,
         PROV = "_provides", SUPER = "_supersedes",
         REQ = "expanded", AFTER = "_after";
- 
+
     var YUI = {
 
         dupsAllowed: {'yahoo': true, 'get': true},
@@ -130,7 +142,7 @@
             'type': 'js',
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
-            // button is also optional, but this creates a circular 
+            // button is also optional, but this creates a circular
             // dependency when loadOptional is specified.  button
             // optionally includes menu, menu requires container.
             'optional': ['dragdrop', 'animation', 'connection'],
@@ -280,7 +292,7 @@
              'requires': ['element'],
              'optional': ['animation', 'dragdrop', 'resize', 'selector'],
              'skinnable': true
-         }, 
+         },
 
         'logger': {
             'type': 'js',
@@ -471,7 +483,7 @@
         }
     }
 }
- , 
+ ,
 
         ObjectUtil: {
             appendArray: function(o, a) {
@@ -611,11 +623,11 @@
         this.charset = null;
 
         /**
-         * The name of the variable in a sandbox or script node 
+         * The name of the variable in a sandbox or script node
          * (for external script support in Safari 2.x and earlier)
-         * to reference when the load is complete.  If this variable 
-         * is not available in the specified scripts, the operation will 
-         * fail.  
+         * to reference when the load is complete.  If this variable
+         * is not available in the specified scripts, the operation will
+         * fail.
          * @property varName
          * @type string
          */
@@ -695,7 +707,7 @@
          * A filter to apply to result urls.  This filter will modify the default
          * path for all modules.  The default path for the YUI library is the
          * minified version of the files (e.g., event-min.js).  The filter property
-         * can be a predefined filter or a custom filter.  The valid predefined 
+         * can be a predefined filter or a custom filter.  The valid predefined
          * filters are:
          * <dl>
          *  <dt>DEBUG</dt>
@@ -704,11 +716,11 @@
          *  <dt>RAW</dt>
          *  <dd>Selects the non-minified version of the library (e.g., event.js).
          * </dl>
-         * You can also define a custom filter, which must be an object literal 
+         * You can also define a custom filter, which must be an object literal
          * containing a search expression and a replace string:
          * <pre>
-         *  myFilter: &#123; 
-         *      'searchExp': "-min\\.js", 
+         *  myFilter: &#123;
+         *      'searchExp': "-min\\.js",
          *      'replaceStr': "-debug.js"
          *  &#125;
          * </pre>
@@ -737,7 +749,7 @@
         this.rollups = null;
 
         /**
-         * Whether or not to load optional dependencies for 
+         * Whether or not to load optional dependencies for
          * the requested modules
          * @property loadOptional
          * @type boolean
@@ -755,7 +767,7 @@
         this.sorted = [];
 
         /**
-         * Set when beginning to compute the dependency tree. 
+         * Set when beginning to compute the dependency tree.
          * Composed of what YAHOO reports to be loaded combined
          * with what has been loaded by the tool
          * @propery loaded
@@ -791,7 +803,7 @@
          *      // The default skin, which is automatically applied if not
          *      // overriden by a component-specific skin definition.
          *      // Change this in to apply a different skin globally
-         *      defaultSkin: 'sam', 
+         *      defaultSkin: 'sam',
          *
          *      // This is combined with the loader base property to get
          *      // the default root directory for a skin. ex:
@@ -827,7 +839,7 @@
             }
         });
 
-        this.skin = lang.merge(YUI.info.skin); 
+        this.skin = lang.merge(YUI.info.skin);
 
         this._config(o);
 
@@ -836,12 +848,12 @@
     Y.util.YUILoader.prototype = {
 
         FILTERS: {
-            RAW: { 
-                'searchExp': "-min\\.js", 
+            RAW: {
+                'searchExp': "-min\\.js",
                 'replaceStr': ".js"
             },
-            DEBUG: { 
-                'searchExp': "-min\\.js", 
+            DEBUG: {
+                'searchExp': "-min\\.js",
                 'replaceStr': "-debug.js"
             }
         },
@@ -889,7 +901,7 @@
 
         },
 
-        /** Add a new module to the component metadata.         
+        /** Add a new module to the component metadata.
          * <dl>
          *     <dt>name:</dt>       <dd>required, the component name</dd>
          *     <dt>type:</dt>       <dd>required, the component type (js or css)</dd>
@@ -904,7 +916,7 @@
          * </dl>
          * @method addModule
          * @param o An object containing the module data
-         * @return {boolean} true if the module was added, false if 
+         * @return {boolean} true if the module was added, false if
          * the object passed in did not provide all required attributes
          */
         addModule: function(o) {
@@ -1043,11 +1055,11 @@
                 if (!done[mm]) {
                     // Y.log(name + ' provides worker trying: ' + mm);
                     done[mm] = true;
-                    // we always want the return value normal behavior 
+                    // we always want the return value normal behavior
                     // (provides) for superseded modules.
                     lang.augmentObject(o, me.getProvides(mm));
-                } 
-                
+                }
+
                 // else {
                 // Y.log(name + ' provides worker skipping done: ' + mm);
                 // }
@@ -1074,7 +1086,7 @@
 
 
         /**
-         * Calculates the dependency tree, the result is stored in the sorted 
+         * Calculates the dependency tree, the result is stored in the sorted
          * property
          * @method calculate
          * @param o optional options object
@@ -1130,7 +1142,7 @@
             }
 
             var l = lang.merge(this.inserted); // shallow clone
-            
+
             if (!this._sandbox) {
                 l = lang.merge(l, env.modules);
             }
@@ -1164,11 +1176,11 @@
             this.loaded = l;
 
         },
-        
+
 
         /**
-         * Inspects the required modules list looking for additional 
-         * dependencies.  Expands the required list to include all 
+         * Inspects the required modules list looking for additional
+         * dependencies.  Expands the required list to include all
          * required modules.  Called by calculate()
          * @method _explode
          * @private
@@ -1197,12 +1209,12 @@
          * @private
          * @deprecated
          */
-        _skin: function() { 
+        _skin: function() {
         },
 
         /**
          * Returns the skin module name for the specified skin name.  If a
-         * module name is supplied, the returned skin module name is 
+         * module name is supplied, the returned skin module name is
          * specific to the module passed in.
          * @method formatSkin
          * @param skin {string} the name of the skin
@@ -1217,22 +1229,22 @@
 
             return s;
         },
-        
+
         /**
          * Reverses <code>formatSkin</code>, providing the skin name and
          * module name if the string matches the pattern for skins.
          * @method parseSkin
          * @param mod {string} the module name to parse
-         * @return {skin: string, module: string} the parsed skin name 
+         * @return {skin: string, module: string} the parsed skin name
          * and module name, or null if the supplied string does not match
          * the skin pattern
          */
         parseSkin: function(mod) {
-            
+
             if (mod.indexOf(this.SKIN_PREFIX) === 0) {
                 var a = mod.split("-");
                 return {skin: a[1], module: a[2]};
-            } 
+            }
 
             return null;
         },
@@ -1269,7 +1281,7 @@
                 var rolled = false;
 
                 // go through the rollup candidates
-                for (i in rollups) { 
+                for (i in rollups) {
 
                     // there can be only one
                     if (!r[i] && !this.loaded[i]) {
@@ -1349,7 +1361,7 @@
             for (i in r) {
 
                 // remove if already loaded
-                if (i in this.loaded) { 
+                if (i in this.loaded) {
                     delete r[i];
 
                 // remove anything this module supersedes
@@ -1415,7 +1427,7 @@
                 });
             }
         },
-        
+
         /**
          * Sorts the dependency tree.  The last step of calculate()
          * @method _sort
@@ -1436,9 +1448,9 @@
                     return false;
                 }
 
-                var ii, 
-                    rr = mm.expanded, 
-                    after = mm.after, 
+                var ii,
+                    rr = mm.expanded,
+                    after = mm.after,
                     other = info[bb],
                     optional = mm.optional;
 
@@ -1495,11 +1507,11 @@
             }
 
             // pointer to the first unsorted item
-            var p=0; 
+            var p=0;
 
             // keep going until we make a pass without moving anything
             for (;;) {
-               
+
                 var l=s.length, a, b, j, k, moved=false;
 
                 // start the loop after items that are already sorted
@@ -1517,7 +1529,7 @@
                             // extract the dependency so we can move it up
                             b = s.splice(k, 1);
 
-                            // insert the dependency above the item that 
+                            // insert the dependency above the item that
                             // requires it
                             s.splice(j, 0, b[0]);
 
@@ -1535,7 +1547,7 @@
                     }
                 }
 
-                // when we make it here and moved is false, we are 
+                // when we make it here and moved is false, we are
                 // finished sorting
                 if (!moved) {
                     break;
@@ -1561,14 +1573,14 @@
 
         _combine: function() {
 
-                this._combining = []; 
+                this._combining = [];
 
                 var self = this,
                     s=this.sorted,
                     len = s.length,
                     js = this.comboBase,
                     css = this.comboBase,
-                    target, 
+                    target,
                     startLen = js.length,
                     i, m, type = this.loadType;
 
@@ -1611,8 +1623,8 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                         }
 
                         this.loadNext(o.data);
-                    }, 
-                    
+                    },
+
                     loadScript = function() {
                         // YAHOO.log('combining js: ' + js);
                         if (js.length > startLen) {
@@ -1624,7 +1636,7 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                                 insertBefore: self.insertBefore,
                                 charset: self.charset,
                                 timeout: self.timeout,
-                                scope: self 
+                                scope: self
                             });
                         }
                     };
@@ -1640,7 +1652,7 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                             insertBefore: this.insertBefore,
                             charset: this.charset,
                             timeout: this.timeout,
-                            scope: self 
+                            scope: self
                         });
                     } else {
                         loadScript();
@@ -1652,12 +1664,18 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                     // this._combineComplete = true;
                     this.loadNext(this._loading);
                 }
-        }, 
+        },
 
         /**
-         * inserts the requested modules and their dependencies.  
-         * <code>type</code> can be "js" or "css".  Both script and 
+         * inserts the requested modules and their dependencies.
+         * <code>type</code> can be "js" or "css".  Both script and
          * css are inserted if type is not provided.
+         * Note: the loader can be configured to fetch resources from any
+         * remote site.  This is done via the normal browser mechanisms
+         * for inserting these resources into the document and making the
+         * content available to the code that would access it.
+         * Be careful when retreiving remote resources.  Only use this
+         * utility to fetch files from sites you trust.
          * @method insert
          * @param o optional options object
          * @param type {string} the type of dependency to insert
@@ -1794,14 +1812,14 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 var xhrData = {
 
                     success: function(o) {
-                        
+
                         var idx=o.argument[0], name=o.argument[2];
 
                         // store the response in the position it was requested
-                        this._scriptText[idx] = o.responseText; 
-                        
+                        this._scriptText[idx] = o.responseText;
+
                         // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
-                    
+
                         if (this.onProgress) {
                             this.onProgress.call(this.scope, {
                                         name: name,
@@ -1821,7 +1839,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                             // wrap the contents of the requested modules in an anonymous function
                             var t = "(function() {\n";
-                        
+
                             // return the locally scoped reference.
                             var b = "\nreturn " + v + ";\n})();";
 
@@ -1942,7 +1960,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                     var fn=(m.type === "css") ? util.Get.css : util.Get.script,
                         url = m.fullpath,
-                        self=this, 
+                        self=this,
                         c=function(o) {
                             self.loadNext(o.data);
                         };
@@ -1950,7 +1968,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                         url = (url) ? this._filter(url) : this._url(m.path);
 
                     // safari 2.x or lower, script, and part of YUI
-                    if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" && 
+                    if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" &&
                           !m.varName) {
                           //YUI.info.moduleInfo[s[i]]) {
                           //YAHOO.log("using YAHOO env " + s[i] + ", " + m.varName);
@@ -1967,7 +1985,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                         charset: this.charset,
                         timeout: this.timeout,
                         varName: m.varName,
-                        scope: self 
+                        scope: self
                     });
 
                     return;

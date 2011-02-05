@@ -1,12 +1,28 @@
 /**
  * Provides a mechanism to fetch remote resources and
- * insert them into a document
+ * insert the content into a document.  This utility can
+ * fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @module get
  * @requires yahoo
  */
 
 /**
- * Fetches and inserts one or more script or link nodes into the document
+ * Fetches and inserts one or more script or link nodes into the document.
+ * This utility can fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @namespace YAHOO.util
  * @class YAHOO.util.Get
  */
@@ -569,6 +585,8 @@ YAHOO.util.Get = function() {
         /**
          * Fetches and inserts one or more script nodes into the head
          * of the current document or the document in a specified window.
+         * Be careful when fetching remote scripts.  Only fetch scripts
+         * from sites you trust.
          *
          * @method script
          * @static
