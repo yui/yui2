@@ -1,9 +1,22 @@
 Calendar Release Notes
 
-*** version 2.8.1 ***
+*** version 2.8.3 ***
+
++ No code changes.
+
++ APIDocs updated to identify string parameters and 
+  properties, which get added to the DOM as HTML.
+
+  These string values should be escaped by the implementor, 
+  if they come from an untrusted external source.
+
+*** version 2.8.2 ***
 
 + No changes
 
+*** version 2.8.1 ***
+
++ No changes
 
 *** version 2.8.0 ***
 
