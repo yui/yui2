@@ -134,7 +134,7 @@
     Module.CSS_MODULE = "yui-module";
     
     /**
-    * Constant representing the module header
+    * CSS classname representing the module header. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_HEADER
     * @static
     * @final
@@ -143,7 +143,7 @@
     Module.CSS_HEADER = "hd";
 
     /**
-    * Constant representing the module body
+    * CSS classname representing the module body. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_BODY
     * @static
     * @final
@@ -152,7 +152,7 @@
     Module.CSS_BODY = "bd";
     
     /**
-    * Constant representing the module footer
+    * CSS classname representing the module footer. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_FOOTER
     * @static
     * @final
@@ -799,16 +799,21 @@
         },
 
         /**
-        * Sets the Module's header content to the string specified, or appends 
-        * the passed element to the header. If no header is present, one will 
+        * Sets the Module's header content to the markup specified, or appends 
+        * the passed element to the header. 
+        * 
+        * If no header is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the header.
         * 
         * @method setHeader
-        * @param {String} headerContent The string used to set the header.
+        * @param {HTML} headerContent The markup used to set the header content.
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the header innerHTML
-        * set to their default toString implementations.
+        * set to their default toString implementations. 
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
         * <em>OR</em>
@@ -859,10 +864,13 @@
         * 
         * An empty string can be passed to the method to clear the contents of the body.
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body content 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only
         * child of the body element.
@@ -906,17 +914,20 @@
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Sets the Module's footer content to the HTML specified, or appends 
         * the passed element to the footer. If no footer is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the footer.
         * @method setFooter
-        * @param {String} footerContent The HTML used to set the footer 
+        * @param {HTML} footerContent The HTML used to set the footer 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the footer innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer

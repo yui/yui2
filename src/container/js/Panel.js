@@ -665,13 +665,13 @@
             });
 
             /**
-            * UI Strings used by the Panel
+            * UI Strings used by the Panel. The strings are inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * 
             * @config strings
             * @type Object
             * @default An object literal with the properties shown below:
             *     <dl>
-            *         <dt>close</dt><dd><em>String</em> : The string to use for the close icon. Defaults to "Close".</dd>
+            *         <dt>close</dt><dd><em>HTML</em> : The markup to use as the label for the close icon. Defaults to "Close".</dd>
             *     </dl>
             */
             this.cfg.addProperty(DEFAULT_CONFIG.STRINGS.key, { 
