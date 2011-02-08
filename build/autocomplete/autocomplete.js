@@ -629,7 +629,7 @@ YAHOO.widget.AutoComplete.prototype.getListItemIndex = function(elListItem) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-hd".
  *
  * @method setHeader
- * @param sHeader {String} HTML markup for results container header.
+ * @param sHeader {HTML} HTML markup for results container header.
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
     if(this._elHeader) {
@@ -650,7 +650,7 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-ft".
  *
  * @method setFooter
- * @param sFooter {String} HTML markup for results container footer.
+ * @param sFooter {HTML} HTML markup for results container footer.
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
     if(this._elFooter) {
@@ -671,7 +671,7 @@ YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-bd".
  *
  * @method setBody
- * @param sBody {String} HTML markup for results container body.
+ * @param sBody {HTML} HTML markup for results container body.
  */
 YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
     if(this._elBody) {
@@ -946,7 +946,7 @@ YAHOO.widget.AutoComplete.prototype.doBeforeLoadData = function(sQuery, oRespons
  * @param oResultData {Object} Result data object.
  * @param sQuery {String} The corresponding query string.
  * @param sResultMatch {HTMLElement} The current query string. 
- * @return {String} HTML markup of formatted result data.
+ * @return {HTML} HTML markup of formatted result data.
  */
 YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultData, sQuery, sResultMatch) {
     var sMarkup = (sResultMatch) ? sResultMatch : "";
