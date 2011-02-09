@@ -954,6 +954,24 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultData, sQuery,
 };
 
 /**
+ * An alternative to the formatResult() method, escapes the result data before
+ * inserting into DOM. Implementers should point to this method when accessing
+ * data from third-party sources, from user input, or from otherwise
+ * untrustworthy sources:
+ * myAutoComplete.formatResult = myAutoComplete.formatEscapedResult();
+ *
+ * @method formatEscapedResult
+ * @param oResultData {Object} Result data object.
+ * @param sQuery {String} The corresponding query string.
+ * @param sResultMatch {HTMLElement} The current query string.
+ * @return {String} Formatted result data.
+ */
+YAHOO.widget.AutoComplete.prototype.formatEscapedResult = function(oResultData, sQuery, sResultMatch) {
+    var sResult = (sResultMatch) ? sResultMatch : "";
+    return YAHOO.lang.escapeHTML(sResult);
+};
+
+/**
  * Overridable method called before container expands allows implementers to access data
  * and DOM elements.
  *
