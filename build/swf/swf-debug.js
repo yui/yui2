@@ -142,7 +142,7 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 					objstring += 'classid="' + FLASH_CID + '" '
 				}
 				else {
-					objstring += 'type="' + FLASH_TYPE + '" data="' + flashURL + '" ';
+					objstring += 'type="' + FLASH_TYPE + '" data="' + YAHOO.lang.escapeHTML(flashURL) + '" ';
 				}
 				
                 w = "100%";
@@ -151,19 +151,19 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 				objstring += 'width="' + w + '" height="' + h + '">';
 				
 				if (UA.ie) {
-					objstring += '<param name="movie" value="' + flashURL + '"/>';
+					objstring += '<param name="movie" value="' + YAHOO.lang.escapeHTML(flashURL) + '"/>';
 				}
 				
 				for (var attribute in p_oAttributes.fixedAttributes) {
 					if (possibleAttributes.hasOwnProperty(attribute)) {
-						objstring += '<param name="' + attribute + '" value="' + p_oAttributes.fixedAttributes[attribute] + '"/>';
+						objstring += '<param name="' + YAHOO.lang.escapeHTML(attribute) + '" value="' + YAHOO.lang.escapeHTML(p_oAttributes.fixedAttributes[attribute]) + '"/>';
 					}
 				}
 
 				for (var flashvar in p_oAttributes.flashVars) {
 					var fvar = p_oAttributes.flashVars[flashvar];
 					if (Lang.isString(fvar)) {
-						flashvarstring += "&" + flashvar + "=" + encodeURIComponent(fvar);
+						flashvarstring += "&" + YAHOO.lang.escapeHTML(flashvar) + "=" + YAHOO.lang.escapeHTML(encodeURIComponent(fvar));
 					}
 				}
 				
