@@ -93,7 +93,7 @@ YAHOO.deconcept.SWFObject.prototype =
 		{
 			if(variables.hasOwnProperty(key))
 			{
-				variablePairs[variablePairs.length] = key +"="+ variables[key];
+				variablePairs[variablePairs.length] = YAHOO.lang.escapeHTML(key) +"="+ YAHOO.lang.escapeHTML(variables[key]);
 			}
 		}
 		return variablePairs;
@@ -108,14 +108,14 @@ YAHOO.deconcept.SWFObject.prototype =
 				this.addVariable("MMplayerType", "PlugIn");
 				this.setAttribute('swf', this.xiSWFPath);
 			}
-			swfNode = '<embed type="application/x-shockwave-flash" src="'+ this.getAttribute('swf') +'" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'"';
-			swfNode += ' id="'+ this.getAttribute('id') +'" name="'+ this.getAttribute('id') +'" ';
+			swfNode = '<embed type="application/x-shockwave-flash" src="'+ YAHOO.lang.escapeHTML(this.getAttribute('swf')) +'" width="'+ YAHOO.lang.escapeHTML(this.getAttribute('width')) +'" height="'+ YAHOO.lang.escapeHTML(this.getAttribute('height')) +'" style="'+ YAHOO.lang.escapeHTML(this.getAttribute('style')) +'"';
+			swfNode += ' id="'+ YAHOO.lang.escapeHTML(this.getAttribute('id')) +'" name="'+ YAHOO.lang.escapeHTML(this.getAttribute('id')) +'" ';
 			params = this.getParams();
 			for(key in params)
 			{
 				if(params.hasOwnProperty(key))
 				{
-					swfNode += [key] +'="'+ params[key] +'" ';
+					swfNode += YAHOO.lang.escapeHTML(key) +'="'+ YAHOO.lang.escapeHTML(params[key]) +'" ';
 				}
 			}
 			pairs = this.getVariablePairs().join("&");
@@ -126,14 +126,14 @@ YAHOO.deconcept.SWFObject.prototype =
 				this.addVariable("MMplayerType", "ActiveX");
 				this.setAttribute('swf', this.xiSWFPath);
 			}
-			swfNode = '<object id="'+ this.getAttribute('id') +'" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'">';
-			swfNode += '<param name="movie" value="'+ this.getAttribute('swf') +'" />';
+			swfNode = '<object id="'+ YAHOO.lang.escapeHTML(this.getAttribute('id')) +'" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+ YAHOO.lang.escapeHTML(this.getAttribute('width')) +'" height="'+ YAHOO.lang.escapeHTML(this.getAttribute('height')) +'" style="'+ YAHOO.lang.escapeHTML(this.getAttribute('style')) +'">';
+			swfNode += '<param name="movie" value="'+ YAHOO.lang.escapeHTML(this.getAttribute('swf')) +'" />';
 			params = this.getParams();
 			for(key in params)
 			{
 				if(params.hasOwnProperty(key))
 				{
-					swfNode += '<param name="'+ key +'" value="'+ params[key] +'" />';
+					swfNode += '<param name="'+ YAHOO.lang.escapeHTML(key) +'" value="'+ YAHOO.lang.escapeHTML(params[key]) +'" />';
 				}
 			}
 			pairs = this.getVariablePairs().join("&");
