@@ -11,13 +11,14 @@
 	<property name="flexbin" value="/flex_sdk_3.4/bin"/>
 	<property name="astra.srcdir" value="{$component.basedir}/as"/>
 		
-	<target name="build" depends="YuiModuleTargets.build, swfbuild" />
-	<target name="deploybuild" depends="YuiSharedTargets.deploybuild, swfdeploy" />
+	<target name="build" depends="YuiModuleTargets.build" />
+	<target name="deploybuild" depends="YuiSharedTargets.deploybuild" />
 	
 	<target name="swfbuild" description="Uploader SWF build">
 		    
         <!-- build the uploader.swf -->
         <!-- TODO: Make MXMLC a property -->
+
         <exec executable="${flexbin}/mxmlc" failonerror="true">
 	
             <!-- Flash Platform -->
@@ -29,9 +30,10 @@
             <!-- Document Class -->
             <arg line="'./as/Uploader.as'"/>
         </exec>
+
     </target>
-    
-    <target name="swfdeploy" description="Copy SWF to destination" depends="swfbuild">
+   
+    <target name="swfdeploy" description="Copy SWF to destination">
         <copy file="${component.builddir}/assets/uploader.swf" todir="${global.build.component.assets}" />
     </target>
 
