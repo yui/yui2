@@ -1985,7 +1985,7 @@ asyncMode : "allowAll",
 /**
  * Callback string parameter name sent to the remote script. By default,
  * requests are sent to
- * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+ * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callback
  *
  * @property scriptCallbackParam
  * @type String
@@ -2823,7 +2823,8 @@ var xPad=function (x, pad, r)
      *  </dl>
      *  More locales may be added by subclassing of YAHOO.util.DateLocale.
      *  See YAHOO.util.DateLocale for more information.
-     * @return {String} Formatted date for display.
+     * @return {HTML} Formatted date for display. Non-date values are passed
+     * through as-is.
      * @sa YAHOO.util.DateLocale
      */
     format : function (oDate, oConfig, sLocale) {
