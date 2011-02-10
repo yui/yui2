@@ -290,7 +290,7 @@ isActive : false,
  * Text to display on Save button.
  *
  * @property LABEL_SAVE
- * @type String
+ * @type HTML
  * @default "Save"
  */
 LABEL_SAVE : "Save",
@@ -299,7 +299,7 @@ LABEL_SAVE : "Save",
  * Text to display on Cancel button.
  *
  * @property LABEL_CANCEL
- * @type String
+ * @type HTML
  * @default "Cancel"
  */
 LABEL_CANCEL : "Cancel",
@@ -844,10 +844,11 @@ lang.extend(widget.CheckboxCellEditor, BCE, {
 /**
  * Array of checkbox values. Can either be a simple array (e.g., ["red","green","blue"])
  * or a an array of objects (e.g., [{label:"red", value:"#FF0000"},
- * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). 
+ * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property checkboxOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 checkboxOptions : null,
 
@@ -1166,10 +1167,11 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g.,
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property dropdownOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 dropdownOptions : null,
 
@@ -1377,10 +1379,11 @@ radios : null,
 /**
  * Array of radio values. Can either be a simple array (e.g., ["yes","no","maybe"])
  * or a an array of objects (e.g., [{label:"yes", value:1}, {label:"no", value:-1},
- * {label:"maybe", value:0}]). 
+ * {label:"maybe", value:0}]). String values are treated as markup and inserted
+ * into the DOM as innerHTML.
  *
  * @property radioOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 radioOptions : null,
 
