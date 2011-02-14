@@ -8,11 +8,11 @@
 
     <!-- custom properties -->
 
-	<property name="flexbin" value="/flex_sdk_3.4/bin"/>
+	<property name="flexbin" value="/flex_sdk_4.1/bin"/>
 	<property name="astra.srcdir" value="{$component.basedir}/as"/>
 		
-	<target name="build" depends="YuiModuleTargets.build" />
-	<target name="deploybuild" depends="YuiSharedTargets.deploybuild" />
+	<target name="build" depends="YuiModuleTargets.build, swfbuild" />
+	<target name="deploybuild" depends="YuiSharedTargets.deploybuild, swfdeploy" />
 	
 	<target name="swfbuild" description="Uploader SWF build">
 		    
