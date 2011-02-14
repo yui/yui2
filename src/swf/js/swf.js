@@ -5,6 +5,7 @@ YAHOO.namespace("widget");
 	var version = 0;
 	var UA = YAHOO.env.ua;
 	var sF = "ShockwaveFlash";
+    var mF, eP;
 
 	 	if (UA.gecko || UA.webkit || UA.opera) {
 			   if ((mF = navigator.mimeTypes['application/x-shockwave-flash'])) {
