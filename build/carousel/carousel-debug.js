@@ -1396,33 +1396,38 @@
 
             /**
              * The content to be used as the progress indicator when the item
-             * is still being loaded.
+             * is still being loaded. Inserted into DOM with innerHTML.
              *
              * @property ITEM_LOADING_CONTENT
+             * @type HTML
              * @default "Loading"
              */
             ITEM_LOADING_CONTENT: "Loading",
 
             /**
-             * The next navigation button name/text.
+             * The next navigation button name/text. Inserted into DOM with innerHTML.
              *
              * @property NEXT_BUTTON_TEXT
+             * @type HTML
              * @default "Next Page"
              */
             NEXT_BUTTON_TEXT: "Next Page",
 
             /**
              * The prefix text for the pager in case the UI is a drop-down.
+             * Inserted into DOM with innerHTML.
              *
              * @property PAGER_PREFIX_TEXT
+             * @type HTML
              * @default "Go to page "
              */
             PAGER_PREFIX_TEXT: "Go to page ",
 
             /**
-             * The previous navigation button name/text.
+             * The previous navigation button name/text. Inserted into DOM with innerHTML.
              *
              * @property PREVIOUS_BUTTON_TEXT
+             * @type HTML
              * @default "Previous Page"
              */
             PREVIOUS_BUTTON_TEXT: "Previous Page"
@@ -1439,9 +1444,9 @@
          *
          * @method addItem
          * @public
-         * @param item {String | Object | HTMLElement} The item to be appended
+         * @param item {HTML | Object | HTMLElement} The item to be appended
          * to the Carousel. If the parameter is a string, it is assumed to be
-         * the content of the newly created item. If the parameter is an
+         * the HTML content of the newly created item. If the parameter is an
          * object, it is assumed to supply the content and an optional class
          * and an optional id of the newly created item.
          * @param index {Number} optional The position to where in the list
@@ -2295,9 +2300,9 @@
          *
          * @method replaceItem
          * @public
-         * @param item {String | Object | HTMLElement} The item to be appended
+         * @param item {HTML | Object | HTMLElement} The item to be appended
          * to the Carousel. If the parameter is a string, it is assumed to be
-         * the content of the newly created item. If the parameter is an
+         * the HTML content of the newly created item. If the parameter is an
          * object, it is assumed to supply the content and an optional class
          * and an optional id of the newly created item.
          * @param index {Number} The position to where in the list (starts from
@@ -4381,4 +4386,5 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
+
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
