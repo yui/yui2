@@ -93,7 +93,7 @@ YAHOO.deconcept.SWFObject.prototype =
 		{
 			if(variables.hasOwnProperty(key))
 			{
-				variablePairs[variablePairs.length] = YAHOO.lang.escapeHTML(key) +"="+ YAHOO.lang.escapeHTML(variables[key]);
+				variablePairs[variablePairs.length] = YAHOO.lang.escapeHTML(key) +"="+ YAHOO.lang.escapeHTML(encodeURIComponent(variables[key]));
 			}
 		}
 		return variablePairs;
