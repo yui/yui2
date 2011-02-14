@@ -68,7 +68,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @property CSS_RESIZE_MASK
         * @description The CSS class for the mask inside the resize element
-        * @type String
+        * @type {HTML}
         */
         CSS_RESIZE_MASK: 'yui-crop-resize-mask',
 
@@ -708,7 +708,6 @@ var Dom = YAHOO.util.Dom,
             * @type Array
             */
             this.setAttributeConfig('initialXY', {
-                writeOnce: true,
                 validator: YAHOO.lang.isArray,
                 value: attr.initialXY || [10, 10]
             });
