@@ -727,7 +727,7 @@
         * @method _setLabel
         * @description Sets the value of the button's "label" attribute.
         * @protected
-        * @param {String} p_sLabel String indicating the value for the button's 
+        * @param {HTML} p_sLabel String indicating the value for the button's 
         * "label" attribute.
         */
         _setLabel: function (p_sLabel) {
@@ -2948,7 +2948,7 @@
         
             /**
             * @attribute label
-            * @description String specifying the button's text label 
+            * @description {HTML} specifying the button's text label 
             * or innerHTML.
             * @default null
             * @type String
