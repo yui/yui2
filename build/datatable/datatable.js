@@ -2458,13 +2458,11 @@ RS.prototype = {
      *
      * @method deleteRecord
      * @param index {Number} Record's RecordSet position index.
-     * @param range {Number} (optional) How many Records to delete.
      * @return {Object} A copy of the data held by the deleted Record.
      */
     deleteRecord : function(index) {
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
-            // Copy data from the Record for the event that gets fired later
-            var oData = widget.DataTable._cloneObject(this.getRecord(index).getData());
+            var oData = this.getRecord(index).getData();
             
             this._deleteRecord(index);
             this.fireEvent("recordDeleteEvent",{data:oData,index:index});
@@ -2491,15 +2489,16 @@ RS.prototype = {
         }
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
             var recordsToDelete = this.getRecords(index, range);
-            // Copy data from each Record for the event that gets fired later
-            var deletedData = [];
+            var deletedData = [], // this mistakenly held Records, not data
+                deletedObjects = []; // this passes data only
             
             for(var i=0; i<recordsToDelete.length; i++) {
-                deletedData[deletedData.length] = widget.DataTable._cloneObject(recordsToDelete[i]);
+                deletedData[deletedData.length] = recordsToDelete[i]; // backward compatibility
+                deletedObjects[deletedObjects.length] = recordsToDelete[i].getData();
             }
             this._deleteRecord(index, range);
 
-            this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
+            this.fireEvent("recordsDeleteEvent",{data:deletedData,deletedData:deletedObjects,index:index});
 
             return deletedData;
         }
@@ -2574,7 +2573,7 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when a Record is deleted from the RecordSet.
  *
  * @event recordDeleteEvent
- * @param oArgs.data {Object} A copy of the data held by the deleted Record,
+ * @param oArgs.data {Object} The data held by the deleted Record,
  * or an array of data object literals if multiple Records were deleted at once.
  * @param oArgs.index {Object} Index of the deleted Record.
  */
@@ -2584,6 +2583,7 @@ lang.augmentProto(RS, util.EventProvider);
  *
  * @event recordsDeleteEvent
  * @param oArgs.data {Object[]} An array of deleted Records.
+ * @param oArgs.deletedData {Object[]} An array of deleted data.
  * @param oArgs.index {Object} Index of the first deleted Record.
  */
 
@@ -3985,7 +3985,7 @@ initAttributes : function(oConfigs) {
     * @default 0      
     */      
      this.setAttributeConfig("renderLoopSize", {
-         value: 0,      
+         value: 0,
          validator: lang.isNumber
      });
 
@@ -4105,48 +4105,48 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-     * @attribute MSG_EMPTY      
+     * @attribute MSG_EMPTY
      * @description Message to display if DataTable has no data. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "No records found."      
-     */      
-     this.setAttributeConfig("MSG_EMPTY", {      
-         value: "No records found.",      
-         validator: lang.isString      
+     * @default "No records found."
+     */
+     this.setAttributeConfig("MSG_EMPTY", {
+         value: "No records found.",
+         validator: lang.isString
      });      
 
     /**
-     * @attribute MSG_LOADING     
+     * @attribute MSG_LOADING
      * @description Message to display while DataTable is loading data. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "Loading..."      
+     * @default "Loading..."
      */      
-     this.setAttributeConfig("MSG_LOADING", {      
-         value: "Loading...",      
-         validator: lang.isString      
+     this.setAttributeConfig("MSG_LOADING", {
+         value: "Loading...",
+         validator: lang.isString
      });      
 
     /**
-     * @attribute MSG_ERROR     
+     * @attribute MSG_ERROR
      * @description Message to display while DataTable has data error. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "Data error."      
+     * @default "Data error."
      */      
-     this.setAttributeConfig("MSG_ERROR", {      
-         value: "Data error.",      
-         validator: lang.isString      
-     });      
+     this.setAttributeConfig("MSG_ERROR", {
+         value: "Data error.",
+         validator: lang.isString
+     });
 
     /**
-     * @attribute MSG_SORTASC 
+     * @attribute MSG_SORTASC
      * @description Message to display in tooltip to sort Column in ascending
      * order. String values are treated as markup and inserted into the DOM as
      * innerHTML.
      * @type HTML
-     * @default "Click to sort ascending"      
+     * @default "Click to sort ascending"
      */      
      this.setAttributeConfig("MSG_SORTASC", {      
          value: "Click to sort ascending",      
@@ -4163,12 +4163,12 @@ initAttributes : function(oConfigs) {
      });
 
     /**
-     * @attribute MSG_SORTDESC 
+     * @attribute MSG_SORTDESC
      * @description Message to display in tooltip to sort Column in descending
      * order. String values are treated as markup and inserted into the DOM as
      * innerHTML.
      * @type HTML
-     * @default "Click to sort descending"      
+     * @default "Click to sort descending"
      */      
      this.setAttributeConfig("MSG_SORTDESC", {      
          value: "Click to sort descending",      

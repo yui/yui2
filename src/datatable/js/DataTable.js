@@ -1242,7 +1242,7 @@ initAttributes : function(oConfigs) {
     * @default 0      
     */      
      this.setAttributeConfig("renderLoopSize", {
-         value: 0,      
+         value: 0,
          validator: lang.isNumber
      });
 
@@ -1362,48 +1362,48 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-     * @attribute MSG_EMPTY      
+     * @attribute MSG_EMPTY
      * @description Message to display if DataTable has no data. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "No records found."      
-     */      
-     this.setAttributeConfig("MSG_EMPTY", {      
-         value: "No records found.",      
-         validator: lang.isString      
+     * @default "No records found."
+     */
+     this.setAttributeConfig("MSG_EMPTY", {
+         value: "No records found.",
+         validator: lang.isString
      });      
 
     /**
-     * @attribute MSG_LOADING     
+     * @attribute MSG_LOADING
      * @description Message to display while DataTable is loading data. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "Loading..."      
+     * @default "Loading..."
      */      
-     this.setAttributeConfig("MSG_LOADING", {      
-         value: "Loading...",      
-         validator: lang.isString      
+     this.setAttributeConfig("MSG_LOADING", {
+         value: "Loading...",
+         validator: lang.isString
      });      
 
     /**
-     * @attribute MSG_ERROR     
+     * @attribute MSG_ERROR
      * @description Message to display while DataTable has data error. String
      * values are treated as markup and inserted into the DOM with innerHTML.
      * @type HTML
-     * @default "Data error."      
+     * @default "Data error."
      */      
-     this.setAttributeConfig("MSG_ERROR", {      
-         value: "Data error.",      
-         validator: lang.isString      
-     });      
+     this.setAttributeConfig("MSG_ERROR", {
+         value: "Data error.",
+         validator: lang.isString
+     });
 
     /**
-     * @attribute MSG_SORTASC 
+     * @attribute MSG_SORTASC
      * @description Message to display in tooltip to sort Column in ascending
      * order. String values are treated as markup and inserted into the DOM as
      * innerHTML.
      * @type HTML
-     * @default "Click to sort ascending"      
+     * @default "Click to sort ascending"
      */      
      this.setAttributeConfig("MSG_SORTASC", {      
          value: "Click to sort ascending",      
@@ -1420,12 +1420,12 @@ initAttributes : function(oConfigs) {
      });
 
     /**
-     * @attribute MSG_SORTDESC 
+     * @attribute MSG_SORTDESC
      * @description Message to display in tooltip to sort Column in descending
      * order. String values are treated as markup and inserted into the DOM as
      * innerHTML.
      * @type HTML
-     * @default "Click to sort descending"      
+     * @default "Click to sort descending"
      */      
      this.setAttributeConfig("MSG_SORTDESC", {      
          value: "Click to sort descending",      
