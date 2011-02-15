@@ -1744,7 +1744,10 @@
         
         
             if (sType == "checkbox" || sType == "radio") {
-        
+                if ((p_oEvent.which || p_oEvent.button) != 1) {
+                    return;
+                }
+
                 this.set("checked", !(this.get("checked")));
             
             }
