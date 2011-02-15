@@ -136,12 +136,14 @@
         
                 oInput = document.createElement(sInput);
         
-            }
-            else {
+                oInput.value = p_sValue;
+
+            } else {
             
                 oInput = document.createElement("input");
                 oInput.name = p_sName;
                 oInput.type = p_sType;
+                oInput.value = p_sValue;
         
                 if (p_bChecked) {
         
@@ -151,7 +153,6 @@
         
             }
         
-            oInput.value = p_sValue;
         
         }
 
