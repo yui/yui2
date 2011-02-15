@@ -594,8 +594,18 @@ var XMLDocument = function(rootTagName, namespaceURL) {
 
         output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
         Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
+
         output = YAHOO.util.Number.format(77.7, {decimalPlaces:-1});
         Assert.areSame("80", output, "Incorrect decimal rounding: expected -1 places rounded up");
+
+        output = YAHOO.util.Number.format(123456.123, {decimalPlaces:-2});
+        Assert.areSame("123500", output, "Incorrect decimal rounding: expected -1 places");
+
+        output = YAHOO.util.Number.format(77.7, {decimalPlaces:-1});
+        Assert.areSame("80", output, "Incorrect decimal rounding: expected -1 places rounded up");
+
+        output = YAHOO.util.Number.format(77.5, {decimalPlaces:0});
+        Assert.areSame("78", output, "Incorrect decimal rounding: expected -0 places rounded up from .5");
 
         // Bug BZ4002772
         output = YAHOO.util.Number.format(0.007, {decimalPlaces:2});
@@ -700,6 +710,55 @@ var XMLDocument = function(rootTagName, namespaceURL) {
 
         output = YAHOO.util.Number.format(0.0005, {decimalPlaces:3, thousandsSeparator:","})// returns 0.000 (wrong)
         Assert.areSame("0.001", output, "Incorrect rounding: expected 0.001");
+
+        // bug 2528977
+        output = YAHOO.util.Number.format(0.95, {decimalPlaces:1, thousandsSeparator:","})// returns 0.9 (wrong)
+        Assert.areSame("1.0", output, "Incorrect rounding: expected 1.0");
+
+        output = YAHOO.util.Number.format(-0.95, {decimalPlaces:1, thousandsSeparator:","})// returns 0.9 (wrong)
+        Assert.areSame("-1.0", output, "Incorrect rounding: expected 1.0");
+
+        output = YAHOO.util.Number.format(1.95, {decimalPlaces:1, thousandsSeparator:","})// returns 1.9 (wrong)
+        Assert.areSame("2.0", output, "Incorrect rounding: expected 2.0");
+
+        output = YAHOO.util.Number.format(-1.95, {decimalPlaces:1, thousandsSeparator:","})// returns 1.9 (wrong)
+        Assert.areSame("-2.0", output, "Incorrect rounding: expected 2.0");
+
+        output = YAHOO.util.Number.format(2.95, {decimalPlaces:1, thousandsSeparator:","})// returns 3.0 (right)
+        Assert.areSame("3.0", output, "Incorrect rounding: expected 3.0");
+
+        output = YAHOO.util.Number.format(3.95, {decimalPlaces:1, thousandsSeparator:","})// returns 4.0 (right)
+        Assert.areSame("4.0", output, "Incorrect rounding: expected 4.0");
+
+        output = YAHOO.util.Number.format(4.95, {decimalPlaces:1, thousandsSeparator:","})// returns 5.0 (right)
+        Assert.areSame("5.0", output, "Incorrect rounding: expected 5.0");
+
+        output = YAHOO.util.Number.format(5.95, {decimalPlaces:1, thousandsSeparator:","})// returns 6.0 (right)
+        Assert.areSame("6.0", output, "Incorrect rounding: expected 6.0");
+
+        output = YAHOO.util.Number.format(6.95, {decimalPlaces:1, thousandsSeparator:","})// returns 7.0 (right)
+        Assert.areSame("7.0", output, "Incorrect rounding: expected 7.0");
+
+        output = YAHOO.util.Number.format(7.95, {decimalPlaces:1, thousandsSeparator:","})// returns 8.0 (right)
+        Assert.areSame("8.0", output, "Incorrect rounding: expected 8.0");
+
+        output = YAHOO.util.Number.format(8.95, {decimalPlaces:1, thousandsSeparator:","})// returns 8.9 (wrong)
+        Assert.areSame("9.0", output, "Incorrect rounding: expected 9.0");
+
+        output = YAHOO.util.Number.format(9.95, {decimalPlaces:1, thousandsSeparator:","})// returns 9.9 (wrong)
+        Assert.areSame("10.0", output, "Incorrect rounding: expected 10.0");
+
+        output = YAHOO.util.Number.format(10.95, {decimalPlaces:1, thousandsSeparator:","})// returns 10.9 (wrong)
+        Assert.areSame("11.0", output, "Incorrect rounding: expected 11.0");
+
+        output = YAHOO.util.Number.format(11.95, {decimalPlaces:1, thousandsSeparator:","})// returns 11.9 (wrong)
+        Assert.areSame("12.0", output, "Incorrect rounding: expected 12.0");
+
+        output = YAHOO.util.Number.format(12.95, {decimalPlaces:1, thousandsSeparator:","})// returns 12.9 (wrong)
+        Assert.areSame("13.0", output, "Incorrect rounding: expected 13.0");
+
+        output = YAHOO.util.Number.format(13.95, {decimalPlaces:1, thousandsSeparator:","})// returns 13.9 (wrong)
+        Assert.areSame("14.0", output, "Incorrect rounding: expected 14.0");
     }
 });
 

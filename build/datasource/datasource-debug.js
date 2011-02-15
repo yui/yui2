@@ -2665,12 +2665,68 @@ lang.augmentObject(util.DataSource, DS);
             // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
             // instead of -1 and 1. Manually handle that case.
             // Bug 2528976
-            if (absN < Math.pow(10, -1*places) && absN >= Math.pow(10, -1*places) * 0.5) {
+            
+            
+            // Bug 2528976
+            // Bug 2528977
+            // Can't trust any toFixed on a flost
+            var unfloatedN = absN+'';
+            if(places > 0 || unfloatedN.indexOf('.') > 0) {
+                var power = Math.pow(10, places);
+                s = Math.round(absN * power) / power + '';
+                var dot = s.indexOf('.'),
+                    padding, zeroes;
+                
+                // Add padding
+                if(dot < 0) {
+                    padding = places;
+                    zeroes = (Math.pow(10, padding) + '').substring(1);
+                    if(places > 0) {
+                        s = s + '.' + zeroes;
+                    }
+                }
+                else {
+                    padding = places - (s.length - dot - 1);
+                    zeroes = (Math.pow(10, padding) + '').substring(1);
+                    s = s + zeroes;
+                }
+                
+            
+                
+// 0.12345678 round to 4 decimal places
+// 10 ^4
+// 0.12345678 x 10 ^4 = 1234.5678
+// Math.round(1234.5678) = 1235
+// 1235 / 10 ^4
+
+// 12.5 round to 5 decimal places
+// 10 ^5
+// 12.5 x 10 ^5 = 1250000
+// Math.round(1250000) = 1250000
+// 1250000 / 10 ^5 = 12.5 0000
+
+
+                
+                
+                
+            }
+            else {
+                s = absN.toFixed(places)+'';
+            }
+
+
+    //var power = Math.pow(10, places || 0);
+    //s = (absN === 0) ? "0" : Math.round(absN * power)/power+'';
+    
+    /*s = (absN === 0) ? "0" : Math.pow(10, -1*places)+'';*/
+
+
+            /*if (absN < Math.pow(10, -1*places) && absN >= Math.pow(10, -1*places) * 0.5) {
                 s = Math.pow(10, -1*places)+'';
             } else
             {
                 s = absN.toFixed(places)+'';
-            }
+            }*/
         }
 
         bits  = s.split(/\D/);

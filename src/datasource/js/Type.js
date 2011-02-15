@@ -85,14 +85,31 @@
                 s = "0";
             }
         } else {
-            // There is a bug in IE's toFixed implementation:
-            // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
-            // instead of -1 and 1. Manually handle that case.
+            // Avoid toFixed on floats:
             // Bug 2528976
-            if (absN < Math.pow(10, -1*places) && absN >= Math.pow(10, -1*places) * 0.5) {
-                s = Math.pow(10, -1*places)+'';
-            } else
-            {
+            // Bug 2528977
+            var unfloatedN = absN+'';
+            if(places > 0 || unfloatedN.indexOf('.') > 0) {
+                var power = Math.pow(10, places);
+                s = Math.round(absN * power) / power + '';
+                var dot = s.indexOf('.'),
+                    padding, zeroes;
+                
+                // Add padding
+                if(dot < 0) {
+                    padding = places;
+                    zeroes = (Math.pow(10, padding) + '').substring(1);
+                    if(places > 0) {
+                        s = s + '.' + zeroes;
+                    }
+                }
+                else {
+                    padding = places - (s.length - dot - 1);
+                    zeroes = (Math.pow(10, padding) + '').substring(1);
+                    s = s + zeroes;
+                }
+            }
+            else {
                 s = absN.toFixed(places)+'';
             }
         }
