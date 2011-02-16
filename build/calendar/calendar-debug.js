@@ -1616,9 +1616,12 @@ Calendar.prototype = {
         this.oDomContainer = Dom.get(container);
         if (!this.oDomContainer) { this.logger.log("Container not found in document.", "error"); }
 
+        this._oDoc = this.oDomContainer.ownerDocument;
+
         if (!this.oDomContainer.id) {
             this.oDomContainer.id = Dom.generateId();
         }
+
         if (!id) {
             id = this.oDomContainer.id + "_t";
         }
@@ -3328,7 +3331,8 @@ Calendar.prototype = {
 
         Event.purgeElement(this.oDomContainer, true);
 
-        var html = [];
+        var html = [], 
+            table;
 
         html[html.length] = '<table cellSpacing="0" class="' + this.Style.CSS_CALENDAR + ' y' + (workingDate.getFullYear() + this.Locale.YEAR_OFFSET) +'" id="' + this.id + '">';
         html = this.renderHeader(html);
@@ -3339,8 +3343,12 @@ Calendar.prototype = {
         this.oDomContainer.innerHTML = html.join("\n");
 
         this.applyListeners();
-        this.cells = Dom.getElementsByClassName(this.Style.CSS_CELL, "td", this.id);
-    
+
+        // Using oDomContainer.ownerDocument, to allow for cross-frame rendering
+        table = ((this._oDoc) && this._oDoc.getElementById(this.id)) || (this.id);
+
+        this.cells = Dom.getElementsByClassName(this.Style.CSS_CELL, "td", table);
+
         this.cfg.refireEvent(DEF_CFG.TITLE.key);
         this.cfg.refireEvent(DEF_CFG.CLOSE.key);
         this.cfg.refireEvent(DEF_CFG.IFRAME.key);

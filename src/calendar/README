@@ -1,12 +1,15 @@
 Calendar Release Notes
 
-*** Development Master ***
+*** 2.9.0 ***
 
 + Fixed renderStack application when multiple renderers applied to
   the same date.
 
 + Removed Opera Width Fix. No longer required. Opera handles floats 
   correclty
+
++ Allow calendar to be rendered into a (iframe) document, different
+  from the instance. 
 
 *** version 2.8.3 ***
 
