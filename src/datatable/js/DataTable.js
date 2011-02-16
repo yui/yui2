@@ -634,47 +634,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _cloneObject : function(o) {
-        if(!lang.isValue(o)) {
-            return o;
-        }
-        
-        var copy = {};
-        
-        if(o instanceof YAHOO.widget.BaseCellEditor) {
-            copy = o;
-        }
-        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
-            copy = o;
-        }
-        else if(lang.isFunction(o)) {
-            copy = o;
-        }
-        else if(lang.isArray(o)) {
-            var array = [];
-            for(var i=0,len=o.length;i<len;i++) {
-                array[i] = DT._cloneObject(o[i]);
-            }
-            copy = array;
-        }
-        else if(lang.isObject(o)) { 
-            for (var x in o){
-                if(lang.hasOwnProperty(o, x)) {
-                    if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
-                        copy[x] = DT._cloneObject(o[x]);
-                    }
-                    else {
-                        copy[x] = o[x];
-                    }
-                }
-            }
-        }
-        else {
-            copy = o;
-        }
-    
-        return copy;
-    },
+    _cloneObject : YAHOO.util.DataSourceBase._cloneObject,
 
     /**
      * Formats a BUTTON element.

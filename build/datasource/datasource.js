@@ -310,7 +310,56 @@ _nTransactionId : 0,
 // DataSourceBase private static methods
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Clones object literal or array of object literals.
+ *
+ * @method DataSourceBase._cloneObject
+ * @param o {Object} Object.
+ * @private
+ * @static
+ */
+_cloneObject: function(o) {
+    if(!lang.isValue(o)) {
+        return o;
+    }
 
+    var copy = {};
+
+    if(o instanceof YAHOO.widget.BaseCellEditor) {
+        copy = o;
+    }
+    else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
+        copy = o;
+    }
+    else if(lang.isFunction(o)) {
+        copy = o;
+    }
+    else if(lang.isArray(o)) {
+        var array = [];
+        for(var i=0,len=o.length;i<len;i++) {
+            array[i] = DS._cloneObject(o[i]);
+        }
+        copy = array;
+    }
+    else if(lang.isObject(o)) {
+        for (var x in o){
+            if(lang.hasOwnProperty(o, x)) {
+                if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
+                    copy[x] = DS._cloneObject(o[x]);
+                }
+                else {
+                    copy[x] = o[x];
+                }
+            }
+        }
+    }
+    else {
+        copy = o;
+    }
+
+    return copy;
+},
+    
 /**
  * Get an XPath-specified value for a given field from an XML node or document.
  *
@@ -742,6 +791,7 @@ addToCache : function(oRequest, oResponse) {
     }
 
     // Add to cache in the newest position, at the end of the array
+    oResponse = DS._cloneObject(oResponse);
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache[aCache.length] = oCacheElem;
     this.fireEvent("responseCacheEvent", {request:oRequest,response:oResponse});
@@ -2590,15 +2640,9 @@ lang.augmentObject(util.DataSource, DS);
                 s = "0";
             }
         } else {
-            // There is a bug in IE's toFixed implementation:
-            // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
-            // instead of -1 and 1. Manually handle that case.
-            // Bug 2528976
-            
-            
+            // Avoid toFixed on floats:
             // Bug 2528976
             // Bug 2528977
-            // Can't trust any toFixed on a flost
             var unfloatedN = absN+'';
             if(places > 0 || unfloatedN.indexOf('.') > 0) {
                 var power = Math.pow(10, places);
@@ -2619,43 +2663,10 @@ lang.augmentObject(util.DataSource, DS);
                     zeroes = (Math.pow(10, padding) + '').substring(1);
                     s = s + zeroes;
                 }
-                
-            
-                
-// 0.12345678 round to 4 decimal places
-// 10 ^4
-// 0.12345678 x 10 ^4 = 1234.5678
-// Math.round(1234.5678) = 1235
-// 1235 / 10 ^4
-
-// 12.5 round to 5 decimal places
-// 10 ^5
-// 12.5 x 10 ^5 = 1250000
-// Math.round(1250000) = 1250000
-// 1250000 / 10 ^5 = 12.5 0000
-
-
-                
-                
-                
             }
             else {
                 s = absN.toFixed(places)+'';
             }
-
-
-    //var power = Math.pow(10, places || 0);
-    //s = (absN === 0) ? "0" : Math.round(absN * power)/power+'';
-    
-    /*s = (absN === 0) ? "0" : Math.pow(10, -1*places)+'';*/
-
-
-            /*if (absN < Math.pow(10, -1*places) && absN >= Math.pow(10, -1*places) * 0.5) {
-                s = Math.pow(10, -1*places)+'';
-            } else
-            {
-                s = absN.toFixed(places)+'';
-            }*/
         }
 
         bits  = s.split(/\D/);
