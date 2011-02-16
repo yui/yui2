@@ -1622,9 +1622,9 @@ var D = YAHOO.util.Dom,
                 D.removeClass(this._wrap, this.CSS_DRAG);
             }
             if (this._wrap != this.get('element')) {
-                this.setStyle('position', '');
-                this.setStyle('top', '');
-                this.setStyle('left', '');
+                this.setStyle('position', (this._positioned ? 'absolute' : 'relative'));
+                this.setStyle('top', D.getStyle(this._wrap, 'top'));
+                this.setStyle('left',D.getStyle(this._wrap, 'left'));
                 this._wrap.parentNode.replaceChild(this.get('element'), this._wrap);
             }
             this.removeClass(this.CSS_RESIZE);

@@ -178,142 +178,142 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
 
 (function () {
 
-	var Event = YAHOO.util.Event,
-		Lang = YAHOO.lang,
-		delegates = [],
+    var Event = YAHOO.util.Event,
+        Lang = YAHOO.lang,
+        delegates = [],
 
 
-		getMatch = function(el, selector, container) {
-		
-			var returnVal;
-		
-			if (!el || el === container) {
-				returnVal = false;
-			}
-			else {
-				returnVal = YAHOO.util.Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
-			}
-		
-			return returnVal;
-		
-		};
+        getMatch = function(el, selector, container) {
+        
+            var returnVal;
+        
+            if (!el || el === container) {
+                returnVal = false;
+            }
+            else {
+                returnVal = YAHOO.util.Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
+            }
+        
+            return returnVal;
+        
+        };
 
 
-	Lang.augmentObject(Event, {
+    Lang.augmentObject(Event, {
 
-		/**
-		 * Creates a delegate function used to call event listeners specified 
-		 * via the <code>YAHOO.util.Event.delegate</code> method.
-		 *
-		 * @method _createDelegate
-		 *
-		 * @param {Function} fn        The method (event listener) to call.
-		 * @param {Function|string} filter Function or CSS selector used to 
-		 * determine for what element(s) the event listener should be called.		
-		 * @param {Object}   obj	An arbitrary object that will be 
-		 *                             passed as a parameter to the listener.
-		 * @param {Boolean|object}  overrideContext  If true, the value of the 
-		 * 							obj parameter becomes the execution context
-		 *                          of the listener. If an object, this object
-		 *                          becomes the execution context.
-		 * @return {Function} Function that will call the event listener 
-		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
+        /**
+         * Creates a delegate function used to call event listeners specified 
+         * via the <code>YAHOO.util.Event.delegate</code> method.
+         *
+         * @method _createDelegate
+         *
+         * @param {Function} fn        The method (event listener) to call.
+         * @param {Function|string} filter Function or CSS selector used to 
+         * determine for what element(s) the event listener should be called.        
+         * @param {Object}   obj    An arbitrary object that will be 
+         *                             passed as a parameter to the listener.
+         * @param {Boolean|object}  overrideContext  If true, the value of the 
+         *                             obj parameter becomes the execution context
+         *                          of the listener. If an object, this object
+         *                          becomes the execution context.
+         * @return {Function} Function that will call the event listener 
+         * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
          * @for Event
-		 * @static
-		 */
-		_createDelegate: function (fn, filter, obj, overrideContext) {
+         * @static
+         */
+        _createDelegate: function (fn, filter, obj, overrideContext) {
 
-			return function (event) {
+            return function (event) {
 
-				var container = this,
-					target = Event.getTarget(event),
-					selector = filter,
+                var container = this,
+                    target = Event.getTarget(event),
+                    selector = filter,
 
-					//	The user might have specified the document object 
-					//	as the delegation container, in which case it is not 
-					//	nessary to scope the provided CSS selector(s) to the 
-					//	delegation container
-					bDocument = (container.nodeType === 9),
+                    //    The user might have specified the document object 
+                    //    as the delegation container, in which case it is not 
+                    //    nessary to scope the provided CSS selector(s) to the 
+                    //    delegation container
+                    bDocument = (container.nodeType === 9),
 
-					matchedEl,
-					context,
-					sID,
-					sIDSelector;
-
-
-				if (Lang.isFunction(filter)) {
-					matchedEl = filter(target);
-				}
-				else if (Lang.isString(filter)) {
-
-					if (!bDocument) {
-
-						sID = container.id;
-
-						if (!sID) {
-							sID = Event.generateId(container);
-						}						
-
-						//	Scope all selectors to the container
-						sIDSelector = ("#" + sID + " ");
-						selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
-
-					}
+                    matchedEl,
+                    context,
+                    sID,
+                    sIDSelector;
 
 
-					if (YAHOO.util.Selector.test(target, selector)) {
-						matchedEl = target;
-					}
-					else if (YAHOO.util.Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
+                if (Lang.isFunction(filter)) {
+                    matchedEl = filter(target);
+                }
+                else if (Lang.isString(filter)) {
 
-						//	The target is a descendant of an element matching 
-						//	the selector, so crawl up to find the ancestor that 
-						//	matches the selector
+                    if (!bDocument) {
 
-						matchedEl = getMatch(target, selector, container);
+                        sID = container.id;
 
-					}
+                        if (!sID) {
+                            sID = Event.generateId(container);
+                        }                        
 
-				}
+                        //    Scope all selectors to the container
+                        sIDSelector = ("#" + sID + " ");
+                        selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
+
+                    }
 
 
-				if (matchedEl) {
+                    if (YAHOO.util.Selector.test(target, selector)) {
+                        matchedEl = target;
+                    }
+                    else if (YAHOO.util.Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
 
-					//	The default context for delegated listeners is the 
-					//	element that matched the filter.
+                        //    The target is a descendant of an element matching 
+                        //    the selector, so crawl up to find the ancestor that 
+                        //    matches the selector
 
-					context = matchedEl;
+                        matchedEl = getMatch(target, selector, container);
 
-		            if (overrideContext) {
-		                if (overrideContext === true) {
-		                    context = obj;
-		                } else {
-		                    context = overrideContext;
-		                }
-		            }
+                    }
 
-					//	Call the listener passing in the container and the 
-					//	element that matched the filter in case the user 
-					//	needs those.
+                }
 
-					return fn.call(context, event, matchedEl, container, obj);
 
-				}
+                if (matchedEl) {
 
-			};
+                    //    The default context for delegated listeners is the 
+                    //    element that matched the filter.
 
-		},
+                    context = matchedEl;
+
+                    if (overrideContext) {
+                        if (overrideContext === true) {
+                            context = obj;
+                        } else {
+                            context = overrideContext;
+                        }
+                    }
+
+                    //    Call the listener passing in the container and the 
+                    //    element that matched the filter in case the user 
+                    //    needs those.
+
+                    return fn.call(context, event, matchedEl, container, obj);
+
+                }
+
+            };
+
+        },
 
 
         /**
          * Appends a delegated event listener.  Delegated event listeners 
-		 * receive three arguments by default: the DOM event, the element  
-		 * specified by the filtering function or CSS selector, and the 
-		 * container element (the element to which the event listener is 
-		 * bound).  (Note: Using the delegate method requires the event-delegate 
-		 * module.  Using CSS selectors as the filtering criteria for delegated 
-		 * event listeners requires inclusion of the Selector Utility.)
+         * receive three arguments by default: the DOM event, the element  
+         * specified by the filtering function or CSS selector, and the 
+         * container element (the element to which the event listener is 
+         * bound).  (Note: Using the delegate method requires the event-delegate 
+         * module.  Using CSS selectors as the filtering criteria for delegated 
+         * event listeners requires inclusion of the Selector Utility.)
          *
          * @method delegate
          *
@@ -322,11 +322,11 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
          *  listener to.
          * @param {String}   type     The type of event listener to append
          * @param {Function} fn        The method the event invokes
-		 * @param {Function|string} filter Function or CSS selector used to 
-		 * determine for what element(s) the event listener should be called. 
-		 * When a function is specified, the function should return an 
-		 * HTML element.  Using a CSS Selector requires the inclusion of the 
-		 * CSS Selector Utility.
+         * @param {Function|string} filter Function or CSS selector used to 
+         * determine for what element(s) the event listener should be called. 
+         * When a function is specified, the function should return an 
+         * HTML element.  Using a CSS Selector requires the inclusion of the 
+         * CSS Selector Utility.
          * @param {Object}   obj    An arbitrary object that will be 
          *                             passed as a parameter to the listener
          * @param {Boolean|object}  overrideContext  If true, the value of the obj parameter becomes
@@ -340,49 +340,49 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
          * @static
          * @for Event
          */
-		delegate: function (container, type, fn, filter, obj, overrideContext) {
+        delegate: function (container, type, fn, filter, obj, overrideContext) {
 
-			var sType = type,
-				fnMouseDelegate,
-				fnDelegate;
-
-
-			if (Lang.isString(filter) && !YAHOO.util.Selector) {
-				YAHOO.log("Using a CSS selector to define the filtering criteria for a delegated listener requires the Selector Utility.", "error", "Event");
-		        return false;
-			}
+            var sType = type,
+                fnMouseDelegate,
+                fnDelegate;
 
 
-			if (type == "mouseenter" || type == "mouseleave") {
+            if (Lang.isString(filter) && !YAHOO.util.Selector) {
+                YAHOO.log("Using a CSS selector to define the filtering criteria for a delegated listener requires the Selector Utility.", "error", "Event");
+                return false;
+            }
 
-				if (!Event._createMouseDelegate) {
-					YAHOO.log("Delegating a " + type + " event requires the event-mouseenter module.", "error", "Event");
-			        return false;
-				}
 
-				//	Look up the real event--either mouseover or mouseout
-				sType = Event._getType(type);
+            if (type == "mouseenter" || type == "mouseleave") {
 
-				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
+                if (!Event._createMouseDelegate) {
+                    YAHOO.log("Delegating a " + type + " event requires the event-mouseenter module.", "error", "Event");
+                    return false;
+                }
 
-				fnDelegate = Event._createDelegate(function (event, matchedEl, container) {
+                //    Look up the real event--either mouseover or mouseout
+                sType = Event._getType(type);
 
-					return fnMouseDelegate.call(matchedEl, event, container);
+                fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
 
-				}, filter, obj, overrideContext);
+                fnDelegate = Event._createDelegate(function (event, matchedEl, container) {
 
-			}
-			else {
+                    return fnMouseDelegate.call(matchedEl, event, container);
 
-				fnDelegate = Event._createDelegate(fn, filter, obj, overrideContext);
+                }, filter, obj, overrideContext);
 
-			}
+            }
+            else {
 
-			delegates.push([container, sType, fn, fnDelegate]);
-			
-			return Event.on(container, sType, fnDelegate);
+                fnDelegate = Event._createDelegate(fn, filter, obj, overrideContext);
 
-		},
+            }
+
+            delegates.push([container, sType, fn, fnDelegate]);
+            
+            return Event.on(container, sType, fnDelegate);
+
+        },
 
 
         /**
@@ -402,42 +402,42 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
          * @static
          * @for Event
          */
-		removeDelegate: function (container, type, fn) {
+        removeDelegate: function (container, type, fn) {
 
-			var sType = type,
-				returnVal = false,
-				index,
-				cacheItem;
+            var sType = type,
+                returnVal = false,
+                index,
+                cacheItem;
 
-			//	Look up the real event--either mouseover or mouseout
-			if (type == "mouseenter" || type == "mouseleave") {
-				sType = Event._getType(type);
-			}
+            //    Look up the real event--either mouseover or mouseout
+            if (type == "mouseenter" || type == "mouseleave") {
+                sType = Event._getType(type);
+            }
 
-			index = Event._getCacheIndex(delegates, container, sType, fn);
+            index = Event._getCacheIndex(delegates, container, sType, fn);
 
-		    if (index >= 0) {
-		        cacheItem = delegates[index];
-		    }
+            if (index >= 0) {
+                cacheItem = delegates[index];
+            }
 
 
-		    if (container && cacheItem) {
+            if (container && cacheItem) {
 
-		        returnVal = Event.removeListener(cacheItem[0], cacheItem[1], cacheItem[3]);
+                returnVal = Event.removeListener(cacheItem[0], cacheItem[1], cacheItem[3]);
 
-				if (returnVal) {
-	                delete delegates[index][2];
-	                delete delegates[index][3];
-	                delegates.splice(index, 1);
-				}		
-		
-		    }
+                if (returnVal) {
+                    delete delegates[index][2];
+                    delete delegates[index][3];
+                    delegates.splice(index, 1);
+                }        
+        
+            }
 
-			return returnVal;
+            return returnVal;
 
-		}
-		
-	});
+        }
+        
+    });
 
 }());
 
@@ -1184,10 +1184,11 @@ YAHOO.widget.Column.prototype = {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Unique name, required.
+     * Unique name, required. If "label" property is not provided, the "key"
+     * value will be treated as markup and inserted into the DOM as innerHTML.
      *
      * @property key
-     * @type String
+     * @type String|HTML
      */
     key : null,
 
@@ -1200,10 +1201,11 @@ YAHOO.widget.Column.prototype = {
     field : null,
 
     /**
-     * Text or HTML for display as Column's label in the TH element.
+     * Value displayed as Column header in the TH element. String value is
+     * treated as markup and inserted into the DOM as innerHTML.
      *
      * @property label
-     * @type String
+     * @type HTML
      */
     label : null,
 
@@ -1306,13 +1308,15 @@ YAHOO.widget.Column.prototype = {
     dateOptions : null,
 
     /**
-     * Array of dropdown values for formatter:"dropdown" cases. Can either be a simple array (e.g.,
-     * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g.,
-     * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
-     * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]).
+     * Array of dropdown values for formatter:"dropdown" cases. Can either be a
+     * simple array (e.g., ["Alabama","Alaska","Arizona","Arkansas"]) or a an
+     * array of objects (e.g., [{label:"Alabama", value:"AL"},
+     * {label:"Alaska", value:"AK"}, {label:"Arizona", value:"AZ"},
+     * {label:"Arkansas", value:"AR"}]). String values are treated as markup and
+     * inserted into the DOM as innerHTML.
      *
      * @property dropdownOptions
-     * @type String[] | Object[]
+     * @type HTML[] | Object[]
      */
     dropdownOptions : null,
      
@@ -2528,13 +2532,11 @@ RS.prototype = {
      *
      * @method deleteRecord
      * @param index {Number} Record's RecordSet position index.
-     * @param range {Number} (optional) How many Records to delete.
      * @return {Object} A copy of the data held by the deleted Record.
      */
     deleteRecord : function(index) {
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
-            // Copy data from the Record for the event that gets fired later
-            var oData = widget.DataTable._cloneObject(this.getRecord(index).getData());
+            var oData = this.getRecord(index).getData();
             
             this._deleteRecord(index);
             this.fireEvent("recordDeleteEvent",{data:oData,index:index});
@@ -2564,17 +2566,18 @@ RS.prototype = {
         }
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
             var recordsToDelete = this.getRecords(index, range);
-            // Copy data from each Record for the event that gets fired later
-            var deletedData = [];
+            var deletedData = [], // this mistakenly held Records, not data
+                deletedObjects = []; // this passes data only
             
             for(var i=0; i<recordsToDelete.length; i++) {
-                deletedData[deletedData.length] = widget.DataTable._cloneObject(recordsToDelete[i]);
+                deletedData[deletedData.length] = recordsToDelete[i]; // backward compatibility
+                deletedObjects[deletedObjects.length] = recordsToDelete[i].getData();
             }
             this._deleteRecord(index, range);
 
-            this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
+            this.fireEvent("recordsDeleteEvent",{data:deletedData,deletedData:deletedObjects,index:index});
             YAHOO.log(range + "Record(s) deleted at index " + index +
-                    " and containing data " + lang.dump(deletedData), "info", this.toString());
+                    " and containing data " + lang.dump(deletedObjects), "info", this.toString());
 
             return deletedData;
         }
@@ -2651,7 +2654,7 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when a Record is deleted from the RecordSet.
  *
  * @event recordDeleteEvent
- * @param oArgs.data {Object} A copy of the data held by the deleted Record,
+ * @param oArgs.data {Object} The data held by the deleted Record,
  * or an array of data object literals if multiple Records were deleted at once.
  * @param oArgs.index {Object} Index of the deleted Record.
  */
@@ -2661,6 +2664,7 @@ lang.augmentProto(RS, util.EventProvider);
  *
  * @event recordsDeleteEvent
  * @param oArgs.data {Object[]} An array of deleted Records.
+ * @param oArgs.deletedData {Object[]} An array of deleted data.
  * @param oArgs.index {Object} Index of the first deleted Record.
  */
 
@@ -3458,47 +3462,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _cloneObject : function(o) {
-        if(!lang.isValue(o)) {
-            return o;
-        }
-        
-        var copy = {};
-        
-        if(o instanceof YAHOO.widget.BaseCellEditor) {
-            copy = o;
-        }
-        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
-            copy = o;
-        }
-        else if(lang.isFunction(o)) {
-            copy = o;
-        }
-        else if(lang.isArray(o)) {
-            var array = [];
-            for(var i=0,len=o.length;i<len;i++) {
-                array[i] = DT._cloneObject(o[i]);
-            }
-            copy = array;
-        }
-        else if(lang.isObject(o)) { 
-            for (var x in o){
-                if(lang.hasOwnProperty(o, x)) {
-                    if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
-                        copy[x] = DT._cloneObject(o[x]);
-                    }
-                    else {
-                        copy[x] = o[x];
-                    }
-                }
-            }
-        }
-        else {
-            copy = o;
-        }
-    
-        return copy;
-    },
+    _cloneObject : YAHOO.util.DataSourceBase._cloneObject,
 
     /**
      * Formats a BUTTON element.
@@ -3507,11 +3471,13 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object | Boolean} Data value for the cell. By default, the value
-     * is what gets written to the BUTTON.
+     * @param oData {HTML} Data value for the cell. By default, the value
+     * is what gets written to the BUTTON. String values are treated as markup
+     * and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatButton : function(el, oRecord, oColumn, oData) {
+    formatButton : function(el, oRecord, oColumn, oData, oDataTable) {
         var sValue = lang.isValue(oData) ? oData : "Click";
         //TODO: support YAHOO.widget.Button
         //if(YAHOO.widget.Button) {
@@ -3530,13 +3496,14 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object | Boolean} Data value for the cell. Can be a simple
+     * @param oData {Object | Boolean | HTML} Data value for the cell. Can be a simple
      * Boolean to indicate whether checkbox is checked or not. Can be object literal
-     * {checked:bBoolean, label:sLabel}. Other forms of oData require a custom
-     * formatter.
+     * {checked:bBoolean, label:sLabel}. String values are treated as markup
+     * and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatCheckbox : function(el, oRecord, oColumn, oData) {
+    formatCheckbox : function(el, oRecord, oColumn, oData, oDataTable) {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"checkbox\"" + bChecked +
@@ -3551,10 +3518,12 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Number} Data value for the cell.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatCurrency : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || this.get("currencyOptions"));
+    formatCurrency : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this;
+        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || oDT.get("currencyOptions"));
     },
 
     /**
@@ -3564,11 +3533,14 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} Data value for the cell, or null.
+     * @param oData {Object} Data value for the cell, or null. String values are
+     * treated as markup and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDate : function(el, oRecord, oColumn, oData) {
-        var oConfig = oColumn.dateOptions || this.get("dateOptions");
+    formatDate : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            oConfig = oColumn.dateOptions || oDT.get("dateOptions");
         el.innerHTML = util.Date.format(oData, oConfig, oConfig.locale);
     },
 
@@ -3579,11 +3551,15 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} Data value for the cell, or null.
+     * @param oData {Object} Data value for the cell, or null. String values may
+     * be treated as markup and inserted into the DOM with innerHTML as element
+     * label.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDropdown : function(el, oRecord, oColumn, oData) {
-        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
+    formatDropdown : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
             options = (lang.isArray(oColumn.dropdownOptions)) ?
                 oColumn.dropdownOptions : null,
 
@@ -3598,7 +3574,7 @@ lang.augmentObject(DT, {
             selectEl = el.appendChild(selectEl);
 
             // Add event listener
-            Ev.addListener(selectEl,"change",this._onDropdownChange,this);
+            Ev.addListener(selectEl,"change",oDT._onDropdownChange,oDT);
         }
 
         selectEl = collection[0];
@@ -3642,16 +3618,18 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} Data value for the cell, or null.
+     * @param oData {String} Data value for the cell, or null. Values are
+     * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatEmail : function(el, oRecord, oColumn, oData) {
+    formatEmail : function(el, oRecord, oColumn, oData, oDataTable) {
         if(lang.isString(oData)) {
-            oData = oData.replace(/"/g, "&#34;");
+            oData = lang.escapeHTML(oData);
             el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
         }
         else {
-            el.innerHTML = lang.isValue(oData) ? oData : "";
+            el.innerHTML = lang.isValue(oData) ? lang.escapeHTML(oData.toString()) : "";
         }
     },
 
@@ -3662,16 +3640,18 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} Data value for the cell, or null.
+     * @param oData {String} Data value for the cell, or null. Values are
+     * HTML-escaped
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatLink : function(el, oRecord, oColumn, oData) {
+    formatLink : function(el, oRecord, oColumn, oData, oDataTable) {
         if(lang.isString(oData)) {
-            oData = oData.replace(/"/g, "&#34;");
+            oData = lang.escapeHTML(oData);
             el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
         }
         else {
-            el.innerHTML = lang.isValue(oData) ? oData : "";
+            el.innerHTML = lang.isValue(oData) ? lang.escapeHTML(oData.toString()) : "";
         }
     },
 
@@ -3683,10 +3663,12 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} Data value for the cell, or null.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatNumber : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || this.get("numberOptions"));
+    formatNumber : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this;
+        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || oDT.get("numberOptions"));
     },
 
     /**
@@ -3697,13 +3679,15 @@ lang.augmentObject(DT, {
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oData {Object} (Optional) Data value for the cell.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatRadio : function(el, oRecord, oColumn, oData) {
-        var bChecked = oData;
+    formatRadio : function(el, oRecord, oColumn, oData, oDataTable) {
+        var oDT = oDataTable || this,
+            bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\""+this.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
+                " name=\""+oDT.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
@@ -3714,13 +3698,14 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} (Optional) Data value for the cell.
+     * @param oData {String} (Optional) Data value for the cell. Values are
+     * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatText : function(el, oRecord, oColumn, oData) {
+    formatText : function(el, oRecord, oColumn, oData, oDataTable) {
         var value = (lang.isValue(oData)) ? oData : "";
-        //TODO: move to util function
-        el.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+        el.innerHTML = lang.escapeHTML(value.toString());
     },
 
     /**
@@ -3730,11 +3715,13 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} (Optional) Data value for the cell.
+     * @param oData {Object} (Optional) Data value for the cell. Values are
+     * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatTextarea : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oData)) ? oData : "",
+    formatTextarea : function(el, oRecord, oColumn, oData, oDataTable) {
+        var value = (lang.isValue(oData)) ? lang.escapeHTML(oData.toString()) : "",
             markup = "<textarea>" + value + "</textarea>";
         el.innerHTML = markup;
     },
@@ -3746,11 +3733,13 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} (Optional) Data value for the cell.
+     * @param oData {Object} (Optional) Data value for the cell. Values are
+     * HTML-escaped.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatTextbox : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oData)) ? oData : "",
+    formatTextbox : function(el, oRecord, oColumn, oData, oDataTable) {
+        var value = (lang.isValue(oData)) ? lang.escapeHTML(oData.toString()) : "",
             markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
     },
@@ -3762,10 +3751,12 @@ lang.augmentObject(DT, {
      * @param el {HTMLElement} The element to format with markup.
      * @param oRecord {YAHOO.widget.Record} Record instance.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oData {Object} (Optional) Data value for the cell.
+     * @param oData {HTML} (Optional) Data value for the cell. String values are
+     * treated as markup and inserted into the DOM with innerHTML.
+     * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
      * @static
      */
-    formatDefault : function(el, oRecord, oColumn, oData) {
+    formatDefault : function(el, oRecord, oColumn, oData, oDataTable) {
         el.innerHTML = oData === undefined ||
                        oData === null ||
                        (typeof oData === 'number' && isNaN(oData)) ?
@@ -3843,7 +3834,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute summary
-    * @description Value for the SUMMARY attribute.
+    * @description String value for the SUMMARY attribute.
     * @type String
     * @default ""    
     */
@@ -3994,9 +3985,10 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute caption
-    * @description Value for the CAPTION element. NB: Not supported in
+    * @description Value for the CAPTION element. String values are treated as
+    * markup and inserted into the DOM with innerHTML. NB: Not supported in
     * ScrollingDataTable.    
-    * @type String
+    * @type HTML
     */
     this.setAttributeConfig("caption", {
         value: null,
@@ -4030,17 +4022,17 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * @attribute renderLoopSize 	 
+    * @attribute renderLoopSize      
     * @description A value greater than 0 enables DOM rendering of rows to be
     * executed from a non-blocking timeout queue and sets how many rows to be
     * rendered per timeout. Recommended for very large data sets.     
-    * @type Number 	 
-    * @default 0 	 
-    */ 	 
-     this.setAttributeConfig("renderLoopSize", { 	 
-         value: 0, 	 
-         validator: lang.isNumber 	 
-     }); 	 
+    * @type Number      
+    * @default 0      
+    */      
+     this.setAttributeConfig("renderLoopSize", {
+         value: 0,
+         validator: lang.isNumber
+     });
 
     /**
     * @attribute formatRow
@@ -4158,46 +4150,51 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-     * @attribute MSG_EMPTY 	 
-     * @description Message to display if DataTable has no data.     
-     * @type String 	 
-     * @default "No records found." 	 
-     */ 	 
-     this.setAttributeConfig("MSG_EMPTY", { 	 
-         value: "No records found.", 	 
-         validator: lang.isString 	 
-     }); 	 
+     * @attribute MSG_EMPTY
+     * @description Message to display if DataTable has no data. String
+     * values are treated as markup and inserted into the DOM with innerHTML.
+     * @type HTML
+     * @default "No records found."
+     */
+     this.setAttributeConfig("MSG_EMPTY", {
+         value: "No records found.",
+         validator: lang.isString
+     });      
 
     /**
-     * @attribute MSG_LOADING	 
-     * @description Message to display while DataTable is loading data.
-     * @type String 	 
-     * @default "Loading..." 	 
-     */ 	 
-     this.setAttributeConfig("MSG_LOADING", { 	 
-         value: "Loading...", 	 
-         validator: lang.isString 	 
-     }); 	 
+     * @attribute MSG_LOADING
+     * @description Message to display while DataTable is loading data. String
+     * values are treated as markup and inserted into the DOM with innerHTML.
+     * @type HTML
+     * @default "Loading..."
+     */      
+     this.setAttributeConfig("MSG_LOADING", {
+         value: "Loading...",
+         validator: lang.isString
+     });      
 
     /**
-     * @attribute MSG_ERROR	 
-     * @description Message to display while DataTable has data error.
-     * @type String 	 
-     * @default "Data error." 	 
-     */ 	 
-     this.setAttributeConfig("MSG_ERROR", { 	 
-         value: "Data error.", 	 
-         validator: lang.isString 	 
-     }); 	 
+     * @attribute MSG_ERROR
+     * @description Message to display while DataTable has data error. String
+     * values are treated as markup and inserted into the DOM with innerHTML.
+     * @type HTML
+     * @default "Data error."
+     */      
+     this.setAttributeConfig("MSG_ERROR", {
+         value: "Data error.",
+         validator: lang.isString
+     });
 
     /**
-     * @attribute MSG_SORTASC 
-     * @description Message to display in tooltip to sort Column in ascending order.
-     * @type String 	 
-     * @default "Click to sort ascending" 	 
-     */ 	 
-     this.setAttributeConfig("MSG_SORTASC", { 	 
-         value: "Click to sort ascending", 	 
+     * @attribute MSG_SORTASC
+     * @description Message to display in tooltip to sort Column in ascending
+     * order. String values are treated as markup and inserted into the DOM as
+     * innerHTML.
+     * @type HTML
+     * @default "Click to sort ascending"
+     */      
+     this.setAttributeConfig("MSG_SORTASC", {      
+         value: "Click to sort ascending",      
          validator: lang.isString,
          method: function(sParam) {
             if(this._elThead) {
@@ -4211,13 +4208,15 @@ initAttributes : function(oConfigs) {
      });
 
     /**
-     * @attribute MSG_SORTDESC 
-     * @description Message to display in tooltip to sort Column in descending order.
-     * @type String 	 
-     * @default "Click to sort descending" 	 
-     */ 	 
-     this.setAttributeConfig("MSG_SORTDESC", { 	 
-         value: "Click to sort descending", 	 
+     * @attribute MSG_SORTDESC
+     * @description Message to display in tooltip to sort Column in descending
+     * order. String values are treated as markup and inserted into the DOM as
+     * innerHTML.
+     * @type HTML
+     * @default "Click to sort descending"
+     */      
+     this.setAttributeConfig("MSG_SORTDESC", {      
+         value: "Click to sort descending",      
          validator: lang.isString,
          method: function(sParam) {
             if(this._elThead) {
@@ -4575,13 +4574,13 @@ _disabled : false,
 clearTextSelection : function() {
     var sel;
     if(window.getSelection) {
-    	sel = window.getSelection();
+        sel = window.getSelection();
     }
     else if(document.getSelection) {
-    	sel = document.getSelection();
+        sel = document.getSelection();
     }
     else if(document.selection) {
-    	sel = document.selection;
+        sel = document.selection;
     }
     if(sel) {
         if(sel.empty) {
@@ -4908,7 +4907,8 @@ _destroyTableEl : function() {
  * Creates HTML markup CAPTION element.
  *
  * @method _initCaptionEl
- * @param sCaption {String} Text for caption.
+ * @param sCaption {HTML} Caption value. String values are treated as markup and
+ * inserted into the DOM with innerHTML.
  * @private
  */
 _initCaptionEl : function(sCaption) {
@@ -5601,14 +5601,14 @@ _initEvents : function () {
     this._initCellEditing();
 },
 
-/** 	 
-  * Initializes Column sorting. 	 
-  * 	 
-  * @method _initColumnSort 	 
-  * @private 	 
-  */ 	 
+/**      
+  * Initializes Column sorting.      
+  *      
+  * @method _initColumnSort      
+  * @private      
+  */      
 _initColumnSort : function() {
-    this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
+    this.subscribe("theadCellClickEvent", this.onEventSortColumn);      
 
     // Backward compatibility
     var oSortedBy = this.get("sortedBy");
@@ -5622,12 +5622,12 @@ _initColumnSort : function() {
     }
 },
 
-/** 	 
-  * Initializes CellEditor integration. 	 
-  * 	 
-  * @method _initCellEditing 	 
-  * @private 	 
-  */ 	 
+/**      
+  * Initializes CellEditor integration.      
+  *      
+  * @method _initCellEditing      
+  * @private      
+  */      
 _initCellEditing : function() {
     this.subscribe("editorBlurEvent",function () {
         this.onEditorBlurEvent.apply(this,arguments);
@@ -7894,7 +7894,7 @@ destroy : function() {
  * Displays message within secondary TBODY.
  *
  * @method showTableMessage
- * @param sHTML {String} (optional) Value for innerHTMlang.
+ * @param sHTML {HTML} (optional) Value for innerHTML.
  * @param sClassName {String} (optional) Classname.
  */
 showTableMessage : function(sHTML, sClassName) {
@@ -13777,7 +13777,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Fired when a message is shown in the DataTable's message element.
      *
      * @event tableMsgShowEvent
-     * @param oArgs.html {String} The HTML displayed.
+     * @param oArgs.html {HTML} The HTML displayed.
      * @param oArgs.className {String} The className assigned.
      *
      */
@@ -16318,7 +16318,7 @@ isActive : false,
  * Text to display on Save button.
  *
  * @property LABEL_SAVE
- * @type String
+ * @type HTML
  * @default "Save"
  */
 LABEL_SAVE : "Save",
@@ -16327,7 +16327,7 @@ LABEL_SAVE : "Save",
  * Text to display on Cancel button.
  *
  * @property LABEL_CANCEL
- * @type String
+ * @type HTML
  * @default "Cancel"
  */
 LABEL_CANCEL : "Cancel",
@@ -16892,10 +16892,11 @@ lang.extend(widget.CheckboxCellEditor, BCE, {
 /**
  * Array of checkbox values. Can either be a simple array (e.g., ["red","green","blue"])
  * or a an array of objects (e.g., [{label:"red", value:"#FF0000"},
- * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). 
+ * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property checkboxOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 checkboxOptions : null,
 
@@ -17221,10 +17222,11 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g.,
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property dropdownOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 dropdownOptions : null,
 
@@ -17433,10 +17435,11 @@ radios : null,
 /**
  * Array of radio values. Can either be a simple array (e.g., ["yes","no","maybe"])
  * or a an array of objects (e.g., [{label:"yes", value:1}, {label:"no", value:-1},
- * {label:"maybe", value:0}]). 
+ * {label:"maybe", value:0}]). String values are treated as markup and inserted
+ * into the DOM as innerHTML.
  *
  * @property radioOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 radioOptions : null,
 

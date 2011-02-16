@@ -302,31 +302,31 @@ var Dom = YAHOO.util.Dom,
         /** 
         * @property STR_COLLAPSE
         * @description String for Toolbar Collapse Button
-        * @type String
+        * @type {HTML}
         */
         STR_COLLAPSE: 'Collapse Toolbar',
         /** 
         * @property STR_EXPAND
         * @description String for Toolbar Collapse Button - Expand
-        * @type String
+        * @type {HTML}
         */
         STR_EXPAND: 'Expand Toolbar',
         /** 
         * @property STR_SPIN_LABEL
         * @description String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
-        * @type String
+        * @type {HTML}
         */
         STR_SPIN_LABEL: 'Spin Button with value {VALUE}. Use Control Shift Up Arrow and Control Shift Down arrow keys to increase or decrease the value.',
         /** 
         * @property STR_SPIN_UP
         * @description String for spinbutton up
-        * @type String
+        * @type {HTML}
         */
         STR_SPIN_UP: 'Click to increase the value of this input',
         /** 
         * @property STR_SPIN_DOWN
         * @description String for spinbutton down
-        * @type String
+        * @type {HTML}
         */
         STR_SPIN_DOWN: 'Click to decrease the value of this input',
         /** 
@@ -387,35 +387,35 @@ var Dom = YAHOO.util.Dom,
         * @protected
         * @property CLASS_CONTAINER
         * @description Default CSS class to apply to the toolbar container element
-        * @type String
+        * @type {HTML}
         */
         CLASS_CONTAINER: 'yui-toolbar-container',
         /**
         * @protected
         * @property CLASS_DRAGHANDLE
         * @description Default CSS class to apply to the toolbar's drag handle element
-        * @type String
+        * @type {HTML}
         */
         CLASS_DRAGHANDLE: 'yui-toolbar-draghandle',
         /**
         * @protected
         * @property CLASS_SEPARATOR
         * @description Default CSS class to apply to all separators in the toolbar
-        * @type String
+        * @type {HTML}
         */
         CLASS_SEPARATOR: 'yui-toolbar-separator',
         /**
         * @protected
         * @property CLASS_DISABLED
         * @description Default CSS class to apply when the toolbar is disabled
-        * @type String
+        * @type {HTML}
         */
         CLASS_DISABLED: 'yui-toolbar-disabled',
         /**
         * @protected
         * @property CLASS_PREFIX
         * @description Default prefix for dynamically created class names
-        * @type String
+        * @type {HTML}
         */
         CLASS_PREFIX: 'yui-toolbar',
         /** 
@@ -575,9 +575,9 @@ var Dom = YAHOO.util.Dom,
             /**
             * @attribute titlebar
             * @description Boolean indicating if the toolbar should have a titlebar. If
-            * passed a string, it will use that as the titlebar text
+            * passed a string, it will use that as the innerHTML of the titlebar header
             * @default false
-            * @type Boolean or String
+            * @type Boolean or {HTML}
             */
             this.setAttributeConfig('titlebar', {
                 value: false,
@@ -728,7 +728,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method addButtonGroup
         * @description Add a new button group to the toolbar. (uses addButton)
-        * @param {Object} oGroup Object literal reference to the Groups Config (contains an array of button configs as well as the group label)
+        * @param {Object} oGroup Object literal reference to the Groups Config (contains an array of button configs as well as the group label (Which will be used as HTML))
         */
         addButtonGroup: function(oGroup) {
             if (!this.get('element')) {

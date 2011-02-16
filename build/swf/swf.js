@@ -5,6 +5,7 @@ YAHOO.namespace("widget");
 	var version = 0;
 	var UA = YAHOO.env.ua;
 	var sF = "ShockwaveFlash";
+    var mF, eP;
 
 	 	if (UA.gecko || UA.webkit || UA.opera) {
 			   if ((mF = navigator.mimeTypes['application/x-shockwave-flash'])) {
@@ -71,25 +72,6 @@ YAHOO.namespace("widget");
 
 			isFlashVersionAtLeast : function (ver) {
 				return version >= ver;
-			},
-			
-			parseFlashVersion : function (ver)
-			{
-				var flashVersion = ver;
-				if(YAHOO.lang.isString(ver))
-				{
-					var verSplit = ver.split(".");
-					if(verSplit.length > 2)
-					{
-						flashVersion = parseInt(verSplit[0]);
-						flashVersion += parseInt(verSplit[2]) * .001;
-					}
-					else
-					{
-						flashVersion = parseFloat(ver);
-					}					
-				}
-				return YAHOO.lang.isNumber(flashVersion) ? flashVersion : null;
 			}	
 		};	
 	
@@ -104,7 +86,7 @@ YAHOO.namespace("widget");
 		FLASH_VER = "10.22",
 		EXPRESS_INSTALL_URL = "http://fpdownload.macromedia.com/pub/flashplayer/update/current/swf/autoUpdater.swf?" + Math.random(),
 		EVENT_HANDLER = "YAHOO.widget.SWF.eventHandler",
-		possibleAttributes = {align:"", allowNetworking:"", allowScriptAccess:"", base:"", bgcolor:"", menu:"", name:"", quality:"", salign:"", scale:"", tabindex:"", wmode:""};
+		possibleAttributes = {align:"", allowfullscreen: "", allownetworking:"", allowscriptaccess:"", base:"", bgcolor:"", devicefont: "", loop: "", menu:"", name:"", play: "", quality:"", salign:"", seamlesstabbing: "", scale:"", swliveconnect: "", tabindex:"", wmode:""};
 		
 		/**
 		 * The SWF utility is a tool for embedding Flash applications in HTMl pages.
@@ -144,7 +126,7 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 	
 	var _id = this._id;
     var oElement = Dom.get(p_oElement);
-	var flashVersion = SWFDetect.parseFlashVersion(p_oAttributes["version"]) || FLASH_VER;
+	var flashVersion = (p_oAttributes["version"] || FLASH_VER);
 	var isFlashVersionRight = SWFDetect.isFlashVersionAtLeast(flashVersion);
 	var canExpressInstall = (UA.flash >= 8.0);
 	var shouldExpressInstall = canExpressInstall && !isFlashVersionRight && p_oAttributes["useExpressInstall"];
@@ -174,8 +156,8 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 				}
 				
 				for (var attribute in p_oAttributes.fixedAttributes) {
-					if (possibleAttributes.hasOwnProperty(attribute)) {
-						objstring += '<param name="' + YAHOO.lang.escapeHTML(attribute) + '" value="' + YAHOO.lang.escapeHTML(p_oAttributes.fixedAttributes[attribute]) + '"/>';
+					if (possibleAttributes.hasOwnProperty(attribute.toLowerCase())) {
+						objstring += '<param name="' + YAHOO.lang.escapeHTML(attribute.toLowerCase()) + '" value="' + YAHOO.lang.escapeHTML(p_oAttributes.fixedAttributes[attribute]) + '"/>';
 					}
 				}
 
@@ -193,9 +175,10 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 				objstring += "</object>"; 
 
 				oElement.innerHTML = objstring;
-				YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
-				this._swf = Dom.get(_id);
-			}				
+			}
+			
+			YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
+			this._swf = Dom.get(_id);	
 };
 
 /**

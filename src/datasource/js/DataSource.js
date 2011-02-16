@@ -313,7 +313,56 @@ _nTransactionId : 0,
 // DataSourceBase private static methods
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Clones object literal or array of object literals.
+ *
+ * @method DataSourceBase._cloneObject
+ * @param o {Object} Object.
+ * @private
+ * @static
+ */
+_cloneObject: function(o) {
+    if(!lang.isValue(o)) {
+        return o;
+    }
 
+    var copy = {};
+
+    if(o instanceof YAHOO.widget.BaseCellEditor) {
+        copy = o;
+    }
+    else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
+        copy = o;
+    }
+    else if(lang.isFunction(o)) {
+        copy = o;
+    }
+    else if(lang.isArray(o)) {
+        var array = [];
+        for(var i=0,len=o.length;i<len;i++) {
+            array[i] = DS._cloneObject(o[i]);
+        }
+        copy = array;
+    }
+    else if(lang.isObject(o)) {
+        for (var x in o){
+            if(lang.hasOwnProperty(o, x)) {
+                if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
+                    copy[x] = DS._cloneObject(o[x]);
+                }
+                else {
+                    copy[x] = o[x];
+                }
+            }
+        }
+    }
+    else {
+        copy = o;
+    }
+
+    return copy;
+},
+    
 /**
  * Get an XPath-specified value for a given field from an XML node or document.
  *
@@ -759,6 +808,7 @@ addToCache : function(oRequest, oResponse) {
     }
 
     // Add to cache in the newest position, at the end of the array
+    oResponse = DS._cloneObject(oResponse);
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache[aCache.length] = oCacheElem;
     this.fireEvent("responseCacheEvent", {request:oRequest,response:oResponse});

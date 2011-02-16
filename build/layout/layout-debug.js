@@ -1362,7 +1362,7 @@
         },
 		/**
         * @property loadHandler
-        * @description Callback method for the YUI Connection Manager used for load the body using AJAX
+        * @description Callback method for the YUI Connection Manager used for load the body using AJAX. NOTE: e.responseText is loaded via innerHTML.
         * @type Object
         */
 		loadHandler: {
@@ -1759,7 +1759,8 @@
             });
             /**
             * @attribute header
-            * @description The text to use as the Header of the Unit
+            * @description The html to use as the Header of the Unit (sets via innerHTML)
+            * @type {HTML}
             */
             this.setAttributeConfig('header', {
                 value: attr.header || false,
@@ -1803,7 +1804,8 @@
             });
             /**
             * @attribute body
-            * @description The content for the body. If we find an element in the page with an id that matches the passed option we will move that element into the body of this unit.
+            * @description The content for the body. If we find an element in the page with an id that matches the passed option we will move that element into the body of this unit. (sets via innerHTML)
+            * @type {HTML}
             */
             this.setAttributeConfig('body', {
                 value: attr.body || false,
@@ -1847,7 +1849,8 @@
 
             /**
             * @attribute footer
-            * @description The content for the footer. If we find an element in the page with an id that matches the passed option we will move that element into the footer of this unit.
+            * @description The content for the footer. If we find an element in the page with an id that matches the passed option we will move that element into the footer of this unit. (sets via innerHTML)
+            * @type {HTML}
             */
             this.setAttributeConfig('footer', {
                 value: attr.footer || false,

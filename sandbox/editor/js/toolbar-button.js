@@ -231,7 +231,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @attribute label
             * @description The text label for the button
-            * @type String
+            * @type {HTML}
             */            
             this.setAttributeConfig('label', {
                 value: attr.label,
@@ -248,7 +248,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @attribute title
             * @description The title of the button
-            * @type String
+            * @type {HTML}
             */            
             this.setAttributeConfig('title', {
                 value: attr.title

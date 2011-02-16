@@ -63,10 +63,11 @@
 	YAHOO.widget.ProgressBar = Prog;
 
     /**
-     * String containing the HTML string which is the basis for the Progress Bar.
+     * String containing the HTML string which is the basis for the Progress
+     * Bar. Value is inserted into the DOM with innerHTML.
      *
      * @property ProgressBar.MARKUP
-     * @type String
+     * @type HTML
      * @static
      * @final
      * @default (too long)
