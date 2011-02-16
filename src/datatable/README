@@ -13,6 +13,20 @@ sendRequest() method under the hood.
 * Moved YAHOO.widget.DataTable._cloneObject definition to
 YAHOO.util.DataSourceBase._cloneObject.
 
+
+**** 2.8.3 ****
+
+* YAHOO.widget.DataTable.formatEmail, YAHOO.widget.DataTable.formatLink,
+YAHOO.widget.DataTable.formatText, YAHOO.widget.DataTable.formatTextarea, and
+YAHOO.widget.DataTable.formatTextbox now escape data value with
+YAHOO.lang.escapeHTML before insertion into DOM.
+
+
+**** 2.8.2 ****
+
+* No changes.
+
+
 **** 2.8.1 ****
 
 * No changes.
