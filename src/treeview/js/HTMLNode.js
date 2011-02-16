@@ -87,39 +87,39 @@ YAHOO.extend(HN, YAHOO.widget.Node, {
      * @param o {object |string | HTMLElement } An html string, an object containing an html property or an HTML element
      */
     setHtml: function(o) {
-		this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
+        this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
 
         var el = this.getContentEl();
         if (el) {
-			if (o.nodeType && o.nodeType == 1 && o.tagName) {
-				el.innerHTML = "";
-			} else {
-				el.innerHTML = this.html;
-			}
+            if (o.nodeType && o.nodeType == 1 && o.tagName) {
+                el.innerHTML = "";
+            } else {
+                el.innerHTML = this.html;
+            }
         }
 
     },
 
     // overrides YAHOO.widget.Node
-	// If property html is a string, it sets the innerHTML for the node
-	// If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
+    // If property html is a string, it sets the innerHTML for the node
+    // If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
     getContentHtml: function() {
-		if (typeof this.html === "string") {
-			return this.html;
-		} else {
+        if (typeof this.html === "string") {
+            return this.html;
+        } else {
 
-			HN._deferredNodes.push(this);
-			if (!HN._timer) {
-				HN._timer = window.setTimeout(function () {
-					var n;
-					while((n = HN._deferredNodes.pop())) {
-						n.getContentEl().appendChild(n.html);
-					}
-					HN._timer = null;
-				},0);
-			}
-			return "";
-		}
+            HN._deferredNodes.push(this);
+            if (!HN._timer) {
+                HN._timer = window.setTimeout(function () {
+                    var n;
+                    while((n = HN._deferredNodes.pop())) {
+                        n.getContentEl().appendChild(n.html);
+                    }
+                    HN._timer = null;
+                },0);
+            }
+            return "";
+        }
     },
 
       /**
@@ -140,12 +140,12 @@ YAHOO.extend(HN, YAHOO.widget.Node, {
 
     /**
     * An array of HTMLNodes created with HTML Elements that had their rendering
-	* deferred until the basic tree structure is rendered.
+    * deferred until the basic tree structure is rendered.
     * @property _deferredNodes
     * @type YAHOO.widget.HTMLNode[]
     * @default []
     * @private
-	* @static
+    * @static
     */
 HN._deferredNodes = [];
     /**
@@ -154,7 +154,7 @@ HN._deferredNodes = [];
     * @type System Timer
     * @default null
     * @private
-	* @static
+    * @static
     */
 HN._timer = null;
 })();

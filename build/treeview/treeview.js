@@ -647,12 +647,12 @@ TV.prototype = {
         if (Dom.hasClass(target, node.labelStyle) || Dom.getAncestorByClassName(target,node.labelStyle)) {
             this.fireEvent('labelClick',node);
         }
-		// http://yuilibrary.com/projects/yui2/ticket/2528946
-		// Ensures that any open editor is closed.  
-		// Since the editor is in a separate source which might not be included, 
-		// we first need to ensure we have the _closeEditor method available
-		if (this._closeEditor) { this._closeEditor(false); }
-        
+        // http://yuilibrary.com/projects/yui2/ticket/2528946
+        // Ensures that any open editor is closed.
+        // Since the editor is in a separate source which might not be included,
+        // we first need to ensure we have the _closeEditor method available
+        if (this._closeEditor) { this._closeEditor(false); }
+
         //  If it is a toggle cell, toggle
         if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
             toggle(true);
@@ -822,6 +822,7 @@ TV.prototype = {
             // case KEY.PAGE_DOWN:
                 // break;
             case 107:  // plus key
+            case 187:  // plus key
                 if (ev.shiftKey) {
                     node.parent.expandAll();
                 } else {
@@ -829,6 +830,7 @@ TV.prototype = {
                 }
                 break;
             case 109: // minus key
+            case 189: // minus key
                 if (ev.shiftKey) {
                     node.parent.collapseAll();
                 } else {
@@ -2100,13 +2102,13 @@ YAHOO.widget.Node.prototype = {
                 el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
-		el = Dom.get('ygtvtableel' + this.index);
+        el = Dom.get('ygtvtableel' + this.index);
         if (el) {
-			if (this.expanded) {
-				Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
-			} else {
-				Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
-			}
+            if (this.expanded) {
+                Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
+            } else {
+                Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
+            }
         }
     },
 
@@ -2450,7 +2452,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
-		sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
+        sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
@@ -3235,39 +3237,39 @@ YAHOO.extend(HN, YAHOO.widget.Node, {
      * @param o {object |string | HTMLElement } An html string, an object containing an html property or an HTML element
      */
     setHtml: function(o) {
-		this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
+        this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
 
         var el = this.getContentEl();
         if (el) {
-			if (o.nodeType && o.nodeType == 1 && o.tagName) {
-				el.innerHTML = "";
-			} else {
-				el.innerHTML = this.html;
-			}
+            if (o.nodeType && o.nodeType == 1 && o.tagName) {
+                el.innerHTML = "";
+            } else {
+                el.innerHTML = this.html;
+            }
         }
 
     },
 
     // overrides YAHOO.widget.Node
-	// If property html is a string, it sets the innerHTML for the node
-	// If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
+    // If property html is a string, it sets the innerHTML for the node
+    // If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
     getContentHtml: function() {
-		if (typeof this.html === "string") {
-			return this.html;
-		} else {
+        if (typeof this.html === "string") {
+            return this.html;
+        } else {
 
-			HN._deferredNodes.push(this);
-			if (!HN._timer) {
-				HN._timer = window.setTimeout(function () {
-					var n;
-					while((n = HN._deferredNodes.pop())) {
-						n.getContentEl().appendChild(n.html);
-					}
-					HN._timer = null;
-				},0);
-			}
-			return "";
-		}
+            HN._deferredNodes.push(this);
+            if (!HN._timer) {
+                HN._timer = window.setTimeout(function () {
+                    var n;
+                    while((n = HN._deferredNodes.pop())) {
+                        n.getContentEl().appendChild(n.html);
+                    }
+                    HN._timer = null;
+                },0);
+            }
+            return "";
+        }
     },
 
       /**
@@ -3288,12 +3290,12 @@ YAHOO.extend(HN, YAHOO.widget.Node, {
 
     /**
     * An array of HTMLNodes created with HTML Elements that had their rendering
-	* deferred until the basic tree structure is rendered.
+    * deferred until the basic tree structure is rendered.
     * @property _deferredNodes
     * @type YAHOO.widget.HTMLNode[]
     * @default []
     * @private
-	* @static
+    * @static
     */
 HN._deferredNodes = [];
     /**
@@ -3302,7 +3304,7 @@ HN._deferredNodes = [];
     * @type System Timer
     * @default null
     * @private
-	* @static
+    * @static
     */
 HN._timer = null;
 })();
@@ -3489,7 +3491,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         buttonsContainer:null,
         node:null, // which Node is being edited
         saveOnEnter:true,
-		oldValue:undefined
+        oldValue:undefined
         // Each node type is free to add its own properties to this as it sees fit.
     };
 
@@ -3513,28 +3515,28 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
      * @private
     */
 
-	TVproto._initEditor = function () {
-		/** 
-	 	* Fires when the user clicks on the ok button of a node editor
-	 	* @event editorSaveEvent 
-	 	* @type CustomEvent 
-	 	* @param oArgs.newValue {mixed} the new value just entered 
-	 	* @param oArgs.oldValue {mixed} the value originally in the tree 
-	 	* @param oArgs.node {YAHOO.widget.Node} the node that has the focus 
-	        * @for YAHOO.widget.TreeView
-	 	*/ 
-	 	this.createEvent("editorSaveEvent", this); 
-		
-		/** 
-	 	* Fires when the user clicks on the cancel button of a node editor
-	 	* @event editorCancelEvent 
-	 	* @type CustomEvent 
-	 	* @param {YAHOO.widget.Node} node the node that has the focus 
-	        * @for YAHOO.widget.TreeView
-	 	*/ 
-	 	this.createEvent("editorCancelEvent", this); 
+    TVproto._initEditor = function () {
+        /**
+        * Fires when the user clicks on the ok button of a node editor
+        * @event editorSaveEvent
+        * @type CustomEvent
+        * @param oArgs.newValue {mixed} the new value just entered
+        * @param oArgs.oldValue {mixed} the value originally in the tree
+        * @param oArgs.node {YAHOO.widget.Node} the node that has the focus
+            * @for YAHOO.widget.TreeView
+        */
+        this.createEvent("editorSaveEvent", this);
 
-	};
+        /**
+        * Fires when the user clicks on the cancel button of a node editor
+        * @event editorCancelEvent
+        * @type CustomEvent
+        * @param {YAHOO.widget.Node} node the node that has the focus
+            * @for YAHOO.widget.TreeView
+        */
+        this.createEvent("editorCancelEvent", this);
+
+    };
 
     /**
     * Entry point of the editing plug-in.
@@ -3554,10 +3556,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             editorData.active = true;
             editorData.whoHasIt = this;
             if (!editorData.nodeType) {
-				// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
+                // Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
                 editorData.editorPanel = ed = this.getEl().appendChild(document.createElement('div'));
                 Dom.addClass(ed,'ygtv-label-editor');
-				ed.tabIndex = 0;
+                ed.tabIndex = 0;
 
                 buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
                 Dom.addClass(buttons,'ygtv-button-container');
@@ -3569,9 +3571,9 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 button.innerHTML = ' ';
                 Event.on(buttons, 'click', function (ev) {
                     var target = Event.getTarget(ev),
-						editorData = TV.editorData,
-						node = editorData.node,
-						self = editorData.whoHasIt;
+                        editorData = TV.editorData,
+                        node = editorData.node,
+                        self = editorData.whoHasIt;
                     if (Dom.hasClass(target,'ygtvok')) {
                         Event.stopEvent(ev);
                         self._closeEditor(true);
@@ -3588,11 +3590,11 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 Event.on(ed,'keydown',function (ev) {
                     var editorData = TV.editorData,
                         KEY = YAHOO.util.KeyListener.KEY,
-						self = editorData.whoHasIt;
+                        self = editorData.whoHasIt;
                     switch (ev.keyCode) {
                         case KEY.ENTER:
                             Event.stopEvent(ev);
-                            if (editorData.saveOnEnter) { 
+                            if (editorData.saveOnEnter) {
                                 self._closeEditor(true);
                             }
                             break;
@@ -3613,10 +3615,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
                 Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
             }
             Dom.addClass(ed,' ygtv-edit-' + node._type);
-			// Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
+            // Fixes: http://yuilibrary.com/projects/yui2/ticket/2528945
             Dom.setStyle(ed,'display','block');
-			Dom.setXY(ed,Dom.getXY(node.getContentEl()));
-			// up to here
+            Dom.setXY(ed,Dom.getXY(node.getContentEl()));
+            // up to here
             ed.focus();
             node.fillEditorContainer(editorData);
 
@@ -3638,7 +3640,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         } else if (oArgs.node instanceof YAHOO.widget.Node) {
             oArgs.node.editNode();
         }
-		return false;
+        return false;
     };
 
     /**
@@ -3653,16 +3655,16 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         var ed = TV.editorData,
             node = ed.node,
             close = true;
-		// http://yuilibrary.com/projects/yui2/ticket/2528946
-		// _closeEditor might now be called at any time, even when there is no label editor open
-		// so we need to ensure there is one.
-		if (!node || !ed.active) { return; }
-        if (save) { 
-            close = ed.node.saveEditorValue(ed) !== false; 
+        // http://yuilibrary.com/projects/yui2/ticket/2528946
+        // _closeEditor might now be called at any time, even when there is no label editor open
+        // so we need to ensure there is one.
+        if (!node || !ed.active) { return; }
+        if (save) {
+            close = ed.node.saveEditorValue(ed) !== false;
         } else {
-			this.fireEvent( 'editorCancelEvent', node); 
-		}
-			
+            this.fireEvent( 'editorCancelEvent', node);
+        }
+
         if (close) {
             Dom.setStyle(ed.editorPanel,'display','none');
             ed.active = false;
