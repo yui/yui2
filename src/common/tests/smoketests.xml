@@ -10,5 +10,6 @@
         <url>event/tests/focusin-focusout.html</url>
         <url>event-delegate/tests/delegation.html</url>
         <url>yahoo/tests/yahoo.html</url>
+        <url>yuiloader/tests/yuiloader.html</url>
     </tests>
 </yuitest>
