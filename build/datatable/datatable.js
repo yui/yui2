@@ -6688,14 +6688,27 @@ _onTheadClick : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("theadRadioClickEvent",{target:elTarget,event:e});
                 }
                 else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
-                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                    if(!elTarget.disabled) {
+                        bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                    }
+                    else {
+                        bKeepBubbling = false;
+                    }
+                }
+                else if (elTarget.disabled){
+                    bKeepBubbling = false;
                 }
                 break;
             case "a":
                 bKeepBubbling = oSelf.fireEvent("theadLinkClickEvent",{target:elTarget,event:e});
                 break;
             case "button":
-                bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                if(!elTarget.disabled) {
+                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = false;
+                }
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -6766,14 +6779,27 @@ _onTbodyClick : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
                 }
                 else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
-                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                    if(!elTarget.disabled) {
+                        bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                    }
+                    else {
+                        bKeepBubbling = false;
+                    }
+                }
+                else if (elTarget.disabled){
+                    bKeepBubbling = false;
                 }
                 break;
             case "a":
                 bKeepBubbling = oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
                 break;
             case "button":
-                bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                if(!elTarget.disabled) {
+                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = false;
+                }
                 break;
             case "td":
                 bKeepBubbling = oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
