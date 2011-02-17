@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.html
+version: 2.8.1
+*/
 /**
  * The Browser History Manager provides the ability to use the back/forward
  * navigation buttons in a DHTML application. It also allows a DHTML
@@ -115,6 +121,10 @@ YAHOO.util.History = (function () {
         }
 
         _stateField.value = initialStates.join("&") + "|" + currentStates.join("&");
+
+        if (YAHOO.env.ua.webkit) {
+            _stateField.value += "|" + _fqstates.join(",");
+        }
     }
 
     /**
@@ -177,7 +187,10 @@ YAHOO.util.History = (function () {
         var html, doc;
 
         html = '<html><body><div id="state">' +
-                    YAHOO.lang.escapeHTML(fqstate) +
+                   fqstate.replace(/&/g,'&amp;').
+                           replace(/</g,'&lt;').
+                           replace(/>/g,'&gt;').
+                           replace(/"/g,'&quot;') +
                '</div></body></html>';
 
         try {
@@ -365,6 +378,16 @@ YAHOO.util.History = (function () {
             // YAHOO.util.History.navigate has been called or after
             // the user has hit the back/forward button.
 
+            // On Safari 1.x and 2.0, the only way to catch a back/forward
+            // operation is to watch history.length... We basically exploit
+            // what I consider to be a bug (history.length is not supposed
+            // to change when going back/forward in the history...) This is
+            // why, in the following thread, we first compare the hash,
+            // because the hash thing will be fixed in the next major
+            // version of Safari. So even if they fix the history.length
+            // bug, all this will still work!
+            counter = history.length;
+
             // On Gecko and Opera, we just need to watch the hash...
             hash = _getHash();
 
@@ -373,9 +396,17 @@ YAHOO.util.History = (function () {
                 var state, newHash, newCounter;
 
                 newHash = _getHash();
+                newCounter = history.length;
                 if (newHash !== hash) {
                     hash = newHash;
+                    counter = newCounter;
                     _handleFQStateChange(hash);
+                    _storeStates();
+                } else if (newCounter !== counter && YAHOO.env.ua.webkit) {
+                    hash = newHash;
+                    counter = newCounter;
+                    state = _fqstates[counter - 1];
+                    _handleFQStateChange(state);
                     _storeStates();
                 }
 
@@ -606,7 +637,7 @@ YAHOO.util.History = (function () {
             }
 
             for (moduleName in states) {
-                if (!_modules[escape(moduleName)]) {
+                if (!_modules[moduleName]) {
                     throw new Error("The following module has not been registered: " + moduleName);
                 }
             }
@@ -648,8 +679,18 @@ YAHOO.util.History = (function () {
                 // we'll consider this an acceptable bug, and hope that Apple
                 // comes out with their next version of Safari very soon.
                 self.location.hash = fqstate;
+                if (YAHOO.env.ua.webkit) {
+                    // The following two lines are only useful for Safari 1.x
+                    // and 2.0. Recent nightly builds of WebKit do not require
+                    // that, but unfortunately, it is not easy to differentiate
+                    // between the two. Once Safari 2.0 departs the A-grade
+                    // list, we can remove the following two lines...
+                    _fqstates[history.length] = fqstate;
+                    _storeStates();
+                }
 
                 return true;
+
             }
         },
 
@@ -764,3 +805,4 @@ YAHOO.util.History = (function () {
     };
 
 })();
+YAHOO.register("history", YAHOO.util.History, {version: "2.8.1", build: "19"});
