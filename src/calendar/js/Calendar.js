@@ -2251,7 +2251,7 @@ Calendar.prototype = {
 
         this.applyListeners();
 
-        // Using oDomContainer.ownerDocument, to allow for cross-frame rendering [ Event listeners etc. won't work cross-frame ]
+        // Using oDomContainer.ownerDocument, to allow for cross-frame rendering
         table = ((this._oDoc) && this._oDoc.getElementById(this.id)) || (this.id);
 
         this.cells = Dom.getElementsByClassName(this.Style.CSS_CELL, "td", table);

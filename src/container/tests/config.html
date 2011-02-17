@@ -190,6 +190,24 @@
 				Assert.areEqual(true, o.cfg.getProperty("BThREE"));				
 			},
 
+            testResetFalsey : function() {
+                var o = this.cfgOwner;
+                o.clearEventLog();
+
+                o.cfg.applyConfig({
+                    bONE:false 
+                }, true);
+                
+                o.cfg.setProperty("bOne", true);
+
+                Assert.areSame(o.cfg.getProperty("bOne"), true, "Overide intial value not set correctly");
+
+                var result = o.cfg.resetProperty("bOne");
+
+                Assert.areSame(result, true, "Result should be true, if reset correctly");
+                Assert.areSame(false, o.cfg.getProperty("bOne"),"Reset value should be false");
+            },
+
 			testSubscribeToConfigEvent : function() {
 				var o = this.cfgOwner;
 				o.clearEventLog();

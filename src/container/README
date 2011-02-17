@@ -1,12 +1,14 @@
 Container Release Notes
 
-*** Development Master ***
+*** 2.9.0 ***
 
 New Features:
 ------------
 
 + Hide or Show can now be prevented by returning false from beforeHide, 
   and beforeShow subscribers respectively.
+
++ Fixed config.resetProperty for falsey initial values
 
 *** version 2.8.3 ***
 

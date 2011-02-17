@@ -232,27 +232,18 @@
         * @return {Boolean} True is the property was reset, false if not
         */
         resetProperty: function (key) {
-    
             key = key.toLowerCase();
-        
-            var property = this.config[key];
-    
-            if (property && property.event) {
-    
-                if (this.initialConfig[key] && 
-                    !Lang.isUndefined(this.initialConfig[key])) {
-    
-                    this.setProperty(key, this.initialConfig[key]);
 
+            var property = this.config[key];
+
+            if (property && property.event) {
+                if (key in this.initialConfig) {
+                    this.setProperty(key, this.initialConfig[key]);
                     return true;
-    
                 }
-    
             } else {
-    
                 return false;
             }
-    
         },
         
         /**
