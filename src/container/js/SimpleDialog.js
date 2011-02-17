@@ -214,14 +214,18 @@
         * @method registerForm
         */
         registerForm: function () {
-
             SimpleDialog.superclass.registerForm.call(this);
 
-            this.form.innerHTML += "<input type=\"hidden\" name=\"" + 
-                this.id + "\" value=\"\"/>";
+            var doc = this.form.ownerDocument,
+                input = doc.createElement("input");
 
+            input.type = "hidden";
+            input.name = this.id;
+            input.value = "";
+
+            this.form.appendChild(input);
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**

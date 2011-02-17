@@ -568,8 +568,7 @@
             }
 
             // Fire first, to honor disabled set in the listner
-            if (obj.fireEvent("contextMouseOver", context, e) !== false 
-                    && !obj.cfg.getProperty("disabled")) {
+            if (obj.fireEvent("contextMouseOver", context, e) !== false && !obj.cfg.getProperty("disabled")) {
 
                 // Stop the tooltip from being hidden (set on last mouseout)
                 if (obj.hideProcId) {
