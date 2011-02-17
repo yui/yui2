@@ -25,7 +25,8 @@ var lang   = YAHOO.lang,
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
-    this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-ceditor"); // "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     this._sType = sType;
     
     // Validate inputs
@@ -911,7 +912,8 @@ lang.augmentProto(BCE, util.EventProvider);
  */
 widget.CheckboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-checkboxceditor"); // "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.CheckboxCellEditor.superclass.constructor.call(this, oConfigs.type || "checkbox", oConfigs);
 };
 
@@ -1086,7 +1088,8 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  */
 widget.DateCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dateceditor"); // "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DateCellEditor.superclass.constructor.call(this, oConfigs.type || "date", oConfigs);
 };
 
@@ -1240,7 +1243,8 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dropdownceditor"); // "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DropdownCellEditor.superclass.constructor.call(this, oConfigs.type || "dropdown", oConfigs);
 };
 
@@ -1446,7 +1450,8 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  */
 widget.RadioCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-radioceditor"); // "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.RadioCellEditor.superclass.constructor.call(this, oConfigs.type || "radio", oConfigs);
 };
 
@@ -1611,7 +1616,8 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  */
 widget.TextareaCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textareaceditor");// "yui-textareaceditor" + ;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextareaCellEditor.superclass.constructor.call(this, oConfigs.type || "textarea", oConfigs);
 };
 
@@ -1734,7 +1740,8 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  */
 widget.TextboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textboxceditor");// "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextboxCellEditor.superclass.constructor.call(this, oConfigs.type || "textbox", oConfigs);
 };
 

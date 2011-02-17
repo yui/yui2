@@ -77,7 +77,7 @@ RS.prototype = {
      */
     _init : function(data) {
         // Internal variables
-        this._sId = "yui-rs" + widget.RecordSet._nCount;
+        this._sId = Dom.generateId(null, "yui-rs");// "yui-rs" + widget.RecordSet._nCount;
         widget.RecordSet._nCount++;
         this._records = [];
         //this._length = 0;
@@ -745,7 +745,7 @@ lang.augmentProto(RS, util.EventProvider);
  */
 YAHOO.widget.Record = function(oLiteral) {
     this._nCount = widget.Record._nCount;
-    this._sId = "yui-rec" + this._nCount;
+    this._sId = Dom.generateId(null, "yui-rec");//"yui-rec" + this._nCount;
     widget.Record._nCount++;
     this._oData = {};
     if(lang.isObject(oLiteral)) {

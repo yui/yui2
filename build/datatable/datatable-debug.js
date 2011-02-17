@@ -445,6 +445,8 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
 /****************************************************************************/
 /****************************************************************************/
 
+var Dom = YAHOO.util.Dom;
+
 /**
  * The ColumnSet class defines and manages a DataTable's Columns,
  * including nested hierarchies and access to individual Column instances.
@@ -457,7 +459,7 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
  * the THEAD.
  */
 YAHOO.widget.ColumnSet = function(aDefinitions) {
-    this._sId = "yui-cs" + YAHOO.widget.ColumnSet._nCount;
+    this._sId = Dom.generateId(null, "yui-cs"); // "yui-cs" + YAHOO.widget.ColumnSet._nCount;
 
     // First clone the defs
     aDefinitions = YAHOO.widget.DataTable._cloneObject(aDefinitions);
@@ -953,7 +955,7 @@ YAHOO.widget.ColumnSet.prototype = {
  * @param oConfigs {Object} Object literal of definitions.
  */
 YAHOO.widget.Column = function(oConfigs) {
-    this._sId = "yui-col" + YAHOO.widget.Column._nCount;
+    this._sId = Dom.generateId(null, "yui-col"); // "yui-col" + YAHOO.widget.Column._nCount;
     
     // Object literal defines Column attributes
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
@@ -966,7 +968,7 @@ YAHOO.widget.Column = function(oConfigs) {
 
     // Assign a key if not found
     if(!YAHOO.lang.isValue(this.key)) {
-        this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
+        this.key = Dom.generateId(null, "yui-dt-col"); //"yui-dt-col" + YAHOO.widget.Column._nCount;
     }
     
     // Assign a field if not found, defaults to key
@@ -2037,7 +2039,7 @@ RS.prototype = {
      */
     _init : function(data) {
         // Internal variables
-        this._sId = "yui-rs" + widget.RecordSet._nCount;
+        this._sId = Dom.generateId(null, "yui-rs");// "yui-rs" + widget.RecordSet._nCount;
         widget.RecordSet._nCount++;
         this._records = [];
         //this._length = 0;
@@ -2705,7 +2707,7 @@ lang.augmentProto(RS, util.EventProvider);
  */
 YAHOO.widget.Record = function(oLiteral) {
     this._nCount = widget.Record._nCount;
-    this._sId = "yui-rec" + this._nCount;
+    this._sId = Dom.generateId(null, "yui-rec");//"yui-rec" + this._nCount;
     widget.Record._nCount++;
     this._oData = {};
     if(lang.isObject(oLiteral)) {
@@ -2878,7 +2880,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Internal vars
     this._nIndex = DT._nCount;
-    this._sId = "yui-dt"+this._nIndex;
+    this._sId = Dom.generateId(null, "yui-dt");// "yui-dt"+this._nIndex;
     this._oChainRender = new YAHOO.util.Chain();
     this._oChainRender.subscribe("end",this._onRenderChainEnd, this, true);
 
@@ -3462,7 +3464,47 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _cloneObject : YAHOO.util.DataSourceBase._cloneObject,
+    _cloneObject: function(o) {
+        if(!lang.isValue(o)) {
+            return o;
+        }
+
+        var copy = {};
+
+        if(o instanceof YAHOO.widget.BaseCellEditor) {
+            copy = o;
+        }
+        else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
+            copy = o;
+        }
+        else if(lang.isFunction(o)) {
+            copy = o;
+        }
+        else if(lang.isArray(o)) {
+            var array = [];
+            for(var i=0,len=o.length;i<len;i++) {
+                array[i] = DT._cloneObject(o[i]);
+            }
+            copy = array;
+        }
+        else if(lang.isObject(o)) {
+            for (var x in o){
+                if(lang.hasOwnProperty(o, x)) {
+                    if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
+                        copy[x] = DT._cloneObject(o[x]);
+                    }
+                    else {
+                        copy[x] = o[x];
+                    }
+                }
+            }
+        }
+        else {
+            copy = o;
+        }
+
+        return copy;
+    },
 
     /**
      * Formats a BUTTON element.
@@ -15991,7 +16033,8 @@ var lang   = YAHOO.lang,
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
-    this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-ceditor"); // "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     this._sType = sType;
     
     // Validate inputs
@@ -16877,7 +16920,8 @@ lang.augmentProto(BCE, util.EventProvider);
  */
 widget.CheckboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-checkboxceditor"); // "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.CheckboxCellEditor.superclass.constructor.call(this, oConfigs.type || "checkbox", oConfigs);
 };
 
@@ -17052,7 +17096,8 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  */
 widget.DateCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dateceditor"); // "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DateCellEditor.superclass.constructor.call(this, oConfigs.type || "date", oConfigs);
 };
 
@@ -17206,7 +17251,8 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dropdownceditor"); // "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DropdownCellEditor.superclass.constructor.call(this, oConfigs.type || "dropdown", oConfigs);
 };
 
@@ -17412,7 +17458,8 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  */
 widget.RadioCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-radioceditor"); // "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.RadioCellEditor.superclass.constructor.call(this, oConfigs.type || "radio", oConfigs);
 };
 
@@ -17577,7 +17624,8 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  */
 widget.TextareaCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textareaceditor");// "yui-textareaceditor" + ;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextareaCellEditor.superclass.constructor.call(this, oConfigs.type || "textarea", oConfigs);
 };
 
@@ -17700,7 +17748,8 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  */
 widget.TextboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textboxceditor");// "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextboxCellEditor.superclass.constructor.call(this, oConfigs.type || "textbox", oConfigs);
 };
 

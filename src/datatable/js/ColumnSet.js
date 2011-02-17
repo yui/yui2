@@ -2,6 +2,8 @@
 /****************************************************************************/
 /****************************************************************************/
 
+var Dom = YAHOO.util.Dom;
+
 /**
  * The ColumnSet class defines and manages a DataTable's Columns,
  * including nested hierarchies and access to individual Column instances.
@@ -14,7 +16,7 @@
  * the THEAD.
  */
 YAHOO.widget.ColumnSet = function(aDefinitions) {
-    this._sId = "yui-cs" + YAHOO.widget.ColumnSet._nCount;
+    this._sId = Dom.generateId(null, "yui-cs"); // "yui-cs" + YAHOO.widget.ColumnSet._nCount;
 
     // First clone the defs
     aDefinitions = YAHOO.widget.DataTable._cloneObject(aDefinitions);
@@ -510,7 +512,7 @@ YAHOO.widget.ColumnSet.prototype = {
  * @param oConfigs {Object} Object literal of definitions.
  */
 YAHOO.widget.Column = function(oConfigs) {
-    this._sId = "yui-col" + YAHOO.widget.Column._nCount;
+    this._sId = Dom.generateId(null, "yui-col"); // "yui-col" + YAHOO.widget.Column._nCount;
     
     // Object literal defines Column attributes
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
@@ -523,7 +525,7 @@ YAHOO.widget.Column = function(oConfigs) {
 
     // Assign a key if not found
     if(!YAHOO.lang.isValue(this.key)) {
-        this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
+        this.key = Dom.generateId(null, "yui-dt-col"); //"yui-dt-col" + YAHOO.widget.Column._nCount;
     }
     
     // Assign a field if not found, defaults to key
