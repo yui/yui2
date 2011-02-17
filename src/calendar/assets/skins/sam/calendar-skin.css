@@ -12,6 +12,7 @@
  * - Cell Hover BG : 426fd9
  * - Disabled BG : cccccc
  * - Disabled Text Color : a6a6a6
+ * - Selectable OOM Text Color: a6a6a6;
  **/
 
 /* CALENDAR BOUNDING BOX */
@@ -195,6 +196,11 @@
 	background-color:#cccccc;
 	color:#a6a6a6;
 	cursor:default;
+}
+
+/* LINK INSIDE OOM CELLS */
+.yui-skin-sam .yui-calendar td.calcell.oom a {
+    color:#a6a6a6;
 }
 
 /* SELECTED DATE */
