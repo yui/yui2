@@ -265,8 +265,6 @@ CalendarGroup.prototype = {
         */
         cfg.addProperty(DEF_CFG.MAXDATE.key, { value:DEF_CFG.MAXDATE.value, handler:this.delegateConfig  } );
 
-        // Options properties
-
         /**
         * True if the Calendar should allow multiple selections. False by default.
         * @config MULTI_SELECT
@@ -274,6 +272,14 @@ CalendarGroup.prototype = {
         * @default false
         */
         cfg.addProperty(DEF_CFG.MULTI_SELECT.key, { value:DEF_CFG.MULTI_SELECT.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
+
+        /**
+        * True if the Calendar should allow selection of out-of-month dates. False by default.
+        * @config OOM_SELECT
+        * @type Boolean
+        * @default false
+        */
+        cfg.addProperty(DEF_CFG.OOM_SELECT.key, { value:DEF_CFG.OOM_SELECT.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
 
         /**
         * The weekday the week begins on. Default is 0 (Sunday).
@@ -1456,6 +1462,7 @@ YAHOO.lang.augmentProto(CalendarGroup, Calendar, "buildDayLabel",
                                                  "renderCellStyleToday",
                                                  "renderCellStyleSelected",
                                                  "renderCellNotThisMonth",
+                                                 "styleCellNotThisMonth",
                                                  "renderBodyCellRestricted",
                                                  "initStyles",
                                                  "configTitle",

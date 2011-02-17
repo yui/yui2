@@ -196,6 +196,7 @@ Calendar.DEFAULT_CONFIG = {
     MINDATE : {key:"mindate", value:null},
     MAXDATE : {key:"maxdate", value:null},
     MULTI_SELECT : {key:"multi_select", value:false},
+    OOM_SELECT : {key:"oom_select", value:false},
     START_WEEKDAY : {key:"start_weekday", value:0},
     SHOW_WEEKDAYS : {key:"show_weekdays", value:true},
     SHOW_WEEK_HEADER : {key:"show_week_header", value:false},
@@ -926,7 +927,7 @@ Calendar.prototype = {
                             cal.deselectCell(index);
                         } else {
                             cal.selectCell(index);
-                        } 
+                        }
 
                     } else {
                         link = cell.getElementsByTagName("a")[0];
@@ -1073,6 +1074,14 @@ Calendar.prototype = {
         * @default false
         */
         cfg.addProperty(DEF_CFG.MULTI_SELECT.key, { value:DEF_CFG.MULTI_SELECT.value, handler:this.configOptions, validator:cfg.checkBoolean } );
+
+        /**
+        * True if the Calendar should allow selection of out-of-month dates. False by default.
+        * @config OOM_SELECT
+        * @type Boolean
+        * @default false
+        */
+        cfg.addProperty(DEF_CFG.OOM_SELECT.key, { value:DEF_CFG.OOM_SELECT.value, handler:this.configOptions, validator:cfg.checkBoolean } );
 
         /**
         * The weekday the week begins on. Default is 0 (Sunday = 0, Monday = 1 ... Saturday = 6).
@@ -2011,6 +2020,7 @@ Calendar.prototype = {
             renderer,
             t = this.today,
             cfg = this.cfg,
+            oom,
             todayYear = t.getFullYear(),
             todayMonth = t.getMonth(),
             todayDate = t.getDate(),
@@ -2018,6 +2028,7 @@ Calendar.prototype = {
             hideBlankWeeks = cfg.getProperty(DEF_CFG.HIDE_BLANK_WEEKS.key),
             showWeekFooter = cfg.getProperty(DEF_CFG.SHOW_WEEK_FOOTER.key),
             showWeekHeader = cfg.getProperty(DEF_CFG.SHOW_WEEK_HEADER.key),
+            oomSelect = cfg.getProperty(DEF_CFG.OOM_SELECT.key),
             mindate = cfg.getProperty(DEF_CFG.MINDATE.key),
             maxdate = cfg.getProperty(DEF_CFG.MAXDATE.key),
             yearOffset = this.Locale.YEAR_OFFSET;
@@ -2039,7 +2050,7 @@ Calendar.prototype = {
 
         var cal = this.parent || this;
 
-        for (var r=0;r<6;r++) {
+        for (var r = 0; r < 6; r++) {
             weekNum = DateMath.getWeekNumber(workingDate, startDay);
             weekClass = weekPrefix + weekNum;
 
@@ -2070,7 +2081,8 @@ Calendar.prototype = {
                     this.cellDates[this.cellDates.length] = workingArray; // Add this date to cellDates
 
                     // Local OOM check for performance, since we already have pagedate
-                    if (workingDate.getMonth() != useDate.getMonth()) {
+                    oom = workingDate.getMonth() != useDate.getMonth(); 
+                    if (oom && !oomSelect) {
                         cellRenderers[cellRenderers.length]=cal.renderCellNotThisMonth;
                     } else {
                         Dom.addClass(cell, workingDayPrefix + workingDate.getDay());
@@ -2156,13 +2168,15 @@ Calendar.prototype = {
                         cellRenderers[cellRenderers.length]=cal.renderCellStyleSelected; 
                     }
 
-                    if ((mindate && (workingDate.getTime() < mindate.getTime())) ||
-                        (maxdate && (workingDate.getTime() > maxdate.getTime()))
-                    ) {
-                        cellRenderers[cellRenderers.length]=cal.renderOutOfBoundsDate;
+                    if (oom) {
+                        cellRenderers[cellRenderers.length] = cal.styleCellNotThisMonth; 
+                    }
+
+                    if ((mindate && (workingDate.getTime() < mindate.getTime())) || (maxdate && (workingDate.getTime() > maxdate.getTime()))) {
+                        cellRenderers[cellRenderers.length] = cal.renderOutOfBoundsDate;
                     } else {
-                        cellRenderers[cellRenderers.length]=cal.styleCellDefault;
-                        cellRenderers[cellRenderers.length]=cal.renderCellDefault; 
+                        cellRenderers[cellRenderers.length] = cal.styleCellDefault;
+                        cellRenderers[cellRenderers.length] = cal.renderCellDefault;
                     }
 
                     for (var x=0; x < cellRenderers.length; ++x) {
@@ -2560,11 +2574,20 @@ Calendar.prototype = {
     *   should not be terminated
     */
     renderCellNotThisMonth : function(workingDate, cell) {
-        Dom.addClass(cell, this.Style.CSS_CELL_OOM);
+        this.styleCellNotThisMonth(workingDate, cell);
         cell.innerHTML=workingDate.getDate();
         return Calendar.STOP_RENDER;
     },
-    
+
+    /** Applies the style used for rendering out-of-month dates to the current calendar cell
+    * @method styleCellNotThisMonth
+    * @param {Date}                 workingDate     The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell            The current working cell in the calendar
+    */
+    styleCellNotThisMonth : function(workingDate, cell) {
+        YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_OOM);
+    },
+
     /**
     * Renders the current calendar cell as a non-selectable "black-out" date using the default
     * restricted style.
@@ -2893,8 +2916,8 @@ Calendar.prototype = {
                 selectDate = cellDate.concat();
 
             if (cellDateIndex > -1) {
-                if (this.cfg.getProperty(DEF_CFG.PAGEDATE.key).getMonth() == dCellDate.getMonth() &&
-                    this.cfg.getProperty(DEF_CFG.PAGEDATE.key).getFullYear() == dCellDate.getFullYear()) {
+                if ((this.cfg.getProperty(DEF_CFG.PAGEDATE.key).getMonth() == dCellDate.getMonth() &&
+                    this.cfg.getProperty(DEF_CFG.PAGEDATE.key).getFullYear() == dCellDate.getFullYear()) || this.cfg.getProperty(DEF_CFG.OOM_SELECT.key)) {
                     Dom.removeClass(cell, this.Style.CSS_CELL_SELECTED);
                 }
                 selected.splice(cellDateIndex, 1);
