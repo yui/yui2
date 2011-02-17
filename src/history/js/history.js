@@ -158,7 +158,7 @@ YAHOO.util.History = (function () {
                 moduleObj = _modules[moduleName];
                 currentState = modules[moduleName];
                 if (!currentState || moduleObj.currentState !== currentState) {
-                    moduleObj.currentState = currentState || moduleObj.initialState;
+                    moduleObj.currentState = typeof currentState === 'undefined' ? moduleObj.initialState : currentState;
                     moduleObj.onStateChange(_decode(moduleObj.currentState));
                 }
             }
