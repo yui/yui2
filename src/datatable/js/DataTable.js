@@ -4979,7 +4979,7 @@ render : function() {
                     if((this instanceof DT) && this._sId) {
                         var i = oArg.nCurrent,
                             loopN = oArg.nLoopLength,
-                            nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
+                            nIterEnd = (i - loopN < 0) ? 0 : i - loopN;
     
                         elTbody.style.display = "none";
                         
