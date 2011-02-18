@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>editor&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>editor&nbsp; <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_editor.html" title="editor">editor</a>
                 
@@ -4706,11 +4706,9 @@
 
             <span class="c1">//Convert b and i tags to strong and em tags</span>
             <span class="k">if</span> <span class="p">((</span><span class="nx">markup</span> <span class="o">==</span> <span class="s1">&#39;semantic&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">markup</span> <span class="o">==</span> <span class="s1">&#39;xhtml&#39;</span><span class="p">))</span> <span class="p">{</span>
-                <span class="c1">//html = html.replace(/&lt;i(\s+[^&gt;]*)?&gt;/gi, &quot;&lt;em$1&gt;&quot;);</span>
-                <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;i([^&gt;]*)&gt;/gi</span><span class="p">,</span> <span class="s2">&quot;&lt;em$1&gt;&quot;</span><span class="p">);</span>
+                <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;i(\s+[^&gt;]*)?&gt;/gi</span><span class="p">,</span> <span class="s1">&#39;&lt;em$1&gt;&#39;</span><span class="p">);</span>
                 <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;\/i&gt;/gi</span><span class="p">,</span> <span class="s1">&#39;&lt;/em&gt;&#39;</span><span class="p">);</span>
-                <span class="c1">//html = html.replace(/&lt;b(\s+[^&gt;]*)?&gt;/gi, &quot;&lt;strong$1&gt;&quot;);</span>
-                <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;b([^&gt;]*)&gt;/gi</span><span class="p">,</span> <span class="s2">&quot;&lt;strong$1&gt;&quot;</span><span class="p">);</span>
+                <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;b(\s+[^&gt;]*)?&gt;/gi</span><span class="p">,</span> <span class="s1">&#39;&lt;strong$1&gt;&#39;</span><span class="p">);</span>
                 <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;\/b&gt;/gi</span><span class="p">,</span> <span class="s1">&#39;&lt;/strong&gt;&#39;</span><span class="p">);</span>
             <span class="p">}</span>
 

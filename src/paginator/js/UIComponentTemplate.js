@@ -32,8 +32,9 @@ Paginator.ui.YourComponent.init = function (p) {
     // instance
 
     /**
-     * Describe your attribute
+     * Describe your attribute.
      * @attribute myAttr
+     * @type {HTML}
      * @default 'foo'
      */
     p.setAttributeConfig('myAttr', {

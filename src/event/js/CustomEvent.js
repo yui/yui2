@@ -282,7 +282,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         for (i=0; i<len; ++i) {
             var s = subs[i];
-            if (!s) {
+            if (!s || !s.fn) {
                 rebuild=true;
             } else {
 

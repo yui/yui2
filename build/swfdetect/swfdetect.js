@@ -15,6 +15,7 @@ YAHOO.namespace("util");
 var version = 0;
 var uA = YAHOO.env.ua;
 var sF = "ShockwaveFlash";
+var mF, eP;
 
  	if (uA.gecko || uA.webkit || uA.opera) {
 		   if ((mF = navigator.mimeTypes['application/x-shockwave-flash'])) {

@@ -63,6 +63,7 @@
 		private var fileIDList:Dictionary;
 		private var fileIDCounter:Number;
 		private var filesToUpload:Array;
+		private var actualLimit:Number;
 
 		private var singleFile:FileReference;
 		private var multipleFiles:FileReferenceList;
@@ -215,6 +216,7 @@
 		public function removeFile(fileID:String):Object {
 
 			// TODO: Do we need to remove the item from filesToUpload also?
+            cancel(fileID);
 
 			delete fileDataList[fileID];
 			delete fileRefList[fileID];
@@ -397,6 +399,12 @@
 			  queueForUpload(fileRefList["file"+fileId2], request, fieldName);
 			}
 			
+			if (filesToUpload.length < this.simultaneousUploadLimit) {
+						this.actualLimit = filesToUpload.length;
+			} else {
+				this.actualLimit = this.simultaneousUploadLimit;
+			}
+				
 			processQueue();
 		}
 
@@ -580,8 +588,10 @@
 		private function multipleFilesSelected(event:Event):void {
 			var currentFRL:FileReferenceList = multipleFiles;
 			for each (var currentFR:FileReference in currentFRL.fileList) {
-				addFile(currentFR);
-			}
+				if (currentFR.size > 0) {
+				    addFile(currentFR);
+			    }
+			}			
 			processSelection();
 		}
 		
@@ -861,6 +871,8 @@
 			newEvent.type = "fileSelect"
 
 			super.dispatchEventToJavaScript(newEvent);
+			
+
 		}
 
 		
@@ -908,7 +920,7 @@
 		 */	
 
 		private function processQueue():void {
-			while (this.currentUploadThreads < this.simultaneousUploadLimit && filesToUpload.length > 0) {
+			while (this.currentUploadThreads < this.actualLimit && filesToUpload.length > 0) {
 				var objToUpload:Object = filesToUpload.shift();
 				var fr:FileReference = objToUpload.fr;
 				var request:URLRequest = objToUpload.request;

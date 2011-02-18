@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Container&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>Container&nbsp; <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html" title="container">container</a>
                 
@@ -903,35 +903,35 @@
                 <span class="k">if</span> <span class="p">(</span><span class="nx">effect</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Animate in</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">visible</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Animate in if not showing</span>
                         <span class="k">if</span> <span class="p">(</span><span class="nx">currentVis</span> <span class="o">!=</span> <span class="s2">&quot;visible&quot;</span> <span class="o">||</span> <span class="nx">currentVis</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                                <span class="nx">nEffectInstances</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-    
-                                <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">nEffectInstances</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                                    <span class="nx">ei</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-                                    <span class="k">if</span> <span class="p">(</span><span class="nx">j</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">alreadySubscribed</span><span class="p">(</span>
-                                            <span class="nx">ei</span><span class="p">.</span><span class="nx">animateInCompleteEvent</span><span class="p">,</span> 
-                                            <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">))</span> <span class="p">{</span>
-    
-                                        <span class="cm">/*</span>
-<span class="cm">                                             Delegate showEvent until end </span>
-<span class="cm">                                             of animateInComplete</span>
-<span class="cm">                                        */</span>
-    
-                                        <span class="nx">ei</span><span class="p">.</span><span class="nx">animateInCompleteEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
-                                         <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-                                    <span class="p">}</span>
-                                    <span class="nx">ei</span><span class="p">.</span><span class="nx">animateIn</span><span class="p">();</span>
+                            <span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+                            <span class="nx">nEffectInstances</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+                            <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">nEffectInstances</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="nx">ei</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="nx">j</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">alreadySubscribed</span><span class="p">(</span>
+                                        <span class="nx">ei</span><span class="p">.</span><span class="nx">animateInCompleteEvent</span><span class="p">,</span> 
+                                        <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">))</span> <span class="p">{</span>
+
+                                    <span class="cm">/*</span>
+<span class="cm">                                         Delegate showEvent until end </span>
+<span class="cm">                                         of animateInComplete</span>
+<span class="cm">                                    */</span>
+
+                                    <span class="nx">ei</span><span class="p">.</span><span class="nx">animateInCompleteEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
+                                     <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
                                 <span class="p">}</span>
+                                <span class="nx">ei</span><span class="p">.</span><span class="nx">animateIn</span><span class="p">();</span>
                             <span class="p">}</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// Show</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">currentVis</span> <span class="o">!=</span> <span class="s2">&quot;visible&quot;</span> <span class="o">||</span> <span class="nx">currentVis</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                            <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-                            <span class="k">this</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">refireEvent</span><span class="p">(</span><span class="s2">&quot;iframe&quot;</span><span class="p">);</span>
-                            <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-                        <span class="p">}</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+                        <span class="k">this</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">refireEvent</span><span class="p">(</span><span class="s2">&quot;iframe&quot;</span><span class="p">);</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
                     <span class="p">}</span>
@@ -944,26 +944,26 @@
 
                 <span class="k">if</span> <span class="p">(</span><span class="nx">effect</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Animate out if showing</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">currentVis</span> <span class="o">==</span> <span class="s2">&quot;visible&quot;</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                            <span class="nx">nEffectInstances</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-                            <span class="k">for</span> <span class="p">(</span><span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">nEffectInstances</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                                <span class="nx">h</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
-        
-                                <span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">alreadySubscribed</span><span class="p">(</span>
-                                    <span class="nx">h</span><span class="p">.</span><span class="nx">animateOutCompleteEvent</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> 
-                                    <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">))</span> <span class="p">{</span>
-        
-                                    <span class="cm">/*</span>
-<span class="cm">                                         Delegate hideEvent until end </span>
-<span class="cm">                                         of animateOutComplete</span>
-<span class="cm">                                    */</span>
-        
-                                    <span class="nx">h</span><span class="p">.</span><span class="nx">animateOutCompleteEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
-                                        <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-        
-                                <span class="p">}</span>
-                                <span class="nx">h</span><span class="p">.</span><span class="nx">animateOut</span><span class="p">();</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+
+                        <span class="nx">nEffectInstances</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">nEffectInstances</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">h</span> <span class="o">=</span> <span class="nx">effectInstances</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+    
+                            <span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">alreadySubscribed</span><span class="p">(</span>
+                                <span class="nx">h</span><span class="p">.</span><span class="nx">animateOutCompleteEvent</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> 
+                                <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">))</span> <span class="p">{</span>
+    
+                                <span class="cm">/*</span>
+<span class="cm">                                     Delegate hideEvent until end </span>
+<span class="cm">                                     of animateOutComplete</span>
+<span class="cm">                                */</span>
+    
+                                <span class="nx">h</span><span class="p">.</span><span class="nx">animateOutCompleteEvent</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span>
+                                    <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    
                             <span class="p">}</span>
+                            <span class="nx">h</span><span class="p">.</span><span class="nx">animateOut</span><span class="p">();</span>
                         <span class="p">}</span>
 
                     <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">currentVis</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
@@ -973,10 +973,9 @@
                 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// Simple hide</span>
 
                     <span class="k">if</span> <span class="p">(</span><span class="nx">currentVis</span> <span class="o">==</span> <span class="s2">&quot;visible&quot;</span> <span class="o">||</span> <span class="nx">currentVis</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                            <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-                            <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-                        <span class="p">}</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="k">this</span><span class="p">.</span><span class="nx">_setDomVisibility</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
                     <span class="p">}</span>
@@ -2175,7 +2174,7 @@
                 <span class="p">}</span>
             <span class="p">}</span>
 
-            <span class="nx">Dom</span><span class="p">.</span><span class="nx">getElementsBy</span><span class="p">(</span><span class="nx">isOverlayElement</span><span class="p">,</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+            <span class="nx">Dom</span><span class="p">.</span><span class="nx">getElementsBy</span><span class="p">(</span><span class="nx">isOverlayElement</span><span class="p">,</span> <span class="s2">&quot;DIV&quot;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
 
             <span class="nx">aOverlays</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">compareZIndexDesc</span><span class="p">);</span>
 

@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>SWF Utility&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>SWF Utility&nbsp; <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_swf.html" title="swf">swf</a>
                 
@@ -120,25 +120,6 @@
 
 			<span class="nx">isFlashVersionAtLeast</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ver</span><span class="p">)</span> <span class="p">{</span>
 				<span class="k">return</span> <span class="nx">version</span> <span class="o">&gt;=</span> <span class="nx">ver</span><span class="p">;</span>
-			<span class="p">},</span>
-			
-			<span class="nx">parseFlashVersion</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ver</span><span class="p">)</span>
-			<span class="p">{</span>
-				<span class="kd">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">ver</span><span class="p">;</span>
-				<span class="k">if</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">ver</span><span class="p">))</span>
-				<span class="p">{</span>
-					<span class="kd">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">ver</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">);</span>
-					<span class="k">if</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span>
-					<span class="p">{</span>
-						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-						<span class="nx">flashVersion</span> <span class="o">+=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">verSplit</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="p">.</span><span class="mi">001</span><span class="p">;</span>
-					<span class="p">}</span>
-					<span class="k">else</span>
-					<span class="p">{</span>
-						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">ver</span><span class="p">);</span>
-					<span class="p">}</span>					
-				<span class="p">}</span>
-				<span class="k">return</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">flashVersion</span><span class="p">)</span> <span class="o">?</span> <span class="nx">flashVersion</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
 			<span class="p">}</span>	
 		<span class="p">};</span>	
 	
@@ -193,7 +174,7 @@
 	
 	<span class="kd">var</span> <span class="nx">_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">p_oElement</span><span class="p">);</span>
-	<span class="kd">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="p">.</span><span class="nx">parseFlashVersion</span><span class="p">(</span><span class="nx">p_oAttributes</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">])</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="p">(</span><span class="nx">p_oAttributes</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="p">);</span>
 	<span class="kd">var</span> <span class="nx">isFlashVersionRight</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="p">.</span><span class="nx">isFlashVersionAtLeast</span><span class="p">(</span><span class="nx">flashVersion</span><span class="p">);</span>
 	<span class="kd">var</span> <span class="nx">canExpressInstall</span> <span class="o">=</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">flash</span> <span class="o">&gt;=</span> <span class="mf">8.0</span><span class="p">);</span>
 	<span class="kd">var</span> <span class="nx">shouldExpressInstall</span> <span class="o">=</span> <span class="nx">canExpressInstall</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isFlashVersionRight</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oAttributes</span><span class="p">[</span><span class="s2">&quot;useExpressInstall&quot;</span><span class="p">];</span>
@@ -242,9 +223,10 @@
 				<span class="nx">objstring</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/object&gt;&quot;</span><span class="p">;</span> 
 
 				<span class="nx">oElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">objstring</span><span class="p">;</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">));</span>
-				<span class="k">this</span><span class="p">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">);</span>
-			<span class="p">}</span>				
+			<span class="p">}</span>
+			
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SWF</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">));</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">_id</span><span class="p">);</span>	
 <span class="p">};</span>
 
 <span class="cm">/**</span>

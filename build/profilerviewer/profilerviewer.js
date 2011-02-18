@@ -121,7 +121,7 @@
 		CLASS_TABLE: 'yui-pv-table',
 		
 		/**
-		 * Strings used in the UI.
+		 * HTML strings used in the UI. Values will be inserted into DOM with innerHTML.
 		 * @static
 		 * @property STRINGS
 		 * @object
@@ -1086,11 +1086,12 @@
 		
         /**
          * The series definition information to use when charting
-		 * specific fields on the chart.  displayName, xField,
-		 * and style members are used to construct the series
+		 * specific fields on the chart.  "displayName", "xField",
+		 * and "style" members are used to construct the series
 		 * definition; the "group" member is the array of fields
 		 * that should be charted when the table is sorted by a
-		 * given field.
+		 * given field. The "displayName" string value will be
+		 * treated as markup and inserted into the DOM with innerHTML.
          * @attribute chartSeriesDefinitions
          * @type obj
 		 * @default See JS source for full default definitions.
@@ -1183,4 +1184,5 @@
     };
 	
 })();
+
 YAHOO.register("profilerviewer", YAHOO.widget.ProfilerViewer, {version: "@VERSION@", build: "@BUILD@"});

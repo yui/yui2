@@ -1,12 +1,34 @@
 Container Release Notes
 
-*** Development Master ***
+*** 2.9.0 ***
 
 New Features:
 ------------
 
 + Hide or Show can now be prevented by returning false from beforeHide, 
   and beforeShow subscribers respectively.
+
+Bug Fixes:
+----------
+
++ Fixed config.resetProperty for falsey initial values
+
++ We no longer use innerHTML to add hidden input to
+  form in SimpleDialog, so that we don't blow away listeners.
+
+*** version 2.8.3 ***
+
++ No code changes.
+
++ APIDocs updated to identify string parameters and
+  properties, which get added to the DOM as HTML.
+
+  These string values should be escaped by the implementor,
+  if they come from an untrusted external source.
+
+*** version 2.8.2 ***
+
++ No changes
 
 *** version 2.8.1 ***
 
@@ -82,7 +104,6 @@ Changes:
         // Display is used here as an example, you could also
         // set the height, or margin, or position for the table to 
         // hide it if required.
-
         display:none;
     }
 

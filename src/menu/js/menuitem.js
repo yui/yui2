@@ -6,7 +6,7 @@
 /**
 * Creates an item for a menu.
 * 
-* @param {String} p_oObject String specifying the text of the menu item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
 * the <code>&#60;li&#62;</code> element of the menu item.
@@ -554,7 +554,7 @@ MenuItem.prototype = {
     * automatically called by the constructor, and sets up all DOM references 
     * for pre-existing markup, and creates required markup if it is not 
     * already present.
-    * @param {String} p_oObject String specifying the text of the menu item.
+    * @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
     * the <code>&#60;li&#62;</code> element of the menu item.
@@ -1590,11 +1590,11 @@ MenuItem.prototype = {
 
         /**
         * @config text
-        * @description String specifying the text label for the menu item.  
+        * @description String or markup specifying the text label for the menu item.  
         * When building a menu from existing HTML the value of this property
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @default ""
-        * @type String
+        * @type HTML
         */
         oConfig.addProperty(
             TEXT_CONFIG.key, 
@@ -1609,13 +1609,13 @@ MenuItem.prototype = {
 
         /**
         * @config helptext
-        * @description String specifying additional instructional text to 
-        * accompany the text for the menu item.
+        * @description String or markup specifying additional instructional text to 
+        * accompany the text for the menu item. The helptext is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @deprecated Use "text" configuration property to add help text markup.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
         * class=\"helptext\"&#62;Ctrl + C&#60;/em&#62;");</code>
         * @default null
-        * @type String|<a href="http://www.w3.org/TR/
+        * @type HTML|<a href="http://www.w3.org/TR/
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
         * HTMLElement</a>
         */
@@ -1633,7 +1633,7 @@ MenuItem.prototype = {
         * @config url
         * @description String specifying the URL for the menu item's anchor's 
         * "href" attribute.  When building a menu from existing HTML the value 
-        * of this property will be interpreted from the menu's markup.
+        * of this property will be interpreted from the menu's markup. Markup for the menu item content. The url is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default "#"
         * @type String
         */        
@@ -1654,7 +1654,7 @@ MenuItem.prototype = {
         * require the user to click directly on the menu item's anchor node in
         * order to cause the browser to navigate to the specified URL.</strong> 
         * When building a menu from existing HTML the value of this property 
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The target is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default null
         * @type String
         */        

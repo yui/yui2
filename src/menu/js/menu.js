@@ -1018,8 +1018,8 @@ _getFirstEnabledItem: function () {
 * item belongs.
 * @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem 
 * instance to be added to the menu.
-* @param {String} p_oItem String specifying the text of the item to be added 
-* to the menu.
+* @param {HTML} p_oItem String or markup specifying the content of the item to be added 
+* to the menu. The item is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Object} p_oItem Object literal containing a set of menu item 
 * configuration properties.
 * @param {Number} p_nItemIndex Optional. Number indicating the index at 
@@ -4458,7 +4458,7 @@ toString: function () {
 /**
 * @method setItemGroupTitle
 * @description Sets the title of a group of menu items.
-* @param {String} p_sGroupTitle String specifying the title of the group.
+* @param {HTML} p_sGroupTitle String or markup specifying the title of the group. The title is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Number} p_nGroupIndex Optional. Number specifying the group to which
 * the title belongs.
 */
@@ -4527,8 +4527,8 @@ setItemGroupTitle: function (p_sGroupTitle, p_nGroupIndex) {
 * @description Appends an item to the menu.
 * @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem 
 * instance to be added to the menu.
-* @param {String} p_oItem String specifying the text of the item to be added 
-* to the menu.
+* @param {HTML} p_oItem String or markup specifying content of the item to be added 
+* to the menu. The item text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Object} p_oItem Object literal containing a set of menu item 
 * configuration properties.
 * @param {Number} p_nGroupIndex Optional. Number indicating the group to
@@ -4546,9 +4546,9 @@ addItem: function (p_oItem, p_nGroupIndex) {
 * @method addItems
 * @description Adds an array of items to the menu.
 * @param {Array} p_aItems Array of items to be added to the menu.  The array 
-* can contain strings specifying the text for each item to be created, object
+* can contain strings specifying the markup for the content of each item to be created, object
 * literals specifying each of the menu item configuration properties, 
-* or MenuItem instances.
+* or MenuItem instances. The item content if provided as a string is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {Number} p_nGroupIndex Optional. Number specifying the group to 
 * which the items belongs.
 * @return {Array}

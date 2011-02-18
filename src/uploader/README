@@ -1,5 +1,9 @@
 YUI Library - Uploader - Release Notes
 
+2.8.3
+  * Bug fixes
+     * Added escapes to all non-HTML text written to innerHTML.
+
 2.8.1
   * Bug fixes
      * Corrected the version of the Uploader SWF that is included in the /build directory

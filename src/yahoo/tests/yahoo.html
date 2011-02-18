@@ -429,8 +429,23 @@ are output in the logger to the right. <br />View the source to see how it's don
 
         test_to_fail : function (){
             Assert.isNull("not null");;
+        },
+
+        test_escapeHTML: function () {
+            var L = YAHOO.lang;
+
+            Assert.areSame('&amp;&lt;&gt;&quot;&#x27;&#x2F;&#x60;', L.escapeHTML('&<>"\'/`'));
+            Assert.areSame('&amp;&amp;&amp;', L.escapeHTML('&&&'));
+            Assert.areSame('&lt;&lt;&lt;', L.escapeHTML('<<<'));
+            Assert.areSame('&gt;&gt;&gt;', L.escapeHTML('>>>'));
+            Assert.areSame('&quot;&quot;&quot;', L.escapeHTML('"""'));
+            Assert.areSame('&#x27;&#x27;&#x27;', L.escapeHTML("'''"));
+            Assert.areSame('&#x2F;&#x2F;&#x2F;', L.escapeHTML("///"));
+            Assert.areSame('&#x60;&#x60;&#x60;', L.escapeHTML('```'));
+            Assert.areSame('foo', L.escapeHTML('foo'));
+            Assert.areSame('foo &amp; bar', L.escapeHTML('foo & bar'));
+            Assert.areSame('&lt;script&gt;alert(&quot;evil&quot;)&lt;&#x2F;script&gt;', L.escapeHTML('<script>alert("evil")</' + 'script>'));
         }
-        
     }));
      
     function runTests(){

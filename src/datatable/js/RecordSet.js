@@ -21,22 +21,7 @@ var lang   = YAHOO.lang,
  * @constructor
  */
 YAHOO.widget.RecordSet = function(data) {
-    // Internal variables
-    this._sId = "yui-rs" + widget.RecordSet._nCount;
-    widget.RecordSet._nCount++;
-    this._records = [];
-    //this._length = 0;
-
-    if(data) {
-        if(lang.isArray(data)) {
-            this.addRecords(data);
-        }
-        else if(lang.isObject(data)) {
-            this.addRecord(data);
-        }
-    }
-
-    YAHOO.log("RecordSet initialized", "info", this.toString());
+    this._init(data);
 };
 
 var RS = widget.RecordSet;
@@ -82,6 +67,52 @@ RS.prototype = {
     // Private methods
     //
     /////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Initializer.
+     *
+     * @method _init
+     * @param data {Object || Object[]} An object literal or an array of data.
+     * @private
+     */
+    _init : function(data) {
+        // Internal variables
+        this._sId = Dom.generateId(null, "yui-rs");// "yui-rs" + widget.RecordSet._nCount;
+        widget.RecordSet._nCount++;
+        this._records = [];
+        //this._length = 0;
+
+        this._initEvents();
+
+        if(data) {
+            if(lang.isArray(data)) {
+                this.addRecords(data);
+            }
+            else if(lang.isObject(data)) {
+                this.addRecord(data);
+            }
+        }
+
+        YAHOO.log("RecordSet initialized", "info", this.toString());
+    },
+    
+    /**
+     * Initializes custom events.
+     *
+     * @method _initEvents
+     * @private
+     */
+    _initEvents : function() {
+        this.createEvent("recordAddEvent");
+        this.createEvent("recordsAddEvent");
+        this.createEvent("recordSetEvent");
+        this.createEvent("recordsSetEvent");
+        this.createEvent("recordUpdateEvent");
+        this.createEvent("recordDeleteEvent");
+        this.createEvent("recordsDeleteEvent");
+        this.createEvent("resetEvent");
+        this.createEvent("recordValueUpdateEvent");
+    },
 
     /**
      * Adds one Record to the RecordSet at the given index. If index is null,
@@ -541,13 +572,11 @@ RS.prototype = {
      *
      * @method deleteRecord
      * @param index {Number} Record's RecordSet position index.
-     * @param range {Number} (optional) How many Records to delete.
      * @return {Object} A copy of the data held by the deleted Record.
      */
     deleteRecord : function(index) {
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
-            // Copy data from the Record for the event that gets fired later
-            var oData = widget.DataTable._cloneObject(this.getRecord(index).getData());
+            var oData = this.getRecord(index).getData();
             
             this._deleteRecord(index);
             this.fireEvent("recordDeleteEvent",{data:oData,index:index});
@@ -577,17 +606,18 @@ RS.prototype = {
         }
         if(lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
             var recordsToDelete = this.getRecords(index, range);
-            // Copy data from each Record for the event that gets fired later
-            var deletedData = [];
+            var deletedData = [], // this mistakenly held Records, not data
+                deletedObjects = []; // this passes data only
             
             for(var i=0; i<recordsToDelete.length; i++) {
-                deletedData[deletedData.length] = widget.DataTable._cloneObject(recordsToDelete[i]);
+                deletedData[deletedData.length] = recordsToDelete[i]; // backward compatibility
+                deletedObjects[deletedObjects.length] = recordsToDelete[i].getData();
             }
             this._deleteRecord(index, range);
 
-            this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
+            this.fireEvent("recordsDeleteEvent",{data:deletedData,deletedData:deletedObjects,index:index});
             YAHOO.log(range + "Record(s) deleted at index " + index +
-                    " and containing data " + lang.dump(deletedData), "info", this.toString());
+                    " and containing data " + lang.dump(deletedObjects), "info", this.toString());
 
             return deletedData;
         }
@@ -664,7 +694,7 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when a Record is deleted from the RecordSet.
  *
  * @event recordDeleteEvent
- * @param oArgs.data {Object} A copy of the data held by the Record,
+ * @param oArgs.data {Object} The data held by the deleted Record,
  * or an array of data object literals if multiple Records were deleted at once.
  * @param oArgs.index {Object} Index of the deleted Record.
  */
@@ -673,8 +703,8 @@ lang.augmentProto(RS, util.EventProvider);
  * Fired when multiple Records are deleted from the RecordSet at once.
  *
  * @event recordsDeleteEvent
- * @param oArgs.data {Object[]} An array of data object literals copied
- * from the Records.
+ * @param oArgs.data {Object[]} An array of deleted Records.
+ * @param oArgs.deletedData {Object[]} An array of deleted data.
  * @param oArgs.index {Object} Index of the first deleted Record.
  */
 
@@ -715,7 +745,7 @@ lang.augmentProto(RS, util.EventProvider);
  */
 YAHOO.widget.Record = function(oLiteral) {
     this._nCount = widget.Record._nCount;
-    this._sId = "yui-rec" + this._nCount;
+    this._sId = Dom.generateId(null, "yui-rec");//"yui-rec" + this._nCount;
     widget.Record._nCount++;
     this._oData = {};
     if(lang.isObject(oLiteral)) {

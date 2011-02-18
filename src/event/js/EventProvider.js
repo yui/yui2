@@ -1,6 +1,6 @@
 /**
- * EventProvider is designed to be used with YAHOO.augment to wrap 
- * CustomEvents in an interface that allows events to be subscribed to 
+ * EventProvider is designed to be used with YAHOO.augment to wrap
+ * CustomEvents in an interface that allows events to be subscribed to
  * and fired by name.  This makes it possible for implementing code to
  * subscribe to an event that either has not been created yet, or will
  * not be created at all.
@@ -26,16 +26,16 @@ YAHOO.util.EventProvider.prototype = {
      * @private
      */
     __yui_subscribers: null,
-    
+
     /**
      * Subscribe to a CustomEvent by event type
      *
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
-     * @param p_obj      {Object}   An object to be passed along when the event 
+     * @param p_obj      {Object}   An object to be passed along when the event
      *                              fires
-     * @param overrideContext {boolean}  If true, the obj passed in becomes the 
+     * @param overrideContext {boolean}  If true, the obj passed in becomes the
      *                              execution scope of the listener
      */
     subscribe: function(p_type, p_fn, p_obj, overrideContext) {
@@ -91,7 +91,7 @@ YAHOO.util.EventProvider.prototype = {
 
         return false;
     },
-    
+
     /**
      * Removes all listeners from the specified event.  If the event type
      * is not specified, all listeners from all hosted custom events will
@@ -106,7 +106,7 @@ YAHOO.util.EventProvider.prototype = {
     /**
      * Creates a new custom event of the specified type.  If a custom event
      * by that name already exists, it will not be re-created.  In either
-     * case the custom event is returned. 
+     * case the custom event is returned.
      *
      * @method createEvent
      *
@@ -175,19 +175,19 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
 
    /**
      * Fire a custom event by name.  The callback functions will be executed
-     * from the scope specified when the event was created, and with the 
+     * from the scope specified when the event was created, and with the
      * following parameters:
      *   <ul>
      *   <li>The first argument fire() was executed with</li>
-     *   <li>The custom object (if any) that was passed into the subscribe() 
+     *   <li>The custom object (if any) that was passed into the subscribe()
      *       method</li>
      *   </ul>
      * @method fireEvent
      * @param p_type    {string}  the type, or name of the event
-     * @param arguments {Object*} an arbitrary set of parameters to pass to 
+     * @param arguments {Object*} an arbitrary set of parameters to pass to
      *                            the handler.
      * @return {boolean} the return value from CustomEvent.fire
-     *                   
+     *
      */
     fireEvent: function(p_type) {
 

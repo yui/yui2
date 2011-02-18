@@ -1,7 +1,7 @@
 JSON Utility - Release Notes
 
-2.7.0
-    * No changes
+2.9.0
+    * parse() now coerces input to a string before processing (per spec).
 
 2.8.0
     * Refactored to be ECMA 5 spec compliant.  This resulted in the following:

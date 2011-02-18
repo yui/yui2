@@ -16,6 +16,11 @@
 				flashvars = _stage.loaderInfo.parameters;
 				if (flashvars["YUIBridgeCallback"] && flashvars["YUISwfId"] && ExternalInterface.available) {
 					_jsHandler = flashvars["YUIBridgeCallback"];
+					var jsCheck:RegExp = /^[A-Za-z0-9.]*$/g;
+					if (!jsCheck.test(_jsHandler)) {
+				 		_jsHandler = "";
+					}
+
 					_swfID = flashvars["YUISwfId"];
 				}
 			}

@@ -58,7 +58,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is equal to another. This uses the double equals sign
-     * so type cohersion may occur.
+     * so type coercion may occur.
      * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -73,7 +73,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not equal to another. This uses the double equals sign
-     * so type cohersion may occur.
+     * so type coercion may occur.
      * @param {Object} unexpected The unexpected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -89,7 +89,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not the same as another. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} unexpected The unexpected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -104,7 +104,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is the same as another. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -123,7 +123,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is false. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isFalse
@@ -137,7 +137,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is true. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isTrue
@@ -182,7 +182,7 @@ YAHOO.util.Assert = {
     
     /**
      * Asserts that a value is not null. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNotNull
@@ -196,7 +196,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is not undefined. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNotUndefined
@@ -210,7 +210,7 @@ YAHOO.util.Assert = {
 
     /**
      * Asserts that a value is null. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNull
@@ -224,7 +224,7 @@ YAHOO.util.Assert = {
         
     /**
      * Asserts that a value is undefined. This uses the triple equals sign
-     * so no type cohersion may occur.
+     * so no type coercion may occur.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isUndefined

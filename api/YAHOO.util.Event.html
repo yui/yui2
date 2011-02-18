@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Event Utility&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html" title="event">event</a>
                  &gt; YAHOO.util.Event 
@@ -2333,89 +2333,19 @@ event is modified using the current time.
                                         
                                          static 
                                         
-                                        Boolean
+                                        void
                                             <strong property="yui:name">on</strong>
                                            (
-                                                
-                                                        
-                                                         el
-                                                    
-                                                
-                                                        , 
-                                                         sType
-                                                    
-                                                
-                                                        , 
-                                                         fn
-                                                    
-                                                
-                                                        , 
-                                                         obj
-                                                    
-                                                
-                                                        , 
-                                                         overrideContext
-                                                    
-                                                
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Appends an event handler.  This is an alias for <code>addListener</code>
+                                            YAHOO.util.Event.on is an alias for addListener
                                         </div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">el</span>
-                                                        &lt;<span property="yui:type">String|HTMLElement|Array|NodeList</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> An id, an element 
-reference, or a collection of ids and/or elements to assign the 
-listener to.</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">sType</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">     The type of event to append</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">fn</span>
-                                                        &lt;<span property="yui:type">Function</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">        The method the event invokes</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">obj</span>
-                                                        &lt;<span property="yui:type">Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">    An arbitrary object that will be 
-passed as a parameter to the handler</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">overrideContext</span>
-                                                        &lt;<span property="yui:type">Boolean|object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  If true, the obj passed in becomes
-the execution context of the listener. If an
-object, this object becomes the execution
-context.</span>
-                                                        </dd>
-                                                </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            Boolean
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">True if the action was successful or defered,
-false if one or more of the elements 
-could not have the listener attached,
-or if the operation throws an exception.</dd>
-                                                </dl>
 
 
              
@@ -3212,14 +3142,7 @@ otherwise.</dd>
                                         <div class="description" property="yui:description">
                                             In some cases, some browsers will return a text node inside
 the actual element that was targeted.  This normalizes the
-return value for getTarget and getRelatedTarget.  
-If accessing a property of the node throws an error, this is
-probably the anonymous div wrapper Gecko adds inside text
-nodes.  This likely will only occur when attempting to access
-the relatedTarget.  In this case, we now return null because
-the anonymous div is completely useless and we do not know
-what the related target was because we can't even get to
-the element's parent node.
+return value for getTarget and getRelatedTarget.
                                         </div>
 
                                         <div class="description">

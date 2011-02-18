@@ -1,3 +1,5 @@
+/*jslint evil: true, strict: false, regexp: false*/
+
 /**
  * Provides dynamic loading for the YUI library.  It includes the dependency
  * info for the library, and will automatically pull in dependencies for
@@ -18,9 +20,20 @@
  */
 (function() {
 
-    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env,
-        PROV = "_provides", SUPER = "_supersedes",
-        REQ = "expanded", AFTER = "_after";
+    var Y = YAHOO,
+        util = Y.util,
+        lang = Y.lang,
+        env = Y.env,
+        PROV = "_provides",
+        SUPER = "_supersedes",
+        REQ = "expanded",
+        AFTER = "_after",
+        VERSION = "@VERSION@";
+
+    // version hack for cdn testing
+    // if (/VERSION/.test(VERSION)) {
+        // VERSION = "2.8.2";
+    // }
 
     var YUI = {
 
@@ -37,8 +50,8 @@
     // 'root': '2.5.2/build/',
     // 'base': 'http://yui.yahooapis.com/2.5.2/build/',
 
-    'root': '@VERSION@/build/',
-    'base': 'http://yui.yahooapis.com/@VERSION@/build/',
+    'root': VERSION + '/build/',
+    'base': 'http://yui.yahooapis.com/' + VERSION + '/build/',
 
     'comboBase': 'http://yui.yahooapis.com/combo?',
 
@@ -161,7 +174,7 @@
         'datatable': {
             'type': 'js',
             'path': 'datatable/datatable-min.js',
-            'requires': ['element', 'datasource', 'event-delegate'],
+            'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
         },
@@ -470,9 +483,7 @@
             'skinnable': true
         }
     }
-}
- ,
-
+},
         ObjectUtil: {
             appendArray: function(o, a) {
                 if (a) {
@@ -1619,6 +1630,8 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                                 timeout: self.timeout,
                                 scope: self
                             });
+                        } else {
+                            this.loadNext();
                         }
                     };
 
@@ -1714,23 +1727,78 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                 // YAHOO.log("sandbox: " + this.toString() + ", " + type);
             // }
 
-            this._config(o);
+            var self = this,
+                success = function(o) {
 
-            if (!this.onSuccess) {
+                    var idx=o.argument[0], name=o.argument[2];
+
+                    // store the response in the position it was requested
+                    self._scriptText[idx] = o.responseText;
+
+                    // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
+
+                    if (self.onProgress) {
+                        self.onProgress.call(self.scope, {
+                                    name: name,
+                                    scriptText: o.responseText,
+                                    xhrResponse: o,
+                                    data: self.data
+                                });
+                    }
+
+                    // only generate the sandbox once everything is loaded
+                    self._loadCount++;
+
+                    if (self._loadCount >= self._stopCount) {
+
+                        // the variable to find
+                        var v = self.varName || "YAHOO";
+
+                        // wrap the contents of the requested modules in an anonymous function
+                        var t = "(function() {\n";
+
+                        // return the locally scoped reference.
+                        var b = "\nreturn " + v + ";\n})();";
+
+                        var ref = eval(t + self._scriptText.join("\n") + b);
+
+                        self._pushEvents(ref);
+
+                        if (ref) {
+                            self.onSuccess.call(self.scope, {
+                                    reference: ref,
+                                    data: self.data
+                                });
+                        } else {
+                            self._onFailure.call(self.varName + " reference failure");
+                        }
+                    }
+                },
+
+                failure = function(o) {
+                    self.onFailure.call(self.scope, {
+                            msg: "XHR failure",
+                            xhrResponse: o,
+                            data: self.data
+                        });
+                };
+
+            self._config(o);
+
+            if (!self.onSuccess) {
 throw new Error("You must supply an onSuccess handler for your sandbox");
             }
 
-            this._sandbox = true;
+            self._sandbox = true;
 
-            var self = this;
 
             // take care of any css first (this can't be sandboxed)
             if (!type || type !== "js") {
-                this._internalCallback = function() {
+                self._internalCallback = function() {
                             self._internalCallback = null;
                             self.sandbox(null, "js");
                         };
-                this.insert(null, "css");
+                self.insert(null, "css");
                 return;
             }
 
@@ -1739,116 +1807,60 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // get a new loader instance to load connection.
                 var ld = new YAHOO.util.YUILoader();
                 ld.insert({
-                    base: this.base,
-                    filter: this.filter,
+                    base: self.base,
+                    filter: self.filter,
                     require: "connection",
-                    insertBefore: this.insertBefore,
-                    charset: this.charset,
+                    insertBefore: self.insertBefore,
+                    charset: self.charset,
                     onSuccess: function() {
-                        this.sandbox(null, "js");
+                        self.sandbox(null, "js");
                     },
-                    scope: this
+                    scope: self
                 }, "js");
                 return;
             }
 
-            this._scriptText = [];
-            this._loadCount = 0;
-            this._stopCount = this.sorted.length;
-            this._xhr = [];
+            self._scriptText = [];
+            self._loadCount = 0;
+            self._stopCount = self.sorted.length;
+            self._xhr = [];
 
-            this.calculate();
+            self.calculate();
 
-            var s=this.sorted, l=s.length, i, m, url;
+            var s=self.sorted, l=s.length, i, m, url;
 
             for (i=0; i<l; i=i+1) {
-                m = this.moduleInfo[s[i]];
+                m = self.moduleInfo[s[i]];
 
                 // undefined modules cause a failure
                 if (!m) {
-                    this._onFailure("undefined module " + m);
-                    for (var j=0;j<this._xhr.length;j=j+1) {
-                        this._xhr[j].abort();
+                    self._onFailure("undefined module " + m);
+                    for (var j=0;j<self._xhr.length;j=j+1) {
+                        self._xhr[j].abort();
                     }
                     return;
                 }
 
                 // css files should be done
                 if (m.type !== "js") {
-                    this._loadCount++;
+                    self._loadCount++;
                     continue;
                 }
 
                 url = m.fullpath;
-                url = (url) ? this._filter(url) : this._url(m.path);
+                url = (url) ? self._filter(url) : self._url(m.path);
 
                 // YAHOO.log("xhr request: " + url + ", " + i);
 
                 var xhrData = {
-
-                    success: function(o) {
-
-                        var idx=o.argument[0], name=o.argument[2];
-
-                        // store the response in the position it was requested
-                        this._scriptText[idx] = o.responseText;
-
-                        // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
-
-                        if (this.onProgress) {
-                            this.onProgress.call(this.scope, {
-                                        name: name,
-                                        scriptText: o.responseText,
-                                        xhrResponse: o,
-                                        data: this.data
-                                    });
-                        }
-
-                        // only generate the sandbox once everything is loaded
-                        this._loadCount++;
-
-                        if (this._loadCount >= this._stopCount) {
-
-                            // the variable to find
-                            var v = this.varName || "YAHOO";
-
-                            // wrap the contents of the requested modules in an anonymous function
-                            var t = "(function() {\n";
-
-                            // return the locally scoped reference.
-                            var b = "\nreturn " + v + ";\n})();";
-
-                            var ref = eval(t + this._scriptText.join("\n") + b);
-
-                            this._pushEvents(ref);
-
-                            if (ref) {
-                                this.onSuccess.call(this.scope, {
-                                        reference: ref,
-                                        data: this.data
-                                    });
-                            } else {
-                                this._onFailure.call(this.varName + " reference failure");
-                            }
-                        }
-                    },
-
-                    failure: function(o) {
-                        this.onFailure.call(this.scope, {
-                                msg: "XHR failure",
-                                xhrResponse: o,
-                                data: this.data
-                            });
-                    },
-
-                    scope: this,
-
-                    // module index, module name, sandbox name
+                    success: success,
+                    failure: failure,
+                    scope: self,
+                    // [module index, module name, sandbox name]
                     argument: [i, url, s[i]]
-
                 };
 
-                this._xhr.push(util.Connect.asyncRequest('GET', url, xhrData));
+                self._xhr.push(util.Connect.asyncRequest('GET', url, xhrData));
             }
         },
 
@@ -1870,6 +1882,11 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
             if (!this._loading) {
                 return;
             }
+
+            var self = this,
+                donext = function(o) {
+                    self.loadNext(o.data);
+                }, successfn, s = this.sorted, len=s.length, i, fn, m, url;
 
 
             if (mname) {
@@ -1897,7 +1914,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 //this.inserted = lang.merge(this.inserted, o);
             }
 
-            var s=this.sorted, len=s.length, i, m;
+
 
             for (i=0; i<len; i=i+1) {
 
@@ -1930,30 +1947,28 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // The load type is stored to offer the possibility to load
                 // the css separately from the script.
                 if (!this.loadType || this.loadType === m.type) {
+
+                    successfn = donext;
+
                     this._loading = s[i];
                     //YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
-                    var fn=(m.type === "css") ? util.Get.css : util.Get.script,
-                        url = m.fullpath,
-                        self=this,
-                        c=function(o) {
-                            self.loadNext(o.data);
-                        };
-
-                        url = (url) ? this._filter(url) : this._url(m.path);
+                    fn = (m.type === "css") ? util.Get.css : util.Get.script;
+                    url = m.fullpath;
+                    url = (url) ? this._filter(url) : this._url(m.path);
 
                     // safari 2.x or lower, script, and part of YUI
                     if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" &&
                           !m.varName) {
                           //YUI.info.moduleInfo[s[i]]) {
                           //YAHOO.log("using YAHOO env " + s[i] + ", " + m.varName);
-                        c = null;
+                        successfn = null;
                         this._useYahooListener = true;
                     }
 
                     fn(url, {
                         data: s[i],
-                        onSuccess: c,
+                        onSuccess: successfn,
                         onFailure: this._onFailure,
                         onTimeout: this._onTimeout,
                         insertBefore: this.insertBefore,

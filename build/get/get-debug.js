@@ -1,12 +1,28 @@
 /**
  * Provides a mechanism to fetch remote resources and
  * insert them into a document
+ * This utility can fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @module get
  * @requires yahoo
  */
 
 /**
- * Fetches and inserts one or more script or link nodes into the document 
+ * Fetches and inserts one or more script or link nodes into the document.
+ * This utility can fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @namespace YAHOO.util
  * @class YAHOO.util.Get
  */
@@ -17,26 +33,26 @@ YAHOO.util.Get = function() {
      * @property queues
      * @private
      */
-    var queues={}, 
-        
+    var queues={},
+
     /**
      * queue index used to generate transaction ids
      * @property qidx
      * @type int
      * @private
      */
-        qidx=0, 
-        
+        qidx=0,
+
     /**
      * node index used to generate unique node ids
      * @property nidx
      * @type int
      * @private
      */
-        nidx=0, 
+        nidx=0,
 
     /**
-     * interal property used to prevent multiple simultaneous purge 
+     * interal property used to prevent multiple simultaneous purge
      * processes
      * @property purging
      * @type boolean
@@ -44,15 +60,15 @@ YAHOO.util.Get = function() {
      */
         _purging=false,
 
-        ua=YAHOO.env.ua, 
-        
+        ua=YAHOO.env.ua,
+
         lang=YAHOO.lang,
-    
-    _fail, 
-    _purge, 
+
+    _fail,
+    _purge,
     _track,
-    
-    /** 
+
+    /**
      * Generates an HTML element, this is not appended to a document
      * @method _node
      * @param type {string} the type of element
@@ -198,7 +214,7 @@ YAHOO.util.Get = function() {
 
         YAHOO.log("_next: " + id + ", loaded: " + loaded, "info", "Get");
 
-        var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], 
+        var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0],
             n, msg, url, s, extra;
 
         if (q.timer) {
@@ -213,9 +229,9 @@ YAHOO.util.Get = function() {
         }
 
         if (loaded) {
-            q.url.shift(); 
+            q.url.shift();
             if (q.varName) {
-                q.varName.shift(); 
+                q.varName.shift();
             }
         } else {
             // This is the first pass: make sure the url is an array
@@ -227,12 +243,12 @@ YAHOO.util.Get = function() {
 
 
         if (q.url.length === 0) {
-            // Safari 2.x workaround - There is no way to know when 
+            // Safari 2.x workaround - There is no way to know when
             // a script is ready in versions of Safari prior to 3.x.
             // Adding an extra node reduces the problem, but doesn't
             // eliminate it completely because the browser executes
-            // them asynchronously. 
-            if (q.type === "script" && ua.webkit && ua.webkit < 420 && 
+            // them asynchronously.
+            if (q.type === "script" && ua.webkit && ua.webkit < 420 &&
                     !q.finalpass && !q.varName) {
                 // Add another script node.  This does not guarantee that the
                 // scripts will execute in order, but it does appear to fix the
@@ -249,14 +265,14 @@ YAHOO.util.Get = function() {
             }
 
             return;
-        } 
+        }
 
 
         url = q.url[0];
 
         // if the url is undefined, this is probably a trailing comma problem in IE
         if (!url) {
-            q.url.shift(); 
+            q.url.shift();
             YAHOO.log('skipping empty url');
             return _next(id);
         }
@@ -289,11 +305,11 @@ YAHOO.util.Get = function() {
         } else {
             h.appendChild(n);
         }
-        
+
         YAHOO.log("Appending node: " + url, "info", "Get");
 
         // FireFox does not support the onload event for link nodes, so there is
-        // no way to make the css requests synchronous. This means that the css 
+        // no way to make the css requests synchronous. This means that the css
         // rules in multiple files could be applied out of order in this browser
         // if a later request returns before an earlier one.  Safari too.
         if ((ua.webkit || ua.gecko) && q.type === "css") {
@@ -359,7 +375,7 @@ YAHOO.util.Get = function() {
         q = queues[id];
         q.win = q.win || window;
         q.scope = q.scope || q.win;
-        q.autopurge = ("autopurge" in q) ? q.autopurge : 
+        q.autopurge = ("autopurge" in q) ? q.autopurge :
                       (type === "script") ? true : false;
 
         q.attributes = q.attributes || {};
@@ -435,7 +451,7 @@ YAHOO.util.Get = function() {
                         q._cache = q.varName[0].split(".");
                         q.timer = lang.later(freq, q, function(o) {
                             a = this._cache;
-                            l = a.length; 
+                            l = a.length;
                             w = this.win;
                             for (i=0; i<l; i=i+1) {
                                 w = w[a[i]];
@@ -452,7 +468,7 @@ YAHOO.util.Get = function() {
                                     return;
                                 }
                             }
-                            
+
                             YAHOO.log("Safari poll complete");
 
                             q.timer.cancel();
@@ -463,12 +479,12 @@ YAHOO.util.Get = function() {
                         lang.later(YAHOO.util.Get.POLL_FREQ, null, f, [id, url]);
                     }
                 }
-            } 
+            }
 
         // FireFox and Opera support onload (but not DOM2 in FF) handlers for
         // script nodes.  Opera, but not FF, supports the onload event for link
         // nodes.
-        } else { 
+        } else {
             n.onload = function() {
                 YAHOO.log(id + " onload " + url, "info", "Get");
                 f(id, url);
@@ -503,9 +519,9 @@ YAHOO.util.Get = function() {
         if (queues[tId]) {
 
             var q     = queues[tId],
-                nodes = q.nodes, 
-                l     = nodes.length, 
-                d     = q.win.document, 
+                nodes = q.nodes,
+                l     = nodes.length,
+                d     = q.win.document,
                 h     = d.getElementsByTagName("head")[0],
                 sib, i, node, attr;
 
@@ -565,7 +581,7 @@ YAHOO.util.Get = function() {
          * @default 2000
          */
         TIMEOUT: 2000,
-        
+
         /**
          * Called by the the helper for detecting script load in Safari
          * @method _finalize
@@ -590,7 +606,7 @@ YAHOO.util.Get = function() {
                 YAHOO.log("Aborting " + id, "info", "Get");
                 q.aborted = true;
             }
-        }, 
+        },
 
         /**
          * Fetches and inserts one or more script nodes into the head
@@ -599,7 +615,7 @@ YAHOO.util.Get = function() {
          * @method script
          * @static
          * @param url {string|string[]} the url or urls to the script(s)
-         * @param opts {object} Options: 
+         * @param opts {object} Options:
          * <dl>
          * <dt>onSuccess</dt>
          * <dd>
@@ -664,7 +680,7 @@ YAHOO.util.Get = function() {
          * <dd>a window other than the one the utility occupies</dd>
          * <dt>autopurge</dt>
          * <dd>
-         * setting to true will let the utilities cleanup routine purge 
+         * setting to true will let the utilities cleanup routine purge
          * the script once loaded
          * </dd>
          * <dt>data</dt>
@@ -675,7 +691,7 @@ YAHOO.util.Get = function() {
          * <dt>varName</dt>
          * <dd>
          * variable that should be available when a script is finished
-         * loading.  Used to help Safari 2.x and below with script load 
+         * loading.  Used to help Safari 2.x and below with script load
          * detection.  The type of this property should match what was
          * passed into the url parameter: if loading a single url, a
          * string can be supplied.  If loading multiple scripts, you
@@ -718,13 +734,13 @@ YAHOO.util.Get = function() {
         script: function(url, opts) { return _queue("script", url, opts); },
 
         /**
-         * Fetches and inserts one or more css link nodes into the 
+         * Fetches and inserts one or more css link nodes into the
          * head of the current document or the document in a specified
          * window.
          * @method css
          * @static
          * @param url {string} the url or urls to the css file(s)
-         * @param opts Options: 
+         * @param opts Options:
          * <dl>
          * <dt>onSuccess</dt>
          * <dd>
@@ -770,7 +786,7 @@ YAHOO.util.Get = function() {
          * @return {tId: string} an object containing info about the transaction
          */
         css: function(url, opts) {
-            return _queue("css", url, opts); 
+            return _queue("css", url, opts);
         }
     };
 }();

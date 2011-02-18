@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Container&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>Container&nbsp; <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html" title="container">container</a>
                 
@@ -748,9 +748,6 @@
 
                     <span class="nx">oIFrame</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;_yuiResizeMonitor&quot;</span><span class="p">;</span>
                     <span class="nx">oIFrame</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Text Resize Monitor&quot;</span><span class="p">;</span>
-                    <span class="nx">oIFrame</span><span class="p">.</span><span class="nx">tabIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-                    <span class="nx">oIFrame</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;presentation&quot;</span><span class="p">);</span>
-
                     <span class="cm">/*</span>
 <span class="cm">                        Need to set &quot;position&quot; property before inserting the </span>
 <span class="cm">                        iframe into the document or Safari&#39;s status bar will </span>
@@ -1213,15 +1210,13 @@
         <span class="nx">configVisible</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">visible</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">visible</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                    <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">beforeShowEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+                <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">showEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">())</span> <span class="p">{</span>
-                    <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">beforeHideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+                <span class="nx">Dom</span><span class="p">.</span><span class="nx">setStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">hideEvent</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
             <span class="p">}</span>
         <span class="p">},</span>
 
