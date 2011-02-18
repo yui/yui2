@@ -19,6 +19,10 @@ Bug Fixes:
 + We no longer use innerHTML to add hidden input to
   form in SimpleDialog, so that we don't blow away listeners.
 
++ Showing a modal dialog, without any focusable content will
+  now focus on the innerElement (or hidden focus element, 
+  for browsers which don't support tabIndex 0 on divs)
+
 *** version 2.8.3 ***
 
 + No code changes.

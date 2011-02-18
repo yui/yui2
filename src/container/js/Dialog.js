@@ -403,7 +403,7 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            this.showEvent.subscribe(this.focusFirst, this, true);
+            //this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
@@ -805,10 +805,12 @@
          * This method is invoked when the Dialog is made visible.
          * </p>
          * @method focusFirst
+         * @return {Boolean} true, if focused. false if not
          */
         focusFirst: function (type, args, obj) {
 
-            var el = this.firstFormElement;
+            var el = this.firstFormElement, 
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -817,43 +819,50 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(oException) {
                     // Ignore
                 }
             } else {
                 if (this.defaultHtmlButton) {
-                    this.focusDefaultButton();
+                    focused = this.focusDefaultButton();
                 } else {
-                    this.focusFirstButton();
+                    focused = this.focusFirstButton();
                 }
             }
+            return focused;
         },
 
         /**
         * Sets focus to the last element in the Dialog's form or the last 
         * button defined via the "buttons" configuration property.
         * @method focusLast
+        * @return {Boolean} true, if focused. false if not
         */
         focusLast: function (type, args, obj) {
 
             var aButtons = this.cfg.getProperty("buttons"),
-                el = this.lastFormElement;
+                el = this.lastFormElement,
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
             }
 
             if (aButtons && Lang.isArray(aButtons)) {
-                this.focusLastButton();
+                focused = this.focusLastButton();
             } else {
                 if (el) {
                     try {
                         el.focus();
+                        focused = true;
                     } catch(oException) {
                         // Ignore
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
@@ -884,9 +893,12 @@
         * the "buttons" configuration property. By default, this method is 
         * called when the Dialog is made visible.
         * @method focusDefaultButton
+        * @return {Boolean} true if focused, false if not
         */
         focusDefaultButton: function () {
-            var button = this._getButton(this.defaultHtmlButton);
+            var button = this._getButton(this.defaultHtmlButton), 
+                         focused = false;
+            
             if (button) {
                 /*
                     Place the call to the "focus" method inside a try/catch
@@ -895,9 +907,11 @@
                 */
                 try {
                     button.focus();
+                    focused = true;
                 } catch(oException) {
                 }
             }
+            return focused;
         },
 
         /**
@@ -944,12 +958,14 @@
         * Sets the focus to the first button created via the "buttons"
         * configuration property.
         * @method focusFirstButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusFirstButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 oButton,
-                oElement;
+                oElement,
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 oButton = aButtons[0];
@@ -964,25 +980,30 @@
                         */
                         try {
                             oElement.focus();
+                            focused = true;
                         } catch(oException) {
                             // ignore
                         }
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
         * Sets the focus to the last button created via the "buttons" 
         * configuration property.
         * @method focusLastButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusLastButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 nButtons,
                 oButton,
-                oElement;
+                oElement, 
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 nButtons = aButtons.length;
@@ -1001,6 +1022,7 @@
         
                             try {
                                 oElement.focus();
+                                focused = true;
                             } catch(oException) {
                                 // Ignore
                             }
@@ -1008,6 +1030,8 @@
                     }
                 }
             }
+
+            return focused;
         },
 
         /**

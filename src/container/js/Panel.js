@@ -164,7 +164,7 @@
         configuration property back to its original value before 
         "setWidthToOffsetWidth" was called.
     */
-    
+
     function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
 
         var sOriginalWidth = p_oObject[0],
@@ -250,7 +250,7 @@
                 this.subscribe("changeContent", this.setFirstLastFocusable);
             });
 
-            this.subscribe("show", this.focusFirst);
+            this.subscribe("show", this._focusOnShow);
 
             this.initEvent.fire(Panel);
         },
@@ -277,15 +277,7 @@
                 // the documentElement, when the document scrollbars are clicked on
                 if (insideDoc && target !== this.element && target !== this.mask && !Dom.isAncestor(this.element, target)) {
                     try {
-                        if (this.firstElement) {
-                            this.firstElement.focus();
-                        } else {
-                            if (this._modalFocus) {
-                                this._modalFocus.focus();
-                            } else {
-                                this.innerElement.focus();
-                            }
-                        }
+                        this._focusFirstModal();
                     } catch(err){
                         // Just in case we fail to focus
                         try {
@@ -294,6 +286,26 @@
                             }
                         } catch(err2) { }
                     }
+                }
+            }
+        },
+
+        /**
+         * Focuses on the first element if present, otherwise falls back to the focus mechanisms used for 
+         * modality. This method does not try/catch focus failures. The caller is responsible for catching exceptions,
+         * and taking remedial measures.
+         * 
+         * @method _focusFirstModal
+         */
+        _focusFirstModal : function() {
+            var el = this.firstElement;
+            if (el) {
+                el.focus();
+            } else {
+                if (this._modalFocus) {
+                    this._modalFocus.focus();
+                } else {
+                    this.innerElement.focus();
                 }
             }
         },
@@ -363,12 +375,34 @@
         },
 
         /**
+         * Focus handler for the show event
+         *
+         * @method _focusOnShow
+         * @param {String} type Event Type
+         * @param {Array} args Event arguments
+         * @param {Object} obj Additional data 
+         */
+        _focusOnShow : function(type, args, obj) {
+
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
+            }
+
+            if (!this.focusFirst(type, args, obj)) {
+                if (this.cfg.getProperty("modal")) {
+                    this._focusFirstModal();
+                }
+            }
+        },
+
+        /**
          * Sets focus to the first element in the Panel.
          *
          * @method focusFirst
+         * @return {Boolean} true, if successfully focused, false otherwise 
          */
         focusFirst: function (type, args, obj) {
-            var el = this.firstElement;
+            var el = this.firstElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -377,19 +411,23 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
         },
 
         /**
          * Sets focus to the last element in the Panel.
          *
          * @method focusLast
+         * @return {Boolean} true, if successfully focused, false otherwise
          */
         focusLast: function (type, args, obj) {
-            var el = this.lastElement;
+            var el = this.lastElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -398,10 +436,13 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
         },
 
         /**
