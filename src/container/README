@@ -8,6 +8,9 @@ New Features:
 + Hide or Show can now be prevented by returning false from beforeHide, 
   and beforeShow subscribers respectively.
 
++ Dialog's button configuration now passes "type" onto the YUI Button
+  constructor, when provided.
+
 Bug Fixes:
 ----------
 

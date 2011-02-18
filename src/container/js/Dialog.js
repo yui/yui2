@@ -688,7 +688,7 @@
                     oButton = aButtons[i];
 
                     if (Button) {
-                        oYUIButton = new Button({ label: oButton.text});
+                        oYUIButton = new Button({ label: oButton.text, type:oButton.type });
                         oYUIButton.appendTo(oSpan);
 
                         oButtonEl = oYUIButton.get("element");
