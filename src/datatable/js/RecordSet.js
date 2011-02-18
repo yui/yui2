@@ -445,7 +445,7 @@ RS.prototype = {
                     lang.dump(aData), "info", this.toString());
         }
 
-        return added.length > 1 ? added : added[0];
+        return added;
     },
 
     /**

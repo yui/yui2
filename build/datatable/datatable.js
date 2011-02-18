@@ -2340,7 +2340,7 @@ RS.prototype = {
         if (a.length && !added.length) {
         }
 
-        return added.length > 1 ? added : added[0];
+        return added;
     },
 
     /**
@@ -9567,7 +9567,8 @@ updateRow : function(row, oData) {
 updateRows : function(startrow, aData) {
     if(lang.isArray(aData)) {
         var startIndex = startrow,
-            oRecordSet = this._oRecordSet;
+            oRecordSet = this._oRecordSet,
+            lastRowIndex = oRecordSet.getLength();
             
         if (!lang.isNumber(startrow)) {
             startIndex = this.getRecordIndex(startrow);
@@ -9612,7 +9613,6 @@ updateRows : function(startrow, aData) {
                     // Update the TR elements
                     var loopN = this.get("renderLoopSize"),
                         rowCount = aData.length, // how many needed
-                        lastRowIndex = oRecordSet.getLength()-1,// DOM is unreliable source of truth
                         isLast = (lastIndex >= lastRowIndex),
                         isAdding = (lastIndex > lastRowIndex);
                                            
