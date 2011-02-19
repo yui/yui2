@@ -6139,20 +6139,30 @@
 
             root = root || this.innerElement;
 
-            var focusable = {};
+            var focusable = {}, panel = this;
             for (var i = 0; i < Panel.FOCUSABLE.length; i++) {
                 focusable[Panel.FOCUSABLE[i]] = true;
             }
 
-            function isFocusable(el) {
-                if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
-                    return true;
-                }
-                return false;
-            }
-
             // Not looking by Tag, since we want elements in DOM order
-            return Dom.getElementsBy(isFocusable, null, root);
+            
+            return Dom.getElementsBy(function(el) { return panel._testIfFocusable(el, focusable); }, null, root);
+        },
+
+        /**
+         * This is the test method used by getFocusableElements, to determine which elements to 
+         * include in the focusable elements list. Users may override this to customize behavior.
+         *
+         * @method _testIfFocusable
+         * @param {Object} el The element being tested
+         * @param {Object} focusable The hash of known focusable elements, created by an array-to-map operation on Panel.FOCUSABLE
+         * @protected
+         */
+        _testIfFocusable: function(el, focusable) {
+            if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
+                return true;
+            }
+            return false;
         },
 
         /**

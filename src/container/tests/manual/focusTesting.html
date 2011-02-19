@@ -9,55 +9,58 @@
         margin:0;
         padding:0;
     }
+
+    label {
+        display:block;
+        margin:5px;
+    }
     </style>
 
-<link rel="stylesheet" type="text/css" href="../../../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../../../build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="../../../../build/container/assets/skins/sam/container.css" />
-<script type="text/javascript" src="../../../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../../../build/button/button-min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../../build/fonts/fonts-min.css">
+<link rel="stylesheet" type="text/css" href="../../../../build/button/assets/skins/sam/button.css">
+<link rel="stylesheet" type="text/css" href="../../../../build/container/assets/skins/sam/container.css">
+<script type="text/javascript" src="../../../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../../build/element/element.js"></script>
+<script type="text/javascript" src="../../../../build/button/button.js"></script>
 <script type="text/javascript" src="../../../../build/container/container.js"></script>
 </head>
 
 <body class="yui-skin-sam">
     <button id="p">Show Panel</button>
     <button id="d">Show Dialog</button>
+    <button id="r">Show Radio</button>
 
     <div id="panel">
         <div class="hd">Header</div>
         <div class="bd">
             <form>
-                <label for="firstname">First Name:</label><input type="textbox" name="firstname" />
-                <label for="lastname">Last Name:</label><input type="textbox" name="lastname" />
-                <label for="email">E-mail:</label><input type="textbox" name="email" /> 
+                <label for="firstname">First Name:<input type="textbox" name="firstname"></label>
+                <label for="lastname">Last Name:<input type="textbox" name="lastname"></label>
+                <label for="email">E-mail:<input type="textbox" name="email"></label>
             
-                <label for="state[]">State:</label>
+                <label for="state[]">State:
                 <select multiple name="state[]">
                     <option value="California">California</option>
                     <option value="New Jersey">New Jersey</option>
                     <option value="New York">New York</option>
-                </select> 
+                </select>
+                </label>
             
-                <div class="clear"></div>
+                <label for="radiobuttons">Radio buttons:
+                    <input type="radio" name="radiobuttons[]" value="1" checked/> 1
+                    <input type="radio" name="radiobuttons[]" value="2" /> 2
+                </label>
             
-                <label for="radiobuttons">Radio buttons:</label>
-                <input type="radio" name="radiobuttons[]" value="1" checked/> 1
-                <input type="radio" name="radiobuttons[]" value="2" /> 2
-                
-                <div class="clear"></div>
-            
-                <label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1" /> 1
-                
-                <div class="clear"></div>
+                <label for="check">Single checkbox:<input type="checkbox" name="check" value="1" /> 1</label>
                     
-                <label for="textarea">Text area:</label><textarea name="textarea"></textarea>
+                <label for="textarea">Text area:<textarea name="textarea"></textarea></label>
             
-                <div class="clear"></div>
-            
-                <label for="cbarray">Multi checkbox:</label>
-                <input type="checkbox" name="cbarray[]" value="1" /> 1
-                <input type="checkbox" name="cbarray[]" value="2" /> 2
+                <label for="cbarray">Multi checkbox:
+                    <input type="checkbox" name="cbarray[]" value="1" /> 1
+                    <input type="checkbox" name="cbarray[]" value="2" /> 2
+                </label>
             </form>
         </div>
     </div>
@@ -66,40 +69,46 @@
         <div class="hd">Header</div>
         <div class="bd">
             <form>
-                <label for="firstname">First Name:</label><input type="textbox" name="firstname" />
-                <label for="lastname">Last Name:</label><input type="textbox" name="lastname" />
-                <label for="email">E-mail:</label><input type="textbox" name="email" /> 
-
-                <label for="state[]">State:</label>
+                <label for="firstname">First Name:<input type="textbox" name="firstname"></label>
+                <label for="lastname">Last Name:<input type="textbox" name="lastname"></label>
+                <label for="email">E-mail:<input type="textbox" name="email"></label>
+            
+                <label for="state[]">State:
                 <select multiple name="state[]">
                     <option value="California">California</option>
                     <option value="New Jersey">New Jersey</option>
                     <option value="New York">New York</option>
-                </select> 
-
-                <div class="clear"></div>
-
-                <label for="radiobuttons">Radio buttons:</label>
-                <input type="radio" name="radiobuttons[]" value="1" checked/> 1
-                <input type="radio" name="radiobuttons[]" value="2" /> 2
-
-                <div class="clear"></div>
-
-                <label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1" /> 1
-
-                <div class="clear"></div>
-
-                <label for="textarea">Text area:</label><textarea name="textarea"></textarea>
-
-                <div class="clear"></div>
-
-                <label for="cbarray">Multi checkbox:</label>
-                <input type="checkbox" name="cbarray[]" value="1" /> 1
-                <input type="checkbox" name="cbarray[]" value="2" /> 2
+                </select>
+                </label>
+            
+                <label for="radiobuttons">Radio buttons:
+                    <input type="radio" name="radiobuttons[]" value="1" checked/> 1
+                    <input type="radio" name="radiobuttons[]" value="2" /> 2
+                </label>
+            
+                <label for="check">Single checkbox:<input type="checkbox" name="check" value="1" /> 1</label>
+                    
+                <label for="textarea">Text area:<textarea name="textarea"></textarea></label>
+            
+                <label for="cbarray">Multi checkbox:
+                    <input type="checkbox" name="cbarray[]" value="1" /> 1
+                    <input type="checkbox" name="cbarray[]" value="2" /> 2
+                </label>
             </form>
         </div>
     </div>
 
+    <div id="radio">
+        <div class="hd">Header</div>
+        <div class="bd">
+            <form id="rform">
+                <label><input type="radio" name="foo" value="1"> Hi-diddle-ee-dee...</label>
+                <button>I’m a button, and I should get focus if my preceding <input> is not checked.</button>
+                <label><input type="radio" name="foo" value="2" checked="checked"> a sailor’s life...</label>
+                <label><input type="radio" name="foo" value="3"> for me!</label>
+            </form>
+        </div>
+    </div>
 
     <script type="text/javascript">
 
@@ -125,12 +134,31 @@
         });
         d.render();
 
+        var r = new YAHOO.widget.Panel("radio", {
+            visible:false,
+            close:false,
+            width: 400 + 'px',
+            x: 100,
+            y: 100,
+            modal:true
+        });
+        r.render();
+
+        var f = YAHOO.util.Dom.get("rform");
+        r.firstElement = f.elements[1];
+        r.lastElement = f.elements[2];
+        r.setTabLoop(f.elements[1], f.elements[2]);
+
         YAHOO.util.Event.on("p", "click", function() {
             p.show();
         });
 
         YAHOO.util.Event.on("d", "click", function() {
             d.show();
+        });
+        
+        YAHOO.util.Event.on("r", "click", function() {
+            r.show();
         });
     </script>
 </body>
