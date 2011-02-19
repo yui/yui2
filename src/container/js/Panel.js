@@ -754,7 +754,8 @@
 
             var val = args[0],
                 oClose = this.close,
-                strings = this.cfg.getProperty("strings");
+                strings = this.cfg.getProperty("strings"),
+                fc;
 
             if (val) {
                 if (!oClose) {
@@ -767,7 +768,13 @@
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
 
-                    this.innerElement.appendChild(oClose);
+                    fc = this.innerElement.firstChild;
+
+                    if (fc) {
+                        this.innerElement.insertBefore(oClose, fc);
+                    } else {
+                        this.innerElement.appendChild(oClose);
+                    }
 
                     oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
 

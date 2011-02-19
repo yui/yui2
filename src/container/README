@@ -33,6 +33,15 @@ Bug Fixes:
   which Dialog overrides instead, to inject it's custom
   argumements. 
 
++ Fixed tab behavior for close button. It's now rendered
+  as the first child of innerElement, as opposed to the 
+  last, so that it fits in with the natural DOM flow.
+
+  Also, Dialog, when Tab/Shift-Tabbing in Modal mode,
+  loops from the lastButton to the firstElement (the
+  close button usually), instead of to the first form
+  element (thereby, bypassing the button).
+
 *** version 2.8.3 ***
 
 + No code changes.

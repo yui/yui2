@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Container</title>
+
+    <style type="text/css">
+    body {
+        margin:0;
+        padding:0;
+    }
+    </style>
+
+<link rel="stylesheet" type="text/css" href="../../../../build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="../../../../build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="../../../../build/container/assets/skins/sam/container.css" />
+<script type="text/javascript" src="../../../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../../../build/button/button-min.js"></script>
+<script type="text/javascript" src="../../../../build/container/container.js"></script>
+</head>
+
+<body class="yui-skin-sam">
+    <button id="p">Show Panel</button>
+    <button id="d">Show Dialog</button>
+
+    <div id="panel">
+        <div class="hd">Header</div>
+        <div class="bd">
+            <form>
+                <label for="firstname">First Name:</label><input type="textbox" name="firstname" />
+                <label for="lastname">Last Name:</label><input type="textbox" name="lastname" />
+                <label for="email">E-mail:</label><input type="textbox" name="email" /> 
+            
+                <label for="state[]">State:</label>
+                <select multiple name="state[]">
+                    <option value="California">California</option>
+                    <option value="New Jersey">New Jersey</option>
+                    <option value="New York">New York</option>
+                </select> 
+            
+                <div class="clear"></div>
+            
+                <label for="radiobuttons">Radio buttons:</label>
+                <input type="radio" name="radiobuttons[]" value="1" checked/> 1
+                <input type="radio" name="radiobuttons[]" value="2" /> 2
+                
+                <div class="clear"></div>
+            
+                <label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1" /> 1
+                
+                <div class="clear"></div>
+                    
+                <label for="textarea">Text area:</label><textarea name="textarea"></textarea>
+            
+                <div class="clear"></div>
+            
+                <label for="cbarray">Multi checkbox:</label>
+                <input type="checkbox" name="cbarray[]" value="1" /> 1
+                <input type="checkbox" name="cbarray[]" value="2" /> 2
+            </form>
+        </div>
+    </div>
+
+    <div id="dialog">
+        <div class="hd">Header</div>
+        <div class="bd">
+            <form>
+                <label for="firstname">First Name:</label><input type="textbox" name="firstname" />
+                <label for="lastname">Last Name:</label><input type="textbox" name="lastname" />
+                <label for="email">E-mail:</label><input type="textbox" name="email" /> 
+
+                <label for="state[]">State:</label>
+                <select multiple name="state[]">
+                    <option value="California">California</option>
+                    <option value="New Jersey">New Jersey</option>
+                    <option value="New York">New York</option>
+                </select> 
+
+                <div class="clear"></div>
+
+                <label for="radiobuttons">Radio buttons:</label>
+                <input type="radio" name="radiobuttons[]" value="1" checked/> 1
+                <input type="radio" name="radiobuttons[]" value="2" /> 2
+
+                <div class="clear"></div>
+
+                <label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1" /> 1
+
+                <div class="clear"></div>
+
+                <label for="textarea">Text area:</label><textarea name="textarea"></textarea>
+
+                <div class="clear"></div>
+
+                <label for="cbarray">Multi checkbox:</label>
+                <input type="checkbox" name="cbarray[]" value="1" /> 1
+                <input type="checkbox" name="cbarray[]" value="2" /> 2
+            </form>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        var p = new YAHOO.widget.Panel("panel", {
+            visible:false,
+            close:true,
+            width: 400 + 'px',
+            x: 100,
+            y: 100,
+            modal:true
+        });
+        p.render();
+
+        var d = new YAHOO.widget.Dialog("dialog", {
+            visible:false,
+            close:true,
+            buttons : [ { text:"Submit", handler:function(){}, isDefault:true },
+                        { text:"Cancel", handler:function(){} } ],
+            width: 400 + 'px',
+            x: 500,
+            y: 100,
+            modal:true
+        });
+        d.render();
+
+        YAHOO.util.Event.on("p", "click", function() {
+            p.show();
+        });
+
+        YAHOO.util.Event.on("d", "click", function() {
+            d.show();
+        });
+    </script>
+</body>
+</html>

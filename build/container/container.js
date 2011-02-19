@@ -6348,7 +6348,8 @@
 
             var val = args[0],
                 oClose = this.close,
-                strings = this.cfg.getProperty("strings");
+                strings = this.cfg.getProperty("strings"),
+                fc;
 
             if (val) {
                 if (!oClose) {
@@ -6361,7 +6362,13 @@
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
 
-                    this.innerElement.appendChild(oClose);
+                    fc = this.innerElement.firstChild;
+
+                    if (fc) {
+                        this.innerElement.insertBefore(oClose, fc);
+                    } else {
+                        this.innerElement.appendChild(oClose);
+                    }
 
                     oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
 
@@ -7942,7 +7949,7 @@
         * buttons, by default an array of HTML <code>&#60;BUTTON&#62;</code> 
         * elements.  If the Dialog's buttons were created using the 
         * YAHOO.widget.Button class (via the inclusion of the optional Button 
-        * dependancy on the page), an array of YAHOO.widget.Button instances 
+        * dependency on the page), an array of YAHOO.widget.Button instances 
         * is returned.
         * @return {Array}
         */
@@ -7969,6 +7976,11 @@
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use firstElement instead of firstFormElement
+                if (args[0] === 9 && this.firstElement) {
+                    el = this.firstElement;
+                }
             }
 
             if (el) {
@@ -8002,6 +8014,11 @@
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use lastElement instead of lastFormElement
+                if (args[0] === 9 && this.lastElement) {
+                    el = this.lastElement;
+                }
             }
 
             if (aButtons && Lang.isArray(aButtons)) {
