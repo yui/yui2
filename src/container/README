@@ -23,6 +23,16 @@ Bug Fixes:
   now focus on the innerElement (or hidden focus element, 
   for browsers which don't support tabIndex 0 on divs)
 
++ public setTabLoop should honor firstElement, lastElement
+  arguments passed in. Before, since it was being used
+  as the hook for Dialog to jump in and change the 
+  first/lastElement to account for its buttons, it 
+  was overriding lastElement with lastButton
+
+  There is now a separate hook, a protected _setTabLoop 
+  which Dialog overrides instead, to inject it's custom
+  argumements. 
+
 *** version 2.8.3 ***
 
 + No code changes.

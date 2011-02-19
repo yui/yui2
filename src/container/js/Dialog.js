@@ -578,9 +578,25 @@
         setTabLoop : function(firstElement, lastElement) {
 
             firstElement = firstElement || this.firstButton;
-            lastElement = this.lastButton || lastElement;
+            lastElement = lastElement || this.lastButton;
 
             Dialog.superclass.setTabLoop.call(this, firstElement, lastElement);
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            firstElement = firstElement || this.firstButton;
+            lastElement = this.lastButton || lastElement;
+
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**

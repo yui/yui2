@@ -5947,7 +5947,7 @@
                     this.innerElement.tabIndex = 0;
                 }
             }
-            this.setTabLoop(this.firstElement, this.lastElement);
+            this._setTabLoop(this.firstElement, this.lastElement);
             Event.onFocus(document.documentElement, this._onElementFocus, this, true);
             _currentModal = this;
         },
@@ -6062,6 +6062,20 @@
         },
 
         /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         *
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            this.setTabLoop(firstElement, lastElement);
+        },
+
+        /**
          * Sets up a tab, shift-tab loop between the first and last elements
          * provided. NOTE: Sets up the preventBackTab and preventTabOut KeyListener
          * instance properties, which are reset everytime this method is invoked.
@@ -6161,7 +6175,7 @@
             }
 
             if (this.cfg.getProperty("modal")) {
-                this.setTabLoop(this.firstElement, this.lastElement);
+                this._setTabLoop(this.firstElement, this.lastElement);
             }
         },
 
@@ -6368,6 +6382,7 @@
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
+
                     this.innerElement.appendChild(oClose);
 
                     oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
@@ -7726,9 +7741,25 @@
         setTabLoop : function(firstElement, lastElement) {
 
             firstElement = firstElement || this.firstButton;
-            lastElement = this.lastButton || lastElement;
+            lastElement = lastElement || this.lastButton;
 
             Dialog.superclass.setTabLoop.call(this, firstElement, lastElement);
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            firstElement = firstElement || this.firstButton;
+            lastElement = this.lastButton || lastElement;
+
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**
