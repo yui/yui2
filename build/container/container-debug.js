@@ -5660,6 +5660,8 @@
         * @type Object
         */
         EVENT_TYPES = {
+            "BEFORE_SHOW_MASK" : "beforeShowMask",
+            "BEFORE_HIDE_MASK" : "beforeHideMask",
             "SHOW_MASK": "showMask",
             "HIDE_MASK": "hideMask",
             "DRAG": "drag"
@@ -6206,11 +6208,27 @@
             this.showMaskEvent.signature = SIGNATURE;
 
             /**
+            * CustomEvent fired before the modality mask is shown. Subscribers can return false to prevent the
+            * mask from being shown
+            * @event beforeShowMaskEvent
+            */
+            this.beforeShowMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_SHOW_MASK);
+            this.beforeShowMaskEvent.signature = SIGNATURE;
+
+            /**
             * CustomEvent fired after the modality mask is hidden
             * @event hideMaskEvent
             */
             this.hideMaskEvent = this.createEvent(EVENT_TYPES.HIDE_MASK);
             this.hideMaskEvent.signature = SIGNATURE;
+
+            /**
+            * CustomEvent fired before the modality mask is hidden. Subscribers can return false to prevent the
+            * mask from being hidden
+            * @event beforeHideMaskEvent
+            */
+            this.beforeHideMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_HIDE_MASK);
+            this.beforeHideMaskEvent.signature = SIGNATURE;
 
             /**
             * CustomEvent when the Panel is dragged
@@ -7011,7 +7029,7 @@
         * @method hideMask
         */
         hideMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeHideMaskEvent.fire()) {
                 this.mask.style.display = "none";
                 Dom.removeClass(document.body, "masked");
                 this.hideMaskEvent.fire();
@@ -7023,7 +7041,7 @@
         * @method showMask
         */
         showMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeShowMaskEvent.fire()) {
                 Dom.addClass(document.body, "masked");
                 this.sizeMask();
                 this.mask.style.display = "block";

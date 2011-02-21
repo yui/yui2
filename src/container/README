@@ -11,6 +11,10 @@ New Features:
 + Dialog's button configuration now passes "type" onto the YUI Button
   constructor, when provided.
 
++ Added beforeShowMask, beforeHideMask events. Subscribers to these 
+  events can return false to prevent the mask from being shown/hidden 
+  respectively.
+
 Bug Fixes:
 ----------
 
