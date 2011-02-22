@@ -734,12 +734,9 @@ init: function (p_oElement, p_oConfig) {
 
 
     if (this.element) {
-
         Dom.addClass(this.element, this.CSS_CLASS_NAME);
 
-
         // Subscribe to Custom Events
-
         this.initEvent.subscribe(this._onInit);
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
@@ -754,39 +751,28 @@ init: function (p_oElement, p_oConfig) {
         this.keyPressEvent.subscribe(this._onKeyPress);
         this.blurEvent.subscribe(this._onBlur);
 
-
 		if (!bFocusListenerInitialized) {
 			Event.onFocus(document, onDocFocus);
 			bFocusListenerInitialized = true;
 		}
 
-
 		//	Fixes an issue in Firefox 2 and Webkit where Dom's "getX" and "getY" 
 		//	methods return values that don't take scrollTop into consideration 
 
-        if ((UA.gecko && UA.gecko < 1.9) || UA.webkit) {
-
+        if ((UA.gecko && UA.gecko < 1.9) || (UA.webkit && UA.webkit < 523)) {
             this.cfg.subscribeToConfigEvent(_Y, this._onYChange);
-
         }
 
 
         if (p_oConfig) {
-    
             this.cfg.applyConfig(p_oConfig, true);
-    
         }
 
-
         // Register the Menu instance with the MenuManager
-
         MenuManager.addMenu(this);
 
-
         this.initEvent.fire(Menu);
-
     }
-
 },
 
 
