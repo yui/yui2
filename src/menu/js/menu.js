@@ -1228,10 +1228,8 @@ _removeItemFromGroupByIndex: function (p_nGroupIndex, p_nItemIndex) {
     
                 oUL = this._aListElements[nGroupIndex];
     
-                if (this.body && oUL) {
-    
-                    this.body.removeChild(oUL);
-    
+                if (oUL && oUL.parentNode) {
+                    oUL.parentNode.removeChild(oUL);
                 }
     
                 // Remove the group from the array of items
