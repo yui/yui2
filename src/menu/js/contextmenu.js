@@ -1,9 +1,9 @@
 (function () {
 
-	var _XY = "xy",
-		_MOUSEDOWN = "mousedown",
-		_CONTEXTMENU = "ContextMenu",
-		_SPACE = " ";
+    var _XY = "xy",
+        _MOUSEDOWN = "mousedown",
+        _CONTEXTMENU = "ContextMenu",
+        _SPACE = " ";
 
 /**
 * Creates a list of options or commands which are made visible in response to 
@@ -37,7 +37,7 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 
 var Event = YAHOO.util.Event,
-	UA = YAHOO.env.ua,
+    UA = YAHOO.env.ua,
     ContextMenu = YAHOO.widget.ContextMenu,
 
 
@@ -66,8 +66,8 @@ var Event = YAHOO.util.Event,
     * @type Object
     */
     TRIGGER_CONFIG = { 
-		key: "trigger",
-		suppressEvent: true
+        key: "trigger",
+        suppressEvent: true
     };
 
 
@@ -198,7 +198,7 @@ init: function(p_oElement, p_oConfig) {
 */
 initEvents: function() {
 
-	ContextMenu.superclass.initEvents.call(this);
+    ContextMenu.superclass.initEvents.call(this);
 
     // Create custom events
 
@@ -294,51 +294,51 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     var aXY;
 
     if (!(p_oEvent.type == _MOUSEDOWN && !p_oEvent.ctrlKey)) {
-	
-		this.contextEventTarget = Event.getTarget(p_oEvent);
-	
-		this.triggerContextMenuEvent.fire(p_oEvent);
-		
-	
-		if (!this._bCancelled) {
+    
+        this.contextEventTarget = Event.getTarget(p_oEvent);
+    
+        this.triggerContextMenuEvent.fire(p_oEvent);
+        
+    
+        if (!this._bCancelled) {
 
-			/*
-				Prevent the browser's default context menu from appearing and 
-				stop the propagation of the "contextmenu" event so that 
-				other ContextMenu instances are not displayed.
-			*/
+            /*
+                Prevent the browser's default context menu from appearing and 
+                stop the propagation of the "contextmenu" event so that 
+                other ContextMenu instances are not displayed.
+            */
 
-			Event.stopEvent(p_oEvent);
+            Event.stopEvent(p_oEvent);
 
 
-			// Hide any other Menu instances that might be visible
+            // Hide any other Menu instances that might be visible
 
-			YAHOO.widget.MenuManager.hideVisible();
-			
-	
+            YAHOO.widget.MenuManager.hideVisible();
+            
+    
 
-			// Position and display the context menu
-	
-			aXY = Event.getXY(p_oEvent);
-	
-	
-			if (!YAHOO.util.Dom.inDocument(this.element)) {
-	
-				this.beforeShowEvent.subscribe(position, aXY);
-	
-			}
-			else {
-	
-				this.cfg.setProperty(_XY, aXY);
-			
-			}
-	
-	
-			this.show();
-	
-		}
-	
-		this._bCancelled = false;
+            // Position and display the context menu
+    
+            aXY = Event.getXY(p_oEvent);
+    
+    
+            if (!YAHOO.util.Dom.inDocument(this.element)) {
+    
+                this.beforeShowEvent.subscribe(position, aXY);
+    
+            }
+            else {
+    
+                this.cfg.setProperty(_XY, aXY);
+            
+            }
+    
+    
+            this.show();
+    
+        }
+    
+        this._bCancelled = false;
 
     }
 

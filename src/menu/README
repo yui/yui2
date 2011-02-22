@@ -7,6 +7,9 @@ Fixed the following bugs:
   Webkit >= 523. It's not longer required for newer webkits,
   and resulted in incorrect positioning of submenus when scrolled
 
++ stopMouseEventHandlers made into a prototype method to correct scope,
+  and also allow for it to be overridden (was originally pure private)
+
 *** version 2.8.3 ***
 
 + No code changes.
