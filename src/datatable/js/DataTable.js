@@ -4531,7 +4531,7 @@ getTdEl : function(cell) {
  * @return {HTMLElement} Reference to TD element.
  */
 getFirstTdEl : function(row) {
-    var elRow = this.getTrEl(row) || this.getFirstTrEl();
+    var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getFirstTrEl();
     if(elRow && (elRow.cells.length > 0)) {
         return elRow.cells[0];
     }
@@ -4544,10 +4544,11 @@ getFirstTdEl : function(row) {
  * the first TD element of the optionally given row, or null.
  *
  * @method getLastTdEl
+ * @param row {HTMLElement} (optional) row from which to get first TD
  * @return {HTMLElement} Reference to last TD element.
  */
 getLastTdEl : function(row) {
-    var elRow = this.getTrEl(row) || this.getLastTrEl();
+    var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getLastTrEl();
     if(elRow && (elRow.cells.length > 0)) {
         return elRow.cells[elRow.cells.length-1];
     }
