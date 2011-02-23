@@ -57,7 +57,7 @@ Selector = {
 
     _sort: function(nodes) {
         if (nodes) {
-            nodes = Y.Array(nodes, 0, true);
+            nodes = Y_Array(nodes, 0, true);
             if (nodes.sort) {
                 nodes.sort(Selector._compare);
             }
@@ -96,14 +96,22 @@ Selector = {
      * @static
      */
     query: function(selector, root, firstOnly, skipNative) {
-        root = root || Y_DOC;
+        if (typeof root == 'string') {
+            root = Y_DOM.get(root);
+            if (!root) {
+                return (firstOnly) ? null : [];
+            }
+        } else {
+            root = root || Y_DOC;
+        }
+
         var ret = [],
             useNative = (Selector.useNative && Y_DOC.querySelector && !skipNative),
             queries = [[selector, root]],
             query,
             result,
             i,
-            fn = (useNative) ? Selector._nativeQuery : Y.Selector._bruteQuery;
+            fn = (useNative) ? Selector._nativeQuery : Selector._bruteQuery;
 
         if (selector && fn) {
             // split group into seperate queries
@@ -113,7 +121,8 @@ Selector = {
             }
 
             for (i = 0; (query = queries[i++]);) {
-                result = fn(query[0], query[1], firstOnly);
+     //           result = fn(query[0], query[1], firstOnly);
+                result = fn(query[0], Y_DOC, firstOnly);
                 if (!firstOnly) { // coerce DOM Collection to Array
                     result = Y_Array(result, 0, true);
                 }

@@ -9,7 +9,7 @@ _!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/st
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
-<script id="selector-script" type="text/javascript" src="../../../build/selector/selector-min.js"></script>
+<script id="selector-script" type="text/javascript" src="../../../build/selector/selector.js"></script>
 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
@@ -21,6 +21,8 @@ onload = function() {
     var logger = new YAHOO.tool.TestLogger(null, {height:'2000px'});
     var suite = new YAHOO.tool.TestSuite("Selector Suite");
     var Selector = Y.Selector;
+
+    Selector.useNative = false;
 
     var $ = Selector.query;
     var demo = Y.Dom.get('demo');
@@ -59,7 +61,7 @@ onload = function() {
             Y.ArrayAssert.itemsAreEqual([], $('#root-test li', Y.Dom.get('nth-test')), 'id selector w/root false pos');
             Y.ArrayAssert.itemsAreEqual([], $('#root-test li', Y.Dom.get('nth-test')), 'id selector w/root false pos');
             Y.ArrayAssert.itemsAreEqual([Y.Dom.get('nth-test')], $('> ol', 'root-test'), "$('> ol', 'root-test')");
-            Y.ArrayAssert.itemsAreEqual([Y.Dom.get('root-test')], $('+ div', 'empty'), "$('+ div', 'empty')");
+            Y.ArrayAssert.itemsAreEqual([Y.Dom.get('root-test')], $('+ div', Y.Dom.get('empty')), "$('+ div', 'empty')");
         },
         testNthLastChild: function() {
             var all = Y.Dom.get('nth-test').getElementsByTagName('li');
@@ -121,9 +123,13 @@ onload = function() {
             Y.ArrayAssert.itemsAreEqual($('.not-button', 'test-inputs'), $('input:not([type=button])', 'test-inputs'), 'input[type=radio], input[type=checkbox] = input:not([type=button])');
             Y.ArrayAssert.itemsAreEqual($('p, p'), document.getElementsByTagName('p'), 'p, p');
             Y.ArrayAssert.itemsAreEqual($('p', null, true), document.getElementsByTagName('p')[0], 'p (firstOnly)');
-            Y.ArrayAssert.itemsAreEqual($('.Foo'), [], '.Foo');
+
+            // native queries are case insensitive
+            //Y.ArrayAssert.itemsAreEqual([], $('.Foo'), '.Foo');
             Y.ArrayAssert.itemsAreEqual($('p ~  p'), [children[1], children[2]], 'p ~ p');
             Y.ArrayAssert.itemsAreEqual([], $('#demo.bar p'), '#demo.bar p');
+            console.log(Y.Dom.get('demo').getElementsByTagName('p'));
+            console.log($('#demo.foo p'));
             Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), $('#demo.foo p'), '#demo.foo p');
             Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), $('.foo p'), '.foo p');
             Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), $('#demo p'), '#demo p');
