@@ -426,7 +426,7 @@
 				filesToUpload = [];
 			} 
 
-			else { // cancel specified file
+			else if (fileRefList[fileID] != null) { // cancel specified file				
 				var fr:FileReference = fileRefList[fileID];
 				if (this.currentUploadThreads > 0)
 					this.currentUploadThreads--;
