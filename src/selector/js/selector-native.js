@@ -121,8 +121,7 @@ Selector = {
             }
 
             for (i = 0; (query = queries[i++]);) {
-     //           result = fn(query[0], query[1], firstOnly);
-                result = fn(query[0], Y_DOC, firstOnly);
+                result = fn(query[0], query[1], firstOnly);
                 if (!firstOnly) { // coerce DOM Collection to Array
                     result = Y_Array(result, 0, true);
                 }
