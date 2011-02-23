@@ -1095,7 +1095,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             throw new TypeError("method undefined");
         }
 
-        if (d && !L.isArray(d)) {
+        if (!L.isUndefined(data) && !L.isArray(d)) {
             d = [data];
         }
 
