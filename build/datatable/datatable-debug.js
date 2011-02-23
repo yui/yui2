@@ -9638,14 +9638,13 @@ updateRow : function(row, oData) {
     if(lang.isNumber(index) && (index >= 0)) {
         var oRecordSet = this._oRecordSet,
             oldRecord = oRecordSet.getRecord(index);
-            
-        
+
         if(oldRecord) {
             var updatedRecord = this._oRecordSet.setRecord(oData, index),
                 elRow = this.getTrEl(oldRecord),
                 // Copy data from the Record for the event that gets fired later
                 oldData = oldRecord ? oldRecord.getData() : null;
-               
+
             if(updatedRecord) {
                 // Update selected rows as necessary
                 var tracker = this._aSelections || [],
@@ -9661,6 +9660,14 @@ updateRow : function(row, oData) {
                     }
                 }
 
+                // Update anchors as necessary
+                if(this._oAnchorRecord && this._oAnchorRecord.getId() === oldId) {
+                    this._oAnchorRecord = updatedRecord;
+                }
+                if(this._oAnchorCell && this._oAnchorCell.record.getId() === oldId) {
+                    this._oAnchorCell.record = updatedRecord;
+                }
+
                 // Update the TR only if row is on current page
                 this._oChainRender.add({
                     method: function() {
@@ -9670,7 +9677,7 @@ updateRow : function(row, oData) {
                             if (oPaginator) {
                                 var pageStartIndex = (oPaginator.getPageRecords())[0],
                                     pageLastIndex = (oPaginator.getPageRecords())[1];
-        
+
                                 // At least one of the new records affects the view
                                 if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
                                     this.render();
@@ -9731,21 +9738,34 @@ updateRows : function(startrow, aData) {
                 aOldRecords = oRecordSet.getRecords(startIndex, aData.length),
                 aNewRecords = oRecordSet.setRecords(aData, startIndex);
             if(aNewRecords) {
-                // Update selected rows as necessary
                 var tracker = this._aSelections || [],
-                    i=0, j, newId, oldId;
-                for(; i<tracker.length; i++) {
-                    for(j=0; j<aOldRecords.length; j++) {
-                        oldId = aOldRecords[j].getId();
-                        if((tracker[i] === oldId)) {
-                            tracker[i] = aNewRecords[j].getId();
+                    i=0, j, newRecord, newId, oldId,
+                    anchorRecord = this._oAnchorRecord ? this._oAnchorRecord.getId() : null,
+                    anchorCell = this._oAnchorCell ? this._oAnchorCell.record.getId() : null;
+                for(; i<aOldRecords.length; i++) {
+                    oldId = aOldRecords[i].getId();
+                    newRecord = aNewRecords[i];
+                    newId = newRecord.getId();
+                    
+                    // Update selected rows as necessary
+                    for(j=0; j<tracker.length; j++) {
+                        if((tracker[j] === oldId)) {
+                            tracker[j] = newId;
                         }
-                        else if(tracker[i].recordId === oldId) {
-                            tracker[i].recordId = aNewRecords[j].getId();
+                        else if(tracker[j].recordId === oldId) {
+                            tracker[j].recordId = newId;
                         }
                     }
-                }
-            
+                    
+                    // Update anchors as necessary
+                    if(anchorRecord && anchorRecord === oldId) {
+                        this._oAnchorRecord = newRecord;
+                    }
+                    if(anchorCell && anchorCell === oldId) {
+                        this._oAnchorCell.record = newRecord;
+                    }
+               }
+
                 // Paginated
                 var oPaginator = this.get('paginator');
                 if (oPaginator) {
