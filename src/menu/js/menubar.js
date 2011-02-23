@@ -1,19 +1,19 @@
 (function () {
 
-	var Lang = YAHOO.lang,
+    var Lang = YAHOO.lang,
 
-		// String constants
-	
-		_STATIC = "static",
-		_DYNAMIC_STATIC = "dynamic," + _STATIC,
-		_DISABLED = "disabled",
-		_SELECTED = "selected",
-		_AUTO_SUBMENU_DISPLAY = "autosubmenudisplay",
-		_SUBMENU = "submenu",
-		_VISIBLE = "visible",
-		_SPACE = " ",
-		_SUBMENU_TOGGLE_REGION = "submenutoggleregion",
-		_MENUBAR = "MenuBar";
+        // String constants
+    
+        _STATIC = "static",
+        _DYNAMIC_STATIC = "dynamic," + _STATIC,
+        _DISABLED = "disabled",
+        _SELECTED = "selected",
+        _AUTO_SUBMENU_DISPLAY = "autosubmenudisplay",
+        _SUBMENU = "submenu",
+        _VISIBLE = "visible",
+        _SPACE = " ",
+        _SUBMENU_TOGGLE_REGION = "submenutoggleregion",
+        _MENUBAR = "MenuBar";
 
 /**
 * Horizontal collection of items, each of which can contain a submenu.
@@ -55,7 +55,7 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 */
 function checkPosition(p_sPosition) {
 
-	var returnVal = false;
+    var returnVal = false;
 
     if (Lang.isString(p_sPosition)) {
 
@@ -72,29 +72,29 @@ var Event = YAHOO.util.Event,
     MenuBar = YAHOO.widget.MenuBar,
 
     POSITION_CONFIG =  { 
-		key: "position", 
-		value: _STATIC, 
-		validator: checkPosition, 
-		supercedes: [_VISIBLE] 
-	}, 
+        key: "position", 
+        value: _STATIC, 
+        validator: checkPosition, 
+        supercedes: [_VISIBLE] 
+    }, 
 
-	SUBMENU_ALIGNMENT_CONFIG =  { 
-		key: "submenualignment", 
-		value: ["tl","bl"]
-	},
+    SUBMENU_ALIGNMENT_CONFIG =  { 
+        key: "submenualignment", 
+        value: ["tl","bl"]
+    },
 
-	AUTO_SUBMENU_DISPLAY_CONFIG =  { 
-		key: _AUTO_SUBMENU_DISPLAY, 
-		value: false, 
-		validator: Lang.isBoolean,
-		suppressEvent: true
-	},
-	
-	SUBMENU_TOGGLE_REGION_CONFIG = {
-		key: _SUBMENU_TOGGLE_REGION, 
-		value: false, 
-		validator: Lang.isBoolean
-	};
+    AUTO_SUBMENU_DISPLAY_CONFIG =  { 
+        key: _AUTO_SUBMENU_DISPLAY, 
+        value: false, 
+        validator: Lang.isBoolean,
+        suppressEvent: true
+    },
+    
+    SUBMENU_TOGGLE_REGION_CONFIG = {
+        key: _SUBMENU_TOGGLE_REGION, 
+        value: false, 
+        validator: Lang.isBoolean
+    };
 
 
 
@@ -223,17 +223,17 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
     
                         oNextItem.cfg.setProperty(_SELECTED, true);
                         
-						oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
-						
-						if(oSubmenu) {
-					
-							oSubmenu.show();
-							oSubmenu.setInitialFocus();
-						
-						}
-						else {
-							oNextItem.focus();  
-						}
+                        oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
+                        
+                        if(oSubmenu) {
+                    
+                            oSubmenu.show();
+                            oSubmenu.setInitialFocus();
+                        
+                        }
+                        else {
+                            oNextItem.focus();  
+                        }
     
                     }
     
@@ -322,7 +322,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
     var oItem = p_aArgs[1],
         bReturnVal = true,
-    	oItemEl,
+        oItemEl,
         oEvent,
         oTarget,
         oActiveItem,
@@ -332,20 +332,20 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         nToggleRegion;
 
 
-	var toggleSubmenuDisplay = function () {
+    var toggleSubmenuDisplay = function () {
 
-		if(oSubmenu.cfg.getProperty(_VISIBLE)) {
-		
-			oSubmenu.hide();
-		
-		}
-		else {
-		
-			oSubmenu.show();                    
-		
-		}
-	
-	};
+        if(oSubmenu.cfg.getProperty(_VISIBLE)) {
+        
+            oSubmenu.hide();
+        
+        }
+        else {
+        
+            oSubmenu.show();                    
+        
+        }
+    
+    };
     
 
     if(oItem && !oItem.cfg.getProperty(_DISABLED)) {
@@ -375,30 +375,30 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
         if(oSubmenu) {
 
-			oItemEl = oItem.element;
-			nMenuItemX = YAHOO.util.Dom.getX(oItemEl);
-			nToggleRegion = nMenuItemX + (oItemEl.offsetWidth - this.SUBMENU_TOGGLE_REGION_WIDTH);
+            oItemEl = oItem.element;
+            nMenuItemX = YAHOO.util.Dom.getX(oItemEl);
+            nToggleRegion = nMenuItemX + (oItemEl.offsetWidth - this.SUBMENU_TOGGLE_REGION_WIDTH);
 
-			if (oConfig.getProperty(_SUBMENU_TOGGLE_REGION)) {
+            if (oConfig.getProperty(_SUBMENU_TOGGLE_REGION)) {
 
-				if (Event.getPageX(oEvent) > nToggleRegion) {
+                if (Event.getPageX(oEvent) > nToggleRegion) {
 
-					toggleSubmenuDisplay();
+                    toggleSubmenuDisplay();
 
-					Event.preventDefault(oEvent);
+                    Event.preventDefault(oEvent);
 
-					/*
-						 Return false so that other click event handlers are not called when the 
-						 user clicks inside the toggle region.
-					*/
-					bReturnVal = false;
-				
-				}
+                    /*
+                         Return false so that other click event handlers are not called when the 
+                         user clicks inside the toggle region.
+                    */
+                    bReturnVal = false;
+                
+                }
         
-        	}
-			else {
+            }
+            else {
 
-				toggleSubmenuDisplay();
+                toggleSubmenuDisplay();
             
             }
         
@@ -407,7 +407,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     }
 
 
-	return bReturnVal;
+    return bReturnVal;
 
 },
 
@@ -424,13 +424,13 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 */
 configSubmenuToggle: function (p_sType, p_aArgs) {
 
-	var bSubmenuToggle = p_aArgs[0];
-	
-	if (bSubmenuToggle) {
-	
-		this.cfg.setProperty(_AUTO_SUBMENU_DISPLAY, false);
-	
-	}
+    var bSubmenuToggle = p_aArgs[0];
+    
+    if (bSubmenuToggle) {
+    
+        this.cfg.setProperty(_AUTO_SUBMENU_DISPLAY, false);
+    
+    }
 
 },
 
@@ -467,7 +467,7 @@ initDefaultConfig: function() {
 
     var oConfig = this.cfg;
 
-	// Add configuration properties
+    // Add configuration properties
 
 
     /*
@@ -531,12 +531,12 @@ initDefaultConfig: function() {
     * @default false
     * @type Boolean
     */
-	oConfig.addProperty(
-	   AUTO_SUBMENU_DISPLAY_CONFIG.key, 
-	   {
-	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
-	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
-	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
+    oConfig.addProperty(
+       AUTO_SUBMENU_DISPLAY_CONFIG.key, 
+       {
+           value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
+           validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
+           suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
        } 
     );
 
@@ -553,12 +553,12 @@ initDefaultConfig: function() {
     * @default false
     * @type Boolean
     */
-	oConfig.addProperty(
-	   SUBMENU_TOGGLE_REGION_CONFIG.key, 
-	   {
-	       value: SUBMENU_TOGGLE_REGION_CONFIG.value, 
-	       validator: SUBMENU_TOGGLE_REGION_CONFIG.validator,
-	       handler: this.configSubmenuToggle
+    oConfig.addProperty(
+       SUBMENU_TOGGLE_REGION_CONFIG.key, 
+       {
+           value: SUBMENU_TOGGLE_REGION_CONFIG.value, 
+           validator: SUBMENU_TOGGLE_REGION_CONFIG.validator,
+           handler: this.configSubmenuToggle
        } 
     );
 

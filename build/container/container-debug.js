@@ -5660,6 +5660,8 @@
         * @type Object
         */
         EVENT_TYPES = {
+            "BEFORE_SHOW_MASK" : "beforeShowMask",
+            "BEFORE_HIDE_MASK" : "beforeHideMask",
             "SHOW_MASK": "showMask",
             "HIDE_MASK": "hideMask",
             "DRAG": "drag"
@@ -5780,7 +5782,7 @@
         configuration property back to its original value before 
         "setWidthToOffsetWidth" was called.
     */
-    
+
     function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
 
         var sOriginalWidth = p_oObject[0],
@@ -5866,7 +5868,7 @@
                 this.subscribe("changeContent", this.setFirstLastFocusable);
             });
 
-            this.subscribe("show", this.focusFirst);
+            this.subscribe("show", this._focusOnShow);
 
             this.initEvent.fire(Panel);
         },
@@ -5893,15 +5895,7 @@
                 // the documentElement, when the document scrollbars are clicked on
                 if (insideDoc && target !== this.element && target !== this.mask && !Dom.isAncestor(this.element, target)) {
                     try {
-                        if (this.firstElement) {
-                            this.firstElement.focus();
-                        } else {
-                            if (this._modalFocus) {
-                                this._modalFocus.focus();
-                            } else {
-                                this.innerElement.focus();
-                            }
-                        }
+                        this._focusFirstModal();
                     } catch(err){
                         // Just in case we fail to focus
                         try {
@@ -5910,6 +5904,26 @@
                             }
                         } catch(err2) { }
                     }
+                }
+            }
+        },
+
+        /**
+         * Focuses on the first element if present, otherwise falls back to the focus mechanisms used for 
+         * modality. This method does not try/catch focus failures. The caller is responsible for catching exceptions,
+         * and taking remedial measures.
+         * 
+         * @method _focusFirstModal
+         */
+        _focusFirstModal : function() {
+            var el = this.firstElement;
+            if (el) {
+                el.focus();
+            } else {
+                if (this._modalFocus) {
+                    this._modalFocus.focus();
+                } else {
+                    this.innerElement.focus();
                 }
             }
         },
@@ -5935,7 +5949,7 @@
                     this.innerElement.tabIndex = 0;
                 }
             }
-            this.setTabLoop(this.firstElement, this.lastElement);
+            this._setTabLoop(this.firstElement, this.lastElement);
             Event.onFocus(document.documentElement, this._onElementFocus, this, true);
             _currentModal = this;
         },
@@ -5979,12 +5993,34 @@
         },
 
         /**
+         * Focus handler for the show event
+         *
+         * @method _focusOnShow
+         * @param {String} type Event Type
+         * @param {Array} args Event arguments
+         * @param {Object} obj Additional data 
+         */
+        _focusOnShow : function(type, args, obj) {
+
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
+            }
+
+            if (!this.focusFirst(type, args, obj)) {
+                if (this.cfg.getProperty("modal")) {
+                    this._focusFirstModal();
+                }
+            }
+        },
+
+        /**
          * Sets focus to the first element in the Panel.
          *
          * @method focusFirst
+         * @return {Boolean} true, if successfully focused, false otherwise 
          */
         focusFirst: function (type, args, obj) {
-            var el = this.firstElement;
+            var el = this.firstElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -5993,19 +6029,23 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
         },
 
         /**
          * Sets focus to the last element in the Panel.
          *
          * @method focusLast
+         * @return {Boolean} true, if successfully focused, false otherwise
          */
         focusLast: function (type, args, obj) {
-            var el = this.lastElement;
+            var el = this.lastElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -6014,10 +6054,27 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         *
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**
@@ -6084,20 +6141,30 @@
 
             root = root || this.innerElement;
 
-            var focusable = {};
+            var focusable = {}, panel = this;
             for (var i = 0; i < Panel.FOCUSABLE.length; i++) {
                 focusable[Panel.FOCUSABLE[i]] = true;
             }
 
-            function isFocusable(el) {
-                if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
-                    return true;
-                }
-                return false;
-            }
-
             // Not looking by Tag, since we want elements in DOM order
-            return Dom.getElementsBy(isFocusable, null, root);
+            
+            return Dom.getElementsBy(function(el) { return panel._testIfFocusable(el, focusable); }, null, root);
+        },
+
+        /**
+         * This is the test method used by getFocusableElements, to determine which elements to 
+         * include in the focusable elements list. Users may override this to customize behavior.
+         *
+         * @method _testIfFocusable
+         * @param {Object} el The element being tested
+         * @param {Object} focusable The hash of known focusable elements, created by an array-to-map operation on Panel.FOCUSABLE
+         * @protected
+         */
+        _testIfFocusable: function(el, focusable) {
+            if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -6120,7 +6187,7 @@
             }
 
             if (this.cfg.getProperty("modal")) {
-                this.setTabLoop(this.firstElement, this.lastElement);
+                this._setTabLoop(this.firstElement, this.lastElement);
             }
         },
 
@@ -6141,11 +6208,27 @@
             this.showMaskEvent.signature = SIGNATURE;
 
             /**
+            * CustomEvent fired before the modality mask is shown. Subscribers can return false to prevent the
+            * mask from being shown
+            * @event beforeShowMaskEvent
+            */
+            this.beforeShowMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_SHOW_MASK);
+            this.beforeShowMaskEvent.signature = SIGNATURE;
+
+            /**
             * CustomEvent fired after the modality mask is hidden
             * @event hideMaskEvent
             */
             this.hideMaskEvent = this.createEvent(EVENT_TYPES.HIDE_MASK);
             this.hideMaskEvent.signature = SIGNATURE;
+
+            /**
+            * CustomEvent fired before the modality mask is hidden. Subscribers can return false to prevent the
+            * mask from being hidden
+            * @event beforeHideMaskEvent
+            */
+            this.beforeHideMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_HIDE_MASK);
+            this.beforeHideMaskEvent.signature = SIGNATURE;
 
             /**
             * CustomEvent when the Panel is dragged
@@ -6315,7 +6398,8 @@
 
             var val = args[0],
                 oClose = this.close,
-                strings = this.cfg.getProperty("strings");
+                strings = this.cfg.getProperty("strings"),
+                fc;
 
             if (val) {
                 if (!oClose) {
@@ -6327,7 +6411,14 @@
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
-                    this.innerElement.appendChild(oClose);
+
+                    fc = this.innerElement.firstChild;
+
+                    if (fc) {
+                        this.innerElement.insertBefore(oClose, fc);
+                    } else {
+                        this.innerElement.appendChild(oClose);
+                    }
 
                     oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
 
@@ -6938,7 +7029,7 @@
         * @method hideMask
         */
         hideMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeHideMaskEvent.fire()) {
                 this.mask.style.display = "none";
                 Dom.removeClass(document.body, "masked");
                 this.hideMaskEvent.fire();
@@ -6950,7 +7041,7 @@
         * @method showMask
         */
         showMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeShowMaskEvent.fire()) {
                 Dom.addClass(document.body, "masked");
                 this.sizeMask();
                 this.mask.style.display = "block";
@@ -7510,7 +7601,7 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            this.showEvent.subscribe(this.focusFirst, this, true);
+            //this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
@@ -7685,9 +7776,25 @@
         setTabLoop : function(firstElement, lastElement) {
 
             firstElement = firstElement || this.firstButton;
-            lastElement = this.lastButton || lastElement;
+            lastElement = lastElement || this.lastButton;
 
             Dialog.superclass.setTabLoop.call(this, firstElement, lastElement);
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            firstElement = firstElement || this.firstButton;
+            lastElement = this.lastButton || lastElement;
+
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**
@@ -7795,7 +7902,7 @@
                     oButton = aButtons[i];
 
                     if (Button) {
-                        oYUIButton = new Button({ label: oButton.text});
+                        oYUIButton = new Button({ label: oButton.text, type:oButton.type });
                         oYUIButton.appendTo(oSpan);
 
                         oButtonEl = oYUIButton.get("element");
@@ -7894,7 +8001,7 @@
         * buttons, by default an array of HTML <code>&#60;BUTTON&#62;</code> 
         * elements.  If the Dialog's buttons were created using the 
         * YAHOO.widget.Button class (via the inclusion of the optional Button 
-        * dependancy on the page), an array of YAHOO.widget.Button instances 
+        * dependency on the page), an array of YAHOO.widget.Button instances 
         * is returned.
         * @return {Array}
         */
@@ -7912,55 +8019,74 @@
          * This method is invoked when the Dialog is made visible.
          * </p>
          * @method focusFirst
+         * @return {Boolean} true, if focused. false if not
          */
         focusFirst: function (type, args, obj) {
 
-            var el = this.firstFormElement;
+            var el = this.firstFormElement, 
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use firstElement instead of firstFormElement
+                if (args[0] === 9 && this.firstElement) {
+                    el = this.firstElement;
+                }
             }
 
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(oException) {
                     // Ignore
                 }
             } else {
                 if (this.defaultHtmlButton) {
-                    this.focusDefaultButton();
+                    focused = this.focusDefaultButton();
                 } else {
-                    this.focusFirstButton();
+                    focused = this.focusFirstButton();
                 }
             }
+            return focused;
         },
 
         /**
         * Sets focus to the last element in the Dialog's form or the last 
         * button defined via the "buttons" configuration property.
         * @method focusLast
+        * @return {Boolean} true, if focused. false if not
         */
         focusLast: function (type, args, obj) {
 
             var aButtons = this.cfg.getProperty("buttons"),
-                el = this.lastFormElement;
+                el = this.lastFormElement,
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use lastElement instead of lastFormElement
+                if (args[0] === 9 && this.lastElement) {
+                    el = this.lastElement;
+                }
             }
 
             if (aButtons && Lang.isArray(aButtons)) {
-                this.focusLastButton();
+                focused = this.focusLastButton();
             } else {
                 if (el) {
                     try {
                         el.focus();
+                        focused = true;
                     } catch(oException) {
                         // Ignore
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
@@ -7991,9 +8117,12 @@
         * the "buttons" configuration property. By default, this method is 
         * called when the Dialog is made visible.
         * @method focusDefaultButton
+        * @return {Boolean} true if focused, false if not
         */
         focusDefaultButton: function () {
-            var button = this._getButton(this.defaultHtmlButton);
+            var button = this._getButton(this.defaultHtmlButton), 
+                         focused = false;
+            
             if (button) {
                 /*
                     Place the call to the "focus" method inside a try/catch
@@ -8002,9 +8131,11 @@
                 */
                 try {
                     button.focus();
+                    focused = true;
                 } catch(oException) {
                 }
             }
+            return focused;
         },
 
         /**
@@ -8051,12 +8182,14 @@
         * Sets the focus to the first button created via the "buttons"
         * configuration property.
         * @method focusFirstButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusFirstButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 oButton,
-                oElement;
+                oElement,
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 oButton = aButtons[0];
@@ -8071,25 +8204,30 @@
                         */
                         try {
                             oElement.focus();
+                            focused = true;
                         } catch(oException) {
                             // ignore
                         }
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
         * Sets the focus to the last button created via the "buttons" 
         * configuration property.
         * @method focusLastButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusLastButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 nButtons,
                 oButton,
-                oElement;
+                oElement, 
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 nButtons = aButtons.length;
@@ -8108,6 +8246,7 @@
         
                             try {
                                 oElement.focus();
+                                focused = true;
                             } catch(oException) {
                                 // Ignore
                             }
@@ -8115,6 +8254,8 @@
                     }
                 }
             }
+
+            return focused;
         },
 
         /**

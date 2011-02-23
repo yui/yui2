@@ -3510,53 +3510,53 @@ _onTbodyFocus : function(e, oSelf) {
  */
 _onTableMouseover : function(e, origTarget, container, oSelf) {
     var elTarget = origTarget;
-        var elTag = elTarget.nodeName.toLowerCase();
-        var bKeepBubbling = true;
-        while(elTarget && (elTag != "table")) {
-            switch(elTag) {
-                case "body":
-                     return;
-                case "a":
-                    break;
-                case "td":
-                    bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-                    break;
-                case "span":
-                    if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
-                        bKeepBubbling = oSelf.fireEvent("theadLabelMouseoverEvent",{target:elTarget,event:e});
-                        // Backward compatibility
-                        bKeepBubbling = oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
-                    }
-                    break;
-                case "th":
-                    bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
+    var bKeepBubbling = true;
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                 return;
+            case "a":
+                break;
+            case "td":
+                bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+                break;
+            case "span":
+                if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
+                    bKeepBubbling = oSelf.fireEvent("theadLabelMouseoverEvent",{target:elTarget,event:e});
                     // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
-                    break;
-                case "tr":
-                    if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
-                        bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
-                        // Backward compatibility
-                        bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
-                    }
-                    else {
-                        bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
-                    }
-                    break;
-                default:
-                    break;
-            }
-            if(bKeepBubbling === false) {
-                return;
-            }
-            else {
-                elTarget = elTarget.parentNode;
-                if(elTarget) {
-                    elTag = elTarget.nodeName.toLowerCase();
+                    bKeepBubbling = oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
                 }
+                break;
+            case "th":
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
+                break;
+            case "tr":
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
+                    bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
+                }
+                break;
+            default:
+                break;
+        }
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
-        oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
+    }
+    oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
 },
 
 /**
@@ -3571,7 +3571,7 @@ _onTableMouseover : function(e, origTarget, container, oSelf) {
  */
 _onTableMouseout : function(e, origTarget, container, oSelf) {
     var elTarget = origTarget;
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3630,7 +3630,7 @@ _onTableMouseout : function(e, origTarget, container, oSelf) {
  */
 _onTableMousedown : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3689,7 +3689,7 @@ _onTableMousedown : function(e, oSelf) {
  */
 _onTableMouseup : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3748,7 +3748,7 @@ _onTableMouseup : function(e, oSelf) {
  */
 _onTableDblclick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3804,7 +3804,7 @@ _onTableDblclick : function(e, oSelf) {
  */
 _onTheadKeydown : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3871,7 +3871,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
+    var elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3939,7 +3939,7 @@ _onTheadClick : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e),
-        elTag = elTarget.nodeName.toLowerCase(),
+        elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase(),
         bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3954,14 +3954,27 @@ _onTheadClick : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("theadRadioClickEvent",{target:elTarget,event:e});
                 }
                 else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
-                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                    if(!elTarget.disabled) {
+                        bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                    }
+                    else {
+                        bKeepBubbling = false;
+                    }
+                }
+                else if (elTarget.disabled){
+                    bKeepBubbling = false;
                 }
                 break;
             case "a":
                 bKeepBubbling = oSelf.fireEvent("theadLinkClickEvent",{target:elTarget,event:e});
                 break;
             case "button":
-                bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                if(!elTarget.disabled) {
+                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = false;
+                }
                 break;
             case "span":
                 if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
@@ -4017,7 +4030,7 @@ _onTbodyClick : function(e, oSelf) {
 
     // Fire Custom Events
     var elTarget = Ev.getTarget(e),
-        elTag = elTarget.nodeName.toLowerCase(),
+        elTag = elTarget.nodeName && elTarget.nodeName.toLowerCase(),
         bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -4032,14 +4045,27 @@ _onTbodyClick : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
                 }
                 else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
-                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                    if(!elTarget.disabled) {
+                        bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                    }
+                    else {
+                        bKeepBubbling = false;
+                    }
+                }
+                else if (elTarget.disabled){
+                    bKeepBubbling = false;
                 }
                 break;
             case "a":
                 bKeepBubbling = oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
                 break;
             case "button":
-                bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                if(!elTarget.disabled) {
+                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = false;
+                }
                 break;
             case "td":
                 bKeepBubbling = oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
@@ -4979,7 +5005,7 @@ render : function() {
                     if((this instanceof DT) && this._sId) {
                         var i = oArg.nCurrent,
                             loopN = oArg.nLoopLength,
-                            nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
+                            nIterEnd = (i - loopN < 0) ? 0 : i - loopN;
     
                         elTbody.style.display = "none";
                         
@@ -6863,7 +6889,8 @@ updateRow : function(row, oData) {
 updateRows : function(startrow, aData) {
     if(lang.isArray(aData)) {
         var startIndex = startrow,
-            oRecordSet = this._oRecordSet;
+            oRecordSet = this._oRecordSet,
+            lastRowIndex = oRecordSet.getLength();
             
         if (!lang.isNumber(startrow)) {
             startIndex = this.getRecordIndex(startrow);
@@ -6911,7 +6938,6 @@ updateRows : function(startrow, aData) {
                     // Update the TR elements
                     var loopN = this.get("renderLoopSize"),
                         rowCount = aData.length, // how many needed
-                        lastRowIndex = oRecordSet.getLength()-1,// DOM is unreliable source of truth
                         isLast = (lastIndex >= lastRowIndex),
                         isAdding = (lastIndex > lastRowIndex);
                                            

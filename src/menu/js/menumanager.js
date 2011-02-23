@@ -23,32 +23,32 @@
 (function () {
 
     var UA = YAHOO.env.ua,
-		Dom = YAHOO.util.Dom,
-	    Event = YAHOO.util.Event,
-	    Lang = YAHOO.lang,
+        Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Lang = YAHOO.lang,
 
-		_DIV = "DIV",
-    	_HD = "hd",
-    	_BD = "bd",
-    	_FT = "ft",
-    	_LI = "LI",
-    	_DISABLED = "disabled",
-		_MOUSEOVER = "mouseover",
-		_MOUSEOUT = "mouseout",
-		_MOUSEDOWN = "mousedown",
-		_MOUSEUP = "mouseup",
-		_CLICK = "click",
-		_KEYDOWN = "keydown",
-		_KEYUP = "keyup",
-		_KEYPRESS = "keypress",
-		_CLICK_TO_HIDE = "clicktohide",
-		_POSITION = "position", 
-		_DYNAMIC = "dynamic",
-		_SHOW_DELAY = "showdelay",
-		_SELECTED = "selected",
-		_VISIBLE = "visible",
-		_UL = "UL",
-		_MENUMANAGER = "MenuManager";
+        _DIV = "DIV",
+        _HD = "hd",
+        _BD = "bd",
+        _FT = "ft",
+        _LI = "LI",
+        _DISABLED = "disabled",
+        _MOUSEOVER = "mouseover",
+        _MOUSEOUT = "mouseout",
+        _MOUSEDOWN = "mousedown",
+        _MOUSEUP = "mouseup",
+        _CLICK = "click",
+        _KEYDOWN = "keydown",
+        _KEYUP = "keyup",
+        _KEYPRESS = "keypress",
+        _CLICK_TO_HIDE = "clicktohide",
+        _POSITION = "position", 
+        _DYNAMIC = "dynamic",
+        _SHOW_DELAY = "showdelay",
+        _SELECTED = "selected",
+        _VISIBLE = "visible",
+        _UL = "UL",
+        _MENUMANAGER = "MenuManager";
 
 
     /**
@@ -122,7 +122,7 @@
         function getMenuRootElement(p_oElement) {
         
             var oParentNode,
-            	returnVal;
+                returnVal;
     
             if (p_oElement && p_oElement.tagName) {
             
@@ -204,8 +204,8 @@
             // See if the target of the event was a menu, or a menu item
     
             oElement = getMenuRootElement(oTarget),
-			bFireEvent = true,
-			sEventType = p_oEvent.type,
+            bFireEvent = true,
+            sEventType = p_oEvent.type,
             sCustomEventType,
             sTagName,
             sId,
@@ -246,35 +246,35 @@
     
                 sCustomEventType = m_oEventTypes[sEventType];
 
-				/*
-					There is an inconsistency between Firefox for Mac OS X and 
-					Firefox Windows & Linux regarding the triggering of the 
-					display of the browser's context menu and the subsequent 
-					firing of the "click" event. In Firefox for Windows & Linux, 
-					when the user triggers the display of the browser's context 
-					menu the "click" event also fires for the document object, 
-					even though the "click" event did not fire for the element 
-					that was the original target of the "contextmenu" event. 
-					This is unique to Firefox on Windows & Linux.  For all 
-					other A-Grade browsers, including Firefox for Mac OS X, the 
-					"click" event doesn't fire for the document object. 
+                /*
+                    There is an inconsistency between Firefox for Mac OS X and 
+                    Firefox Windows & Linux regarding the triggering of the 
+                    display of the browser's context menu and the subsequent 
+                    firing of the "click" event. In Firefox for Windows & Linux, 
+                    when the user triggers the display of the browser's context 
+                    menu the "click" event also fires for the document object, 
+                    even though the "click" event did not fire for the element 
+                    that was the original target of the "contextmenu" event. 
+                    This is unique to Firefox on Windows & Linux.  For all 
+                    other A-Grade browsers, including Firefox for Mac OS X, the 
+                    "click" event doesn't fire for the document object. 
 
-					This bug in Firefox for Windows affects Menu, as Menu 
-					instances listen for events at the document level and 
-					dispatches Custom Events of the same name.  Therefore users
-					of Menu will get an unwanted firing of the "click" 
-					custom event.  The following line fixes this bug.
-				*/
-				
+                    This bug in Firefox for Windows affects Menu, as Menu 
+                    instances listen for events at the document level and 
+                    dispatches Custom Events of the same name.  Therefore users
+                    of Menu will get an unwanted firing of the "click" 
+                    custom event.  The following line fixes this bug.
+                */
+                
 
 
-				if (sEventType == "click" && 
-					(UA.gecko && oMenu.platform != "mac") && 
-					p_oEvent.button > 0) {
+                if (sEventType == "click" && 
+                    (UA.gecko && oMenu.platform != "mac") && 
+                    p_oEvent.button > 0) {
 
-					bFireEvent = false;
+                    bFireEvent = false;
 
-				}
+                }
     
                 // Fire the Custom Event that corresponds the current DOM event    
         
@@ -282,9 +282,9 @@
                     oMenuItem[sCustomEventType].fire(p_oEvent);                   
                 }
         
-				if (bFireEvent) {
-                	oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
-				}
+                if (bFireEvent) {
+                    oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
+                }
             
             }
             else if (sEventType == _MOUSEDOWN) {
@@ -306,42 +306,42 @@
 
                             oMenu.hide();
 
-							//	In IE when the user mouses down on a focusable 
-							//	element that element will be focused and become 
-							//	the "activeElement".
-							//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
-							//	However, there is a bug in IE where if there is 
-							//	a positioned element with a focused descendant 
-							//	that is hidden in response to the mousedown 
-							//	event, the target of the mousedown event will 
-							//	appear to have focus, but will not be set as 
-							//	the activeElement.  This will result in the 
-							//	element not firing key events, even though it
-							//	appears to have focus.  The following call to 
-							//	"setActive" fixes this bug.
+                            //	In IE when the user mouses down on a focusable 
+                            //	element that element will be focused and become 
+                            //	the "activeElement".
+                            //	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+                            //	However, there is a bug in IE where if there is 
+                            //	a positioned element with a focused descendant 
+                            //	that is hidden in response to the mousedown 
+                            //	event, the target of the mousedown event will 
+                            //	appear to have focus, but will not be set as 
+                            //	the activeElement.  This will result in the 
+                            //	element not firing key events, even though it
+                            //	appears to have focus.  The following call to 
+                            //	"setActive" fixes this bug.
 
-							if (UA.ie && oTarget.focus) {
-								oTarget.setActive();
-							}
+                            if (UA.ie && oTarget.focus) {
+                                oTarget.setActive();
+                            }
         
                         }
                         else {
                             
-							if (oMenu.cfg.getProperty(_SHOW_DELAY) > 0) {
-							
-								oMenu._cancelShowDelay();
-							
-							}
+                            if (oMenu.cfg.getProperty(_SHOW_DELAY) > 0) {
+                            
+                                oMenu._cancelShowDelay();
+                            
+                            }
 
 
-							if (oMenu.activeItem) {
-						
-								oMenu.activeItem.blur();
-								oMenu.activeItem.cfg.setProperty(_SELECTED, false);
-						
-								oMenu.activeItem = null;            
-						
-							}
+                            if (oMenu.activeItem) {
+                        
+                                oMenu.activeItem.blur();
+                                oMenu.activeItem.cfg.setProperty(_SELECTED, false);
+                        
+                                oMenu.activeItem = null;            
+                        
+                            }
         
                         }
         
@@ -433,7 +433,7 @@
                 m_oVisibleMenus[sId] = this;
                 
                 YAHOO.log(this + " added to the collection of visible menus.", 
-                	"info", _MENUMANAGER);
+                    "info", _MENUMANAGER);
             
             }
             else if (m_oVisibleMenus[sId]) {
@@ -441,7 +441,7 @@
                 delete m_oVisibleMenus[sId];
                 
                 YAHOO.log(this + " removed from the collection of visible menus.", 
-                	"info", _MENUMANAGER);
+                    "info", _MENUMANAGER);
             
             }
         
@@ -560,8 +560,8 @@
                         Event.on(oDoc, _KEYUP, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYPRESS, onDOMEvent, this, true);
     
-						Event.onFocus(oDoc, onDOMEvent, this, true);
-						Event.onBlur(oDoc, onDOMEvent, this, true);						
+                        Event.onFocus(oDoc, onDOMEvent, this, true);
+                        Event.onBlur(oDoc, onDOMEvent, this, true);						
     
                         m_bInitializedEventHandlers = true;
                         
@@ -732,11 +732,11 @@
                 
                 if (p_sId in m_oMenus) {
                 
-					returnVal = m_oMenus[p_sId];
-				
-				}
+                    returnVal = m_oMenus[p_sId];
+                
+                }
             
-            	return returnVal;
+                return returnVal;
             
             },
     
@@ -751,15 +751,15 @@
             */
             getMenuItem: function (p_sId) {
     
-    			var returnVal;
+                var returnVal;
     
-    			if (p_sId in m_oItems) {
+                if (p_sId in m_oItems) {
     
-					returnVal = m_oItems[p_sId];
-				
-				}
-				
-				return returnVal;
+                    returnVal = m_oItems[p_sId];
+                
+                }
+                
+                return returnVal;
             
             },
 
@@ -823,7 +823,7 @@
                 
                 }
 
-				return returnVal;
+                return returnVal;
             
             },
 
@@ -849,7 +849,7 @@
             */
             getFocusedMenu: function () {
 
-				var returnVal;
+                var returnVal;
     
                 if (m_oFocusedMenuItem) {
     
@@ -857,7 +857,7 @@
                 
                 }
     
-    			return returnVal;
+                return returnVal;
     
             },
     

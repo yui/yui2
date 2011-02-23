@@ -426,7 +426,7 @@
 				filesToUpload = [];
 			} 
 
-			else { // cancel specified file
+			else if (fileRefList[fileID] != null) { // cancel specified file				
 				var fr:FileReference = fileRefList[fileID];
 				if (this.currentUploadThreads > 0)
 					this.currentUploadThreads--;
@@ -518,7 +518,8 @@
 			newEvent.type = "uploadComplete"
 			super.dispatchEventToJavaScript(newEvent);
 
-			this.currentUploadThreads--;
+			if (this.currentUploadThreads > 0)
+				this.currentUploadThreads--;
 			// get next off of queue:
 			processQueue();
 		}
@@ -563,6 +564,9 @@
 				newEvent.status = event.toString();
 				logMessage("Security error for " + fileIDList[event.target]);
 			}
+			
+			if (this.currentUploadThreads > 0)
+				this.currentUploadThreads--;
 
 			newEvent.type = "uploadError";
 			newEvent.id = fileIDList[event.target];
