@@ -2769,12 +2769,10 @@ _onMouseOut: function (p_sType, p_aArgs) {
                 // Menu Item mouseout logic
     
                 if (!bMovingToSubmenu) {
-    
+
                     oItem.cfg.setProperty(_SELECTED, false);
-    
-    
+
                     if (oSubmenu) {
-    
                         nSubmenuHideDelay = this.cfg.getProperty(_SUBMENU_HIDE_DELAY);
     
                         nShowDelay = this.cfg.getProperty(_SHOW_DELAY);
@@ -2782,8 +2780,7 @@ _onMouseOut: function (p_sType, p_aArgs) {
                         if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
                             nShowDelay >= nSubmenuHideDelay) {
     
-                            this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent),
-                                    nSubmenuHideDelay);
+                            this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent), nSubmenuHideDelay);
     
                         }
                         else {
@@ -3058,8 +3055,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
                     oNextItem.cfg.setProperty(_SELECTED, true);
                     oNextItem.focus();
 
-
-                    if (this.cfg.getProperty(_MAX_HEIGHT) > 0) {
+                    if (this.cfg.getProperty(_MAX_HEIGHT) > 0 || Dom.hasClass(this.body, _YUI_MENU_BODY_SCROLLED)) {
 
                         oBody = this.body;
                         nBodyScrollTop = oBody.scrollTop;
@@ -3228,7 +3224,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
                             
                                 oSubmenu.show();
-                                oSubmenu.setInitialFocus();                                
+                                oSubmenu.setInitialFocus();
                             
                             }
                             else {
@@ -4572,17 +4568,14 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
     
     }
 
-     
-     if (sCSSPosition == _ABSOLUTE) { 	 
-     
+
+     if (sCSSPosition == _ABSOLUTE) {
          nZIndex = oCfg.getProperty(_ZINDEX);
-     
-         if (!nZIndex || nZIndex === 0) { 	 
-     
-             oCfg.setProperty(_ZINDEX, 1); 	 
-     
-         } 	 
-     
+
+         if (!nZIndex || nZIndex === 0) {
+             oCfg.setProperty(_ZINDEX, 1);
+         }
+
      }
 
 },
@@ -4692,9 +4685,8 @@ _setScrollHeight: function (p_nScrollHeight) {
         nOffsetWidth,
         sWidth;
 
-
     if (this.getItems().length > 0) {
-    
+
         oElement = this.element;
         oBody = this.body;
         oHeader = this.header;
@@ -4703,18 +4695,13 @@ _setScrollHeight: function (p_nScrollHeight) {
         fnMouseOut = this._onScrollTargetMouseOut;
         nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
 
-
         if (nScrollHeight > 0 && nScrollHeight < nMinScrollHeight) {
-        
             nScrollHeight = nMinScrollHeight;
-        
         }
-
 
         Dom.setStyle(oBody, _HEIGHT, _EMPTY_STRING);
         Dom.removeClass(oBody, _YUI_MENU_BODY_SCROLLED);
         oBody.scrollTop = 0;
-
 
         //	Need to set a width for the Menu to fix the following problems in 
         //	Firefox 2 and IE:
@@ -4731,7 +4718,7 @@ _setScrollHeight: function (p_nScrollHeight) {
         //	#3) In IE it is necessary to give the Menu a width before the 
         //	scrollbars are rendered to prevent the Menu from rendering with a 
         //	width that is 100% of the browser viewport.
-    
+
         bSetWidth = ((UA.gecko && UA.gecko < 1.9) || UA.ie);
 
         if (nScrollHeight > 0 && bSetWidth && !this.cfg.getProperty(_WIDTH)) {
@@ -4771,30 +4758,28 @@ _setScrollHeight: function (p_nScrollHeight) {
             this.cfg.subscribeToConfigEvent(_WIDTH, this._clearSetWidthFlag);
     
         }
-    
-    
+
+
         if (nScrollHeight > 0 && (!oHeader && !oFooter)) {
-    
+
             YAHOO.log("Creating header and footer for scrolling.", "info", this.toString());
-    
+
             this.setHeader(_NON_BREAKING_SPACE);
             this.setFooter(_NON_BREAKING_SPACE);
-    
+
             oHeader = this.header;
             oFooter = this.footer;
-    
+
             Dom.addClass(oHeader, _TOP_SCROLLBAR);
             Dom.addClass(oFooter, _BOTTOM_SCROLLBAR);
-            
+
             oElement.insertBefore(oHeader, oBody);
             oElement.appendChild(oFooter);
         
         }
-    
-    
+
         nHeight = nScrollHeight;
-    
-    
+
         if (oHeader && oFooter) {
             nHeight = (nHeight - (oHeader.offsetHeight + oFooter.offsetHeight));
         }

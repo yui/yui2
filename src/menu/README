@@ -13,6 +13,10 @@ Fixed the following bugs:
 + remove UL using UL.parentNode.removeChild, as opposed to assuming this.body,
   to allow for customizations.
 
++ Keyboard handling now correctly updates scroll indicators, when used on a 
+  scrollable Menu (without max height defined) and programmatically updates
+  body scrollTop values.
+
 *** version 2.8.3 ***
 
 + No code changes.
