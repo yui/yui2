@@ -359,7 +359,7 @@ Anim.prototype = {
             Y.AnimMgr.stop(this);
         };
         
-        var onStart = function() {            
+        this._handleStart = function() {            
             this.onStart.fire();
             
             this.runtimeAttributes = {};
@@ -377,7 +377,7 @@ Anim.prototype = {
          * @private
          */
          
-        var onTween = function() {
+        this._handleTween = function() {
             var data = {
                 duration: new Date() - this.getStartTime(),
                 currentFrame: this.currentFrame
@@ -398,10 +398,12 @@ Anim.prototype = {
                 this.setAttribute(attr, this.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
             }
             
+            this.afterTween.fire(data);
+            
             actualFrames += 1;
         };
         
-        var onComplete = function() {
+        this._handleComplete = function() {
             var actual_duration = (new Date() - startTime) / 1000 ;
             
             var data = {
@@ -444,6 +446,13 @@ Anim.prototype = {
         this.onTween = new Y.CustomEvent('tween', this);
         
         /**
+         * Custom event that fires between each frame
+         * Listen via subscribe method (e.g. myAnim.afterTween.subscribe(someFunction)
+         * @event afterTween
+         */
+        this.afterTween = new Y.CustomEvent('afterTween', this);
+        
+        /**
          * Custom event that fires after onTween
          * @private
          */
@@ -461,9 +470,9 @@ Anim.prototype = {
          */
         this._onComplete = new Y.CustomEvent('_complete', this, true);
 
-        this._onStart.subscribe(onStart);
-        this._onTween.subscribe(onTween);
-        this._onComplete.subscribe(onComplete);
+        this._onStart.subscribe(this._handleStart);
+        this._onTween.subscribe(this._handleTween);
+        this._onComplete.subscribe(this._handleComplete);
     }
 };
 

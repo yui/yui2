@@ -75,6 +75,23 @@
                 YAHOO.util.Assert.isTrue(pass, 'onStart failed to fire');
             },            
 
+            test_afterTween: function() {
+                var pass = false,
+                    test = this;
+
+                var handler = function() {
+                    test.resume(function() {
+                        pass = true;
+                        animFoo.afterTween.unsubscribe(handler);
+                        YAHOO.util.Assert.isTrue(pass, 'afterTween failed to fire');
+                    });
+                };      
+                animFoo.afterTween.subscribe(handler);
+                animFoo.animate();
+                test.wait();
+                animFoo.stop();
+            },            
+
             test_endValue: function() {
                 var handler = function() {
                     YAHOO.util.Assert.areEqual(10, elFoo.offsetWidth, 'incorrect "to" end value set');
