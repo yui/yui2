@@ -59,15 +59,18 @@ YAHOO.util.AnimMgr = new function() {
         this.start();
     };
     
-    /**
-     * removes an animation instance from the animation queue.
-     * All animation instances must be registered in order to animate.
-     * @method unRegister
-     * @param {object} tween The Anim instance to be be registered
-     * @param {Int} index The index of the Anim instance
-     * @private
-     */
-    this.unRegister = function(tween, index) {
+    var _unregisterQueue = [];
+    var _unregistering = false;
+
+    var doUnregister = function() {
+        var next_args = _unregisterQueue.shift();
+        unRegister.apply(YAHOO.util.AnimMgr,next_args);
+        if (_unregisterQueue.length) {
+            arguments.callee();
+        }
+    };
+
+    var unRegister = function(tween, index) {
         index = index || getIndex(tween);
         if (!tween.isAnimated() || index === -1) {
             return false;
@@ -83,7 +86,24 @@ YAHOO.util.AnimMgr = new function() {
 
         return true;
     };
-    
+
+    /**
+     * removes an animation instance from the animation queue.
+     * All animation instances must be registered in order to animate.
+     * @method unRegister
+     * @param {object} tween The Anim instance to be be registered
+     * @param {Int} index The index of the Anim instance
+     * @private
+     */
+    this.unRegister = function() {
+        _unregisterQueue.push(arguments);
+        if (!_unregistering) {
+            _unregistering = true;
+            doUnregister();
+            _unregistering = false;
+        }
+    }
+
     /**
      * Starts the animation thread.
 	* Only one thread can run at a time.
