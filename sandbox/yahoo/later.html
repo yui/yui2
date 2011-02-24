@@ -1,54 +1,39 @@
 <html>
 <head>
-<script src="../src/js/YAHOO.js" type="text/javascript"></script>
-<script src="../src/js/Env.js" type="text/javascript"></script>
-<script src="../src/js/Lang.js" type="text/javascript"></script>
-<script src="../../build/event/event.js" type="text/javascript"></script>
-<script src="../../build/dom/dom.js" type="text/javascript"></script>
-<script src="../../build/logger/logger.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="../../build/logger/assets/skins/sam/logger.css" />
-</head>
-<body class="yui-skin-sam">
-<script> 
+<script src="../../build/yahoo/yahoo.js" type="text/javascript"></script>
+<script>
 
-new YAHOO.widget.LogReader();
-var count = 0, timer, r=null, f=null, m=null;
-
-function fn(data) {
-    if (count++ > 5) {
-        YAHOO.log("fn cancel");
-        timer.cancel();
-    } else {
-        YAHOO.log("fn executed with " + YAHOO.lang.dump(arguments));
-    }
+function accumulator() {
+    this.sum = 0;
 }
 
-var Obj = function(a) {
-    this.a = a;
-    this.count = 0;
-};
+accumulator.prototype.add = function(addEnd) { // Adds one number
+    this.sum += addEnd;
+}
 
-Obj.prototype.doit = function(stuff) {
-    if (this.count++ > 5) {
-        YAHOO.log("Obj.doit " + this.a + " canceled");
-        this.timer.cancel();
-    } else {
-        YAHOO.log("Obj.doit " + this.a + ", stuff: " + YAHOO.lang.dump(arguments) + ", count: " + this.count);
+function aggregator() {
+    aggregator.superclass.constructor.apply(this, arguments);
+}
+
+YAHOO.extend(aggregator, accumulator, {
+    add: function() { // Adds many numbers
+        for (var i = 0; i < arguments.length; i++) {
+            aggregator.superclass.add.call(this, arguments[i]);
+        }
     }
-};
+});
 
-YAHOO.lang.later(0, window, fn, "test timeout 1");
 
-YAHOO.lang.later(0, null, fn, "test timeout 2");
 
-//timer = YAHOO.lang.later(1000, window, fn, "lo", true);
 
-var o = new Obj("test interval 1");
-o.timer = YAHOO.lang.later(100, o, "doit", "arg1", true);
+var calculator = new aggregator();
+calculator.add(5, 7, 4);
+alert(calculator.sum); // Displays "16"
 
-var o = new Obj("test interval 2");
-o.timer = YAHOO.lang.later(100, o, o.doit, ["arg1", "arg2"], true);
+YAHOO.lang.later(1, null, function(x){alert(x)}, 0)
 
 </script>
+</head>
+<body>
 </body>
 </html>
