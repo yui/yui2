@@ -92,6 +92,7 @@
                 contentParent = this._contentParent,
                 tabElement = tab.get(ELEMENT),
                 contentEl = tab.get(CONTENT_EL),
+                activeIndex = this.get(ACTIVE_INDEX),
                 before;
 
             if (!tabs) { // not ready yet
@@ -118,6 +119,9 @@
 
             if ( !tab.get(ACTIVE) ) {
                 tab.set('contentVisible', false, true); /* hide if not active */
+                if (index <= activeIndex) {
+                    this.set(ACTIVE_INDEX, activeIndex + 1, true);
+                }  
             } else {
                 this.set(ACTIVE_TAB, tab, true);
                 this.set('activeIndex', index, true);
@@ -205,6 +209,7 @@
          */
         removeTab: function(tab) {
             var tabCount = this.get('tabs').length,
+                activeIndex = this.get(ACTIVE_INDEX),
                 index = this.getTabIndex(tab);
 
             if ( tab === this.get(ACTIVE_TAB) ) { 
@@ -217,6 +222,8 @@
                 } else { // no more tabs
                     this.set(ACTIVE_TAB, null);
                 }
+            } else if (index < activeIndex) {
+                this.set(ACTIVE_INDEX, activeIndex - 1, true);
             }
             
             this._removeTabEvents(tab);

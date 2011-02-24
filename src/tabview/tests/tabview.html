@@ -53,6 +53,7 @@
                 Y.Assert.areEqual(1, tabview.get('activeIndex'), 'tabview.selectTab(1);');
                 tabview.deselectTab(1);
                 Y.Assert.areEqual(null, tabview.get('activeIndex'), 'tabview.selectTab(1);');
+                tabview.selectTab(1);
             },            
 
             test_addTab: function() {
@@ -64,11 +65,13 @@
                 Y.Assert.areEqual(tabs.length - 1, tabview.getTabIndex(tab),  'incorrect Tab');
             },            
 
-            test_removeTab: function() {
-                var tab = tabview.getTab(0);
+            test_removeActiveTab: function() {
+                var tab = tabview.get('activeTab'),
+                    index = tabview.get('activeIndex');
                 tabview.removeTab(tab);
 
                 Y.Assert.areEqual(null, tabview.getTabIndex(tab), 'incorrect Tab');
+                Y.Assert.areEqual(index + 1, tabview.get('activeIndex'), 'incorrect Tab');
             },            
 
             test_activeTabChange: function() {
