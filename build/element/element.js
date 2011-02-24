@@ -128,7 +128,7 @@ YAHOO.util.Attribute.prototype = {
         var beforeRetVal,
             owner = this.owner,
             name = this.name,
-            invalidValue = YAHOO.util.Attribute.INVALID_VALUE;
+            invalidValue = YAHOO.util.Attribute.INVALID_VALUE,
         
             event = {
                 type: name, 
