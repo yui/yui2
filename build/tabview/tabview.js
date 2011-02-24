@@ -335,9 +335,13 @@
             this.setAttributeConfig(ACTIVE_INDEX, {
                 value: attr.activeIndex,
                 validator: function(value) {
-                    var ret = true;
-                    if (value && this.getTab(value).get(DISABLED)) { // cannot activate if disabled
-                        ret = false;
+                    var ret = true,
+                        tab;
+                    if (value) { // cannot activate if disabled
+                        tab = this.getTab(value);
+                        if (tab && tab.get(DISABLED)) {
+                            ret = false;
+                        }
                     }
                     return ret;
                 }
@@ -467,7 +471,7 @@
                     active = tab;
                 }
             }
-            if (activeIndex) {
+            if (activeIndex != undefined) { // not null or undefined
                 this.set(ACTIVE_TAB, this.getTab(activeIndex));
             } else {
                 this._configs[ACTIVE_TAB].value = active; // dont invoke method

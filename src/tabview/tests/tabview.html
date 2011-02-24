@@ -16,7 +16,6 @@
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
 
 <script type="text/javascript">
-(function() {
     var Y = YAHOO.util,
         tool = YAHOO.tool,
         suite = new tool.TestSuite("yuisuite");
@@ -108,11 +107,10 @@
         if (parent && parent != window) {
             tool.TestManager.load();
         } else {
-            tool.TestRunner.run();
+//            tool.TestRunner.run();
         }
 
     }); 
-})();
 </script>
 <style type="text/css">
 
@@ -122,8 +120,8 @@
     <div id="doc">
         <div id="demo" class="yui-navset">
             <ul class="yui-nav">
-                <li class="selected"><a href="#foo"><em>foo</em></a></li>
-                <li id="tab-bar"><a href="#bar"><em>bar</em></a></li>
+                <li><a href="#foo"><em>foo</em></a></li>
+                <li class="selected" id="tab-bar"><a href="#bar"><em>bar</em></a></li>
                 <li><a href="#baz"><em>baz</em></a></li>
             </ul>
             <div class="yui-content">
