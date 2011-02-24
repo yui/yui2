@@ -61,14 +61,11 @@
         * @type class
         */
         this.animClass = animClass;
-    
     };
-
 
     var Dom = YAHOO.util.Dom,
         CustomEvent = YAHOO.util.CustomEvent,
         ContainerEffect = YAHOO.widget.ContainerEffect;
-
 
     /**
     * A pre-configured ContainerEffect instance that can be used for fading 
@@ -112,6 +109,8 @@
         };
 
         fade.handleStartAnimateIn = function (type, args, obj) {
+            obj.overlay._fadingIn = true;
+
             Dom.addClass(obj.overlay.element, "hide-select");
 
             if (!obj.overlay.underlay) {
@@ -125,6 +124,8 @@
         };
 
         fade.handleCompleteAnimateIn = function (type,args,obj) {
+            obj.overlay._fadingIn = false;
+            
             Dom.removeClass(obj.overlay.element, "hide-select");
 
             if (obj.overlay.element.style.filter) {
@@ -138,12 +139,15 @@
         };
 
         fade.handleStartAnimateOut = function (type, args, obj) {
+            obj.overlay._fadingOut = true;
             Dom.addClass(obj.overlay.element, "hide-select");
             obj.handleUnderlayStart();
         };
 
         fade.handleCompleteAnimateOut =  function (type, args, obj) {
+            obj.overlay._fadingOut = false;
             Dom.removeClass(obj.overlay.element, "hide-select");
+
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
@@ -221,7 +225,7 @@
             obj.overlay.cfg.refireEvent("iframe");
             obj.animateInCompleteEvent.fire();
         };
-        
+
         slide.handleStartAnimateOut = function (type, args, obj) {
     
             var vw = Dom.getViewportWidth(),
@@ -269,36 +273,37 @@
             this.animateInCompleteEvent = this.createEvent("animateInComplete");
             this.animateInCompleteEvent.signature = CustomEvent.LIST;
         
-            this.animateOutCompleteEvent = 
-                this.createEvent("animateOutComplete");
+            this.animateOutCompleteEvent = this.createEvent("animateOutComplete");
             this.animateOutCompleteEvent.signature = CustomEvent.LIST;
-        
-            this.animIn = new this.animClass(this.targetElement, 
-                this.attrIn.attributes, this.attrIn.duration, 
+
+            this.animIn = new this.animClass(
+                this.targetElement, 
+                this.attrIn.attributes, 
+                this.attrIn.duration, 
                 this.attrIn.method);
 
             this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
             this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
-
-            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, 
-                this);
+            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn,this);
         
-            this.animOut = new this.animClass(this.targetElement, 
-                this.attrOut.attributes, this.attrOut.duration, 
+            this.animOut = new this.animClass(
+                this.targetElement, 
+                this.attrOut.attributes, 
+                this.attrOut.duration, 
                 this.attrOut.method);
 
             this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
             this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
-            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, 
-                this);
+            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
 
         },
-        
+
         /**
         * Triggers the in-animation.
         * @method animateIn
         */
         animateIn: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateInEvent.fire();
             this.animIn.animate();
         },
@@ -308,8 +313,36 @@
         * @method animateOut
         */
         animateOut: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateOutEvent.fire();
             this.animOut.animate();
+        },
+        
+        /**
+         * Flag to define whether Anim should jump to the last frame,
+         * when animateIn or animateOut is stopped.
+         *
+         * @property lastFrameOnStop
+         * @default true
+         * @type boolean
+         */
+        lastFrameOnStop : true,
+
+        /**
+         * Stops both animIn and animOut instances, if in progress.
+         *
+         * @method _stopAnims
+         * @param {boolean} finish If true, animation will jump to final frame.
+         * @protected
+         */
+        _stopAnims : function(finish) {
+            if (this.animOut && this.animOut.isAnimated()) {
+                this.animOut.stop(finish);
+            }
+
+            if (this.animIn && this.animIn.isAnimated()) {
+                this.animIn.stop(finish);
+            }
         },
 
         /**

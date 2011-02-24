@@ -513,6 +513,7 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.EFFECT.key, {
+                handler: this.configEffect,
                 suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
             });
@@ -1185,6 +1186,61 @@
                     this.hideEvent.fire();
                 }
             }
+        },
+
+        /**
+        * Default event handler for the "effect" configuration property
+        * @param {String} type The CustomEvent type (usually the property name)
+        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * handlers, args[0] will equal the newly applied value for the property.
+        * @param {Object} obj The scope object. For configuration handlers, 
+        * this will usually equal the owner.
+        * @method configEffect
+        */
+        configEffect: function (type, args, obj) {
+            this._cachedEffects = (this.cacheEffects) ? this._createEffects(args[0]) : null;
+        },
+
+        /**
+         * If true, ContainerEffects (and Anim instances) are cached when "effect" is set, and reused. 
+         * If false, new instances are created each time the container is hidden or shown, as was the 
+         * behavior prior to 2.9.0. 
+         *
+         * @property cacheEffects
+         * @since 2.9.0
+         * @default true
+         * @type boolean
+         */
+        cacheEffects : true,
+
+        /**
+         * Creates an array of ContainerEffect instances from the provided configs
+         * 
+         * @method _createEffects
+         * @param {Array|Object} effectCfg An effect configuration or array of effect configurations
+         * @return {Array} An array of ContainerEffect instances.
+         * @protected
+         */
+        _createEffects: function(effectCfg) {
+            var effectInstances = null,
+                n, 
+                i,
+                eff;
+
+            if (effectCfg instanceof Array) {
+                effectInstances = [];
+                n = effectCfg.length;
+                for (i = 0; i < n; i++) {
+                    eff = effectCfg[i];
+                    if (eff.effect) {
+                        effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+                    }
+                }
+            } else if (effectCfg.effect) {
+                effectInstances = [effectCfg.effect(this, effectCfg.duration)];
+            }
+
+            return effectInstances;
         },
 
         /**

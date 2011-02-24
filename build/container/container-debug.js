@@ -1196,6 +1196,7 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.EFFECT.key, {
+                handler: this.configEffect,
                 suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
             });
@@ -1868,6 +1869,61 @@
                     this.hideEvent.fire();
                 }
             }
+        },
+
+        /**
+        * Default event handler for the "effect" configuration property
+        * @param {String} type The CustomEvent type (usually the property name)
+        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * handlers, args[0] will equal the newly applied value for the property.
+        * @param {Object} obj The scope object. For configuration handlers, 
+        * this will usually equal the owner.
+        * @method configEffect
+        */
+        configEffect: function (type, args, obj) {
+            this._cachedEffects = (this.cacheEffects) ? this._createEffects(args[0]) : null;
+        },
+
+        /**
+         * If true, ContainerEffects (and Anim instances) are cached when "effect" is set, and reused. 
+         * If false, new instances are created each time the container is hidden or shown, as was the 
+         * behavior prior to 2.9.0. 
+         *
+         * @property cacheEffects
+         * @since 2.9.0
+         * @default true
+         * @type boolean
+         */
+        cacheEffects : true,
+
+        /**
+         * Creates an array of ContainerEffect instances from the provided configs
+         * 
+         * @method _createEffects
+         * @param {Array|Object} effectCfg An effect configuration or array of effect configurations
+         * @return {Array} An array of ContainerEffect instances.
+         * @protected
+         */
+        _createEffects: function(effectCfg) {
+            var effectInstances = null,
+                n, 
+                i,
+                eff;
+
+            if (effectCfg instanceof Array) {
+                effectInstances = [];
+                n = effectCfg.length;
+                for (i = 0; i < n; i++) {
+                    eff = effectCfg[i];
+                    if (eff.effect) {
+                        effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+                    }
+                }
+            } else if (effectCfg.effect) {
+                effectInstances = [effectCfg.effect(this, effectCfg.duration)];
+            }
+
+            return effectInstances;
         },
 
         /**
@@ -2733,12 +2789,10 @@
 
             var visible = args[0],
                 currentVis = Dom.getStyle(this.element, "visibility"),
-                effect = this.cfg.getProperty("effect"),
-                effectInstances = [],
+                effects = this._cachedEffects || this._createEffects(this.cfg.getProperty("effect")),
                 isMacGecko = (this.platform == "mac" && UA.gecko),
                 alreadySubscribed = Config.alreadySubscribed,
-                eff, ei, e, i, j, k, h,
-                nEffects,
+                ei, e, j, k, h,
                 nEffectInstances;
 
             if (currentVis == "inherit") {
@@ -2759,46 +2813,27 @@
                 }
             }
 
-            if (effect) {
-                if (effect instanceof Array) {
-                    nEffects = effect.length;
-
-                    for (i = 0; i < nEffects; i++) {
-                        eff = effect[i];
-                        effectInstances[effectInstances.length] = 
-                            eff.effect(this, eff.duration);
-
-                    }
-                } else {
-                    effectInstances[effectInstances.length] = 
-                        effect.effect(this, effect.duration);
-                }
-            }
-
             if (visible) { // Show
+
                 if (isMacGecko) {
                     this.showMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate in
+                if (effects) { // Animate in
                     if (visible) { // Animate in if not showing
-                        if (currentVis != "visible" || currentVis === "") {
+
+                         // Fading out is a bit of a hack, but didn't want to risk doing 
+                         // something broader (e.g a generic this._animatingOut) for 2.9.0
+
+                        if (currentVis != "visible" || currentVis === "" || this._fadingOut) {
                             if (this.beforeShowEvent.fire()) {
-                                nEffectInstances = effectInstances.length;
-    
+
+                                nEffectInstances = effects.length;
+
                                 for (j = 0; j < nEffectInstances; j++) {
-                                    ei = effectInstances[j];
-                                    if (j === 0 && !alreadySubscribed(
-                                            ei.animateInCompleteEvent, 
-                                            this.showEvent.fire, this.showEvent)) {
-    
-                                        /*
-                                             Delegate showEvent until end 
-                                             of animateInComplete
-                                        */
-    
-                                        ei.animateInCompleteEvent.subscribe(
-                                         this.showEvent.fire, this.showEvent, true);
+                                    ei = effects[j];
+                                    if (j === 0 && !alreadySubscribed(ei.animateInCompleteEvent, this.showEvent.fire, this.showEvent)) {
+                                        ei.animateInCompleteEvent.subscribe(this.showEvent.fire, this.showEvent, true);
                                     }
                                     ei.animateIn();
                                 }
@@ -2822,25 +2857,15 @@
                     this.hideMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate out if showing
-                    if (currentVis == "visible") {
+                if (effects) { // Animate out if showing
+                    if (currentVis == "visible" || this._fadingIn) {
                         if (this.beforeHideEvent.fire()) {
-                            nEffectInstances = effectInstances.length;
+                            nEffectInstances = effects.length;
                             for (k = 0; k < nEffectInstances; k++) {
-                                h = effectInstances[k];
+                                h = effects[k];
         
-                                if (k === 0 && !alreadySubscribed(
-                                    h.animateOutCompleteEvent, this.hideEvent.fire, 
-                                    this.hideEvent)) {
-        
-                                    /*
-                                         Delegate hideEvent until end 
-                                         of animateOutComplete
-                                    */
-        
-                                    h.animateOutCompleteEvent.subscribe(
-                                        this.hideEvent.fire, this.hideEvent, true);
-        
+                                if (k === 0 && !alreadySubscribed(h.animateOutCompleteEvent, this.hideEvent.fire, this.hideEvent)) {
+                                    h.animateOutCompleteEvent.subscribe(this.hideEvent.fire, this.hideEvent, true);
                                 }
                                 h.animateOut();
                             }
@@ -8901,14 +8926,11 @@
         * @type class
         */
         this.animClass = animClass;
-    
     };
-
 
     var Dom = YAHOO.util.Dom,
         CustomEvent = YAHOO.util.CustomEvent,
         ContainerEffect = YAHOO.widget.ContainerEffect;
-
 
     /**
     * A pre-configured ContainerEffect instance that can be used for fading 
@@ -8952,6 +8974,8 @@
         };
 
         fade.handleStartAnimateIn = function (type, args, obj) {
+            obj.overlay._fadingIn = true;
+
             Dom.addClass(obj.overlay.element, "hide-select");
 
             if (!obj.overlay.underlay) {
@@ -8965,6 +8989,8 @@
         };
 
         fade.handleCompleteAnimateIn = function (type,args,obj) {
+            obj.overlay._fadingIn = false;
+            
             Dom.removeClass(obj.overlay.element, "hide-select");
 
             if (obj.overlay.element.style.filter) {
@@ -8978,12 +9004,15 @@
         };
 
         fade.handleStartAnimateOut = function (type, args, obj) {
+            obj.overlay._fadingOut = true;
             Dom.addClass(obj.overlay.element, "hide-select");
             obj.handleUnderlayStart();
         };
 
         fade.handleCompleteAnimateOut =  function (type, args, obj) {
+            obj.overlay._fadingOut = false;
             Dom.removeClass(obj.overlay.element, "hide-select");
+
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
@@ -9061,7 +9090,7 @@
             obj.overlay.cfg.refireEvent("iframe");
             obj.animateInCompleteEvent.fire();
         };
-        
+
         slide.handleStartAnimateOut = function (type, args, obj) {
     
             var vw = Dom.getViewportWidth(),
@@ -9109,36 +9138,37 @@
             this.animateInCompleteEvent = this.createEvent("animateInComplete");
             this.animateInCompleteEvent.signature = CustomEvent.LIST;
         
-            this.animateOutCompleteEvent = 
-                this.createEvent("animateOutComplete");
+            this.animateOutCompleteEvent = this.createEvent("animateOutComplete");
             this.animateOutCompleteEvent.signature = CustomEvent.LIST;
-        
-            this.animIn = new this.animClass(this.targetElement, 
-                this.attrIn.attributes, this.attrIn.duration, 
+
+            this.animIn = new this.animClass(
+                this.targetElement, 
+                this.attrIn.attributes, 
+                this.attrIn.duration, 
                 this.attrIn.method);
 
             this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
             this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
-
-            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, 
-                this);
+            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn,this);
         
-            this.animOut = new this.animClass(this.targetElement, 
-                this.attrOut.attributes, this.attrOut.duration, 
+            this.animOut = new this.animClass(
+                this.targetElement, 
+                this.attrOut.attributes, 
+                this.attrOut.duration, 
                 this.attrOut.method);
 
             this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
             this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
-            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, 
-                this);
+            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
 
         },
-        
+
         /**
         * Triggers the in-animation.
         * @method animateIn
         */
         animateIn: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateInEvent.fire();
             this.animIn.animate();
         },
@@ -9148,8 +9178,36 @@
         * @method animateOut
         */
         animateOut: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateOutEvent.fire();
             this.animOut.animate();
+        },
+        
+        /**
+         * Flag to define whether Anim should jump to the last frame,
+         * when animateIn or animateOut is stopped.
+         *
+         * @property lastFrameOnStop
+         * @default true
+         * @type boolean
+         */
+        lastFrameOnStop : true,
+
+        /**
+         * Stops both animIn and animOut instances, if in progress.
+         *
+         * @method _stopAnims
+         * @param {boolean} finish If true, animation will jump to final frame.
+         * @protected
+         */
+        _stopAnims : function(finish) {
+            if (this.animOut && this.animOut.isAnimated()) {
+                this.animOut.stop(finish);
+            }
+
+            if (this.animIn && this.animIn.isAnimated()) {
+                this.animIn.stop(finish);
+            }
         },
 
         /**
