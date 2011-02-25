@@ -12,6 +12,9 @@ and destroyed for each instance instead of being shared globally.
 sendRequest() method under the hood.
 * Moved YAHOO.widget.DataTable._cloneObject definition to
 YAHOO.util.DataSourceBase._cloneObject.
+* Bug 2528233: Rewired getTrEl(), getFirstTrEl(), getLastTrEl(), getNextTrEl(),
+getPreviousTrEl(), getAboveTdEl(), getBelowTdEl(), getTrIndex() in order to
+support non-primary rows (i.e., row expansions).
 
 
 **** 2.8.3 ****

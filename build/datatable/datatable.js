@@ -3089,6 +3089,17 @@ lang.augmentObject(DT, {
     CLASS_LAST : "yui-dt-last",
 
     /**
+     * Class name assigned to Record elements.
+     *
+     * @property DataTable.CLASS_REC
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-rec"
+     */
+    CLASS_REC : "yui-dt-rec",
+
+    /**
      * Class name assigned to even elements.
      *
      * @property DataTable.CLASS_EVEN
@@ -5738,6 +5749,7 @@ _getTrTemplateEl : function (oRecord, index) {
             df.appendChild(elTd);
         }
         tr.appendChild(df);
+        tr.className = DT.CLASS_REC;
         this._elTrTemplate = tr;
         return tr;
     }   
@@ -5878,7 +5890,7 @@ _deleteTrEl : function(row) {
     if(lang.isNumber(rowIndex) && (rowIndex > -2) && (rowIndex < this._elTbody.rows.length)) {
         // Cannot use tbody.deleteRow due to IE6 instability
         //return this._elTbody.deleteRow(rowIndex);
-        return this._elTbody.removeChild(this.getTrEl(row));
+        return this._elTbody.removeChild(this._elTbody.rows[row]);
     }
     else {
         return null;
@@ -7086,9 +7098,10 @@ getMsgTdEl : function() {
 
 /**
  * Returns the corresponding TR reference for a given DOM element, ID string or
- * directly page row index. If the given identifier is a child of a TR element,
+ * page row index. If the given identifier is a child of a TR element,
  * then DOM tree is traversed until a parent TR element is returned, otherwise
- * null.
+ * null. Returns null if the row is not considered a primary row (i.e., row
+ * extensions).
  *
  * @method getTrEl
  * @param row {HTMLElement | String | Number | YAHOO.widget.Record} Which row to
@@ -7102,8 +7115,8 @@ getTrEl : function(row) {
     }
     // By page row index
     else if(lang.isNumber(row)) {
-        var allRows = this._elTbody.rows;
-        return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
+        var dataRows = Dom.getElementsByClassName(DT.CLASS_REC, "tr", this._elTbody);
+        return dataRows && dataRows[row] ? dataRows[row] : null;
     }
     // By ID string or element reference
     else {
@@ -7125,42 +7138,70 @@ getTrEl : function(row) {
 },
 
 /**
- * Returns DOM reference to the first TR element in the DataTable page, or null.
+ * Returns DOM reference to the first primary TR element in the DataTable page, or null.
  *
  * @method getFirstTrEl
  * @return {HTMLElement} Reference to TR element.
  */
 getFirstTrEl : function() {
-    return this._elTbody.rows[0] || null;
+    var allRows = this._elTbody.rows,
+        i=0;
+    while(allRows[i]) {
+        if(this.getRecord(allRows[i])) {
+            return allRows[i];
+        }
+        i++;
+    }
+    return null;
+
 },
 
 /**
- * Returns DOM reference to the last TR element in the DataTable page, or null.
+ * Returns DOM reference to the last primary TR element in the DataTable page, or null.
  *
  * @method getLastTrEl
  * @return {HTMLElement} Reference to last TR element.
  */
 getLastTrEl : function() {
-    var allRows = this._elTbody.rows;
-        if(allRows.length > 0) {
-            return allRows[allRows.length-1] || null;
+    var allRows = this._elTbody.rows,
+        i=allRows.length-1;
+    while(i>-1) {
+        if(this.getRecord(allRows[i])) {
+            return allRows[i];
         }
+        i--;
+    }
+    return null;
 },
 
 /**
- * Returns DOM reference to the next TR element from the given TR element, or null.
+ * Returns DOM reference to the next TR element from the given primary TR element, or null.
  *
  * @method getNextTrEl
  * @param row {HTMLElement | String | Number | YAHOO.widget.Record} Element
  * reference, ID string, page row index, or Record from which to get next TR element.
+ * @param forcePrimary {Boolean} (optional) If true, will only return TR elements
+ * that correspond to Records. Non-primary rows (such as row expansions)
+ * will be skipped.
  * @return {HTMLElement} Reference to next TR element.
  */
-getNextTrEl : function(row) {
+getNextTrEl : function(row, forcePrimary) {
     var nThisTrIndex = this.getTrIndex(row);
     if(nThisTrIndex !== null) {
         var allRows = this._elTbody.rows;
-        if(nThisTrIndex < allRows.length-1) {
-            return allRows[nThisTrIndex+1];
+        if(forcePrimary) {
+            while(nThisTrIndex < allRows.length-1) {
+                row = allRows[nThisTrIndex+1];
+                if(this.getRecord(row)) {
+                    return row;
+                }
+                nThisTrIndex++;
+            }
+        }
+        else {
+            if(nThisTrIndex < allRows.length-1) {
+                return allRows[nThisTrIndex+1];
+            }
         }
     }
 
@@ -7168,19 +7209,34 @@ getNextTrEl : function(row) {
 },
 
 /**
- * Returns DOM reference to the previous TR element from the given TR element, or null.
+ * Returns DOM reference to the previous TR element from the given primary TR element, or null.
  *
  * @method getPreviousTrEl
  * @param row {HTMLElement | String | Number | YAHOO.widget.Record} Element
  * reference, ID string, page row index, or Record from which to get previous TR element.
+ * @param forcePrimary {Boolean} (optional) If true, will only return TR elements
+ * from rothat correspond to Records. Non-primary rows (such as row expansions)
+ * will be skipped.
  * @return {HTMLElement} Reference to previous TR element.
  */
-getPreviousTrEl : function(row) {
+getPreviousTrEl : function(row, forcePrimary) {
     var nThisTrIndex = this.getTrIndex(row);
     if(nThisTrIndex !== null) {
         var allRows = this._elTbody.rows;
-        if(nThisTrIndex > 0) {
-            return allRows[nThisTrIndex-1];
+
+        if(forcePrimary) {
+            while(nThisTrIndex > 0) {
+                row = allRows[nThisTrIndex-1];
+                if(this.getRecord(row)) {
+                    return row;
+                }
+                nThisTrIndex--;
+            }
+        }
+        else {
+            if(nThisTrIndex > 0) {
+                return allRows[nThisTrIndex-1];
+            }
         }
     }
 
@@ -7255,7 +7311,7 @@ getTdEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to the first TD element in the DataTable page (by default),
+ * Returns DOM reference to the first primary TD element in the DataTable page (by default),
  * the first TD element of the optionally given row, or null.
  *
  * @method getFirstTdEl
@@ -7271,7 +7327,7 @@ getFirstTdEl : function(row) {
 },
 
 /**
- * Returns DOM reference to the last TD element in the DataTable page (by default),
+ * Returns DOM reference to the last primary TD element in the DataTable page (by default),
  * the first TD element of the optionally given row, or null.
  *
  * @method getLastTdEl
@@ -7344,14 +7400,17 @@ getPreviousTdEl : function(cell) {
  * @method getAboveTdEl
  * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
  * object literal of syntax {record:oRecord, column:oColumn} from which to get next TD element.
- * @return {HTMLElement} Reference to next TD element, or null.
+ * @param forcePrimary {Boolean} (optional) If true, will only return TD elements
+ * from rows that correspond to Records. Non-primary rows (such as row expansions)
+ * will be skipped.
+ * @return {HTMLElement} Reference to above TD element, or null.
  */
-getAboveTdEl : function(cell) {
+getAboveTdEl : function(cell, forcePrimary) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var elPreviousRow = this.getPreviousTrEl(elCell);
-        if(elPreviousRow) {
-            return elPreviousRow.cells[elCell.cellIndex];
+        var elPreviousRow = this.getPreviousTrEl(elCell, forcePrimary);
+        if(elPreviousRow ) {
+            return elPreviousRow.cells[elCell.cellIndex] ? elPreviousRow.cells[elCell.cellIndex] : null;
         }
     }
     return null;
@@ -7363,14 +7422,17 @@ getAboveTdEl : function(cell) {
  * @method getBelowTdEl
  * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
  * object literal of syntax {record:oRecord, column:oColumn} from which to get previous TD element.
- * @return {HTMLElement} Reference to previous TD element, or null.
+ * @param forcePrimary {Boolean} (optional) If true, will only return TD elements
+ * from rows that correspond to Records. Non-primary rows (such as row expansions)
+ * will be skipped.
+ * @return {HTMLElement} Reference to below TD element, or null.
  */
-getBelowTdEl : function(cell) {
+getBelowTdEl : function(cell, forcePrimary) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var elNextRow = this.getNextTrEl(elCell);
+        var elNextRow = this.getNextTrEl(elCell, forcePrimary);
         if(elNextRow) {
-            return elNextRow.cells[elCell.cellIndex];
+            return elNextRow.cells[elCell.cellIndex] ? elNextRow.cells[elCell.cellIndex] : null;
         }
     }
     return null;
@@ -7432,17 +7494,28 @@ getThEl : function(theadCell) {
 },
 
 /**
- * Returns the page row index of given row. Returns null if the row is not on the
- * current DataTable page.
+ * Returns the page row index of given primary row. Returns null if the row is not on the
+ * current DataTable page, or if row is not considered a primary row (i.e., row
+ * extensions).
  *
  * @method getTrIndex
  * @param row {HTMLElement | String | YAHOO.widget.Record | Number} DOM or ID
  * string reference to an element within the DataTable page, a Record instance,
  * or a Record's RecordSet index.
- * @return {Number} Page row index, or null if row does not exist or is not on current page.
+ * @return {Number} Page row index, or null if data row does not exist or is not on current page.
  */
 getTrIndex : function(row) {
-    var nRecordIndex;
+    var record = this.getRecord(row),
+        tr;
+    if(record) {
+        tr = this.getTrEl(record);
+        if(tr) {
+            return tr.sectionRowIndex;
+        }
+    }
+    return null;
+
+    /*var nRecordIndex;
 
     // By Record
     if(row instanceof YAHOO.widget.Record) {
@@ -7467,6 +7540,7 @@ getTrIndex : function(row) {
                 var rng = oPaginator.getPageRecords();
                 if (rng && nRecordIndex >= rng[0] && nRecordIndex <= rng[1]) {
                     // This Record is on current page
+                    //TODO: row exp
                     return nRecordIndex - rng[0];
                 }
                 // This Record is not on current page
@@ -7476,6 +7550,7 @@ getTrIndex : function(row) {
             }
             // Not paginated, just return the Record index
             else {
+                //TODO: row exp
                 return nRecordIndex;
             }
         }
@@ -7494,7 +7569,7 @@ getTrIndex : function(row) {
         }
     }
 
-    return null;
+    return null;*/
 },
 
 
@@ -9337,7 +9412,7 @@ addRow : function(oData, index) {
             }
             // Not paginated
             else {
-                recIndex = this.getTrIndex(oRecord);
+                recIndex = this.getRecordIndex(oRecord);
                 if(lang.isNumber(recIndex)) {
                     // Add the TR element
                     this._oChainRender.add({
