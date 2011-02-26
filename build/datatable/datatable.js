@@ -5486,7 +5486,6 @@ _initTbodyEl : function(elTable) {
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
-        Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
 
         // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
@@ -5550,7 +5549,6 @@ _initMsgTbodyEl : function(elTable) {
         Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
-        Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
 
         // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
@@ -6663,28 +6661,6 @@ _onTbodyKeydown : function(e, oSelf) {
         }
     }
     oSelf.fireEvent("tableKeyEvent",{target:(elTarget || oSelf._elContainer),event:e});
-},
-
-/**
- * Handles keypress events on the TABLE. Mainly to support stopEvent on Mac.
- *
- * @method _onTableKeypress
- * @param e {HTMLEvent} The key event.
- * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
- * @private
- */
-_onTableKeypress : function(e, oSelf) {
-    if(ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") !== -1) && (ua.webkit < 420)) {
-        var nKey = Ev.getCharCode(e);
-        // arrow down
-        if(nKey == 40) {
-            Ev.stopEvent(e);
-        }
-        // arrow up
-        else if(nKey == 38) {
-            Ev.stopEvent(e);
-        }
-    }
 },
 
 /**
