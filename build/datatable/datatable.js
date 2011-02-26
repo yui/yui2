@@ -8679,7 +8679,7 @@ hideColumn : function(oColumn) {
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
         
         // Hide each nested Column
-        for(var i=0; i<allDescendants.length; i++) {
+        for(var i=0, len=allDescendants.length; i<len; i++) {
             var thisColumn = allDescendants[i];
             thisColumn.hidden = true;
 
@@ -8727,7 +8727,7 @@ showColumn : function(oColumn) {
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
         
         // Show each nested Column
-        for(var i=0; i<allDescendants.length; i++) {
+        for(var i=0, len=allDescendants.length; i<len; i++) {
             var thisColumn = allDescendants[i];
             thisColumn.hidden = false;
             
