@@ -7524,11 +7524,21 @@ getThEl : function(theadCell) {
  */
 getTrIndex : function(row) {
     var record = this.getRecord(row),
+        index = this.getRecordIndex(record),
         tr;
     if(record) {
         tr = this.getTrEl(record);
         if(tr) {
             return tr.sectionRowIndex;
+        }
+        else {
+            var oPaginator = this.get("paginator");
+            if(oPaginator) {
+                return oPaginator.get('recordOffset') + index;
+            }
+            else {
+                return index;
+            }
         }
     }
     return null;
