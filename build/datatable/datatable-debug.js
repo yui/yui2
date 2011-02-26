@@ -4901,8 +4901,31 @@ _initDomElements : function(elContainer) {
  * @private
  */
 _destroyContainerEl : function(elContainer) {
-    Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
-    Ev.purgeElement(elContainer, true);
+        var columns = this._oColumnSet.keys,
+        elements, i;
+
+        Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
+
+    // Bug 2528783
+    Ev.purgeElement( elContainer );
+    Ev.purgeElement( this._elThead, true ); // recursive to get resize handles
+    Ev.purgeElement( this._elTbody );
+    Ev.purgeElement( this._elMsgTbody );
+
+    // because change doesn't bubble, each select (via formatDropdown) gets
+    // its own subscription
+    elements = elContainer.getElementsByTagName( 'select' );
+
+    if ( elements.length ) {
+        Ev.detachListener( elements, 'change' );
+    }
+
+    for ( i = columns.length - 1; i >= 0; --i ) {
+        if ( columns[i].editor ) {
+            Ev.purgeElement( columns[i].editor._elContainer );
+        }
+    }
+
     elContainer.innerHTML = "";
     
     this._elContainer = null;
@@ -7355,7 +7378,8 @@ getTdLinerEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to a TD element.
+ * Returns DOM reference to a TD element. Returns null if the row is not
+ * considered a primary row (i.e., row extensions).
  *
  * @method getTdEl
  * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
@@ -7619,63 +7643,6 @@ getTrIndex : function(row) {
     }
     YAHOO.log("Could not get page row index for row " + row, "info", this.toString());
     return null;
-
-    /*var nRecordIndex;
-
-    // By Record
-    if(row instanceof YAHOO.widget.Record) {
-        nRecordIndex = this._oRecordSet.getRecordIndex(row);
-        if(nRecordIndex === null) {
-            // Not a valid Record
-            return null;
-        }
-    }
-    // Calculate page row index from Record index
-    else if(lang.isNumber(row)) {
-        nRecordIndex = row;
-    }
-    if(lang.isNumber(nRecordIndex)) {
-        // Validate the number
-        if((nRecordIndex > -1) && (nRecordIndex < this._oRecordSet.getLength())) {
-            // DataTable is paginated
-            var oPaginator = this.get('paginator');
-            if(oPaginator) {
-                // Check the record index is within the indices of the
-                // current page
-                var rng = oPaginator.getPageRecords();
-                if (rng && nRecordIndex >= rng[0] && nRecordIndex <= rng[1]) {
-                    // This Record is on current page
-                    //TODO: row exp
-                    return nRecordIndex - rng[0];
-                }
-                // This Record is not on current page
-                else {
-                    return null;
-                }
-            }
-            // Not paginated, just return the Record index
-            else {
-                //TODO: row exp
-                return nRecordIndex;
-            }
-        }
-        // RecordSet index is out of range
-        else {
-            return null;
-        }
-    }
-    // By element reference or ID string
-    else {
-        // Validate TR element
-        var elRow = this.getTrEl(row);
-        if(elRow && (elRow.ownerDocument == document) &&
-                (elRow.parentNode == this._elTbody)) {
-            return elRow.sectionRowIndex;
-        }
-    }
-
-    YAHOO.log("Could not get page row index for row " + row, "info", this.toString());
-    return null;*/
 },
 
 

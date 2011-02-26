@@ -2071,8 +2071,31 @@ _initDomElements : function(elContainer) {
  * @private
  */
 _destroyContainerEl : function(elContainer) {
-    Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
-    Ev.purgeElement(elContainer, true);
+        var columns = this._oColumnSet.keys,
+        elements, i;
+
+        Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
+
+    // Bug 2528783
+    Ev.purgeElement( elContainer );
+    Ev.purgeElement( this._elThead, true ); // recursive to get resize handles
+    Ev.purgeElement( this._elTbody );
+    Ev.purgeElement( this._elMsgTbody );
+
+    // because change doesn't bubble, each select (via formatDropdown) gets
+    // its own subscription
+    elements = elContainer.getElementsByTagName( 'select' );
+
+    if ( elements.length ) {
+        Ev.detachListener( elements, 'change' );
+    }
+
+    for ( i = columns.length - 1; i >= 0; --i ) {
+        if ( columns[i].editor ) {
+            Ev.purgeElement( columns[i].editor._elContainer );
+        }
+    }
+
     elContainer.innerHTML = "";
     
     this._elContainer = null;
