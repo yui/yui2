@@ -10029,8 +10029,10 @@ formatCell : function(elLiner, oRecord, oColumn) {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column | String | Number} A Column key, or a ColumnSet key index.
  * @param oData {Object} New data value for the cell.
+ * @param skipRender {Boolean} Skips render step. Editors that update multiple
+ * cells in ScrollingDataTable should render only on the last call to updateCell().
  */
-updateCell : function(oRecord, oColumn, oData) {    
+updateCell : function(oRecord, oColumn, oData, skipRender) {
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
     if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
@@ -10056,7 +10058,10 @@ updateCell : function(oRecord, oColumn, oData) {
                 scope: this,
                 timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
             });
-            this._runRenderChain();
+            // Bug 2529024
+            if(!skipRender) {
+                this._runRenderChain();
+            }
         }
         else {
             this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
@@ -15183,6 +15188,8 @@ _runRenderChain : function() {
     } 
     if(this._nScrollLeft) {
         this._elBdContainer.scrollLeft = this._nScrollLeft;
+        // Bug 2529024
+        this._elHdContainer.scrollLeft = this._nScrollLeft; 
         this._nScrollLeft = null;
     } 
 },

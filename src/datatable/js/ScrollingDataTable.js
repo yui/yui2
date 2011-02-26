@@ -615,6 +615,8 @@ _runRenderChain : function() {
     } 
     if(this._nScrollLeft) {
         this._elBdContainer.scrollLeft = this._nScrollLeft;
+        // Bug 2529024
+        this._elHdContainer.scrollLeft = this._nScrollLeft; 
         this._nScrollLeft = null;
     } 
 },
