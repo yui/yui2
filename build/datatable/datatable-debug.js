@@ -3810,7 +3810,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDefault : function(el, oRecord, oColumn, oData, oDataTable) {
-        el.innerHTML = lang.isValue(oData) ? oData.toString() : "&#160;";
+        el.innerHTML = (lang.isValue(oData) && oData !== "") ? oData.toString() : "&#160;";
     },
 
     /**
