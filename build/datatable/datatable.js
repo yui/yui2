@@ -8212,11 +8212,11 @@ getColumnById : function(column) {
  */
 getColumnSortDir : function(oColumn, oSortedBy) {
     // Backward compatibility
-    if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
-        if(oColumn.sortOptions.defaultOrder == "asc") {
+    if(oColumn.sortOptions && oColumn.sortOptions.defaultDir) {
+        if(oColumn.sortOptions.defaultDir == "asc") {
             oColumn.sortOptions.defaultDir = DT.CLASS_ASC;
         }
-        else if (oColumn.sortOptions.defaultOrder == "desc") {
+        else if (oColumn.sortOptions.defaultDir == "desc") {
             oColumn.sortOptions.defaultDir = DT.CLASS_DESC;
         }
     }
