@@ -1258,6 +1258,24 @@ initAttributes : function(oConfigs) {
      });
 
     /**
+    * @attribute sortFunction
+    * @description Default Column sort function
+    * @type function
+    */
+    this.setAttributeConfig("sortFunction", {
+        value: function(a, b, desc, field) {
+            var compare = YAHOO.util.Sort.compare,
+                sorted = compare(a.getData(field),b.getData(field), desc);
+            if(sorted === 0) {
+                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+            }
+            else {
+                return sorted;
+            }
+        }
+    });
+
+    /**
     * @attribute formatRow
     * @description A function that accepts a TR element and its associated Record
     * for custom formatting. The function must return TRUE in order to automatically
@@ -5589,21 +5607,8 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Shortcut for the frequently-used compare method
-                    var compare = YAHOO.util.Sort.compare;
-
                     // Default sort function if necessary
-                    sortFnc = sortFnc || 
-                        function(a, b, desc, field) {
-                            var sorted = compare(a.getData(field),b.getData(field), desc);
-                            if(sorted === 0) {
-                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                            }
-                            else {
-                                return sorted;
-                            }
-                        };
-
+                    sortFnc = sortFnc || this.get("sortFunction");
                     // Get the field to sort
                     var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
 

@@ -15,6 +15,7 @@ YAHOO.util.DataSourceBase._cloneObject.
 * Bug 2528233: Rewired getTrEl(), getFirstTrEl(), getLastTrEl(), getNextTrEl(),
 getPreviousTrEl(), getAboveTdEl(), getBelowTdEl(), getTrIndex() in order to
 support non-primary rows (i.e., row expansions).
+* Added new Attribte "sortFunction" to serve as overridable default sort function.
 
 
 **** 2.8.3 ****
