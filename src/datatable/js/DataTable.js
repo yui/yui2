@@ -980,10 +980,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDefault : function(el, oRecord, oColumn, oData, oDataTable) {
-        el.innerHTML = oData === undefined ||
-                       oData === null ||
-                       (typeof oData === 'number' && isNaN(oData)) ?
-                       "&#160;" : oData.toString();
+        el.innerHTML = lang.isValue(oData) ? oData.toString() : "&#160;";
     },
 
     /**
