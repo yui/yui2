@@ -2933,7 +2933,7 @@
 
             index = dt.getTrIndex(3);
             Assert.areSame(6, index, "Record index: Expected last primary row");
-        },
+        }
 
     });
 
