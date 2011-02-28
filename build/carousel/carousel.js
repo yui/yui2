@@ -3810,7 +3810,7 @@
                 item,
                 itemsTable = carousel._itemsTable,
                 posUndefined = JS.isUndefined(obj.pos),
-                oel = posUndefined ? null : itemsTable.items[obj.pos+1],
+                oel =  posUndefined ? null : itemsTable.items[obj.pos+1],
                 pos,
                 sibling,
                 styles;
@@ -3842,12 +3842,23 @@
                         carouselEl.appendChild(el);
                     }
                 } else {
-                    if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
-                        sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                    if (!JS.isUndefined(itemsTable.loading[pos])) {
+                        oel = itemsTable.loading[pos];
+                        // if oel is null, it is a problem ...
                     }
-                    if (sibling) {
-                        carouselEl.insertBefore(el, sibling);
+                    if (oel) {
+                        // replace the node
+                        carouselEl.replaceChild(el, oel);
+                        // ... and remove the item from the data structure
+                        delete itemsTable.loading[pos];
                     } else {
+                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                            sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                        }
+                        if (sibling) {
+                            carouselEl.insertBefore(el, sibling);
+                        } else {
+                        }
                     }
                 }
             } else {
@@ -3912,7 +3923,7 @@
         /**
          * Synchronize and redraw the UI after an item is removed.
          *
-         * @method _syncUiForItemAdd
+         * @method _syncUiForItemRemove
          * @protected
          */
         _syncUiForItemRemove: function (obj) {
@@ -4402,6 +4413,5 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
-
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});

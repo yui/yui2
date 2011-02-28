@@ -1001,10 +1001,10 @@ YAHOO.util.Connect =
     */
 	function _swf(uri) {
 		var o = '<object id="YUIConnectionSwf" type="application/x-shockwave-flash" data="' +
-		        uri + '" width="0" height="0">' +
-		     	'<param name="movie" value="' + uri + '">' +
-                '<param name="allowScriptAccess" value="always">' +
-		    	'</object>',
+				uri + '" width="0" height="0">' +
+				'<param name="movie" value="' + uri + '">' +
+				'<param name="allowScriptAccess" value="always">' +
+				'</object>',
 		    c = document.createElement('div');
 
 		document.body.appendChild(c);
@@ -1508,6 +1508,8 @@ YAHOO.util.Connect =
 		// receives the load event.  Subsequently, the event handler is detached
 		// and the iframe removed from the document.
 		uploadCallback = function() {
+			var body, pre, text;
+
 			if(callback && callback.timeout){
 				window.clearTimeout(oConn._timeOut[o.tId]);
 				delete oConn._timeOut[o.tId];
@@ -1528,9 +1530,20 @@ YAHOO.util.Connect =
 
 			try
 			{
+				body = io.contentWindow.document.getElementsByTagName('body')[0];
+				pre = io.contentWindow.document.getElementsByTagName('pre')[0];
+
+				if (body) {
+					if (pre) {
+						text = pre.textContent?pre.textContent:pre.innerText;
+					}
+					else {
+						text = body.textContent?body.textContent:body.innerText;
+					}
+				}
+				obj.responseText = text;
 				// responseText and responseXML will be populated with the same data from the iframe.
 				// Since the HTTP headers cannot be read from the iframe
-				obj.responseText = io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:io.contentWindow.document.documentElement.textContent;
 				obj.responseXML = io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;
 			}
 			catch(e){}
