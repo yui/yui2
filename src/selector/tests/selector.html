@@ -23,7 +23,7 @@ onload = function() {
     var suite = new YAHOO.tool.TestSuite("Selector Suite");
     var Selector = Y.Selector;
 
-    Selector.useNative = false;
+//    Selector.useNative = false;
 
     var $ = Selector.query;
     var demo = Y.Dom.get('demo');
@@ -62,7 +62,8 @@ onload = function() {
             Y.ArrayAssert.itemsAreEqual([], $('#root-test li', Y.Dom.get('nth-test')), 'id selector w/root false pos');
             Y.ArrayAssert.itemsAreEqual([], $('#root-test li', Y.Dom.get('nth-test')), 'id selector w/root false pos');
             Y.ArrayAssert.itemsAreEqual([Y.Dom.get('nth-test')], $('> ol', 'root-test'), "$('> ol', 'root-test')");
-            Y.ArrayAssert.itemsAreEqual([Y.Dom.get('root-test')], $('+ div', Y.Dom.get('empty')), "$('+ div', 'empty')");
+            // sibling combinator not supported as first token
+            //Y.ArrayAssert.itemsAreEqual([Y.Dom.get('root-test')], $('+ div', Y.Dom.get('empty')), "$('+ div', 'empty')");
         },
         testNthLastChild: function() {
             var all = Y.Dom.get('nth-test').getElementsByTagName('li');
