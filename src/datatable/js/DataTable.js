@@ -4399,11 +4399,11 @@ getTrEl : function(row) {
         return dataRows && dataRows[row] ? dataRows[row] : null;
     }
     // By ID string or element reference
-    else {
+    else if(row) {
         var elRow = (lang.isString(row)) ? document.getElementById(row) : row;
 
         // Validate HTML element
-        if(elRow && (elRow.ownerDocument == document)) {
+        if(elRow && elRow.ownerDocument == document) {
             // Validate TR element
             if(elRow.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
@@ -4525,6 +4525,36 @@ getPreviousTrEl : function(row, forcePrimary) {
     return null;
 },
 
+
+/**
+ * Workaround for IE bug where hidden or not-in-dom elements cause cellIndex
+ * value to be incorrect.
+ *
+ * @method getCellIndex
+ * @param cell {HTMLElement | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
+ * @return {Number} TD.cellIndex value.
+ */
+getCellIndex : function(cell) {
+    cell = this.getTdEl(cell);
+    if(cell) {
+        if(ua.ie > 0) {
+            var i=0,
+                tr = cell.parentNode,
+                allCells = tr.childNodes,
+                len = allCells.length;
+            for(; i<len; i++) {
+                if(allCells[i] == cell) {
+                    return i;
+                }
+            }
+        }
+        else {
+            return cell.cellIndex;
+        }
+    }
+},
+
 /**
  * Returns DOM reference to a TD liner element.
  *
@@ -4638,7 +4668,7 @@ getLastTdEl : function(row) {
 getNextTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.cellIndex;
+        var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex < elRow.cells.length-1) {
             return elRow.cells[nThisTdIndex+1];
@@ -4665,7 +4695,7 @@ getNextTdEl : function(cell) {
 getPreviousTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.cellIndex;
+        var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
             return elRow.cells[nThisTdIndex-1];
@@ -4697,7 +4727,8 @@ getAboveTdEl : function(cell, forcePrimary) {
     if(elCell) {
         var elPreviousRow = this.getPreviousTrEl(elCell, forcePrimary);
         if(elPreviousRow ) {
-            return elPreviousRow.cells[elCell.cellIndex] ? elPreviousRow.cells[elCell.cellIndex] : null;
+            var cellIndex = this.getCellIndex(elCell);
+            return elPreviousRow.cells[cellIndex] ? elPreviousRow.cells[cellIndex] : null;
         }
     }
     YAHOO.log("Could not get above TD element for cell " + cell, "info", this.toString());
@@ -4720,7 +4751,8 @@ getBelowTdEl : function(cell, forcePrimary) {
     if(elCell) {
         var elNextRow = this.getNextTrEl(elCell, forcePrimary);
         if(elNextRow) {
-            return elNextRow.cells[elCell.cellIndex] ? elNextRow.cells[elCell.cellIndex] : null;
+            var cellIndex = this.getCellIndex(elCell);
+            return elNextRow.cells[cellIndex] ? elNextRow.cells[cellIndex] : null;
         }
     }
     YAHOO.log("Could not get below TD element for cell " + cell, "info", this.toString());
@@ -5457,7 +5489,7 @@ getColumn : function(column) {
         // Validate TD element
         var elCell = this.getTdEl(column);
         if(elCell) {
-            oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
+            oColumn = this._oColumnSet.getColumn(this.getCellIndex(elCell));
         }
         // Validate TH element
         else {
@@ -7342,7 +7374,7 @@ formatCell : function(elLiner, oRecord, oColumn) {
         oRecord = this.getRecord(elLiner);
     }
     if(!oColumn) {
-        oColumn = this.getColumn(elLiner.parentNode.cellIndex);
+        oColumn = this.getColumn(this.getCellIndex(elLiner.parentNode));
     }
 
     if(oRecord && oColumn) {
@@ -7399,7 +7431,7 @@ updateCell : function(oRecord, oColumn, oData, skipRender) {
             this._oChainRender.add({
                 method: function() {
                     if((this instanceof DT) && this._sId) {
-                        this.formatCell(elTd.firstChild);
+                        this.formatCell(elTd.firstChild, oRecord, oColumn);
                         this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
                         YAHOO.log("DataTable cell updated: Record ID = " + oRecord.getId() +
                                 ", Record index = " + this.getRecordIndex(oRecord) +
@@ -9456,7 +9488,8 @@ selectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
 
         if(oRecord && sColumnKey) {
             // Get Record ID
@@ -9477,13 +9510,13 @@ selectCell : function(cell) {
             // Update trackers
             this._aSelections = tracker;
             if(!this._oAnchorCell) {
-                this._oAnchorCell = {record:oRecord, column:this.getColumn(sColumnKey)};
+                this._oAnchorCell = {record:oRecord, column:oColumn};
             }
 
             // Update the UI
             Dom.addClass(elCell, DT.CLASS_SELECTED);
 
-            this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key: this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+            this.fireEvent("cellSelectEvent", {record:oRecord, column:oColumn, key: sColumnKey, el:elCell});
             YAHOO.log("Selected " + elCell, "info", this.toString());
             return;
         }
@@ -9503,7 +9536,8 @@ unselectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
 
         if(oRecord && sColumnKey) {
             // Get Record ID
@@ -9522,7 +9556,7 @@ unselectCell : function(cell) {
                     // Update the UI
                     Dom.removeClass(elCell, DT.CLASS_SELECTED);
 
-                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: oColumn, key:sColumnKey, el:elCell});
                     YAHOO.log("Unselected " + elCell, "info", this.toString());
                     return;
                 }
@@ -9747,10 +9781,11 @@ highlightCell : function(cell) {
         }
 
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
         this._elLastHighlightedTd = elCell;
-        this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        this.fireEvent("cellHighlightEvent", {record:oRecord, column:oColumn, key:sColumnKey, el:elCell});
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
         return;
     }
@@ -9770,7 +9805,7 @@ unhighlightCell : function(cell) {
         var oRecord = this.getRecord(elCell);
         Dom.removeClass(elCell,DT.CLASS_HIGHLIGHTED);
         this._elLastHighlightedTd = null;
-        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(this.getCellIndex(elCell)), key:this.getColumn(this.getCellIndex(elCell)).getKey(), el:elCell});
         YAHOO.log("Unhighlighted " + elCell, "info", this.toString());
         return;
     }
@@ -10082,7 +10117,7 @@ saveCellEditor : function() {
             // Update the Record
             this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
             // Update the UI
-            this.formatCell(this._oCellEditor.cell.firstChild);
+            this.formatCell(this._oCellEditor.cell.firstChild, this._oCellEditor.record, this._oCellEditor.column);
             
             // Bug fix 1764044
             this._oChainRender.add({
@@ -10543,7 +10578,7 @@ onEventFormatCell : function(oArgs) {
 
     var elCell = this.getTdEl(target);
     if(elCell) {
-        var oColumn = this.getColumn(elCell.cellIndex);
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
         this.formatCell(elCell.firstChild, this.getRecord(elCell), oColumn);
     }
     else {
