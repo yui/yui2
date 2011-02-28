@@ -58,7 +58,7 @@ left: -2px;
 
 *html .yui-picker-bg {
     background-image: none;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../build/colorpicker/assets/picker_mask.png', sizingMethod='scale');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='picker_mask.png', sizingMethod='scale');
 }
 
 
