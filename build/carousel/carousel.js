@@ -3923,7 +3923,7 @@
         /**
          * Synchronize and redraw the UI after an item is removed.
          *
-         * @method _syncUiForItemAdd
+         * @method _syncUiForItemRemove
          * @protected
          */
         _syncUiForItemRemove: function (obj) {
