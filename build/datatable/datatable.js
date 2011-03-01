@@ -17284,10 +17284,21 @@ handleDisabledBtns : function() {
     }
     // Save on change for single-select
     else {
-        Ev.addListener(this.dropdown, "change", function(v){
-            // Save on change
-            this.save();
-        }, this, true);
+        if(!ua.ie) {
+            Ev.addListener(this.dropdown, "change", function(v){
+                // Save on change
+                this.save();
+            }, this, true);
+        }
+        else {
+            // Bug 2529274: "change" event is not keyboard accessible in IE6
+            Ev.addListener(this.dropdown, "blur", function(v){
+                this.save();
+            }, this, true);
+            Ev.addListener(this.dropdown, "click", function(v){
+                this.save();
+            }, this, true);
+        }
     }
 },
 
