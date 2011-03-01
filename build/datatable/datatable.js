@@ -7324,9 +7324,11 @@ getTdEl : function(cell) {
             elCell = el;
         }
         
-        // Make sure the TD is in this TBODY
+        // Make sure the TD is in this TBODY or is not in DOM
         // Bug 2527707 and bug 2263558
-        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) ||
+            (elCell.parentNode.parentNode === null) ||
+            (elCell.parentNode.parentNode.nodeType === 11))) {
             // Now we can return the TD element
             return elCell;
         }
@@ -7365,8 +7367,13 @@ getTdEl : function(cell) {
  */
 getFirstTdEl : function(row) {
     var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getFirstTrEl();
-    if(elRow && (elRow.cells.length > 0)) {
-        return elRow.cells[0];
+    if(elRow) {
+        if(elRow.cells && elRow.cells.length > 0) {
+            return elRow.cells[0];
+        }
+        else if(elRow.childNodes && elRow.childNodes.length > 0) {
+            return elRow.childNodes[0];
+        }
     }
     return null;
 },
@@ -7381,8 +7388,13 @@ getFirstTdEl : function(row) {
  */
 getLastTdEl : function(row) {
     var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getLastTrEl();
-    if(elRow && (elRow.cells.length > 0)) {
-        return elRow.cells[elRow.cells.length-1];
+    if(elRow) {
+        if(elRow.cells && elRow.cells.length > 0) {
+            return elRow.cells[elRow.cells.length-1];
+        }
+        else if(elRow.childNodes && elRow.childNodes.length > 0) {
+            return elRow.childNodes[elRow.childNodes.length-1];
+        }
     }
     return null;
 },
@@ -7400,8 +7412,11 @@ getNextTdEl : function(cell) {
     if(elCell) {
         var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
-        if(nThisTdIndex < elRow.cells.length-1) {
+        if(elRow.cells && (elRow.cells.length) > 0 && (nThisTdIndex < elRow.cells.length-1)) {
             return elRow.cells[nThisTdIndex+1];
+        }
+        else if(elRow.childNodes && (elRow.childNodes.length) > 0 && (nThisTdIndex < elRow.childNodes.length-1)) {
+            return elRow.childNodes[nThisTdIndex+1];
         }
         else {
             var elNextRow = this.getNextTrEl(elRow);
@@ -7427,7 +7442,12 @@ getPreviousTdEl : function(cell) {
         var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
-            return elRow.cells[nThisTdIndex-1];
+            if(elRow.cells && elRow.cells.length > 0) {
+                return elRow.cells[nThisTdIndex-1];
+            }
+            else if(elRow.childNodes && elRow.childNodes.length > 0) {
+                return elRow.childNodes[nThisTdIndex-1];
+            }
         }
         else {
             var elPreviousRow = this.getPreviousTrEl(elRow);
@@ -7456,7 +7476,12 @@ getAboveTdEl : function(cell, forcePrimary) {
         var elPreviousRow = this.getPreviousTrEl(elCell, forcePrimary);
         if(elPreviousRow ) {
             var cellIndex = this.getCellIndex(elCell);
-            return elPreviousRow.cells[cellIndex] ? elPreviousRow.cells[cellIndex] : null;
+            if(elPreviousRow.cells && elPreviousRow.cells.length > 0) {
+                return elPreviousRow.cells[cellIndex] ? elPreviousRow.cells[cellIndex] : null;
+            }
+            else if(elPreviousRow.childNodes && elPreviousRow.childNodes.length > 0) {
+                return elPreviousRow.childNodes[cellIndex] ? elPreviousRow.childNodes[cellIndex] : null;
+            }
         }
     }
     return null;
@@ -7479,7 +7504,12 @@ getBelowTdEl : function(cell, forcePrimary) {
         var elNextRow = this.getNextTrEl(elCell, forcePrimary);
         if(elNextRow) {
             var cellIndex = this.getCellIndex(elCell);
-            return elNextRow.cells[cellIndex] ? elNextRow.cells[cellIndex] : null;
+            if(elNextRow.cells && elNextRow.cells.length > 0) {
+                return elNextRow.cells[cellIndex] ? elNextRow.cells[cellIndex] : null;
+            }
+            else if(elNextRow.childNodes && elNextRow.childNodes.length > 0) {
+                return elNextRow.childNodes[cellIndex] ? elNextRow.childNodes[cellIndex] : null;
+            }
         }
     }
     return null;
