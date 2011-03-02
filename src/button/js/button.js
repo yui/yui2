@@ -2117,12 +2117,28 @@
                 oButtonElement = this.get("element"),
                 oMenuElement = this._menu.element;
            
+            function findTargetInSubmenus(aSubmenus)
+            {
+                var i, iMax, oSubmenuElement;
+                for (i = 0, iMax = aSubmenus.length; i < iMax; i++)
+                {
+                    oSubmenuElement = aSubmenus[i].element;
+                    if (oTarget = oSubmenuElement || Dom.isAncestor(oSubmenuElement, oTarget))
+                        return true;
+
+                    if (findTargetInSubmenus(aSubmenus[i].getSubmenus()))
+                        return true;
+                }
+        
+                return false;
+            }
         
             if (oTarget != oButtonElement && 
                 !Dom.isAncestor(oButtonElement, oTarget) && 
                 oTarget != oMenuElement && 
-                !Dom.isAncestor(oMenuElement, oTarget)) {
-        
+                !Dom.isAncestor(oMenuElement, oTarget) &&
+                !findTargetInSubmenus(this._menu.getSubmenus())) {
+
                 this._hideMenu();
 
 				//	In IE when the user mouses down on a focusable element
