@@ -2117,17 +2117,17 @@
                 oButtonElement = this.get("element"),
                 oMenuElement = this._menu.element;
            
-            function findTargetInSubmenus(aSubmenus)
-            {
+            function findTargetInSubmenus(aSubmenus) {
                 var i, iMax, oSubmenuElement;
-                for (i = 0, iMax = aSubmenus.length; i < iMax; i++)
-                {
+                for (i = 0, iMax = aSubmenus.length; i < iMax; i++) {
                     oSubmenuElement = aSubmenus[i].element;
-                    if (oTarget = oSubmenuElement || Dom.isAncestor(oSubmenuElement, oTarget))
+                    if (oTarget == oSubmenuElement || Dom.isAncestor(oSubmenuElement, oTarget)) {
                         return true;
+                    }
 
-                    if (findTargetInSubmenus(aSubmenus[i].getSubmenus()))
+                    if (findTargetInSubmenus(aSubmenus[i].getSubmenus())) {
                         return true;
+                    }
                 }
         
                 return false;
