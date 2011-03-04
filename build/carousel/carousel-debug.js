@@ -3898,6 +3898,9 @@
             pos = posUndefined ?
                       obj.newPos || itemsTable.numItems - 1 : obj.pos;
             item = itemsTable.items[pos] || {};
+            if (!item || !("id" in item)) { // Nothing can be done now
+                return;
+            }
 
             el = carousel._createCarouselItem({
                     className : item.className,
@@ -3937,6 +3940,8 @@
                         }
                         if (sibling) {
                             carouselEl.insertBefore(el, sibling);
+                        } else if (!Dom.get(el.id)) {
+                            carouselEl.appendChild(el);
                         } else {
                             YAHOO.log("Unable to find sibling","error",WidgetName);
                         }
