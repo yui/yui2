@@ -1901,17 +1901,19 @@
                 i,
                 eff;
 
-            if (effectCfg instanceof Array) {
-                effectInstances = [];
-                n = effectCfg.length;
-                for (i = 0; i < n; i++) {
-                    eff = effectCfg[i];
-                    if (eff.effect) {
-                        effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+            if (effectCfg) {
+                if (effectCfg instanceof Array) {
+                    effectInstances = [];
+                    n = effectCfg.length;
+                    for (i = 0; i < n; i++) {
+                        eff = effectCfg[i];
+                        if (eff.effect) {
+                            effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+                        }
                     }
+                } else if (effectCfg.effect) {
+                    effectInstances = [effectCfg.effect(this, effectCfg.duration)];
                 }
-            } else if (effectCfg.effect) {
-                effectInstances = [effectCfg.effect(this, effectCfg.duration)];
             }
 
             return effectInstances;
