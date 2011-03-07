@@ -1,12 +1,28 @@
 /**
  * Provides a mechanism to fetch remote resources and
  * insert them into a document
+ * This utility can fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @module get
  * @requires yahoo
  */
 
 /**
- * Fetches and inserts one or more script or link nodes into the document
+ * Fetches and inserts one or more script or link nodes into the document.
+ * This utility can fetch JavaScript and CSS files, inserting script
+ * tags for script and link tags for CSS.  Note, this
+ * is done via the normal browser mechanisms for inserting
+ * these resources and making the content available to
+ * code that would access it.  Be careful when retreiving
+ * remote resources.  Only use this utility to fetch
+ * files from sites you trust.
+ *
  * @namespace YAHOO.util
  * @class YAHOO.util.Get
  */
@@ -44,15 +60,15 @@ YAHOO.util.Get = function() {
      */
         _purging=false,
 
-        ua=YAHOO.env.ua, 
-        
+        ua=YAHOO.env.ua,
+
         lang=YAHOO.lang,
-    
-    _fail, 
-    _purge, 
+
+    _fail,
+    _purge,
     _track,
-    
-    /** 
+
+    /**
      * Generates an HTML element, this is not appended to a document
      * @method _node
      * @param type {string} the type of element
@@ -195,7 +211,7 @@ YAHOO.util.Get = function() {
     _next = function(id, loaded) {
 
 
-        var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], 
+        var q = queues[id], w=q.win, d=w.document, h=d.getElementsByTagName("head")[0],
             n, msg, url, s, extra;
 
         if (q.timer) {
@@ -253,7 +269,7 @@ YAHOO.util.Get = function() {
 
         // if the url is undefined, this is probably a trailing comma problem in IE
         if (!url) {
-            q.url.shift(); 
+            q.url.shift();
             return _next(id);
         }
 
@@ -284,7 +300,7 @@ YAHOO.util.Get = function() {
         } else {
             h.appendChild(n);
         }
-        
+
 
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css
@@ -426,7 +442,7 @@ YAHOO.util.Get = function() {
                         q._cache = q.varName[0].split(".");
                         q.timer = lang.later(freq, q, function(o) {
                             a = this._cache;
-                            l = a.length; 
+                            l = a.length;
                             w = this.win;
                             for (i=0; i<l; i=i+1) {
                                 w = w[a[i]];
@@ -442,7 +458,7 @@ YAHOO.util.Get = function() {
                                     return;
                                 }
                             }
-                            
+
 
                             q.timer.cancel();
                             f(id, url);
@@ -490,9 +506,9 @@ YAHOO.util.Get = function() {
         if (queues[tId]) {
 
             var q     = queues[tId],
-                nodes = q.nodes, 
-                l     = nodes.length, 
-                d     = q.win.document, 
+                nodes = q.nodes,
+                l     = nodes.length,
+                d     = q.win.document,
                 h     = d.getElementsByTagName("head")[0],
                 sib, i, node, attr;
 

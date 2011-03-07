@@ -25,7 +25,8 @@ var lang   = YAHOO.lang,
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
-    this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-ceditor"); // "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     this._sType = sType;
     
     // Validate inputs
@@ -352,7 +353,7 @@ isActive : false,
  * Text to display on Save button.
  *
  * @property LABEL_SAVE
- * @type String
+ * @type HTML
  * @default "Save"
  */
 LABEL_SAVE : "Save",
@@ -361,7 +362,7 @@ LABEL_SAVE : "Save",
  * Text to display on Cancel button.
  *
  * @property LABEL_CANCEL
- * @type String
+ * @type HTML
  * @default "Cancel"
  */
 LABEL_CANCEL : "Cancel",
@@ -911,7 +912,8 @@ lang.augmentProto(BCE, util.EventProvider);
  */
 widget.CheckboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-checkboxceditor"); // "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.CheckboxCellEditor.superclass.constructor.call(this, oConfigs.type || "checkbox", oConfigs);
 };
 
@@ -926,10 +928,11 @@ lang.extend(widget.CheckboxCellEditor, BCE, {
 /**
  * Array of checkbox values. Can either be a simple array (e.g., ["red","green","blue"])
  * or a an array of objects (e.g., [{label:"red", value:"#FF0000"},
- * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). 
+ * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property checkboxOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 checkboxOptions : null,
 
@@ -1085,7 +1088,8 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  */
 widget.DateCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dateceditor"); // "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DateCellEditor.superclass.constructor.call(this, oConfigs.type || "date", oConfigs);
 };
 
@@ -1239,7 +1243,8 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-dropdownceditor"); // "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.DropdownCellEditor.superclass.constructor.call(this, oConfigs.type || "dropdown", oConfigs);
 };
 
@@ -1255,10 +1260,11 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g.,
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). String
+ * values are treated as markup and inserted into the DOM as innerHTML.
  *
  * @property dropdownOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 dropdownOptions : null,
 
@@ -1444,7 +1450,8 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  */
 widget.RadioCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-radioceditor"); // "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.RadioCellEditor.superclass.constructor.call(this, oConfigs.type || "radio", oConfigs);
 };
 
@@ -1467,10 +1474,11 @@ radios : null,
 /**
  * Array of radio values. Can either be a simple array (e.g., ["yes","no","maybe"])
  * or a an array of objects (e.g., [{label:"yes", value:1}, {label:"no", value:-1},
- * {label:"maybe", value:0}]). 
+ * {label:"maybe", value:0}]). String values are treated as markup and inserted
+ * into the DOM as innerHTML.
  *
  * @property radioOptions
- * @type String[] | Object[]
+ * @type HTML[] | Object[]
  */
 radioOptions : null,
 
@@ -1608,7 +1616,8 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  */
 widget.TextareaCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textareaceditor");// "yui-textareaceditor" + ;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextareaCellEditor.superclass.constructor.call(this, oConfigs.type || "textarea", oConfigs);
 };
 
@@ -1731,7 +1740,8 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  */
 widget.TextboxCellEditor = function(oConfigs) {
     oConfigs = oConfigs || {};
-    this._sId = this._sId || "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || Dom.generateId(null, "yui-textboxceditor");// "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    YAHOO.widget.BaseCellEditor._nCount++;
     widget.TextboxCellEditor.superclass.constructor.call(this, oConfigs.type || "textbox", oConfigs);
 };
 

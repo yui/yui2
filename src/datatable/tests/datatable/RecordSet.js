@@ -173,10 +173,28 @@
                 rs.updateKey(oTestRecord.getId(), "b", "yyy");
                 Assert.areSame("yyy", oTestRecord.getData("b"), "Failed to update key b of Record 0 by ID");
             //});
+        },
+        
+        testdeleteRecord: function() {
+            var dt = this.createInstance(),
+                rs = dt.getRecordSet();
+            rs.subscribe("recordDeleteEvent", function(o) {
+                Assert.areSame(3, rs.getLength(), "Failed to delete record at index 2.");
+                Assert.areEqual("1a",o.data.a, "Failed to return deleted data.");
+            });
+            rs.deleteRecord(1);
+        },
+        
+        testdeleteRecords: function() {
+            var dt = this.createInstance(),
+                rs = dt.getRecordSet();
+            rs.subscribe("recordsDeleteEvent", function(o) {
+                Assert.areSame(2, rs.getLength(), "Failed to delete record at index 2.");
+                Assert.areEqual("1a",o.deletedData[0].a, "Failed to return deleted data (0).");
+                Assert.areEqual("2a",o.deletedData[1].a, "Failed to return deleted data (1).");
+            });
+            rs.deleteRecords(1,2);
         }
-
-
-        //TODO: More RecordSet APIs
     });
     var rsRecordSetTest = new DataTableTestCase(rsRecordSetTemplate);
     

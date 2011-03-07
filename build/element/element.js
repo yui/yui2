@@ -14,6 +14,8 @@ YAHOO.util.Attribute = function(hash, owner) {
     }
 };
 
+YAHOO.util.Attribute.INVALID_VALUE = {};
+
 YAHOO.util.Attribute.prototype = {
     /**
      * The name of the attribute.
@@ -125,12 +127,13 @@ YAHOO.util.Attribute.prototype = {
     setValue: function(value, silent) {
         var beforeRetVal,
             owner = this.owner,
-            name = this.name;
+            name = this.name,
+            invalidValue = YAHOO.util.Attribute.INVALID_VALUE,
         
-        var event = {
-            type: name, 
-            prevValue: this.getValue(),
-            newValue: value
+            event = {
+                type: name, 
+                prevValue: this.getValue(),
+                newValue: value
         };
         
         if (this.readOnly || ( this.writeOnce && this._written) ) {
@@ -152,10 +155,16 @@ YAHOO.util.Attribute.prototype = {
             value = this.setter.call(owner, value, this.name);
             if (value === undefined) {
             }
+
+            if (value === invalidValue) {
+                return false;
+            }
         }
         
         if (this.method) {
-            this.method.call(owner, value, this.name);
+            if (this.method.call(owner, value, this.name) === invalidValue) {
+                return false; 
+            }
         }
         
         this.value = value; // TODO: set before calling setter/method?

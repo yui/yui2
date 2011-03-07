@@ -804,12 +804,10 @@
 
             var visible = args[0],
                 currentVis = Dom.getStyle(this.element, "visibility"),
-                effect = this.cfg.getProperty("effect"),
-                effectInstances = [],
+                effects = this._cachedEffects || this._createEffects(this.cfg.getProperty("effect")),
                 isMacGecko = (this.platform == "mac" && UA.gecko),
                 alreadySubscribed = Config.alreadySubscribed,
-                eff, ei, e, i, j, k, h,
-                nEffects,
+                ei, e, j, k, h,
                 nEffectInstances;
 
             if (currentVis == "inherit") {
@@ -830,46 +828,27 @@
                 }
             }
 
-            if (effect) {
-                if (effect instanceof Array) {
-                    nEffects = effect.length;
-
-                    for (i = 0; i < nEffects; i++) {
-                        eff = effect[i];
-                        effectInstances[effectInstances.length] = 
-                            eff.effect(this, eff.duration);
-
-                    }
-                } else {
-                    effectInstances[effectInstances.length] = 
-                        effect.effect(this, effect.duration);
-                }
-            }
-
             if (visible) { // Show
+
                 if (isMacGecko) {
                     this.showMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate in
+                if (effects) { // Animate in
                     if (visible) { // Animate in if not showing
-                        if (currentVis != "visible" || currentVis === "") {
+
+                         // Fading out is a bit of a hack, but didn't want to risk doing 
+                         // something broader (e.g a generic this._animatingOut) for 2.9.0
+
+                        if (currentVis != "visible" || currentVis === "" || this._fadingOut) {
                             if (this.beforeShowEvent.fire()) {
-                                nEffectInstances = effectInstances.length;
-    
+
+                                nEffectInstances = effects.length;
+
                                 for (j = 0; j < nEffectInstances; j++) {
-                                    ei = effectInstances[j];
-                                    if (j === 0 && !alreadySubscribed(
-                                            ei.animateInCompleteEvent, 
-                                            this.showEvent.fire, this.showEvent)) {
-    
-                                        /*
-                                             Delegate showEvent until end 
-                                             of animateInComplete
-                                        */
-    
-                                        ei.animateInCompleteEvent.subscribe(
-                                         this.showEvent.fire, this.showEvent, true);
+                                    ei = effects[j];
+                                    if (j === 0 && !alreadySubscribed(ei.animateInCompleteEvent, this.showEvent.fire, this.showEvent)) {
+                                        ei.animateInCompleteEvent.subscribe(this.showEvent.fire, this.showEvent, true);
                                     }
                                     ei.animateIn();
                                 }
@@ -893,25 +872,15 @@
                     this.hideMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate out if showing
-                    if (currentVis == "visible") {
+                if (effects) { // Animate out if showing
+                    if (currentVis == "visible" || this._fadingIn) {
                         if (this.beforeHideEvent.fire()) {
-                            nEffectInstances = effectInstances.length;
+                            nEffectInstances = effects.length;
                             for (k = 0; k < nEffectInstances; k++) {
-                                h = effectInstances[k];
+                                h = effects[k];
         
-                                if (k === 0 && !alreadySubscribed(
-                                    h.animateOutCompleteEvent, this.hideEvent.fire, 
-                                    this.hideEvent)) {
-        
-                                    /*
-                                         Delegate hideEvent until end 
-                                         of animateOutComplete
-                                    */
-        
-                                    h.animateOutCompleteEvent.subscribe(
-                                        this.hideEvent.fire, this.hideEvent, true);
-        
+                                if (k === 0 && !alreadySubscribed(h.animateOutCompleteEvent, this.hideEvent.fire, this.hideEvent)) {
+                                    h.animateOutCompleteEvent.subscribe(this.hideEvent.fire, this.hideEvent, true);
                                 }
                                 h.animateOut();
                             }

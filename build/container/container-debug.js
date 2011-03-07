@@ -232,27 +232,18 @@
         * @return {Boolean} True is the property was reset, false if not
         */
         resetProperty: function (key) {
-    
             key = key.toLowerCase();
-        
-            var property = this.config[key];
-    
-            if (property && property.event) {
-    
-                if (this.initialConfig[key] && 
-                    !Lang.isUndefined(this.initialConfig[key])) {
-    
-                    this.setProperty(key, this.initialConfig[key]);
 
+            var property = this.config[key];
+
+            if (property && property.event) {
+                if (key in this.initialConfig) {
+                    this.setProperty(key, this.initialConfig[key]);
                     return true;
-    
                 }
-    
             } else {
-    
                 return false;
             }
-    
         },
         
         /**
@@ -826,7 +817,7 @@
     Module.CSS_MODULE = "yui-module";
     
     /**
-    * Constant representing the module header
+    * CSS classname representing the module header. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_HEADER
     * @static
     * @final
@@ -835,7 +826,7 @@
     Module.CSS_HEADER = "hd";
 
     /**
-    * Constant representing the module body
+    * CSS classname representing the module body. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_BODY
     * @static
     * @final
@@ -844,7 +835,7 @@
     Module.CSS_BODY = "bd";
     
     /**
-    * Constant representing the module footer
+    * CSS classname representing the module footer. NOTE: The classname is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @property YAHOO.widget.Module.CSS_FOOTER
     * @static
     * @final
@@ -1205,6 +1196,7 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.EFFECT.key, {
+                handler: this.configEffect,
                 suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
             });
@@ -1494,16 +1486,21 @@
         },
 
         /**
-        * Sets the Module's header content to the string specified, or appends 
-        * the passed element to the header. If no header is present, one will 
+        * Sets the Module's header content to the markup specified, or appends 
+        * the passed element to the header. 
+        * 
+        * If no header is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the header.
         * 
         * @method setHeader
-        * @param {String} headerContent The string used to set the header.
+        * @param {HTML} headerContent The markup used to set the header content.
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the header innerHTML
-        * set to their default toString implementations.
+        * set to their default toString implementations. 
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
         * <em>OR</em>
@@ -1554,10 +1551,13 @@
         * 
         * An empty string can be passed to the method to clear the contents of the body.
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body content 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only
         * child of the body element.
@@ -1601,17 +1601,20 @@
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Sets the Module's footer content to the HTML specified, or appends 
         * the passed element to the footer. If no footer is present, one will 
         * be automatically created. An empty string can be passed to the method
         * to clear the contents of the footer.
         * @method setFooter
-        * @param {String} footerContent The HTML used to set the footer 
+        * @param {HTML} footerContent The HTML used to set the footer 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the footer innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
@@ -1866,6 +1869,63 @@
                     this.hideEvent.fire();
                 }
             }
+        },
+
+        /**
+        * Default event handler for the "effect" configuration property
+        * @param {String} type The CustomEvent type (usually the property name)
+        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * handlers, args[0] will equal the newly applied value for the property.
+        * @param {Object} obj The scope object. For configuration handlers, 
+        * this will usually equal the owner.
+        * @method configEffect
+        */
+        configEffect: function (type, args, obj) {
+            this._cachedEffects = (this.cacheEffects) ? this._createEffects(args[0]) : null;
+        },
+
+        /**
+         * If true, ContainerEffects (and Anim instances) are cached when "effect" is set, and reused. 
+         * If false, new instances are created each time the container is hidden or shown, as was the 
+         * behavior prior to 2.9.0. 
+         *
+         * @property cacheEffects
+         * @since 2.9.0
+         * @default true
+         * @type boolean
+         */
+        cacheEffects : true,
+
+        /**
+         * Creates an array of ContainerEffect instances from the provided configs
+         * 
+         * @method _createEffects
+         * @param {Array|Object} effectCfg An effect configuration or array of effect configurations
+         * @return {Array} An array of ContainerEffect instances.
+         * @protected
+         */
+        _createEffects: function(effectCfg) {
+            var effectInstances = null,
+                n, 
+                i,
+                eff;
+
+            if (effectCfg) {
+                if (effectCfg instanceof Array) {
+                    effectInstances = [];
+                    n = effectCfg.length;
+                    for (i = 0; i < n; i++) {
+                        eff = effectCfg[i];
+                        if (eff.effect) {
+                            effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+                        }
+                    }
+                } else if (effectCfg.effect) {
+                    effectInstances = [effectCfg.effect(this, effectCfg.duration)];
+                }
+            }
+
+            return effectInstances;
         },
 
         /**
@@ -2731,12 +2791,10 @@
 
             var visible = args[0],
                 currentVis = Dom.getStyle(this.element, "visibility"),
-                effect = this.cfg.getProperty("effect"),
-                effectInstances = [],
+                effects = this._cachedEffects || this._createEffects(this.cfg.getProperty("effect")),
                 isMacGecko = (this.platform == "mac" && UA.gecko),
                 alreadySubscribed = Config.alreadySubscribed,
-                eff, ei, e, i, j, k, h,
-                nEffects,
+                ei, e, j, k, h,
                 nEffectInstances;
 
             if (currentVis == "inherit") {
@@ -2757,46 +2815,27 @@
                 }
             }
 
-            if (effect) {
-                if (effect instanceof Array) {
-                    nEffects = effect.length;
-
-                    for (i = 0; i < nEffects; i++) {
-                        eff = effect[i];
-                        effectInstances[effectInstances.length] = 
-                            eff.effect(this, eff.duration);
-
-                    }
-                } else {
-                    effectInstances[effectInstances.length] = 
-                        effect.effect(this, effect.duration);
-                }
-            }
-
             if (visible) { // Show
+
                 if (isMacGecko) {
                     this.showMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate in
+                if (effects) { // Animate in
                     if (visible) { // Animate in if not showing
-                        if (currentVis != "visible" || currentVis === "") {
+
+                         // Fading out is a bit of a hack, but didn't want to risk doing 
+                         // something broader (e.g a generic this._animatingOut) for 2.9.0
+
+                        if (currentVis != "visible" || currentVis === "" || this._fadingOut) {
                             if (this.beforeShowEvent.fire()) {
-                                nEffectInstances = effectInstances.length;
-    
+
+                                nEffectInstances = effects.length;
+
                                 for (j = 0; j < nEffectInstances; j++) {
-                                    ei = effectInstances[j];
-                                    if (j === 0 && !alreadySubscribed(
-                                            ei.animateInCompleteEvent, 
-                                            this.showEvent.fire, this.showEvent)) {
-    
-                                        /*
-                                             Delegate showEvent until end 
-                                             of animateInComplete
-                                        */
-    
-                                        ei.animateInCompleteEvent.subscribe(
-                                         this.showEvent.fire, this.showEvent, true);
+                                    ei = effects[j];
+                                    if (j === 0 && !alreadySubscribed(ei.animateInCompleteEvent, this.showEvent.fire, this.showEvent)) {
+                                        ei.animateInCompleteEvent.subscribe(this.showEvent.fire, this.showEvent, true);
                                     }
                                     ei.animateIn();
                                 }
@@ -2820,25 +2859,15 @@
                     this.hideMacGeckoScrollbars();
                 }
 
-                if (effect) { // Animate out if showing
-                    if (currentVis == "visible") {
+                if (effects) { // Animate out if showing
+                    if (currentVis == "visible" || this._fadingIn) {
                         if (this.beforeHideEvent.fire()) {
-                            nEffectInstances = effectInstances.length;
+                            nEffectInstances = effects.length;
                             for (k = 0; k < nEffectInstances; k++) {
-                                h = effectInstances[k];
+                                h = effects[k];
         
-                                if (k === 0 && !alreadySubscribed(
-                                    h.animateOutCompleteEvent, this.hideEvent.fire, 
-                                    this.hideEvent)) {
-        
-                                    /*
-                                         Delegate hideEvent until end 
-                                         of animateOutComplete
-                                    */
-        
-                                    h.animateOutCompleteEvent.subscribe(
-                                        this.hideEvent.fire, this.hideEvent, true);
-        
+                                if (k === 0 && !alreadySubscribed(h.animateOutCompleteEvent, this.hideEvent.fire, this.hideEvent)) {
+                                    h.animateOutCompleteEvent.subscribe(this.hideEvent.fire, this.hideEvent, true);
                                 }
                                 h.animateOut();
                             }
@@ -5088,9 +5117,9 @@
             });
 
             /**
-            * Specifies the Tooltip's text. 
+            * Specifies the Tooltip's text. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
             * @config text
-            * @type String
+            * @type HTML
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, {
@@ -5318,8 +5347,7 @@
             }
 
             // Fire first, to honor disabled set in the listner
-            if (obj.fireEvent("contextMouseOver", context, e) !== false 
-                    && !obj.cfg.getProperty("disabled")) {
+            if (obj.fireEvent("contextMouseOver", context, e) !== false && !obj.cfg.getProperty("disabled")) {
 
                 // Stop the tooltip from being hidden (set on last mouseout)
                 if (obj.hideProcId) {
@@ -5659,6 +5687,8 @@
         * @type Object
         */
         EVENT_TYPES = {
+            "BEFORE_SHOW_MASK" : "beforeShowMask",
+            "BEFORE_HIDE_MASK" : "beforeHideMask",
             "SHOW_MASK": "showMask",
             "HIDE_MASK": "hideMask",
             "DRAG": "drag"
@@ -5779,7 +5809,7 @@
         configuration property back to its original value before 
         "setWidthToOffsetWidth" was called.
     */
-    
+
     function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
 
         var sOriginalWidth = p_oObject[0],
@@ -5865,7 +5895,7 @@
                 this.subscribe("changeContent", this.setFirstLastFocusable);
             });
 
-            this.subscribe("show", this.focusFirst);
+            this.subscribe("show", this._focusOnShow);
 
             this.initEvent.fire(Panel);
         },
@@ -5892,15 +5922,7 @@
                 // the documentElement, when the document scrollbars are clicked on
                 if (insideDoc && target !== this.element && target !== this.mask && !Dom.isAncestor(this.element, target)) {
                     try {
-                        if (this.firstElement) {
-                            this.firstElement.focus();
-                        } else {
-                            if (this._modalFocus) {
-                                this._modalFocus.focus();
-                            } else {
-                                this.innerElement.focus();
-                            }
-                        }
+                        this._focusFirstModal();
                     } catch(err){
                         // Just in case we fail to focus
                         try {
@@ -5909,6 +5931,26 @@
                             }
                         } catch(err2) { }
                     }
+                }
+            }
+        },
+
+        /**
+         * Focuses on the first element if present, otherwise falls back to the focus mechanisms used for 
+         * modality. This method does not try/catch focus failures. The caller is responsible for catching exceptions,
+         * and taking remedial measures.
+         * 
+         * @method _focusFirstModal
+         */
+        _focusFirstModal : function() {
+            var el = this.firstElement;
+            if (el) {
+                el.focus();
+            } else {
+                if (this._modalFocus) {
+                    this._modalFocus.focus();
+                } else {
+                    this.innerElement.focus();
                 }
             }
         },
@@ -5934,7 +5976,7 @@
                     this.innerElement.tabIndex = 0;
                 }
             }
-            this.setTabLoop(this.firstElement, this.lastElement);
+            this._setTabLoop(this.firstElement, this.lastElement);
             Event.onFocus(document.documentElement, this._onElementFocus, this, true);
             _currentModal = this;
         },
@@ -5978,12 +6020,34 @@
         },
 
         /**
+         * Focus handler for the show event
+         *
+         * @method _focusOnShow
+         * @param {String} type Event Type
+         * @param {Array} args Event arguments
+         * @param {Object} obj Additional data 
+         */
+        _focusOnShow : function(type, args, obj) {
+
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
+            }
+
+            if (!this.focusFirst(type, args, obj)) {
+                if (this.cfg.getProperty("modal")) {
+                    this._focusFirstModal();
+                }
+            }
+        },
+
+        /**
          * Sets focus to the first element in the Panel.
          *
          * @method focusFirst
+         * @return {Boolean} true, if successfully focused, false otherwise 
          */
         focusFirst: function (type, args, obj) {
-            var el = this.firstElement;
+            var el = this.firstElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -5992,19 +6056,23 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
         },
 
         /**
          * Sets focus to the last element in the Panel.
          *
          * @method focusLast
+         * @return {Boolean} true, if successfully focused, false otherwise
          */
         focusLast: function (type, args, obj) {
-            var el = this.lastElement;
+            var el = this.lastElement, focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
@@ -6013,10 +6081,27 @@
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(err) {
                     // Ignore
                 }
             }
+
+            return focused;
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         *
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**
@@ -6083,20 +6168,30 @@
 
             root = root || this.innerElement;
 
-            var focusable = {};
+            var focusable = {}, panel = this;
             for (var i = 0; i < Panel.FOCUSABLE.length; i++) {
                 focusable[Panel.FOCUSABLE[i]] = true;
             }
 
-            function isFocusable(el) {
-                if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
-                    return true;
-                }
-                return false;
-            }
-
             // Not looking by Tag, since we want elements in DOM order
-            return Dom.getElementsBy(isFocusable, null, root);
+            
+            return Dom.getElementsBy(function(el) { return panel._testIfFocusable(el, focusable); }, null, root);
+        },
+
+        /**
+         * This is the test method used by getFocusableElements, to determine which elements to 
+         * include in the focusable elements list. Users may override this to customize behavior.
+         *
+         * @method _testIfFocusable
+         * @param {Object} el The element being tested
+         * @param {Object} focusable The hash of known focusable elements, created by an array-to-map operation on Panel.FOCUSABLE
+         * @protected
+         */
+        _testIfFocusable: function(el, focusable) {
+            if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -6119,7 +6214,7 @@
             }
 
             if (this.cfg.getProperty("modal")) {
-                this.setTabLoop(this.firstElement, this.lastElement);
+                this._setTabLoop(this.firstElement, this.lastElement);
             }
         },
 
@@ -6140,11 +6235,27 @@
             this.showMaskEvent.signature = SIGNATURE;
 
             /**
+            * CustomEvent fired before the modality mask is shown. Subscribers can return false to prevent the
+            * mask from being shown
+            * @event beforeShowMaskEvent
+            */
+            this.beforeShowMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_SHOW_MASK);
+            this.beforeShowMaskEvent.signature = SIGNATURE;
+
+            /**
             * CustomEvent fired after the modality mask is hidden
             * @event hideMaskEvent
             */
             this.hideMaskEvent = this.createEvent(EVENT_TYPES.HIDE_MASK);
             this.hideMaskEvent.signature = SIGNATURE;
+
+            /**
+            * CustomEvent fired before the modality mask is hidden. Subscribers can return false to prevent the
+            * mask from being hidden
+            * @event beforeHideMaskEvent
+            */
+            this.beforeHideMaskEvent = this.createEvent(EVENT_TYPES.BEFORE_HIDE_MASK);
+            this.beforeHideMaskEvent.signature = SIGNATURE;
 
             /**
             * CustomEvent when the Panel is dragged
@@ -6280,13 +6391,13 @@
             });
 
             /**
-            * UI Strings used by the Panel
+            * UI Strings used by the Panel. The strings are inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * 
             * @config strings
             * @type Object
             * @default An object literal with the properties shown below:
             *     <dl>
-            *         <dt>close</dt><dd><em>String</em> : The string to use for the close icon. Defaults to "Close".</dd>
+            *         <dt>close</dt><dd><em>HTML</em> : The markup to use as the label for the close icon. Defaults to "Close".</dd>
             *     </dl>
             */
             this.cfg.addProperty(DEFAULT_CONFIG.STRINGS.key, { 
@@ -6314,7 +6425,8 @@
 
             var val = args[0],
                 oClose = this.close,
-                strings = this.cfg.getProperty("strings");
+                strings = this.cfg.getProperty("strings"),
+                fc;
 
             if (val) {
                 if (!oClose) {
@@ -6326,7 +6438,14 @@
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
-                    this.innerElement.appendChild(oClose);
+
+                    fc = this.innerElement.firstChild;
+
+                    if (fc) {
+                        this.innerElement.insertBefore(oClose, fc);
+                    } else {
+                        this.innerElement.appendChild(oClose);
+                    }
 
                     oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
 
@@ -6937,7 +7056,7 @@
         * @method hideMask
         */
         hideMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeHideMaskEvent.fire()) {
                 this.mask.style.display = "none";
                 Dom.removeClass(document.body, "masked");
                 this.hideMaskEvent.fire();
@@ -6949,7 +7068,7 @@
         * @method showMask
         */
         showMask: function () {
-            if (this.cfg.getProperty("modal") && this.mask) {
+            if (this.cfg.getProperty("modal") && this.mask && this.beforeShowMaskEvent.fire()) {
                 Dom.addClass(document.body, "masked");
                 this.sizeMask();
                 this.mask.style.display = "block";
@@ -7298,7 +7417,7 @@
                 */
 
                 /**
-                * The arbitraty argument or arguments to pass to the Connection 
+                * The arbitrary argument or arguments to pass to the Connection 
                 * callback functions
                 * @property callback.argument
                 * @type Object
@@ -7363,7 +7482,8 @@
             *    <dt>text:</dt>
             *    <dd>
             *       The text that will display on the face of the button. The text can 
-            *       include HTML, as long as it is compliant with HTML Button specifications.
+            *       include HTML, as long as it is compliant with HTML Button specifications. The text is added to the DOM as HTML,
+            *       and should be escaped by the implementor if coming from an external source. 
             *    </dd>
             *    <dt>handler:</dt>
             *    <dd>Can be either:
@@ -7508,7 +7628,7 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            this.showEvent.subscribe(this.focusFirst, this, true);
+            //this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
@@ -7683,9 +7803,25 @@
         setTabLoop : function(firstElement, lastElement) {
 
             firstElement = firstElement || this.firstButton;
-            lastElement = this.lastButton || lastElement;
+            lastElement = lastElement || this.lastButton;
 
             Dialog.superclass.setTabLoop.call(this, firstElement, lastElement);
+        },
+
+        /**
+         * Protected internal method for setTabLoop, which can be used by 
+         * subclasses to jump in and modify the arguments passed in if required.
+         *
+         * @method _setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         * @protected
+         */
+        _setTabLoop : function(firstElement, lastElement) {
+            firstElement = firstElement || this.firstButton;
+            lastElement = this.lastButton || lastElement;
+
+            this.setTabLoop(firstElement, lastElement);
         },
 
         /**
@@ -7793,7 +7929,7 @@
                     oButton = aButtons[i];
 
                     if (Button) {
-                        oYUIButton = new Button({ label: oButton.text});
+                        oYUIButton = new Button({ label: oButton.text, type:oButton.type });
                         oYUIButton.appendTo(oSpan);
 
                         oButtonEl = oYUIButton.get("element");
@@ -7892,7 +8028,7 @@
         * buttons, by default an array of HTML <code>&#60;BUTTON&#62;</code> 
         * elements.  If the Dialog's buttons were created using the 
         * YAHOO.widget.Button class (via the inclusion of the optional Button 
-        * dependancy on the page), an array of YAHOO.widget.Button instances 
+        * dependency on the page), an array of YAHOO.widget.Button instances 
         * is returned.
         * @return {Array}
         */
@@ -7910,55 +8046,74 @@
          * This method is invoked when the Dialog is made visible.
          * </p>
          * @method focusFirst
+         * @return {Boolean} true, if focused. false if not
          */
         focusFirst: function (type, args, obj) {
 
-            var el = this.firstFormElement;
+            var el = this.firstFormElement, 
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use firstElement instead of firstFormElement
+                if (args[0] === 9 && this.firstElement) {
+                    el = this.firstElement;
+                }
             }
 
             if (el) {
                 try {
                     el.focus();
+                    focused = true;
                 } catch(oException) {
                     // Ignore
                 }
             } else {
                 if (this.defaultHtmlButton) {
-                    this.focusDefaultButton();
+                    focused = this.focusDefaultButton();
                 } else {
-                    this.focusFirstButton();
+                    focused = this.focusFirstButton();
                 }
             }
+            return focused;
         },
 
         /**
         * Sets focus to the last element in the Dialog's form or the last 
         * button defined via the "buttons" configuration property.
         * @method focusLast
+        * @return {Boolean} true, if focused. false if not
         */
         focusLast: function (type, args, obj) {
 
             var aButtons = this.cfg.getProperty("buttons"),
-                el = this.lastFormElement;
+                el = this.lastFormElement,
+                focused = false;
 
             if (args && args[1]) {
                 Event.stopEvent(args[1]);
+
+                // When tabbing here, use lastElement instead of lastFormElement
+                if (args[0] === 9 && this.lastElement) {
+                    el = this.lastElement;
+                }
             }
 
             if (aButtons && Lang.isArray(aButtons)) {
-                this.focusLastButton();
+                focused = this.focusLastButton();
             } else {
                 if (el) {
                     try {
                         el.focus();
+                        focused = true;
                     } catch(oException) {
                         // Ignore
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
@@ -7989,9 +8144,12 @@
         * the "buttons" configuration property. By default, this method is 
         * called when the Dialog is made visible.
         * @method focusDefaultButton
+        * @return {Boolean} true if focused, false if not
         */
         focusDefaultButton: function () {
-            var button = this._getButton(this.defaultHtmlButton);
+            var button = this._getButton(this.defaultHtmlButton), 
+                         focused = false;
+            
             if (button) {
                 /*
                     Place the call to the "focus" method inside a try/catch
@@ -8000,9 +8158,11 @@
                 */
                 try {
                     button.focus();
+                    focused = true;
                 } catch(oException) {
                 }
             }
+            return focused;
         },
 
         /**
@@ -8049,12 +8209,14 @@
         * Sets the focus to the first button created via the "buttons"
         * configuration property.
         * @method focusFirstButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusFirstButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 oButton,
-                oElement;
+                oElement,
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 oButton = aButtons[0];
@@ -8069,25 +8231,30 @@
                         */
                         try {
                             oElement.focus();
+                            focused = true;
                         } catch(oException) {
                             // ignore
                         }
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
         * Sets the focus to the last button created via the "buttons" 
         * configuration property.
         * @method focusLastButton
+        * @return {Boolean} true, if focused. false if not
         */
         focusLastButton: function () {
 
             var aButtons = this.cfg.getProperty("buttons"),
                 nButtons,
                 oButton,
-                oElement;
+                oElement, 
+                focused = false;
 
             if (aButtons && Lang.isArray(aButtons)) {
                 nButtons = aButtons.length;
@@ -8106,6 +8273,7 @@
         
                             try {
                                 oElement.focus();
+                                focused = true;
                             } catch(oException) {
                                 // Ignore
                             }
@@ -8113,6 +8281,8 @@
                     }
                 }
             }
+
+            return focused;
         },
 
         /**
@@ -8495,9 +8665,9 @@
             });
         
             /**
-            * Sets the text for the SimpleDialog
+            * Sets the text for the SimpleDialog. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
             * @config text
-            * @type String
+            * @type HTML
             * @default ""
             */
             this.cfg.addProperty(DEFAULT_CONFIG.TEXT.key, { 
@@ -8559,14 +8729,18 @@
         * @method registerForm
         */
         registerForm: function () {
-
             SimpleDialog.superclass.registerForm.call(this);
 
-            this.form.innerHTML += "<input type=\"hidden\" name=\"" + 
-                this.id + "\" value=\"\"/>";
+            var doc = this.form.ownerDocument,
+                input = doc.createElement("input");
 
+            input.type = "hidden";
+            input.name = this.id;
+            input.value = "";
+
+            this.form.appendChild(input);
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**
@@ -8675,10 +8849,13 @@
         * of a SimpleDialog with your own custom markup.</p>
         * 
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {HTML} bodyContent The HTML used to set the body. 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
+        * 
+        * <p>NOTE: Markup passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</p>
+        * 
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only child of the body element.
         * <em>OR</em>
@@ -8751,14 +8928,11 @@
         * @type class
         */
         this.animClass = animClass;
-    
     };
-
 
     var Dom = YAHOO.util.Dom,
         CustomEvent = YAHOO.util.CustomEvent,
         ContainerEffect = YAHOO.widget.ContainerEffect;
-
 
     /**
     * A pre-configured ContainerEffect instance that can be used for fading 
@@ -8802,6 +8976,8 @@
         };
 
         fade.handleStartAnimateIn = function (type, args, obj) {
+            obj.overlay._fadingIn = true;
+
             Dom.addClass(obj.overlay.element, "hide-select");
 
             if (!obj.overlay.underlay) {
@@ -8815,6 +8991,8 @@
         };
 
         fade.handleCompleteAnimateIn = function (type,args,obj) {
+            obj.overlay._fadingIn = false;
+            
             Dom.removeClass(obj.overlay.element, "hide-select");
 
             if (obj.overlay.element.style.filter) {
@@ -8828,12 +9006,15 @@
         };
 
         fade.handleStartAnimateOut = function (type, args, obj) {
+            obj.overlay._fadingOut = true;
             Dom.addClass(obj.overlay.element, "hide-select");
             obj.handleUnderlayStart();
         };
 
         fade.handleCompleteAnimateOut =  function (type, args, obj) {
+            obj.overlay._fadingOut = false;
             Dom.removeClass(obj.overlay.element, "hide-select");
+
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
@@ -8911,7 +9092,7 @@
             obj.overlay.cfg.refireEvent("iframe");
             obj.animateInCompleteEvent.fire();
         };
-        
+
         slide.handleStartAnimateOut = function (type, args, obj) {
     
             var vw = Dom.getViewportWidth(),
@@ -8959,36 +9140,37 @@
             this.animateInCompleteEvent = this.createEvent("animateInComplete");
             this.animateInCompleteEvent.signature = CustomEvent.LIST;
         
-            this.animateOutCompleteEvent = 
-                this.createEvent("animateOutComplete");
+            this.animateOutCompleteEvent = this.createEvent("animateOutComplete");
             this.animateOutCompleteEvent.signature = CustomEvent.LIST;
-        
-            this.animIn = new this.animClass(this.targetElement, 
-                this.attrIn.attributes, this.attrIn.duration, 
+
+            this.animIn = new this.animClass(
+                this.targetElement, 
+                this.attrIn.attributes, 
+                this.attrIn.duration, 
                 this.attrIn.method);
 
             this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);
             this.animIn.onTween.subscribe(this.handleTweenAnimateIn, this);
-
-            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, 
-                this);
+            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn,this);
         
-            this.animOut = new this.animClass(this.targetElement, 
-                this.attrOut.attributes, this.attrOut.duration, 
+            this.animOut = new this.animClass(
+                this.targetElement, 
+                this.attrOut.attributes, 
+                this.attrOut.duration, 
                 this.attrOut.method);
 
             this.animOut.onStart.subscribe(this.handleStartAnimateOut, this);
             this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
-            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, 
-                this);
+            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, this);
 
         },
-        
+
         /**
         * Triggers the in-animation.
         * @method animateIn
         */
         animateIn: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateInEvent.fire();
             this.animIn.animate();
         },
@@ -8998,8 +9180,36 @@
         * @method animateOut
         */
         animateOut: function () {
+            this._stopAnims(this.lastFrameOnStop);
             this.beforeAnimateOutEvent.fire();
             this.animOut.animate();
+        },
+        
+        /**
+         * Flag to define whether Anim should jump to the last frame,
+         * when animateIn or animateOut is stopped.
+         *
+         * @property lastFrameOnStop
+         * @default true
+         * @type boolean
+         */
+        lastFrameOnStop : true,
+
+        /**
+         * Stops both animIn and animOut instances, if in progress.
+         *
+         * @method _stopAnims
+         * @param {boolean} finish If true, animation will jump to final frame.
+         * @protected
+         */
+        _stopAnims : function(finish) {
+            if (this.animOut && this.animOut.isAnimated()) {
+                this.animOut.stop(finish);
+            }
+
+            if (this.animIn && this.animIn.isAnimated()) {
+                this.animIn.stop(finish);
+            }
         },
 
         /**

@@ -121,11 +121,11 @@ YAHOO.widget.CalendarNavigator = function(cal) {
      * <dt>strings</dt>
      * <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
      *     <dl>
-     *         <dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
-     *         <dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
-     *         <dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
-     *         <dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
-     *         <dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
+     *         <dt>month</dt><dd><em>HTML</em> : The markup to use for the month label. Defaults to "Month".</dd>
+     *         <dt>year</dt><dd><em>HTML</em> : The markup to use for the year label. Defaults to "Year".</dd>
+     *         <dt>submit</dt><dd><em>HTML</em> : The markup to use for the submit button label. Defaults to "Okay".</dd>
+     *         <dt>cancel</dt><dd><em>HTML</em> : The markup to use for the cancel button label. Defaults to "Cancel".</dd>
+     *         <dt>invalidYear</dt><dd><em>HTML</em> : The markup to use for invalid year values. Defaults to "Year needs to be a number".</dd>
      *     </dl>
      * </dd>
      * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
@@ -146,7 +146,7 @@ YAHOO.widget.CalendarNavigator = function(cal) {
         monthFormat: YAHOO.widget.Calendar.LONG,
         initialFocus: "year"
     };
-    
+
     /**
      * Object literal containing the default configuration values for the CalendarNavigator
      * @property _DEFAULT_CFG
@@ -614,12 +614,12 @@ YAHOO.widget.CalendarNavigator.prototype = {
     },
 
     /**
-     * Renders the contents of the navigator
+     * Renders the contents of the navigator. NOTE: The contents of the array passed into this method are added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.
      * 
      * @method renderNavContents
      * 
-     * @param {Array} html The HTML buffer to append the HTML to.
-     * @return {Array} A reference to the buffer passed in.
+     * @param {HTML[]} html The HTML buffer to append the HTML to.
+     * @return {HTML[]} A reference to the buffer passed in.
      */
     renderNavContents : function(html) {
         var NAV = YAHOO.widget.CalendarNavigator,
@@ -641,11 +641,11 @@ YAHOO.widget.CalendarNavigator.prototype = {
     },
 
     /**
-     * Renders the month label and control for the navigator
+     * Renders the month label and control for the navigator. NOTE: The contents of the array passed into this method are added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.
      * 
      * @method renderNavContents
-     * @param {Array} html The HTML buffer to append the HTML to.
-     * @return {Array} A reference to the buffer passed in.
+     * @param {HTML[]} html The HTML buffer to append the HTML to.
+     * @return {HTML[]} A reference to the buffer passed in.
      */
     renderMonth : function(html) {
         var NAV = YAHOO.widget.CalendarNavigator,
@@ -672,7 +672,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
     },
 
     /**
-     * Renders the year label and control for the navigator
+     * Renders the year label and control for the navigator. NOTE: The contents of the array passed into this method are added to the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
      * 
      * @method renderYear
      * @param {Array} html The HTML buffer to append the HTML to.
@@ -694,10 +694,11 @@ YAHOO.widget.CalendarNavigator.prototype = {
     },
 
     /**
-     * Renders the submit/cancel buttons for the navigator
+     * Renders the submit/cancel buttons for the navigator. NOTE: The contents of the array passed into this method are added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.
      * 
-     * @method renderButton
-     * @return {String} The HTML created for the Button UI
+     * @method renderButtons
+     * @param {Array} html The HTML buffer to append the HTML to.
+     * @return {Array} A reference to the buffer passed in.
      */
     renderButtons : function(html) {
         var C = YAHOO.widget.CalendarNavigator.CLASSES;
@@ -885,9 +886,10 @@ YAHOO.widget.CalendarNavigator.prototype = {
     },
 
     /**
-     * Displays an error message in the Navigator's error panel
+     * Displays an error message in the Navigator's error panel.
+     * 
      * @method setError
-     * @param {String} msg The error message to display
+     * @param {HTML} msg The markup for the error message to display. NOTE: The msg passed into this method is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
      */
     setError : function(msg) {
         if (this.errorEl) {

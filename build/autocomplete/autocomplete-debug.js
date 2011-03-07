@@ -637,7 +637,7 @@ YAHOO.widget.AutoComplete.prototype.getListItemIndex = function(elListItem) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-hd".
  *
  * @method setHeader
- * @param sHeader {String} HTML markup for results container header.
+ * @param sHeader {HTML} HTML markup for results container header.
  */
 YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
     if(this._elHeader) {
@@ -658,7 +658,7 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-ft".
  *
  * @method setFooter
- * @param sFooter {String} HTML markup for results container footer.
+ * @param sFooter {HTML} HTML markup for results container footer.
  */
 YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
     if(this._elFooter) {
@@ -679,7 +679,7 @@ YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
  * inserted within a &lt;div&gt; tag with a class of "yui-ac-bd".
  *
  * @method setBody
- * @param sBody {String} HTML markup for results container body.
+ * @param sBody {HTML} HTML markup for results container body.
  */
 YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
     if(this._elBody) {
@@ -849,7 +849,7 @@ YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFu
 
 YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullResponse, oParsedResponse, oCallback) {
     // If AC has passed a query string value back to itself, grab it
-    if(oCallback && oCallback.argument && oCallback.argument.query) {
+    if(oCallback && oCallback.argument && YAHOO.lang.isValue(oCallback.argument.query)) {
         sQuery = oCallback.argument.query;
     }
 
@@ -959,11 +959,29 @@ YAHOO.widget.AutoComplete.prototype.doBeforeLoadData = function(sQuery, oRespons
  * @param oResultData {Object} Result data object.
  * @param sQuery {String} The corresponding query string.
  * @param sResultMatch {HTMLElement} The current query string. 
- * @return {String} HTML markup of formatted result data.
+ * @return {HTML} HTML markup of formatted result data.
  */
 YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultData, sQuery, sResultMatch) {
     var sMarkup = (sResultMatch) ? sResultMatch : "";
     return sMarkup;
+};
+
+/**
+ * An alternative to the formatResult() method, escapes the result data before
+ * inserting into DOM. Implementers should point to this method when accessing
+ * data from third-party sources, from user input, or from otherwise
+ * untrustworthy sources:
+ * myAutoComplete.formatResult = myAutoComplete.formatEscapedResult();
+ *
+ * @method formatEscapedResult
+ * @param oResultData {Object} Result data object.
+ * @param sQuery {String} The corresponding query string.
+ * @param sResultMatch {HTMLElement} The current query string.
+ * @return {String} Formatted result data.
+ */
+YAHOO.widget.AutoComplete.prototype.formatEscapedResult = function(oResultData, sQuery, sResultMatch) {
+    var sResult = (sResultMatch) ? sResultMatch : "";
+    return YAHOO.lang.escapeHTML(sResult);
 };
 
 /**

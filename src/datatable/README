@@ -10,6 +10,26 @@ DataTable Release Notes
 and destroyed for each instance instead of being shared globally.
 * Added new method load(), a convenience method that calls DataSource's
 sendRequest() method under the hood.
+* Moved YAHOO.widget.DataTable._cloneObject definition to
+YAHOO.util.DataSourceBase._cloneObject.
+* Bug 2528233: Rewired getTrEl(), getFirstTrEl(), getLastTrEl(), getNextTrEl(),
+getPreviousTrEl(), getAboveTdEl(), getBelowTdEl(), getTrIndex() in order to
+support non-primary rows (i.e., row expansions).
+* Added new Attribte "sortFunction" to serve as overridable default sort function.
+
+
+**** 2.8.3 ****
+
+* YAHOO.widget.DataTable.formatEmail, YAHOO.widget.DataTable.formatLink,
+YAHOO.widget.DataTable.formatText, YAHOO.widget.DataTable.formatTextarea, and
+YAHOO.widget.DataTable.formatTextbox now escape data value with
+YAHOO.lang.escapeHTML before insertion into DOM.
+
+
+**** 2.8.2 ****
+
+* No changes.
+
 
 **** 2.8.1 ****
 

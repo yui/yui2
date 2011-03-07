@@ -11,7 +11,7 @@
 <script src = "../../build/logger/logger.js" ></script>
 <script type="text/javascript">
 
-YAHOO.widget.Logger.enableBrowserConsole() 
+YAHOO.widget.Logger.enableBrowserConsole()
 var l = new YAHOO.widget.LogWriter("(");
 
 YAHOO.example.LangTest = function() {
@@ -22,23 +22,23 @@ YAHOO.example.LangTest = function() {
 
     var tests = {
 
-        "An array literal is an array": 
+        "An array literal is an array":
             YAHOO.lang.isArray([1, 2]),
 
-        "An object literal is not an array": 
+        "An object literal is not an array":
             !YAHOO.lang.isArray({"one": "two"}),
 
-        "But, an associative array is an array": 
+        "But, an associative array is an array":
             function() {
                 var a = new Array();
                 a["one"] = "two";
                 return YAHOO.lang.isArray(a);
             }(),
 
-        "A collection of elements is like an array, but isn't": 
+        "A collection of elements is like an array, but isn't":
             !YAHOO.lang.isArray(document.getElementsByTagName("body")),
 
-        "null is not an array": 
+        "null is not an array":
             !YAHOO.lang.isArray(null),
 
         "True/false is a boolean":
@@ -106,13 +106,13 @@ YAHOO.example.LangTest = function() {
 
         "a number is not a string":
             !YAHOO.lang.isString(123),
-  
+
         "a boolean is not a string":
             !YAHOO.lang.isString(true),
- 
+
         "undefined is undefined***":
             YAHOO.lang.isUndefined(undefined),
- 
+
         "false is not undefined":
             !YAHOO.lang.isUndefined(false),
 
@@ -121,7 +121,7 @@ YAHOO.example.LangTest = function() {
 
     }
 
-    return { 
+    return {
         init: function() {
 
             alert(typeof null);
@@ -159,7 +159,7 @@ YAHOO.example.LangTest.init();
 
 </script>
 </head>
-<body><style>.dd {position:absolute; height:50px; width:50px; border:1px solid green} 
+<body><style>.dd {position:absolute; height:50px; width:50px; border:1px solid green}
   #ddel1 {top: 100px; left: 100px; background: red}
   #ddel2 {top: 100px; left: 200px; background: red}
   #ddel3 {top: 200px; left: 100px; background: blue}

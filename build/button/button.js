@@ -136,12 +136,14 @@
         
                 oInput = document.createElement(sInput);
         
-            }
-            else {
+                oInput.value = p_sValue;
+
+            } else {
             
                 oInput = document.createElement("input");
                 oInput.name = p_sName;
                 oInput.type = p_sType;
+                oInput.value = p_sValue;
         
                 if (p_bChecked) {
         
@@ -151,7 +153,6 @@
         
             }
         
-            oInput.value = p_sValue;
         
         }
 
@@ -706,7 +707,7 @@
         * @method _setLabel
         * @description Sets the value of the button's "label" attribute.
         * @protected
-        * @param {String} p_sLabel String indicating the value for the button's 
+        * @param {HTML} p_sLabel String indicating the value for the button's 
         * "label" attribute.
         */
         _setLabel: function (p_sLabel) {
@@ -1723,7 +1724,10 @@
         
         
             if (sType == "checkbox" || sType == "radio") {
-        
+                if ((p_oEvent.which || p_oEvent.button) != 1) {
+                    return;
+                }
+
                 this.set("checked", !(this.get("checked")));
             
             }
@@ -2092,12 +2096,28 @@
                 oButtonElement = this.get("element"),
                 oMenuElement = this._menu.element;
            
+            function findTargetInSubmenus(aSubmenus) {
+                var i, iMax, oSubmenuElement;
+                for (i = 0, iMax = aSubmenus.length; i < iMax; i++) {
+                    oSubmenuElement = aSubmenus[i].element;
+                    if (oTarget == oSubmenuElement || Dom.isAncestor(oSubmenuElement, oTarget)) {
+                        return true;
+                    }
+
+                    if (findTargetInSubmenus(aSubmenus[i].getSubmenus())) {
+                        return true;
+                    }
+                }
+        
+                return false;
+            }
         
             if (oTarget != oButtonElement && 
                 !Dom.isAncestor(oButtonElement, oTarget) && 
                 oTarget != oMenuElement && 
-                !Dom.isAncestor(oMenuElement, oTarget)) {
-        
+                !Dom.isAncestor(oMenuElement, oTarget) &&
+                !findTargetInSubmenus(this._menu.getSubmenus())) {
+
                 this._hideMenu();
 
 				//	In IE when the user mouses down on a focusable element
@@ -2924,7 +2944,7 @@
         
             /**
             * @attribute label
-            * @description String specifying the button's text label 
+            * @description {HTML} specifying the button's text label 
             * or innerHTML.
             * @default null
             * @type String

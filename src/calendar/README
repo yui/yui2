@@ -1,12 +1,36 @@
 Calendar Release Notes
 
-*** Development Master ***
+*** 2.9.0 ***
 
 + Fixed renderStack application when multiple renderers applied to
   the same date.
 
 + Removed Opera Width Fix. No longer required. Opera handles floats 
   correclty
+
++ Allow calendar to be rendered into a (iframe) document, different
+  from the instance. 
+
++ Added OOM selection support, driven by the "oom_select" config 
+  property. When oom_select is enabled, OOM dates will also accept
+  custom renderers.
+
+  Based on patches provided by Joshua Flynn (flynnjandm) and 
+  Pranav (unohoo) in tickets #1755642, #2528933
+
+*** version 2.8.3 ***
+
++ No code changes.
+
++ APIDocs updated to identify string parameters and 
+  properties, which get added to the DOM as HTML.
+
+  These string values should be escaped by the implementor, 
+  if they come from an untrusted external source.
+
+*** version 2.8.2 ***
+
++ No changes
 
 *** version 2.8.1 ***
 

@@ -1,5 +1,9 @@
 SWF Utility - Release Notes
 
+2.8.3
+    * Bug fixes
+        * Added escapes to all non-HTML text written to innerHTML.
+
 2.8.1
     * No change
 	

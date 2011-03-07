@@ -2461,43 +2461,43 @@ var Dom = YAHOO.util.Dom,
         /**
         * @property SEP_DOMPATH
         * @description The value to place in between the Dom path items
-        * @type String
+        * @type {HTML}
         */
         SEP_DOMPATH: '<',
         /**
         * @property STR_LEAVE_EDITOR
         * @description The accessibility string for the element after the iFrame
-        * @type String
+        * @type {HTML}
         */
         STR_LEAVE_EDITOR: 'You have left the Rich Text Editor.',
         /**
         * @property STR_BEFORE_EDITOR
         * @description The accessibility string for the element before the iFrame
-        * @type String
+        * @type {HTML}
         */
         STR_BEFORE_EDITOR: 'This text field can contain stylized text and graphics. To cycle through all formatting options, use the keyboard shortcut Shift + Escape to place focus on the toolbar and navigate between options with your arrow keys. To exit this text editor use the Escape key and continue tabbing. <h4>Common formatting keyboard shortcuts:</h4><ul><li>Control Shift B sets text to bold</li> <li>Control Shift I sets text to italic</li> <li>Control Shift U underlines text</li> <li>Control Shift L adds an HTML link</li></ul>',
         /**
         * @property STR_TITLE
         * @description The Title of the HTML document that is created in the iFrame
-        * @type String
+        * @type {HTML}
         */
         STR_TITLE: 'Rich Text Area.',
         /**
         * @property STR_IMAGE_HERE
         * @description The text to place in the URL textbox when using the blankimage.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_HERE: 'Image URL Here',
         /**
         * @property STR_IMAGE_URL
         * @description The label string for Image URL
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_URL: 'Image URL',        
         /**
         * @property STR_LINK_URL
         * @description The label string for the Link URL.
-        * @type String
+        * @type {HTML}
         */
         STR_LINK_URL: 'Link URL',
         /**
@@ -2518,35 +2518,35 @@ var Dom = YAHOO.util.Dom,
         * @protected
         * @property CLASS_NOEDIT
         * @description CSS class applied to elements that are not editable.
-        * @type String
+        * @type {HTML}
         */
         CLASS_NOEDIT: 'yui-noedit',
         /**
         * @protected
         * @property CLASS_CONTAINER
         * @description Default CSS class to apply to the editors container element
-        * @type String
+        * @type {HTML}
         */
         CLASS_CONTAINER: 'yui-editor-container',
         /**
         * @protected
         * @property CLASS_EDITABLE
         * @description Default CSS class to apply to the editors iframe element
-        * @type String
+        * @type {HTML}
         */
         CLASS_EDITABLE: 'yui-editor-editable',
         /**
         * @protected
         * @property CLASS_EDITABLE_CONT
         * @description Default CSS class to apply to the editors iframe's parent element
-        * @type String
+        * @type {HTML}
         */
         CLASS_EDITABLE_CONT: 'yui-editor-editable-container',
         /**
         * @protected
         * @property CLASS_PREFIX
         * @description Default prefix for dynamically created class names
-        * @type String
+        * @type {HTML}
         */
         CLASS_PREFIX: 'yui-editor',
         /** 

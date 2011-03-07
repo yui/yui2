@@ -149,129 +149,129 @@ var Dom = YAHOO.util.Dom,
         /**
         * @property STR_BEFORE_EDITOR
         * @description The accessibility string for the element before the iFrame
-        * @type String
+        * @type {HTML}
         */
         STR_BEFORE_EDITOR: 'This text field can contain stylized text and graphics. To cycle through all formatting options, use the keyboard shortcut Control + Shift + T to place focus on the toolbar and navigate between option heading names. <h4>Common formatting keyboard shortcuts:</h4><ul><li>Control Shift B sets text to bold</li> <li>Control Shift I sets text to italic</li> <li>Control Shift U underlines text</li> <li>Control Shift [ aligns text left</li> <li>Control Shift | centers text</li> <li>Control Shift ] aligns text right</li> <li>Control Shift L adds an HTML link</li> <li>To exit this text editor use the keyboard shortcut Control + Shift + ESC.</li></ul>',    
         /**
         * @property STR_CLOSE_WINDOW
         * @description The Title of the close button in the Editor Window
-        * @type String
+        * @type {HTML}
         */
         STR_CLOSE_WINDOW: 'Close Window',
         /**
         * @property STR_CLOSE_WINDOW_NOTE
         * @description A note appearing in the Editor Window to tell the user that the Escape key will close the window
-        * @type String
+        * @type {HTML}
         */
         STR_CLOSE_WINDOW_NOTE: 'To close this window use the Control + Shift + W key',
         /**
         * @property STR_IMAGE_PROP_TITLE
         * @description The title for the Image Property Editor Window
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_PROP_TITLE: 'Image Options',
         /**
         * @property STR_IMAGE_TITLE
         * @description The label string for Image Description
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_TITLE: 'Description',
         /**
         * @property STR_IMAGE_SIZE
         * @description The label string for Image Size
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_SIZE: 'Size',
         /**
         * @property STR_IMAGE_ORIG_SIZE
         * @description The label string for Original Image Size
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_ORIG_SIZE: 'Original Size',
         /**
         * @property STR_IMAGE_COPY
         * @description The label string for the image copy and paste message for Opera and Safari
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_COPY: '<span class="tip"><span class="icon icon-info"></span><strong>Note:</strong>To move this image just highlight it, cut, and paste where ever you\'d like.</span>',
         /**
         * @property STR_IMAGE_PADDING
         * @description The label string for the image padding.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_PADDING: 'Padding',
         /**
         * @property STR_IMAGE_BORDER
         * @description The label string for the image border.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_BORDER: 'Border',
         /**
         * @property STR_IMAGE_BORDER_SIZE
         * @description The label string for the image border size.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_BORDER_SIZE: 'Border Size',
         /**
         * @property STR_IMAGE_BORDER_TYPE
         * @description The label string for the image border type.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_BORDER_TYPE: 'Border Type',
         /**
         * @property STR_IMAGE_TEXTFLOW
         * @description The label string for the image text flow.
-        * @type String
+        * @type {HTML}
         */
         STR_IMAGE_TEXTFLOW: 'Text Flow',
         /**
         * @property STR_LOCAL_FILE_WARNING
         * @description The label string for the local file warning.
-        * @type String
+        * @type {HTML}
         */
         STR_LOCAL_FILE_WARNING: '<span class="tip"><span class="icon icon-warn"></span><strong>Note:</strong>This image/link points to a file on your computer and will not be accessible to others on the internet.</span>',
         /**
         * @property STR_LINK_PROP_TITLE
         * @description The label string for the Link Property Editor Window.
-        * @type String
+        * @type {HTML}
         */
         STR_LINK_PROP_TITLE: 'Link Options',
         /**
         * @property STR_LINK_PROP_REMOVE
         * @description The label string for the Remove link from text link inside the property editor.
-        * @type String
+        * @type {HTML}
         */
         STR_LINK_PROP_REMOVE: 'Remove link from text',
         /**
         * @property STR_LINK_NEW_WINDOW
         * @description The string for the open in a new window label.
-        * @type String
+        * @type {HTML}
         */
         STR_LINK_NEW_WINDOW: 'Open in a new window.',
         /**
         * @property STR_LINK_TITLE
         * @description The string for the link description.
-        * @type String
+        * @type {HTML}
         */
         STR_LINK_TITLE: 'Description',
         /**
         * @property STR_NONE
         * @description The string for the word none.
-        * @type String
+        * @type {HTML}
         */
         STR_NONE: 'none',
         /**
         * @protected
         * @property CLASS_LOCAL_FILE
         * @description CSS class applied to an element when it's found to have a local url.
-        * @type String
+        * @type {HTML}
         */
         CLASS_LOCAL_FILE: 'warning-localfile',
         /**
         * @protected
         * @property CLASS_HIDDEN
         * @description CSS class applied to the body when the hiddenelements button is pressed.
-        * @type String
+        * @type {HTML}
         */
         CLASS_HIDDEN: 'yui-hidden',
         /** 

@@ -63,6 +63,24 @@
 
                 value: 'default'
             });
+
+            this.setAttributeConfig('testCancel', {
+                setter: function(val) {
+                    if (val !== 'foo' && val !== 'foo2') {
+                        return YAHOO.util.Attribute.INVALID_VALUE;
+                    } else {
+                        return val;
+                    }
+                },
+
+                method: function(val) {
+                    if (val === 'foo2') {
+                        return YAHOO.util.Attribute.INVALID_VALUE;
+                    }
+                },
+
+                value: 'foo'
+            });
         };
 
         var foo = new Y.Element('foo', { foo: 0, href: 2, wrap: true });
@@ -197,6 +215,15 @@
                 foo.on('click', function(e) { alert('click'); });
                 var baz = new Y.Element('baz');
                 baz.on('click', function(e) { alert('click'); });
+            },
+
+            test_cancelSetter: function() {
+                foo.set('testCancel', 'bar');    
+                Assert.areEqual('foo', foo.get('testCancel'), 'cancel via setter return');
+
+                foo.set('testCancel', 'foo2');
+
+                Assert.areEqual('foo', foo.get('testCancel'), 'cancel via method return');
             },
 
             test_destroy: function() {

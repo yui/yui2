@@ -1405,6 +1405,7 @@ if (!YAHOO.util.Event) {
                 }
 
                 EU._simpleRemove(window, "unload", EU._unload);
+                EU._simpleRemove(window, "load", EU._load);
 
             },
 

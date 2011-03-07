@@ -6,7 +6,7 @@
 /**
 * Creates an item for a menu.
 * 
-* @param {String} p_oObject String specifying the text of the menu item.
+* @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
 * the <code>&#60;li&#62;</code> element of the menu item.
@@ -49,51 +49,51 @@ var Dom = YAHOO.util.Dom,
     UA = YAHOO.env.ua,
     Lang = YAHOO.lang,
 
-	// Private string constants
+    // Private string constants
 
-	_TEXT = "text",
-	_HASH = "#",
-	_HYPHEN = "-",
-	_HELP_TEXT = "helptext",
-	_URL = "url",
-	_TARGET = "target",
-	_EMPHASIS = "emphasis",
-	_STRONG_EMPHASIS = "strongemphasis",
-	_CHECKED = "checked",
-	_SUBMENU = "submenu",
-	_DISABLED = "disabled",
-	_SELECTED = "selected",
-	_HAS_SUBMENU = "hassubmenu",
-	_CHECKED_DISABLED = "checked-disabled",
-	_HAS_SUBMENU_DISABLED = "hassubmenu-disabled",
-	_HAS_SUBMENU_SELECTED = "hassubmenu-selected",
-	_CHECKED_SELECTED = "checked-selected",
-	_ONCLICK = "onclick",
-	_CLASSNAME = "classname",
-	_EMPTY_STRING = "",
-	_OPTION = "OPTION",
-	_OPTGROUP = "OPTGROUP",
-	_LI_UPPERCASE = "LI",
-	_HREF = "href",
-	_SELECT = "SELECT",
-	_DIV = "DIV",
-	_START_HELP_TEXT = "<em class=\"helptext\">",
-	_START_EM = "<em>",
-	_END_EM = "</em>",
-	_START_STRONG = "<strong>",
-	_END_STRONG = "</strong>",
-	_PREVENT_CONTEXT_OVERLAP = "preventcontextoverlap",
-	_OBJ = "obj",
-	_SCOPE = "scope",
-	_NONE = "none",
-	_VISIBLE = "visible",
-	_SPACE = " ",
-	_MENUITEM = "MenuItem",
-	_CLICK = "click",
-	_SHOW = "show",
-	_HIDE = "hide",
-	_LI_LOWERCASE = "li",
-	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
+    _TEXT = "text",
+    _HASH = "#",
+    _HYPHEN = "-",
+    _HELP_TEXT = "helptext",
+    _URL = "url",
+    _TARGET = "target",
+    _EMPHASIS = "emphasis",
+    _STRONG_EMPHASIS = "strongemphasis",
+    _CHECKED = "checked",
+    _SUBMENU = "submenu",
+    _DISABLED = "disabled",
+    _SELECTED = "selected",
+    _HAS_SUBMENU = "hassubmenu",
+    _CHECKED_DISABLED = "checked-disabled",
+    _HAS_SUBMENU_DISABLED = "hassubmenu-disabled",
+    _HAS_SUBMENU_SELECTED = "hassubmenu-selected",
+    _CHECKED_SELECTED = "checked-selected",
+    _ONCLICK = "onclick",
+    _CLASSNAME = "classname",
+    _EMPTY_STRING = "",
+    _OPTION = "OPTION",
+    _OPTGROUP = "OPTGROUP",
+    _LI_UPPERCASE = "LI",
+    _HREF = "href",
+    _SELECT = "SELECT",
+    _DIV = "DIV",
+    _START_HELP_TEXT = "<em class=\"helptext\">",
+    _START_EM = "<em>",
+    _END_EM = "</em>",
+    _START_STRONG = "<strong>",
+    _END_STRONG = "</strong>",
+    _PREVENT_CONTEXT_OVERLAP = "preventcontextoverlap",
+    _OBJ = "obj",
+    _SCOPE = "scope",
+    _NONE = "none",
+    _VISIBLE = "visible",
+    _SPACE = " ",
+    _MENUITEM = "MenuItem",
+    _CLICK = "click",
+    _SHOW = "show",
+    _HIDE = "hide",
+    _LI_LOWERCASE = "li",
+    _ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
 
     EVENT_TYPES = [
     
@@ -111,94 +111,94 @@ var Dom = YAHOO.util.Dom,
     
     ],
 
-	TEXT_CONFIG = { 
-		key: _TEXT, 
-		value: _EMPTY_STRING, 
-		validator: Lang.isString, 
-		suppressEvent: true 
-	}, 
+    TEXT_CONFIG = { 
+        key: _TEXT, 
+        value: _EMPTY_STRING, 
+        validator: Lang.isString, 
+        suppressEvent: true 
+    }, 
 
-	HELP_TEXT_CONFIG = { 
-		key: _HELP_TEXT,
-		supercedes: [_TEXT], 
-		suppressEvent: true 
-	},
+    HELP_TEXT_CONFIG = { 
+        key: _HELP_TEXT,
+        supercedes: [_TEXT], 
+        suppressEvent: true 
+    },
 
-	URL_CONFIG = { 
-		key: _URL, 
-		value: _HASH, 
-		suppressEvent: true 
-	}, 
+    URL_CONFIG = { 
+        key: _URL, 
+        value: _HASH, 
+        suppressEvent: true 
+    }, 
 
-	TARGET_CONFIG = { 
-		key: _TARGET, 
-		suppressEvent: true 
-	}, 
+    TARGET_CONFIG = { 
+        key: _TARGET, 
+        suppressEvent: true 
+    }, 
 
-	EMPHASIS_CONFIG = { 
-		key: _EMPHASIS, 
-		value: false, 
-		validator: Lang.isBoolean, 
-		suppressEvent: true, 
-		supercedes: [_TEXT]
-	}, 
+    EMPHASIS_CONFIG = { 
+        key: _EMPHASIS, 
+        value: false, 
+        validator: Lang.isBoolean, 
+        suppressEvent: true, 
+        supercedes: [_TEXT]
+    }, 
 
-	STRONG_EMPHASIS_CONFIG = { 
-		key: _STRONG_EMPHASIS, 
-		value: false, 
-		validator: Lang.isBoolean, 
-		suppressEvent: true,
-		supercedes: [_TEXT]
-	},
+    STRONG_EMPHASIS_CONFIG = { 
+        key: _STRONG_EMPHASIS, 
+        value: false, 
+        validator: Lang.isBoolean, 
+        suppressEvent: true,
+        supercedes: [_TEXT]
+    },
 
-	CHECKED_CONFIG = { 
-		key: _CHECKED, 
-		value: false, 
-		validator: Lang.isBoolean, 
-		suppressEvent: true, 
-		supercedes: [_DISABLED, _SELECTED]
-	}, 
+    CHECKED_CONFIG = { 
+        key: _CHECKED, 
+        value: false, 
+        validator: Lang.isBoolean, 
+        suppressEvent: true, 
+        supercedes: [_DISABLED, _SELECTED]
+    }, 
 
-	SUBMENU_CONFIG = { 
-		key: _SUBMENU,
-		suppressEvent: true,
-		supercedes: [_DISABLED, _SELECTED]
-	},
+    SUBMENU_CONFIG = { 
+        key: _SUBMENU,
+        suppressEvent: true,
+        supercedes: [_DISABLED, _SELECTED]
+    },
 
-	DISABLED_CONFIG = { 
-		key: _DISABLED, 
-		value: false, 
-		validator: Lang.isBoolean, 
-		suppressEvent: true,
-		supercedes: [_TEXT, _SELECTED]
-	},
+    DISABLED_CONFIG = { 
+        key: _DISABLED, 
+        value: false, 
+        validator: Lang.isBoolean, 
+        suppressEvent: true,
+        supercedes: [_TEXT, _SELECTED]
+    },
 
-	SELECTED_CONFIG = { 
-		key: _SELECTED, 
-		value: false, 
-		validator: Lang.isBoolean, 
-		suppressEvent: true
-	},
+    SELECTED_CONFIG = { 
+        key: _SELECTED, 
+        value: false, 
+        validator: Lang.isBoolean, 
+        suppressEvent: true
+    },
 
-	ONCLICK_CONFIG = { 
-		key: _ONCLICK,
-		suppressEvent: true
-	},
+    ONCLICK_CONFIG = { 
+        key: _ONCLICK,
+        suppressEvent: true
+    },
 
-	CLASS_NAME_CONFIG = { 
-		key: _CLASSNAME, 
-		value: null, 
-		validator: Lang.isString,
-		suppressEvent: true
-	},
+    CLASS_NAME_CONFIG = { 
+        key: _CLASSNAME, 
+        value: null, 
+        validator: Lang.isString,
+        suppressEvent: true
+    },
     
-	KEY_LISTENER_CONFIG = {
-		key: "keylistener", 
-		value: null, 
-		suppressEvent: true
-	},
+    KEY_LISTENER_CONFIG = {
+        key: "keylistener", 
+        value: null, 
+        suppressEvent: true
+    },
 
-	m_oMenuItemTemplate = null,
+    m_oMenuItemTemplate = null,
 
     CLASS_NAMES = {};
 
@@ -213,23 +213,23 @@ var Dom = YAHOO.util.Dom,
 */  
 var getClassNameForState = function (prefix, state) {
 
-	var oClassNames = CLASS_NAMES[prefix];
-	
-	if (!oClassNames) {
-		CLASS_NAMES[prefix] = {};
-		oClassNames = CLASS_NAMES[prefix];
-	}
+    var oClassNames = CLASS_NAMES[prefix];
+    
+    if (!oClassNames) {
+        CLASS_NAMES[prefix] = {};
+        oClassNames = CLASS_NAMES[prefix];
+    }
 
 
-	var sClassName = oClassNames[state];
+    var sClassName = oClassNames[state];
 
-	if (!sClassName) {
-		sClassName = prefix + _HYPHEN + state;
-		oClassNames[state] = sClassName;
-	}
+    if (!sClassName) {
+        sClassName = prefix + _HYPHEN + state;
+        oClassNames[state] = sClassName;
+    }
 
-	return sClassName;
-	
+    return sClassName;
+    
 };
 
 
@@ -242,8 +242,8 @@ var getClassNameForState = function (prefix, state) {
 */  
 var addClassNameForState = function (state) {
 
-	Dom.addClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
-	Dom.addClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
+    Dom.addClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
+    Dom.addClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
 
 };
 
@@ -256,8 +256,8 @@ var addClassNameForState = function (state) {
 */  
 var removeClassNameForState = function (state) {
 
-	Dom.removeClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
-	Dom.removeClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
+    Dom.removeClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
+    Dom.removeClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
 
 };
 
@@ -359,13 +359,13 @@ MenuItem.prototype = {
     // Public properties
 
 
-	/**
+    /**
     * @property constructor
-	* @description Object reference to the menu item's constructor function.
+    * @description Object reference to the menu item's constructor function.
     * @default YAHOO.widget.MenuItem
-	* @type YAHOO.widget.MenuItem
-	*/
-	constructor: MenuItem,
+    * @type YAHOO.widget.MenuItem
+    */
+    constructor: MenuItem,
 
 
     /**
@@ -437,13 +437,13 @@ MenuItem.prototype = {
     value: null,
 
 
-	/**
+    /**
     * @property browser
     * @deprecated Use YAHOO.env.ua
-	* @description String representing the browser.
-	* @type String
-	*/
-	browser: Module.prototype.browser,
+    * @description String representing the browser.
+    * @type String
+    */
+    browser: Module.prototype.browser,
 
 
     /**
@@ -554,7 +554,7 @@ MenuItem.prototype = {
     * automatically called by the constructor, and sets up all DOM references 
     * for pre-existing markup, and creates required markup if it is not 
     * already present.
-    * @param {String} p_oObject String specifying the text of the menu item.
+    * @param {HTML} p_oObject Markup for the menu item content. The markup is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
     * one-html.html#ID-74680021">HTMLLIElement</a>} p_oObject Object specifying 
     * the <code>&#60;li&#62;</code> element of the menu item.
@@ -587,7 +587,7 @@ MenuItem.prototype = {
         var oConfig = this.cfg,
             sURL = _HASH,
             oCustomEvent,
-			aEventData,
+            aEventData,
             oAnchor,
             sTarget,
             sText,
@@ -692,19 +692,19 @@ MenuItem.prototype = {
             Dom.addClass(this._oAnchor, this.CSS_LABEL_CLASS_NAME);
 
 
-			i = EVENT_TYPES.length - 1;
+            i = EVENT_TYPES.length - 1;
 
-			do {
+            do {
 
-				aEventData = EVENT_TYPES[i];
+                aEventData = EVENT_TYPES[i];
 
-				oCustomEvent = this.createEvent(aEventData[1]);
-				oCustomEvent.signature = CustomEvent.LIST;
-				
-				this[aEventData[0]] = oCustomEvent;
+                oCustomEvent = this.createEvent(aEventData[1]);
+                oCustomEvent.signature = CustomEvent.LIST;
+                
+                this[aEventData[0]] = oCustomEvent;
 
-			}
-			while (i--);
+            }
+            while (i--);
 
 
             if (p_oConfig) {
@@ -1100,38 +1100,38 @@ MenuItem.prototype = {
             }
 
 
-			addClassNameForState.call(this, _DISABLED);
+            addClassNameForState.call(this, _DISABLED);
 
 
             if (oSubmenu) {
 
-				addClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
+                addClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
             
             }
             
 
             if (bChecked) {
 
-				addClassNameForState.call(this, _CHECKED_DISABLED);
+                addClassNameForState.call(this, _CHECKED_DISABLED);
 
             }
 
         }
         else {
 
-			removeClassNameForState.call(this, _DISABLED);
+            removeClassNameForState.call(this, _DISABLED);
 
 
             if (oSubmenu) {
 
-				removeClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
+                removeClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
             
             }
             
 
             if (bChecked) {
 
-				removeClassNameForState.call(this, _CHECKED_DISABLED);
+                removeClassNameForState.call(this, _CHECKED_DISABLED);
 
             }
 
@@ -1153,8 +1153,8 @@ MenuItem.prototype = {
     configSelected: function (p_sType, p_aArgs, p_oItem) {
 
         var oConfig = this.cfg,
-        	oAnchor = this._oAnchor,
-        	
+            oAnchor = this._oAnchor,
+            
             bSelected = p_aArgs[0],
             bChecked = oConfig.getProperty(_CHECKED),
             oSubmenu = oConfig.getProperty(_SUBMENU);
@@ -1169,38 +1169,38 @@ MenuItem.prototype = {
 
         if (bSelected && !oConfig.getProperty(_DISABLED)) {
 
-			addClassNameForState.call(this, _SELECTED);
+            addClassNameForState.call(this, _SELECTED);
 
 
             if (oSubmenu) {
 
-				addClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
+                addClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
             
             }
 
 
             if (bChecked) {
 
-				addClassNameForState.call(this, _CHECKED_SELECTED);
+                addClassNameForState.call(this, _CHECKED_SELECTED);
 
             }
 
         }
         else {
 
-			removeClassNameForState.call(this, _SELECTED);
+            removeClassNameForState.call(this, _SELECTED);
 
 
             if (oSubmenu) {
 
-				removeClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
+                removeClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
             
             }
 
 
             if (bChecked) {
 
-				removeClassNameForState.call(this, _CHECKED_SELECTED);
+                removeClassNameForState.call(this, _CHECKED_SELECTED);
 
             }
 
@@ -1307,16 +1307,16 @@ MenuItem.prototype = {
 
             if (oMenu) {
 
-				oMenu.cfg.setProperty(_PREVENT_CONTEXT_OVERLAP, true);
+                oMenu.cfg.setProperty(_PREVENT_CONTEXT_OVERLAP, true);
 
                 addClassNameForState.call(this, _HAS_SUBMENU);
 
 
-				if (oConfig.getProperty(_URL) === _HASH) {
-				
-					oConfig.setProperty(_URL, (_HASH + oMenu.id));
-				
-				}
+                if (oConfig.getProperty(_URL) === _HASH) {
+                
+                    oConfig.setProperty(_URL, (_HASH + oMenu.id));
+                
+                }
 
 
                 this._oSubmenu = oMenu;
@@ -1333,7 +1333,7 @@ MenuItem.prototype = {
         }
         else {
 
-			removeClassNameForState.call(this, _HAS_SUBMENU);
+            removeClassNameForState.call(this, _HAS_SUBMENU);
 
             if (this._oSubmenu) {
 
@@ -1432,89 +1432,89 @@ MenuItem.prototype = {
     /**
     * @method _dispatchClickEvent
     * @description Dispatches a DOM "click" event to the anchor element of a 
-	* MenuItem instance.
-	* @private	
+    * MenuItem instance.
+    * @private	
     */
-	_dispatchClickEvent: function () {
+    _dispatchClickEvent: function () {
 
-		var oMenuItem = this,
-			oAnchor,
-			oEvent;
+        var oMenuItem = this,
+            oAnchor,
+            oEvent;
 
-		if (!oMenuItem.cfg.getProperty(_DISABLED)) {
+        if (!oMenuItem.cfg.getProperty(_DISABLED)) {
 
-			oAnchor = Dom.getFirstChild(oMenuItem.element);
+            oAnchor = Dom.getFirstChild(oMenuItem.element);
 
-			//	Dispatch a "click" event to the MenuItem's anchor so that its
-			//	"click" event handlers will get called in response to the user 
-			//	pressing the keyboard shortcut defined by the "keylistener"
-			//	configuration property.
+            //	Dispatch a "click" event to the MenuItem's anchor so that its
+            //	"click" event handlers will get called in response to the user 
+            //	pressing the keyboard shortcut defined by the "keylistener"
+            //	configuration property.
 
-			if (UA.ie) {
-				oAnchor.fireEvent(_ONCLICK);
-			}
-			else {
+            if (UA.ie) {
+                oAnchor.fireEvent(_ONCLICK);
+            }
+            else {
 
-				if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
+                if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
 
-					oEvent = document.createEvent("HTMLEvents");
-					oEvent.initEvent(_CLICK, true, true);
+                    oEvent = document.createEvent("HTMLEvents");
+                    oEvent.initEvent(_CLICK, true, true);
 
-				}
-				else {
+                }
+                else {
 
-					oEvent = document.createEvent("MouseEvents");
-					oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
-						0, 0, false, false, false, false, 0, null);
+                    oEvent = document.createEvent("MouseEvents");
+                    oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
+                        0, 0, false, false, false, false, 0, null);
 
-				}
+                }
 
-				oAnchor.dispatchEvent(oEvent);
+                oAnchor.dispatchEvent(oEvent);
 
-			}
+            }
 
-		}
+        }
 
-	},
+    },
 
 
     /**
     * @method _createKeyListener
     * @description "show" event handler for a Menu instance - responsible for 
-	* setting up the KeyListener instance for a MenuItem.
-	* @private	
+    * setting up the KeyListener instance for a MenuItem.
+    * @private	
     * @param {String} type String representing the name of the event that 
     * was fired.
     * @param {Array} args Array of arguments sent when the event was fired.
     * @param {Array} keyData Array of arguments sent when the event was fired.
     */
-	_createKeyListener: function (type, args, keyData) {
+    _createKeyListener: function (type, args, keyData) {
 
-		var oMenuItem = this,
-			oMenu = oMenuItem.parent;
+        var oMenuItem = this,
+            oMenu = oMenuItem.parent;
 
-		var oKeyListener = new YAHOO.util.KeyListener(
-										oMenu.element.ownerDocument, 
-										keyData, 
-										{
-											fn: oMenuItem._dispatchClickEvent, 
-											scope: oMenuItem, 
-											correctScope: true });
-
-
-		if (oMenu.cfg.getProperty(_VISIBLE)) {
-			oKeyListener.enable();
-		}
+        var oKeyListener = new YAHOO.util.KeyListener(
+                                        oMenu.element.ownerDocument, 
+                                        keyData, 
+                                        {
+                                            fn: oMenuItem._dispatchClickEvent, 
+                                            scope: oMenuItem, 
+                                            correctScope: true });
 
 
-		oMenu.subscribe(_SHOW, oKeyListener.enable, null, oKeyListener);
-		oMenu.subscribe(_HIDE, oKeyListener.disable, null, oKeyListener);
-		
-		oMenuItem._keyListener = oKeyListener;
-		
-		oMenu.unsubscribe(_SHOW, oMenuItem._createKeyListener, keyData);
-		
-	},
+        if (oMenu.cfg.getProperty(_VISIBLE)) {
+            oKeyListener.enable();
+        }
+
+
+        oMenu.subscribe(_SHOW, oKeyListener.enable, null, oKeyListener);
+        oMenu.subscribe(_HIDE, oKeyListener.disable, null, oKeyListener);
+        
+        oMenuItem._keyListener = oKeyListener;
+        
+        oMenu.unsubscribe(_SHOW, oMenuItem._createKeyListener, keyData);
+        
+    },
 
 
     /**
@@ -1527,49 +1527,49 @@ MenuItem.prototype = {
     */
     configKeyListener: function (p_sType, p_aArgs) {
 
-		var oKeyData = p_aArgs[0],
-			oMenuItem = this,
-			oMenu = oMenuItem.parent;
+        var oKeyData = p_aArgs[0],
+            oMenuItem = this,
+            oMenu = oMenuItem.parent;
 
-		if (oMenuItem._keyData) {
+        if (oMenuItem._keyData) {
 
-			//	Unsubscribe from the "show" event in case the keylistener 
-			//	config was changed before the Menu was ever made visible.
+            //	Unsubscribe from the "show" event in case the keylistener 
+            //	config was changed before the Menu was ever made visible.
 
-			oMenu.unsubscribe(_SHOW, 
-					oMenuItem._createKeyListener, oMenuItem._keyData);
+            oMenu.unsubscribe(_SHOW, 
+                    oMenuItem._createKeyListener, oMenuItem._keyData);
 
-			oMenuItem._keyData = null;					
-					
-		}
-
-
-		//	Tear down for the previous value of the "keylistener" property
-
-		if (oMenuItem._keyListener) {
-
-			oMenu.unsubscribe(_SHOW, oMenuItem._keyListener.enable);
-			oMenu.unsubscribe(_HIDE, oMenuItem._keyListener.disable);
-
-			oMenuItem._keyListener.disable();
-			oMenuItem._keyListener = null;
-
-		}
+            oMenuItem._keyData = null;					
+                    
+        }
 
 
-    	if (oKeyData) {
-	
-			oMenuItem._keyData = oKeyData;
+        //	Tear down for the previous value of the "keylistener" property
 
-			//	Defer the creation of the KeyListener instance until the 
-			//	parent Menu is visible.  This is necessary since the 
-			//	KeyListener instance needs to be bound to the document the 
-			//	Menu has been rendered into.  Deferring creation of the 
-			//	KeyListener instance also improves performance.
+        if (oMenuItem._keyListener) {
 
-			oMenu.subscribe(_SHOW, oMenuItem._createKeyListener, 
-				oKeyData, oMenuItem);
-		}
+            oMenu.unsubscribe(_SHOW, oMenuItem._keyListener.enable);
+            oMenu.unsubscribe(_HIDE, oMenuItem._keyListener.disable);
+
+            oMenuItem._keyListener.disable();
+            oMenuItem._keyListener = null;
+
+        }
+
+
+        if (oKeyData) {
+    
+            oMenuItem._keyData = oKeyData;
+
+            //	Defer the creation of the KeyListener instance until the 
+            //	parent Menu is visible.  This is necessary since the 
+            //	KeyListener instance needs to be bound to the document the 
+            //	Menu has been rendered into.  Deferring creation of the 
+            //	KeyListener instance also improves performance.
+
+            oMenu.subscribe(_SHOW, oMenuItem._createKeyListener, 
+                oKeyData, oMenuItem);
+        }
     
     },
 
@@ -1577,11 +1577,11 @@ MenuItem.prototype = {
     // Public methods
 
 
-	/**
+    /**
     * @method initDefaultConfig
-	* @description Initializes an item's configurable properties.
-	*/
-	initDefaultConfig : function () {
+    * @description Initializes an item's configurable properties.
+    */
+    initDefaultConfig : function () {
 
         var oConfig = this.cfg;
 
@@ -1590,11 +1590,11 @@ MenuItem.prototype = {
 
         /**
         * @config text
-        * @description String specifying the text label for the menu item.  
+        * @description String or markup specifying the text label for the menu item.  
         * When building a menu from existing HTML the value of this property
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The text is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @default ""
-        * @type String
+        * @type HTML
         */
         oConfig.addProperty(
             TEXT_CONFIG.key, 
@@ -1609,13 +1609,13 @@ MenuItem.prototype = {
 
         /**
         * @config helptext
-        * @description String specifying additional instructional text to 
-        * accompany the text for the menu item.
+        * @description String or markup specifying additional instructional text to 
+        * accompany the text for the menu item. The helptext is inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source.
         * @deprecated Use "text" configuration property to add help text markup.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
         * class=\"helptext\"&#62;Ctrl + C&#60;/em&#62;");</code>
         * @default null
-        * @type String|<a href="http://www.w3.org/TR/
+        * @type HTML|<a href="http://www.w3.org/TR/
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
         * HTMLElement</a>
         */
@@ -1633,7 +1633,7 @@ MenuItem.prototype = {
         * @config url
         * @description String specifying the URL for the menu item's anchor's 
         * "href" attribute.  When building a menu from existing HTML the value 
-        * of this property will be interpreted from the menu's markup.
+        * of this property will be interpreted from the menu's markup. Markup for the menu item content. The url is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default "#"
         * @type String
         */        
@@ -1654,7 +1654,7 @@ MenuItem.prototype = {
         * require the user to click directly on the menu item's anchor node in
         * order to cause the browser to navigate to the specified URL.</strong> 
         * When building a menu from existing HTML the value of this property 
-        * will be interpreted from the menu's markup.
+        * will be interpreted from the menu's markup. The target is inserted into the DOM as an attribute value, and should be escaped by the implementor if coming from an external source.
         * @default null
         * @type String
         */        
@@ -1837,9 +1837,9 @@ MenuItem.prototype = {
         /**
         * @config keylistener
         * @description Object literal representing the key(s) that can be used 
- 		* to trigger the MenuItem's "click" event.  Possible attributes are 
-		* shift (boolean), alt (boolean), ctrl (boolean) and keys (either an int 
-		* or an array of ints representing keycodes).
+        * to trigger the MenuItem's "click" event.  Possible attributes are 
+        * shift (boolean), alt (boolean), ctrl (boolean) and keys (either an int 
+        * or an array of ints representing keycodes).
         * @default null
         * @type Object
         */
@@ -1852,57 +1852,57 @@ MenuItem.prototype = {
             }
         );
 
-	},
+    },
 
     /**
     * @method getNextSibling
     * @description Finds the menu item's next sibling.
     * @return YAHOO.widget.MenuItem
     */
-	getNextSibling: function () {
-	
-		var isUL = function (el) {
-				return (el.nodeName.toLowerCase() === "ul");
-			},
-	
-			menuitemEl = this.element,
-			next = Dom.getNextSibling(menuitemEl),
-			parent,
-			sibling,
-			list;
-		
-		if (!next) {
-			
-			parent = menuitemEl.parentNode;
-			sibling = Dom.getNextSiblingBy(parent, isUL);
-			
-			if (sibling) {
-				list = sibling;
-			}
-			else {
-				list = Dom.getFirstChildBy(parent.parentNode, isUL);
-			}
-			
-			next = Dom.getFirstChild(list);
-			
-		}
+    getNextSibling: function () {
+    
+        var isUL = function (el) {
+                return (el.nodeName.toLowerCase() === "ul");
+            },
+    
+            menuitemEl = this.element,
+            next = Dom.getNextSibling(menuitemEl),
+            parent,
+            sibling,
+            list;
+        
+        if (!next) {
+            
+            parent = menuitemEl.parentNode;
+            sibling = Dom.getNextSiblingBy(parent, isUL);
+            
+            if (sibling) {
+                list = sibling;
+            }
+            else {
+                list = Dom.getFirstChildBy(parent.parentNode, isUL);
+            }
+            
+            next = Dom.getFirstChild(list);
+            
+        }
 
-		return YAHOO.widget.MenuManager.getMenuItem(next.id);
+        return YAHOO.widget.MenuManager.getMenuItem(next.id);
 
-	},
+    },
 
     /**
     * @method getNextEnabledSibling
     * @description Finds the menu item's next enabled sibling.
     * @return YAHOO.widget.MenuItem
     */
-	getNextEnabledSibling: function () {
-		
-		var next = this.getNextSibling();
-		
+    getNextEnabledSibling: function () {
+        
+        var next = this.getNextSibling();
+        
         return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getNextEnabledSibling() : next;
-		
-	},
+        
+    },
 
 
     /**
@@ -1910,37 +1910,37 @@ MenuItem.prototype = {
     * @description Finds the menu item's previous sibling.
     * @return {YAHOO.widget.MenuItem}
     */	
-	getPreviousSibling: function () {
+    getPreviousSibling: function () {
 
-		var isUL = function (el) {
-				return (el.nodeName.toLowerCase() === "ul");
-			},
+        var isUL = function (el) {
+                return (el.nodeName.toLowerCase() === "ul");
+            },
 
-			menuitemEl = this.element,
-			next = Dom.getPreviousSibling(menuitemEl),
-			parent,
-			sibling,
-			list;
-		
-		if (!next) {
-			
-			parent = menuitemEl.parentNode;
-			sibling = Dom.getPreviousSiblingBy(parent, isUL);
-			
-			if (sibling) {
-				list = sibling;
-			}
-			else {
-				list = Dom.getLastChildBy(parent.parentNode, isUL);
-			}
-			
-			next = Dom.getLastChild(list);
-			
-		}
+            menuitemEl = this.element,
+            next = Dom.getPreviousSibling(menuitemEl),
+            parent,
+            sibling,
+            list;
+        
+        if (!next) {
+            
+            parent = menuitemEl.parentNode;
+            sibling = Dom.getPreviousSiblingBy(parent, isUL);
+            
+            if (sibling) {
+                list = sibling;
+            }
+            else {
+                list = Dom.getLastChildBy(parent.parentNode, isUL);
+            }
+            
+            next = Dom.getLastChild(list);
+            
+        }
 
-		return YAHOO.widget.MenuManager.getMenuItem(next.id);
-		
-	},
+        return YAHOO.widget.MenuManager.getMenuItem(next.id);
+        
+    },
 
 
     /**
@@ -1948,13 +1948,13 @@ MenuItem.prototype = {
     * @description Finds the menu item's previous enabled sibling.
     * @return {YAHOO.widget.MenuItem}
     */
-	getPreviousEnabledSibling: function () {
-		
-		var next = this.getPreviousSibling();
-		
+    getPreviousEnabledSibling: function () {
+        
+        var next = this.getPreviousSibling();
+        
         return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getPreviousEnabledSibling() : next;
-		
-	},
+        
+    },
 
 
     /**
@@ -1975,15 +1975,15 @@ MenuItem.prototype = {
 
                 if (!(UA.ie && !document.hasFocus())) {
                 
-					if (oActiveItem) {
-		
-						oActiveItem.blurEvent.fire();
-		
-					}
-	
-					oAnchor.focus();
-					
-					this.focusEvent.fire();
+                    if (oActiveItem) {
+        
+                        oActiveItem.blurEvent.fire();
+        
+                    }
+    
+                    oAnchor.focus();
+                    
+                    this.focusEvent.fire();
                 
                 }
 
@@ -2055,11 +2055,11 @@ MenuItem.prototype = {
     },
 
 
-	/**
+    /**
     * @method destroy
-	* @description Removes the menu item's <code>&#60;li&#62;</code> element 
-	* from its parent <code>&#60;ul&#62;</code> element.
-	*/
+    * @description Removes the menu item's <code>&#60;li&#62;</code> element 
+    * from its parent <code>&#60;ul&#62;</code> element.
+    */
     destroy: function () {
 
         var oEl = this.element,
@@ -2098,16 +2098,16 @@ MenuItem.prototype = {
 
             // Remove CustomEvent listeners
 
-			i = EVENT_TYPES.length - 1;
+            i = EVENT_TYPES.length - 1;
 
-			do {
+            do {
 
-				aEventData = EVENT_TYPES[i];
-				
-				this[aEventData[0]].unsubscribeAll();
+                aEventData = EVENT_TYPES[i];
+                
+                this[aEventData[0]].unsubscribeAll();
 
-			}
-			while (i--);
+            }
+            while (i--);
             
             
             this.cfg.configChangedEvent.unsubscribeAll();

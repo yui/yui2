@@ -16,7 +16,6 @@
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
 
 <script type="text/javascript">
-(function() {
     var Y = YAHOO.util,
         tool = YAHOO.tool,
         suite = new tool.TestSuite("yuisuite");
@@ -53,6 +52,7 @@
                 Y.Assert.areEqual(1, tabview.get('activeIndex'), 'tabview.selectTab(1);');
                 tabview.deselectTab(1);
                 Y.Assert.areEqual(null, tabview.get('activeIndex'), 'tabview.selectTab(1);');
+                tabview.selectTab(1);
             },            
 
             test_addTab: function() {
@@ -64,11 +64,13 @@
                 Y.Assert.areEqual(tabs.length - 1, tabview.getTabIndex(tab),  'incorrect Tab');
             },            
 
-            test_removeTab: function() {
-                var tab = tabview.getTab(0);
+            test_removeActiveTab: function() {
+                var tab = tabview.get('activeTab'),
+                    index = tabview.get('activeIndex');
                 tabview.removeTab(tab);
 
                 Y.Assert.areEqual(null, tabview.getTabIndex(tab), 'incorrect Tab');
+                Y.Assert.areEqual(index + 1, tabview.get('activeIndex'), 'incorrect Tab');
             },            
 
             test_activeTabChange: function() {
@@ -105,11 +107,10 @@
         if (parent && parent != window) {
             tool.TestManager.load();
         } else {
-            tool.TestRunner.run();
+//            tool.TestRunner.run();
         }
 
     }); 
-})();
 </script>
 <style type="text/css">
 
@@ -119,8 +120,8 @@
     <div id="doc">
         <div id="demo" class="yui-navset">
             <ul class="yui-nav">
-                <li class="selected"><a href="#foo"><em>foo</em></a></li>
-                <li id="tab-bar"><a href="#bar"><em>bar</em></a></li>
+                <li><a href="#foo"><em>foo</em></a></li>
+                <li class="selected" id="tab-bar"><a href="#bar"><em>bar</em></a></li>
                 <li><a href="#baz"><em>baz</em></a></li>
             </ul>
             <div class="yui-content">
