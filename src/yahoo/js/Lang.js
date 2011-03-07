@@ -397,7 +397,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 break;
             }
             j = s.indexOf(RBRACE, i);
-            if (i + 1 >= j) {
+            if (i + 1 > j) {
                 break;
             }
 
