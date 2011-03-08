@@ -17,6 +17,14 @@ Fixed the following bugs:
   scrollable Menu (without max height defined) and programmatically updates
   body scrollTop values.
 
+Changes
+-------
+
++ Menu and ContextMenu's destroy methods now accept a 'shallowPurge'
+  argument, which is passed through to Module's destroy implementation
+  and can be used to prevent Module destroy() from deep purging all it's
+  children. See Container README for further details
+
 *** version 2.8.3 ***
 
 + No code changes.

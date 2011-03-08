@@ -1110,16 +1110,18 @@
         },
 
         /**
-        * Removes the Module element from the DOM and sets all child elements 
-        * to null.
+        * Removes the Module element from the DOM, sets all child elements to null, and purges the bounding element of event listeners.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
 
-            var parent;
+            var parent,
+                purgeChildren = !(shallowPurge);
 
             if (this.element) {
-                Event.purgeElement(this.element, true);
+                Event.purgeElement(this.element, purgeChildren);
                 parent = this.element.parentNode;
             }
 

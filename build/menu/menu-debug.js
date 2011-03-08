@@ -5739,8 +5739,11 @@ clearContent: function () {
 * @method destroy
 * @description Removes the menu's <code>&#60;div&#62;</code> element 
 * (and accompanying child nodes) from the document.
+* @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+* NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
+* 
 */
-destroy: function () {
+destroy: function (shallowPurge) {
 
     // Remove all items
 
@@ -5753,7 +5756,7 @@ destroy: function () {
 
     // Continue with the superclass implementation of this method
 
-    Menu.superclass.destroy.call(this);
+    Menu.superclass.destroy.call(this, shallowPurge);
     
     YAHOO.log("Destroyed.", "info", this.toString());
 
@@ -9034,8 +9037,10 @@ initDefaultConfig: function() {
 * @method destroy
 * @description Removes the context menu's <code>&#60;div&#62;</code> element 
 * (and accompanying child nodes) from the document.
+* @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+* NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
 */
-destroy: function() {
+destroy: function(shallowPurge) {
 
     // Remove the DOM event handlers from the current trigger(s)
 
@@ -9044,7 +9049,7 @@ destroy: function() {
 
     // Continue with the superclass implementation of this method
 
-    ContextMenu.superclass.destroy.call(this);
+    ContextMenu.superclass.destroy.call(this, shallowPurge);
 
 },
 

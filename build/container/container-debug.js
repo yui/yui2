@@ -1793,16 +1793,18 @@
         },
 
         /**
-        * Removes the Module element from the DOM and sets all child elements 
-        * to null.
+        * Removes the Module element from the DOM, sets all child elements to null, and purges the bounding element of event listeners.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
 
-            var parent;
+            var parent,
+                purgeChildren = !(shallowPurge);
 
             if (this.element) {
-                Event.purgeElement(this.element, true);
+                Event.purgeElement(this.element, purgeChildren);
                 parent = this.element.parentNode;
             }
 
@@ -4115,8 +4117,10 @@
         * Removes the Overlay element from the DOM and sets all child 
         * elements to null.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
 
             if (this.iframe) {
                 this.iframe.parentNode.removeChild(this.iframe);
@@ -4138,7 +4142,7 @@
                 this._processTriggers(this._contextTriggers, _UNSUBSCRIBE, this._alignOnTrigger);
             }
 
-            Overlay.superclass.destroy.call(this);
+            Overlay.superclass.destroy.call(this, shallowPurge);
         },
 
         /**
@@ -7184,19 +7188,21 @@
             moduleElement = moduleElement || this.innerElement;
             Panel.superclass._renderFooter.call(this, moduleElement);
         },
-        
+
         /**
         * Removes the Panel element from the DOM and sets all child elements
         * to null.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
             Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
             this.removeMask();
             if (this.close) {
                 Event.purgeElement(this.close);
             }
-            Panel.superclass.destroy.call(this);  
+            Panel.superclass.destroy.call(this, shallowPurge);  
         },
 
         /**
@@ -8478,8 +8484,10 @@
         * Removes the Panel element from the DOM and sets all child elements 
         * to null.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
             removeButtonEventHandlers.call(this);
 
             this._aButtons = null;
@@ -8498,7 +8506,7 @@
                     this.form = null;
                 }
             }
-            Dialog.superclass.destroy.call(this);
+            Dialog.superclass.destroy.call(this, shallowPurge);
         },
 
         /**
