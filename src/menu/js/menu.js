@@ -112,16 +112,12 @@
 YAHOO.widget.Menu = function (p_oElement, p_oConfig) {
 
     if (p_oConfig) {
-
         this.parent = p_oConfig.parent;
         this.lazyLoad = p_oConfig.lazyLoad || p_oConfig.lazyload;
         this.itemData = p_oConfig.itemData || p_oConfig.itemdata;
-
     }
 
-
     YAHOO.widget.Menu.superclass.constructor.call(this, p_oElement, p_oConfig);
-
 };
 
 
@@ -4150,6 +4146,163 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 
 },
 
+/**
+ * Resizes the shadow to match the container bounding element
+ * 
+ * @method _sizeShadow
+ * @protected
+ */
+_sizeShadow : function () {
+
+    var oElement = this.element,
+        oShadow = this._shadow;
+
+    if (oShadow && oElement) {
+        // Clear the previous width
+        if (oShadow.style.width && oShadow.style.height) {
+            oShadow.style.width = _EMPTY_STRING;
+            oShadow.style.height = _EMPTY_STRING;
+        }
+
+        oShadow.style.width = (oElement.offsetWidth + 6) + _PX;
+        oShadow.style.height = (oElement.offsetHeight + 1) + _PX;
+    }
+},
+
+/**
+ * Replaces the shadow element in the DOM with the current shadow element (this._shadow)
+ * 
+ * @method _replaceShadow
+ * @protected 
+ */
+_replaceShadow : function () {
+    this.element.appendChild(this._shadow);
+},
+
+/**
+ * Adds the classname marker for a visible shadow, to the shadow element
+ * 
+ * @method _addShadowVisibleClass
+ * @protected
+ */
+_addShadowVisibleClass : function () {
+    Dom.addClass(this._shadow, _YUI_MENU_SHADOW_VISIBLE);
+},
+
+/**
+ * Removes the classname marker for a visible shadow, from the shadow element
+ * 
+ * @method _removeShadowVisibleClass
+ * @protected
+ */
+_removeShadowVisibleClass : function () {
+    Dom.removeClass(this._shadow, _YUI_MENU_SHADOW_VISIBLE);
+},
+
+/**
+ * Removes the shadow element from the DOM, and unsubscribes all the listeners used to keep it in sync. Used
+ * to handle setting the shadow to false.
+ * 
+ * @method _removeShadow
+ * @protected
+ */
+_removeShadow : function() {
+
+    var p = (this._shadow && this._shadow.parentNode);
+
+    if (p) {
+        p.removeChild(this._shadow);
+    }
+
+    this.beforeShowEvent.unsubscribe(this._addShadowVisibleClass);
+    this.beforeHideEvent.unsubscribe(this._removeShadowVisibleClass);
+
+    this.cfg.unsubscribeFromConfigEvent(_WIDTH, this._sizeShadow);
+    this.cfg.unsubscribeFromConfigEvent(_HEIGHT, this._sizeShadow);
+    this.cfg.unsubscribeFromConfigEvent(_MAX_HEIGHT, this._sizeShadow);
+    this.cfg.unsubscribeFromConfigEvent(_MAX_HEIGHT, this._replaceShadow);
+
+    this.changeContentEvent.unsubscribe(this._sizeShadow);
+
+    Module.textResizeEvent.unsubscribe(this._sizeShadow);
+},
+
+/**
+ * Used to create the shadow element, add it to the DOM, and subscribe listeners to keep it in sync.
+ *
+ * @method _createShadow
+ * @protected
+ */
+_createShadow : function () {
+
+    var oShadow = this._shadow,
+        oElement;
+
+    if (!oShadow) {
+        oElement = this.element;
+
+        if (!m_oShadowTemplate) {
+            m_oShadowTemplate = document.createElement(_DIV_LOWERCASE);
+            m_oShadowTemplate.className = _YUI_MENU_SHADOW_YUI_MENU_SHADOW_VISIBLE;
+        }
+
+        oShadow = m_oShadowTemplate.cloneNode(false);
+
+        oElement.appendChild(oShadow);
+        
+        this._shadow = oShadow;
+
+        this.beforeShowEvent.subscribe(this._addShadowVisibleClass);
+        this.beforeHideEvent.subscribe(this._removeShadowVisibleClass);
+
+        if (UA.ie) {
+            /*
+                 Need to call sizeShadow & syncIframe via setTimeout for 
+                 IE 7 Quirks Mode and IE 6 Standards Mode and Quirks Mode 
+                 or the shadow and iframe shim will not be sized and 
+                 positioned properly.
+            */
+            Lang.later(0, this, function () {
+                this._sizeShadow(); 
+                this.syncIframe();
+            });
+
+            this.cfg.subscribeToConfigEvent(_WIDTH, this._sizeShadow);
+            this.cfg.subscribeToConfigEvent(_HEIGHT, this._sizeShadow);
+            this.cfg.subscribeToConfigEvent(_MAX_HEIGHT, this._sizeShadow);
+            this.changeContentEvent.subscribe(this._sizeShadow);
+
+            Module.textResizeEvent.subscribe(this._sizeShadow, this, true);
+
+            this.destroyEvent.subscribe(function () {
+                Module.textResizeEvent.unsubscribe(this._sizeShadow, this);
+            });
+        }
+
+        this.cfg.subscribeToConfigEvent(_MAX_HEIGHT, this._replaceShadow);
+    }
+},
+
+/**
+ * The beforeShow event handler used to set up the shadow lazily when the menu is made visible.
+ * @method _shadowBeforeShow
+ * @protected 
+ */
+_shadowBeforeShow : function () {
+    if (this._shadow) {
+
+        // If called because the "shadow" event was refired - just append again and resize
+        this._replaceShadow();
+
+        if (UA.ie) {
+            this._sizeShadow();
+        }
+    } else {
+        this._createShadow();
+    }
+
+    this.beforeShowEvent.unsubscribe(this._shadowBeforeShow);
+},
 
 /**
 * @method configShadow
@@ -4161,178 +4314,30 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 */
 configShadow: function (p_sType, p_aArgs, p_oMenu) {
 
-    var sizeShadow = function () {
-
-        var oElement = this.element,
-            oShadow = this._shadow;
-    
-        if (oShadow && oElement) {
-
-            // Clear the previous width
-
-            if (oShadow.style.width && oShadow.style.height) {
-            
-                oShadow.style.width = _EMPTY_STRING;
-                oShadow.style.height = _EMPTY_STRING;
-            
-            }
-
-            oShadow.style.width = (oElement.offsetWidth + 6) + _PX;
-            oShadow.style.height = (oElement.offsetHeight + 1) + _PX;
-            
-        }
-    
-    };
-
-
-    var replaceShadow = function () {
-
-        this.element.appendChild(this._shadow);
-
-    };
-
-
-    var addShadowVisibleClass = function () {
-    
-        Dom.addClass(this._shadow, _YUI_MENU_SHADOW_VISIBLE);
-    
-    };
-    
-
-    var removeShadowVisibleClass = function () {
-
-        Dom.removeClass(this._shadow, _YUI_MENU_SHADOW_VISIBLE);
-    
-    };
-
-
-    var createShadow = function () {
-
-        var oShadow = this._shadow,
-            oElement;
-
-        if (!oShadow) {
-
-            oElement = this.element;
-
-
-            if (!m_oShadowTemplate) {
-
-                m_oShadowTemplate = document.createElement(_DIV_LOWERCASE);
-                m_oShadowTemplate.className = _YUI_MENU_SHADOW_YUI_MENU_SHADOW_VISIBLE;
-            
-            }
-
-            oShadow = m_oShadowTemplate.cloneNode(false);
-
-            oElement.appendChild(oShadow);
-            
-            this._shadow = oShadow;
-
-            this.beforeShowEvent.subscribe(addShadowVisibleClass);
-            this.beforeHideEvent.subscribe(removeShadowVisibleClass);
-
-
-            if (UA.ie) {
-        
-                /*
-                     Need to call sizeShadow & syncIframe via setTimeout for 
-                     IE 7 Quirks Mode and IE 6 Standards Mode and Quirks Mode 
-                     or the shadow and iframe shim will not be sized and 
-                     positioned properly.
-                */
-        
-                Lang.later(0, this, function () {
-
-                    sizeShadow.call(this); 
-                    this.syncIframe();
-                
-                });
-
-
-                this.cfg.subscribeToConfigEvent(_WIDTH, sizeShadow);
-                this.cfg.subscribeToConfigEvent(_HEIGHT, sizeShadow);
-                this.cfg.subscribeToConfigEvent(_MAX_HEIGHT, sizeShadow);
-                this.changeContentEvent.subscribe(sizeShadow);
-
-                Module.textResizeEvent.subscribe(sizeShadow, this, true);
-                
-                this.destroyEvent.subscribe(function () {
-                
-                    Module.textResizeEvent.unsubscribe(sizeShadow, this);
-                
-                });
-        
-            }
-
-            this.cfg.subscribeToConfigEvent(_MAX_HEIGHT, replaceShadow);
-
-        }
-
-    };
-
-
-    var onBeforeShow = function () {
-
-        if (this._shadow) {
-
-            // If called because the "shadow" event was refired - just append again and resize
-            
-            replaceShadow.call(this);
-            
-            if (UA.ie) {
-                sizeShadow.call(this);
-            }
-        
-        }
-        else {
-    
-            createShadow.call(this);
-        
-        }
-
-        this.beforeShowEvent.unsubscribe(onBeforeShow);
-    
-    };
-
-
     var bShadow = p_aArgs[0];
 
-
     if (bShadow && this.cfg.getProperty(_POSITION) == _DYNAMIC) {
-
         if (this.cfg.getProperty(_VISIBLE)) {
-
             if (this._shadow) {
-
                 // If the "shadow" event was refired - just append again and resize
-                
-                replaceShadow.call(this);
+                this._replaceShadow();
                 
                 if (UA.ie) {
-                    sizeShadow.call(this);
+                    this._sizeShadow();
                 }
-                
-            } 
-            else {
-                createShadow.call(this);
+            } else {
+                this._createShadow();
             }
-        
+        } else {
+            this.beforeShowEvent.subscribe(this._shadowBeforeShow);
         }
-        else {
-
-            this.beforeShowEvent.subscribe(onBeforeShow);
-        
-        }
-    
+    } else if (!bShadow) {
+        this.beforeShowEvent.unsubscribe(this._shadowBeforeShow);
+        this._removeShadow();
     }
-    
 },
 
-
-
 // Public methods
-
 
 /**
 * @method initEvents

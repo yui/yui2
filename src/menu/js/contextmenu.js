@@ -30,9 +30,7 @@
 * @namespace YAHOO.widget
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
-
     YAHOO.widget.ContextMenu.superclass.constructor.call(this, p_oElement, p_oConfig);
-
 };
 
 
@@ -81,11 +79,8 @@ var Event = YAHOO.util.Event,
 * @param {Array} p_aPos Array representing the xy position for the context menu.
 */
 function position(p_sType, p_aArgs, p_aPos) {
-
     this.cfg.setProperty(_XY, p_aPos);
-    
     this.beforeShowEvent.unsubscribe(position, p_aPos);
-
 }
 
 
@@ -174,21 +169,16 @@ init: function(p_oElement, p_oConfig) {
 
 
     // Call the init of the superclass (YAHOO.widget.Menu)
-
+    
     ContextMenu.superclass.init.call(this, p_oElement);
-
 
     this.beforeInitEvent.fire(ContextMenu);
 
-
     if (p_oConfig) {
-
         this.cfg.applyConfig(p_oConfig, true);
-
     }
-    
+
     this.initEvent.fire(ContextMenu);
-    
 },
 
 
@@ -197,29 +187,20 @@ init: function(p_oElement, p_oConfig) {
 * @description Initializes the custom events for the context menu.
 */
 initEvents: function() {
-
     ContextMenu.superclass.initEvents.call(this);
 
     // Create custom events
-
     this.triggerContextMenuEvent = this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
-
     this.triggerContextMenuEvent.signature = YAHOO.util.CustomEvent.LIST;
-
 },
-
 
 /**
 * @method cancel
 * @description Cancels the display of the context menu.
 */
 cancel: function() {
-
     this._bCancelled = true;
-
 },
-
-
 
 // Private methods
 
@@ -235,28 +216,18 @@ _removeEventHandlers: function() {
 
     var oTrigger = this._oTrigger;
 
-
     // Remove the event handlers from the trigger(s)
-
     if (oTrigger) {
-
         Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
-        
-        if (UA.opera) {
-        
-            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
-    
-        }
 
+        if (UA.opera) {
+            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
+        }
     }
 
 },
 
-
-
 // Private event handlers
-
-
 
 /**
 * @method _onTriggerClick
@@ -271,9 +242,7 @@ _removeEventHandlers: function() {
 _onTriggerClick: function(p_oEvent, p_oMenu) {
 
     if (p_oEvent.ctrlKey) {
-    
         Event.stopEvent(p_oEvent);
-
     }
     
 },
