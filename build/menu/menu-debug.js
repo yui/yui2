@@ -4662,6 +4662,35 @@ _clearSetWidthFlag: function () {
 
 },
 
+/**
+ * @method _subscribeScrollHandlers
+ * @param {HTMLElement} oHeader The scroll header element
+ * @param {HTMLElement} oFooter The scroll footer element
+ */
+_subscribeScrollHandlers : function(oHeader, oFooter) {
+    var fnMouseOver = this._onScrollTargetMouseOver;
+    var fnMouseOut = this._onScrollTargetMouseOut;
+
+    Event.on(oHeader, _MOUSEOVER, fnMouseOver, this, true);
+    Event.on(oHeader, _MOUSEOUT, fnMouseOut, this, true);
+    Event.on(oFooter, _MOUSEOVER, fnMouseOver, this, true);
+    Event.on(oFooter, _MOUSEOUT, fnMouseOut, this, true);
+},
+
+/**
+ * @method _unsubscribeScrollHandlers 
+ * @param {HTMLElement} oHeader The scroll header element
+ * @param {HTMLElement} oFooter The scroll footer element
+ */
+_unsubscribeScrollHandlers : function(oHeader, oFooter) {
+    var fnMouseOver = this._onScrollTargetMouseOver;
+    var fnMouseOut = this._onScrollTargetMouseOut;
+    
+    Event.removeListener(oHeader, _MOUSEOVER, fnMouseOver);
+    Event.removeListener(oHeader, _MOUSEOUT, fnMouseOut);
+    Event.removeListener(oFooter, _MOUSEOVER, fnMouseOver);
+    Event.removeListener(oFooter, _MOUSEOUT, fnMouseOut);
+},
 
 /**
 * @method _setScrollHeight
@@ -4678,8 +4707,6 @@ _setScrollHeight: function (p_nScrollHeight) {
         oBody,
         oHeader,
         oFooter,
-        fnMouseOver,
-        fnMouseOut,
         nMinScrollHeight,
         nHeight,
         nOffsetWidth,
@@ -4691,8 +4718,6 @@ _setScrollHeight: function (p_nScrollHeight) {
         oBody = this.body;
         oHeader = this.header;
         oFooter = this.footer;
-        fnMouseOver = this._onScrollTargetMouseOver;
-        fnMouseOut = this._onScrollTargetMouseOut;
         nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
 
         if (nScrollHeight > 0 && nScrollHeight < nMinScrollHeight) {
@@ -4794,14 +4819,8 @@ _setScrollHeight: function (p_nScrollHeight) {
             Dom.setStyle(oBody, _HEIGHT, (nHeight + _PX));
 
             if (!this._hasScrollEventHandlers) {
-    
-                Event.on(oHeader, _MOUSEOVER, fnMouseOver, this, true);
-                Event.on(oHeader, _MOUSEOUT, fnMouseOut, this, true);
-                Event.on(oFooter, _MOUSEOVER, fnMouseOver, this, true);
-                Event.on(oFooter, _MOUSEOUT, fnMouseOut, this, true);
-    
+                this._subscribeScrollHandlers(oHeader, oFooter);
                 this._hasScrollEventHandlers = true;
-    
             }
     
             this._disableScrollHeader();
@@ -4837,14 +4856,8 @@ _setScrollHeight: function (p_nScrollHeight) {
             this._enableScrollFooter();
     
             if (this._hasScrollEventHandlers) {
-    
-                Event.removeListener(oHeader, _MOUSEOVER, fnMouseOver);
-                Event.removeListener(oHeader, _MOUSEOUT, fnMouseOut);
-                Event.removeListener(oFooter, _MOUSEOVER, fnMouseOver);
-                Event.removeListener(oFooter, _MOUSEOUT, fnMouseOut);
-
+                this._unsubscribeScrollHandlers(oHeader, oFooter);    
                 this._hasScrollEventHandlers = false;
-    
             }
 
             oElement.removeChild(oHeader);
