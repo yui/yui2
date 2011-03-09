@@ -683,6 +683,51 @@
     }
 
     /**
+     * Show or hide navigation.
+     *
+     * @method showNavigation
+     * @private
+     */
+    function showNavigation(hide) {
+        var carousel = this,
+            cfg = carousel.get("navigation");
+
+        if (JS.isUndefined(cfg)) {
+            return; // can't do anything
+        }
+
+        if (JS.isUndefined(hide)) {
+            // show the navigation
+            if (!JS.isUndefined(cfg.prev) && JS.isArray(cfg.prev) &&
+                !JS.isUndefined(cfg.prev[0])) {
+                Dom.setStyle(cfg.prev[0], "visibility", "visible");
+            }
+            if (!JS.isUndefined(cfg.next) && JS.isArray(cfg.next) &&
+                !JS.isUndefined(cfg.next[0])) {
+                Dom.setStyle(cfg.next[0], "visibility", "visible");
+            }
+            if (!JS.isUndefined(carousel._pages) &&
+                !JS.isUndefined(carousel._pages.el)) {
+                Dom.setStyle(carousel._pages.el, "visibility", "visible");
+            }
+        } else {
+            // hide the navigation
+            if (!JS.isUndefined(cfg.prev) && JS.isArray(cfg.prev) &&
+                !JS.isUndefined(cfg.prev[0])) {
+                Dom.setStyle(cfg.prev[0], "visibility", "hidden");
+            }
+            if (!JS.isUndefined(cfg.next) && JS.isArray(cfg.next) &&
+                !JS.isUndefined(cfg.next[0])) {
+                Dom.setStyle(cfg.next[0], "visibility", "hidden");
+            }
+            if (!JS.isUndefined(carousel._pages) &&
+                !JS.isUndefined(carousel._pages.el)) {
+                Dom.setStyle(carousel._pages.el, "visibility", "hidden");
+            }
+        }
+    }
+
+    /**
      * Fire custom events for enabling/disabling navigation elements.
      *
      * @method syncNavigation
@@ -1645,6 +1690,7 @@
 
             if (carousel.fireEvent(beforeHideEvent) !== false) {
                 carousel.removeClass(carousel.CLASSES.VISIBLE);
+                showNavigation.call(carousel, false);
                 carousel.fireEvent(hideEvent);
             }
         },
@@ -2681,6 +2727,7 @@
 
             if (carousel.fireEvent(beforeShowEvent) !== false) {
                 carousel.addClass(cssClass.VISIBLE);
+                showNavigation.call(carousel);
                 carousel.fireEvent(showEvent);
             }
         },
@@ -3818,6 +3865,9 @@
             pos = posUndefined ?
                       obj.newPos || itemsTable.numItems - 1 : obj.pos;
             item = itemsTable.items[pos] || {};
+            if (!item || !("id" in item)) { // Nothing can be done now
+                return;
+            }
 
             el = carousel._createCarouselItem({
                     className : item.className,
@@ -3857,6 +3907,8 @@
                         }
                         if (sibling) {
                             carouselEl.insertBefore(el, sibling);
+                        } else if (!Dom.get(el.id)) {
+                            carouselEl.appendChild(el);
                         } else {
                         }
                     }

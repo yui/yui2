@@ -328,10 +328,7 @@ _cloneObject: function(o) {
 
     var copy = {};
 
-    if(o instanceof YAHOO.widget.BaseCellEditor) {
-        copy = o;
-    }
-    else if(Object.prototype.toString.apply(o) === "[object RegExp]") {
+    if(Object.prototype.toString.apply(o) === "[object RegExp]") {
         copy = o;
     }
     else if(lang.isFunction(o)) {
@@ -692,6 +689,15 @@ responseSchema : null,
  */
 useXPath : false,
 
+/**
+ * Clones entries before adding to cache.
+ *
+ * @property cloneBeforeCaching
+ * @type Boolean
+ * @default false
+ */
+cloneBeforeCaching : false,
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // DataSourceBase public methods
@@ -808,7 +814,7 @@ addToCache : function(oRequest, oResponse) {
     }
 
     // Add to cache in the newest position, at the end of the array
-    oResponse = DS._cloneObject(oResponse);
+    oResponse = (this.cloneBeforeCaching) ? DS._cloneObject(oResponse) : oResponse;
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache[aCache.length] = oCacheElem;
     this.fireEvent("responseCacheEvent", {request:oRequest,response:oResponse});

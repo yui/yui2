@@ -75,9 +75,10 @@
         this.datasource = null;
     };
 
-    DataTableTestCase.prototype.createInstance = function(oDT, oConfig) {
+    DataTableTestCase.prototype.createInstance = function(oDT, oConfig, aColumns) {
         oDT = oDT || DataTable;
-        this.datatable = new oDT(this.container, this.columns, this.datasource, oConfig);
+        aColumns = aColumns || this.columns;
+        this.datatable = new oDT(this.container, aColumns, this.datasource, oConfig);
         gCount++;
         return this.datatable;
     };
@@ -1246,6 +1247,59 @@
         }
     });
     var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);
+
+    /**
+     *
+     *
+     * Tests APIsfrom within formatters
+     *
+     *
+     */
+    var dtFormatterTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Formatter Tests",
+        
+        testCellFormatter: function() {
+            this.createInstance(null, null, [{key:"a"},{key:"b", formatter:function(el, record, column){
+                var tr = this.getTrEl(el);
+                Assert.areSame("tr", tr.nodeName.toLowerCase(), "Expected tr element");
+                
+                var td = this.getFirstTdEl(tr);
+                Assert.areSame(0, this.getCellIndex(td), "Expected td from first column");
+
+                td = this.getNextTdEl(td);
+                Assert.areSame(1, this.getCellIndex(td), "Expected td from second column");
+
+                td = this.getLastTdEl(tr);
+                Assert.areSame(2, this.getCellIndex(td), "Expected td from last column");
+
+                td = this.getPreviousTdEl(td);
+                Assert.areSame(1, this.getCellIndex(td), "Expected td from last column");
+                
+                var tr = this.getTrEl(el);
+                Assert.areSame("tr", tr.nodeName.toLowerCase(), "Expected tr");
+                Assert.areSame(true, YAHOO.util.Dom.isAncestor(tr, el), "Expected tr to be parent");
+                }
+            },{key:"c"}]);
+        },
+
+        testRowFormatter: function() {
+            this.createInstance(null, {formatter:function(elTr, oRecord) {
+                var td = this.getFirstTdEl(elTr);
+                Assert.areSame(0, this.getCellIndex(td), "Expected td from first column");
+
+                td = this.getNextTdEl(elTr);
+                Assert.areSame(1, this.getCellIndex(td), "Expected td from second column");
+
+                td = this.getLastTdEl(elTr);
+                Assert.areSame(3, this.getCellIndex(td), "Expected td from last column");
+
+                td = this.getPreviousTdEl(elTr);
+                Assert.areSame(2, this.getCellIndex(td), "Expected td from last column");
+            }
+        });
+        }
+    });
+    var dtFormatterTest = new DataTableTestCase(dtFormatterTemplate);
 
     /**
      *
@@ -2933,7 +2987,7 @@
 
             index = dt.getTrIndex(3);
             Assert.areSame(6, index, "Record index: Expected last primary row");
-        },
+        }
 
     });
 
@@ -2952,6 +3006,7 @@
         datatablesuite.add(dtDomAccessorsTest);
         datatablesuite.add(dtDataLoadTest);
         datatablesuite.add(dtRowMutationTest);
+        datatablesuite.add(dtFormatterTest);
         datatablesuite.add(dtSortingTest);
         datatablesuite.add(dtRowSelectionTest);
         datatablesuite.add(dtCellSelectionTest);

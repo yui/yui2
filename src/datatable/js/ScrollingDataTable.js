@@ -32,6 +32,8 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
         oConfigs.scrollable = false;
     }
 
+    this._init();
+
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
     // Once per instance
@@ -217,6 +219,21 @@ initAttributes : function(oConfigs) {
             }
         }
     });
+},
+
+/**
+ * Initializes internal variables.
+ *
+ * @method _init
+ * @private
+ */
+_init : function() {
+    this._elHdContainer = null;
+    this._elHdTable = null;
+    this._elBdContainer = null;
+    this._elBdThead = null;
+    this._elTmpContainer = null;
+    this._elTmpTable = null;
 },
 
 /**
@@ -615,6 +632,8 @@ _runRenderChain : function() {
     } 
     if(this._nScrollLeft) {
         this._elBdContainer.scrollLeft = this._nScrollLeft;
+        // Bug 2529024
+        this._elHdContainer.scrollLeft = this._nScrollLeft; 
         this._nScrollLeft = null;
     } 
 },

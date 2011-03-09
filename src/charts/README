@@ -1,5 +1,12 @@
 YUI Library - Charts - Release Notes
 
+2.9.0
+  * Fixed bug in which flash minimum version was miscalculated in some instances.
+  * Fixed bug in which an error occurred when a Chart using legendLabelFunction was reloaded.
+  * Fixed bug in which itemDoubleClick event was not working.
+  * Fixed bug in which the legend label function was not working for pie charts.
+  * Fixed bug in which export to png/jpeg was not working in certain versions of flash player 10.
+
 2.8.1
   * No changes
 

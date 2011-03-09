@@ -439,6 +439,1195 @@ YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
 
 }());
 
+
+/**
+ * Augments the Event Utility with support for the mouseenter and mouseleave
+ * events:  A mouseenter event fires the first time the mouse enters an
+ * element; a mouseleave event first the first time the mouse leaves an
+ * element.
+ *
+ * @module event-mouseenter
+ * @title Event Utility mouseenter and mouseout Module
+ * @namespace YAHOO.util
+ * @requires event
+ */
+
+(function () {
+
+    var Event = YAHOO.util.Event,
+        Lang = YAHOO.lang,
+
+        addListener = Event.addListener,
+        removeListener = Event.removeListener,
+        getListeners = Event.getListeners,
+
+        delegates = [],
+
+        specialTypes = {
+            mouseenter: "mouseover",
+            mouseleave: "mouseout"
+        },
+
+        remove = function(el, type, fn) {
+
+            var index = Event._getCacheIndex(delegates, el, type, fn),
+                cacheItem,
+                returnVal;
+
+            if (index >= 0) {
+                cacheItem = delegates[index];
+            }
+
+            if (el && cacheItem) {
+
+                //    removeListener will translate the value of type
+                returnVal = removeListener.call(Event, cacheItem[0], type, cacheItem[3]);
+
+                if (returnVal) {
+                    delete delegates[index][2];
+                    delete delegates[index][3];
+                    delegates.splice(index, 1);
+                }
+
+            }
+
+            return returnVal;
+
+        };
+
+
+    Lang.augmentObject(Event._specialTypes, specialTypes);
+
+    Lang.augmentObject(Event, {
+
+        /**
+         * Creates a delegate function used to call mouseover and mouseleave
+         * event listeners specified via the
+         * <code>YAHOO.util.Event.addListener</code>
+         * or <code>YAHOO.util.Event.on</code> method.
+         *
+         * @method _createMouseDelegate
+         *
+         * @param {Function} fn        The method (event listener) to call
+         * @param {Object}   obj    An arbitrary object that will be
+         *                             passed as a parameter to the listener
+         * @param {Boolean|object}  overrideContext  If true, the value of the
+         *                             obj parameter becomes the execution context
+         *                          of the listener. If an object, this object
+         *                          becomes the execution context.
+         * @return {Function} Function that will call the event listener
+         * specified by either the <code>YAHOO.util.Event.addListener</code>
+         * or <code>YAHOO.util.Event.on</code> method.
+         * @private
+         * @static
+         * @for Event
+         */
+        _createMouseDelegate: function (fn, obj, overrideContext) {
+
+            return function (event, container) {
+
+                var el = this,
+                    relatedTarget = Event.getRelatedTarget(event),
+                    context,
+                    args;
+
+                if (el != relatedTarget && !YAHOO.util.Dom.isAncestor(el, relatedTarget)) {
+
+                    context = el;
+
+                    if (overrideContext) {
+                        if (overrideContext === true) {
+                            context = obj;
+                        } else {
+                            context = overrideContext;
+                        }
+                    }
+
+                    // The default args passed back to a mouseenter or
+                    // mouseleave listener are: the event, and any object
+                    // the user passed when subscribing
+
+                    args = [event, obj];
+
+                    // Add the element and delegation container as arguments
+                    // when delegating mouseenter and mouseleave
+
+                    if (container) {
+                        args.splice(1, 0, el, container);
+                    }
+
+                    return fn.apply(context, args);
+
+                }
+
+            };
+
+        },
+
+        addListener: function (el, type, fn, obj, overrideContext) {
+
+            var fnDelegate,
+                returnVal;
+
+            if (specialTypes[type]) {
+
+                fnDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
+
+                fnDelegate.mouseDelegate = true;
+
+                delegates.push([el, type, fn, fnDelegate]);
+
+                //    addListener will translate the value of type
+                returnVal = addListener.call(Event, el, type, fnDelegate);
+
+            }
+            else {
+                returnVal = addListener.apply(Event, arguments);
+            }
+
+            return returnVal;
+
+        },
+
+        removeListener: function (el, type, fn) {
+
+            var returnVal;
+
+            if (specialTypes[type]) {
+                returnVal = remove.apply(Event, arguments);
+            }
+            else {
+                returnVal = removeListener.apply(Event, arguments);
+            }
+
+            return returnVal;
+
+        },
+
+        getListeners: function (el, type) {
+
+            //    If the user specified the type as mouseover or mouseout,
+            //    need to filter out those used by mouseenter and mouseleave.
+            //    If the user specified the type as mouseenter or mouseleave,
+            //    need to filter out the true mouseover and mouseout listeners.
+
+            var listeners = [],
+                elListeners,
+                bMouseOverOrOut = (type === "mouseover" || type === "mouseout"),
+                bMouseDelegate,
+                i,
+                l;
+
+            if (type && (bMouseOverOrOut || specialTypes[type])) {
+
+                elListeners = getListeners.call(Event, el, this._getType(type));
+
+                if (elListeners) {
+
+                    for (i=elListeners.length-1; i>-1; i--) {
+
+                        l = elListeners[i];
+                        bMouseDelegate = l.fn.mouseDelegate;
+
+                        if ((specialTypes[type] && bMouseDelegate) || (bMouseOverOrOut && !bMouseDelegate)) {
+                            listeners.push(l);
+                        }
+
+                    }
+
+                }
+
+            }
+            else {
+                listeners = getListeners.apply(Event, arguments);
+            }
+
+            return (listeners && listeners.length) ? listeners : null;
+
+        }
+
+    }, true);
+
+    Event.on = Event.addListener;
+
+}());
+YAHOO.register("event-mouseenter", YAHOO.util.Event, {version: "@VERSION@", build: "@BUILD@"});
+
+var Y = YAHOO,
+    Y_DOM = YAHOO.util.Dom,
+    EMPTY_ARRAY = [],
+    Y_UA = Y.env.ua,
+    Y_Lang = Y.lang,
+    Y_DOC = document,
+    Y_DOCUMENT_ELEMENT = Y_DOC.documentElement,
+
+    Y_DOM_inDoc = Y_DOM.inDocument,
+    Y_mix = Y_Lang.augmentObject,
+    Y_guid = Y_DOM.generateId,
+
+    Y_getDoc = function(element) {
+        var doc = Y_DOC;
+        if (element) {
+            doc = (element.nodeType === 9) ? element : // element === document
+                element.ownerDocument || // element === DOM node
+                element.document || // element === window
+                Y_DOC; // default
+        }
+
+        return doc;
+    },
+
+    Y_Array = function(o, startIdx) {
+        var l, a, start = startIdx || 0;
+
+        // IE errors when trying to slice HTMLElement collections
+        try {
+            return Array.prototype.slice.call(o, start);
+        } catch (e) {
+            a = [];
+            l = o.length;
+            for (; start < l; start++) {
+                a.push(o[start]);
+            }
+            return a;
+        }
+    },
+
+    Y_DOM_allById = function(id, root) {
+        root = root || Y_DOC;
+        var nodes = [],
+            ret = [],
+            i,
+            node;
+
+        if (root.querySelectorAll) {
+            ret = root.querySelectorAll('[id="' + id + '"]');
+        } else if (root.all) {
+            nodes = root.all(id);
+
+            if (nodes) {
+                // root.all may return HTMLElement or HTMLCollection.
+                // some elements are also HTMLCollection (FORM, SELECT).
+                if (nodes.nodeName) {
+                    if (nodes.id === id) { // avoid false positive on name
+                        ret.push(nodes);
+                        nodes = EMPTY_ARRAY; // done, no need to filter
+                    } else { //  prep for filtering
+                        nodes = [nodes];
+                    }
+                }
+
+                if (nodes.length) {
+                    // filter out matches on node.name
+                    // and element.id as reference to element with id === 'id'
+                    for (i = 0; node = nodes[i++];) {
+                        if (node.id === id  ||
+                                (node.attributes && node.attributes.id &&
+                                node.attributes.id.value === id)) {
+                            ret.push(node);
+                        }
+                    }
+                }
+            }
+        } else {
+            ret = [Y_getDoc(root).getElementById(id)];
+        }
+
+        return ret;
+    };
+
+/**
+ * The selector-native module provides support for native querySelector
+ * @module dom
+ * @submodule selector-native
+ * @for Selector
+ */
+
+/**
+ * Provides support for using CSS selectors to query the DOM
+ * @class Selector
+ * @static
+ * @for Selector
+ */
+
+var COMPARE_DOCUMENT_POSITION = 'compareDocumentPosition',
+    OWNER_DOCUMENT = 'ownerDocument',
+
+Selector = {
+    _foundCache: [],
+
+    useNative: true,
+
+    _compare: ('sourceIndex' in Y_DOCUMENT_ELEMENT) ?
+        function(nodeA, nodeB) {
+            var a = nodeA.sourceIndex,
+                b = nodeB.sourceIndex;
+
+            if (a === b) {
+                return 0;
+            } else if (a > b) {
+                return 1;
+            }
+
+            return -1;
+
+        } : (Y_DOCUMENT_ELEMENT[COMPARE_DOCUMENT_POSITION] ?
+        function(nodeA, nodeB) {
+            if (nodeA[COMPARE_DOCUMENT_POSITION](nodeB) & 4) {
+                return -1;
+            } else {
+                return 1;
+            }
+        } :
+        function(nodeA, nodeB) {
+            var rangeA, rangeB, compare;
+            if (nodeA && nodeB) {
+                rangeA = nodeA[OWNER_DOCUMENT].createRange();
+                rangeA.setStart(nodeA, 0);
+                rangeB = nodeB[OWNER_DOCUMENT].createRange();
+                rangeB.setStart(nodeB, 0);
+                compare = rangeA.compareBoundaryPoints(1, rangeB); // 1 === Range.START_TO_END
+            }
+
+            return compare;
+
+    }),
+
+    _sort: function(nodes) {
+        if (nodes) {
+            nodes = Y_Array(nodes, 0, true);
+            if (nodes.sort) {
+                nodes.sort(Selector._compare);
+            }
+        }
+
+        return nodes;
+    },
+
+    _deDupe: function(nodes) {
+        var ret = [],
+            i, node;
+
+        for (i = 0; (node = nodes[i++]);) {
+            if (!node._found) {
+                ret[ret.length] = node;
+                node._found = true;
+            }
+        }
+
+        for (i = 0; (node = ret[i++]);) {
+            node._found = null;
+            node.removeAttribute('_found');
+        }
+
+        return ret;
+    },
+
+    /**
+     * Retrieves a set of nodes based on a given CSS selector.
+     * @method query
+     *
+     * @param {string} selector The CSS Selector to test the node against.
+     * @param {HTMLElement} root optional An HTMLElement to start the query from. Defaults to Y.config.doc
+     * @param {Boolean} firstOnly optional Whether or not to return only the first match.
+     * @return {Array} An array of nodes that match the given selector.
+     * @static
+     */
+    query: function(selector, root, firstOnly, skipNative) {
+        if (typeof root == 'string') {
+            root = Y_DOM.get(root);
+            if (!root) {
+                return (firstOnly) ? null : [];
+            }
+        } else {
+            root = root || Y_DOC;
+        }
+
+        var ret = [],
+            useNative = (Selector.useNative && Y_DOC.querySelector && !skipNative),
+            queries = [[selector, root]],
+            query,
+            result,
+            i,
+            fn = (useNative) ? Selector._nativeQuery : Selector._bruteQuery;
+
+        if (selector && fn) {
+            // split group into seperate queries
+            if (!skipNative && // already done if skipping
+                    (!useNative || root.tagName)) { // split native when element scoping is needed
+                queries = Selector._splitQueries(selector, root);
+            }
+
+            for (i = 0; (query = queries[i++]);) {
+                result = fn(query[0], query[1], firstOnly);
+                if (!firstOnly) { // coerce DOM Collection to Array
+                    result = Y_Array(result, 0, true);
+                }
+                if (result) {
+                    ret = ret.concat(result);
+                }
+            }
+
+            if (queries.length > 1) { // remove dupes and sort by doc order
+                ret = Selector._sort(Selector._deDupe(ret));
+            }
+        }
+
+        Y.log('query: ' + selector + ' returning: ' + ret.length, 'info', 'Selector');
+        return (firstOnly) ? (ret[0] || null) : ret;
+
+    },
+
+    // allows element scoped queries to begin with combinator
+    // e.g. query('> p', document.body) === query('body > p')
+    _splitQueries: function(selector, node) {
+        var groups = selector.split(','),
+            queries = [],
+            prefix = '',
+            i, len;
+
+        if (node) {
+            // enforce for element scoping
+            if (node.tagName) {
+                node.id = node.id || Y_guid();
+                prefix = '[id="' + node.id + '"] ';
+            }
+
+            for (i = 0, len = groups.length; i < len; ++i) {
+                selector =  prefix + groups[i];
+                queries.push([selector, node]);
+            }
+        }
+
+        return queries;
+    },
+
+    _nativeQuery: function(selector, root, one) {
+        if (Y_UA.webkit && selector.indexOf(':checked') > -1 &&
+                (Selector.pseudos && Selector.pseudos.checked)) { // webkit (chrome, safari) fails to find "selected"
+            return Selector.query(selector, root, one, true); // redo with skipNative true to try brute query
+        }
+        try {
+            //Y.log('trying native query with: ' + selector, 'info', 'selector-native');
+            return root['querySelector' + (one ? '' : 'All')](selector);
+        } catch(e) { // fallback to brute if available
+            //Y.log('native query error; reverting to brute query with: ' + selector, 'info', 'selector-native');
+            return Selector.query(selector, root, one, true); // redo with skipNative true
+        }
+    },
+
+    filter: function(nodes, selector) {
+        var ret = [],
+            i, node;
+
+        if (nodes && selector) {
+            for (i = 0; (node = nodes[i++]);) {
+                if (Selector.test(node, selector)) {
+                    ret[ret.length] = node;
+                }
+            }
+        } else {
+            Y.log('invalid filter input (nodes: ' + nodes +
+                    ', selector: ' + selector + ')', 'warn', 'Selector');
+        }
+
+        return ret;
+    },
+
+    test: function(node, selector, root) {
+        var ret = false,
+            groups = selector.split(','),
+            useFrag = false,
+            parent,
+            item,
+            items,
+            frag,
+            i, j, group;
+
+        if (node && node.tagName) { // only test HTMLElements
+
+            // we need a root if off-doc
+            if (!root && !Y_DOM_inDoc(node)) {
+                parent = node.parentNode;
+                if (parent) {
+                    root = parent;
+                } else { // only use frag when no parent to query
+                    frag = node[OWNER_DOCUMENT].createDocumentFragment();
+                    frag.appendChild(node);
+                    root = frag;
+                    useFrag = true;
+                }
+            }
+            root = root || node[OWNER_DOCUMENT];
+
+            if (!node.id) {
+                node.id = Y_guid();
+            }
+            for (i = 0; (group = groups[i++]);) { // TODO: off-dom test
+                group += '[id="' + node.id + '"]';
+                items = Selector.query(group, root);
+
+                for (j = 0; item = items[j++];) {
+                    if (item === node) {
+                        ret = true;
+                        break;
+                    }
+                }
+                if (ret) {
+                    break;
+                }
+            }
+
+            if (useFrag) { // cleanup
+                frag.removeChild(node);
+            }
+        }
+
+        return ret;
+    }
+
+};
+
+YAHOO.util.Selector = Selector;
+/**
+ * The selector module provides helper methods allowing CSS2 Selectors to be used with DOM elements.
+ * @module dom
+ * @submodule selector-css2
+ * @for Selector
+ */
+
+/**
+ * Provides helper methods for collecting and filtering DOM elements.
+ */
+
+var PARENT_NODE = 'parentNode',
+    TAG_NAME = 'tagName',
+    ATTRIBUTES = 'attributes',
+    COMBINATOR = 'combinator',
+    PSEUDOS = 'pseudos',
+
+    SelectorCSS2 = {
+        _reRegExpTokens: /([\^\$\?\[\]\*\+\-\.\(\)\|\\])/, // TODO: move?
+        SORT_RESULTS: true,
+        _children: function(node, tag) {
+            var ret = node.children,
+                i,
+                children = [],
+                childNodes,
+                child;
+
+            if (node.children && tag && node.children.tags) {
+                children = node.children.tags(tag);
+            } else if ((!ret && node[TAG_NAME]) || (ret && tag)) { // only HTMLElements have children
+                childNodes = ret || node.childNodes;
+                ret = [];
+                for (i = 0; (child = childNodes[i++]);) {
+                    if (child.tagName) {
+                        if (!tag || tag === child.tagName) {
+                            ret.push(child);
+                        }
+                    }
+                }
+            }
+
+            return ret || [];
+        },
+
+        _re: {
+            //attr: /(\[.*\])/g,
+            attr: /(\[[^\]]*\])/g,
+            //esc: /\\[:\[][\w\d\]]*/gi,
+            esc: /\\[:\[\]\(\)#\.\'\>+~"]/gi,
+            //pseudos: /:([\-\w]+(?:\(?:['"]?(.+)['"]?\))*)/i
+            pseudos: /(\([^\)]*\))/g
+        },
+
+        /**
+         * Mapping of shorthand tokens to corresponding attribute selector
+         * @property shorthand
+         * @type object
+         */
+        shorthand: {
+            //'\\#([^\\s\\\\(\\[:]*)': '[id=$1]',
+            '\\#(-?[_a-z]+[-\\w\\uE000]*)': '[id=$1]',
+            //'\\#([^\\s\\\.:\\[\\]]*)': '[id=$1]',
+            //'\\.([^\\s\\\\(\\[:]*)': '[className=$1]'
+            '\\.(-?[_a-z]+[-\\w\\uE000]*)': '[className~=$1]'
+        },
+
+        /**
+         * List of operators and corresponding boolean functions.
+         * These functions are passed the attribute and the current node's value of the attribute.
+         * @property operators
+         * @type object
+         */
+        operators: {
+            '': function(node, attr) { return !!node.getAttribute(attr); }, // Just test for existence of attribute
+            //'': '.+',
+            //'=': '^{val}$', // equality
+            '~=': '(?:^|\\s+){val}(?:\\s+|$)', // space-delimited
+            '|=': '^{val}(?:-|$)' // optional hyphen-delimited
+        },
+
+        pseudos: {
+           'first-child': function(node) {
+                return Selector._children(node[PARENT_NODE])[0] === node;
+            }
+        },
+
+        _bruteQuery: function(selector, root, firstOnly) {
+            var ret = [],
+                nodes = [],
+                tokens = Selector._tokenize(selector),
+                token = tokens[tokens.length - 1],
+                rootDoc = Y_getDoc(root),
+                child,
+                id,
+                className,
+                tagName;
+
+
+            // if we have an initial ID, set to root when in document
+            /*
+            if (tokens[0] && rootDoc === root &&
+                    (id = tokens[0].id) &&
+                    rootDoc.getElementById(id)) {
+                root = rootDoc.getElementById(id);
+            }
+            */
+
+            if (token) {
+                // prefilter nodes
+                id = token.id;
+                className = token.className;
+                tagName = token.tagName || '*';
+
+                if (root.getElementsByTagName) { // non-IE lacks DOM api on doc frags
+                    // try ID first, unless no root.all && root not in document
+                    // (root.all works off document, but not getElementById)
+                    // TODO: move to allById?
+                    if (id && (root.all || (root.nodeType === 9 || Y_DOM_inDoc(root)))) {
+                        nodes = Y_DOM_allById(id, root);
+                    // try className
+                    } else if (className) {
+                        nodes = root.getElementsByClassName(className);
+                    } else { // default to tagName
+                        nodes = root.getElementsByTagName(tagName);
+                    }
+
+                } else { // brute getElementsByTagName('*')
+                    child = root.firstChild;
+                    while (child) {
+                        if (child.tagName) { // only collect HTMLElements
+                            nodes.push(child);
+                        }
+                        child = child.nextSilbing || child.firstChild;
+                    }
+                }
+                if (nodes.length) {
+                    ret = Selector._filterNodes(nodes, tokens, firstOnly);
+                }
+            }
+
+            return ret;
+        },
+
+        _filterNodes: function(nodes, tokens, firstOnly) {
+            var i = 0,
+                j,
+                len = tokens.length,
+                n = len - 1,
+                result = [],
+                node = nodes[0],
+                tmpNode = node,
+                getters = Selector.getters,
+                operator,
+                combinator,
+                token,
+                path,
+                pass,
+                //FUNCTION = 'function',
+                value,
+                tests,
+                test;
+
+            //do {
+            for (i = 0; (tmpNode = node = nodes[i++]);) {
+                n = len - 1;
+                path = null;
+
+                testLoop:
+                while (tmpNode && tmpNode.tagName) {
+                    token = tokens[n];
+                    tests = token.tests;
+                    j = tests.length;
+                    if (j && !pass) {
+                        while ((test = tests[--j])) {
+                            operator = test[1];
+                            if (getters[test[0]]) {
+                                value = getters[test[0]](tmpNode, test[0]);
+                            } else {
+                                value = tmpNode[test[0]];
+                                // use getAttribute for non-standard attributes
+                                if (value === undefined && tmpNode.getAttribute) {
+                                    value = tmpNode.getAttribute(test[0]);
+                                }
+                            }
+
+                            if ((operator === '=' && value !== test[2]) ||  // fast path for equality
+                                (typeof operator !== 'string' && // protect against String.test monkey-patch (Moo)
+                                operator.test && !operator.test(value)) ||  // regex test
+                                (!operator.test && // protect against RegExp as function (webkit)
+                                        typeof operator === 'function' && !operator(tmpNode, test[0], test[2]))) { // function test
+
+                                // skip non element nodes or non-matching tags
+                                if ((tmpNode = tmpNode[path])) {
+                                    while (tmpNode &&
+                                        (!tmpNode.tagName ||
+                                            (token.tagName && token.tagName !== tmpNode.tagName))
+                                    ) {
+                                        tmpNode = tmpNode[path];
+                                    }
+                                }
+                                continue testLoop;
+                            }
+                        }
+                    }
+
+                    n--; // move to next token
+                    // now that we've passed the test, move up the tree by combinator
+                    if (!pass && (combinator = token.combinator)) {
+                        path = combinator.axis;
+                        tmpNode = tmpNode[path];
+
+                        // skip non element nodes
+                        while (tmpNode && !tmpNode.tagName) {
+                            tmpNode = tmpNode[path];
+                        }
+
+                        if (combinator.direct) { // one pass only
+                            path = null;
+                        }
+
+                    } else { // success if we made it this far
+                        result.push(node);
+                        if (firstOnly) {
+                            return result;
+                        }
+                        break;
+                    }
+                }
+            }// while (tmpNode = node = nodes[++i]);
+            node = tmpNode = null;
+            return result;
+        },
+
+        combinators: {
+            ' ': {
+                axis: 'parentNode'
+            },
+
+            '>': {
+                axis: 'parentNode',
+                direct: true
+            },
+
+
+            '+': {
+                axis: 'previousSibling',
+                direct: true
+            }
+        },
+
+        _parsers: [
+            {
+                name: ATTRIBUTES,
+                //re: /^\[(-?[a-z]+[\w\-]*)+([~\|\^\$\*!=]=?)?['"]?([^\]]*?)['"]?\]/i,
+                re: /^\uE003(-?[a-z]+[\w\-]*)+([~\|\^\$\*!=]=?)?['"]?([^\uE004'"]*)['"]?\uE004/i,
+                fn: function(match, token) {
+                    var operator = match[2] || '',
+                        operators = Selector.operators,
+                        escVal = (match[3]) ? match[3].replace(/\\/g, '') : '',
+                        test;
+
+                    // add prefiltering for ID and CLASS
+                    if ((match[1] === 'id' && operator === '=') ||
+                            (match[1] === 'className' &&
+                            Y_DOCUMENT_ELEMENT.getElementsByClassName &&
+                            (operator === '~=' || operator === '='))) {
+                        token.prefilter = match[1];
+
+
+                        match[3] = escVal;
+
+                        // escape all but ID for prefilter, which may run through QSA (via Dom.allById)
+                        token[match[1]] = (match[1] === 'id') ? match[3] : escVal;
+
+                    }
+
+                    // add tests
+                    if (operator in operators) {
+                        test = operators[operator];
+                        if (typeof test === 'string') {
+                            match[3] = escVal.replace(Selector._reRegExpTokens, '\\$1');
+                            test = new RegExp(test.replace('{val}', match[3]));
+                        }
+                        match[2] = test;
+                    }
+                    if (!token.last || token.prefilter !== match[1]) {
+                        return match.slice(1);
+                    }
+                }
+
+            },
+            {
+                name: TAG_NAME,
+                re: /^((?:-?[_a-z]+[\w-]*)|\*)/i,
+                fn: function(match, token) {
+                    var tag = match[1].toUpperCase();
+                    token.tagName = tag;
+
+                    if (tag !== '*' && (!token.last || token.prefilter)) {
+                        return [TAG_NAME, '=', tag];
+                    }
+                    if (!token.prefilter) {
+                        token.prefilter = 'tagName';
+                    }
+                }
+            },
+            {
+                name: COMBINATOR,
+                re: /^\s*([>+~]|\s)\s*/,
+                fn: function(match, token) {
+                }
+            },
+            {
+                name: PSEUDOS,
+                re: /^:([\-\w]+)(?:\uE005['"]?([^\uE005]*)['"]?\uE006)*/i,
+                fn: function(match, token) {
+                    var test = Selector[PSEUDOS][match[1]];
+                    if (test) { // reorder match array and unescape special chars for tests
+                        if (match[2]) {
+                            match[2] = match[2].replace(/\\/g, '');
+                        }
+                        return [match[2], test];
+                    } else { // selector token not supported (possibly missing CSS3 module)
+                        return false;
+                    }
+                }
+            }
+            ],
+
+        _getToken: function(token) {
+            return {
+                tagName: null,
+                id: null,
+                className: null,
+                attributes: {},
+                combinator: null,
+                tests: []
+            };
+        },
+
+        /**
+            Break selector into token units per simple selector.
+            Combinator is attached to the previous token.
+         */
+        _tokenize: function(selector) {
+            selector = selector || '';
+            selector = Selector._replaceShorthand(Y_Lang.trim(selector));
+            var token = Selector._getToken(),     // one token per simple selector (left selector holds combinator)
+                query = selector, // original query for debug report
+                tokens = [],    // array of tokens
+                found = false,  // whether or not any matches were found this pass
+                match,         // the regex match
+                test,
+                i, parser;
+
+            /*
+                Search for selector patterns, store, and strip them from the selector string
+                until no patterns match (invalid selector) or we run out of chars.
+
+                Multiple attributes and pseudos are allowed, in any order.
+                for example:
+                    'form:first-child[type=button]:not(button)[lang|=en]'
+            */
+
+            outer:
+            do {
+                found = false; // reset after full pass
+
+                for (i = 0; (parser = Selector._parsers[i++]);) {
+                    if ( (match = parser.re.exec(selector)) ) { // note assignment
+                        if (parser.name !== COMBINATOR ) {
+                            token.selector = selector;
+                        }
+                        selector = selector.replace(match[0], ''); // strip current match from selector
+                        if (!selector.length) {
+                            token.last = true;
+                        }
+
+                        if (Selector._attrFilters[match[1]]) { // convert class to className, etc.
+                            match[1] = Selector._attrFilters[match[1]];
+                        }
+
+                        test = parser.fn(match, token);
+                        if (test === false) { // selector not supported
+                            found = false;
+                            break outer;
+                        } else if (test) {
+                            token.tests.push(test);
+                        }
+
+                        if (!selector.length || parser.name === COMBINATOR) {
+                            tokens.push(token);
+                            token = Selector._getToken(token);
+                            if (parser.name === COMBINATOR) {
+                                token.combinator = Selector.combinators[match[1]];
+                            }
+                        }
+                        found = true;
+
+
+                    }
+                }
+            } while (found && selector.length);
+
+            if (!found || selector.length) { // not fully parsed
+                Y.log('query: ' + query + ' contains unsupported token in: ' + selector, 'warn', 'Selector');
+                tokens = [];
+            }
+            return tokens;
+        },
+
+        _replaceShorthand: function(selector) {
+            var shorthand = Selector.shorthand,
+                esc = selector.match(Selector._re.esc), // pull escaped colon, brackets, etc.
+                attrs,
+                pseudos,
+                re, i, len;
+
+            if (esc) {
+                selector = selector.replace(Selector._re.esc, '\uE000');
+            }
+
+            attrs = selector.match(Selector._re.attr);
+            pseudos = selector.match(Selector._re.pseudos);
+
+            if (attrs) {
+                selector = selector.replace(Selector._re.attr, '\uE001');
+            }
+
+            if (pseudos) {
+                selector = selector.replace(Selector._re.pseudos, '\uE002');
+            }
+
+
+            for (re in shorthand) {
+                if (shorthand.hasOwnProperty(re)) {
+                    selector = selector.replace(new RegExp(re, 'gi'), shorthand[re]);
+                }
+            }
+
+            if (attrs) {
+                for (i = 0, len = attrs.length; i < len; ++i) {
+                    selector = selector.replace(/\uE001/, attrs[i]);
+                }
+            }
+
+            if (pseudos) {
+                for (i = 0, len = pseudos.length; i < len; ++i) {
+                    selector = selector.replace(/\uE002/, pseudos[i]);
+                }
+            }
+
+            selector = selector.replace(/\[/g, '\uE003');
+            selector = selector.replace(/\]/g, '\uE004');
+
+            selector = selector.replace(/\(/g, '\uE005');
+            selector = selector.replace(/\)/g, '\uE006');
+
+            if (esc) {
+                for (i = 0, len = esc.length; i < len; ++i) {
+                    selector = selector.replace('\uE000', esc[i]);
+                }
+            }
+
+            return selector;
+        },
+
+        _attrFilters: {
+            'class': 'className',
+            'for': 'htmlFor'
+        },
+
+        getters: {
+            href: function(node, attr) {
+                return Y_DOM.getAttribute(node, attr);
+            }
+        }
+    };
+
+Y_mix(Selector, SelectorCSS2, true);
+Selector.getters.src = Selector.getters.rel = Selector.getters.href;
+
+// IE wants class with native queries
+if (Selector.useNative && Y_DOC.querySelector) {
+    Selector.shorthand['\\.([^\\s\\\\(\\[:]*)'] = '[class~=$1]';
+}
+
+/**
+ * The selector css3 module provides support for css3 selectors.
+ * @module dom
+ * @submodule selector-css3
+ * @for Selector
+ */
+
+/*
+    an+b = get every _a_th node starting at the _b_th
+    0n+b = no repeat ("0" and "n" may both be omitted (together) , e.g. "0n+1" or "1", not "0+1"), return only the _b_th element
+    1n+b =  get every element starting from b ("1" may may be omitted, e.g. "1n+0" or "n+0" or "n")
+    an+0 = get every _a_th element, "0" may be omitted
+*/
+
+Selector._reNth = /^(?:([\-]?\d*)(n){1}|(odd|even)$)*([\-+]?\d*)$/;
+
+Selector._getNth = function(node, expr, tag, reverse) {
+    Selector._reNth.test(expr);
+    var a = parseInt(RegExp.$1, 10), // include every _a_ elements (zero means no repeat, just first _a_)
+        n = RegExp.$2, // "n"
+        oddeven = RegExp.$3, // "odd" or "even"
+        b = parseInt(RegExp.$4, 10) || 0, // start scan from element _b_
+        result = [],
+        siblings = Selector._children(node.parentNode, tag),
+        op;
+
+    if (oddeven) {
+        a = 2; // always every other
+        op = '+';
+        n = 'n';
+        b = (oddeven === 'odd') ? 1 : 0;
+    } else if ( isNaN(a) ) {
+        a = (n) ? 1 : 0; // start from the first or no repeat
+    }
+
+    if (a === 0) { // just the first
+        if (reverse) {
+            b = siblings.length - b + 1;
+        }
+
+        if (siblings[b - 1] === node) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } else if (a < 0) {
+        reverse = !!reverse;
+        a = Math.abs(a);
+    }
+
+    if (!reverse) {
+        for (var i = b - 1, len = siblings.length; i < len; i += a) {
+            if ( i >= 0 && siblings[i] === node ) {
+                return true;
+            }
+        }
+    } else {
+        for (var i = siblings.length - b, len = siblings.length; i >= 0; i -= a) {
+            if ( i < len && siblings[i] === node ) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+Y_mix(Selector.pseudos, {
+    'root': function(node) {
+        return node === node.ownerDocument.documentElement;
+    },
+
+    'nth-child': function(node, expr) {
+        return Selector._getNth(node, expr);
+    },
+
+    'nth-last-child': function(node, expr) {
+        return Selector._getNth(node, expr, null, true);
+    },
+
+    'nth-of-type': function(node, expr) {
+        return Selector._getNth(node, expr, node.tagName);
+    },
+
+    'nth-last-of-type': function(node, expr) {
+        return Selector._getNth(node, expr, node.tagName, true);
+    },
+
+    'last-child': function(node) {
+        var children = Selector._children(node.parentNode);
+        return children[children.length - 1] === node;
+    },
+
+    'first-of-type': function(node) {
+        return Selector._children(node.parentNode, node.tagName)[0] === node;
+    },
+
+    'last-of-type': function(node) {
+        var children = Selector._children(node.parentNode, node.tagName);
+        return children[children.length - 1] === node;
+    },
+
+    'only-child': function(node) {
+        var children = Selector._children(node.parentNode);
+        return children.length === 1 && children[0] === node;
+    },
+
+    'only-of-type': function(node) {
+        var children = Selector._children(node.parentNode, node.tagName);
+        return children.length === 1 && children[0] === node;
+    },
+
+    'empty': function(node) {
+        return node.childNodes.length === 0;
+    },
+
+    'not': function(node, expr) {
+        return !Selector.test(node, expr);
+    },
+
+    'contains': function(node, expr) {
+        var text = node.innerText || node.textContent || '';
+        return text.indexOf(expr) > -1;
+    },
+
+    'checked': function(node) {
+        return (node.checked === true || node.selected === true);
+    },
+
+    enabled: function(node) {
+        return (node.disabled !== undefined && !node.disabled);
+    },
+
+    disabled: function(node) {
+        return (node.disabled);
+    }
+});
+
+Y_mix(Selector.operators, {
+    '^=': '^{val}', // Match starts with value
+    '!=': function(node, attr, val) { return node[attr] !== val; }, // Match starts with value
+    '$=': '{val}$', // Match ends with value
+    '*=': '{val}' // Match contains value as substring
+});
+
+Selector.combinators['~'] = {
+    axis: 'previousSibling'
+};
+YAHOO.register("selector", YAHOO.util.Selector, {version: "@VERSION@", build: "@BUILD@"});
+
+
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -3726,10 +4915,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDefault : function(el, oRecord, oColumn, oData, oDataTable) {
-        el.innerHTML = oData === undefined ||
-                       oData === null ||
-                       (typeof oData === 'number' && isNaN(oData)) ?
-                       "&#160;" : oData.toString();
+        el.innerHTML = (lang.isValue(oData) && oData !== "") ? oData.toString() : "&#160;";
     },
 
     /**
@@ -4001,6 +5187,24 @@ initAttributes : function(oConfigs) {
          value: 0,
          validator: lang.isNumber
      });
+
+    /**
+    * @attribute sortFunction
+    * @description Default Column sort function
+    * @type function
+    */
+    this.setAttributeConfig("sortFunction", {
+        value: function(a, b, desc, field) {
+            var compare = YAHOO.util.Sort.compare,
+                sorted = compare(a.getData(field),b.getData(field), desc);
+            if(sorted === 0) {
+                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+            }
+            else {
+                return sorted;
+            }
+        }
+    });
 
     /**
     * @attribute formatRow
@@ -4811,8 +6015,31 @@ _initDomElements : function(elContainer) {
  * @private
  */
 _destroyContainerEl : function(elContainer) {
-    Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
-    Ev.purgeElement(elContainer, true);
+        var columns = this._oColumnSet.keys,
+        elements, i;
+
+        Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
+
+    // Bug 2528783
+    Ev.purgeElement( elContainer );
+    Ev.purgeElement( this._elThead, true ); // recursive to get resize handles
+    Ev.purgeElement( this._elTbody );
+    Ev.purgeElement( this._elMsgTbody );
+
+    // because change doesn't bubble, each select (via formatDropdown) gets
+    // its own subscription
+    elements = elContainer.getElementsByTagName( 'select' );
+
+    if ( elements.length ) {
+        Ev.detachListener( elements, 'change' );
+    }
+
+    for ( i = columns.length - 1; i >= 0; --i ) {
+        if ( columns[i].editor ) {
+            Ev.purgeElement( columns[i].editor._elContainer );
+        }
+    }
+
     elContainer.innerHTML = "";
     
     this._elContainer = null;
@@ -5463,7 +6690,6 @@ _initTbodyEl : function(elTable) {
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
-        Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
 
         // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
@@ -5527,7 +6753,6 @@ _initMsgTbodyEl : function(elTable) {
         Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
-        Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
 
         // Bug 2528073: mouseover/mouseout handled via mouseenter/mouseleave
@@ -6643,28 +7868,6 @@ _onTbodyKeydown : function(e, oSelf) {
 },
 
 /**
- * Handles keypress events on the TABLE. Mainly to support stopEvent on Mac.
- *
- * @method _onTableKeypress
- * @param e {HTMLEvent} The key event.
- * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
- * @private
- */
-_onTableKeypress : function(e, oSelf) {
-    if(ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") !== -1) && (ua.webkit < 420)) {
-        var nKey = Ev.getCharCode(e);
-        // arrow down
-        if(nKey == 40) {
-            Ev.stopEvent(e);
-        }
-        // arrow up
-        else if(nKey == 38) {
-            Ev.stopEvent(e);
-        }
-    }
-},
-
-/**
  * Handles click events on the THEAD element.
  *
  * @method _onTheadClick
@@ -7119,11 +8322,11 @@ getTrEl : function(row) {
         return dataRows && dataRows[row] ? dataRows[row] : null;
     }
     // By ID string or element reference
-    else {
+    else if(row) {
         var elRow = (lang.isString(row)) ? document.getElementById(row) : row;
 
         // Validate HTML element
-        if(elRow && (elRow.ownerDocument == document)) {
+        if(elRow && elRow.ownerDocument == document) {
             // Validate TR element
             if(elRow.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
@@ -7243,6 +8446,36 @@ getPreviousTrEl : function(row, forcePrimary) {
     return null;
 },
 
+
+/**
+ * Workaround for IE bug where hidden or not-in-dom elements cause cellIndex
+ * value to be incorrect.
+ *
+ * @method getCellIndex
+ * @param cell {HTMLElement | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
+ * @return {Number} TD.cellIndex value.
+ */
+getCellIndex : function(cell) {
+    cell = this.getTdEl(cell);
+    if(cell) {
+        if(ua.ie > 0) {
+            var i=0,
+                tr = cell.parentNode,
+                allCells = tr.childNodes,
+                len = allCells.length;
+            for(; i<len; i++) {
+                if(allCells[i] == cell) {
+                    return i;
+                }
+            }
+        }
+        else {
+            return cell.cellIndex;
+        }
+    }
+},
+
 /**
  * Returns DOM reference to a TD liner element.
  *
@@ -7257,7 +8490,8 @@ getTdLinerEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to a TD element.
+ * Returns DOM reference to a TD element. Returns null if the row is not
+ * considered a primary row (i.e., row extensions).
  *
  * @method getTdEl
  * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
@@ -7279,9 +8513,11 @@ getTdEl : function(cell) {
             elCell = el;
         }
         
-        // Make sure the TD is in this TBODY
+        // Make sure the TD is in this TBODY or is not in DOM
         // Bug 2527707 and bug 2263558
-        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) ||
+            (elCell.parentNode.parentNode === null) ||
+            (elCell.parentNode.parentNode.nodeType === 11))) {
             // Now we can return the TD element
             return elCell;
         }
@@ -7320,8 +8556,13 @@ getTdEl : function(cell) {
  */
 getFirstTdEl : function(row) {
     var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getFirstTrEl();
-    if(elRow && (elRow.cells.length > 0)) {
-        return elRow.cells[0];
+    if(elRow) {
+        if(elRow.cells && elRow.cells.length > 0) {
+            return elRow.cells[0];
+        }
+        else if(elRow.childNodes && elRow.childNodes.length > 0) {
+            return elRow.childNodes[0];
+        }
     }
     return null;
 },
@@ -7336,8 +8577,13 @@ getFirstTdEl : function(row) {
  */
 getLastTdEl : function(row) {
     var elRow = lang.isValue(row) ? this.getTrEl(row) : this.getLastTrEl();
-    if(elRow && (elRow.cells.length > 0)) {
-        return elRow.cells[elRow.cells.length-1];
+    if(elRow) {
+        if(elRow.cells && elRow.cells.length > 0) {
+            return elRow.cells[elRow.cells.length-1];
+        }
+        else if(elRow.childNodes && elRow.childNodes.length > 0) {
+            return elRow.childNodes[elRow.childNodes.length-1];
+        }
     }
     return null;
 },
@@ -7353,10 +8599,13 @@ getLastTdEl : function(row) {
 getNextTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.cellIndex;
+        var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
-        if(nThisTdIndex < elRow.cells.length-1) {
+        if(elRow.cells && (elRow.cells.length) > 0 && (nThisTdIndex < elRow.cells.length-1)) {
             return elRow.cells[nThisTdIndex+1];
+        }
+        else if(elRow.childNodes && (elRow.childNodes.length) > 0 && (nThisTdIndex < elRow.childNodes.length-1)) {
+            return elRow.childNodes[nThisTdIndex+1];
         }
         else {
             var elNextRow = this.getNextTrEl(elRow);
@@ -7379,10 +8628,15 @@ getNextTdEl : function(cell) {
 getPreviousTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.cellIndex;
+        var nThisTdIndex = this.getCellIndex(elCell);
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
-            return elRow.cells[nThisTdIndex-1];
+            if(elRow.cells && elRow.cells.length > 0) {
+                return elRow.cells[nThisTdIndex-1];
+            }
+            else if(elRow.childNodes && elRow.childNodes.length > 0) {
+                return elRow.childNodes[nThisTdIndex-1];
+            }
         }
         else {
             var elPreviousRow = this.getPreviousTrEl(elRow);
@@ -7410,7 +8664,13 @@ getAboveTdEl : function(cell, forcePrimary) {
     if(elCell) {
         var elPreviousRow = this.getPreviousTrEl(elCell, forcePrimary);
         if(elPreviousRow ) {
-            return elPreviousRow.cells[elCell.cellIndex] ? elPreviousRow.cells[elCell.cellIndex] : null;
+            var cellIndex = this.getCellIndex(elCell);
+            if(elPreviousRow.cells && elPreviousRow.cells.length > 0) {
+                return elPreviousRow.cells[cellIndex] ? elPreviousRow.cells[cellIndex] : null;
+            }
+            else if(elPreviousRow.childNodes && elPreviousRow.childNodes.length > 0) {
+                return elPreviousRow.childNodes[cellIndex] ? elPreviousRow.childNodes[cellIndex] : null;
+            }
         }
     }
     return null;
@@ -7432,7 +8692,13 @@ getBelowTdEl : function(cell, forcePrimary) {
     if(elCell) {
         var elNextRow = this.getNextTrEl(elCell, forcePrimary);
         if(elNextRow) {
-            return elNextRow.cells[elCell.cellIndex] ? elNextRow.cells[elCell.cellIndex] : null;
+            var cellIndex = this.getCellIndex(elCell);
+            if(elNextRow.cells && elNextRow.cells.length > 0) {
+                return elNextRow.cells[cellIndex] ? elNextRow.cells[cellIndex] : null;
+            }
+            else if(elNextRow.childNodes && elNextRow.childNodes.length > 0) {
+                return elNextRow.childNodes[cellIndex] ? elNextRow.childNodes[cellIndex] : null;
+            }
         }
     }
     return null;
@@ -7506,70 +8772,24 @@ getThEl : function(theadCell) {
  */
 getTrIndex : function(row) {
     var record = this.getRecord(row),
+        index = this.getRecordIndex(record),
         tr;
     if(record) {
         tr = this.getTrEl(record);
         if(tr) {
             return tr.sectionRowIndex;
         }
+        else {
+            var oPaginator = this.get("paginator");
+            if(oPaginator) {
+                return oPaginator.get('recordOffset') + index;
+            }
+            else {
+                return index;
+            }
+        }
     }
     return null;
-
-    /*var nRecordIndex;
-
-    // By Record
-    if(row instanceof YAHOO.widget.Record) {
-        nRecordIndex = this._oRecordSet.getRecordIndex(row);
-        if(nRecordIndex === null) {
-            // Not a valid Record
-            return null;
-        }
-    }
-    // Calculate page row index from Record index
-    else if(lang.isNumber(row)) {
-        nRecordIndex = row;
-    }
-    if(lang.isNumber(nRecordIndex)) {
-        // Validate the number
-        if((nRecordIndex > -1) && (nRecordIndex < this._oRecordSet.getLength())) {
-            // DataTable is paginated
-            var oPaginator = this.get('paginator');
-            if(oPaginator) {
-                // Check the record index is within the indices of the
-                // current page
-                var rng = oPaginator.getPageRecords();
-                if (rng && nRecordIndex >= rng[0] && nRecordIndex <= rng[1]) {
-                    // This Record is on current page
-                    //TODO: row exp
-                    return nRecordIndex - rng[0];
-                }
-                // This Record is not on current page
-                else {
-                    return null;
-                }
-            }
-            // Not paginated, just return the Record index
-            else {
-                //TODO: row exp
-                return nRecordIndex;
-            }
-        }
-        // RecordSet index is out of range
-        else {
-            return null;
-        }
-    }
-    // By element reference or ID string
-    else {
-        // Validate TR element
-        var elRow = this.getTrEl(row);
-        if(elRow && (elRow.ownerDocument == document) &&
-                (elRow.parentNode == this._elTbody)) {
-            return elRow.sectionRowIndex;
-        }
-    }
-
-    return null;*/
 },
 
 
@@ -8207,7 +9427,7 @@ getColumn : function(column) {
         // Validate TD element
         var elCell = this.getTdEl(column);
         if(elCell) {
-            oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
+            oColumn = this._oColumnSet.getColumn(this.getCellIndex(elCell));
         }
         // Validate TH element
         else {
@@ -8250,11 +9470,11 @@ getColumnById : function(column) {
  */
 getColumnSortDir : function(oColumn, oSortedBy) {
     // Backward compatibility
-    if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
-        if(oColumn.sortOptions.defaultOrder == "asc") {
+    if(oColumn.sortOptions && oColumn.sortOptions.defaultDir) {
+        if(oColumn.sortOptions.defaultDir == "asc") {
             oColumn.sortOptions.defaultDir = DT.CLASS_ASC;
         }
-        else if (oColumn.sortOptions.defaultOrder == "desc") {
+        else if (oColumn.sortOptions.defaultDir == "desc") {
             oColumn.sortOptions.defaultDir = DT.CLASS_DESC;
         }
     }
@@ -8363,21 +9583,8 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Shortcut for the frequently-used compare method
-                    var compare = YAHOO.util.Sort.compare;
-
                     // Default sort function if necessary
-                    sortFnc = sortFnc || 
-                        function(a, b, desc, field) {
-                            var sorted = compare(a.getData(field),b.getData(field), desc);
-                            if(sorted === 0) {
-                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                            }
-                            else {
-                                return sorted;
-                            }
-                        };
-
+                    sortFnc = sortFnc || this.get("sortFunction");
                     // Get the field to sort
                     var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
 
@@ -8723,7 +9930,7 @@ hideColumn : function(oColumn) {
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
         
         // Hide each nested Column
-        for(var i=0; i<allDescendants.length; i++) {
+        for(var i=0, len=allDescendants.length; i<len; i++) {
             var thisColumn = allDescendants[i];
             thisColumn.hidden = true;
 
@@ -8771,7 +9978,7 @@ showColumn : function(oColumn) {
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
         
         // Show each nested Column
-        for(var i=0; i<allDescendants.length; i++) {
+        for(var i=0, len=allDescendants.length; i<len; i++) {
             var thisColumn = allDescendants[i];
             thisColumn.hidden = false;
             
@@ -10051,7 +11258,7 @@ formatCell : function(elLiner, oRecord, oColumn) {
         oRecord = this.getRecord(elLiner);
     }
     if(!oColumn) {
-        oColumn = this.getColumn(elLiner.parentNode.cellIndex);
+        oColumn = this.getColumn(this.getCellIndex(elLiner.parentNode));
     }
 
     if(oRecord && oColumn) {
@@ -10085,8 +11292,10 @@ formatCell : function(elLiner, oRecord, oColumn) {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column | String | Number} A Column key, or a ColumnSet key index.
  * @param oData {Object} New data value for the cell.
+ * @param skipRender {Boolean} Skips render step. Editors that update multiple
+ * cells in ScrollingDataTable should render only on the last call to updateCell().
  */
-updateCell : function(oRecord, oColumn, oData) {    
+updateCell : function(oRecord, oColumn, oData, skipRender) {
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
     if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
@@ -10105,14 +11314,17 @@ updateCell : function(oRecord, oColumn, oData) {
             this._oChainRender.add({
                 method: function() {
                     if((this instanceof DT) && this._sId) {
-                        this.formatCell(elTd.firstChild);
+                        this.formatCell(elTd.firstChild, oRecord, oColumn);
                         this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
                     }
                 },
                 scope: this,
                 timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
             });
-            this._runRenderChain();
+            // Bug 2529024
+            if(!skipRender) {
+                this._runRenderChain();
+            }
         }
         else {
             this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
@@ -12145,7 +13357,8 @@ selectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
 
         if(oRecord && sColumnKey) {
             // Get Record ID
@@ -12166,13 +13379,13 @@ selectCell : function(cell) {
             // Update trackers
             this._aSelections = tracker;
             if(!this._oAnchorCell) {
-                this._oAnchorCell = {record:oRecord, column:this.getColumn(sColumnKey)};
+                this._oAnchorCell = {record:oRecord, column:oColumn};
             }
 
             // Update the UI
             Dom.addClass(elCell, DT.CLASS_SELECTED);
 
-            this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key: this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+            this.fireEvent("cellSelectEvent", {record:oRecord, column:oColumn, key: sColumnKey, el:elCell});
             return;
         }
     }
@@ -12190,7 +13403,8 @@ unselectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
 
         if(oRecord && sColumnKey) {
             // Get Record ID
@@ -12209,7 +13423,7 @@ unselectCell : function(cell) {
                     // Update the UI
                     Dom.removeClass(elCell, DT.CLASS_SELECTED);
 
-                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: oColumn, key:sColumnKey, el:elCell});
                     return;
                 }
             }
@@ -12427,10 +13641,11 @@ highlightCell : function(cell) {
         }
 
         var oRecord = this.getRecord(elCell);
-        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
+        var sColumnKey = oColumn.getKey();
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
         this._elLastHighlightedTd = elCell;
-        this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        this.fireEvent("cellHighlightEvent", {record:oRecord, column:oColumn, key:sColumnKey, el:elCell});
         return;
     }
 },
@@ -12448,7 +13663,7 @@ unhighlightCell : function(cell) {
         var oRecord = this.getRecord(elCell);
         Dom.removeClass(elCell,DT.CLASS_HIGHLIGHTED);
         this._elLastHighlightedTd = null;
-        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(this.getCellIndex(elCell)), key:this.getColumn(this.getCellIndex(elCell)).getKey(), el:elCell});
         return;
     }
 },
@@ -12755,7 +13970,7 @@ saveCellEditor : function() {
             // Update the Record
             this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
             // Update the UI
-            this.formatCell(this._oCellEditor.cell.firstChild);
+            this.formatCell(this._oCellEditor.cell.firstChild, this._oCellEditor.record, this._oCellEditor.column);
             
             // Bug fix 1764044
             this._oChainRender.add({
@@ -13212,7 +14427,7 @@ onEventFormatCell : function(oArgs) {
 
     var elCell = this.getTdEl(target);
     if(elCell) {
-        var oColumn = this.getColumn(elCell.cellIndex);
+        var oColumn = this.getColumn(this.getCellIndex(elCell));
         this.formatCell(elCell.firstChild, this.getRecord(elCell), oColumn);
     }
     else {
@@ -14658,6 +15873,8 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
         oConfigs.scrollable = false;
     }
 
+    this._init();
+
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
     // Once per instance
@@ -14843,6 +16060,21 @@ initAttributes : function(oConfigs) {
             }
         }
     });
+},
+
+/**
+ * Initializes internal variables.
+ *
+ * @method _init
+ * @private
+ */
+_init : function() {
+    this._elHdContainer = null;
+    this._elHdTable = null;
+    this._elBdContainer = null;
+    this._elBdThead = null;
+    this._elTmpContainer = null;
+    this._elTmpTable = null;
 },
 
 /**
@@ -15239,6 +16471,8 @@ _runRenderChain : function() {
     } 
     if(this._nScrollLeft) {
         this._elBdContainer.scrollLeft = this._nScrollLeft;
+        // Bug 2529024
+        this._elHdContainer.scrollLeft = this._nScrollLeft; 
         this._nScrollLeft = null;
     } 
 },
@@ -17239,10 +18473,21 @@ handleDisabledBtns : function() {
     }
     // Save on change for single-select
     else {
-        Ev.addListener(this.dropdown, "change", function(v){
-            // Save on change
-            this.save();
-        }, this, true);
+        if(!ua.ie) {
+            Ev.addListener(this.dropdown, "change", function(v){
+                // Save on change
+                this.save();
+            }, this, true);
+        }
+        else {
+            // Bug 2529274: "change" event is not keyboard accessible in IE6
+            Ev.addListener(this.dropdown, "blur", function(v){
+                this.save();
+            }, this, true);
+            Ev.addListener(this.dropdown, "click", function(v){
+                this.save();
+            }, this, true);
+        }
     }
 },
 
