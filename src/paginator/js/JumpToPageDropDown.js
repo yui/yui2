@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the jump-to-page dropdown
@@ -66,7 +67,7 @@ Paginator.ui.JumpToPageDropdown.prototype = {
      */
     render : function (id_base) {
         this.select = document.createElement('select');
-        this.select.id        = id_base + '-jtp';
+        setId(this.select, id_base + '-jtp');
         this.select.className = this.paginator.get('jumpToPageDropdownClass');
         this.select.title = 'Jump to page';
 

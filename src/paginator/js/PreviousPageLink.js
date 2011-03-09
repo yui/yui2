@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the previous page.
@@ -110,14 +111,14 @@ Paginator.ui.PreviousPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.id        = id_base + '-prev-link';
+        setId(this.link, id_base + '-prev-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-prev-span';
+        setId(this.span, id_base + '-prev-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
