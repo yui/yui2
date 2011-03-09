@@ -167,7 +167,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {String} html String to escape.
      * @return {String} Escaped string.
      * @static
-     * @since 2.8.3
+     * @since 2.9.0
      */
     escapeHTML: function (html) {
         return html.replace(/[&<>"'\/`]/g, function (match) {
