@@ -25,6 +25,9 @@ Fixed the following bugs:
   is configured to handle the configuration queue, we do. Cleaning this up 
   is beyond the scope of 2.9.0.
 
++ Reversed condition to hide/show submenus with delay, so that menus
+  aren't hidden prematurely when showdelay is less than submenuhidedelay
+
 Changes
 -------
 
