@@ -6,8 +6,6 @@ Paginator Release Notes
     * Added JumpToPageDropdown UI Component (hat tip to Matt Parker)
     * renderUIComponent is now chainable
     * Add link title configuration attributes (hat tip to Pete Peterson)
-
-2.8.3
     * RowsPerPageDropdown configuration rowsPerPageOptions text now assigned
       to option.text rather than option.innerHTML.
 
