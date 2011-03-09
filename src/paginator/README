@@ -8,6 +8,8 @@ Paginator Release Notes
     * Add link title configuration attributes (hat tip to Pete Peterson)
     * RowsPerPageDropdown configuration rowsPerPageOptions text now assigned
       to option.text rather than option.innerHTML.
+    * IDs generated for UI components now use Dom.generateId for safety from
+      creating duplicate IDs when using in YUI 3 as yui2-paginator
 
 2.8.1
     * No changes
