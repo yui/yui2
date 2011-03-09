@@ -1581,7 +1581,7 @@ _cancelShowDelay: function () {
 /**
 * @method _execSubmenuHideDelay
 * @description Hides a submenu after the number of milliseconds specified by 
-* the "submenuhidedelay" configuration property have ellapsed.
+* the "submenuhidedelay" configuration property have elapsed.
 * @private
 * @param {YAHOO.widget.Menu} p_oSubmenu Object specifying the submenu that  
 * should be hidden.
@@ -1890,33 +1890,23 @@ _onMouseOut: function (p_sType, p_aArgs) {
 
                     if (oSubmenu) {
                         nSubmenuHideDelay = this.cfg.getProperty(_SUBMENU_HIDE_DELAY);
-    
                         nShowDelay = this.cfg.getProperty(_SHOW_DELAY);
     
-                        if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
-                            nShowDelay >= nSubmenuHideDelay) {
+                        /*if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
+                            nShowDelay >= nSubmenuHideDelay) { */
     
+                        if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && nSubmenuHideDelay >= nShowDelay) {
                             this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent), nSubmenuHideDelay);
-    
-                        }
-                        else {
-    
+                        } else {
                             oSubmenu.hide();
-    
                         }
-    
                     }
-    
                 }
-    
     
                 oItem.handledMouseOutEvent = true;
                 oItem.handledMouseOverEvent = false;
-        
             }
-    
         }
-
 
         if (!this._bHandledMouseOutEvent && ((oRelatedTarget != this.element &&  
             !Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
