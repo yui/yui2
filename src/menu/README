@@ -28,6 +28,8 @@ Fixed the following bugs:
 + Reversed condition to hide/show submenus with delay, so that menus
   aren't hidden prematurely when showdelay is less than submenuhidedelay
 
++ Menus are no longer left un-hidden, when mousing slowly through the shadow
+
 Changes
 -------
 

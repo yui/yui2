@@ -2413,28 +2413,20 @@ _execHideDelay: function () {
     this._cancelHideDelay();
 
     var oRoot = this.getRoot();
-        
+
     oRoot._hideDelayTimer = Lang.later(oRoot.cfg.getProperty(_HIDE_DELAY), this, function () {
     
         if (oRoot.activeItem) {
-
             if (oRoot.hasFocus()) {
-
                 oRoot.activeItem.focus();
-            
             }
-            
             oRoot.clearActiveItem();
-
         }
 
         if (oRoot == this && !(this instanceof YAHOO.widget.MenuBar) && 
             this.cfg.getProperty(_POSITION) == _DYNAMIC) {
-
             this.hide();
-        
         }
-    
     });
 
 },
@@ -2446,15 +2438,10 @@ _execHideDelay: function () {
 * @private
 */
 _cancelShowDelay: function () {
-
     var oTimer = this.getRoot()._showDelayTimer;
-
     if (oTimer) {
-
         oTimer.cancel();
-
     }
-
 },
 
 
@@ -2743,6 +2730,8 @@ _onMouseOut: function (p_sType, p_aArgs) {
         nShowDelay;
 
 
+    YAHOO.log("onMouseout: this == " + this);
+
     if (!this._bStopMouseEventHandlers) {
     
         if (oItem && !oItem.cfg.getProperty(_DISABLED)) {
@@ -2751,30 +2740,17 @@ _onMouseOut: function (p_sType, p_aArgs) {
             oSubmenu = oItemCfg.getProperty(_SUBMENU);
     
     
-            if (oSubmenu && (oRelatedTarget == oSubmenu.element ||
-                    Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
-    
+            if (oSubmenu && (oRelatedTarget == oSubmenu.element || Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
                 bMovingToSubmenu = true;
-    
             }
     
-    
-            if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element &&  
-                !Dom.isAncestor(oItem.element, oRelatedTarget)) || bMovingToSubmenu)) {
-    
-                // Menu Item mouseout logic
-    
+            if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element && !Dom.isAncestor(oItem.element, oRelatedTarget)) || bMovingToSubmenu)) {
                 if (!bMovingToSubmenu) {
-
                     oItem.cfg.setProperty(_SELECTED, false);
-
                     if (oSubmenu) {
+                        
                         nSubmenuHideDelay = this.cfg.getProperty(_SUBMENU_HIDE_DELAY);
                         nShowDelay = this.cfg.getProperty(_SHOW_DELAY);
-    
-                        /*if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
-                            nShowDelay >= nSubmenuHideDelay) { */
-    
                         if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && nSubmenuHideDelay >= nShowDelay) {
                             this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent), nSubmenuHideDelay);
                         } else {
@@ -2788,28 +2764,43 @@ _onMouseOut: function (p_sType, p_aArgs) {
             }
         }
 
-        if (!this._bHandledMouseOutEvent && ((oRelatedTarget != this.element &&  
-            !Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
-    
-            // Menu mouseout logic
+        YAHOO.log("onMouseout: oRelatedTarget = " + oRelatedTarget.className);
+        YAHOO.log("onMouseout: this.element = " + this.element.id);
+        YAHOO.log("onMouseout: Ancestorthis.element = " + Dom.isAncestor(this.element, oRelatedTarget));
+        YAHOO.log("onMouseout: canHide = " + this._canHideOnMouseOut(oRelatedTarget));        
 
-            if (this._useHideDelay) {
-                this._execHideDelay();
+        if (!this._bHandledMouseOutEvent) {
+            if (this._canHideOnMouseOut(oRelatedTarget) || bMovingToSubmenu) {
+                // Menu mouseout logic
+                if (this._useHideDelay) {
+                    this._execHideDelay();
+                }
+    
+                Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
+        
+                this._nCurrentMouseX = Event.getPageX(oEvent);
+        
+                this._bHandledMouseOutEvent = true;
+                this._bHandledMouseOverEvent = false;
             }
-
-            Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
-    
-            this._nCurrentMouseX = Event.getPageX(oEvent);
-    
-            this._bHandledMouseOutEvent = true;
-            this._bHandledMouseOverEvent = false;
-    
         }
-    
     }
 
 },
 
+/**
+ * Util method to determine if it's OK to hide the menu based on the related target on mouseout
+ * @method _canHideOnMouseOut
+ * @protected
+ * @param {HTMLElement} oRelatedTarget The related target based on which we're making the decision
+ * @return {boolean} true if it's OK to hide based on the related target.
+ */
+_canHideOnMouseOut : function(oRelatedTarget) {
+    // Hide if we're not moving back to the element from somewhere inside the element, or we're moving to an element inside the menu.
+    // The shadow is treated as an edge case, inside inside the menu, but we get no further mouseouts, because it overflows the element,
+    // so we need to close when moving to the menu. 
+    return (oRelatedTarget != this.element && (!Dom.isAncestor(this.element, oRelatedTarget) || oRelatedTarget === this._shadow));
+},
 
 /**
 * @method _onMouseMove
