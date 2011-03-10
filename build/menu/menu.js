@@ -2730,7 +2730,7 @@ _onMouseOut: function (p_sType, p_aArgs) {
 
 
         if (!this._bHandledMouseOutEvent) {
-            if (this._canHideOnMouseOut(oRelatedTarget) || bMovingToSubmenu) {
+            if (this._didMouseLeave(oRelatedTarget) || bMovingToSubmenu) {
                 // Menu mouseout logic
                 if (this._useHideDelay) {
                     this._execHideDelay();
@@ -2749,17 +2749,17 @@ _onMouseOut: function (p_sType, p_aArgs) {
 },
 
 /**
- * Util method to determine if it's OK to hide the menu based on the related target on mouseout
- * @method _canHideOnMouseOut
+ * Utilility method to determine if we really moused out of the menu based on the related target
+ * @method _didMouseLeave
  * @protected
  * @param {HTMLElement} oRelatedTarget The related target based on which we're making the decision
  * @return {boolean} true if it's OK to hide based on the related target.
  */
-_canHideOnMouseOut : function(oRelatedTarget) {
+_didMouseLeave : function(oRelatedTarget) {
     // Hide if we're not moving back to the element from somewhere inside the element, or we're moving to an element inside the menu.
     // The shadow is treated as an edge case, inside inside the menu, but we get no further mouseouts, because it overflows the element,
     // so we need to close when moving to the menu. 
-    return (oRelatedTarget != this.element && (!Dom.isAncestor(this.element, oRelatedTarget) || oRelatedTarget === this._shadow));
+    return (oRelatedTarget === this._shadow || (oRelatedTarget != this.element && !Dom.isAncestor(this.element, oRelatedTarget)));
 },
 
 /**
