@@ -971,7 +971,7 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultData, sQuery,
  * inserting into DOM. Implementers should point to this method when accessing
  * data from third-party sources, from user input, or from otherwise
  * untrustworthy sources:
- * myAutoComplete.formatResult = myAutoComplete.formatEscapedResult();
+ * myAutoComplete.formatResult = myAutoComplete.formatEscapedResult;
  *
  * @method formatEscapedResult
  * @param oResultData {Object} Result data object.
