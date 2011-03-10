@@ -4,6 +4,8 @@ Logger Release Notes
 
 * No more duplicate logging in webkit browsers
 * Added support for logging in Opera with opera.postError
+* Changed element ID generation to use Dom.generateId to be safer in YUI 3
+  environments via yui2-logger
 
 *** version 2.8.1 ***
 

@@ -941,9 +941,9 @@ LogReader.prototype = {
         // Create header
         // TODO: refactor this into an innerHTML
         this._elHd = make("div",{
-            id: 'yui-log-hd' + this._sName,
             className: "yui-log-hd"
         });
+        Dom.generateId(this._elHd, 'yui-log-hd' + this._sName);
 
         this._elCollapse = make("div",{ className: 'yui-log-btns' });
 
@@ -1115,14 +1115,15 @@ LogReader.prototype = {
     _createCategoryCheckbox : function(sCategory) {
         if(this._elFt) {
             var filter = make("span",{ className: "yui-log-filtergrp" }),
+                checkid = Dom.generateId(null, "yui-log-filter-" + sCategory + this._sName),
                 check  = make("input", {
-                    id: "yui-log-filter-" + sCategory + this._sName,
+                    id: checkid,
                     className: "yui-log-filter-" + sCategory,
                     type: "checkbox",
                     category: sCategory
                 }),
                 label  = make("label", {
-                    htmlFor: check.id,
+                    htmlFor: checkid,
                     className: sCategory,
                     innerHTML: sCategory
                 });
@@ -1152,14 +1153,15 @@ LogReader.prototype = {
     _createSourceCheckbox : function(sSource) {
         if(this._elFt) {
             var filter = make("span",{ className: "yui-log-filtergrp" }),
+                checkid = Dom.generateId(null, "yui-log-filter-" + sSource + this._sName),
                 check  = make("input", {
-                    id: "yui-log-filter-" + sSource + this._sName,
+                    id: checkid,
                     className: "yui-log-filter-" + sSource,
                     type: "checkbox",
                     source: sSource
                 }),
                 label  = make("label", {
-                    htmlFor: check.id,
+                    htmlFor: checkid,
                     className: sSource,
                     innerHTML: sSource
                 });

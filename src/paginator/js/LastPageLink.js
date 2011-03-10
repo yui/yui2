@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the last page.
@@ -121,18 +122,18 @@ Paginator.ui.LastPageLink.prototype = {
         this.span = document.createElement('span');
         this.na   = this.span.cloneNode(false);
 
-        this.link.id        = id_base + '-last-link';
+        setId(this.link, id_base + '-last-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-last-span';
+        setId(this.span, id_base + '-last-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
-        this.na.id = id_base + '-last-na';
+        setId(this.na, id_base + '-last-na');
 
         switch (last) {
             case Paginator.VALUE_UNLIMITED :

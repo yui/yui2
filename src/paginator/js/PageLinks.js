@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the page links
@@ -176,7 +177,7 @@ Paginator.ui.PageLinks.prototype = {
 
         // Set up container
         this.container = document.createElement('span');
-        this.container.id        = id_base + '-pages';
+        setId(this.container, id_base + '-pages');
         this.container.className = p.get('pageLinksContainerClass');
         YAHOO.util.Event.on(this.container,'click',this.onClick,this,true);
 
