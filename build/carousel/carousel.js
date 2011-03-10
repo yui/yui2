@@ -2374,10 +2374,11 @@
                     carousel._itemsTable.items[index] = undefined;
                 }
 
+                elId = oel.id || Dom.generateId();
                 carousel._itemsTable.items.splice(index, 1, {
                     item      : content,
                     className : carousel.CLASSES.ITEM + (item.className ? " " + item.className : ""),
-                    id        : Dom.generateId()
+                    id        : elId
                 });
 
                 el = carousel._itemsTable.items[index];
@@ -4230,7 +4231,7 @@
                 pager    = carousel._pages.el,  // the pager container element
                 sel;
 
-            if (num === 0) {
+            if (num === 0 || !pager) {
                 return;// don't do anything if number of pages is 0
             }
 
