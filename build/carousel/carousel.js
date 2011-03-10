@@ -2374,10 +2374,11 @@
                     carousel._itemsTable.items[index] = undefined;
                 }
 
+                elId = oel.id || Dom.generateId();
                 carousel._itemsTable.items.splice(index, 1, {
                     item      : content,
                     className : carousel.CLASSES.ITEM + (item.className ? " " + item.className : ""),
-                    id        : Dom.generateId()
+                    id        : elId
                 });
 
                 el = carousel._itemsTable.items[index];
