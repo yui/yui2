@@ -46,9 +46,34 @@ Bug Fixes:
   close button usually), instead of to the first form
   element (thereby, bypassing the button).
 
-*** version 2.8.3 ***
++ Module/Overlay now caches ContainerEffect (and hence
+  Anim) instances, instead of recreating them each time
+  hide/show is called. This was required so that we could
+  correctly stop running Anim instances when switching
+  between animIn and animOut midway through an animation.
 
-+ No code changes.
+  This should also help performance.
+
+  If you need to revert back to the pre 2.9.0 behavior
+  for any reason, you can set the overlay.cacheEffects
+  property to false on your instance before setting
+  the effect property, or on the prototype.
+
+Changes
+-------
+
++ Module's destroy method (and the destroy method of all 
+  subclasses) now supports a 'shallowPurge' argument, which
+  when true, prevents Module from recursively purging DOM 
+  event listeners from all children on destruction.
+
+  If the shallowPurge argument is not provided Module will
+  purge event listeners from all children. 
+
+  This was preferred, over supporting the opposite 
+  (a 'deepPurge' argument for example), to maintain backwards 
+  compatiblity while supporting intuitive argument values
+  (false and undefined mean the same thing).
 
 + APIDocs updated to identify string parameters and
   properties, which get added to the DOM as HTML.

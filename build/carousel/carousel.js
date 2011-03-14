@@ -683,6 +683,51 @@
     }
 
     /**
+     * Show or hide navigation.
+     *
+     * @method showNavigation
+     * @private
+     */
+    function showNavigation(hide) {
+        var carousel = this,
+            cfg = carousel.get("navigation");
+
+        if (JS.isUndefined(cfg)) {
+            return; // can't do anything
+        }
+
+        if (JS.isUndefined(hide)) {
+            // show the navigation
+            if (!JS.isUndefined(cfg.prev) && JS.isArray(cfg.prev) &&
+                !JS.isUndefined(cfg.prev[0])) {
+                Dom.setStyle(cfg.prev[0], "visibility", "visible");
+            }
+            if (!JS.isUndefined(cfg.next) && JS.isArray(cfg.next) &&
+                !JS.isUndefined(cfg.next[0])) {
+                Dom.setStyle(cfg.next[0], "visibility", "visible");
+            }
+            if (!JS.isUndefined(carousel._pages) &&
+                !JS.isUndefined(carousel._pages.el)) {
+                Dom.setStyle(carousel._pages.el, "visibility", "visible");
+            }
+        } else {
+            // hide the navigation
+            if (!JS.isUndefined(cfg.prev) && JS.isArray(cfg.prev) &&
+                !JS.isUndefined(cfg.prev[0])) {
+                Dom.setStyle(cfg.prev[0], "visibility", "hidden");
+            }
+            if (!JS.isUndefined(cfg.next) && JS.isArray(cfg.next) &&
+                !JS.isUndefined(cfg.next[0])) {
+                Dom.setStyle(cfg.next[0], "visibility", "hidden");
+            }
+            if (!JS.isUndefined(carousel._pages) &&
+                !JS.isUndefined(carousel._pages.el)) {
+                Dom.setStyle(carousel._pages.el, "visibility", "hidden");
+            }
+        }
+    }
+
+    /**
      * Fire custom events for enabling/disabling navigation elements.
      *
      * @method syncNavigation
@@ -1645,6 +1690,7 @@
 
             if (carousel.fireEvent(beforeHideEvent) !== false) {
                 carousel.removeClass(carousel.CLASSES.VISIBLE);
+                showNavigation.call(carousel, false);
                 carousel.fireEvent(hideEvent);
             }
         },
@@ -2328,10 +2374,11 @@
                     carousel._itemsTable.items[index] = undefined;
                 }
 
+                elId = oel.id || Dom.generateId();
                 carousel._itemsTable.items.splice(index, 1, {
                     item      : content,
                     className : carousel.CLASSES.ITEM + (item.className ? " " + item.className : ""),
-                    id        : Dom.generateId()
+                    id        : elId
                 });
 
                 el = carousel._itemsTable.items[index];
@@ -2681,6 +2728,7 @@
 
             if (carousel.fireEvent(beforeShowEvent) !== false) {
                 carousel.addClass(cssClass.VISIBLE);
+                showNavigation.call(carousel);
                 carousel.fireEvent(showEvent);
             }
         },
@@ -3810,7 +3858,7 @@
                 item,
                 itemsTable = carousel._itemsTable,
                 posUndefined = JS.isUndefined(obj.pos),
-                oel = posUndefined ? null : itemsTable.items[obj.pos+1],
+                oel =  posUndefined ? null : itemsTable.items[obj.pos+1],
                 pos,
                 sibling,
                 styles;
@@ -3818,6 +3866,9 @@
             pos = posUndefined ?
                       obj.newPos || itemsTable.numItems - 1 : obj.pos;
             item = itemsTable.items[pos] || {};
+            if (!item || !("id" in item)) { // Nothing can be done now
+                return;
+            }
 
             el = carousel._createCarouselItem({
                     className : item.className,
@@ -3842,12 +3893,25 @@
                         carouselEl.appendChild(el);
                     }
                 } else {
-                    if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
-                        sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                    if (!JS.isUndefined(itemsTable.loading[pos])) {
+                        oel = itemsTable.loading[pos];
+                        // if oel is null, it is a problem ...
                     }
-                    if (sibling) {
-                        carouselEl.insertBefore(el, sibling);
+                    if (oel) {
+                        // replace the node
+                        carouselEl.replaceChild(el, oel);
+                        // ... and remove the item from the data structure
+                        delete itemsTable.loading[pos];
                     } else {
+                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                            sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                        }
+                        if (sibling) {
+                            carouselEl.insertBefore(el, sibling);
+                        } else if (!Dom.get(el.id)) {
+                            carouselEl.appendChild(el);
+                        } else {
+                        }
                     }
                 }
             } else {
@@ -3912,7 +3976,7 @@
         /**
          * Synchronize and redraw the UI after an item is removed.
          *
-         * @method _syncUiForItemAdd
+         * @method _syncUiForItemRemove
          * @protected
          */
         _syncUiForItemRemove: function (obj) {
@@ -4167,7 +4231,7 @@
                 pager    = carousel._pages.el,  // the pager container element
                 sel;
 
-            if (num === 0) {
+            if (num === 0 || !pager) {
                 return;// don't do anything if number of pages is 0
             }
 
@@ -4402,6 +4466,5 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
-
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});

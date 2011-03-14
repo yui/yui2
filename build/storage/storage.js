@@ -1114,10 +1114,10 @@ var Y = YAHOO,
 
 			for (i = _driver.callSWF("getLength", []) - 1; 0 <= i; i -= 1) {
 				key = _driver.callSWF("getNameAt", [i]);
-				isKeySessionStorage = -1 < key.indexOf(StorageManager.LOCATION_SESSION);
+				isKeySessionStorage = isSessionStorage && (-1 < key.indexOf(StorageManager.LOCATION_SESSION));
 
 				// this is session storage, but the session key is not set, so remove item
-				if (isSessionStorage && ! sessionKey) {
+				if (isKeySessionStorage && ! sessionKey) {
 					_driver.callSWF("removeItem", [key]);
 				}
 				else if (isSessionStorage === isKeySessionStorage) {

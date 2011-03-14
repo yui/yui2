@@ -729,7 +729,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {String} html String to escape.
      * @return {String} Escaped string.
      * @static
-     * @since 2.8.3
+     * @since 2.9.0
      */
     escapeHTML: function (html) {
         return html.replace(/[&<>"'\/`]/g, function (match) {
@@ -959,7 +959,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 break;
             }
             j = s.indexOf(RBRACE, i);
-            if (i + 1 >= j) {
+            if (i + 1 > j) {
                 break;
             }
 

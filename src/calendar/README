@@ -18,10 +18,6 @@ Calendar Release Notes
   Based on patches provided by Joshua Flynn (flynnjandm) and 
   Pranav (unohoo) in tickets #1755642, #2528933
 
-*** version 2.8.3 ***
-
-+ No code changes.
-
 + APIDocs updated to identify string parameters and 
   properties, which get added to the DOM as HTML.
 

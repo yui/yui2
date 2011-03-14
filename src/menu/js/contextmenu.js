@@ -30,9 +30,7 @@
 * @namespace YAHOO.widget
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
-
     YAHOO.widget.ContextMenu.superclass.constructor.call(this, p_oElement, p_oConfig);
-
 };
 
 
@@ -81,11 +79,8 @@ var Event = YAHOO.util.Event,
 * @param {Array} p_aPos Array representing the xy position for the context menu.
 */
 function position(p_sType, p_aArgs, p_aPos) {
-
     this.cfg.setProperty(_XY, p_aPos);
-    
     this.beforeShowEvent.unsubscribe(position, p_aPos);
-
 }
 
 
@@ -141,6 +136,9 @@ contextEventTarget: null,
 
 /**
 * @event triggerContextMenuEvent
+* @param type {String} The name of the event, "triggerContextMenu"
+* @param args {Array} The array of event arguments. For this event, the underlying
+* DOM event is the only argument, available from args[0].
 * @description Custom Event wrapper for the "contextmenu" DOM event 
 * ("mousedown" for Opera) fired by the element(s) that trigger the display of 
 * the context menu.
@@ -174,21 +172,16 @@ init: function(p_oElement, p_oConfig) {
 
 
     // Call the init of the superclass (YAHOO.widget.Menu)
-
+    
     ContextMenu.superclass.init.call(this, p_oElement);
-
 
     this.beforeInitEvent.fire(ContextMenu);
 
-
     if (p_oConfig) {
-
         this.cfg.applyConfig(p_oConfig, true);
-
     }
-    
+
     this.initEvent.fire(ContextMenu);
-    
 },
 
 
@@ -197,29 +190,20 @@ init: function(p_oElement, p_oConfig) {
 * @description Initializes the custom events for the context menu.
 */
 initEvents: function() {
-
     ContextMenu.superclass.initEvents.call(this);
 
     // Create custom events
-
     this.triggerContextMenuEvent = this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
-
     this.triggerContextMenuEvent.signature = YAHOO.util.CustomEvent.LIST;
-
 },
-
 
 /**
 * @method cancel
 * @description Cancels the display of the context menu.
 */
 cancel: function() {
-
     this._bCancelled = true;
-
 },
-
-
 
 // Private methods
 
@@ -235,28 +219,18 @@ _removeEventHandlers: function() {
 
     var oTrigger = this._oTrigger;
 
-
     // Remove the event handlers from the trigger(s)
-
     if (oTrigger) {
-
         Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
-        
-        if (UA.opera) {
-        
-            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
-    
-        }
 
+        if (UA.opera) {
+            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
+        }
     }
 
 },
 
-
-
 // Private event handlers
-
-
 
 /**
 * @method _onTriggerClick
@@ -271,9 +245,7 @@ _removeEventHandlers: function() {
 _onTriggerClick: function(p_oEvent, p_oMenu) {
 
     if (p_oEvent.ctrlKey) {
-    
         Event.stopEvent(p_oEvent);
-
     }
     
 },
@@ -403,8 +375,10 @@ initDefaultConfig: function() {
 * @method destroy
 * @description Removes the context menu's <code>&#60;div&#62;</code> element 
 * (and accompanying child nodes) from the document.
+* @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+* NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
 */
-destroy: function() {
+destroy: function(shallowPurge) {
 
     // Remove the DOM event handlers from the current trigger(s)
 
@@ -413,7 +387,7 @@ destroy: function() {
 
     // Continue with the superclass implementation of this method
 
-    ContextMenu.superclass.destroy.call(this);
+    ContextMenu.superclass.destroy.call(this, shallowPurge);
 
 },
 

@@ -1253,8 +1253,10 @@
         * Removes the Panel element from the DOM and sets all child elements 
         * to null.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
             removeButtonEventHandlers.call(this);
 
             this._aButtons = null;
@@ -1273,7 +1275,7 @@
                     this.form = null;
                 }
             }
-            Dialog.superclass.destroy.call(this);
+            Dialog.superclass.destroy.call(this, shallowPurge);
         },
 
         /**

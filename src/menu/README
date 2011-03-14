@@ -17,9 +17,26 @@ Fixed the following bugs:
   scrollable Menu (without max height defined) and programmatically updates
   body scrollTop values.
 
-*** version 2.8.3 ***
++ Added support to remove shadow when flipped from true to false. 
 
-+ No code changes.
+  This was missing in general, but also fixes the use case where shadow is 
+  set to false in the constructor configuration. Ideally we should never be 
+  setting it to true in this later use case, but due to the way menu lazyload 
+  is configured to handle the configuration queue, we do. Cleaning this up 
+  is beyond the scope of 2.9.0.
+
++ Reversed condition to hide/show submenus with delay, so that menus
+  aren't hidden prematurely when showdelay is less than submenuhidedelay
+
++ Menus are no longer left un-hidden, when mousing slowly through the shadow
+
+Changes
+-------
+
++ Menu and ContextMenu's destroy methods now accept a 'shallowPurge'
+  argument, which is passed through to Module's destroy implementation
+  and can be used to prevent Module destroy() from deep purging all it's
+  children. See Container README for further details
 
 + APIDocs updated to identify string parameters and
   properties, which get added to the DOM as HTML.

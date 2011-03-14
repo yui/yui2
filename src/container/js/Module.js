@@ -513,6 +513,7 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.EFFECT.key, {
+                handler: this.configEffect,
                 suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
             });
@@ -1109,16 +1110,18 @@
         },
 
         /**
-        * Removes the Module element from the DOM and sets all child elements 
-        * to null.
+        * Removes the Module element from the DOM, sets all child elements to null, and purges the bounding element of event listeners.
         * @method destroy
+        * @param {boolean} shallowPurge If true, only the parent element's DOM event listeners are purged. If false, or not provided, all children are also purged of DOM event listeners. 
+        * NOTE: The flag is a "shallowPurge" flag, as opposed to what may be a more intuitive "purgeChildren" flag to maintain backwards compatibility with behavior prior to 2.9.0.
         */
-        destroy: function () {
+        destroy: function (shallowPurge) {
 
-            var parent;
+            var parent,
+                purgeChildren = !(shallowPurge);
 
             if (this.element) {
-                Event.purgeElement(this.element, true);
+                Event.purgeElement(this.element, purgeChildren);
                 parent = this.element.parentNode;
             }
 
@@ -1185,6 +1188,63 @@
                     this.hideEvent.fire();
                 }
             }
+        },
+
+        /**
+        * Default event handler for the "effect" configuration property
+        * @param {String} type The CustomEvent type (usually the property name)
+        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * handlers, args[0] will equal the newly applied value for the property.
+        * @param {Object} obj The scope object. For configuration handlers, 
+        * this will usually equal the owner.
+        * @method configEffect
+        */
+        configEffect: function (type, args, obj) {
+            this._cachedEffects = (this.cacheEffects) ? this._createEffects(args[0]) : null;
+        },
+
+        /**
+         * If true, ContainerEffects (and Anim instances) are cached when "effect" is set, and reused. 
+         * If false, new instances are created each time the container is hidden or shown, as was the 
+         * behavior prior to 2.9.0. 
+         *
+         * @property cacheEffects
+         * @since 2.9.0
+         * @default true
+         * @type boolean
+         */
+        cacheEffects : true,
+
+        /**
+         * Creates an array of ContainerEffect instances from the provided configs
+         * 
+         * @method _createEffects
+         * @param {Array|Object} effectCfg An effect configuration or array of effect configurations
+         * @return {Array} An array of ContainerEffect instances.
+         * @protected
+         */
+        _createEffects: function(effectCfg) {
+            var effectInstances = null,
+                n, 
+                i,
+                eff;
+
+            if (effectCfg) {
+                if (effectCfg instanceof Array) {
+                    effectInstances = [];
+                    n = effectCfg.length;
+                    for (i = 0; i < n; i++) {
+                        eff = effectCfg[i];
+                        if (eff.effect) {
+                            effectInstances[effectInstances.length] = eff.effect(this, eff.duration);
+                        }
+                    }
+                } else if (effectCfg.effect) {
+                    effectInstances = [effectCfg.effect(this, effectCfg.duration)];
+                }
+            }
+
+            return effectInstances;
         },
 
         /**

@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the rows-per-page dropdown
@@ -85,7 +86,7 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
      */
     render : function (id_base) {
         this.select = document.createElement('select');
-        this.select.id        = id_base + '-rpp';
+        setId(this.select, id_base + '-rpp');
         this.select.className = this.paginator.get('rowsPerPageDropdownClass');
         this.select.title = 'Rows per page';
 

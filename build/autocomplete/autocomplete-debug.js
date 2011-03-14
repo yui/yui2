@@ -849,7 +849,7 @@ YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFu
 
 YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullResponse, oParsedResponse, oCallback) {
     // If AC has passed a query string value back to itself, grab it
-    if(oCallback && oCallback.argument && oCallback.argument.query) {
+    if(oCallback && oCallback.argument && YAHOO.lang.isValue(oCallback.argument.query)) {
         sQuery = oCallback.argument.query;
     }
 
