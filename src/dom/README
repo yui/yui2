@@ -1,6 +1,7 @@
 Dom Release Notes
 
 ** Known Issues **
+* IE8 requires "display-inline" for opacity on inline elements
 * margin/padding/borders on HTML element cause getXY to misreport
 * margin/borders on BODY element may cause getXY to misreport
 * Fixed postioning causes getXY to misreport in some cases
