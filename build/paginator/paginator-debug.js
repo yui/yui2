@@ -1094,7 +1094,8 @@ YAHOO.widget.Paginator = Paginator;
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the textual report of current pagination status.
@@ -1221,8 +1222,8 @@ Paginator.ui.CurrentPageReport.prototype = {
      */
     render : function (id_base) {
         this.span = document.createElement('span');
-        this.span.id        = id_base + '-page-report';
         this.span.className = this.paginator.get('pageReportClass');
+        setId(this.span, id_base + '-page-report');
         this.update();
         
         return this.span;
@@ -1263,7 +1264,8 @@ Paginator.ui.CurrentPageReport.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the page links
@@ -1438,7 +1440,7 @@ Paginator.ui.PageLinks.prototype = {
 
         // Set up container
         this.container = document.createElement('span');
-        this.container.id        = id_base + '-pages';
+        setId(this.container, id_base + '-pages');
         this.container.className = p.get('pageLinksContainerClass');
         YAHOO.util.Event.on(this.container,'click',this.onClick,this,true);
 
@@ -1543,7 +1545,8 @@ Paginator.ui.PageLinks.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the first page.
@@ -1651,14 +1654,14 @@ Paginator.ui.FirstPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.id        = id_base + '-first-link';
+        setId(this.link, id_base + '-first-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-first-span';
+        setId(this.span, id_base + '-first-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -1717,7 +1720,8 @@ Paginator.ui.FirstPageLink.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the last page.
@@ -1837,18 +1841,18 @@ Paginator.ui.LastPageLink.prototype = {
         this.span = document.createElement('span');
         this.na   = this.span.cloneNode(false);
 
-        this.link.id        = id_base + '-last-link';
+        setId(this.link, id_base + '-last-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-last-span';
+        setId(this.span, id_base + '-last-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
-        this.na.id = id_base + '-last-na';
+        setId(this.na, id_base + '-last-na');
 
         switch (last) {
             case Paginator.VALUE_UNLIMITED :
@@ -1916,7 +1920,8 @@ Paginator.ui.LastPageLink.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the next page.
@@ -2026,14 +2031,14 @@ Paginator.ui.NextPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.id        = id_base + '-next-link';
+        setId(this.link, id_base + '-next-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-next-span';
+        setId(this.span, id_base + '-next-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -2094,7 +2099,8 @@ Paginator.ui.NextPageLink.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the link to jump to the previous page.
@@ -2203,14 +2209,14 @@ Paginator.ui.PreviousPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.id        = id_base + '-prev-link';
+        setId(this.link, id_base + '-prev-link');
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         this.link.title     = title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-prev-span';
+        setId(this.span, id_base + '-prev-span');
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -2268,7 +2274,8 @@ Paginator.ui.PreviousPageLink.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the rows-per-page dropdown
@@ -2352,7 +2359,7 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
      */
     render : function (id_base) {
         this.select = document.createElement('select');
-        this.select.id        = id_base + '-rpp';
+        setId(this.select, id_base + '-rpp');
         this.select.className = this.paginator.get('rowsPerPageDropdownClass');
         this.select.title = 'Rows per page';
 
@@ -2465,7 +2472,8 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the jump-to-page dropdown
@@ -2530,7 +2538,7 @@ Paginator.ui.JumpToPageDropdown.prototype = {
      */
     render : function (id_base) {
         this.select = document.createElement('select');
-        this.select.id        = id_base + '-jtp';
+        setId(this.select, id_base + '-jtp');
         this.select.className = this.paginator.get('jumpToPageDropdownClass');
         this.select.title = 'Jump to page';
 

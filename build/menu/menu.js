@@ -2378,28 +2378,20 @@ _execHideDelay: function () {
     this._cancelHideDelay();
 
     var oRoot = this.getRoot();
-        
+
     oRoot._hideDelayTimer = Lang.later(oRoot.cfg.getProperty(_HIDE_DELAY), this, function () {
     
         if (oRoot.activeItem) {
-
             if (oRoot.hasFocus()) {
-
                 oRoot.activeItem.focus();
-            
             }
-            
             oRoot.clearActiveItem();
-
         }
 
         if (oRoot == this && !(this instanceof YAHOO.widget.MenuBar) && 
             this.cfg.getProperty(_POSITION) == _DYNAMIC) {
-
             this.hide();
-        
         }
-    
     });
 
 },
@@ -2411,22 +2403,17 @@ _execHideDelay: function () {
 * @private
 */
 _cancelShowDelay: function () {
-
     var oTimer = this.getRoot()._showDelayTimer;
-
     if (oTimer) {
-
         oTimer.cancel();
-
     }
-
 },
 
 
 /**
 * @method _execSubmenuHideDelay
 * @description Hides a submenu after the number of milliseconds specified by 
-* the "submenuhidedelay" configuration property have ellapsed.
+* the "submenuhidedelay" configuration property have elapsed.
 * @private
 * @param {YAHOO.widget.Menu} p_oSubmenu Object specifying the submenu that  
 * should be hidden.
@@ -2708,6 +2695,7 @@ _onMouseOut: function (p_sType, p_aArgs) {
         nShowDelay;
 
 
+
     if (!this._bStopMouseEventHandlers) {
     
         if (oItem && !oItem.cfg.getProperty(_DISABLED)) {
@@ -2716,75 +2704,63 @@ _onMouseOut: function (p_sType, p_aArgs) {
             oSubmenu = oItemCfg.getProperty(_SUBMENU);
     
     
-            if (oSubmenu && (oRelatedTarget == oSubmenu.element ||
-                    Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
-    
+            if (oSubmenu && (oRelatedTarget == oSubmenu.element || Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
                 bMovingToSubmenu = true;
-    
             }
     
-    
-            if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element &&  
-                !Dom.isAncestor(oItem.element, oRelatedTarget)) || bMovingToSubmenu)) {
-    
-                // Menu Item mouseout logic
-    
+            if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element && !Dom.isAncestor(oItem.element, oRelatedTarget)) || bMovingToSubmenu)) {
                 if (!bMovingToSubmenu) {
-
                     oItem.cfg.setProperty(_SELECTED, false);
-
                     if (oSubmenu) {
+                        
                         nSubmenuHideDelay = this.cfg.getProperty(_SUBMENU_HIDE_DELAY);
-    
                         nShowDelay = this.cfg.getProperty(_SHOW_DELAY);
-    
-                        if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
-                            nShowDelay >= nSubmenuHideDelay) {
-    
+                        if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && nSubmenuHideDelay >= nShowDelay) {
                             this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent), nSubmenuHideDelay);
-    
-                        }
-                        else {
-    
+                        } else {
                             oSubmenu.hide();
-    
                         }
-    
                     }
-    
                 }
-    
     
                 oItem.handledMouseOutEvent = true;
                 oItem.handledMouseOverEvent = false;
+            }
+        }
+
+
+        if (!this._bHandledMouseOutEvent) {
+            if (this._didMouseLeave(oRelatedTarget) || bMovingToSubmenu) {
+                // Menu mouseout logic
+                if (this._useHideDelay) {
+                    this._execHideDelay();
+                }
+    
+                Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
         
+                this._nCurrentMouseX = Event.getPageX(oEvent);
+        
+                this._bHandledMouseOutEvent = true;
+                this._bHandledMouseOverEvent = false;
             }
-    
         }
-
-
-        if (!this._bHandledMouseOutEvent && ((oRelatedTarget != this.element &&  
-            !Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
-    
-            // Menu mouseout logic
-
-            if (this._useHideDelay) {
-                this._execHideDelay();
-            }
-
-            Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
-    
-            this._nCurrentMouseX = Event.getPageX(oEvent);
-    
-            this._bHandledMouseOutEvent = true;
-            this._bHandledMouseOverEvent = false;
-    
-        }
-    
     }
 
 },
 
+/**
+ * Utilility method to determine if we really moused out of the menu based on the related target
+ * @method _didMouseLeave
+ * @protected
+ * @param {HTMLElement} oRelatedTarget The related target based on which we're making the decision
+ * @return {boolean} true if it's OK to hide based on the related target.
+ */
+_didMouseLeave : function(oRelatedTarget) {
+    // Hide if we're not moving back to the element from somewhere inside the element, or we're moving to an element inside the menu.
+    // The shadow is treated as an edge case, inside inside the menu, but we get no further mouseouts, because it overflows the element,
+    // so we need to close when moving to the menu. 
+    return (oRelatedTarget === this._shadow || (oRelatedTarget != this.element && !Dom.isAncestor(this.element, oRelatedTarget)));
+},
 
 /**
 * @method _onMouseMove
@@ -8728,6 +8704,9 @@ contextEventTarget: null,
 
 /**
 * @event triggerContextMenuEvent
+* @param type {String} The name of the event, "triggerContextMenu"
+* @param args {Array} The array of event arguments. For this event, the underlying
+* DOM event is the only argument, available from args[0].
 * @description Custom Event wrapper for the "contextmenu" DOM event 
 * ("mousedown" for Opera) fired by the element(s) that trigger the display of 
 * the context menu.

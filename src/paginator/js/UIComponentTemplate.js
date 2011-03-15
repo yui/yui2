@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * Describe the ui Component
@@ -107,7 +108,7 @@ Paginator.ui.YourComponent.prototype = {
         var myVal = this.paginator.get('myAttr');
 
         this.button = document.createElement('button');
-        this.button.id = id_base + '-first-link';
+        setId(this.button, id_base + '-first-link');
         this.button.innerHTML = myVal;
         // etc
 

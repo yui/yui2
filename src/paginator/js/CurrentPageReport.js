@@ -1,7 +1,8 @@
 (function () {
 
 var Paginator = YAHOO.widget.Paginator,
-    l         = YAHOO.lang;
+    l         = YAHOO.lang,
+    setId     = YAHOO.util.Dom.generateId;
 
 /**
  * ui Component to generate the textual report of current pagination status.
@@ -128,8 +129,8 @@ Paginator.ui.CurrentPageReport.prototype = {
      */
     render : function (id_base) {
         this.span = document.createElement('span');
-        this.span.id        = id_base + '-page-report';
         this.span.className = this.paginator.get('pageReportClass');
+        setId(this.span, id_base + '-page-report');
         this.update();
         
         return this.span;
