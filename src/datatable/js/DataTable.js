@@ -6015,7 +6015,9 @@ _restoreMinWidth : function(oColumn) {
  * hide/show all children Columns).
  *
  * @method hideColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oColumn {YAHOO.widget.Column | HTMLElement | String | Number} Column
+ * instance, TH/TD element (or child of a TH/TD element), a Column key, or a
+ * ColumnSet key index.
  */
 hideColumn : function(oColumn) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
@@ -6066,7 +6068,9 @@ hideColumn : function(oColumn) {
  * hide/show all children Columns).
  *
  * @method showColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oColumn {YAHOO.widget.Column | HTMLElement | String | Number} Column
+ * instance, TH/TD element (or child of a TH/TD element), a Column key, or a
+ * ColumnSet key index.
  */
 showColumn : function(oColumn) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
