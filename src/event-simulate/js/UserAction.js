@@ -276,6 +276,8 @@ YAHOO.util.UserAction = {
             throw new Error("simulateMouseEvent(): Invalid target.");
         }
 
+        relatedTarget = relatedTarget || null;
+
         //check event type
         if (YAHOO.lang.isString(type)){
             type = type.toLowerCase();
@@ -366,7 +368,7 @@ YAHOO.util.UserAction = {
                 customEvent.metaKey = metaKey;
                 customEvent.shiftKey = shiftKey;
                 customEvent.button = button;
-                customEvent.relatedTarget = relatedTarget || null;
+                customEvent.relatedTarget = relatedTarget;
             }
 
             /*
