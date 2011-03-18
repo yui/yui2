@@ -5190,7 +5190,19 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute sortFunction
-    * @description Default Column sort function
+    * @description Default Column sort function, receives the following args:
+    *    <dl>
+    *      <dt>a {Object}</dt>
+    *      <dd>First sort argument.</dd>
+    *      <dt>b {Object}</dt>
+    *      <dd>Second sort argument.</dd>
+
+    *      <dt>desc {Boolean}</dt>
+    *      <dd>True if sort direction is descending, false if
+    * sort direction is ascending.</dd>
+    *      <dt>field {String}</dt>
+    *      <dd>The field to sort by, from sortOptions.field</dd>
+    *   </dl>
     * @type function
     */
     this.setAttributeConfig("sortFunction", {
