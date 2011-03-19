@@ -13378,8 +13378,8 @@ getSelectedTdEls : function() {
  * Sets given cell to the selected state.
  *
  * @method selectCell
- * @param cell {HTMLElement | String} DOM element reference or ID string
- * to DataTable page element or RecordSet index.
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
  */
 selectCell : function(cell) {
 //TODO: accept {record} in selectCell()
@@ -13425,6 +13425,8 @@ selectCell : function(cell) {
  * Sets given cell to the unselected state.
  *
  * @method unselectCell
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
  * @param cell {HTMLElement | String} DOM element reference or ID string
  * to DataTable page element or RecordSet index.
  */
