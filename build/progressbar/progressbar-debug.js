@@ -235,9 +235,7 @@
 		    });
 			/**
 			 * @attribute width
-			 * @description Width of the ProgressBar.
-			 *     If a number, it will be assumed to be in pixels.  
-			 *     If a string it should be a valid setting for the CSS width attribute.  
+			 * @description Pixel width of the ProgressBar, i.e., 200 or "200px".
 			 *     It will always be returned as a string including units.
 			 * @default "200px"
 			 * @type Number or String
@@ -253,9 +251,7 @@
 
 			/**
 			 * @attribute height
-			 * @description Height of the ProgressBar.
-			 *     If a number, it will be assumed to be in pixels.  
-			 *     If a string it should be a valid setting for the CSS height attribute.  
+			 * @description Pixel height of the ProgressBar, i.e., 200 or "200px".
 			 *     It will always be returned as a string including units.
 			 * @default "20px"
 			 * @type Number or String
