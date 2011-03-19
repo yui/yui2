@@ -2437,7 +2437,20 @@ YAHOO.widget.Column.prototype = {
     className : null,
 
     /**
-     * Defines a format function.
+     * Cell formatter function, or a shortcut pointer to a function in the
+     * DataTable.Formatter object. The function, called from the DataTable's
+     * formatCell method, renders markup into the cell liner
+     * element and accepts the following arguments:
+     * <dl>
+     *    <dt>elLiner</dt>
+     *    <dd>The element to write innerHTML to.</dd>
+     *    <dt>oRecord</dt>
+     *    <dd>The associated Record for the row.</dd>
+     *    <dt>oColumn</dt>
+     *    <dd>The Column instance for the cell.</dd>
+     *    <dt>oData</dt>
+     *    <dd>The data value for the cell.</dd>
+     * </dl>
      *
      * @property formatter
      * @type String || HTMLFunction
@@ -4944,7 +4957,8 @@ lang.augmentObject(DT, {
 
 // Done in separate step so referenced functions are defined.
 /**
- * Cell formatting functions.
+ * Registry of cell formatting functions, enables shortcut pointers in Column
+ * definition formatter value (i.e., {key:"myColumn", formatter:"date"}).
  * @property DataTable.Formatter
  * @type Object
  * @static

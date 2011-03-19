@@ -1010,7 +1010,8 @@ lang.augmentObject(DT, {
 
 // Done in separate step so referenced functions are defined.
 /**
- * Cell formatting functions.
+ * Registry of cell formatting functions, enables shortcut pointers in Column
+ * definition formatter value (i.e., {key:"myColumn", formatter:"date"}).
  * @property DataTable.Formatter
  * @type Object
  * @static
