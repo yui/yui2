@@ -1,7 +1,7 @@
 Development master
 
 2.9.0
-    * Add potential fix for IE 9 throwing an error from set()
+    * Add fix for IE 9 throwing an error from set()
       "Invalid this pointer used as target for method call". Best guess
       is that the style collection used for off-DOM calculations was getting
       corrupted.
