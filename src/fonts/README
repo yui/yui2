@@ -1,5 +1,9 @@
 YUI Library - Fonts - Release Notes
 
+Version 2.9.0
+
+  * removed redundant BUTTON declaration
+
 Version 2.8.1
 
   * No changes.

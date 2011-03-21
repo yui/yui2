@@ -1438,11 +1438,9 @@ MenuItem.prototype = {
     _dispatchClickEvent: function () {
 
         var oMenuItem = this,
-            oAnchor,
-            oEvent;
+            oAnchor;
 
         if (!oMenuItem.cfg.getProperty(_DISABLED)) {
-
             oAnchor = Dom.getFirstChild(oMenuItem.element);
 
             //	Dispatch a "click" event to the MenuItem's anchor so that its
@@ -1450,33 +1448,34 @@ MenuItem.prototype = {
             //	pressing the keyboard shortcut defined by the "keylistener"
             //	configuration property.
 
-            if (UA.ie) {
-                oAnchor.fireEvent(_ONCLICK);
-            }
-            else {
-
-                if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
-
-                    oEvent = document.createEvent("HTMLEvents");
-                    oEvent.initEvent(_CLICK, true, true);
-
-                }
-                else {
-
-                    oEvent = document.createEvent("MouseEvents");
-                    oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
-                        0, 0, false, false, false, false, 0, null);
-
-                }
-
-                oAnchor.dispatchEvent(oEvent);
-
-            }
-
+            this._dispatchDOMClick(oAnchor);
         }
-
     },
 
+    /**
+     * Utility method to dispatch a DOM click event on the HTMLElement passed in
+     *
+     * @method _dispatchDOMClick
+     * @protected
+     * @param {HTMLElement} el
+     */    
+    _dispatchDOMClick : function(el) {
+        var oEvent;
+
+        // Choose the standards path for IE9
+        if (UA.ie && UA.ie < 9) {
+            el.fireEvent(_ONCLICK);
+        } else {
+            if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
+                oEvent = document.createEvent("HTMLEvents");
+                oEvent.initEvent(_CLICK, true, true);
+            } else {
+                oEvent = document.createEvent("MouseEvents");
+                oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            }
+            el.dispatchEvent(oEvent);
+        }
+    },
 
     /**
     * @method _createKeyListener
