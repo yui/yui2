@@ -1,5 +1,9 @@
 YUI Library - Grids - Release Notes
 
+Version 2.9.0
+
+  * Fix clearing gap due to generated content 
+
 Version 2.8.1
 
   * No changes.
