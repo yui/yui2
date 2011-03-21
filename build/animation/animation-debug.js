@@ -364,7 +364,9 @@ Anim.prototype = {
             
             this.runtimeAttributes = {};
             for (var attr in this.attributes) {
-                this.setRuntimeAttribute(attr);
+                if (this.attributes.hasOwnProperty(attr)) {
+                    this.setRuntimeAttribute(attr);
+                }
             }
             
             isAnimated = true;
@@ -395,7 +397,9 @@ Anim.prototype = {
             var runtimeAttributes = this.runtimeAttributes;
             
             for (var attr in runtimeAttributes) {
-                this.setAttribute(attr, this.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
+                if (runtimeAttributes.hasOwnProperty(attr)) {
+                    this.setAttribute(attr, this.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit); 
+                }
             }
             
             this.afterTween.fire(data);

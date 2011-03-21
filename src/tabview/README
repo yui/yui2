@@ -1,5 +1,11 @@
 TabView Release Notes
 
+*** version 2.9.0 ***
+* correctly update activeIndex when adding/removing
+* content elements synched with tab item index
+* IE memory leak fix
+* Set "content" attribute for tabs from markup 
+
 *** version 2.8.1 ***
 * No change
 

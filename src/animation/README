@@ -1,5 +1,9 @@
 Animation Release Notes
 
+*** version 2.9.0 ***
+* add "afterTween" event which fires after element has been updated
+* fixed #2529183 AnimMgr.unRegister race condition
+
 *** version 2.8.1 ***
 * no change
 
