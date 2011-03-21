@@ -51,6 +51,7 @@ var Y = YAHOO,
 
 			if (! oCfg.attributes) {oCfg.attributes  = {};}
 			if (! oCfg.attributes.flashVars) {oCfg.attributes.flashVars = {};}
+			oCfg.attributes.flashVars.allowedDomain = document.location.hostname;
 			oCfg.attributes.flashVars.useCompression = 'true';
 			oCfg.attributes.version = 9.115;
 			_driver = new Y.widget.SWF(oCfg.containerID, oCfg.swfURL, oCfg.attributes);
