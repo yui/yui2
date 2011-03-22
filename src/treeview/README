@@ -1,5 +1,11 @@
 TreeView - Release Notes
 
+2.9.0
+  * webkit +/- key capture fixed.
+
+2.8.2
+  * HTML content is escaped when building nodes.
+
 2.8.1
   * No change
 
