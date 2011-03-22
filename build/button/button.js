@@ -2098,14 +2098,18 @@
            
             function findTargetInSubmenus(aSubmenus) {
                 var i, iMax, oSubmenuElement;
+                if (!aSubmenus) {
+                    return true;
+                }
                 for (i = 0, iMax = aSubmenus.length; i < iMax; i++) {
                     oSubmenuElement = aSubmenus[i].element;
                     if (oTarget == oSubmenuElement || Dom.isAncestor(oSubmenuElement, oTarget)) {
                         return true;
                     }
-
-                    if (findTargetInSubmenus(aSubmenus[i].getSubmenus())) {
-                        return true;
+                    if (aSubmenus[i] && aSubmenus[i].getSubmenus) {
+                        if (findTargetInSubmenus(aSubmenus[i].getSubmenus())) {
+                            return true;
+                        }
                     }
                 }
         
