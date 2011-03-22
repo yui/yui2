@@ -179,7 +179,7 @@ Selector = {
      * @static
      */
     query: function(selector, root, firstOnly, skipNative) {
-        if (typeof root == 'string') {
+        if (root && typeof root == 'string') {
             root = Y_DOM.get(root);
             if (!root) {
                 return (firstOnly) ? null : [];
