@@ -1,5 +1,13 @@
 Carousel Release Notes
 
+*** version 2.9.0 ***
+
+* Fixed rendering issues on IE9
+
+* Fixed an issuethat was preventing addItem to work with the index argument.
+
+* Minor bug fix in replaceItem
+
 *** version 2.8.0 ***
 
 * No changes.
