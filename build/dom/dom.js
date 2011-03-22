@@ -1194,8 +1194,12 @@
 
             if (Y.Dom.DOT_ATTRIBUTES[attr]) {
                 val = el[attr];
-            } else if (el && el.getAttribute) {
-                val = el.getAttribute(attr, 2);
+            } else if (el && 'getAttribute' in el) {
+                if (/^(?:href|src)$/.test(attr)) { // use IE flag to return exact value
+                    val = el.getAttribute(attr, 2);
+                } else {
+                    val = el.getAttribute(attr);
+                }
             } else {
             }
 

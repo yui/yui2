@@ -621,6 +621,9 @@
 
                 el = document.getElementById('test-checkbox');
                 Assert.isTrue(Y.Dom.getAttribute(el, 'checked') == true, 'checkbox checked');
+
+                el = document.getElementsByTagName('script')[0];
+                Assert.areEqual('../../../build/yahoo/yahoo.js', Y.Dom.getAttribute(el, 'src'), "Y.Dom.getAttribute(el, 'src')");
             },
 
             test_toHex: function() {
