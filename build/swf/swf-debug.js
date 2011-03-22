@@ -72,8 +72,27 @@ YAHOO.namespace("widget");
 
 			isFlashVersionAtLeast : function (ver) {
 				return version >= ver;
-			}	
-		};	
+			},
+					
+            parseFlashVersion : function (ver)	 	
+		     {	
+		        var flashVersion = ver;	 	
+		        if(YAHOO.lang.isString(ver))	 	
+		        { 	
+		          var verSplit = ver.split(".");	
+		          if(verSplit.length > 2)	
+		          {	
+		            flashVersion = parseInt(verSplit[0]);	 	
+		            flashVersion += parseInt(verSplit[2]) * .001;	
+		          }	
+		          else	
+		          {
+		            flashVersion = parseFloat(ver);	
+		          }          
+		        }
+		        return YAHOO.lang.isNumber(flashVersion) ? flashVersion : null;
+		       }  		
+			};	
 	
 	var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
@@ -126,7 +145,7 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 	
 	var _id = this._id;
     var oElement = Dom.get(p_oElement);
-	var flashVersion = (p_oAttributes["version"] || FLASH_VER);
+	var flashVersion = SWFDetect.parseFlashVersion((p_oAttributes["version"]) || FLASH_VER);
 	var isFlashVersionRight = SWFDetect.isFlashVersionAtLeast(flashVersion);
 	var canExpressInstall = (UA.flash >= 8.0);
 	var shouldExpressInstall = canExpressInstall && !isFlashVersionRight && p_oAttributes["useExpressInstall"];
@@ -175,10 +194,9 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 				objstring += "</object>"; 
 
 				oElement.innerHTML = objstring;
+				YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
+				this._swf = Dom.get(_id);
 			}
-			
-			YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
-			this._swf = Dom.get(_id);	
 };
 
 /**

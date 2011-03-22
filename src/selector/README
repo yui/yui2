@@ -1,5 +1,11 @@
 YUI Library - Selector - Release Notes
 
+2.9.0   
+  * Fixes for IE 8 compat mode
+  * added enabled/disabled pseudos
+  * fix last-of-type pseudo
+  * allow special characters ("-", ":", ".", etc.) in attributes
+
 2.8.1   
   * Fixed nth-of-type selector
 

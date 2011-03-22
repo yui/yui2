@@ -1,3 +1,9 @@
+**** version 2.9.0 ***
+    * 2528628 Toolbar.prototype.destroy uses variable without local declaration
+    * 2528910 Editor issue with "Paragraph style" feature in Opera 10.5 -- document.selection abandoned between Op...
+    * 2529145 Editor regexs fail in IE9
+
+
 **** version 2.8.1 ***
 no changes
 

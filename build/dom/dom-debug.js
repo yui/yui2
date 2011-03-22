@@ -504,7 +504,8 @@
          * Determines whether an HTMLElement has the given className.
          * @method hasClass
          * @param {String | HTMLElement | Array} el The element or collection to test
-         * @param {String} className the class name to search for
+         * @param {String | RegExp} className the class name to search for, or a regular
+         * expression to match against
          * @return {Boolean | Array} A boolean value or array of boolean values
          */
         hasClass: function(el, className) {

@@ -522,7 +522,10 @@ Calendar.prototype = {
         config = nArgs.config;
 
         this.oDomContainer = Dom.get(container);
-        if (!this.oDomContainer) { this.logger.log("Container not found in document.", "error"); }
+        // Removing due to order of operations issue [ logger/id ]. 
+        // The log is kind of pointless because it'll barf on the next statement anyway.
+        // Any code related changes are beyond the scope of 2.9.0 at this point 
+        // if (!this.oDomContainer) { this.logger.log("Container not found in document.", "error"); }
 
         this._oDoc = this.oDomContainer.ownerDocument;
 

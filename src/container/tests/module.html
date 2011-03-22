@@ -121,9 +121,11 @@
 
                         Assert.areEqual("module2", oModule.id, "The Module does not have an id.");
 
-                        Assert.isString(oModule.platform, "The Module's \"platform\" property is not set.");
+                        // Deprecated property
+                        // Assert.isString(oModule.platform, "The Module's \"platform\" property is not set.");
 
-                        Assert.isString(oModule.browser, "The Module's \"browser\" property is not set.");
+                        // Deprecated property
+                        // Assert.isString(oModule.browser, "The Module's \"browser\" property is not set.");
 
                         Assert.isBoolean(oModule.isSecure, "The Module's \"isSecure\" property is not set.");
 

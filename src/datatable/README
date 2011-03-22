@@ -1,6 +1,6 @@
 DataTable Release Notes
 
-*** version 2.NEXT ***
+*** version 2.9.0 ***
 
 * Added className property to CellEditor for custom class assignment.
 * Added useIFrame property to CellEditor for IE6 select bleed-through workaround.
@@ -16,14 +16,11 @@ YAHOO.util.DataSourceBase._cloneObject.
 getPreviousTrEl(), getAboveTdEl(), getBelowTdEl(), getTrIndex() in order to
 support non-primary rows (i.e., row expansions).
 * Added new Attribte "sortFunction" to serve as overridable default sort function.
-
-
-**** 2.8.3 ****
-
 * YAHOO.widget.DataTable.formatEmail, YAHOO.widget.DataTable.formatLink,
 YAHOO.widget.DataTable.formatText, YAHOO.widget.DataTable.formatTextarea, and
 YAHOO.widget.DataTable.formatTextbox now escape data value with
 YAHOO.lang.escapeHTML before insertion into DOM.
+
 
 
 **** 2.8.2 ****

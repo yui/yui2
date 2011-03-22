@@ -1,3 +1,11 @@
+*** Version 2.9.0 ***
+
+    * 2529099 Button type=checkbox doesn't stay checked in Firefox 4.0
+    * 2529139 [bz 3991424] [IE9] hack in _onDocumentMouseDown fails 
+    * 2529193 Menu buttons (of type submit) do not fire a forms onsubmit event in IE 9.
+    * 2529245 Right click only *seemingly* changes active state in buttongroup
+    * 2529295 Sub menus don't work on Menu Buttons
+
 *** Version 2.8.1 ***
 
 + No changes.

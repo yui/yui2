@@ -2473,7 +2473,20 @@ YAHOO.widget.Column.prototype = {
     className : null,
 
     /**
-     * Defines a format function.
+     * Cell formatter function, or a shortcut pointer to a function in the
+     * DataTable.Formatter object. The function, called from the DataTable's
+     * formatCell method, renders markup into the cell liner
+     * element and accepts the following arguments:
+     * <dl>
+     *    <dt>elLiner</dt>
+     *    <dd>The element to write innerHTML to.</dd>
+     *    <dt>oRecord</dt>
+     *    <dd>The associated Record for the row.</dd>
+     *    <dt>oColumn</dt>
+     *    <dd>The Column instance for the cell.</dd>
+     *    <dt>oData</dt>
+     *    <dd>The data value for the cell.</dd>
+     * </dl>
      *
      * @property formatter
      * @type String || HTMLFunction
@@ -5029,7 +5042,8 @@ lang.augmentObject(DT, {
 
 // Done in separate step so referenced functions are defined.
 /**
- * Cell formatting functions.
+ * Registry of cell formatting functions, enables shortcut pointers in Column
+ * definition formatter value (i.e., {key:"myColumn", formatter:"date"}).
  * @property DataTable.Formatter
  * @type Object
  * @static
@@ -5275,7 +5289,19 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute sortFunction
-    * @description Default Column sort function
+    * @description Default Column sort function, receives the following args:
+    *    <dl>
+    *      <dt>a {Object}</dt>
+    *      <dd>First sort argument.</dd>
+    *      <dt>b {Object}</dt>
+    *      <dd>Second sort argument.</dd>
+
+    *      <dt>desc {Boolean}</dt>
+    *      <dd>True if sort direction is descending, false if
+    * sort direction is ascending.</dd>
+    *      <dt>field {String}</dt>
+    *      <dd>The field to sort by, from sortOptions.field</dd>
+    *   </dl>
     * @type function
     */
     this.setAttributeConfig("sortFunction", {
@@ -10034,7 +10060,9 @@ _restoreMinWidth : function(oColumn) {
  * hide/show all children Columns).
  *
  * @method hideColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oColumn {YAHOO.widget.Column | HTMLElement | String | Number} Column
+ * instance, TH/TD element (or child of a TH/TD element), a Column key, or a
+ * ColumnSet key index.
  */
 hideColumn : function(oColumn) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
@@ -10085,7 +10113,9 @@ hideColumn : function(oColumn) {
  * hide/show all children Columns).
  *
  * @method showColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oColumn {YAHOO.widget.Column | HTMLElement | String | Number} Column
+ * instance, TH/TD element (or child of a TH/TD element), a Column key, or a
+ * ColumnSet key index.
  */
 showColumn : function(oColumn) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
@@ -13528,8 +13558,8 @@ getSelectedTdEls : function() {
  * Sets given cell to the selected state.
  *
  * @method selectCell
- * @param cell {HTMLElement | String} DOM element reference or ID string
- * to DataTable page element or RecordSet index.
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
  */
 selectCell : function(cell) {
 //TODO: accept {record} in selectCell()
@@ -13577,6 +13607,8 @@ selectCell : function(cell) {
  * Sets given cell to the unselected state.
  *
  * @method unselectCell
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
  * @param cell {HTMLElement | String} DOM element reference or ID string
  * to DataTable page element or RecordSet index.
  */

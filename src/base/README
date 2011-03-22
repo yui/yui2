@@ -1,5 +1,9 @@
 YUI Library - Base - Release Notes
 
+Version 2.9.0
+
+  * Move list styles to list from item (fix 2528199) 
+
 Version 2.8.1
 
   * No changes.

@@ -2730,7 +2730,7 @@ _onMouseOut: function (p_sType, p_aArgs) {
 
 
         if (!this._bHandledMouseOutEvent) {
-            if (this._canHideOnMouseOut(oRelatedTarget) || bMovingToSubmenu) {
+            if (this._didMouseLeave(oRelatedTarget) || bMovingToSubmenu) {
                 // Menu mouseout logic
                 if (this._useHideDelay) {
                     this._execHideDelay();
@@ -2749,17 +2749,17 @@ _onMouseOut: function (p_sType, p_aArgs) {
 },
 
 /**
- * Util method to determine if it's OK to hide the menu based on the related target on mouseout
- * @method _canHideOnMouseOut
+ * Utilility method to determine if we really moused out of the menu based on the related target
+ * @method _didMouseLeave
  * @protected
  * @param {HTMLElement} oRelatedTarget The related target based on which we're making the decision
  * @return {boolean} true if it's OK to hide based on the related target.
  */
-_canHideOnMouseOut : function(oRelatedTarget) {
+_didMouseLeave : function(oRelatedTarget) {
     // Hide if we're not moving back to the element from somewhere inside the element, or we're moving to an element inside the menu.
     // The shadow is treated as an edge case, inside inside the menu, but we get no further mouseouts, because it overflows the element,
     // so we need to close when moving to the menu. 
-    return (oRelatedTarget != this.element && (!Dom.isAncestor(this.element, oRelatedTarget) || oRelatedTarget === this._shadow));
+    return (oRelatedTarget === this._shadow || (oRelatedTarget != this.element && !Dom.isAncestor(this.element, oRelatedTarget)));
 },
 
 /**
@@ -7862,11 +7862,9 @@ MenuItem.prototype = {
     _dispatchClickEvent: function () {
 
         var oMenuItem = this,
-            oAnchor,
-            oEvent;
+            oAnchor;
 
         if (!oMenuItem.cfg.getProperty(_DISABLED)) {
-
             oAnchor = Dom.getFirstChild(oMenuItem.element);
 
             //	Dispatch a "click" event to the MenuItem's anchor so that its
@@ -7874,33 +7872,34 @@ MenuItem.prototype = {
             //	pressing the keyboard shortcut defined by the "keylistener"
             //	configuration property.
 
-            if (UA.ie) {
-                oAnchor.fireEvent(_ONCLICK);
-            }
-            else {
-
-                if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
-
-                    oEvent = document.createEvent("HTMLEvents");
-                    oEvent.initEvent(_CLICK, true, true);
-
-                }
-                else {
-
-                    oEvent = document.createEvent("MouseEvents");
-                    oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
-                        0, 0, false, false, false, false, 0, null);
-
-                }
-
-                oAnchor.dispatchEvent(oEvent);
-
-            }
-
+            this._dispatchDOMClick(oAnchor);
         }
-
     },
 
+    /**
+     * Utility method to dispatch a DOM click event on the HTMLElement passed in
+     *
+     * @method _dispatchDOMClick
+     * @protected
+     * @param {HTMLElement} el
+     */    
+    _dispatchDOMClick : function(el) {
+        var oEvent;
+
+        // Choose the standards path for IE9
+        if (UA.ie && UA.ie < 9) {
+            el.fireEvent(_ONCLICK);
+        } else {
+            if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
+                oEvent = document.createEvent("HTMLEvents");
+                oEvent.initEvent(_CLICK, true, true);
+            } else {
+                oEvent = document.createEvent("MouseEvents");
+                oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            }
+            el.dispatchEvent(oEvent);
+        }
+    },
 
     /**
     * @method _createKeyListener
@@ -8704,6 +8703,9 @@ contextEventTarget: null,
 
 /**
 * @event triggerContextMenuEvent
+* @param type {String} The name of the event, "triggerContextMenu"
+* @param args {Array} The array of event arguments. For this event, the underlying
+* DOM event is the only argument, available from args[0].
 * @description Custom Event wrapper for the "contextmenu" DOM event 
 * ("mousedown" for Opera) fired by the element(s) that trigger the display of 
 * the context menu.

@@ -1,5 +1,13 @@
 YUI Library - Reset - Release Notes
 
+Note: To apply a background to the entire view, style the HTML element. Style
+the BODY element to apply a background to the content area only.   
+
+Version 2.9.0
+
+  * reset OPTGROUP, OPTION
+  * reset SELECT margin
+
 Version 2.8.1
 
   * No changes.

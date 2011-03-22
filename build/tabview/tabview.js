@@ -307,6 +307,7 @@
             
             /**
              * How the Tabs should be oriented relative to the TabView.
+             * Valid orientations are "top", "left", "bottom", and "right"
              * @attribute orientation
              * @type String
              * @default "top"

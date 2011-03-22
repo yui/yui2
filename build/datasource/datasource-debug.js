@@ -861,7 +861,8 @@ setInterval : function(nMsec, oRequest, oCallback, oCaller) {
 },
 
 /**
- * Disables polling mechanism associated with the given interval ID.
+ * Disables polling mechanism associated with the given interval ID. Does not
+ * affect transactions that are in progress.
  *
  * @method clearInterval
  * @param nId {Number} Interval ID.
@@ -878,7 +879,8 @@ clearInterval : function(nId) {
 },
 
 /**
- * Disables all known polling intervals.
+ * Disables all known polling intervals. Does not affect transactions that are
+ * in progress.
  *
  * @method clearAllIntervals
  */

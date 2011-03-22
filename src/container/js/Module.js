@@ -420,9 +420,11 @@
         }, 
 
         /**
-        * String representing the current user-agent platform
+        * String identifying whether the current platform is windows or mac. This property
+        * currently only identifies these 2 platforms, and returns false otherwise. 
         * @property platform
-        * @type String
+        * @deprecated Use YAHOO.env.ua
+        * @type {String|Boolean}
         */
         platform: function () {
             var ua = navigator.userAgent.toLowerCase();
@@ -440,7 +442,7 @@
         * String representing the user-agent of the browser
         * @deprecated Use YAHOO.env.ua
         * @property browser
-        * @type String
+        * @type {String|Boolean}
         */
         browser: function () {
             var ua = navigator.userAgent.toLowerCase();

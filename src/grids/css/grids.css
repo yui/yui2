@@ -7,8 +7,8 @@
 
 /**  
  * Note: Throughout this file, the *property (star-property) filter is used 
- * to give a value to IE that other browsers do not see. _property is only seen 
- * by IE7, so the combo of *prop and _prop can target between IE6 and IE7.
+ * to give a value to IE < 8 that other browsers do not see. The _property (underscore-property)
+ * is only seen by IE < 7, so the combo of *prop and _prop can differentiate between IE6 and IE7.
  * 
  * More information on these filters and related validation errors:
  * http://tech.groups.yahoo.com/group/ydn-javascript/message/40059

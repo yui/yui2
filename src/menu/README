@@ -30,6 +30,10 @@ Fixed the following bugs:
 
 + Menus are no longer left un-hidden, when mousing slowly through the shadow
 
++ Use standards based create/init/dispatch for IE9 keylistener click dispatch,
+  as opposed to anchor.fireEvent('click'). Also pulled the logic out into
+  _dispatchDOMClick so it's more easily changed, if required.
+
 Changes
 -------
 

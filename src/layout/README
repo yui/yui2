@@ -1,3 +1,10 @@
+**** version 2.9.0 ****
+    * 2528581 Layout manager will not display collapse if bottom unit has no collapse or header
+    * 2528769 LayoutUnit destroy does not remove all events
+    * 2528850 Disabling close/collapse for a LayoutUnit with no header removes the first div in the entire DOM wit...
+    * 2528914 Layout Manager mishandles zIndex of collapsible panel, making Menu Controls unusable
+
+
 **** version 2.8.1 ****
 No changes.
 
