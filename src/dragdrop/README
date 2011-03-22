@@ -1,5 +1,13 @@
 Drag and Drop Release Notes
 
+2.9.0
+    * 2528803 DragDrop API docs inaccurate
+    * 2528759 [bz 3344178] Don't fire mouseDownEvent if onMouseDown already returned false
+    * 2528804 b4DragDropEvent doesn't stop dragDropEvent
+    * 2529042 mising semicolon in  Drag & Drop: Reordering a List example
+    * 2529136 Drag&Drop does not work in IE9 (Document mode - IE9 standards)
+
+
 2.8.1
     * No Changes
 
