@@ -2606,6 +2606,8 @@
                     // the number of visible items
                     if (numItems % numPerPage !== 0) {
                         item = numItems + (numItems%numPerPage) - numPerPage-1;
+                    } else {
+                        item = numItems + item;
                     }
                 } else {
                     stopAutoScroll.call(carousel);
