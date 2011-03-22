@@ -804,7 +804,7 @@
          */
         batch: function(el, method, o, overrides) {
             var collection = [],
-                scope = (overrides) ? o : window;
+                scope = (overrides) ? o : null;
                 
             el = (el && (el[TAG_NAME] || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
             if (el && method) {
@@ -813,7 +813,7 @@
                 } 
 
                 for (var i = 0; i < el.length; ++i) {
-                    collection[collection.length] = method.call(scope, el[i], o);
+                    collection[collection.length] = method.call(scope || el[i], el[i], o);
                 }
             } else {
                 YAHOO.log('batch called with invalid arguments', 'warn', 'Dom');

@@ -293,6 +293,10 @@
 
                 Assert.areEqual(2, Y.Dom.getElementsByClassName('hd', 'div').length, 'getByClassName("hd") '); 
                 Assert.areEqual(3, Y.Dom.getElementsByClassName(/hd/, 'div').length, 'getByClassName("hd") '); 
+
+                Y.Dom.getElementsByClassName('lorem', 'em', 'main', function() {
+                    Assert.areEqual(this.id, 'lorem-ipsum', 'function context'); 
+                }); 
             },
 
             test_getElementsBy: function() {
