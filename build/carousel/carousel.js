@@ -355,8 +355,11 @@
              * which has its parent element style set to overflow: hidden
              * https://bugs.webkit.org/show_bug.cgi?id=13343
              * Let us assume marginLeft == marginRight
+             *
+             * Seems like IE9 also has this issue!
              */
-            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+            if (style == "marginRight" && (YAHOO.env.ua.webkit ||
+                    (YAHOO.env.ua.ie && YAHOO.env.ua.ie >= 9))) {
                 val = parseInt(Dom.getStyle(el, "marginLeft"), 10);
             } else {
                 val = parseInt(Dom.getStyle(el, style), 10);
