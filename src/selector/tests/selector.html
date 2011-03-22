@@ -159,6 +159,8 @@ onload = function() {
             Y.Assert.areEqual(Y.Dom.get('href-test'), $('body [href]', null, true), 'body [href]');
 
             Y.Assert.areEqual(Y.Dom.get('foo-script'), $('head > script[src=http://foo.com/bar.js]', null, true), 'head > script[src=http://foo.com/bar.js]');
+
+            Y.Assert.areEqual(Y.Dom.get('href-test'), $('body [href]', '', true), 'body [href] (empty string root)');
         }
     });
 
