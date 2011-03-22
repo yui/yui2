@@ -1,7 +1,8 @@
 YUI Library - YUITest - Release Notes
 
-2.NEXT
+2.9.0
 
+  * Works with YUI Test Selenium Driver
   * Added JUnit XML test format.
   * Added TAP test format.
   * Added getResults() method on YAHOO.tool.TestRunner.
