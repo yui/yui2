@@ -2132,12 +2132,19 @@
         
                 return false;
             }
-        
+
             if (oTarget != oButtonElement && 
                 !Dom.isAncestor(oButtonElement, oTarget) && 
                 oTarget != oMenuElement && 
-                !Dom.isAncestor(oMenuElement, oTarget) &&
-                !findTargetInSubmenus(this._menu.getSubmenus())) {
+                !Dom.isAncestor(oMenuElement, oTarget)) {
+                
+                
+                if (this._menu  && this._menu.getSubmenus) {
+                    if (!findTargetInSubmenus(this._menu.getSubmenus())) {
+                        return;
+                    }
+                }
+                
 
                 this._hideMenu();
 
