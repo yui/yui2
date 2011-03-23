@@ -323,10 +323,11 @@
                 var h3 = document.getElementsByTagName('h3')[0];
 
                 Y.Dom.generateId(h1);
-                Assert.areEqual('yui-gen0', h1.id, "Y.Dom.generateId(h1)");
+                Assert.areEqual(0, h1.id.indexOf('yui-gen'), "Y.Dom.generateId(h1)");
 
                 Y.Dom.generateId(h3);
-                Assert.areEqual('yui-gen1yui-gen2', h3.id, "Y.Dom.generateId(h3)");
+                Assert.areEqual(0, h3.id.indexOf('yui-gen'), "Y.Dom.generateId(h1)");
+                Assert.areNotEqual(h1.id, h3.id, "Y.Dom.generateId(h1)");
             },            
 
             test_isAncestor: function() {
