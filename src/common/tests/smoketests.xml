@@ -7,8 +7,10 @@
         <url>container/tests/module.html</url>
         <url>datasource/tests/datasource.html</url>
         <url>datatable/tests/datatable.html</url>
+        <url>dom/tests/dom.html</url>
         <url>event/tests/focusin-focusout.html</url>
         <url>event-delegate/tests/delegation.html</url>
+        <url>selector/tests/selector.html</url>
         <url>yahoo/tests/yahoo.html</url>
         <url>yuiloader/tests/yuiloader.html</url>
     </tests>
