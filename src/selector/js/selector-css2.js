@@ -403,7 +403,7 @@ var PARENT_NODE = 'parentNode',
             } while (found && selector.length);
 
             if (!found || selector.length) { // not fully parsed
-                Y.log('query: ' + query + ' contains unsupported token in: ' + selector, 'warn', 'Selector');
+                YAHOO.log('query: ' + query + ' contains unsupported token in: ' + selector, 'warn', 'Selector');
                 tokens = [];
             }
             return tokens;

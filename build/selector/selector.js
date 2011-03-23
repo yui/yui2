@@ -218,7 +218,6 @@ Selector = {
             }
         }
 
-        Y.log('query: ' + selector + ' returning: ' + ret.length, 'info', 'Selector');
         return (firstOnly) ? (ret[0] || null) : ret;
 
     },
@@ -253,10 +252,8 @@ Selector = {
             return Selector.query(selector, root, one, true); // redo with skipNative true to try brute query
         }
         try {
-            //Y.log('trying native query with: ' + selector, 'info', 'selector-native');
             return root['querySelector' + (one ? '' : 'All')](selector);
         } catch(e) { // fallback to brute if available
-            //Y.log('native query error; reverting to brute query with: ' + selector, 'info', 'selector-native');
             return Selector.query(selector, root, one, true); // redo with skipNative true
         }
     },
@@ -272,8 +269,6 @@ Selector = {
                 }
             }
         } else {
-            Y.log('invalid filter input (nodes: ' + nodes +
-                    ', selector: ' + selector + ')', 'warn', 'Selector');
         }
 
         return ret;
@@ -739,7 +734,6 @@ var PARENT_NODE = 'parentNode',
             } while (found && selector.length);
 
             if (!found || selector.length) { // not fully parsed
-                Y.log('query: ' + query + ' contains unsupported token in: ' + selector, 'warn', 'Selector');
                 tokens = [];
             }
             return tokens;

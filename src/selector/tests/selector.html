@@ -6,15 +6,14 @@
 <link rel="stylesheet" type="text/css" href="../../../build/logger/assets/logger.css">
 <link rel="stylesheet" type="text/css" href="../../../build/yuitest/assets/testlogger.css">
 
-<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom-min.js"></script>
+<script type="text/javascript" src="../../../build/event/event-min.js"></script>
 <script id="selector-script" type="text/javascript" src="../../../build/selector/selector.js"></script>
 
-<script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../../build/yuitest/yuitest-min.js"></script>
 
-<script id="foo-script" type="text/javascript" src="http://foo.com/bar.js"></script>
 
 <script>
 onload = function() {
@@ -158,7 +157,7 @@ onload = function() {
             Y.Assert.areEqual(Y.Dom.get('href-test'), $('a[href]', null, true), 'a[href]');
             Y.Assert.areEqual(Y.Dom.get('href-test'), $('body [href]', null, true), 'body [href]');
 
-            Y.Assert.areEqual(Y.Dom.get('foo-script'), $('head > script[src=http://foo.com/bar.js]', null, true), 'head > script[src=http://foo.com/bar.js]');
+            //Y.Assert.areEqual(Y.Dom.get('foo-script'), $('head > script[src=http://foo.com/bar.js]', null, true), 'head > script[src=http://foo.com/bar.js]');
 
             Y.Assert.areEqual(Y.Dom.get('href-test'), $('body [href]', '', true), 'body [href] (empty string root)');
         }
