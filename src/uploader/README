@@ -1,8 +1,12 @@
 YUI Library - Uploader - Release Notes
 
-2.8.3
+2.9.0
   * Bug fixes
      * Added escapes to all non-HTML text written to innerHTML.
+     * Fixed bug #2527851, where an error was thrown when simUpload limit was larger than the number of files being uploaded.
+     * Fixed bug #2528386, where removeFile() wasn't cancelling an upload.
+     * Fixed bug #2528387, where cancelling an invalid id caused an error.
+     * Fixed bug #2528785, where upload process stopped if errors occurred.
 
 2.8.1
   * Bug fixes
