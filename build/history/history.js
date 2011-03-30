@@ -310,7 +310,10 @@ YAHOO.util.History = (function () {
                 if (tokens.length === 2) {
                     moduleName = tokens[0];
                     initialState = tokens[1];
-                    moduleObj = _modules[moduleName];
+
+                    moduleObj = YAHOO.lang.hasOwnProperty(_modules, moduleName)
+                            && _modules[moduleName];
+
                     if (moduleObj) {
                         moduleObj.initialState = initialState;
                     }
@@ -323,7 +326,10 @@ YAHOO.util.History = (function () {
                 if (tokens.length >= 2) {
                     moduleName = tokens[0];
                     currentState = tokens[1];
-                    moduleObj = _modules[moduleName];
+
+                    moduleObj = YAHOO.lang.hasOwnProperty(_modules, moduleName)
+                            && _modules[moduleName];
+
                     if (moduleObj) {
                         moduleObj.currentState = currentState;
                     }
@@ -486,7 +492,7 @@ YAHOO.util.History = (function () {
                 throw new Error("Missing or invalid argument");
             }
 
-            if (_modules[module]) {
+            if (YAHOO.lang.hasOwnProperty(_modules, module)) {
                 // Here, we used to throw an exception. However, users have
                 // complained about this behavior, so we now just return.
                 return;
@@ -634,7 +640,7 @@ YAHOO.util.History = (function () {
             }
 
             for (moduleName in states) {
-                if (!_modules[_encode(moduleName)]) {
+                if (!YAHOO.lang.hasOwnProperty(_modules, _encode(moduleName))) {
                     throw new Error("The following module has not been registered: " + moduleName);
                 }
             }
@@ -701,7 +707,9 @@ YAHOO.util.History = (function () {
                 throw new Error("The Browser History Manager is not initialized");
             }
 
-            moduleObj = _modules[module];
+            moduleObj = YAHOO.lang.hasOwnProperty(_modules, module)
+                    && _modules[module];
+
             if (!moduleObj) {
                 throw new Error("No such registered module: " + module);
             }
