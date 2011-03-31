@@ -318,6 +318,10 @@ YAHOO.env.parseUA = function(agent) {
             m = ua.match(/Opera[\s\/]([^\s]*)/);
             if (m && m[1]) {
                 o.opera = numberify(m[1]);
+                m = ua.match(/Version\/([^\s]*)/);
+                if (m && m[1]) {
+                    o.opera = numberify(m[1]); // opera 10+
+                }
                 m = ua.match(/Opera Mini[^;]*/);
                 if (m) {
                     o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316

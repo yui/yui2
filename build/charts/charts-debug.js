@@ -5,7 +5,6 @@
  * @module charts
  * @requires yahoo, dom, event, datasource
  * @title Charts Widget
- * @experimental
  */
  
 /****************************************************************************/

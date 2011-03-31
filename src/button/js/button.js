@@ -1639,7 +1639,7 @@
         * passed back by the event utility (YAHOO.util.Event).
         */
         _onMouseDown: function (p_oEvent) {
-        
+
             var sType,
             	bReturnVal = true;
         
@@ -1656,9 +1656,8 @@
         
         
                 if (!this.hasFocus()) {
-                
-                    this.focus();
-                
+                    Lang.later(0, this, this.focus);
+                    //this.focus();
                 }
         
         
@@ -1731,6 +1730,7 @@
         * passed back by the event utility (YAHOO.util.Event).
         */
         _onMouseUp: function (p_oEvent) {
+            this.inMouseDown = false;
         
             var sType = this.get("type"),
             	oHideMenuTimer = this._hideMenuTimer,
