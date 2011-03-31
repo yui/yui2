@@ -169,7 +169,6 @@ var Y = YAHOO,
 		 * @see YAHOO.util.Storage.key
 		 */
 		_key: function(index) {
-			console.log(StorageEngineSWF.superclass._key.call(this, index));
 			return StorageEngineSWF.superclass._key.call(this, index).replace(RX_STORAGE_PREFIX, '');
 		},
 
@@ -190,7 +189,6 @@ var Y = YAHOO,
 		 */
 		_setItem: function(sKey, oData) {
 			var sLocationKey = _getKey(this, sKey), swfNode;
-			console.log(sLocationKey);
 
 			if (_driver.callSWF("setItem", [sLocationKey, oData])) {
 				this._addKey(sLocationKey);
