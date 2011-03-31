@@ -382,7 +382,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      *                     process each match.  It receives the key,
      *                     value, and any extra metadata included with
      *                     the key inside of the braces.
-     * @param recurse {boolean} default false, if true, the replaced
+     * @param recurse {boolean} default true - if not false, the replaced
      * string will be rescanned so that nested substitutions are possible.
      * @return {String} the substituted string
      */
@@ -451,7 +451,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
             s = s.substring(0, i) + v + s.substring(j + 1);
 
-            if (!recurse) {
+            if (recurse === false) {
                 lidx = i-1;
             }
 

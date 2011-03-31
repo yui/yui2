@@ -503,6 +503,10 @@ YAHOO.env.parseUA = function(agent) {
             m = ua.match(/Opera[\s\/]([^\s]*)/);
             if (m && m[1]) {
                 o.opera = numberify(m[1]);
+                m = ua.match(/Version\/([^\s]*)/);
+                if (m && m[1]) {
+                    o.opera = numberify(m[1]); // opera 10+
+                }
                 m = ua.match(/Opera Mini[^;]*/);
                 if (m) {
                     o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
@@ -729,7 +733,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param {String} html String to escape.
      * @return {String} Escaped string.
      * @static
-     * @since 2.8.3
+     * @since 2.9.0
      */
     escapeHTML: function (html) {
         return html.replace(/[&<>"'\/`]/g, function (match) {
@@ -944,7 +948,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      *                     process each match.  It receives the key,
      *                     value, and any extra metadata included with
      *                     the key inside of the braces.
-     * @param recurse {boolean} default false, if true, the replaced
+     * @param recurse {boolean} default true - if not false, the replaced
      * string will be rescanned so that nested substitutions are possible.
      * @return {String} the substituted string
      */
@@ -959,7 +963,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 break;
             }
             j = s.indexOf(RBRACE, i);
-            if (i + 1 >= j) {
+            if (i + 1 > j) {
                 break;
             }
 
@@ -1013,7 +1017,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
             s = s.substring(0, i) + v + s.substring(j + 1);
 
-            if (!recurse) {
+            if (recurse === false) {
                 lidx = i-1;
             }
 
@@ -1095,7 +1099,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             throw new TypeError("method undefined");
         }
 
-        if (d && !L.isArray(d)) {
+        if (!L.isUndefined(data) && !L.isArray(d)) {
             d = [data];
         }
 
