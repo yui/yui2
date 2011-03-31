@@ -205,7 +205,7 @@
         },
 
         _setStyle: function() {
-            if (isIE) {
+            if (!window.getComputedStyle && document.documentElement.currentStyle) {
                 return function(el, args) {
                     var property = Y.Dom._toCamel(args.prop),
                         val = args.val;
