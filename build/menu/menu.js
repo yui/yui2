@@ -320,7 +320,7 @@
                             //	appears to have focus.  The following call to 
                             //	"setActive" fixes this bug.
 
-                            if (UA.ie && oTarget.focus) {
+                            if (UA.ie && oTarget.focus && (UA.ie < 9)) {
                                 oTarget.setActive();
                             }
         

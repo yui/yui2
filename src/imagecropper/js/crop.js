@@ -3,7 +3,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, dragdrop, element, event, resize
  * @module imagecropper
- * @beta
  */
 (function() {
 var Dom = YAHOO.util.Dom,
