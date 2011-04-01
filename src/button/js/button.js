@@ -3373,8 +3373,12 @@
         focus: function () {
         
             if (!this.get("disabled")) {
-        
-                this._button.focus();
+                //Adding a try/catch in case the element is not
+                //  visible by the time it's focus is being called.
+                //  for example, on a dialog that closes on button click
+                try {
+                    this._button.focus();
+                } catch (e) {}
             
             }
         
@@ -3389,8 +3393,12 @@
         blur: function () {
         
             if (!this.get("disabled")) {
-        
-                this._button.blur();
+                //Adding a try/catch in case the element is not
+                //  visible by the time it's focus is being called.
+                //  for example, on a dialog that closes on button click
+                try {
+                    this._button.blur();
+                } catch (e) {}
         
             }
         
