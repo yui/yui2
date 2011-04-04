@@ -1850,7 +1850,9 @@ if (!YAHOO.util.Event) {
                                 context = l[EU.ADJ_SCOPE];
                             }
                         }
-                        l[EU.FN].call(context, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
+                        try {
+                            l[EU.FN].call(context, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
+                        } catch(e1) {}
                         ul[i] = null;
                     }
                 }
@@ -1868,7 +1870,9 @@ if (!YAHOO.util.Event) {
                     for (j=listeners.length-1; j>-1; j--) {
                         l = listeners[j];
                         if (l) {
-                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], j);
+                            try {
+                                EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], j);
+                            } catch(e2) {}
                         }
                     }
                     l=null;
