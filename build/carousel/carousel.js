@@ -596,10 +596,12 @@
      * @private
      */
     function getScrollOffset(delta) {
-        var itemSize = 0,
-            size     = 0;
+        var carousel = this,
+            itemSize = 0,
+            size     = 0,
+            attr     = carousel.get("isVertical") ? "height" : "width";
 
-        itemSize = getCarouselItemSize.call(this);
+        itemSize = getCarouselItemSize.call(carousel, attr);
 
         size = itemSize * delta;
 
@@ -1102,7 +1104,7 @@
          * @property _pagination
          * @private
          */
-        _pagination: {},
+        _pagination: null,
 
         /**
          * Status of the previous navigation item.
@@ -1126,7 +1128,7 @@
          * @property _itemAttrCache
          * @private
          */
-         _itemAttrCache: {},
+         _itemAttrCache: null,
 
         /*
          * CSS classes used by the Carousel component
@@ -3527,6 +3529,12 @@
                 containerHeight,
                 containerWidth;
 
+            carousel._recomputeSize = (containerHeight === 0); // bleh!
+            if (carousel._recomputeSize) {
+                carousel._hasRendered = false;
+                return;             // no use going further, bail out!
+            }
+
             clip = clip || carousel._clipEl;
 
             if (rows) {
@@ -3539,14 +3547,6 @@
                 } else {
                     containerWidth  = itemWidth  * num;
                 }
-            }
-
-            // TODO: try to re-use the _hasRendered indicator
-
-            carousel._recomputeSize = (containerHeight === 0); // bleh!
-            if (carousel._recomputeSize) {
-                carousel._hasRendered = false;
-                return;             // no use going further, bail out!
             }
 
             reveal = getRevealSize.call(carousel);
@@ -3576,7 +3576,9 @@
                 }
             }
 
-            carousel._setContainerSize(clip); // adjust the container size too
+            if (clip) {
+                carousel._setContainerSize(clip); // adjust the container size
+            }
         },
 
         /**
@@ -3786,7 +3788,10 @@
             } else {
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
-            this._itemAttrCache = {}; // force recomputed next time
+            /*
+                The _itemAttrCache need not be emptied since the cache is for
+                DOM attributes that do not change; not the Carousel dimensions.
+            */
 
             return val;
         },
