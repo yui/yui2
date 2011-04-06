@@ -3899,42 +3899,24 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                posUndefined = JS.isUndefined(obj.pos),
-                oel =  posUndefined ? null : itemsTable.items[obj.pos+1],
+                oel,
                 pos,
                 sibling,
                 styles;
 
-            pos = posUndefined ?
-                      obj.newPos || itemsTable.numItems - 1 : obj.pos;
-            item = itemsTable.items[pos] || {};
-            if (!item || !("id" in item)) { // Nothing can be done now
-                return;
-            }
-
-            el = carousel._createCarouselItem({
-                    className : item.className,
-                    styles    : {},
-                    content   : item.item,
-                    id        : item.id
-            });
+            pos  = JS.isUndefined(obj.pos) ?
+                   obj.newPos || itemsTable.numItems - 1 : obj.pos;
 
             if (!oel) {
-                if (posUndefined) {
-                    oel = itemsTable.loading[pos] || {};
-                    if ((oel = Dom.get(oel.id))) { // testing assignment
-                        oel.className = item.className;
-                        oel.styles = item.styles;
-                        oel.innerHTML = item.item;
-
-                        if (itemsTable.loading[pos]) {
-                            itemsTable.numItems++;
-                            delete itemsTable.loading[pos];
-                        }
-                    } else {
-                        carouselEl.appendChild(el);
-                    }
-                } else {
+                item = itemsTable.items[pos] || {};
+                el = carousel._createCarouselItem({
+                        className : item.className,
+                        styles    : item.styles,
+                        content   : item.item,
+                        id        : item.id,
+                        pos       : pos
+                });
+                if (JS.isUndefined(obj.pos)) {
                     if (!JS.isUndefined(itemsTable.loading[pos])) {
                         oel = itemsTable.loading[pos];
                         // if oel is null, it is a problem ...
@@ -3945,22 +3927,30 @@
                         // ... and remove the item from the data structure
                         delete itemsTable.loading[pos];
                     } else {
-                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
-                            sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
-                        }
-                        if (sibling) {
-                            carouselEl.insertBefore(el, sibling);
-                        } else if (!Dom.get(el.id)) {
-                            carouselEl.appendChild(el);
-                        } else {
-                            YAHOO.log("Unable to find sibling","error",WidgetName);
-                        }
+                        carouselEl.appendChild(el);
+                    }
+                } else {
+                    if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                        sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                    }
+                    if (sibling) {
+                        carouselEl.insertBefore(el, sibling);
+                    } else {
+                        YAHOO.log("Unable to find sibling","error",WidgetName);
                     }
                 }
             } else {
-                oel = Dom.get(oel.id);
-                if (Dom.isAncestor(carouselEl, oel)) {
-                    carouselEl.insertBefore(el, oel);
+                if (JS.isUndefined(obj.pos)) {
+                    if (!Dom.isAncestor(carousel._carouselEl, oel)) {
+                        carouselEl.appendChild(oel);
+                    }
+                } else {
+                    if (!Dom.isAncestor(carouselEl, oel)) {
+                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                            carouselEl.insertBefore(oel,
+                                    Dom.get(itemsTable.items[obj.pos + 1].id));
+                        }
+                    }
                 }
             }
 
