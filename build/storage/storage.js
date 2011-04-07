@@ -863,7 +863,8 @@ var Util = YAHOO.util,
 		if (! _driver) {
 			// create the database
 			_driver = google.gears.factory.create(StorageEngineGears.GEARS);
-			_driver.open(window.location.host + '-' + StorageEngineGears.DATABASE);
+      // the replace regex fixes http://yuilibrary.com/projects/yui2/ticket/2529411, all ascii characters are allowede except / : * ? " < > | ; ,
+			_driver.open(window.location.host.replace(/[\/\:\*\?"\<\>\|;,]/g, '') + '-' + StorageEngineGears.DATABASE);
 			_driver.execute('CREATE TABLE IF NOT EXISTS ' + TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
 		}
 
