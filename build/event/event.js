@@ -1823,15 +1823,15 @@ if (!YAHOO.util.Event) {
                 for (i=0, len=unloadListeners.length; i<len; ++i) {
                     l = ul[i];
                     if (l) {
-                        context = window;
-                        if (l[EU.ADJ_SCOPE]) {
-                            if (l[EU.ADJ_SCOPE] === true) {
-                                context = l[EU.UNLOAD_OBJ];
-                            } else {
-                                context = l[EU.ADJ_SCOPE];
-                            }
-                        }
                         try {
+                            context = window;
+                            if (l[EU.ADJ_SCOPE]) {
+                                if (l[EU.ADJ_SCOPE] === true) {
+                                    context = l[EU.UNLOAD_OBJ];
+                                } else {
+                                    context = l[EU.ADJ_SCOPE];
+                                }
+                            }
                             l[EU.FN].call(context, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
                         } catch(e1) {}
                         ul[i] = null;
@@ -1859,8 +1859,10 @@ if (!YAHOO.util.Event) {
                     l=null;
                 }
 
-                EU._simpleRemove(window, "unload", EU._unload);
-                EU._simpleRemove(window, "load", EU._load);
+                try {
+                    EU._simpleRemove(window, "unload", EU._unload);
+                    EU._simpleRemove(window, "load", EU._load);
+                } catch(e3) {}
 
             },
 
