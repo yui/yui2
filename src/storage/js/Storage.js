@@ -41,7 +41,7 @@ if (! Util.Storage) {
 
 		// public variables
 		that.createEvent(Storage.CE_READY, {scope: that, fireOnce: true});
-		that.createEvent(Storage.CE_CHANGE, {scope: that, fireOnce: true});
+		that.createEvent(Storage.CE_CHANGE, {scope: that});
 		
 		that.subscribe(Storage.CE_READY, function() {
 			that.isReady = true;
