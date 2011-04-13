@@ -39,9 +39,11 @@ var Util = YAHOO.util;
 		 * @protected
 		 */
 		_addKey: function(sKey) {
-			this._keyMap[sKey] = this.length;
-			this._keys.push(sKey);
-			this.length = this._keys.length;
+		    if (!this._keyMap.hasOwnProperty(sKey)) {
+    			this._keys.push(sKey);
+			    this._keyMap[sKey] = this.length;
+			    this.length = this._keys.length;
+			}
 		},
 
 		/*
