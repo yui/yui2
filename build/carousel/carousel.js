@@ -2639,7 +2639,7 @@
             carousel._firstItem = item;
             carousel.set("firstVisible", item);
 
-            if (carousel.get("selectOnScroll")) {
+            if (!dontSelect && carousel.get("selectOnScroll")) {
                 carousel._selectedItem = item;
             }
 
@@ -2697,10 +2697,11 @@
                 newpos   = 0,
                 selected = carousel.get("selectedItem");
 
-            if (selected == this._firstItem) {
+            if (selected == carousel._firstItem) {
                 newpos = selected - carousel.get("numVisible");
                 carousel._selectedItem = carousel._getSelectedItem(selected-1);
-                carousel.scrollTo(newpos);
+                // since we have selected the item already
+                carousel.scrollTo(newpos, true);
             } else {
                 newpos = carousel.get("selectedItem") -
                          carousel.get("scrollIncrement");
