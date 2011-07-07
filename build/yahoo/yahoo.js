@@ -953,18 +953,34 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f, recurse) {
+        recurse = (recurse !== false);
+
         var i, j, k, key, v, meta, saved=[], token, lidx=s.length,
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}',
             dump, objstr;
 
         for (;;) {
-            i = s.lastIndexOf(LBRACE, lidx);
+            if (recurse) {
+                i = s.lastIndexOf(LBRACE,lidx);
+            }
+            else {
+                i = i ? s.lastIndexOf(LBRACE, i-1) : s.lastIndexOf(LBRACE);
+            }
+
             if (i < 0) {
                 break;
             }
-            j = s.indexOf(RBRACE, i);
+
+            j = s.indexOf(RBRACE,i+1);
+
             if (i + 1 > j) {
-                break;
+                if (recurse && i > 2) {
+                    lidx = i - 1;
+                    continue;
+                }
+                else {
+                    break;
+                }
             }
 
             //Extract key and meta info
@@ -977,13 +993,9 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                 key = key.substring(0, k);
             }
 
-            // lookup the value
-            v = o[key];
-
-            // if a substitution function was provided, execute it
-            if (f) {
-                v = f(key, v, meta);
-            }
+            // If a substitution function was provided, execute it;
+            // otherwise, lookup the value.
+            v = f ? f(key, o[key], meta) : o[key];
 
             if (L.isObject(v)) {
                 if (L.isArray(v)) {
@@ -1007,25 +1019,20 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                         v = objstr;
                     }
                 }
-            } else if (!L.isString(v) && !L.isNumber(v)) {
-                // This {block} has no replace string. Save it for later.
-                v = "~-" + saved.length + "-~";
-                saved[saved.length] = token;
-
-                // break;
             }
 
-            s = s.substring(0, i) + v + s.substring(j + 1);
-
-            if (recurse === false) {
-                lidx = i-1;
+            if (L.isString(v) || L.isNumber(v)) {
+                s = s.substring(0, i) + v + s.substring(j + 1);
+                lidx = s.length;
             }
-
-        }
-
-        // restore saved {block}s
-        for (i=saved.length-1; i>=0; i=i-1) {
-            s = s.replace(new RegExp("~-" + i + "-~"), "{"  + saved[i] + "}", "g");
+            else if (recurse) {
+                if (i > 2) {
+                    lidx = i - 1;
+                }
+                else {
+                    break;
+                }
+            }
         }
 
         return s;
