@@ -2100,10 +2100,10 @@ YAHOO.widget.ColumnSet.prototype = {
     getDescendants : function(oColumn) {
         var oSelf = this;
         var allDescendants = [];
-        var i;
 
         // Recursive function to loop thru all children
         var parse = function(oParent) {
+            var i;
             allDescendants.push(oParent);
             // This Column has children
             if(oParent.children) {
