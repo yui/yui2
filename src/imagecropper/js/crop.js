@@ -121,28 +121,112 @@ var Dom = YAHOO.util.Dom,
         */
         _mask: null,
         /**
+         * @private
+         * @property _originalDimensions
+         * @description The original image dimensions
+         */
+        _originalDimensions: null,
+        /**
+         * @private
+         * @property _scaleRatio
+         * @descriptioon The ratio at which the cropping area and original image are scaled.
+         */
+        _scaleRatio : null,
+        /**
         * @private
         * @method _createWrap
         * @description Creates the wrapper element used to wrap the image
         */
-        _createWrap: function() {
+        _createWrap: function(callback) {
             YAHOO.log('Creating the wrap element', 'log', 'ImageCropper');
             this._wrap = document.createElement('div');
             this._wrap.id = this.get('element').id + '_wrap';
             this._wrap.className = this.CSS_MAIN;
             var el = this.get('element');
-            this._wrap.style.width = el.width ? el.width + 'px' : Dom.getStyle(el, 'width');
-            this._wrap.style.height = el.height ? el.height + 'px' : Dom.getStyle(el, 'height');
-            
-            var par = this.get('element').parentNode;
-            par.replaceChild(this._wrap, this.get('element'));
-            this._wrap.appendChild(this.get('element'));
 
-            Event.on(this._wrap, 'mouseover', this._handleMouseOver, this, true);
-            Event.on(this._wrap, 'mouseout', this._handleMouseOut, this, true);
+			this._determineOriginalDimensions(el, function() {
 
-            Event.on(this._wrap, 'click', function(ev) { Event.stopEvent(ev); }, this, true);
+				this._scaleRatio = {
+					'width' : el.width / this._originalDimensions.width,
+					'height' : el.height / this._originalDimensions.height
+				};
+
+		        this._wrap.style.width = el.width ? el.width + 'px' : Dom.getStyle(el, 'width');
+		        this._wrap.style.height = el.height ? el.height + 'px' : Dom.getStyle(el, 'height');
+
+		        var par = this.get('element').parentNode;
+		        par.replaceChild(this._wrap, this.get('element'));
+		        this._wrap.appendChild(this.get('element'));
+
+		        Event.on(this._wrap, 'mouseover', this._handleMouseOver, this, true);
+		        Event.on(this._wrap, 'mouseout', this._handleMouseOut, this, true);
+
+		        Event.on(this._wrap, 'click', function(ev) { Event.stopEvent(ev); }, this, true);
+
+		        callback.apply(this);
+			});
+
         },
+
+        /**
+		 * @private
+		 * @method _getScaledWidth
+		 * @description Get the scaled image width
+		 * @return {float} the scaled image width
+		 */
+		_getScaledWidth : function(width) {
+			return width * this._scaleRatio.width;
+		},
+		/**
+		 * @private
+		 * @method _getScaledHeight
+		 * @description Get the scaled image height
+		 * @return {float} the scaled image height
+		 */
+		_getScaledHeight : function(height) {
+			return height * this._scaleRatio.height;
+		},
+		/**
+		 * @private
+		 * @method _getUnscaledWidth
+		 * @description Get the original image width
+		 * @return {float} the original image width
+		 */
+		_getUnscaledWidth : function(width) {
+			return width / this._scaleRatio.width;
+		},
+		/**
+		 * @private
+		 * @method _getUnscaledHeight
+		 * @description Returns the original image height
+		 * @return {float} the original image height
+		 */
+		_getUnscaledHeight : function(height) {
+			return height / this._scaleRatio.height;
+		},
+
+		/**
+		 * @private
+		 * @method _determineOriginalDimensions
+		 * @description Save the original image dimensions and call callback upon completion
+		 */
+		_determineOriginalDimensions : function(element, callback) {
+			var img = new Image();
+			var context = this;
+
+			// when the image is loaded, retrieve it's dimensions
+			img.onload = function() {
+				context._originalDimensions = {
+					'width' : img.width,
+					'height' : img.height
+				};
+                // call the provided callback
+				callback.apply(context);
+			};
+
+			// start to load image
+			img.src = element.src;
+		},
 
         /**
         * @private
@@ -166,30 +250,55 @@ var Dom = YAHOO.util.Dom,
             this._resizeEl = document.createElement('div');
             this._resizeEl.className = YAHOO.util.Resize.prototype.CSS_RESIZE;
             this._resizeEl.style.position = 'absolute';
-            
-            this._resizeEl.innerHTML = '<div class="' + this.CSS_RESIZE_MASK + '"></div>';
+
+            var initHeight = this.get('initHeight') ? this.get('initHeight') : this.get('element').height / 4;
+            var initWidth = this.get('initWidth') ? this.get('initWidth') : this.get('element').width / 4;
+
+            var imgSrc = this.get('element').getAttribute('src');
+
+            var imgInfo = {
+            	'src' : this.get('element').getAttribute('src'),
+            	'width' : this.get('element').width,
+            	'height' : this.get('element').height
+            };
+
+            this._resizeEl.innerHTML =
+            			'<div class="' + this.CSS_RESIZE_MASK + '">' +
+            				'<div style="position: relative;">' +
+		        				'<img ' +
+		        					'src="' + imgInfo.src + '" ' +
+		        					'width="' + imgInfo.width + '" ' +
+		        					'height="' + imgInfo.height + '" ' +
+		        					'style="position: absolute;"' +
+		        				'/>' +
+		        			'</div>' +
+            			'</div>';
+
             this._resizeMaskEl = this._resizeEl.firstChild;
             this._wrap.appendChild(this._resizeEl);
-            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
-            this._resizeMaskEl.style.height = Math.floor(this.get('initHeight')) + 'px';
-            this._resizeMaskEl.style.width = Math.floor(this.get('initWidth')) + 'px';
+            this._resizeEl.style.top = this._getScaledWidth(this.get('initialXY')[1]) + 'px';
+            this._resizeEl.style.left = this._getScaledHeight(this.get('initialXY')[0]) + 'px';
+
+            this._resizeMaskEl.style.height = Math.floor(this._getScaledHeight(initHeight)) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(this._getScaledWidth(initWidth)) + 'px';
 
             this._resize = new YAHOO.util.Resize(this._resizeEl, {
                 knobHandles: true,
                 handles: 'all',
                 draggable: true,
                 status: this.get('status'),
-                minWidth: this.get('minWidth'),
-                minHeight: this.get('minHeight'),
+                minWidth: this._getScaledWidth(this.get('minWidth')),
+                minHeight: this._getScaledHeight(this.get('minHeight')),
                 ratio: this.get('ratio'),
                 autoRatio: this.get('autoRatio'),
-                height: this.get('initHeight'),
-                width: this.get('initWidth')
+                width: this._getScaledWidth(initWidth),
+                height: this._getScaledHeight(initHeight)
             });
 
-            this._setBackgroundImage(this.get('element').getAttribute('src', 2));
-            this._setBackgroundPosition(-(this.get('initialXY')[0]),  -(this.get('initialXY')[1]));
+            this._setCropperPosition(
+            		-(this._getScaledWidth(this.get('initialXY')[0])),
+            		-(this._getScaledHeight(this.get('initialXY')[1]))
+            	);
 
             this._resize.on('startResize', this._handleStartResizeEvent, this, true);
             this._resize.on('endResize', this._handleEndResizeEvent, this, true);
@@ -420,17 +529,17 @@ var Dom = YAHOO.util.Dom,
         */
         _syncBackgroundPosition: function() {
             this._handleResizeMaskEl();
-            this._setBackgroundPosition(-(parseInt(this._resizeEl.style.left, 10)), -(parseInt(this._resizeEl.style.top, 10)));
+            this._setCropperPosition(-(parseInt(this._resizeEl.style.left, 10)), -(parseInt(this._resizeEl.style.top, 10)));
         },
 
         /**
         * @private
-        * @method _setBackgroundPosition
+        * @method _setCropperPosition
         * @param Number l The left position
         * @param Number t The top position
         * @description Sets the background image position to the top and left position
         */
-        _setBackgroundPosition: function(l, t) {
+        _setCropperPosition: function(l, t) {
             //YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
             var bl = parseInt(Dom.getStyle(this._resize.get('element'), 'borderLeftWidth'), 10);
             var bt = parseInt(Dom.getStyle(this._resize.get('element'), 'borderTopWidth'), 10);
@@ -443,21 +552,17 @@ var Dom = YAHOO.util.Dom,
             var mask = this._resize.getWrapEl().firstChild;
             var pos = (l - bl) + 'px ' + (t - bt) + 'px';
             this._resizeMaskEl.style.backgroundPosition = pos;
+
+            // get mask -> div (mask) -> div (relative) -> img
+            var mask = this._resize.getWrapEl().firstChild.firstChild.firstChild;
+            var pos = {
+            	'top' : (t - bt) + 'px',
+            	'left': (l - bl) + 'px'
+            };
+          	mask.style.top = pos.top;
+          	mask.style.left = pos.left;
         },
 
-        /**
-        * @private
-        * @method _setBackgroundImage
-        * @param String url The url of the image
-        * @description Sets the background image of the resize element
-        */
-        _setBackgroundImage: function(url) {
-            YAHOO.log('Setting the background image', 'log', 'ImageCropper');
-            var mask = this._resize.getWrapEl().firstChild;
-            this._image = url;
-            mask.style.backgroundImage = 'url(' + url + '#)';
-        },
-        
         /**
         * @private
         * @method _handleEndResizeEvent
@@ -567,9 +672,6 @@ var Dom = YAHOO.util.Dom,
                 bottom: bottom,
                 left: left
             };
-
-            
-            
         },
         /**
         * @method getCropCoords
@@ -578,10 +680,10 @@ var Dom = YAHOO.util.Dom,
         */
         getCropCoords: function() {
             var coords = {
-                top: parseInt(this._resize.getWrapEl().style.top, 10),
-                left: parseInt(this._resize.getWrapEl().style.left, 10),
-                height: this._resize._cache.height,
-                width: this._resize._cache.width,
+                top: this._getUnscaledHeight(parseInt(this._resize.getWrapEl().style.top, 10)),
+                left: this._getUnscaledWidth(parseInt(this._resize.getWrapEl().style.left, 10)),
+                height: this._getUnscaledHeight(this._resize._cache.height),
+                width: this._getUnscaledWidth(this._resize._cache.width),
                 image: this._image
             };
             YAHOO.log('Getting the crop coordinates: ' + Lang.dump(coords), 'log', 'ImageCropper');
@@ -594,9 +696,14 @@ var Dom = YAHOO.util.Dom,
         */
         reset: function() {
             YAHOO.log('Resetting the control', 'log', 'ImageCropper');
-            this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
-            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
+            this._resize.resize(
+            		null,
+            		this._getScaledHeight(this.get('initHeight')),
+            		this._getScaledWidth(this.get('initWidth')),
+            		0, 0, true);
+
+            this._resizeEl.style.top = this._getscaledHeight(this.get('initialXY')[1]) + 'px';
+            this._resizeEl.style.left = this._getScaledWidth(this.get('initialXY')[0]) + 'px';
             this._syncBackgroundPosition();
             return this;
         },
@@ -680,14 +787,13 @@ var Dom = YAHOO.util.Dom,
                     return false;
                 }
             }
-            
-
 
             Crop._instances[id] = this;
-            this._createWrap();
-            this._createMask();
-            this._createResize();
-            this._setConstraints();
+            this._createWrap(function() {
+                this._createMask();
+                this._createResize();
+                this._setConstraints();
+            });
 
         },
         /**
@@ -816,10 +922,10 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @attribute initHeight
-            * @description Set the initlal height of the crop area, defaults to 1/4 of the image height
-            * @type Number
-            */
+             * @attribute initHeight
+             * @description Set the initlal height of the crop area, defaults to 1/4 of the image height
+             * @type Number
+             */
             this.setAttributeConfig('initHeight', {
                 writeOnce: true,
                 validator: YAHOO.lang.isNumber,
@@ -827,10 +933,10 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @attribute initWidth
-            * @description Set the initlal width of the crop area, defaults to 1/4 of the image width
-            * @type Number
-            */
+             * @attribute initWidth
+             * @description Set the initlal width of the crop area, defaults to 1/4 of the image width
+             * @type Number
+             */
             this.setAttributeConfig('initWidth', {
                 validator: YAHOO.lang.isNumber,
                 writeOnce: true,
