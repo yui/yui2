@@ -18505,13 +18505,12 @@ handleDisabledBtns : function() {
     }
     // Save on change for single-select
     else {
-        if(!ua.ie) {
+        if(!ua.ie || ua.ie >= 7 || ua.ie < 6) {// Bug 2529433: fix for bug # "2529274", should not be applied for non IE6.x versions 
             Ev.addListener(this.dropdown, "change", function(v){
                 // Save on change
                 this.save();
             }, this, true);
-        }
-        else {
+        }else { // if and only if IE6.x
             // Bug 2529274: "change" event is not keyboard accessible in IE6
             Ev.addListener(this.dropdown, "blur", function(v){
                 this.save();
