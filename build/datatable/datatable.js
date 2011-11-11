@@ -16204,18 +16204,25 @@ _initContainerEl : function(elContainer) {
  * @private
  */
 _initCaptionEl : function(sCaption) {
-    // Not yet supported
-    /*if(this._elHdTable && sCaption) {
-        // Create CAPTION element
-        if(!this._elCaption) { 
-            this._elCaption = this._elHdTable.createCaption();
-        }
-        // Set CAPTION value
-        this._elCaption.innerHTML = sCaption;
-    }
-    else if(this._elCaption) {
-        this._elCaption.parentNode.removeChild(this._elCaption);
-    }*/
+	var el;
+	if (this._elHdTable && sCaption) {
+		//Create CAPTION element
+		if(!this._elCaption) {
+			el = document.createElement("table");
+			Dom.insertBefore(
+				document.createElement("div"),
+				this._elHdTable.parentNode
+			).appendChild(el);
+			Dom.setStyle(el, "width", "100%");
+			this._elCaption = el.createCaption();
+		}
+		// Set CAPTION value
+		this._elCaption.innerHTML = sCaption;
+	}
+	else if(this._elCaption) {
+		el = this._elCaption.parentNode.parentNode;
+		el.parentNode.removeChild(el.parentNode);
+	}
 },
 
 /**
