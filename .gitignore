@@ -8,3 +8,5 @@ CVS/
 *~
 # Ignore Emacs auto saved files
 *#*#
+# Ignore Eclipse project files
+.project
