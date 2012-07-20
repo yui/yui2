@@ -9,8 +9,8 @@ YUI 2.x Library Source
 Welcome to YUI.
 
 The YUI Library is a set of utilities and controls, written in JavaScript,
-for building richly interactive web applications using techniques such 
-as DOM scripting, DHTML and AJAX. YUI is available under a BSD license 
+for building richly interactive web applications using techniques such
+as DOM scripting, DHTML and AJAX. YUI is available under a BSD license
 and is free for all uses.
 
 The source tree for YUI includes the following directories:
@@ -18,25 +18,26 @@ The source tree for YUI includes the following directories:
 * api: Generated API docs for the entire library in HTML format.  These
      documents are build using YUI Doc from the contents of the src
      directory.
-* build: Generated/built YUI files.  The built files are generated from 
+* build: Generated/built YUI files.  The built files are generated from
      the contents of the src directory.  Files are provided in full,
-     commented form (suitable for debugging) and in minified form 
+     commented form (suitable for debugging) and in minified form
      (suitable for deployment and use).
 * sandbox: The sandbox directory contains works-in-progress, including
      unreleased future components, as well as experimental and/or
      demonstration code created by library authors.
 * src: This directory contains the source code (JavaScript, CSS, image
      assets, ActionScript files) for the library. src also contains (or
-     will contain) all module documentation, tests and examples. The 
-     src/common directory contains documentation, tests and examples 
-     that are not for a specific YUI component. All modifications to 
-     the library and its documentation should take place in this 
-     directory.  
+     will contain) all module documentation, tests and examples. The
+     src/common directory contains documentation, tests and examples
+     that are not for a specific YUI component. All modifications to
+     the library and its documentation should take place in this
+     directory.
 
-     The src directory also contains build.xml files, which can be 
-     used to build individual modules using the YUI component build 
-     tool. The YUI component build tool is part of the YUI "builder" 
-     project, also available on GitHub:
+     The src directory also contains build.xml files, which can be
+     used to build individual modules using the YUI component build
+     tool. The build.xml file at the root of the src directory will
+     build all of the nested modules.  The YUI component build tool
+     is part of the YUI "builder" project, also available on GitHub:
 
          http://github.com/yui/builder
 
