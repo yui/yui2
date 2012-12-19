@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: paginator   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>paginator&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_paginator.html">paginator</a>
+                
+                
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                   
+                    <h3>Module: paginator
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Paginator widget provides a set of controls to navigate through paged
+data.
+                    </div>
+
+
+
+<div class="yui-gc">
+    <div class="yui-u first">
+                    <form onsubmit="return false">
+                        <p>Search paginator:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisible", "url": "YAHOO.widget.Paginator.html#config_alwaysVisible"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "alwaysVisibleChange", "url": "YAHOO.widget.Paginator.html#event_alwaysVisibleChange"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_batch", "url": "YAHOO.widget.Paginator.html#property__batch"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeAlwaysVisibleChange", "url": "YAHOO.widget.Paginator.html#event_beforeAlwaysVisibleChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeContainerClassChange", "url": "YAHOO.widget.Paginator.html#event_beforeContainerClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeContainersChange", "url": "YAHOO.widget.Paginator.html#event_beforeContainersChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforeCurrentPageClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforeCurrentPageClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeDestroy", "url": "YAHOO.widget.Paginator.html#event_beforeDestroy"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "beforeFirstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_beforeFirstPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeIdChange", "url": "YAHOO.widget.Paginator.html#event_beforeIdChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeInitialPageChange", "url": "YAHOO.widget.Paginator.html#event_beforeInitialPageChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "beforeLastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_beforeLastPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "beforeNextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_beforeNextPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLabelBuilderChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLabelBuilderChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinksChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinksChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "beforePageLinksContainerClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_beforePageLinksContainerClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportTemplateChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "beforePageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_beforePageReportValueGenaratorChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "beforePreviousPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#event_beforePreviousPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "beforePreviousPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#event_beforePreviousPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRecordOffsetChange", "url": "YAHOO.widget.Paginator.html#event_beforeRecordOffsetChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRenderedChange", "url": "YAHOO.widget.Paginator.html#event_beforeRenderedChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeRowsPerPageChange", "url": "YAHOO.widget.Paginator.html#event_beforeRowsPerPageChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "beforeRowsPerPageDropdownClassChange", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#event_beforeRowsPerPageDropdownClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "beforeRowsPerPageOptionsChange", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#event_beforeRowsPerPageOptionsChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeTemplateChange", "url": "YAHOO.widget.Paginator.html#event_beforeTemplateChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeTotalRecordsChange", "url": "YAHOO.widget.Paginator.html#event_beforeTotalRecordsChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "beforeUpdateOnChangeChange", "url": "YAHOO.widget.Paginator.html#event_beforeUpdateOnChangeChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "calculateRange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_calculateRange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "changeRequest", "url": "YAHOO.widget.Paginator.html#event_changeRequest"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "container", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#property_container"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClass", "url": "YAHOO.widget.Paginator.html#config_containerClass"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containerClassChange", "url": "YAHOO.widget.Paginator.html#event_containerClassChange"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "_containers", "url": "YAHOO.widget.Paginator.html#property__containers"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containers", "url": "YAHOO.widget.Paginator.html#config_containers"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "containersChange", "url": "YAHOO.widget.Paginator.html#event_containersChange"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_current"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_current"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_current"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "current", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#property_current"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "current", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#property_current"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_currentPageClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "currentPageClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_currentPageClassChange"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_destroy"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#method_destroy"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "destroy", "url": "YAHOO.widget.Paginator.html#event_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#method_destroy"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "destroy", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_destroy"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_firePageChange", "url": "YAHOO.widget.Paginator.html#method__firePageChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClass", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "firstPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#event_firstPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getContainerNodes", "url": "YAHOO.widget.Paginator.html#method_getContainerNodes"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getCurrentPage", "url": "YAHOO.widget.Paginator.html#method_getCurrentPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getNextPage", "url": "YAHOO.widget.Paginator.html#method_getNextPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPageRecords", "url": "YAHOO.widget.Paginator.html#method_getPageRecords"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getPreviousPage", "url": "YAHOO.widget.Paginator.html#method_getPreviousPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_getRowsPerPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getStartIndex", "url": "YAHOO.widget.Paginator.html#method_getStartIndex"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getState", "url": "YAHOO.widget.Paginator.html#method_getState"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalPages", "url": "YAHOO.widget.Paginator.html#method_getTotalPages"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "getTotalRecords", "url": "YAHOO.widget.Paginator.html#method_getTotalRecords"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_handleStateChange", "url": "YAHOO.widget.Paginator.html#method__handleStateChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasNextPage", "url": "YAHOO.widget.Paginator.html#method_hasNextPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPage", "url": "YAHOO.widget.Paginator.html#method_hasPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "hasPreviousPage", "url": "YAHOO.widget.Paginator.html#method_hasPreviousPage"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "id", "url": "YAHOO.widget.Paginator.html#property_id"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "id", "url": "YAHOO.widget.Paginator.html#config_id"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "ID_BASE", "url": "YAHOO.widget.Paginator.html#property_ID_BASE"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "idChange", "url": "YAHOO.widget.Paginator.html#event_idChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "init", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "init", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "init", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#method_init"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "init", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_init"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initConfig", "url": "YAHOO.widget.Paginator.html#method_initConfig"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initEvents", "url": "YAHOO.widget.Paginator.html#method_initEvents"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPage", "url": "YAHOO.widget.Paginator.html#config_initialPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "initialPageChange", "url": "YAHOO.widget.Paginator.html#event_initialPageChange"}, {"access": "private", "host": "YAHOO.widget.Paginator", "name": "initUIComponents", "url": "YAHOO.widget.Paginator.html#method_initUIComponents"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClass", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "lastPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#event_lastPageLinkLabelChange"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_link"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_link"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_link"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "link", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#property_link"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "na", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_na"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClass", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "nextPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#event_nextPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "onChange", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_onChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_onClick"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_onClick"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_onClick"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_onClick"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "onClick", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#method_onClick"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "pageChange", "url": "YAHOO.widget.Paginator.html#event_pageChange"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_pageChanged", "url": "YAHOO.widget.Paginator.html#property__pageChanged"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilder", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLabelBuilder"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLabelBuilderChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLabelBuilderChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinkClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinks", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinks"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClass", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinksContainerClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "pageLinksContainerClassChange", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#event_pageLinksContainerClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClass", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportClassChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplate", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportTemplateChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportTemplateChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenarator", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportValueGenarator"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "pageReportValueGenaratorChange", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#event_pageReportValueGenaratorChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "previousPageLinkClass", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#config_previousPageLinkClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "previousPageLinkClassChange", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#event_previousPageLinkClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "previousPageLinkLabel", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#config_previousPageLinkLabel"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "previousPageLinkLabelChange", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#event_previousPageLinkLabelChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "rebuild", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_rebuild"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "rebuild", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_rebuild"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffset", "url": "YAHOO.widget.Paginator.html#config_recordOffset"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "recordOffsetChange", "url": "YAHOO.widget.Paginator.html#event_recordOffsetChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "render", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "render", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "render", "url": "YAHOO.widget.Paginator.html#event_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "render", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "render", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_render"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#event_rendered"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rendered", "url": "YAHOO.widget.Paginator.html#config_rendered"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "renderedChange", "url": "YAHOO.widget.Paginator.html#event_renderedChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPage", "url": "YAHOO.widget.Paginator.html#config_rowsPerPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "rowsPerPageChange", "url": "YAHOO.widget.Paginator.html#event_rowsPerPageChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "rowsPerPageDropdownClass", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#config_rowsPerPageDropdownClass"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "rowsPerPageDropdownClassChange", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#event_rowsPerPageDropdownClassChange"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "rowsPerPageOptions", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#config_rowsPerPageOptions"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "rowsPerPageOptionsChange", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#event_rowsPerPageOptionsChange"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "select", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#property_select"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_selfSubscribe", "url": "YAHOO.widget.Paginator.html#method__selfSubscribe"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setPage", "url": "YAHOO.widget.Paginator.html#method_setPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setRowsPerPage", "url": "YAHOO.widget.Paginator.html#method_setRowsPerPage"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setStartIndex", "url": "YAHOO.widget.Paginator.html#method_setStartIndex"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setState", "url": "YAHOO.widget.Paginator.html#method_setState"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "setTotalRecords", "url": "YAHOO.widget.Paginator.html#method_setTotalRecords"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "span", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#property_span"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#property_span"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#property_span"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#property_span"}, {"access": "private", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "span", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#property_span"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "sprintf", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_sprintf"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_state", "url": "YAHOO.widget.Paginator.html#property__state"}, {"access": "protected", "host": "YAHOO.widget.Paginator", "name": "_syncRecordOffset", "url": "YAHOO.widget.Paginator.html#method__syncRecordOffset"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "template", "url": "YAHOO.widget.Paginator.html#config_template"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "templateChange", "url": "YAHOO.widget.Paginator.html#event_templateChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "TEMPLATE_DEFAULT", "url": "YAHOO.widget.Paginator.html#property_TEMPLATE_DEFAULT"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "TEMPLATE_ROWS_PER_PAGE", "url": "YAHOO.widget.Paginator.html#property_TEMPLATE_ROWS_PER_PAGE"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecords", "url": "YAHOO.widget.Paginator.html#config_totalRecords"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "totalRecordsChange", "url": "YAHOO.widget.Paginator.html#event_totalRecordsChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "ui", "url": "YAHOO.widget.Paginator.html#property_ui"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.CurrentPageReport", "name": "update", "url": "YAHOO.widget.Paginator.ui.CurrentPageReport.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.FirstPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.FirstPageLink.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.LastPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.LastPageLink.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.NextPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.NextPageLink.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PageLinks", "name": "update", "url": "YAHOO.widget.Paginator.ui.PageLinks.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.PreviousPageLink", "name": "update", "url": "YAHOO.widget.Paginator.ui.PreviousPageLink.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown", "name": "update", "url": "YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#method_update"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChange", "url": "YAHOO.widget.Paginator.html#config_updateOnChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateOnChangeChange", "url": "YAHOO.widget.Paginator.html#event_updateOnChangeChange"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "updateVisibility", "url": "YAHOO.widget.Paginator.html#method_updateVisibility"}, {"access": "", "host": "YAHOO.widget.Paginator", "name": "VALUE_UNLIMITED", "url": "YAHOO.widget.Paginator.html#property_VALUE_UNLIMITED"}];
+                    </script>
+	    </div>
+    <div class="yui-u">
+
+	    </div>
+</div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.CurrentPageReport.html">YAHOO.widget.Paginator.ui.CurrentPageReport</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.FirstPageLink.html">YAHOO.widget.Paginator.ui.FirstPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.LastPageLink.html">YAHOO.widget.Paginator.ui.LastPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.NextPageLink.html">YAHOO.widget.Paginator.ui.NextPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PageLinks.html">YAHOO.widget.Paginator.ui.PageLinks</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PreviousPageLink.html">YAHOO.widget.Paginator.ui.PreviousPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
+                                <li class=""><a href="FirstPageLink.js.html">FirstPageLink.js</a></li>
+                                <li class=""><a href="LastPageLink.js.html">LastPageLink.js</a></li>
+                                <li class=""><a href="NextPageLink.js.html">NextPageLink.js</a></li>
+                                <li class=""><a href="PageLinks.js.html">PageLinks.js</a></li>
+                                <li class=""><a href="Paginator.js.html">Paginator.js</a></li>
+                                <li class=""><a href="PreviousPageLink.js.html">PreviousPageLink.js</a></li>
+                                <li class=""><a href="RowsPerPageDropDown.js.html">RowsPerPageDropDown.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

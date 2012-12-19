@@ -1,0 +1,2915 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: imagecropper  YAHOO.widget.ImageCropper   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>imagecropper&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_imagecropper.html">imagecropper</a>
+                 &gt; YAHOO.widget.ImageCropper 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.ImageCropper</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        <p>Creates a Image Cropper control.</p>
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.ImageCropper</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+                                                , 
+                                                attrs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String/HTMLElement&gt; 
+                                                    </code>
+                                                     The image element to make croppable.
+                                                </dd>
+                                                <dd>
+                                                    <code>attrs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     Object liternal containing configuration parameters.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="property__active">_active</a>
+                                        <code>- private Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag to determine if the crop region is active
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__image">_image</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The url of the image we are cropping
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__instances">_instances</a>
+                                        <code>- private static Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal hash table for all ImageCropper instances
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__mask">_mask</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML Element created to "mask" the image being cropped
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__resize">_resize</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A reference to the Resize Utility used in this Cropper Instance
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__resizeEl">_resizeEl</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML Element used to create the Resize Oject
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__resizeMaskEl">_resizeMaskEl</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML Element used to create the Resize mask
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__wrap">_wrap</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML Element created to wrap the image
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_CSS_MAIN">CSS_MAIN</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS class used to wrap the element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_CSS_MASK">CSS_MASK</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS class for the mask element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_CSS_RESIZE_MASK">CSS_RESIZE_MASK</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS class for the mask inside the resize element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="" href="YAHOO.util.Element.html#property_DOM_EVENTS">DOM_EVENTS</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs">_configs</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__createMask">_createMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the mask element used to mask the image
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__createResize">_createResize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createResize</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the resize element and the instance of the Resize Utility
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__createWrap">_createWrap</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createWrap</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the wrapper element used to wrap the image
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleB4DragEvent">_handleB4DragEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleB4DragEvent</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the DragDrop b4DragEvent event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleBeforeResizeEvent">_handleBeforeResizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleBeforeResizeEvent</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the Resize Utilitys beforeResize event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleDragEvent">_handleDragEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleDragEvent</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the DragDrop DragEvent event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleEndResizeEvent">_handleEndResizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleEndResizeEvent</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the Resize Utilitys endResize event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleKeyPress">_handleKeyPress</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleKeyPress</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the keypress event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleMouseOut">_handleMouseOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleMouseOut</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the mouseout event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleMouseOver">_handleMouseOver</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleMouseOver</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the mouseover event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleResizeEvent">_handleResizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleResizeEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         Event
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the Resize Utilitys Resize event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Event &lt;object&gt;</code>
+                                                             ev The Resize Utilitys resize event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleResizeMaskEl">_handleResizeMaskEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleResizeMaskEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resizes the inner mask element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__handleStartResizeEvent">_handleStartResizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleStartResizeEvent</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the Resize Utilitys startResize event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__moveEl">_moveEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_moveEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Moves the resize element based on the arrow keys
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__setBackgroundImage">_setBackgroundImage</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setBackgroundImage</strong>
+                                           (
+                                                
+                                                        
+                                                         String
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the background image of the resize element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>String &lt;object&gt;</code>
+                                                             url The url of the image
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__setBackgroundPosition">_setBackgroundPosition</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setBackgroundPosition</strong>
+                                           (
+                                                
+                                                        
+                                                         Number
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the background image position to the top and left position
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Number &lt;object&gt;</code>
+                                                             l The left position
+                                                        </dd>
+                                                        <dd>
+                                                            <code>Number &lt;object&gt;</code>
+                                                             t The top position
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__setConstraints">_setConstraints</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Object
+                                            <strong>_setConstraints</strong>
+                                           (
+                                                
+                                                        
+                                                         Boolean
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Set the DragDrop constraints to keep the element inside the crop area.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Boolean &lt;object&gt;</code>
+                                                             inside Used when called from inside a resize event, false by default (dragging)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Object containing Top, Right, Bottom and Left constraints</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__syncBackgroundPosition">_syncBackgroundPosition</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_syncBackgroundPosition</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Syncs the packground position of the resize element with the resize elements top and left style position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Destroys the ImageCropper object and all of it's elements & listeners.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getCropCoords">getCropCoords</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>getCropCoords</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the coordinates needed to crop the image
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The top, left, height, width and image url of the image being cropped</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getCropperById">getCropperById</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Object
+                                            <strong>getCropperById</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get's an ImageCropper object by the HTML id of the image associated with the ImageCropper object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The ImageCropper Object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getEl">getEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the HTML reference for the image element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>The image element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getMaskEl">getMaskEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getMaskEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the HTML reference for the mask element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>The mask element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getResizeEl">getResizeEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getResizeEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the HTML reference for the resize element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>The resize element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getResizeMaskEl">getResizeMaskEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getResizeMaskEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the HTML reference for the resizable object's mask element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>The resize objects mask element.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getResizeObject">getResizeObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        <a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>
+                                            <strong>getResizeObject</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the Resize Utility object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>
+                                                    </code></dt>
+                                                    <dd>The Resize instance</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getWrapEl">getWrapEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getWrapEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the HTML reference for the wrap element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>The wrap element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method_init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The ImageCropper class's initialization method
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method_initAttributes">initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>initAttributes</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes all of the configuration attributes used to create a croppable element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             Object literal specifying a set of 
+configuration attributes used to create the widget.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_reset">reset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        <a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a>
+                                            <strong>reset</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets the crop element back to it's original position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a>
+                                                    </code></dt>
+                                                    <dd>The ImageCropper instance</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representing the ImageCropper Object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.util.Element.html#method__registerHTMLAttr">_registerHTMLAttr</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_addClass">addClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_addListener">addListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_appendChild">appendChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_appendTo">appendTo</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_fireQueue">fireQueue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_getElementsByClassName">getElementsByClassName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_getElementsByTagName">getElementsByTagName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_getStyle">getStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_hasChildNodes">hasChildNodes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_hasClass">hasClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_initAttributes">initAttributes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_insertBefore">insertBefore</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_on">on</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_removeChild">removeChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_removeClass">removeClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_removeListener">removeListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_replaceChild">replaceChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_replaceClass">replaceClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_setStyle">setStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#method_subscribe">subscribe</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_configureAttribute">configureAttribute</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent">fireBeforeChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireChangeEvent">fireChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_get">get</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">getAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">getAttributeKeys</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_refresh">refresh</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_register">register</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue">resetValue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_set">set</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributeConfig">setAttributeConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributes">setAttributes</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3 id="events">Events</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeInitHeightChange">beforeInitHeightChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeInitHeightChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'initHeight' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeInitialXYChange">beforeInitialXYChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeInitialXYChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'initialXY' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeInitWidthChange">beforeInitWidthChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeInitWidthChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'initWidth' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeKeyTickChange">beforeKeyTickChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeKeyTickChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'keyTick' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeMinHeightChange">beforeMinHeightChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeMinHeightChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'minHeight' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeMinWidthChange">beforeMinWidthChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeMinWidthChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'minWidth' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeRatioChange">beforeRatioChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeRatioChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'ratio' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeShiftKeyTickChange">beforeShiftKeyTickChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeShiftKeyTickChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'shiftKeyTick' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeStatusChange">beforeStatusChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeStatusChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'status' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeUseKeysChange">beforeUseKeysChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeUseKeysChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'useKeys' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_dragEvent">dragEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>dragEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the DragDrop dragEvent
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_initHeightChange">initHeightChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>initHeightChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'initHeight' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_initialXYChange">initialXYChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>initialXYChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'initialXY' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_initWidthChange">initWidthChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>initWidthChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'initWidth' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_keyTickChange">keyTickChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keyTickChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'keyTick' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_minHeightChange">minHeightChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>minHeightChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'minHeight' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_minWidthChange">minWidthChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>minWidthChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'minWidth' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_moveEvent">moveEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>moveEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires on every element move. Inside these methods: _handleKeyPress, _handleDragEvent, _handleResizeEvent
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_ratioChange">ratioChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>ratioChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'ratio' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_resizeEvent">resizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>resizeEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires on every element resize.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_shiftKeyTickChange">shiftKeyTickChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>shiftKeyTickChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'shiftKeyTick' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_startResizeEvent">startResizeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>startResizeEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when when a resize action is started.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_statusChange">statusChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>statusChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'status' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_useKeysChange">useKeysChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>useKeysChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'useKeys' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#event_appendTo">appendTo</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#event_available">available</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#event_beforeAppendTo">beforeAppendTo</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#event_beforeElementChange">beforeElementChange</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#event_contentReady">contentReady</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#event_elementChange">elementChange</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3 id="configattributes">Configuration Attributes</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="config_initHeight">initHeight</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set the initlal height of the crop area, defaults to 1/4 of the image height
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_initialXY">initialXY</a>
+                                        <code>- Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of the XY position that we need to set the crop element to when we build it. Defaults to [10, 10]
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_initWidth">initWidth</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set the initlal width of the crop area, defaults to 1/4 of the image width
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_keyTick">keyTick</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The pixel tick for the arrow keys, defaults to 1
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_minHeight">minHeight</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            MinHeight of the crop area, default 50
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_minWidth">minWidth</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            MinWidth of the crop area, default 50.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_ratio">ratio</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set the ratio config option of the Resize Utlility, default false
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_shiftKeyTick">shiftKeyTick</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The pixel tick for shift + the arrow keys, defaults to 10
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_status">status</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Show the Resize Utility status, defaults to true
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_useKeys">useKeys</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Should we use the Arrow keys to position the crop element, defaults to true
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#config_element">element</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="crop.js.html">crop.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#property__active">_active</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__image">_image</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__instances">_instances</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__mask">_mask</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__resize">_resize</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__resizeEl">_resizeEl</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__resizeMaskEl">_resizeMaskEl</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__wrap">_wrap</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property_CSS_MAIN">CSS_MAIN</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property_CSS_MASK">CSS_MASK</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property_CSS_RESIZE_MASK">CSS_RESIZE_MASK</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__createMask">_createMask</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__createResize">_createResize</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__createWrap">_createWrap</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleB4DragEvent">_handleB4DragEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleBeforeResizeEvent">_handleBeforeResizeEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleDragEvent">_handleDragEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleEndResizeEvent">_handleEndResizeEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleKeyPress">_handleKeyPress</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleMouseOut">_handleMouseOut</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleMouseOver">_handleMouseOver</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleResizeEvent">_handleResizeEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleResizeMaskEl">_handleResizeMaskEl</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__handleStartResizeEvent">_handleStartResizeEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__moveEl">_moveEl</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__setBackgroundImage">_setBackgroundImage</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__setBackgroundPosition">_setBackgroundPosition</a>
+                                </li>
+                                <li class="private"><!--<code>Object</code>-->
+                                <a href="#method__setConstraints">_setConstraints</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__syncBackgroundPosition">_syncBackgroundPosition</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#method_getCropCoords">getCropCoords</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#method_getCropperById">getCropperById</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getEl">getEl</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getMaskEl">getMaskEl</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getResizeEl">getResizeEl</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getResizeMaskEl">getResizeMaskEl</a>
+                                </li>
+                                <li class=""><!--<code><a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a></code>-->
+                                <a href="#method_getResizeObject">getResizeObject</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getWrapEl">getWrapEl</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_initAttributes">initAttributes</a>
+                                </li>
+                                <li class=""><!--<code><a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a></code>-->
+                                <a href="#method_reset">reset</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#event_beforeInitHeightChange">beforeInitHeightChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeInitialXYChange">beforeInitialXYChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeInitWidthChange">beforeInitWidthChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeKeyTickChange">beforeKeyTickChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeMinHeightChange">beforeMinHeightChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeMinWidthChange">beforeMinWidthChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeRatioChange">beforeRatioChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeShiftKeyTickChange">beforeShiftKeyTickChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeStatusChange">beforeStatusChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeUseKeysChange">beforeUseKeysChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_dragEvent">dragEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_initHeightChange">initHeightChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_initialXYChange">initialXYChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_initWidthChange">initWidthChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_keyTickChange">keyTickChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_minHeightChange">minHeightChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_minWidthChange">minWidthChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_moveEvent">moveEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_ratioChange">ratioChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_resizeEvent">resizeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_shiftKeyTickChange">shiftKeyTickChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_startResizeEvent">startResizeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_statusChange">statusChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_useKeysChange">useKeysChange</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#config_initHeight">initHeight</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_initialXY">initialXY</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_initWidth">initWidth</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_keyTick">keyTick</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_minHeight">minHeight</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_minWidth">minWidth</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_ratio">ratio</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_shiftKeyTick">shiftKeyTick</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_status">status</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_useKeys">useKeys</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

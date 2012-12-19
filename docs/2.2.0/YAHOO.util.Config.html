@@ -1,0 +1,1265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container  YAHOO.util.Config   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                 &gt; YAHOO.util.Config 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Config</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.Config</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                owner
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>owner
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                    	The owner Object to which this Config Object belongs
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="config">config</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Maintains the local collection of configuration property objects and their specified values
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="eventQueue">eventQueue</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Maintains the local, normalized CustomEvent queue
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="initialConfig">initialConfig</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Maintains the local collection of configuration property objects as they were initially applied.
+This object is used when resetting a property.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="owner">owner</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the owner of this Config Object
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="queueInProgress">queueInProgress</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean flag that specifies whether a queue is currently being executed
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="addProperty">addProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         propertyObject
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a property to the Config Object's private config hash.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            	The configuration property's name
+                                                        </dd>
+                                                        <dd>
+                                                            <code>propertyObject &lt;Object&gt;</code>
+                                                            	The Object containing all of this property's arguments
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="applyConfig">applyConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>applyConfig</strong>
+                                           (
+                                                
+                                                        
+                                                         userConfig
+                                                    
+                                                
+                                                        , 
+                                                         init
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Applies a key-value Object literal to the configuration, replacing any existing values, and queueing the property events.
+Although the values will be set, fireQueue() must be called for their associated events to execute.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>userConfig &lt;Object&gt;</code>
+                                                            	The configuration Object literal
+                                                        </dd>
+                                                        <dd>
+                                                            <code>init &lt;Boolean&gt;</code>
+                                                            		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="checkBoolean">checkBoolean</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>checkBoolean</strong>
+                                           (
+                                                
+                                                        
+                                                         val
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Validates that the value passed in is a Boolean.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>val &lt;Object&gt;</code>
+                                                            	The value to validate
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true, if the value is valid</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="checkNumber">checkNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>checkNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         val
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Validates that the value passed in is a number.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>val &lt;Object&gt;</code>
+                                                            	The value to validate
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true, if the value is valid</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="fireEvent">fireEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>fireEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         Object
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires a configuration property event using the specified value.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            			The configuration property's name
+                                                        </dd>
+                                                        <dd>
+                                                            <code>Object &lt;value&gt;</code>
+                                                            		The value of the correct type for the property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="fireQueue">fireQueue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>fireQueue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires the normalized list of queued property change events
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getConfig">getConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>getConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a key-value configuration map of the values currently set in the Config Object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The current config, represented in a key-value map</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getProperty">getProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>getProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the value of specified property.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            	The name of the property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The value of the specified property</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         owner
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the configuration Object and all of its local members.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>owner &lt;Object&gt;</code>
+                                                            	The owner Object to which this Config Object belongs
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="outputEventQueue">outputEventQueue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>outputEventQueue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the Config object's current CustomEvent queue
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string list of CustomEvents currently queued for execution</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="queueProperty">queueProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>queueProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
+moved from its current position to the end of the queue.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            	The name of the property
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;String&gt;</code>
+                                                            	The value to set the property to
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true, if the set was successful, false if it failed.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="refireEvent">refireEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>refireEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires the event for a property using the property's current value.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            	The name of the property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="refresh">refresh</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>refresh</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Refires the events for all configuration properties using their current values.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="resetProperty">resetProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>resetProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets the specified property's value to its initial value.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            	The name of the property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True is the property was reset, false if not</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setProperty">setProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>setProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                                        , 
+                                                         silent
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            		The name of the property
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;String&gt;</code>
+                                                            		The value to set the property to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>silent &lt;Boolean&gt;</code>
+                                                            	Whether the value should be set silently, without firing the property event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True, if the set was successful, false if it failed.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="subscribeToConfigEvent">subscribeToConfigEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>subscribeToConfigEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         handler
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         override
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subscribes an external handler to the change event for any given property.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            			The property name
+                                                        </dd>
+                                                        <dd>
+                                                            <code>handler &lt;Function&gt;</code>
+                                                            		The handler function to use subscribe to the property's event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            			The Object to use for scoping the event handler (see CustomEvent documentation)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>override &lt;Boolean&gt;</code>
+                                                            	Optional. If true, will override "this" within the handler to map to the scope Object passed into the method.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True, if the subscription was successful, otherwise false.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the Config object
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The Config object in string format.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>unsubscribeFromConfigEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         key
+                                                    
+                                                
+                                                        , 
+                                                         handler
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unsubscribes an external handler from the change event for any given property.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>key &lt;String&gt;</code>
+                                                            			The property name
+                                                        </dd>
+                                                        <dd>
+                                                            <code>handler &lt;Function&gt;</code>
+                                                            		The handler function to use subscribe to the property's event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            			The Object to use for scoping the event handler (see CustomEvent documentation)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True, if the unsubscription was successful, otherwise false.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Boolean
+                                            <strong>YAHOO.util.Config.alreadySubscribed</strong>
+                                           (
+                                                
+                                                        
+                                                         evt
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks to determine if a particular function/Object pair are already subscribed to the specified CustomEvent
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>evt &lt;YAHOO.util.CustomEvent&gt;</code>
+                                                            	The CustomEvent for which to check the subscriptions
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fn &lt;Function&gt;</code>
+                                                            	The function to look for in the subscribers list
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The execution scope Object for the subscription
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true, if the function/Object pair is already subscribed to the CustomEvent passed in</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="configChangedEvent">configChangedEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>configChangedEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Object reference to the owner of this Config Object
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#config">config</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#eventQueue">eventQueue</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#initialConfig">initialConfig</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#owner">owner</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#queueInProgress">queueInProgress</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#addProperty">addProperty</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#applyConfig">applyConfig</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#checkBoolean">checkBoolean</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#checkNumber">checkNumber</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#fireEvent">fireEvent</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#fireQueue">fireQueue</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#getConfig">getConfig</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#getProperty">getProperty</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#outputEventQueue">outputEventQueue</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#queueProperty">queueProperty</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#refireEvent">refireEvent</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#refresh">refresh</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#resetProperty">resetProperty</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#setProperty">setProperty</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#subscribeToConfigEvent">subscribeToConfigEvent</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#configChangedEvent">configChangedEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

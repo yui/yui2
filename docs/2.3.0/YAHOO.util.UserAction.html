@@ -1,0 +1,1250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest  YAHOO.util.UserAction   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                 &gt; YAHOO.util.UserAction 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
+                            Class <b>YAHOO.util.UserAction</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The UserAction object provides functions that simulate events occurring in
+the browser. Since these are simulated events, they do not behave exactly
+as regular, user-initiated events do, but can be used to test simple
+user interactions safely.
+                    </div>
+
+
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="click">click</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>click</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a click on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to click on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="dblclick">dblclick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>dblclick</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a double click on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to double click on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="fireKeyEvent">fireKeyEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>fireKeyEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires an event that normally would be fired by the keyboard (keyup,
+keydown, keypress). Make sure to specify either keyCode or charCode as
+an option.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The type of event ("keyup", "keydown" or "keypress").
+                                                        </dd>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The target of the event.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Options for the event. Either keyCode or charCode
+are required.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="keydown">keydown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>keydown</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a keydown event on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="keypress">keypress</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>keypress</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a keypress on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="keyup">keyup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>keyup</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a keyup event on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mousedown">mousedown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mousedown</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mousedown on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mouseEvent">mouseEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mouseEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mouse event on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to click on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The type of event to fire. This can be any one of
+the following: click, dblclick, mousedown, mouseup, mouseout,
+mouseover, and mousemove.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mousemove">mousemove</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mousemove</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mousemove on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mouseout">mouseout</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mouseout</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mouseout event on a particular element. Use "relatedTarget"
+on the options object to specify where the mouse moved to.
+Quirks: Firefox less than 2.0 doesn't set relatedTarget properly, so
+toElement is assigned in its place. IE doesn't allow toElement to be
+be assigned, so relatedTarget is assigned in its place. Both of these
+concessions allow YAHOO.util.Event.getRelatedTarget() to work correctly
+in both browsers.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mouseover">mouseover</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mouseover</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mouseover event on a particular element. Use "relatedTarget"
+on the options object to specify where the mouse moved from.
+Quirks: Firefox less than 2.0 doesn't set relatedTarget properly, so
+fromElement is assigned in its place. IE doesn't allow fromElement to be
+be assigned, so relatedTarget is assigned in its place. Both of these
+concessions allow YAHOO.util.Event.getRelatedTarget() to work correctly
+in both browsers.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="mouseup">mouseup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>mouseup</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mouseup on a particular element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The element to act on.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>options &lt;Object&gt;</code>
+                                                             Additional event options (use DOM standard names).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="simulateKeyEvent">simulateKeyEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>simulateKeyEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         bubbles
+                                                    
+                                                
+                                                        , 
+                                                         cancelable
+                                                    
+                                                
+                                                        , 
+                                                         view
+                                                    
+                                                
+                                                        , 
+                                                         ctrlKey
+                                                    
+                                                
+                                                        , 
+                                                         altKey
+                                                    
+                                                
+                                                        , 
+                                                         shiftKey
+                                                    
+                                                
+                                                        , 
+                                                         metaKey
+                                                    
+                                                
+                                                        , 
+                                                         keyCode
+                                                    
+                                                
+                                                        , 
+                                                         charCode
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a key event using the given event information to populate
+the generated event object. This method does browser-equalizing
+calculations to account for differences in the DOM and IE event models
+as well as different browser quirks. Note: keydown causes Safari 2.x to
+crash.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The target of the given event.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The type of event to fire. This can be any one of
+the following: keyup, keydown, and keypress.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>bubbles &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if the event can be
+bubbled up. DOM Level 3 specifies that all key events bubble by
+default. The default is true.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>cancelable &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if the event can be
+canceled using preventDefault(). DOM Level 3 specifies that all
+key events can be cancelled. The default 
+is true.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>view &lt;Window&gt;</code>
+                                                             (Optional) The view containing the target. This is
+typically the window object. The default is window.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>ctrlKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the CTRL keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>altKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the ALT keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>shiftKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the SHIFT keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>metaKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the META keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>keyCode &lt;int&gt;</code>
+                                                             (Optional) The code for the key that is in use. 
+The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>charCode &lt;int&gt;</code>
+                                                             (Optional) The Unicode code for the character
+associated with the key being used. The default is 0.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="simulateMouseEvent">simulateMouseEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>simulateMouseEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         target
+                                                    
+                                                
+                                                        , 
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         bubbles
+                                                    
+                                                
+                                                        , 
+                                                         cancelable
+                                                    
+                                                
+                                                        , 
+                                                         view
+                                                    
+                                                
+                                                        , 
+                                                         detail
+                                                    
+                                                
+                                                        , 
+                                                         screenX
+                                                    
+                                                
+                                                        , 
+                                                         screenY
+                                                    
+                                                
+                                                        , 
+                                                         clientX
+                                                    
+                                                
+                                                        , 
+                                                         clientY
+                                                    
+                                                
+                                                        , 
+                                                         ctrlKey
+                                                    
+                                                
+                                                        , 
+                                                         altKey
+                                                    
+                                                
+                                                        , 
+                                                         shiftKey
+                                                    
+                                                
+                                                        , 
+                                                         metaKey
+                                                    
+                                                
+                                                        , 
+                                                         button
+                                                    
+                                                
+                                                        , 
+                                                         relatedTarget
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Simulates a mouse event using the given event information to populate
+the generated event object. This method does browser-equalizing
+calculations to account for differences in the DOM and IE event models
+as well as different browser quirks.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>target &lt;HTMLElement&gt;</code>
+                                                             The target of the given event.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The type of event to fire. This can be any one of
+the following: click, dblclick, mousedown, mouseup, mouseout,
+mouseover, and mousemove.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>bubbles &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if the event can be
+bubbled up. DOM Level 2 specifies that all mouse events bubble by
+default. The default is true.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>cancelable &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if the event can be
+canceled using preventDefault(). DOM Level 2 specifies that all
+mouse events except mousemove can be cancelled. The default 
+is true for all events except mousemove, for which the default 
+is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>view &lt;Window&gt;</code>
+                                                             (Optional) The view containing the target. This is
+typically the window object. The default is window.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>detail &lt;int&gt;</code>
+                                                             (Optional) The number of times the mouse button has
+been used. The default value is 1.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>screenX &lt;int&gt;</code>
+                                                             (Optional) The x-coordinate on the screen at which
+point the event occured. The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>screenY &lt;int&gt;</code>
+                                                             (Optional) The y-coordinate on the screen at which
+point the event occured. The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>clientX &lt;int&gt;</code>
+                                                             (Optional) The x-coordinate on the client at which
+point the event occured. The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>clientY &lt;int&gt;</code>
+                                                             (Optional) The y-coordinate on the client at which
+point the event occured. The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>ctrlKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the CTRL keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>altKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the ALT keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>shiftKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the SHIFT keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>metaKey &lt;Boolean&gt;</code>
+                                                             (Optional) Indicates if one of the META keys
+is pressed while the event is firing. The default is false.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>button &lt;int&gt;</code>
+                                                             (Optional) The button being pressed while the event
+is executing. The value should be 0 for the primary mouse button
+(typically the left button), 1 for the terciary mouse button
+(typically the middle button), and 2 for the secondary mouse button
+(typically the right button). The default is 0.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>relatedTarget &lt;HTMLElement&gt;</code>
+                                                             (Optional) For mouseout events,
+this is the element that the mouse has moved to. For mouseover
+events, this is the element that the mouse has moved from. This
+argument is ignored for all other events. The default is null.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class="selected"><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#click">click</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#dblclick">dblclick</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#fireKeyEvent">fireKeyEvent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#keydown">keydown</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#keypress">keypress</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#keyup">keyup</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mousedown">mousedown</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mouseEvent">mouseEvent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mousemove">mousemove</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mouseout">mouseout</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mouseover">mouseover</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#mouseup">mouseup</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#simulateKeyEvent">simulateKeyEvent</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#simulateMouseEvent">simulateMouseEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: colorpicker   Color.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>colorpicker&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_colorpicker.html">colorpicker</a>
+                
+                 &gt; Color.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * Provides color conversion and validation utils</span>
+<span class="c"> * @class YAHOO.util.Color</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Color</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">HCHARS</span><span class="o">=</span><span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="o">,</span> <span class="nx">lang</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="o">{</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts 0-1 to 0-255</span>
+<span class="c">         * @method real2dec</span>
+<span class="c">         * @param n {float} the number to convert</span>
+<span class="c">         * @return {int} a number 0-255</span>
+<span class="c">         */</span>
+        <span class="nx">real2dec</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">min</span><span class="o">(</span><span class="m">255</span><span class="o">,</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">n</span><span class="o">*</span><span class="m">256</span><span class="o">));</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts HSV (h[0-360], s[0-1]), v[0-1] to RGB [255,255,255]</span>
+<span class="c">         * @method hsv2rgb</span>
+<span class="c">         * @param h {int|[int, float, float]} the hue, or an</span>
+<span class="c">         *        array containing all three parameters</span>
+<span class="c">         * @param s {float} the saturation</span>
+<span class="c">         * @param v {float} the value/brightness</span>
+<span class="c">         * @return {[int, int, int]} the red, green, blue values in</span>
+<span class="c">         *          decimal.</span>
+<span class="c">         */</span>
+        <span class="nx">hsv2rgb</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">h</span><span class="o">,</span> <span class="nx">s</span><span class="o">,</span> <span class="nx">v</span><span class="o">)</span> <span class="o">{</span> 
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">h</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">hsv2rgb</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">h</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">h</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">h</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">r</span><span class="o">,</span> <span class="nx">g</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">f</span><span class="o">,</span> <span class="nx">p</span><span class="o">,</span> <span class="nx">q</span><span class="o">,</span> <span class="nx">t</span><span class="o">;</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">((</span><span class="nx">h</span><span class="o">/</span><span class="m">60</span><span class="o">)%</span><span class="m">6</span><span class="o">);</span>
+            <span class="nx">f</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span><span class="o">/</span><span class="m">60</span><span class="o">)-</span><span class="nx">i</span><span class="o">;</span>
+            <span class="nx">p</span> <span class="o">=</span> <span class="nx">v</span><span class="o">*(</span><span class="m">1</span><span class="o">-</span><span class="nx">s</span><span class="o">);</span>
+            <span class="nx">q</span> <span class="o">=</span> <span class="nx">v</span><span class="o">*(</span><span class="m">1</span><span class="o">-</span><span class="nx">f</span><span class="o">*</span><span class="nx">s</span><span class="o">);</span>
+            <span class="nx">t</span> <span class="o">=</span> <span class="nx">v</span><span class="o">*(</span><span class="m">1</span><span class="o">-(</span><span class="m">1</span><span class="o">-</span><span class="nx">f</span><span class="o">)*</span><span class="nx">s</span><span class="o">);</span>
+            <span class="nx">switch</span><span class="o">(</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">case</span> <span class="m">0</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">t</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="m">1</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">q</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="m">2</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">t</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="m">3</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">q</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="m">4</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">t</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="m">5</span><span class="o">:</span> <span class="nx">r</span><span class="o">=</span><span class="nx">v</span><span class="o">;</span> <span class="nx">g</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="nx">b</span><span class="o">=</span><span class="nx">q</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">fn</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">real2dec</span><span class="o">;</span>
+
+            <span class="k">return</span> <span class="o">[</span><span class="nx">fn</span><span class="o">(</span><span class="nx">r</span><span class="o">),</span> <span class="nx">fn</span><span class="o">(</span><span class="nx">g</span><span class="o">),</span> <span class="nx">fn</span><span class="o">(</span><span class="nx">b</span><span class="o">)];</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts to RGB [255,255,255] to HSV (h[0-360], s[0-1]), v[0-1]</span>
+<span class="c">         * @method rgb2hsv</span>
+<span class="c">         * @param r {int|[int, int, int]} the red value, or an</span>
+<span class="c">         *        array containing all three parameters</span>
+<span class="c">         * @param g {int} the green value</span>
+<span class="c">         * @param b {int} the blue value</span>
+<span class="c">         * @return {[int, float, float]} the value converted to hsv</span>
+<span class="c">         */</span>
+        <span class="nx">rgb2hsv</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">g</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">r</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">rgb2hsv</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">r</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+            <span class="o">}</span>
+
+            <span class="nx">r</span><span class="o">=</span><span class="nx">r</span><span class="o">/</span><span class="m">255</span><span class="o">;</span>
+            <span class="nx">g</span><span class="o">=</span><span class="nx">g</span><span class="o">/</span><span class="m">255</span><span class="o">;</span>
+            <span class="nx">b</span><span class="o">=</span><span class="nx">b</span><span class="o">/</span><span class="m">255</span><span class="o">;</span>
+
+            <span class="k">var</span> <span class="nx">min</span><span class="o">,</span><span class="nx">max</span><span class="o">,</span><span class="nx">delta</span><span class="o">,</span><span class="nx">h</span><span class="o">,</span><span class="nx">s</span><span class="o">,</span><span class="nx">v</span><span class="o">;</span>
+            <span class="nx">min</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">min</span><span class="o">(</span><span class="nb">Math</span><span class="o">.</span><span class="nx">min</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span><span class="nx">g</span><span class="o">),</span><span class="nx">b</span><span class="o">);</span>
+            <span class="nx">max</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span><span class="nx">g</span><span class="o">),</span><span class="nx">b</span><span class="o">);</span>
+            <span class="nx">delta</span> <span class="o">=</span> <span class="nx">max</span><span class="o">-</span><span class="nx">min</span><span class="o">;</span>
+
+            <span class="nx">switch</span> <span class="o">(</span><span class="nx">max</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">case</span> <span class="nx">min</span><span class="o">:</span> <span class="nx">h</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="nx">r</span><span class="o">:</span>   <span class="nx">h</span><span class="o">=</span><span class="m">60</span><span class="o">*(</span><span class="nx">g</span><span class="o">-</span><span class="nx">b</span><span class="o">)/</span><span class="nx">delta</span><span class="o">;</span> 
+                          <span class="k">if</span> <span class="o">(</span><span class="nx">g</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
+                              <span class="nx">h</span><span class="o">+=</span><span class="m">360</span><span class="o">;</span>
+                          <span class="o">}</span>
+                          <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="nx">g</span><span class="o">:</span>   <span class="nx">h</span><span class="o">=(</span><span class="m">60</span><span class="o">*(</span><span class="nx">b</span><span class="o">-</span><span class="nx">r</span><span class="o">)/</span><span class="nx">delta</span><span class="o">)+</span><span class="m">120</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="nx">b</span><span class="o">:</span>   <span class="nx">h</span><span class="o">=(</span><span class="m">60</span><span class="o">*(</span><span class="nx">r</span><span class="o">-</span><span class="nx">g</span><span class="o">)/</span><span class="nx">delta</span><span class="o">)+</span><span class="m">240</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            
+            <span class="nx">s</span> <span class="o">=</span> <span class="o">(</span><span class="nx">max</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="m">1</span><span class="o">-(</span><span class="nx">min</span><span class="o">/</span><span class="nx">max</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">hsv</span> <span class="o">=</span> <span class="o">[</span><span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">h</span><span class="o">),</span> <span class="nx">s</span><span class="o">,</span> <span class="nx">max</span><span class="o">];</span>
+
+            <span class="k">return</span> <span class="nx">hsv</span><span class="o">;</span>
+
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts decimal rgb values into a hex string</span>
+<span class="c">         * 255,255,255 -&gt; FFFFFF</span>
+<span class="c">         * @method rgb2hex</span>
+<span class="c">         * @param r {int|[int, int, int]} the red value, or an</span>
+<span class="c">         *        array containing all three parameters</span>
+<span class="c">         * @param g {int} the green value</span>
+<span class="c">         * @param b {int} the blue value</span>
+<span class="c">         * @return {string} the hex string</span>
+<span class="c">         */</span>
+        <span class="nx">rgb2hex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">g</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">r</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">rgb2hex</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">r</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">f</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">dec2hex</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nx">f</span><span class="o">(</span><span class="nx">r</span><span class="o">)</span> <span class="o">+</span> <span class="nx">f</span><span class="o">(</span><span class="nx">g</span><span class="o">)</span> <span class="o">+</span> <span class="nx">f</span><span class="o">(</span><span class="nx">b</span><span class="o">);</span>
+        <span class="o">},</span>
+     
+        <span class="c">/**</span>
+<span class="c">         * Converts an int 0...255 to hex pair 00...FF</span>
+<span class="c">         * @method dec2hex</span>
+<span class="c">         * @param n {int} the number to convert</span>
+<span class="c">         * @return {string} the hex equivalent</span>
+<span class="c">         */</span>
+        <span class="nx">dec2hex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">n</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">n</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+            <span class="nx">n</span> <span class="o">=</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">n</span><span class="o">))</span> <span class="o">?</span> <span class="nx">n</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
+            <span class="nx">n</span> <span class="o">=</span> <span class="o">(</span><span class="nx">n</span> <span class="o">&gt;</span> <span class="m">255</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="nx">n</span><span class="o">;</span>
+
+            <span class="k">return</span> <span class="nx">HCHARS</span><span class="o">.</span><span class="nx">charAt</span><span class="o">((</span><span class="nx">n</span> <span class="o">-</span> <span class="nx">n</span> <span class="o">%</span> <span class="m">16</span><span class="o">)</span> <span class="o">/</span> <span class="m">16</span><span class="o">)</span> <span class="o">+</span> <span class="nx">HCHARS</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="nx">n</span> <span class="o">%</span> <span class="m">16</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts a hex pair 00...FF to an int 0...255 </span>
+<span class="c">         * @method hex2dec</span>
+<span class="c">         * @param str {string} the hex pair to convert</span>
+<span class="c">         * @return {int} the decimal</span>
+<span class="c">         */</span>
+        <span class="nx">hex2dec</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">str</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nx">HCHARS</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">());</span>
+            <span class="o">};</span>
+
+            <span class="k">var</span> <span class="nx">s</span><span class="o">=</span><span class="nx">str</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">);</span>
+            
+            <span class="k">return</span> <span class="o">((</span><span class="nx">f</span><span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">*</span> <span class="m">16</span><span class="o">)</span> <span class="o">+</span> <span class="nx">f</span><span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="m">1</span><span class="o">]));</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Converts a hex string to rgb</span>
+<span class="c">         * @method hex2rgb</span>
+<span class="c">         * @param str {string} the hex string</span>
+<span class="c">         * @return {[int, int, int]} an array containing the rgb values</span>
+<span class="c">         */</span>
+        <span class="nx">hex2rgb</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">hex2dec</span><span class="o">;</span>
+            <span class="k">return</span> <span class="o">[</span><span class="nx">f</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">2</span><span class="o">)),</span> <span class="nx">f</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">2</span><span class="o">,</span> <span class="m">2</span><span class="o">)),</span> <span class="nx">f</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">4</span><span class="o">,</span> <span class="m">2</span><span class="o">))];</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the closest websafe color to the supplied rgb value.</span>
+<span class="c">         * @method websafe</span>
+<span class="c">         * @param r {int|[int, int, int]} the red value, or an</span>
+<span class="c">         *        array containing all three parameters</span>
+<span class="c">         * @param g {int} the green value</span>
+<span class="c">         * @param b {int} the blue value</span>
+<span class="c">         * @return {[int, int, int]} an array containing the closes</span>
+<span class="c">         *                           websafe rgb colors.</span>
+<span class="c">         */</span>
+        <span class="nx">websafe</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">g</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">r</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">websafe</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">r</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">r</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+            <span class="o">}</span>
+
+            <span class="c">// returns the closest match [0, 51, 102, 153, 204, 255]</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">v</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">min</span><span class="o">(</span><span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">v</span><span class="o">),</span> <span class="m">255</span><span class="o">);</span>
+                    <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">next</span><span class="o">;</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="m">256</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">51</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">next</span> <span class="o">=</span> <span class="nx">i</span><span class="o">+</span><span class="m">51</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">v</span> <span class="o">&gt;=</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span> <span class="o">&lt;=</span> <span class="nx">next</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">return</span> <span class="o">(</span><span class="nx">v</span><span class="o">-</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="m">25</span><span class="o">)</span> <span class="o">?</span> <span class="nx">next</span> <span class="o">:</span> <span class="nx">i</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+ <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Error calculating the websafe value for &quot;</span> <span class="o">+</span> <span class="nx">v</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">v</span><span class="o">;</span>
+            <span class="o">};</span>
+
+            <span class="k">return</span> <span class="o">[</span><span class="nx">f</span><span class="o">(</span><span class="nx">r</span><span class="o">),</span> <span class="nx">f</span><span class="o">(</span><span class="nx">g</span><span class="o">),</span> <span class="nx">f</span><span class="o">(</span><span class="nx">b</span><span class="o">)];</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">}();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class="selected"><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Color.html">YAHOO.util.Color</a></li>
+                                <li class=""><a href="YAHOO.widget.ColorPicker.html">YAHOO.widget.ColorPicker</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="Color.js.html">Color.js</a></li>
+                                <li class=""><a href="ColorPicker.js.html">ColorPicker.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: animation  YAHOO.util.Anim   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>animation&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_animation.html">animation</a>
+                 &gt; YAHOO.util.Anim 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Anim</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a>
+                                    <a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a>
+                                    <a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        Base animation class that provides the interface for building animated effects.
+<p>Usage: var myAnim = new YAHOO.util.Anim(el, { width: { from: 10, to: 100 } }, 1, YAHOO.util.Easing.easeOut);</p>
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.Anim</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+                                                , 
+                                                attributes
+
+                                                , 
+                                                duration
+
+                                                , 
+                                                method
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String | HTMLElement&gt; 
+                                                    </code>
+                                                     Reference to the element that will be animated
+                                                </dd>
+                                                <dd>
+                                                    <code>attributes
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     The attribute(s) to be animated.  
+Each attribute is an object with at minimum a "to" or "by" member defined.  
+Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
+All attribute names use camelCase.
+                                                </dd>
+                                                <dd>
+                                                    <code>duration
+                                                    &lt;Number&gt; 
+                                                    </code>
+                                                     (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
+                                                </dd>
+                                                <dd>
+                                                    <code>method
+                                                    &lt;Function&gt; 
+                                                    </code>
+                                                     (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_onComplete">_onComplete</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires after onComplete
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_onStart">_onStart</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires after onStart, useful in subclassing
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_onTween">_onTween</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires after onTween
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="actualFrames">actualFrames</a>
+                                        <code>- private Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of frames this animation was able to execute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="attributes">attributes</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The collection of attributes to be animated.  
+Each attribute must have at least a "to" or "by" defined in order to animate.  
+If "to" is supplied, the animation will end with the attribute at that value.  
+If "by" is supplied, the animation will end at that value plus its starting value. 
+If both are supplied, "to" is used, and "by" is ignored. 
+Optional additional member include "from" (the value the attribute should start animating from, defaults to current value), and "unit" (the units to apply to the values).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="currentFrame">currentFrame</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The location of the current animation on the timeline.
+In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="duration">duration</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The length of the animation.  Defaults to "1" (second).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="el">el</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The element to be animated.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="isAnimated">isAnimated</a>
+                                        <code>- private Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not the animation is running.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="method">method</a>
+                                        <code>- Function</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The method that will provide values to the attribute(s) during the animation. 
+Defaults to "YAHOO.util.Easing.easeNone".
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="startTime">startTime</a>
+                                        <code>- private Date</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A Date object that is created when the animation begins.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="totalFrames">totalFrames</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The total number of frames to be executed.
+In time-based animations, this is used by AnimMgr to ensure the animation finishes on time.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="useSeconds">useSeconds</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not the duration should be treated as seconds.
+Defaults to true.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="animate">animate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>animate</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Starts the animation by registering it with the animation manager.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doMethod">doMethod</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>doMethod</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                                        , 
+                                                         start
+                                                    
+                                                
+                                                        , 
+                                                         end
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the value computed by the animation's "method".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;String&gt;</code>
+                                                             The name of the attribute.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>start &lt;Number&gt;</code>
+                                                             The value this attribute should start from for this animation.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>end &lt;Number&gt;</code>
+                                                              The value this attribute should end at for this animation.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The Value to be applied to the attribute.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getAttribute">getAttribute</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getAttribute</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns current value of the attribute.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;String&gt;</code>
+                                                             The name of the attribute.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>val The current value of the attribute.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getDefaultUnit">getDefaultUnit</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>getDefaultUnit</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the unit to use when none is supplied.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;attr&gt;</code>
+                                                             The name of the attribute.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The default unit to be used.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getEl">getEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a reference to the animated element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getStartTime">getStartTime</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>getStartTime</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the animation start time.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>current value of startTime.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         attributes
+                                                    
+                                                
+                                                        , 
+                                                         duration
+                                                    
+                                                
+                                                        , 
+                                                         method
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Constructor for Anim instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement&gt;</code>
+                                                             Reference to the element that will be animated
+                                                        </dd>
+                                                        <dd>
+                                                            <code>attributes &lt;Object&gt;</code>
+                                                             The attribute(s) to be animated.  
+Each attribute is an object with at minimum a "to" or "by" member defined.  
+Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
+All attribute names use camelCase.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>duration &lt;Number&gt;</code>
+                                                             (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
+                                                        </dd>
+                                                        <dd>
+                                                            <code>method &lt;Function&gt;</code>
+                                                             (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isAnimated">isAnimated</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>isAnimated</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks whether the element is currently animated.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>current value of isAnimated.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="onTween">onTween</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>onTween</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Feeds the starting and ending values for each animated attribute to doMethod once per frame, then applies the resulting value to the attribute(s).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setAttribute">setAttribute</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setAttribute</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                                        , 
+                                                         val
+                                                    
+                                                
+                                                        , 
+                                                         unit
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Applies a value to an attribute.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;String&gt;</code>
+                                                             The name of the attribute.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>val &lt;Number&gt;</code>
+                                                             The value to be applied to the attribute.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>unit &lt;String&gt;</code>
+                                                             The unit ('px', '%', etc.) of the value.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setEl">setEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Changes the animated element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="setRuntimeAttribute">setRuntimeAttribute</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>setRuntimeAttribute</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the actual values to be used during the animation.  Should only be needed for subclass use.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             The attribute object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="stop">stop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>stop</strong>
+                                           (
+                                                
+                                                        
+                                                         finish
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Stops the animation.  Normally called by AnimMgr when animation completes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>finish &lt;Boolean&gt;</code>
+                                                             (optional) If true, animation will jump to final frame.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Provides a readable name for the Anim instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="onComplete">onComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>onComplete</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Custom event that fires when animation ends
+Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onStart">onStart</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>onStart</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Custom event that fires when animation begins
+Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onTween">onTween</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>onTween</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Custom event that fires between each frame
+Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_onComplete">_onComplete</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_onStart">_onStart</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_onTween">_onTween</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#actualFrames">actualFrames</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#attributes">attributes</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#currentFrame">currentFrame</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#duration">duration</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#el">el</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#isAnimated">isAnimated</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#method">method</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#startTime">startTime</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#totalFrames">totalFrames</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#useSeconds">useSeconds</a>
+                                        <!--<code>&lt;Boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#animate">animate</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#doMethod">doMethod</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#getAttribute">getAttribute</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#getDefaultUnit">getDefaultUnit</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#getEl">getEl</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#getStartTime">getStartTime</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#isAnimated">isAnimated</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#onTween">onTween</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setAttribute">setAttribute</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setEl">setEl</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#setRuntimeAttribute">setRuntimeAttribute</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#stop">stop</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#onComplete">onComplete</a>
+                                </li>
+                                <li class="">
+                                <a href="#onStart">onStart</a>
+                                </li>
+                                <li class="">
+                                <a href="#onTween">onTween</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

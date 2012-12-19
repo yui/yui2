@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: charts  YAHOO.widget.StackedColumnChart   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Charts Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_charts.html">charts</a>
+                 &gt; YAHOO.widget.StackedColumnChart 
+                
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.StackedColumnChart</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        StackedColumnChart class for the YUI Charts widget.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.StackedColumnChart</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                containerId
+
+                                                , 
+                                                dataSource
+
+                                                , 
+                                                attributes
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>containerId
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                      Container element for the Flash Player instance.
+                                                </dd>
+                                                <dd>
+                                                    <code>dataSource
+                                                    &lt;YAHOO.util.DataSource&gt; 
+                                                    </code>
+                                                      DataSource instance.
+                                                </dd>
+                                                <dd>
+                                                    <code>attributes
+                                                    &lt;object&gt; 
+                                                    </code>
+                                                      (optional) Object literal of configuration values.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs">_configs</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__dataSource">_dataSource</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__dataTipFunction">_dataTipFunction</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__pollingID">_pollingID</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__pollingInterval">_pollingInterval</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__request">_request</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__seriesDefs">_seriesDefs</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__seriesLabelFunctions">_seriesLabelFunctions</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__type">_type</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__attributes">_attributes</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__containerID">_containerID</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__id">_id</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__initialized">_initialized</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__swf">_swf</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.FlashAdapter.html#property__swfURL">_swfURL</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.CartesianChart.html#property__xAxisLabelFunction">_xAxisLabelFunction</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.CartesianChart.html#property__yAxisLabelFunction">_yAxisLabelFunction</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_configureAttribute">configureAttribute</a><span class=" deprecated">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent">fireBeforeChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireChangeEvent">fireChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_get">get</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">getAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">getAttributeKeys</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_refresh">refresh</a><span class="">,</span>                                            <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_register">register</a><span class=" deprecated">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue">resetValue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_set">set</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributeConfig">setAttributeConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributes">setAttributes</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.Chart.html#method__getCategoryNames">_getCategoryNames</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__getDataSource">_getDataSource</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__getPolling">_getPolling</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__getRequest">_getRequest</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__getSeriesDefs">_getSeriesDefs</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__initAttributes">_initAttributes</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__loadDataHandler">_loadDataHandler</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__loadHandler">_loadHandler</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setCategoryNames">_setCategoryNames</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setDataSource">_setDataSource</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setDataTipFunction">_setDataTipFunction</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setPolling">_setPolling</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setRequest">_setRequest</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Chart.html#method__setSeriesDefs">_setSeriesDefs</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Chart.html#method_refreshData">refreshData</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Chart.html#method_setSeriesStyles">setSeriesStyles</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Chart.html#method_setStyle">setStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Chart.html#method_setStyles">setStyles</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Chart.html#method_toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__embedSWF">_embedSWF</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__eventHandler">_eventHandler</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__getAltText">_getAltText</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__getSWFURL">_getSWFURL</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__initAttributes">_initAttributes</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__loadHandler">_loadHandler</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.FlashAdapter.html#method__setAltText">_setAltText</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.FlashAdapter.html#method_destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.FlashAdapter.html#method_toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__getXField">_getXField</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__getYField">_getYField</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__initAttributes">_initAttributes</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__setXAxis">_setXAxis</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__setXField">_setXField</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__setYAxis">_setYAxis</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.CartesianChart.html#method__setYField">_setYField</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeCategoryNamesChange">beforeCategoryNamesChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeDataSourceChange">beforeDataSourceChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeDataTipFunctionChange">beforeDataTipFunctionChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_beforePollingChange">beforePollingChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeRequestChange">beforeRequestChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeSeriesChange">beforeSeriesChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_categoryNamesChange">categoryNamesChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_dataSourceChange">dataSourceChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_dataTipFunctionChange">dataTipFunctionChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemClickEvent">itemClickEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemDoubleClickEvent">itemDoubleClickEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemDragEndEvent">itemDragEndEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemDragEvent">itemDragEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemDragStartEvent">itemDragStartEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemMouseOutEvent">itemMouseOutEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_itemMouseOverEvent">itemMouseOverEvent</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_pollingChange">pollingChange</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_requestChange">requestChange</a>                                        <a class="" href="YAHOO.widget.Chart.html#event_seriesChange">seriesChange</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_altTextChange">altTextChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_backgroundColorChange">backgroundColorChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeAltTextChange">beforeAltTextChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeBackgroundColorChange">beforeBackgroundColorChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeExpressInstallChange">beforeExpressInstallChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeSwfURLChange">beforeSwfURLChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeVersionChange">beforeVersionChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_beforeWmodeChange">beforeWmodeChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_contentReady">contentReady</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_expressInstallChange">expressInstallChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_swfURLChange">swfURLChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_versionChange">versionChange</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#event_wmodeChange">wmodeChange</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_beforeXAxisChange">beforeXAxisChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_beforeXFieldChange">beforeXFieldChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_beforeYAxisChange">beforeYAxisChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_beforeYFieldChange">beforeYFieldChange</a>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_xAxisChange">xAxisChange</a>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_xFieldChange">xFieldChange</a>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_yAxisChange">yAxisChange</a>                                        <a class="" href="YAHOO.widget.CartesianChart.html#event_yFieldChange">yFieldChange</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Chart.html#config_categoryNames">categoryNames</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#config_dataSource">dataSource</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#config_dataTipFunction">dataTipFunction</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#config_polling">polling</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#config_request">request</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Chart.html#config_series">series</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_altText">altText</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_backgroundColor">backgroundColor</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_expressInstall">expressInstall</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_swfURL">swfURL</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_version">version</a>                                        <a class="" href="YAHOO.widget.FlashAdapter.html#config_wmode">wmode</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.CartesianChart.html#config_xAxis">xAxis</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#config_xField">xField</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#config_yAxis">yAxis</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.CartesianChart.html#config_yField">yField</a>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class="selected"><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                                <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
+                                <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianSeries.html">YAHOO.widget.CartesianSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CategoryAxis.html">YAHOO.widget.CategoryAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnChart.html">YAHOO.widget.ColumnChart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSeries.html">YAHOO.widget.ColumnSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
+                                <li class=""><a href="YAHOO.widget.LineChart.html">YAHOO.widget.LineChart</a></li>
+                                <li class=""><a href="YAHOO.widget.LineSeries.html">YAHOO.widget.LineSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.NumericAxis.html">YAHOO.widget.NumericAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.PieChart.html">YAHOO.widget.PieChart</a></li>
+                                <li class=""><a href="YAHOO.widget.PieSeries.html">YAHOO.widget.PieSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.Series.html">YAHOO.widget.Series</a></li>
+                                <li class=""><a href="YAHOO.widget.StackedBarChart.html">YAHOO.widget.StackedBarChart</a></li>
+                                <li class=""><a href="YAHOO.widget.StackedBarSeries.html">YAHOO.widget.StackedBarSeries</a></li>
+                                <li class="selected"><a href="YAHOO.widget.StackedColumnChart.html">YAHOO.widget.StackedColumnChart</a></li>
+                                <li class=""><a href="YAHOO.widget.StackedColumnSeries.html">YAHOO.widget.StackedColumnSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                                <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
+                                <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
+                                <li class=""><a href="Chart.js.html">Chart.js</a></li>
+                                <li class=""><a href="ChartTypes.js.html">ChartTypes.js</a></li>
+                                <li class=""><a href="FlashAdapter.js.html">FlashAdapter.js</a></li>
+                                <li class=""><a href="NumericAxis.js.html">NumericAxis.js</a></li>
+                                <li class=""><a href="PieChart.js.html">PieChart.js</a></li>
+                                <li class=""><a href="Series.js.html">Series.js</a></li>
+                                <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
+                                <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

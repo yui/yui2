@@ -1,0 +1,424 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container   OverlayManager.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                
+                 &gt; OverlayManager.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/*</span>
+<span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
+<span class="c">Code licensed under the BSD License:</span>
+<span class="c">http://developer.yahoo.net/yui/license.txt</span>
+<span class="c">Version 0.12.2</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* OverlayManager is used for maintaining the focus status of multiple Overlays.* @namespace YAHOO.widget</span>
+<span class="c">* @namespace YAHOO.widget</span>
+<span class="c">* @class OverlayManager</span>
+<span class="c">* @constructor</span>
+<span class="c">* @param {Array}	overlays	Optional. A collection of Overlays to register with the manager.</span>
+<span class="c">* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* The CSS class representing a focused Overlay</span>
+<span class="c">* @property YAHOO.widget.OverlayManager.CSS_FOCUSED</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span> <span class="o">=</span> <span class="s2">&quot;focused&quot;</span><span class="o">;</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+	<span class="c">/**</span>
+<span class="c">	* The class&#39;s constructor function</span>
+<span class="c">	* @property contructor</span>
+<span class="c">	* @type Function</span>
+<span class="c">	*/</span>
+	<span class="nx">constructor</span> <span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The array of Overlays that are currently registered</span>
+<span class="c">	* @property overlays</span>
+<span class="c">	* @type YAHOO.widget.Overlay[]</span>
+<span class="c">	*/</span>
+	<span class="nx">overlays</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Initializes the default configuration of the OverlayManager</span>
+<span class="c">	* @method initDefaultConfig</span>
+<span class="c">	*/</span>	
+	<span class="nx">initDefaultConfig</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c">/**</span>
+<span class="c">		* The collection of registered Overlays in use by the OverlayManager</span>
+<span class="c">		* @config overlays</span>
+<span class="c">		* @type YAHOO.widget.Overlay[]</span>
+<span class="c">		* @default null</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;overlays&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">suppressEvent</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
+
+		<span class="c">/**</span>
+<span class="c">		* The default DOM event that should be used to focus an Overlay</span>
+<span class="c">		* @config focusevent</span>
+<span class="c">		* @type String</span>
+<span class="c">		* @default &quot;mousedown&quot;</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;focusevent&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;mousedown&quot;</span> <span class="o">}</span> <span class="o">);</span>
+	<span class="o">},</span> 
+
+	<span class="c">/**</span>
+<span class="c">	* Initializes the OverlayManager</span>
+<span class="c">	* @method init</span>
+<span class="c">	* @param {YAHOO.widget.Overlay[]}	overlays	Optional. A collection of Overlays to register with the manager.</span>
+<span class="c">	* @param {Object}	userConfig		The object literal representing the user configuration of the OverlayManager</span>
+<span class="c">	*/</span>
+	<span class="nx">init</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c">/**</span>
+<span class="c">		* The OverlayManager&#39;s Config object used for monitoring configuration properties.</span>
+<span class="c">		* @property cfg</span>
+<span class="c">		* @type YAHOO.util.Config</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">initDefaultConfig</span><span class="o">();</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+
+		<span class="c">/**</span>
+<span class="c">		* The currently activated Overlay</span>
+<span class="c">		* @property activeOverlay</span>
+<span class="c">		* @private</span>
+<span class="c">		* @type YAHOO.widget.Overlay</span>
+<span class="c">		*/</span>
+		<span class="k">var</span> <span class="nx">activeOverlay</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+		<span class="c">/**</span>
+<span class="c">		* Returns the currently focused Overlay</span>
+<span class="c">		* @method getActive</span>
+<span class="c">		* @return {YAHOO.widget.Overlay}	The currently focused Overlay</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getActive</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nx">activeOverlay</span><span class="o">;</span>
+		<span class="o">};</span>
+
+		<span class="c">/**</span>
+<span class="c">		* Focuses the specified Overlay</span>
+<span class="c">		* @method focus</span>
+<span class="c">		* @param {YAHOO.widget.Overlay} overlay	The Overlay to focus</span>
+<span class="c">		* @param {String} overlay	The id of the Overlay to focus</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">focus</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">find</span><span class="o">(</span><span class="nx">overlay</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">blurAll</span><span class="o">();</span>
+				<span class="nx">activeOverlay</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">activeOverlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
+				<span class="k">var</span> <span class="nx">topZIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(!</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">topZIndex</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+					<span class="nx">activeOverlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">topZIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">+</span> <span class="m">2</span><span class="o">));</span>
+				<span class="o">}</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">};</span>
+
+		<span class="c">/**</span>
+<span class="c">		* Removes the specified Overlay from the manager</span>
+<span class="c">		* @method remove</span>
+<span class="c">		* @param {YAHOO.widget.Overlay}	overlay	The Overlay to remove</span>
+<span class="c">		* @param {String} overlay	The id of the Overlay to remove</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">find</span><span class="o">(</span><span class="nx">overlay</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">var</span> <span class="nx">originalZ</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="o">-</span><span class="m">1000</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="nx">originalZ</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;manager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">focusEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">blurEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">focus</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">blur</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">};</span>
+
+		<span class="c">/**</span>
+<span class="c">		* Removes focus from all registered Overlays in the manager</span>
+<span class="c">		* @method blurAll</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">blurAll</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+			<span class="nx">activeOverlay</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">o</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">o</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">o</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">].</span><span class="nx">element</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span><span class="o">);</span>
+			<span class="o">}</span>		
+		<span class="o">};</span>
+
+		<span class="k">var</span> <span class="nx">overlays</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;overlays&quot;</span><span class="o">);</span>
+		
+		<span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span> <span class="o">=</span> <span class="o">[];</span>
+		<span class="o">}</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">overlays</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="nx">overlays</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.</span>
+<span class="c">	* @method register</span>
+<span class="c">	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to register with the manager.</span>
+<span class="c">	* @param {YAHOO.widget.Overlay[]}	overlay		An array of Overlays to register with the manager.</span>
+<span class="c">	* @return	{Boolean}	True if any Overlays are registered.</span>
+<span class="c">	*/</span>
+	<span class="nx">register</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">overlay</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Overlay</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;manager&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="k">this</span> <span class="o">}</span> <span class="o">);</span>
+
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">focusEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;focus&quot;</span><span class="o">);</span>
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">blurEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;blur&quot;</span><span class="o">);</span>
+			
+			<span class="k">var</span> <span class="nx">mgr</span><span class="o">=</span><span class="k">this</span><span class="o">;</span>
+
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">focus</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+				<span class="nx">mgr</span><span class="o">.</span><span class="nx">focus</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">focusEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+			<span class="o">};</span>
+
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">blur</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+				<span class="nx">mgr</span><span class="o">.</span><span class="nx">blurAll</span><span class="o">();</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">blurEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+			<span class="o">};</span>
+
+			<span class="k">var</span> <span class="nx">focusOnDomEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">overlay</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+			<span class="o">};</span>
+			
+			<span class="k">var</span> <span class="nx">focusevent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;focusevent&quot;</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span><span class="nx">focusevent</span><span class="o">,</span><span class="nx">focusOnDomEvent</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+
+			<span class="k">var</span> <span class="nx">zIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(!</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">zIndex</span><span class="o">))</span> <span class="o">{</span>
+				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">zIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">));</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+			<span class="o">}</span>
+			
+			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">overlay</span><span class="o">);</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">overlay</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">regcount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">register</span><span class="o">(</span><span class="nx">overlay</span><span class="o">[</span><span class="nx">i</span><span class="o">]))</span> <span class="o">{</span>
+					<span class="nx">regcount</span><span class="o">++;</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">regcount</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Attempts to locate an Overlay by instance or ID.</span>
+<span class="c">	* @method find</span>
+<span class="c">	* @param {YAHOO.widget.Overlay}	overlay		An Overlay to locate within the manager</span>
+<span class="c">	* @param {String}	overlay		An Overlay id to locate within the manager</span>
+<span class="c">	* @return	{YAHOO.widget.Overlay}	The requested Overlay, if found, or null if it cannot be located.</span>
+<span class="c">	*/</span>
+	<span class="nx">find</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">overlay</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Overlay</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">o</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">o</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">o</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">]</span> <span class="o">==</span> <span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">];</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">overlay</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">p</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">p</span><span class="o">].</span><span class="nx">id</span> <span class="o">==</span> <span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+				<span class="o">}</span>
+			<span class="o">}</span>			
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Used for sorting the manager&#39;s Overlays by z-index.</span>
+<span class="c">	* @method compareZIndexDesc</span>
+<span class="c">	* @private</span>
+<span class="c">	* @return {Number}	0, 1, or -1, depending on where the Overlay should fall in the stacking order.</span>
+<span class="c">	*/</span>
+	<span class="nx">compareZIndexDesc</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o1</span><span class="o">,</span> <span class="nx">o2</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">zIndex1</span> <span class="o">=</span> <span class="nx">o1</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">zIndex2</span> <span class="o">=</span> <span class="nx">o2</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">zIndex1</span> <span class="o">&gt;</span> <span class="nx">zIndex2</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">zIndex1</span> <span class="o">&lt;</span> <span class="nx">zIndex2</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="m">1</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="m">0</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Shows all Overlays in the manager.</span>
+<span class="c">	* @method showAll</span>
+<span class="c">	*/</span>
+	<span class="nx">showAll</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">o</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">o</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">o</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">].</span><span class="nx">show</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Hides all Overlays in the manager.</span>
+<span class="c">	* @method hideAll</span>
+<span class="c">	*/</span>
+	<span class="nx">hideAll</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">o</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">o</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">o</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">].</span><span class="nx">hide</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+
+	<span class="c">/**</span>
+<span class="c">	* Returns a string representation of the object.</span>
+<span class="c">	* @method toString</span>
+<span class="c">	* @return {String}	The string representation of the OverlayManager</span>
+<span class="c">	*/</span> 
+	<span class="nx">toString</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="s2">&quot;OverlayManager&quot;</span><span class="o">;</span>
+	<span class="o">}</span>
+
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class="selected"><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

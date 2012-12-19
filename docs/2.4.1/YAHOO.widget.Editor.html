@@ -1,0 +1,2040 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: editor  YAHOO.widget.Editor   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>editor&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_editor.html">editor</a>
+                 &gt; YAHOO.widget.Editor 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Editor</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Editor</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+                                                , 
+                                                attrs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String/HTMLElement&gt; 
+                                                    </code>
+                                                     The textarea element to turn into an editor.
+                                                </dd>
+                                                <dd>
+                                                    <code>attrs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     Object liternal containing configuration parameters.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_alwaysDisabled">_alwaysDisabled</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Toolbar items that should ALWAYS be disabled event if there is a selection present in the editor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_alwaysEnabled">_alwaysEnabled</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Toolbar items that should ALWAYS be enabled event if there isn't a selection present in the editor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_defaultToolbar">_defaultToolbar</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default toolbar config.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_disabled">_disabled</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Toolbar items that should be disabled if there is no selection present in the editor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_HIDDEN">CLASS_HIDDEN</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class applied to the body when the hiddenelements button is pressed.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_LOCAL_FILE">CLASS_LOCAL_FILE</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class applied to an element when it's found to have a local url.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_BEFORE_EDITOR">STR_BEFORE_EDITOR</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The accessibility string for the element before the iFrame
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_CLOSE_WINDOW">STR_CLOSE_WINDOW</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Title of the close button in the Editor Window
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_CLOSE_WINDOW_NOTE">STR_CLOSE_WINDOW_NOTE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A note appearing in the Editor Window to tell the user that the Escape key will close the window
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_BORDER">STR_IMAGE_BORDER</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the image border.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_COPY">STR_IMAGE_COPY</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the image copy and paste message for Opera and Safari
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_ORIG_SIZE">STR_IMAGE_ORIG_SIZE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for Original Image Size
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_PADDING">STR_IMAGE_PADDING</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the image padding.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_PROP_TITLE">STR_IMAGE_PROP_TITLE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The title for the Image Property Editor Window
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_SIZE">STR_IMAGE_SIZE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for Image Size
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_TEXTFLOW">STR_IMAGE_TEXTFLOW</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the image text flow.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_TITLE">STR_IMAGE_TITLE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for Image Description
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_IMAGE_URL">STR_IMAGE_URL</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for Image URL
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_LINK_NEW_WINDOW">STR_LINK_NEW_WINDOW</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The string for the open in a new window label.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_LINK_PROP_REMOVE">STR_LINK_PROP_REMOVE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the Remove link from text link inside the property editor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_LINK_PROP_TITLE">STR_LINK_PROP_TITLE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the Link Property Editor Window.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_LINK_TITLE">STR_LINK_TITLE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The string for the link description.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_LOCAL_FILE_WARNING">STR_LOCAL_FILE_WARNING</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The label string for the local file warning.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_alwaysDisabled">_alwaysDisabled</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_alwaysEnabled">_alwaysEnabled</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_baseHREF">_baseHREF</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_blankImageLoaded">_blankImageLoaded</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_contentTimer">_contentTimer</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_contentTimerCounter">_contentTimerCounter</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#_defaultCSS">_defaultCSS</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_defaultToolbar">_defaultToolbar</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_disabled">_disabled</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#_docType">_docType</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_fixNodesTimer">_fixNodesTimer</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_lastButton">_lastButton</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_lastImage">_lastImage</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_lastNodeChange">_lastNodeChange</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_lastNodeChangeEvent">_lastNodeChangeEvent</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_mask">_mask</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_nodeChangeTimer">_nodeChangeTimer</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_rendered">_rendered</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_selection">_selection</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_semantic">_semantic</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_showingHiddenElements">_showingHiddenElements</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#_tag2cmd">_tag2cmd</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#afterElement">afterElement</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeElement">beforeElement</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#browser">browser</a><span class="">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#CLASS_CONTAINER">CLASS_CONTAINER</a><span class="protected">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#CLASS_EDITABLE">CLASS_EDITABLE</a><span class="protected">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#CLASS_EDITABLE_CONT">CLASS_EDITABLE_CONT</a><span class="protected">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#CLASS_NOEDIT">CLASS_NOEDIT</a><span class="protected">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#CLASS_PREFIX">CLASS_PREFIX</a><span class="protected">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#currentElement">currentElement</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#currentEvent">currentEvent</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#currentFont">currentFont</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#currentWindow">currentWindow</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#dompath">dompath</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#DOMReady">DOMReady</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#EDITOR_PANEL_ID">EDITOR_PANEL_ID</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorDirty">editorDirty</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#el">el</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#invalidHTML">invalidHTML</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#operaEvent">operaEvent</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#sel">sel</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#SEP_DOMPATH">SEP_DOMPATH</a><span class="">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#STOP_EXEC_COMMAND">STOP_EXEC_COMMAND</a><span class="protected">,</span>
+                                        <a class="protected" href="YAHOO.widget.SimpleEditor.html#STOP_NODE_CHANGE">STOP_NODE_CHANGE</a><span class="protected">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#STR_BEFORE_EDITOR">STR_BEFORE_EDITOR</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#STR_IMAGE_HERE">STR_IMAGE_HERE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#STR_LEAVE_EDITOR">STR_LEAVE_EDITOR</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#STR_LINK_URL">STR_LINK_URL</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#STR_TITLE">STR_TITLE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#toolbar">toolbar</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="" href="YAHOO.util.Element.html#DOM_EVENTS">DOM_EVENTS</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#_configs">_configs</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_cleanClassName">_cleanClassName</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        String
+                                            <strong>_cleanClassName</strong>
+                                           (
+                                                
+                                                        
+                                                         str
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>str &lt;String&gt;</code>
+                                                             The classname to clean up
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_closeWindow">_closeWindow</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_closeWindow</strong>
+                                           (
+                                                
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Close the currently open EditorWindow with the Escape key.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>ev &lt;Event&gt;</code>
+                                                             The keypress Event that we are trapping
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_fixNodes">_fixNodes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_fixNodes</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fix href and imgs as well as remove invalid HTML.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_handleCreateLinkWindowClose">_handleCreateLinkWindowClose</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleCreateLinkWindowClose</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the closing of the Link Properties Window.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_handleInsertImageClick">_handleInsertImageClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleInsertImageClick</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Opens the Image Properties Window when the insert Image button is clicked or an Image is Double Clicked.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_handleInsertImageWindowClose">_handleInsertImageWindowClose</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleInsertImageWindowClose</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the closing of the Image Properties Window.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_handleKeyDown">_handleKeyDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleKeyDown</strong>
+                                           (
+                                                
+                                                        
+                                                         ev
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Override method that handles some new keydown events inside the iFrame document.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>ev &lt;Event&gt;</code>
+                                                             The event we are working on.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_renderPanel">_renderPanel</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
+                                            <strong>_renderPanel</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the panel used for Editor Windows to the document so we can start using it..
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="closeWindow">closeWindow</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>closeWindow</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Close the currently open EditorWindow.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_heading">cmd_heading</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_heading</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('heading') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_hiddenelements">cmd_hiddenelements</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_hiddenelements</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('hiddenelements') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_indent">cmd_indent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_indent</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('indent') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_outdent">cmd_outdent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_outdent</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('outdent') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_removeformat">cmd_removeformat</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_removeformat</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('removeformat') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_script">cmd_script</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_script</strong>
+                                           (
+                                                
+                                                        
+                                                         action
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is a combined execCommand override method. It is called from the cmd_superscript and cmd_subscript methods.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>action &lt;object&gt;</code>
+                                                             action passed from the execCommand method
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_subscript">cmd_subscript</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_subscript</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('subscript') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cmd_superscript">cmd_superscript</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cmd_superscript</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is an execCommand override method. It is called from execCommand when the execCommand('superscript') is used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             Value passed from the execCommand method
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The Editor class' initialization method
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initAttributes">initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initAttributes</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes all of the configuration attributes used to create 
+the editor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             Object literal specifying a set of 
+configuration attributes used to create the editor.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="moveWindow">moveWindow</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>moveWindow</strong>
+                                           (
+                                                
+                                                        
+                                                         force
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Realign the window with the currentElement and reposition the knob above the panel.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>force &lt;Boolean&gt;</code>
+                                                             Boolean to tell it to move but not use any animation (Usually done the first time the window is loaded.)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="openWindow">openWindow</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>openWindow</strong>
+                                           (
+                                                
+                                                        
+                                                         win
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Opens a new "window/panel"
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>win &lt;<a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a>&gt;</code>
+                                                             A <a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a> instance
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representing the editor.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_checkLoaded">_checkLoaded</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_cleanClassName">_cleanClassName</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#_cleanIncomingHTML">_cleanIncomingHTML</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_closeWindow">_closeWindow</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_createCurrentElement">_createCurrentElement</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_createIframe">_createIframe</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_disableEditor">_disableEditor</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_fixNodes">_fixNodes</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_focusWindow">_focusWindow</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getBlankImage">_getBlankImage</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getDoc">_getDoc</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getDomPath">_getDomPath</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getRange">_getRange</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getSelectedElement">_getSelectedElement</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getSelection">_getSelection</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_getWindow">_getWindow</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleAfterNodeChange">_handleAfterNodeChange</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleAlign">_handleAlign</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleClick">_handleClick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleColorPicker">_handleColorPicker</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleCreateLinkClick">_handleCreateLinkClick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleCreateLinkWindowClose">_handleCreateLinkWindowClose</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleDoubleClick">_handleDoubleClick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleFontSize">_handleFontSize</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleInsertImageClick">_handleInsertImageClick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleInsertImageWindowClose">_handleInsertImageWindowClose</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleKeyDown">_handleKeyDown</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleKeyPress">_handleKeyPress</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleKeyUp">_handleKeyUp</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleMouseDown">_handleMouseDown</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleMouseUp">_handleMouseUp</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_handleToolbarClick">_handleToolbarClick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_hasParent">_hasParent</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_hasSelection">_hasSelection</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_initEditor">_initEditor</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_isElement">_isElement</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_isLocalFile">_isLocalFile</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_isNonEditable">_isNonEditable</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_listFix">_listFix</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_renderPanel">_renderPanel</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_selectNode">_selectNode</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_setCurrentEvent">_setCurrentEvent</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_setDesignMode">_setDesignMode</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#_setEditorStyle">_setEditorStyle</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_setInitialContent">_setInitialContent</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_setMarkupType">_setMarkupType</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_setupAfterElement">_setupAfterElement</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_swapEl">_swapEl</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_toggleDesignMode">_toggleDesignMode</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_updateMenuChecked">_updateMenuChecked</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.SimpleEditor.html#_writeDomPath">_writeDomPath</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cleanHTML">cleanHTML</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#clearEditorDoc">clearEditorDoc</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#closeWindow">closeWindow</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_backcolor">cmd_backcolor</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_createlink">cmd_createlink</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_fontname">cmd_fontname</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_fontsize">cmd_fontsize</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_forecolor">cmd_forecolor</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_inserthtml">cmd_inserthtml</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_insertimage">cmd_insertimage</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_insertorderedlist">cmd_insertorderedlist</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_insertunorderedlist">cmd_insertunorderedlist</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_list">cmd_list</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#cmd_unlink">cmd_unlink</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#execCommand">execCommand</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#filter_all_rgb">filter_all_rgb</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#filter_internals">filter_internals</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#filter_invalid_lists">filter_invalid_lists</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#filter_rgb">filter_rgb</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#filter_safari">filter_safari</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#getEditorHTML">getEditorHTML</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#hide">hide</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#initAttributes">initAttributes</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#moveWindow">moveWindow</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#nodeChange">nodeChange</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#openWindow">openWindow</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#post_filter_linebreaks">post_filter_linebreaks</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#pre_filter_linebreaks">pre_filter_linebreaks</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#saveHTML">saveHTML</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#setEditorHTML">setEditorHTML</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#show">show</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.SimpleEditor.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.util.Element.html#_registerHTMLAttr">_registerHTMLAttr</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.Element.html#addClass">addClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#addListener">addListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#appendChild">appendChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#appendTo">appendTo</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#fireQueue">fireQueue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getElementsByClassName">getElementsByClassName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getElementsByTagName">getElementsByTagName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getStyle">getStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#hasChildNodes">hasChildNodes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#hasClass">hasClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#initAttributes">initAttributes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#insertBefore">insertBefore</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#on">on</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeChild">removeChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeClass">removeClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeListener">removeListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#replaceChild">replaceChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#replaceClass">replaceClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#setStyle">setStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#subscribe">subscribe</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.AttributeProvider.html#configureAttribute">configureAttribute</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent">fireBeforeChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#fireChangeEvent">fireChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#get">get</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#getAttributeConfig">getAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#getAttributeKeys">getAttributeKeys</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#refresh">refresh</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#register">register</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#resetValue">resetValue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#set">set</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#setAttributeConfig">setAttributeConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#setAttributes">setAttributes</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3 id="events">Events</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeHiddencssChangeEvent">beforeHiddencssChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeHiddencssChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'hiddencss' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeLocalfilewarningChangeEvent">beforeLocalfilewarningChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeLocalfilewarningChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'localFileWarning' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="hiddencssChangeEvent">hiddencssChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>hiddencssChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'hiddencss' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="localFileWarningChangeEvent">localFileWarningChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>localFileWarningChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'localFileWarning' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#afterExecCommand">afterExecCommand</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#afterNodeChange">afterNodeChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#afterRender">afterRender</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#animateChangeEvent">animateChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeAnimateChangeEvent">beforeAnimateChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeBlankimageChangeEvent">beforeBlankimageChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeCssChangeEvent">beforeCssChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeDisabledChangeEvent">beforeDisabledChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeDompathChangeEvent">beforeDompathChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeExecCommand">beforeExecCommand</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeExtracssChangeEvent">beforeExtracssChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeFocusatstartChangeEvent">beforeFocusatstartChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeHandlesubmitChangeEvent">beforeHandlesubmitChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeHeightChangeEvent">beforeHeightChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeHtmlChangeEvent">beforeHtmlChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeMarkupChangeEvent">beforeMarkupChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeNodeChange">beforeNodeChange</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeRemovelinebreaksChangeEvent">beforeRemovelinebreaksChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeToolbarChangeEvent">beforeToolbarChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#beforeWidthChangeEvent">beforeWidthChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#blankimageChangeEvent">blankimageChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#cleanHTML">cleanHTML</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#cssChangeEvent">cssChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#disabledChangeEvent">disabledChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#dompathChangeEvent">dompathChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorContentLoaded">editorContentLoaded</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorDoubleClick">editorDoubleClick</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorKeyDown">editorKeyDown</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorKeyPress">editorKeyPress</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorKeyUp">editorKeyUp</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorMouseDown">editorMouseDown</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#editorMouseUp">editorMouseUp</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#extracssChangeEvent">extracssChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#focusAtStartChangeEvent">focusAtStartChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#handleSubmitChangeEvent">handleSubmitChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#heightChangeEvent">heightChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#htmlChangeEvent">htmlChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#markupChangeEvent">markupChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#removeLineBreaksChangeEvent">removeLineBreaksChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#toolbarChangeEvent">toolbarChangeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#toolbarLoaded">toolbarLoaded</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#widthChangeEvent">widthChangeEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#available">available</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#contentReady">contentReady</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3 id="configattributes">Configuration Attributes</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="hiddencss">hiddencss</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: <code><pre>
+.yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u, .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol, .yui-hidden li, .yui-hidden table {
+border: 1px dotted #ccc;
+}
+.yui-hidden .yui-non {
+border: none;
+}
+.yui-hidden img {
+padding: 2px;
+}</pre></code>
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="localFileWarning">localFileWarning</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Should we throw the warning if we detect a file that is local to their machine?
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.SimpleEditor.html#allowNoEdit">allowNoEdit</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#animate">animate</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#blankimage">blankimage</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#css">css</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#disabled">disabled</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#dompath">dompath</a><span class="">,</span>                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#editor_wrapper">editor_wrapper</a><span class="private">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#element_cont">element_cont</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#extracss">extracss</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#focusAtStart">focusAtStart</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#handleSubmit">handleSubmit</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#height">height</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#html">html</a><span class="">,</span>                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#iframe">iframe</a><span class="private">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#limitCommands">limitCommands</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#markup">markup</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#nodeChangeThreshold">nodeChangeThreshold</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#panel">panel</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#removeLineBreaks">removeLineBreaks</a><span class="">,</span>                                        <a class="private" href="YAHOO.widget.SimpleEditor.html#textarea">textarea</a><span class="private">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#toolbar">toolbar</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#toolbar_cont">toolbar_cont</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.SimpleEditor.html#width">width</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#element">element</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_date.html">date</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_number.html">number</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a></li>
+                                <li class=""><a href="YAHOO.widget.EditorInfo.html">YAHOO.widget.EditorInfo</a></li>
+                                <li class=""><a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a></li>
+                                <li class=""><a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a></li>
+                                <li class=""><a href="YAHOO.widget.ToolbarButtonAdvanced.html">YAHOO.widget.ToolbarButtonAdvanced</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="editor.js.html">editor.js</a></li>
+                                <li class=""><a href="simple-editor.js.html">simple-editor.js</a></li>
+                                <li class=""><a href="toolbar-button.js.html">toolbar-button.js</a></li>
+                                <li class=""><a href="toolbar.js.html">toolbar.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_alwaysDisabled">_alwaysDisabled</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_alwaysEnabled">_alwaysEnabled</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_defaultToolbar">_defaultToolbar</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_disabled">_disabled</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_HIDDEN">CLASS_HIDDEN</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_LOCAL_FILE">CLASS_LOCAL_FILE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_BEFORE_EDITOR">STR_BEFORE_EDITOR</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_CLOSE_WINDOW">STR_CLOSE_WINDOW</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_CLOSE_WINDOW_NOTE">STR_CLOSE_WINDOW_NOTE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_BORDER">STR_IMAGE_BORDER</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_COPY">STR_IMAGE_COPY</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_ORIG_SIZE">STR_IMAGE_ORIG_SIZE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_PADDING">STR_IMAGE_PADDING</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_PROP_TITLE">STR_IMAGE_PROP_TITLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_SIZE">STR_IMAGE_SIZE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_TEXTFLOW">STR_IMAGE_TEXTFLOW</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_TITLE">STR_IMAGE_TITLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_IMAGE_URL">STR_IMAGE_URL</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_LINK_NEW_WINDOW">STR_LINK_NEW_WINDOW</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_LINK_PROP_REMOVE">STR_LINK_PROP_REMOVE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_LINK_PROP_TITLE">STR_LINK_PROP_TITLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_LINK_TITLE">STR_LINK_TITLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_LOCAL_FILE_WARNING">STR_LOCAL_FILE_WARNING</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>String</code>-->
+                                <a href="#_cleanClassName">_cleanClassName</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_closeWindow">_closeWindow</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_fixNodes">_fixNodes</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_handleCreateLinkWindowClose">_handleCreateLinkWindowClose</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_handleInsertImageClick">_handleInsertImageClick</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_handleInsertImageWindowClose">_handleInsertImageWindowClose</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_handleKeyDown">_handleKeyDown</a>
+                                </li>
+                                <li class="private"><!--<code><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></code>-->
+                                <a href="#_renderPanel">_renderPanel</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#closeWindow">closeWindow</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_heading">cmd_heading</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_hiddenelements">cmd_hiddenelements</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_indent">cmd_indent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_outdent">cmd_outdent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_removeformat">cmd_removeformat</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_script">cmd_script</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_subscript">cmd_subscript</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cmd_superscript">cmd_superscript</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initAttributes">initAttributes</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#moveWindow">moveWindow</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#openWindow">openWindow</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#beforeHiddencssChangeEvent">beforeHiddencssChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeLocalfilewarningChangeEvent">beforeLocalfilewarningChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#hiddencssChangeEvent">hiddencssChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#localFileWarningChangeEvent">localFileWarningChangeEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#hiddencss">hiddencss</a>
+                                </li>
+                                <li class="">
+                                <a href="#localFileWarning">localFileWarning</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container   KeyListener.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                
+                 &gt; KeyListener.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/*</span>
+<span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
+<span class="c">Code licensed under the BSD License:</span>
+<span class="c">http://developer.yahoo.net/yui/license.txt</span>
+<span class="c">Version 0.12.2</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.</span>
+<span class="c">* @namespace YAHOO.util</span>
+<span class="c">* @class KeyListener</span>
+<span class="c">* @constructor</span>
+<span class="c">* @param {HTMLElement}	attachTo	The element or element ID to which the key event should be attached</span>
+<span class="c">* @param {String}	attachTo	The element or element ID to which the key event should be attached</span>
+<span class="c">* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).</span>
+<span class="c">* @param {Function}	handler		The CustomEvent handler to fire when the key event is detected</span>
+<span class="c">* @param {Object}	handler		An object literal representing the handler. </span>
+<span class="c">* @param {String}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attachTo</span><span class="o">,</span> <span class="nx">keyData</span><span class="o">,</span> <span class="nx">handler</span><span class="o">,</span> <span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span> <span class="o">(!</span> <span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEYDOWN</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The CustomEvent fired internally when a key is pressed</span>
+<span class="c">	* @event keyEvent</span>
+<span class="c">	* @private</span>
+<span class="c">	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).</span>
+<span class="c">	*/</span>
+	<span class="k">var</span> <span class="nx">keyEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;keyPressed&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The CustomEvent fired when the KeyListener is enabled via the enable() function</span>
+<span class="c">	* @event enabledEvent</span>
+<span class="c">	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">enabledEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;enabled&quot;</span><span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The CustomEvent fired when the KeyListener is disabled via the disable() function</span>
+<span class="c">	* @event disabledEvent</span>
+<span class="c">	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">disabledEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;disabled&quot;</span><span class="o">);</span>
+
+	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">attachTo</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">attachTo</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">attachTo</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">handler</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">handler</span><span class="o">);</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">handler</span><span class="o">.</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">handler</span><span class="o">.</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">handler</span><span class="o">.</span><span class="nx">correctScope</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Handles the key event when a key is pressed.</span>
+<span class="c">	* @method handleKeyPress</span>
+<span class="c">	* @param {DOMEvent} e	The keypress DOM event</span>
+<span class="c">	* @param {Object}	obj	The DOM event scope object</span>
+<span class="c">	* @private</span>
+<span class="c">	*/</span>
+	<span class="k">function</span> <span class="nx">handleKeyPress</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(!</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">shift</span><span class="o">)</span> <span class="o">{</span>	
+			<span class="nx">keyData</span><span class="o">.</span><span class="nx">shift</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> 
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(!</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">alt</span><span class="o">)</span> <span class="o">{</span>	
+			<span class="nx">keyData</span><span class="o">.</span><span class="nx">alt</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(!</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">ctrl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">keyData</span><span class="o">.</span><span class="nx">ctrl</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="c">// check held down modifying keys first</span>
+<span class="c"></span>		<span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">shiftKey</span> <span class="o">==</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">shift</span> <span class="o">&amp;&amp;</span> 
+			<span class="nx">e</span><span class="o">.</span><span class="nx">altKey</span>   <span class="o">==</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">alt</span> <span class="o">&amp;&amp;</span>
+			<span class="nx">e</span><span class="o">.</span><span class="nx">ctrlKey</span>  <span class="o">==</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">ctrl</span><span class="o">)</span> <span class="o">{</span> <span class="c">// if we pass this, all modifiers match</span>
+<span class="c"></span>			
+			<span class="k">var</span> <span class="nx">dataItem</span><span class="o">;</span>
+			<span class="k">var</span> <span class="nx">keyPressed</span><span class="o">;</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="nx">keyData</span><span class="o">.</span><span class="nx">keys</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">keyData</span><span class="o">.</span><span class="nx">keys</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+					<span class="nx">dataItem</span> <span class="o">=</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+
+					<span class="k">if</span> <span class="o">(</span><span class="nx">dataItem</span> <span class="o">==</span> <span class="nx">e</span><span class="o">.</span><span class="nx">charCode</span> <span class="o">)</span> <span class="o">{</span>
+						<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">charCode</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+						<span class="k">break</span><span class="o">;</span>
+					<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">dataItem</span> <span class="o">==</span> <span class="nx">e</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+						<span class="k">break</span><span class="o">;</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="nx">dataItem</span> <span class="o">=</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">keys</span><span class="o">;</span>
+
+				<span class="k">if</span> <span class="o">(</span><span class="nx">dataItem</span> <span class="o">==</span> <span class="nx">e</span><span class="o">.</span><span class="nx">charCode</span> <span class="o">)</span> <span class="o">{</span>
+					<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">charCode</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+				<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">dataItem</span> <span class="o">==</span> <span class="nx">e</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
+					<span class="nx">keyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Enables the KeyListener by attaching the DOM event listeners to the target DOM element</span>
+<span class="c">	* @method enable</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">enabled</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">attachTo</span><span class="o">,</span> <span class="nx">event</span><span class="o">,</span> <span class="nx">handleKeyPress</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">enabledEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">keyData</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="c">/**</span>
+<span class="c">		* Boolean indicating the enabled/disabled state of the Tooltip</span>
+<span class="c">		* @property enabled</span>
+<span class="c">		* @type Boolean</span>
+<span class="c">		*/</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Disables the KeyListener by removing the DOM event listeners from the target DOM element</span>
+<span class="c">	* @method disable</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">disable</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">enabled</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">attachTo</span><span class="o">,</span> <span class="nx">event</span><span class="o">,</span> <span class="nx">handleKeyPress</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">disabledEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">keyData</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Returns a String representation of the object.</span>
+<span class="c">	* @method toString</span>
+<span class="c">	* @return {String}	The string representation of the KeyListener</span>
+<span class="c">	*/</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="s2">&quot;KeyListener [&quot;</span> <span class="o">+</span> <span class="nx">keyData</span><span class="o">.</span><span class="nx">keys</span> <span class="o">+</span> <span class="s2">&quot;] &quot;</span> <span class="o">+</span> <span class="nx">attachTo</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="o">(</span><span class="nx">attachTo</span><span class="o">.</span><span class="nx">id</span> <span class="o">?</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">attachTo</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">);</span>
+	<span class="o">};</span>
+
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Constant representing the DOM &quot;keydown&quot; event.</span>
+<span class="c">* @property YAHOO.util.KeyListener.KEYDOWN</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEYDOWN</span> <span class="o">=</span> <span class="s2">&quot;keydown&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* Constant representing the DOM &quot;keyup&quot; event.</span>
+<span class="c">* @property YAHOO.util.KeyListener.KEYUP</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEYUP</span> <span class="o">=</span> <span class="s2">&quot;keyup&quot;</span><span class="o">;</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class="selected"><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

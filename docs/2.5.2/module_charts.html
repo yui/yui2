@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: charts   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Charts Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_charts.html">charts</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: charts
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Charts widget provides a Flash control for displaying data
+graphically by series across A-grade browsers with Flash Player installed.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search charts:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.NumericAxis", "name": "alwaysShowZero", "url": "YAHOO.widget.NumericAxis.html#property_alwaysShowZero"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_attributes", "url": "YAHOO.widget.FlashAdapter.html#property__attributes"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColor", "url": "YAHOO.widget.FlashAdapter.html#config_backgroundColor"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_backgroundColorChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeBackgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeBackgroundColorChange"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeCategoryNamesChange", "url": "YAHOO.widget.Chart.html#event_beforeCategoryNamesChange"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeDataSourceChange", "url": "YAHOO.widget.Chart.html#event_beforeDataSourceChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeDataTipFunctionChange", "url": "YAHOO.widget.Chart.html#event_beforeDataTipFunctionChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeExpressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeExpressInstallChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforePollingChange", "url": "YAHOO.widget.Chart.html#event_beforePollingChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeRequestChange", "url": "YAHOO.widget.Chart.html#event_beforeRequestChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeSeriesChange", "url": "YAHOO.widget.Chart.html#event_beforeSeriesChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeSwfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeSwfURLChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeVersionChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeVersionChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeWmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeWmodeChange"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxisChange"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXFieldChange"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxisChange"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYFieldChange"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "categoryNames", "url": "YAHOO.widget.CategoryAxis.html#property_categoryNames"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "categoryNames", "url": "YAHOO.widget.Chart.html#config_categoryNames"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "categoryNamesChange", "url": "YAHOO.widget.Chart.html#event_categoryNamesChange"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "Chart.SWFURL", "url": "YAHOO.widget.Chart.html#property_Chart.SWFURL"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_containerID", "url": "YAHOO.widget.FlashAdapter.html#property__containerID"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "contentReady", "url": "YAHOO.widget.FlashAdapter.html#event_contentReady"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_dataSource", "url": "YAHOO.widget.Chart.html#property__dataSource"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataSource", "url": "YAHOO.widget.Chart.html#config_dataSource"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataSourceChange", "url": "YAHOO.widget.Chart.html#event_dataSourceChange"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_dataTipFunction", "url": "YAHOO.widget.Chart.html#property__dataTipFunction"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataTipFunction", "url": "YAHOO.widget.Chart.html#config_dataTipFunction"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataTipFunctionChange", "url": "YAHOO.widget.Chart.html#event_dataTipFunctionChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "destroy", "url": "YAHOO.widget.FlashAdapter.html#method_destroy"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_embedSWF", "url": "YAHOO.widget.FlashAdapter.html#method__embedSWF"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method__eventHandler"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstall", "url": "YAHOO.widget.FlashAdapter.html#config_expressInstall"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_expressInstallChange"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getCategoryNames", "url": "YAHOO.widget.Chart.html#method__getCategoryNames"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getDataSource", "url": "YAHOO.widget.Chart.html#method__getDataSource"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getPolling", "url": "YAHOO.widget.Chart.html#method__getPolling"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getRequest", "url": "YAHOO.widget.Chart.html#method__getRequest"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getSeriesDefs", "url": "YAHOO.widget.Chart.html#method__getSeriesDefs"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_getSWFURL", "url": "YAHOO.widget.FlashAdapter.html#method__getSWFURL"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getXField", "url": "YAHOO.widget.CartesianChart.html#method__getXField"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getYField", "url": "YAHOO.widget.CartesianChart.html#method__getYField"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "hideOverlappingLabels", "url": "YAHOO.widget.Axis.html#property_hideOverlappingLabels"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_id", "url": "YAHOO.widget.FlashAdapter.html#property__id"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_initAttributes", "url": "YAHOO.widget.CartesianChart.html#method__initAttributes"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_initAttributes", "url": "YAHOO.widget.Chart.html#method__initAttributes"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_initAttributes", "url": "YAHOO.widget.FlashAdapter.html#method__initAttributes"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_initialized", "url": "YAHOO.widget.Chart.html#property__initialized"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemClickEvent", "url": "YAHOO.widget.Chart.html#event_itemClickEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDoubleClickEvent", "url": "YAHOO.widget.Chart.html#event_itemDoubleClickEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragEndEvent", "url": "YAHOO.widget.Chart.html#event_itemDragEndEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragEvent", "url": "YAHOO.widget.Chart.html#event_itemDragEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragStartEvent", "url": "YAHOO.widget.Chart.html#event_itemDragStartEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemMouseOutEvent", "url": "YAHOO.widget.Chart.html#event_itemMouseOutEvent"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemMouseOverEvent", "url": "YAHOO.widget.Chart.html#event_itemMouseOverEvent"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "labelFunction", "url": "YAHOO.widget.Axis.html#property_labelFunction"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_loadDataHandler", "url": "YAHOO.widget.Chart.html#method__loadDataHandler"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_loadHandler", "url": "YAHOO.widget.Chart.html#method__loadHandler"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_loadHandler", "url": "YAHOO.widget.FlashAdapter.html#method__loadHandler"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorTimeUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorTimeUnit"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "majorUnit", "url": "YAHOO.widget.NumericAxis.html#property_majorUnit"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorUnit"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "maximum", "url": "YAHOO.widget.NumericAxis.html#property_maximum"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "maximum", "url": "YAHOO.widget.TimeAxis.html#property_maximum"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minimum", "url": "YAHOO.widget.NumericAxis.html#property_minimum"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "minimum", "url": "YAHOO.widget.TimeAxis.html#property_minimum"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minorUnit", "url": "YAHOO.widget.NumericAxis.html#property_minorUnit"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "orientation", "url": "YAHOO.widget.Axis.html#property_orientation"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "polling", "url": "YAHOO.widget.Chart.html#config_polling"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "pollingChange", "url": "YAHOO.widget.Chart.html#event_pollingChange"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_pollingID", "url": "YAHOO.widget.Chart.html#property__pollingID"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_pollingInterval", "url": "YAHOO.widget.Chart.html#property__pollingInterval"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "proxyFunctionCount", "url": "YAHOO.widget.FlashAdapter.html#property_proxyFunctionCount"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_refreshData", "url": "YAHOO.widget.Chart.html#method__refreshData"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_request", "url": "YAHOO.widget.Chart.html#property__request"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "request", "url": "YAHOO.widget.Chart.html#config_request"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "requestChange", "url": "YAHOO.widget.Chart.html#event_requestChange"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "reverse", "url": "YAHOO.widget.Axis.html#property_reverse"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "scale", "url": "YAHOO.widget.NumericAxis.html#property_scale"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "series", "url": "YAHOO.widget.Chart.html#config_series"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "seriesChange", "url": "YAHOO.widget.Chart.html#event_seriesChange"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_seriesDefs", "url": "YAHOO.widget.Chart.html#property__seriesDefs"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setCategoryNames", "url": "YAHOO.widget.Chart.html#method__setCategoryNames"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setDataSource", "url": "YAHOO.widget.Chart.html#method__setDataSource"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setDataTipFunction", "url": "YAHOO.widget.Chart.html#method__setDataTipFunction"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setPolling", "url": "YAHOO.widget.Chart.html#method__setPolling"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setRequest", "url": "YAHOO.widget.Chart.html#method__setRequest"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setSeriesDefs", "url": "YAHOO.widget.Chart.html#method__setSeriesDefs"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setSeriesStyles", "url": "YAHOO.widget.Chart.html#method_setSeriesStyles"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setStyle", "url": "YAHOO.widget.Chart.html#method_setStyle"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setStyles", "url": "YAHOO.widget.Chart.html#method_setStyles"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxis", "url": "YAHOO.widget.CartesianChart.html#method__setXAxis"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXField", "url": "YAHOO.widget.CartesianChart.html#method__setXField"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxis", "url": "YAHOO.widget.CartesianChart.html#method__setYAxis"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYField", "url": "YAHOO.widget.CartesianChart.html#method__setYField"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "snapToUnits", "url": "YAHOO.widget.NumericAxis.html#property_snapToUnits"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "snapToUnits", "url": "YAHOO.widget.TimeAxis.html#property_snapToUnits"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swf", "url": "YAHOO.widget.FlashAdapter.html#property__swf"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swfURL", "url": "YAHOO.widget.FlashAdapter.html#property__swfURL"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURL", "url": "YAHOO.widget.FlashAdapter.html#config_swfURL"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_swfURLChange"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "toString", "url": "YAHOO.widget.Chart.html#method_toString"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "toString", "url": "YAHOO.widget.FlashAdapter.html#method_toString"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "type", "url": "YAHOO.widget.Axis.html#property_type"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_type", "url": "YAHOO.widget.Chart.html#property__type"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "version", "url": "YAHOO.widget.FlashAdapter.html#config_version"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "versionChange", "url": "YAHOO.widget.FlashAdapter.html#event_versionChange"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmode", "url": "YAHOO.widget.FlashAdapter.html#config_wmode"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_wmodeChange"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxis", "url": "YAHOO.widget.CartesianChart.html#config_xAxis"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxisChange"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_xAxisLabelFunction", "url": "YAHOO.widget.CartesianChart.html#property__xAxisLabelFunction"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xField", "url": "YAHOO.widget.CartesianChart.html#config_xField"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_xFieldChange"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.createProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.createProxyFunction"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.eventHandler"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.removeProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.removeProxyFunction"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxis", "url": "YAHOO.widget.CartesianChart.html#config_yAxis"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxisChange"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_yAxisLabelFunction", "url": "YAHOO.widget.CartesianChart.html#property__yAxisLabelFunction"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yField", "url": "YAHOO.widget.CartesianChart.html#config_yField"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_yFieldChange"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class="selected"><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                                <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
+                                <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianSeries.html">YAHOO.widget.CartesianSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CategoryAxis.html">YAHOO.widget.CategoryAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnChart.html">YAHOO.widget.ColumnChart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSeries.html">YAHOO.widget.ColumnSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
+                                <li class=""><a href="YAHOO.widget.LineChart.html">YAHOO.widget.LineChart</a></li>
+                                <li class=""><a href="YAHOO.widget.LineSeries.html">YAHOO.widget.LineSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.NumericAxis.html">YAHOO.widget.NumericAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.PieChart.html">YAHOO.widget.PieChart</a></li>
+                                <li class=""><a href="YAHOO.widget.PieSeries.html">YAHOO.widget.PieSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.Series.html">YAHOO.widget.Series</a></li>
+                                <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                                <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
+                                <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
+                                <li class=""><a href="Chart.js.html">Chart.js</a></li>
+                                <li class=""><a href="ChartTypes.js.html">ChartTypes.js</a></li>
+                                <li class=""><a href="FlashAdapter.js.html">FlashAdapter.js</a></li>
+                                <li class=""><a href="NumericAxis.js.html">NumericAxis.js</a></li>
+                                <li class=""><a href="PieChart.js.html">PieChart.js</a></li>
+                                <li class=""><a href="Series.js.html">Series.js</a></li>
+                                <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
+                                <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

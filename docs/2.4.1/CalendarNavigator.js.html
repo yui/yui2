@@ -1,0 +1,1384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar   CalendarNavigator.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Calendar&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                
+                 &gt; CalendarNavigator.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * The CalendarNavigator is used along with a Calendar/CalendarGroup to </span>
+<span class="c"> * provide a Month/Year popup navigation control, allowing the user to navigate </span>
+<span class="c"> * to a specific month/year in the Calendar/CalendarGroup without having to </span>
+<span class="c"> * scroll through months sequentially</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class CalendarNavigator</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param {Calendar|CalendarGroup} cal The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">cal</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">cal</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="c">// Setup static properties (inside anon fn, so that we can use shortcuts)</span>
+<span class="c"></span>	<span class="k">var</span> <span class="nx">CN</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * YAHOO.widget.CalendarNavigator.CLASSES contains constants</span>
+<span class="c">	 * for the class values applied to the CalendarNaviatgator&#39;s </span>
+<span class="c">	 * DOM elements</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.CLASSES</span>
+<span class="c">	 * @type Object</span>
+<span class="c">	 * @static</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">CLASSES</span> <span class="o">=</span> <span class="o">{</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the Calendar Navigator&#39;s bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">NAV</span> <span class="o">:</span><span class="s2">&quot;yui-cal-nav&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the Calendar/CalendarGroup&#39;s bounding box to indicate</span>
+<span class="c">		 * the Navigator is currently visible</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">NAV_VISIBLE</span><span class="o">:</span> <span class="s2">&quot;yui-cal-nav-visible&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the Navigator mask&#39;s bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MASK</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">MASK</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-mask&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the year label/control bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">YEAR</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-y&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the month label/control bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">MONTH</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-m&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the submit/cancel button&#39;s bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">BUTTONS</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-b&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to buttons wrapping element</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTON</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">BUTTON</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-btn&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the validation error area&#39;s bounding box</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.ERROR</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">ERROR</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-e&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the year input control</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">YEAR_CTRL</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-yc&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to the month input control</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">MONTH_CTRL</span> <span class="o">:</span> <span class="s2">&quot;yui-cal-nav-mc&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to controls with invalid data (e.g. a year input field with invalid an year)</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.INVALID</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">INVALID</span> <span class="o">:</span> <span class="s2">&quot;yui-invalid&quot;</span><span class="o">,</span>
+		<span class="c">/**</span>
+<span class="c">		 * Class applied to default controls</span>
+<span class="c">		 * @property YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 * @static</span>
+<span class="c">		 */</span>
+		<span class="nx">DEFAULT</span> <span class="o">:</span> <span class="s2">&quot;yui-default&quot;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Object literal containing the default configuration values for the CalendarNavigator</span>
+<span class="c">	 * The configuration object is expected to follow the format below, with the properties being</span>
+<span class="c">	 * case sensitive.</span>
+<span class="c">	 * &lt;dl&gt;</span>
+<span class="c">	 * &lt;dt&gt;strings&lt;/dt&gt;</span>
+<span class="c">	 * &lt;dd&gt;&lt;em&gt;Object&lt;/em&gt; :  An object with the properties shown below, defining the string labels to use in the Navigator&#39;s UI</span>
+<span class="c">	 *     &lt;dl&gt;</span>
+<span class="c">	 *         &lt;dt&gt;month&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The string to use for the month label. Defaults to &quot;Month&quot;.&lt;/dd&gt;</span>
+<span class="c">	 *         &lt;dt&gt;year&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The string to use for the year label. Defaults to &quot;Year&quot;.&lt;/dd&gt;</span>
+<span class="c">	 *         &lt;dt&gt;submit&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The string to use for the submit button label. Defaults to &quot;Okay&quot;.&lt;/dd&gt;</span>
+<span class="c">	 *         &lt;dt&gt;cancel&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The string to use for the cancel button label. Defaults to &quot;Cancel&quot;.&lt;/dd&gt;</span>
+<span class="c">	 *         &lt;dt&gt;invalidYear&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The string to use for invalid year values. Defaults to &quot;Year needs to be a number&quot;.&lt;/dd&gt;</span>
+<span class="c">	 *     &lt;/dl&gt;</span>
+<span class="c">	 * &lt;/dd&gt;</span>
+<span class="c">	 * &lt;dt&gt;monthFormat&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG&lt;/dd&gt;</span>
+<span class="c">	 * &lt;dt&gt;initialFocus&lt;/dt&gt;&lt;dd&gt;&lt;em&gt;String&lt;/em&gt; : Either &quot;year&quot; or &quot;month&quot; specifying which input control should get initial focus. Defaults to &quot;year&quot;&lt;/dd&gt;</span>
+<span class="c">	 * &lt;/dl&gt;</span>
+<span class="c">	 * @property _DEFAULT_CFG</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @type Object</span>
+<span class="c">	 * @static</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">_DEFAULT_CFG</span> <span class="o">=</span> <span class="o">{</span>
+		<span class="nx">strings</span> <span class="o">:</span> <span class="o">{</span>
+			<span class="nx">month</span><span class="o">:</span> <span class="s2">&quot;Month&quot;</span><span class="o">,</span>
+			<span class="nx">year</span><span class="o">:</span> <span class="s2">&quot;Year&quot;</span><span class="o">,</span>
+			<span class="nx">submit</span><span class="o">:</span> <span class="s2">&quot;Okay&quot;</span><span class="o">,</span>
+			<span class="nx">cancel</span><span class="o">:</span> <span class="s2">&quot;Cancel&quot;</span><span class="o">,</span>
+			<span class="nx">invalidYear</span> <span class="o">:</span> <span class="s2">&quot;Year needs to be a number&quot;</span>
+		<span class="o">},</span>
+		<span class="nx">monthFormat</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">.</span><span class="nx">LONG</span><span class="o">,</span>
+		<span class="nx">initialFocus</span><span class="o">:</span> <span class="s2">&quot;year&quot;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Calendar/CalendarGroup&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the Navigator and it&#39;s bounding box.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.ID_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">ID_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_nav&quot;</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Navigator&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the month control.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.MONTH_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String </span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">MONTH_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_month&quot;</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Navigator&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the year control.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.YEAR_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">YEAR_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_year&quot;</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Navigator&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the error bounding box.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.ERROR_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">ERROR_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_error&quot;</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Navigator&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the &quot;Cancel&quot; button.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">CANCEL_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_cancel&quot;</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * The suffix added to the Navigator&#39;s ID, to generate</span>
+<span class="c">	 * a unique ID for the &quot;Submit&quot; button.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @final</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">SUBMIT_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;_submit&quot;</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The number of digits to which the year input control is to be limited.</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">YR_MAX_DIGITS</span> <span class="o">=</span> <span class="m">4</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The amount by which to increment the current year value,</span>
+<span class="c">	 * when the arrow up/down key is pressed on the year control</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.YR_MINOR_INC</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">YR_MINOR_INC</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The amount by which to increment the current year value,</span>
+<span class="c">	 * when the page up/down key is pressed on the year control</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.YR_MAJOR_INC</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">YR_MAJOR_INC</span> <span class="o">=</span> <span class="m">10</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Artificial delay (in ms) between the time the Navigator is hidden</span>
+<span class="c">	 * and the Calendar/CalendarGroup state is updated. Allows the user</span>
+<span class="c">	 * the see the Calendar/CalendarGroup page changing. If set to 0</span>
+<span class="c">	 * the Calendar/CalendarGroup page will be updated instantly</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.UPDATE_DELAY</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">UPDATE_DELAY</span> <span class="o">=</span> <span class="m">50</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Regular expression used to validate the year input</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.YR_PATTERN</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type RegExp</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">YR_PATTERN</span> <span class="o">=</span> <span class="sr">/^\d+$/</span><span class="o">;</span>
+	<span class="c">/**</span>
+<span class="c">	 * Regular expression used to trim strings</span>
+<span class="c">	 * @property YAHOO.widget.CalendarNavigator.TRIM</span>
+<span class="c">	 * @static</span>
+<span class="c">	 * @type RegExp</span>
+<span class="c">	 */</span>
+	<span class="nx">CN</span><span class="o">.</span><span class="nx">TRIM</span> <span class="o">=</span> <span class="sr">/^\s*(.*?)\s*$/</span><span class="o">;</span>
+<span class="o">})();</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The unique ID for this CalendarNavigator instance</span>
+<span class="c">	 * @property id</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 */</span>
+	<span class="nx">id</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The Calendar/CalendarGroup instance to which the navigator belongs</span>
+<span class="c">	 * @property cal</span>
+<span class="c">	 * @type {Calendar|CalendarGroup}</span>
+<span class="c">	 */</span>
+	<span class="nx">cal</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to render the navigator&#39;s bounding box</span>
+<span class="c">	 * @property navEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">navEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to render the navigator&#39;s mask</span>
+<span class="c">	 * @property maskEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">maskEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to input the year</span>
+<span class="c">	 * @property yearEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">yearEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to input the month</span>
+<span class="c">	 * @property monthEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">monthEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to display validation errors</span>
+<span class="c">	 * @property errorEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">errorEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to update the Calendar/Calendar group</span>
+<span class="c">	 * with the month/year values</span>
+<span class="c">	 * @property submitEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">submitEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Reference to the HTMLElement used to hide the navigator without updating the </span>
+<span class="c">	 * Calendar/Calendar group</span>
+<span class="c">	 * @property cancelEl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">cancelEl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/** </span>
+<span class="c">	 * Reference to the first focusable control in the navigator (by default monthEl)</span>
+<span class="c">	 * @property firstCtrl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">firstCtrl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/** </span>
+<span class="c">	 * Reference to the last focusable control in the navigator (by default cancelEl)</span>
+<span class="c">	 * @property lastCtrl</span>
+<span class="c">	 * @type HTMLElement</span>
+<span class="c">	 */</span>
+	<span class="nx">lastCtrl</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The document containing the Calendar/Calendar group instance</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @property _doc</span>
+<span class="c">	 * @type HTMLDocument</span>
+<span class="c">	 */</span>
+	<span class="nx">_doc</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Internal state property for the current year displayed in the navigator</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @property _year</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">_year</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Internal state property for the current month index displayed in the navigator</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @property _month</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 */</span>
+	<span class="nx">_month</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Private internal state property which indicates whether or not the </span>
+<span class="c">	 * Navigator has been rendered.</span>
+<span class="c">	 * @private</span>
+<span class="c">	 * @property __rendered</span>
+<span class="c">	 * @type Boolean</span>
+<span class="c">	 */</span>
+	<span class="nx">__rendered</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Init lifecycle method called as part of construction</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method init</span>
+<span class="c">	 * @param {Calendar} cal The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached</span>
+<span class="c">	 */</span>
+	<span class="nx">init</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">cal</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">calBox</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">;</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">calBox</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">ID_SUFFIX</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="nx">calBox</span><span class="o">.</span><span class="nx">ownerDocument</span><span class="o">;</span>
+
+		<span class="c">/**</span>
+<span class="c">		 * Private flag, to identify IE6/IE7 Quirks</span>
+<span class="c">		 * @private</span>
+<span class="c">		 * @property __isIEQuirks</span>
+<span class="c">		 */</span>
+		<span class="k">var</span> <span class="nx">ie</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="nx">ie</span> <span class="o">&lt;=</span> <span class="m">6</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="nx">ie</span> <span class="o">===</span> <span class="m">7</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">)));</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Displays the navigator and mask, updating the input controls to reflect the </span>
+<span class="c">	 * currently set month and year. The show method will invoke the render method</span>
+<span class="c">	 * if the navigator has not been renderered already, allowing for lazy rendering</span>
+<span class="c">	 * of the control.</span>
+<span class="c">	 * </span>
+<span class="c">	 * The show method will fire the Calendar/CalendarGroup&#39;s beforeShowNav and showNav events</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method show</span>
+<span class="c">	 */</span>
+	<span class="nx">show</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">CLASSES</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">beforeShowNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">__rendered</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+			<span class="o">}</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">clearErrors</span><span class="o">();</span>
+
+			<span class="k">this</span><span class="o">.</span><span class="nx">_updateMonthUI</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_updateYearUI</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+			<span class="k">this</span><span class="o">.</span><span class="nx">setInitialFocus</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">showMask</span><span class="o">();</span>
+
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">CLASSES</span><span class="o">.</span><span class="nx">NAV_VISIBLE</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">showNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Hides the navigator and mask</span>
+<span class="c">	 * </span>
+<span class="c">	 * The show method will fire the Calendar/CalendarGroup&#39;s beforeHideNav event and hideNav events</span>
+<span class="c">	 * @method hide</span>
+<span class="c">	 */</span>
+	<span class="nx">hide</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">CLASSES</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">beforeHideNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">hideMask</span><span class="o">();</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">CLASSES</span><span class="o">.</span><span class="nx">NAV_VISIBLE</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">hideNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+	
+
+	<span class="c">/**</span>
+<span class="c">	 * Displays the navigator&#39;s mask element</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method showMask</span>
+<span class="c">	 */</span>
+	<span class="nx">showMask</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_syncMask</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Hides the navigator&#39;s mask element</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method hideMask</span>
+<span class="c">	 */</span>
+	<span class="nx">hideMask</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Returns the current month set on the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * Note: This may not be the month set in the UI, if </span>
+<span class="c">	 * the UI contains an invalid value.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method getMonth</span>
+<span class="c">	 * @return {Number} The Navigator&#39;s current month index</span>
+<span class="c">	 */</span>
+	<span class="nx">getMonth</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_month</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Returns the current year set on the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * Note: This may not be the year set in the UI, if </span>
+<span class="c">	 * the UI contains an invalid value.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method getYear</span>
+<span class="c">	 * @return {Number} The Navigator&#39;s current year value</span>
+<span class="c">	 */</span>
+	<span class="nx">getYear</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_year</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Sets the current month on the Navigator, and updates the UI</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method setMonth</span>
+<span class="c">	 * @param {Number} nMonth The month index, from 0 (Jan) through 11 (Dec).</span>
+<span class="c">	 */</span>
+	<span class="nx">setMonth</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">nMonth</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">nMonth</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">nMonth</span> <span class="o">&lt;</span> <span class="m">12</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_month</span> <span class="o">=</span> <span class="nx">nMonth</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_updateMonthUI</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Sets the current year on the Navigator, and updates the UI. If the </span>
+<span class="c">	 * provided year is invalid, it will not be set.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method setYear</span>
+<span class="c">	 * @param {Number} nYear The full year value to set the Navigator to.</span>
+<span class="c">	 */</span>
+	<span class="nx">setYear</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">nYear</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">yrPattern</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">YR_PATTERN</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">nYear</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">yrPattern</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">nYear</span><span class="o">+</span><span class="s2">&quot;&quot;</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_year</span> <span class="o">=</span> <span class="nx">nYear</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_updateYearUI</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Renders the HTML for the navigator, adding it to the </span>
+<span class="c">	 * document and attaches event listeners if it has not </span>
+<span class="c">	 * already been rendered.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method render</span>
+<span class="c">	 */</span>
+	<span class="nx">render</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">beforeRenderNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">__rendered</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">createNav</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">createMask</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">applyListeners</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">__rendered</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">renderNavEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Creates the navigator&#39;s containing HTMLElement, it&#39;s contents, and appends </span>
+<span class="c">	 * the containg element to the Calendar/CalendarGroup&#39;s container.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method createNav</span>
+<span class="c">	 */</span>
+	<span class="nx">createNav</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+		<span class="nx">d</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">.</span><span class="nx">NAV</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">htmlBuf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">renderNavContents</span><span class="o">([]);</span>
+
+		<span class="nx">d</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">htmlBuf</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">d</span><span class="o">);</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">navEl</span> <span class="o">=</span> <span class="nx">d</span><span class="o">;</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YEAR_SUFFIX</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">MONTH_SUFFIX</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">ERROR_SUFFIX</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">submitEl</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">SUBMIT_SUFFIX</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cancelEl</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">CANCEL_SUFFIX</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c">// Avoid XUL error on focus, select [ https://bugzilla.mozilla.org/show_bug.cgi?id=236791, </span>
+<span class="c"></span>			<span class="c">// supposedly fixed in 1.8.1, but there are reports of it still being around for methods other than blur ]</span>
+<span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s2">&quot;autocomplete&quot;</span><span class="o">,</span> <span class="s2">&quot;off&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">_setFirstLastElements</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Creates the Mask HTMLElement and appends it to the Calendar/CalendarGroups</span>
+<span class="c">	 * container.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method createMask</span>
+<span class="c">	 */</span>
+	<span class="nx">createMask</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+		<span class="nx">d</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">C</span><span class="o">.</span><span class="nx">MASK</span><span class="o">;</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">d</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span> <span class="o">=</span> <span class="nx">d</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Used to set the width/height of the mask in pixels to match the Calendar Container.</span>
+<span class="c">	 * Currently only used for IE6 and IE7 quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * The method is also registered as an HTMLElement resize listener on the Calendars container element.</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _syncMask</span>
+<span class="c">	 */</span>
+	<span class="nx">_syncMask</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="nx">c</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">,</span> <span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">r</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">r</span><span class="o">.</span><span class="nx">left</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">,</span> <span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">r</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">r</span><span class="o">.</span><span class="nx">top</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Renders the contents of the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method renderNavContents</span>
+<span class="c">	 * </span>
+<span class="c">	 * @param {Array} html The HTML buffer to append the HTML to.</span>
+<span class="c">	 * @return {Array} A reference to the buffer passed in.</span>
+<span class="c">	 */</span>
+	<span class="nx">renderNavContents</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">html</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">,</span>
+			<span class="nx">C</span> <span class="o">=</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">,</span>
+			<span class="nx">h</span> <span class="o">=</span> <span class="nx">html</span><span class="o">;</span> <span class="c">// just to use a shorter name</span>
+<span class="c"></span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">MONTH</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">renderMonth</span><span class="o">(</span><span class="nx">h</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">YEAR</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">renderYear</span><span class="o">(</span><span class="nx">h</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">BUTTONS</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">renderButtons</span><span class="o">(</span><span class="nx">h</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">ERROR</span> <span class="o">+</span> <span class="s1">&#39;&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">ERROR_SUFFIX</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span><span class="o">;</span>
+
+		<span class="k">return</span> <span class="nx">h</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Renders the month label and control for the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method renderNavContents</span>
+<span class="c">	 * @param {Array} html The HTML buffer to append the HTML to.</span>
+<span class="c">	 * @return {Array} A reference to the buffer passed in.</span>
+<span class="c">	 */</span>
+	<span class="nx">renderMonth</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">html</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">,</span>
+			<span class="nx">C</span> <span class="o">=</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">MONTH_SUFFIX</span><span class="o">,</span>
+			<span class="nx">mf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;monthFormat&quot;</span><span class="o">),</span>
+			<span class="nx">months</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">((</span><span class="nx">mf</span> <span class="o">==</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">.</span><span class="nx">SHORT</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;MONTHS_SHORT&quot;</span> <span class="o">:</span> <span class="s2">&quot;MONTHS_LONG&quot;</span><span class="o">),</span>
+			<span class="nx">h</span> <span class="o">=</span> <span class="nx">html</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">months</span> <span class="o">&amp;&amp;</span> <span class="nx">months</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;label for=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+			<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;month&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+			<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/label&gt;&#39;</span><span class="o">;</span>
+			<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;select name=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">MONTH_CTRL</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">months</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;option value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+				<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">months</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+				<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/option&gt;&#39;</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/select&gt;&#39;</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">h</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Renders the year label and control for the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method renderYear</span>
+<span class="c">	 * @param {Array} html The HTML buffer to append the HTML to.</span>
+<span class="c">	 * @return {Array} A reference to the buffer passed in.</span>
+<span class="c">	 */</span>
+	<span class="nx">renderYear</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">html</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">,</span>
+			<span class="nx">C</span> <span class="o">=</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YEAR_SUFFIX</span><span class="o">,</span>
+			<span class="nx">size</span> <span class="o">=</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_MAX_DIGITS</span><span class="o">,</span>
+			<span class="nx">h</span> <span class="o">=</span> <span class="nx">html</span><span class="o">;</span>
+
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;label for=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;year&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/label&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;input type=&quot;text&quot; name=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">YEAR_CTRL</span> <span class="o">+</span> <span class="s1">&#39;&quot; maxlength=&quot;&#39;</span> <span class="o">+</span> <span class="nx">size</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span><span class="o">;</span>
+		<span class="k">return</span> <span class="nx">h</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Renders the submit/cancel buttons for the navigator</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method renderButton</span>
+<span class="c">	 * @return {String} The HTML created for the Button UI</span>
+<span class="c">	 */</span>
+	<span class="nx">renderButtons</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">html</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">html</span><span class="o">;</span>
+
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;span class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">BUTTON</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">DEFAULT</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;button type=&quot;button&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_submit&#39;</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;submit&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;span class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">C</span><span class="o">.</span><span class="nx">BUTTON</span> <span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;button type=&quot;button&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_cancel&#39;</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;cancel&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="o">;</span>
+		<span class="nx">h</span><span class="o">[</span><span class="nx">h</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="o">;</span>
+
+		<span class="k">return</span> <span class="nx">h</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Attaches DOM event listeners to the rendered elements</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * The method will call applyKeyListeners, to setup keyboard specific </span>
+<span class="c">	 * listeners</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @method applyListeners</span>
+<span class="c">	 */</span>
+	<span class="nx">applyListeners</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+		<span class="k">function</span> <span class="nx">yearUpdateHandler</span><span class="o">()</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">validate</span><span class="o">())</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getYearFromUI</span><span class="o">());</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="k">function</span> <span class="nx">monthUpdateHandler</span><span class="o">()</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getMonthFromUI</span><span class="o">());</span>
+		<span class="o">}</span>
+
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">submitEl</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">submit</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cancelEl</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cancel</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span> <span class="nx">yearUpdateHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">,</span> <span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="nx">monthUpdateHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_syncMask</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">applyKeyListeners</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Removes/purges DOM event listeners from the rendered elements</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method purgeListeners</span>
+<span class="c">	 */</span>
+	<span class="nx">purgeListeners</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">submitEl</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">submit</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cancelEl</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cancel</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="s2">&quot;blur&quot;</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">,</span> <span class="s2">&quot;change&quot;</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_syncMask</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">purgeKeyListeners</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Attaches DOM listeners for keyboard support. </span>
+<span class="c">	 * Tab/Shift-Tab looping, Enter Key Submit on Year element,</span>
+<span class="c">	 * Up/Down/PgUp/PgDown year increment on Year element</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * NOTE: MacOSX Safari 2.x doesn&#39;t let you tab to buttons and </span>
+<span class="c">	 * MacOSX Gecko does not let you tab to buttons or select controls,</span>
+<span class="c">	 * so for these browsers, Tab/Shift-Tab looping is limited to the </span>
+<span class="c">	 * elements which can be reached using the tab key.</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @method applyKeyListeners</span>
+<span class="c">	 */</span>
+	<span class="nx">applyKeyListeners</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+		<span class="c">// IE doesn&#39;t fire keypress for arrow/pg keys (non-char keys)</span>
+<span class="c"></span>		<span class="k">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">arrowEvt</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;keydown&quot;</span> <span class="o">:</span> <span class="s2">&quot;keypress&quot;</span><span class="o">;</span>
+
+		<span class="c">// - IE doesn&#39;t fire keypress for non-char keys</span>
+<span class="c"></span>		<span class="c">// - Opera doesn&#39;t allow us to cancel keydown or keypress for tab, but </span>
+<span class="c"></span>		<span class="c">//   changes focus successfully on keydown (keypress is too late to change focus - opera&#39;s already moved on).</span>
+<span class="c"></span>		<span class="k">var</span> <span class="nx">tabEvt</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">||</span> <span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;keydown&quot;</span> <span class="o">:</span> <span class="s2">&quot;keypress&quot;</span><span class="o">;</span>
+
+		<span class="c">// Everyone likes keypress for Enter (char keys) - whoo hoo!</span>
+<span class="c"></span>		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleEnterKey</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="nx">arrowEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleDirectionKeys</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span><span class="o">,</span> <span class="nx">tabEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTabKey</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span><span class="o">,</span> <span class="nx">tabEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleShiftTabKey</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Removes/purges DOM listeners for keyboard support</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method purgeKeyListeners</span>
+<span class="c">	 */</span>
+	<span class="nx">purgeKeyListeners</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">arrowEvt</span> <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;keydown&quot;</span> <span class="o">:</span> <span class="s2">&quot;keypress&quot;</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">tabEvt</span> <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;keydown&quot;</span> <span class="o">:</span> <span class="s2">&quot;keypress&quot;</span><span class="o">;</span>
+
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleEnterKey</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="nx">arrowEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleDirectionKeys</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span><span class="o">,</span> <span class="nx">tabEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTabKey</span><span class="o">);</span>
+		<span class="nx">E</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span><span class="o">,</span> <span class="nx">tabEvt</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleShiftTabKey</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Updates the Calendar/CalendarGroup&#39;s pagedate with the currently set month and year if valid.</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * If the currently set month/year is invalid, a validation error will be displayed and the </span>
+<span class="c">	 * Calendar/CalendarGroup&#39;s pagedate will not be updated.</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @method submit</span>
+<span class="c">	 */</span>
+	<span class="nx">submit</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">validate</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+
+			<span class="k">this</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getMonthFromUI</span><span class="o">());</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getYearFromUI</span><span class="o">());</span>
+
+			<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">;</span>
+			<span class="k">var</span> <span class="nx">nav</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+			
+			<span class="k">function</span> <span class="nx">update</span><span class="o">()</span> <span class="o">{</span>
+				<span class="nx">cal</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="nx">nav</span><span class="o">.</span><span class="nx">getYear</span><span class="o">());</span>
+				<span class="nx">cal</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">nav</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">());</span>
+				<span class="nx">cal</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+			<span class="o">}</span>
+			<span class="c">// Artificial delay, just to help the user see something changed</span>
+<span class="c"></span>			<span class="k">var</span> <span class="nx">delay</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">UPDATE_DELAY</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">delay</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nb">window</span><span class="o">.</span><span class="nx">setTimeout</span><span class="o">(</span><span class="nx">update</span><span class="o">,</span> <span class="nx">delay</span><span class="o">);</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="nx">update</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Hides the navigator and mask, without updating the Calendar/CalendarGroup&#39;s state</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method cancel</span>
+<span class="c">	 */</span>
+	<span class="nx">cancel</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Validates the current state of the UI controls</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method validate</span>
+<span class="c">	 * @return {Boolean} true, if the current UI state contains valid values, false if not</span>
+<span class="c">	 */</span>
+	<span class="nx">validate</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getYearFromUI</span><span class="o">()</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">clearErrors</span><span class="o">();</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">setYearError</span><span class="o">();</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">setError</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;invalidYear&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">));</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Displays an error message in the Navigator&#39;s error panel</span>
+<span class="c">	 * @method setError</span>
+<span class="c">	 * @param {String} msg The error message to display</span>
+<span class="c">	 */</span>
+	<span class="nx">setError</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">msg</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">msg</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Clears the navigator&#39;s error message and hides the error panel</span>
+<span class="c">	 * @method clearError </span>
+<span class="c">	 */</span>
+	<span class="nx">clearError</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_show</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Displays the validation error UI for the year control</span>
+<span class="c">	 * @method setYearError</span>
+<span class="c">	 */</span>
+	<span class="nx">setYearError</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">.</span><span class="nx">INVALID</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Removes the validation error UI for the year control</span>
+<span class="c">	 * @method clearYearError</span>
+<span class="c">	 */</span>
+	<span class="nx">clearYearError</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">CLASSES</span><span class="o">.</span><span class="nx">INVALID</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Clears all validation and error messages in the UI</span>
+<span class="c">	 * @method clearErrors</span>
+<span class="c">	 */</span>
+	<span class="nx">clearErrors</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">clearError</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">clearYearError</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Sets the initial focus, based on the configured value</span>
+<span class="c">	 * @method setInitialFocus</span>
+<span class="c">	 */</span>
+	<span class="nx">setInitialFocus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">submitEl</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__getCfg</span><span class="o">(</span><span class="s2">&quot;initialFocus&quot;</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="nx">f</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">f</span> <span class="o">=</span> <span class="nx">f</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">==</span> <span class="s2">&quot;year&quot;</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">;</span>
+				<span class="k">try</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">select</span><span class="o">();</span>
+				<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+					<span class="c">// Ignore;</span>
+<span class="c"></span>				<span class="o">}</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">==</span> <span class="s2">&quot;month&quot;</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">focus</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="nx">el</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c">// TODO: Fall back if focus fails?</span>
+<span class="c"></span>			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Removes all renderered HTML elements for the Navigator from</span>
+<span class="c">	 * the DOM, purges event listeners and clears (nulls) any property</span>
+<span class="c">	 * references to HTML references</span>
+<span class="c">	 * @method erase</span>
+<span class="c">	 */</span>
+	<span class="nx">erase</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__rendered</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">purgeListeners</span><span class="o">();</span>
+
+			<span class="c">// Clear out innerHTML references</span>
+<span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">errorEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">submitEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">cancelEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+			<span class="o">}</span>
+
+			<span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">p</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">navEl</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">navEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+			<span class="k">var</span> <span class="nx">pm</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">pm</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">pm</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">maskEl</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">__rendered</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Destroys the Navigator object and any HTML references</span>
+<span class="c">	 * @method destroy</span>
+<span class="c">	 */</span>
+	<span class="nx">destroy</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">erase</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cal</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Protected implementation to handle how UI elements are </span>
+<span class="c">	 * hidden/shown.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _show</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 */</span>
+	<span class="nx">_show</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">bShow</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nx">bShow</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;block&quot;</span> <span class="o">:</span> <span class="s2">&quot;none&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Returns the month value (index), from the month UI element</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _getMonthFromUI</span>
+<span class="c">	 * @return {Number} The month index, or 0 if a UI element for the month</span>
+<span class="c">	 * is not found</span>
+<span class="c">	 */</span>
+	<span class="nx">_getMonthFromUI</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">.</span><span class="nx">selectedIndex</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="m">0</span><span class="o">;</span> <span class="c">// Default to Jan</span>
+<span class="c"></span>		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Returns the year value, from the Navitator&#39;s year UI element</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _getYearFromUI</span>
+<span class="c">	 * @return {Number} The year value set in the UI, if valid. null is returned if </span>
+<span class="c">	 * the UI does not contain a valid year value.</span>
+<span class="c">	 */</span>
+	<span class="nx">_getYearFromUI</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">yr</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+			<span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="nx">NAV</span><span class="o">.</span><span class="nx">TRIM</span><span class="o">,</span> <span class="s2">&quot;$1&quot;</span><span class="o">);</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_PATTERN</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">value</span><span class="o">))</span> <span class="o">{</span>
+				<span class="nx">yr</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">value</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">yr</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Updates the Navigator&#39;s year UI, based on the year value set on the Navigator object</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _updateYearUI</span>
+<span class="c">	 */</span>
+	<span class="nx">_updateYearUI</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_year</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_year</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Updates the Navigator&#39;s month UI, based on the month value set on the Navigator object</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _updateMonthUI</span>
+<span class="c">	 */</span>
+	<span class="nx">_updateMonthUI</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">.</span><span class="nx">selectedIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_month</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Sets up references to the first and last focusable element in the Navigator&#39;s UI</span>
+<span class="c">	 * in terms of tab order (Naviagator&#39;s firstEl and lastEl properties). The references</span>
+<span class="c">	 * are used to control modality by looping around from the first to the last control</span>
+<span class="c">	 * and visa versa for tab/shift-tab navigation.</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * See &lt;a href=&quot;#applyKeyListeners&quot;&gt;applyKeyListeners&lt;/a&gt;</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @method _setFirstLastElements</span>
+<span class="c">	 */</span>
+	<span class="nx">_setFirstLastElements</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cancelEl</span><span class="o">;</span>
+
+		<span class="c">// Special handling for MacOSX.</span>
+<span class="c"></span>		<span class="c">// - Safari 2.x can&#39;t focus on buttons</span>
+<span class="c"></span>		<span class="c">// - Gecko can&#39;t focus on select boxes or buttons</span>
+<span class="c"></span>		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__isMac</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&lt;</span> <span class="m">420</span><span class="o">){</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">monthEl</span><span class="o">;</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">;</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Default Keyboard event handler to capture Enter </span>
+<span class="c">	 * on the Navigator&#39;s year control (yearEl)</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method _handleEnterKey</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @param {Event} e The DOM event being handled</span>
+<span class="c">	 */</span>
+	<span class="nx">_handleEnterKey</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">KEYS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEY</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">==</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">ENTER</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">submit</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Default Keyboard event handler to capture up/down/pgup/pgdown</span>
+<span class="c">	 * on the Navigator&#39;s year control (yearEl).</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method _handleDirectionKeys</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @param {Event} e The DOM event being handled</span>
+<span class="c">	 */</span>
+	<span class="nx">_handleDirectionKeys</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">KEYS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEY</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">NAV</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">?</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nb">isFinite</span><span class="o">(</span><span class="nx">value</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">dir</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="nx">switch</span><span class="o">(</span><span class="nx">E</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">))</span> <span class="o">{</span>
+				<span class="nx">case</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">UP</span><span class="o">:</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_MINOR_INC</span><span class="o">;</span>
+					<span class="nx">dir</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="nx">case</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">DOWN</span><span class="o">:</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">value</span> <span class="o">-</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_MINOR_INC</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+					<span class="nx">dir</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="nx">case</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">PAGE_UP</span><span class="o">:</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">+</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_MAJOR_INC</span><span class="o">;</span>
+					<span class="nx">dir</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="nx">case</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">PAGE_DOWN</span><span class="o">:</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">value</span> <span class="o">-</span> <span class="nx">NAV</span><span class="o">.</span><span class="nx">YR_MAJOR_INC</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+					<span class="nx">dir</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="nx">default</span><span class="o">:</span>
+					<span class="k">break</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">dir</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">E</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+				<span class="k">try</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">yearEl</span><span class="o">.</span><span class="nx">select</span><span class="o">();</span>
+				<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+					<span class="c">// Ignore</span>
+<span class="c"></span>				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Default Keyboard event handler to capture Tab </span>
+<span class="c">	 * on the last control (lastCtrl) in the Navigator.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method _handleTabKey</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @param {Event} e The DOM event being handled</span>
+<span class="c">	 */</span>
+	<span class="nx">_handleTabKey</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">KEYS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEY</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">E</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">==</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">TAB</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">shiftKey</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="nx">E</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">firstCtrl</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c">// Ignore - mainly for focus edge cases</span>
+<span class="c"></span>			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Default Keyboard event handler to capture Shift-Tab </span>
+<span class="c">	 * on the first control (firstCtrl) in the Navigator.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @method _handleShiftTabKey</span>
+<span class="c">	 * @protected</span>
+<span class="c">	 * @param {Event} e The DOM event being handled</span>
+<span class="c">	 */</span>
+	<span class="nx">_handleShiftTabKey</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">KEYS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEY</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">shiftKey</span> <span class="o">&amp;&amp;</span> <span class="nx">E</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">==</span> <span class="nx">KEYS</span><span class="o">.</span><span class="nx">TAB</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="nx">E</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">lastCtrl</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="c">// Ignore - mainly for focus edge cases</span>
+<span class="c"></span>			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Retrieve Navigator configuration values from </span>
+<span class="c">	 * the parent Calendar/CalendarGroup&#39;s config value.</span>
+<span class="c">	 * &lt;p&gt;</span>
+<span class="c">	 * If it has not been set in the user provided configuration, the method will </span>
+<span class="c">	 * return the default value of the configuration property, as set in _DEFAULT_CFG</span>
+<span class="c">	 * &lt;/p&gt;</span>
+<span class="c">	 * @private</span>
+<span class="c">	 * @method __getCfg</span>
+<span class="c">	 * @param {String} Case sensitive property name.</span>
+<span class="c">	 * @param {Boolean} true, if the property is a string property, false if not.</span>
+<span class="c">	 * @return The value of the configuration property</span>
+<span class="c">	 */</span>
+	<span class="nx">__getCfg</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">prop</span><span class="o">,</span> <span class="nx">bIsStr</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">DEF_CFG</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarNavigator</span><span class="o">.</span><span class="nx">_DEFAULT_CFG</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">cfg</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;navigator&quot;</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">bIsStr</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="o">(</span><span class="nx">cfg</span> <span class="o">!==</span> <span class="kc">true</span> <span class="o">&amp;&amp;</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">strings</span> <span class="o">&amp;&amp;</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">strings</span><span class="o">[</span><span class="nx">prop</span><span class="o">])</span> <span class="o">?</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">strings</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">:</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">strings</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="o">(</span><span class="nx">cfg</span> <span class="o">!==</span> <span class="kc">true</span> <span class="o">&amp;&amp;</span> <span class="nx">cfg</span><span class="o">[</span><span class="nx">prop</span><span class="o">])</span> <span class="o">?</span> <span class="nx">cfg</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">:</span> <span class="nx">DEF_CFG</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Private flag, to identify MacOS</span>
+<span class="c">	 * @private</span>
+<span class="c">	 * @property __isMac</span>
+<span class="c">	 */</span>
+	<span class="nx">__isMac</span> <span class="o">:</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;macintosh&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span>
+
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_date.html">date</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_number.html">number</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarNavigator.html">YAHOO.widget.CalendarNavigator</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class="selected"><a href="CalendarNavigator.js.html">CalendarNavigator.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

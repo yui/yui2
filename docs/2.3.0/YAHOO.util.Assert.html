@@ -1,0 +1,1446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest  YAHOO.util.Assert   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                 &gt; YAHOO.util.Assert 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
+                            Class <b>YAHOO.util.Assert</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The Assert object provides functions to test JavaScript values against
+known and expected results. Whenever a comparison (assertion) fails,
+an error is thrown.
+                    </div>
+
+
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="areEqual">areEqual</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>areEqual</strong>
+                                           (
+                                                
+                                                        
+                                                         expected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is equal to another. This uses the double equals sign
+so type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>expected &lt;Object&gt;</code>
+                                                             The expected value.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="areNotEqual">areNotEqual</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>areNotEqual</strong>
+                                           (
+                                                
+                                                        
+                                                         unexpected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not equal to another. This uses the double equals sign
+so type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>unexpected &lt;Object&gt;</code>
+                                                             The unexpected value.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="areNotSame">areNotSame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>areNotSame</strong>
+                                           (
+                                                
+                                                        
+                                                         unexpected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not the same as another. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>unexpected &lt;Object&gt;</code>
+                                                             The unexpected value.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="areSame">areSame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>areSame</strong>
+                                           (
+                                                
+                                                        
+                                                         expected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is the same as another. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>expected &lt;Object&gt;</code>
+                                                             The expected value.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="fail">fail</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>fail</strong>
+                                           (
+                                                
+                                                        
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Forces an assertion error to occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display with the failure.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isArray">isArray</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isArray</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is an array.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isBoolean">isBoolean</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isBoolean</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is a Boolean.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isFalse">isFalse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isFalse</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is false. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isFunction">isFunction</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isFunction</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is a function.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isInstanceOf">isInstanceOf</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isInstanceOf</strong>
+                                           (
+                                                
+                                                        
+                                                         expected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is an instance of a particular object. This may return
+incorrect results when comparing objects from one frame to constructors in
+another frame. For best results, don't use in a cross-frame manner.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>expected &lt;Function&gt;</code>
+                                                             The function that the object should be an instance of.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The object to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNaN">isNaN</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNaN</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not a number.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNotNaN">isNotNaN</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNotNaN</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not the special NaN value.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNotNull">isNotNull</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNotNull</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not null. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNotUndefined">isNotUndefined</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNotUndefined</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is not undefined. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNull">isNull</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNull</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is null. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isNumber">isNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is a number.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isObject">isObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isObject</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is an object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isString">isString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isString</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is a string.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isTrue">isTrue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isTrue</strong>
+                                           (
+                                                
+                                                        
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is true. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isTypeOf">isTypeOf</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isTypeOf</strong>
+                                           (
+                                                
+                                                        
+                                                         expectedType
+                                                    
+                                                
+                                                        , 
+                                                         actualValue
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is of a particular type.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>expectedType &lt;String&gt;</code>
+                                                             The expected type of the variable.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actualValue &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isUndefined">isUndefined</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>isUndefined</strong>
+                                           (
+                                                
+                                                        
+                                                         expected
+                                                    
+                                                
+                                                        , 
+                                                         actual
+                                                    
+                                                
+                                                        , 
+                                                         message
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Asserts that a value is undefined. This uses the triple equals sign
+so no type cohersion may occur.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>expected &lt;Object&gt;</code>
+                                                             The expected value.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>actual &lt;Object&gt;</code>
+                                                             The actual value to test.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>message &lt;String&gt;</code>
+                                                             (Optional) The message to display if the assertion fails.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class="selected"><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#areEqual">areEqual</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#areNotEqual">areNotEqual</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#areNotSame">areNotSame</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#areSame">areSame</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#fail">fail</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isArray">isArray</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isBoolean">isBoolean</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isFalse">isFalse</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isFunction">isFunction</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isInstanceOf">isInstanceOf</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNaN">isNaN</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNotNaN">isNotNaN</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNotNull">isNotNull</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNotUndefined">isNotUndefined</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNull">isNull</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isNumber">isNumber</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isObject">isObject</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isString">isString</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isTrue">isTrue</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isTypeOf">isTypeOf</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#isUndefined">isUndefined</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

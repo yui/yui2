@@ -1,0 +1,2784 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar  YAHOO.widget.CalendarNavigator   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Calendar&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                 &gt; YAHOO.widget.CalendarNavigator 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.CalendarNavigator</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The CalendarNavigator is used along with a Calendar/CalendarGroup to 
+provide a Month/Year popup navigation control, allowing the user to navigate 
+to a specific month/year in the Calendar/CalendarGroup without having to 
+scroll through months sequentially
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.CalendarNavigator</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                cal
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>cal
+                                                    &lt;Calendar|CalendarGroup&gt; 
+                                                    </code>
+                                                     The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="__isIEQuirks">__isIEQuirks</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Private flag, to identify IE6/IE7 Quirks
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="__isMac">__isMac</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Private flag, to identify MacOS
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="__rendered">__rendered</a>
+                                        <code>- private Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Private internal state property which indicates whether or not the 
+Navigator has been rendered.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_DEFAULT_CFG">_DEFAULT_CFG</a>
+                                        <code>- protected static Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object literal containing the default configuration values for the CalendarNavigator
+The configuration object is expected to follow the format below, with the properties being
+case sensitive.
+<dl>
+<dt>strings</dt>
+<dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
+<dl>
+<dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
+<dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
+<dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
+<dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
+<dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
+</dl>
+</dd>
+<dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
+<dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
+</dl>
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_doc">_doc</a>
+                                        <code>- protected HTMLDocument</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The document containing the Calendar/Calendar group instance
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_month">_month</a>
+                                        <code>- protected Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal state property for the current month index displayed in the navigator
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_year">_year</a>
+                                        <code>- protected Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal state property for the current year displayed in the navigator
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="cal">cal</a>
+                                        <code>- {Calendar|CalendarGroup}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Calendar/CalendarGroup instance to which the navigator belongs
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="cancelEl">cancelEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to hide the navigator without updating the 
+Calendar/Calendar group
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="errorEl">errorEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to display validation errors
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="firstCtrl">firstCtrl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the first focusable control in the navigator (by default monthEl)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="id">id</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The unique ID for this CalendarNavigator instance
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="lastCtrl">lastCtrl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the last focusable control in the navigator (by default cancelEl)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="maskEl">maskEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to render the navigator's mask
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="monthEl">monthEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to input the month
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="navEl">navEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to render the navigator's bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="submitEl">submitEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to update the Calendar/Calendar group
+with the month/year values
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX">YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Navigator's ID, to generate
+a unique ID for the "Cancel" button.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES">YAHOO.widget.CalendarNavigator.CLASSES</a>
+                                        <code>- static Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            YAHOO.widget.CalendarNavigator.CLASSES contains constants
+for the class values applied to the CalendarNaviatgator's 
+DOM elements
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.BUTTON">YAHOO.widget.CalendarNavigator.CLASSES.BUTTON</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to buttons wrapping element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS">YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the submit/cancel button's bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT">YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to default controls
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.ERROR">YAHOO.widget.CalendarNavigator.CLASSES.ERROR</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the validation error area's bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.INVALID">YAHOO.widget.CalendarNavigator.CLASSES.INVALID</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to controls with invalid data (e.g. a year input field with invalid an year)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.MASK">YAHOO.widget.CalendarNavigator.CLASSES.MASK</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the Navigator mask's bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.MONTH">YAHOO.widget.CalendarNavigator.CLASSES.MONTH</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the month label/control bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL">YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the month input control
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.NAV">YAHOO.widget.CalendarNavigator.CLASSES.NAV</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the Calendar Navigator's bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE">YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the Calendar/CalendarGroup's bounding box to indicate
+the Navigator is currently visible
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.YEAR">YAHOO.widget.CalendarNavigator.CLASSES.YEAR</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the year label/control bounding box
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL">YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to the year input control
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.ERROR_SUFFIX">YAHOO.widget.CalendarNavigator.ERROR_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Navigator's ID, to generate
+a unique ID for the error bounding box.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.ID_SUFFIX">YAHOO.widget.CalendarNavigator.ID_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Calendar/CalendarGroup's ID, to generate
+a unique ID for the Navigator and it's bounding box.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.MONTH_SUFFIX">YAHOO.widget.CalendarNavigator.MONTH_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Navigator's ID, to generate
+a unique ID for the month control.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX">YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Navigator's ID, to generate
+a unique ID for the "Submit" button.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.TRIM">YAHOO.widget.CalendarNavigator.TRIM</a>
+                                        <code>- static RegExp</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Regular expression used to trim strings
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.UPDATE_DELAY">YAHOO.widget.CalendarNavigator.UPDATE_DELAY</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Artificial delay (in ms) between the time the Navigator is hidden
+and the Calendar/CalendarGroup state is updated. Allows the user
+the see the Calendar/CalendarGroup page changing. If set to 0
+the Calendar/CalendarGroup page will be updated instantly
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.YEAR_SUFFIX">YAHOO.widget.CalendarNavigator.YEAR_SUFFIX</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The suffix added to the Navigator's ID, to generate
+a unique ID for the year control.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.YR_MAJOR_INC">YAHOO.widget.CalendarNavigator.YR_MAJOR_INC</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The amount by which to increment the current year value,
+when the page up/down key is pressed on the year control
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS">YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of digits to which the year input control is to be limited.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.YR_MINOR_INC">YAHOO.widget.CalendarNavigator.YR_MINOR_INC</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The amount by which to increment the current year value,
+when the arrow up/down key is pressed on the year control
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.CalendarNavigator.YR_PATTERN">YAHOO.widget.CalendarNavigator.YR_PATTERN</a>
+                                        <code>- static RegExp</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Regular expression used to validate the year input
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="yearEl">yearEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the HTMLElement used to input the year
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="__getCfg">__getCfg</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>__getCfg</strong>
+                                           (
+                                                
+                                                        
+                                                         Case
+                                                    
+                                                
+                                                        , 
+                                                         true,
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Retrieve Navigator configuration values from 
+the parent Calendar/CalendarGroup's config value.
+<p>
+If it has not been set in the user provided configuration, the method will 
+return the default value of the configuration property, as set in _DEFAULT_CFG
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Case &lt;String&gt;</code>
+                                                             sensitive property name.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>true, &lt;Boolean&gt;</code>
+                                                             if the property is a string property, false if not.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>The value of the configuration property</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_getMonthFromUI">_getMonthFromUI</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        Number
+                                            <strong>_getMonthFromUI</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the month value (index), from the month UI element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The month index, or 0 if a UI element for the month
+is not found</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_getYearFromUI">_getYearFromUI</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        Number
+                                            <strong>_getYearFromUI</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the year value, from the Navitator's year UI element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The year value set in the UI, if valid. null is returned if 
+the UI does not contain a valid year value.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_handleDirectionKeys">_handleDirectionKeys</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_handleDirectionKeys</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default Keyboard event handler to capture up/down/pgup/pgdown
+on the Navigator's year control (yearEl).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             The DOM event being handled
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_handleEnterKey">_handleEnterKey</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_handleEnterKey</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default Keyboard event handler to capture Enter 
+on the Navigator's year control (yearEl)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             The DOM event being handled
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_handleShiftTabKey">_handleShiftTabKey</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_handleShiftTabKey</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default Keyboard event handler to capture Shift-Tab 
+on the first control (firstCtrl) in the Navigator.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             The DOM event being handled
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_handleTabKey">_handleTabKey</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_handleTabKey</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default Keyboard event handler to capture Tab 
+on the last control (lastCtrl) in the Navigator.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             The DOM event being handled
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_setFirstLastElements">_setFirstLastElements</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_setFirstLastElements</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets up references to the first and last focusable element in the Navigator's UI
+in terms of tab order (Naviagator's firstEl and lastEl properties). The references
+are used to control modality by looping around from the first to the last control
+and visa versa for tab/shift-tab navigation.
+<p>
+See <a href="#applyKeyListeners">applyKeyListeners</a>
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_show">_show</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_show</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Protected implementation to handle how UI elements are 
+hidden/shown.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_syncMask">_syncMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_syncMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Used to set the width/height of the mask in pixels to match the Calendar Container.
+Currently only used for IE6 and IE7 quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).
+<p>
+The method is also registered as an HTMLElement resize listener on the Calendars container element.
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_updateMonthUI">_updateMonthUI</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_updateMonthUI</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Updates the Navigator's month UI, based on the month value set on the Navigator object
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_updateYearUI">_updateYearUI</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_updateYearUI</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Updates the Navigator's year UI, based on the year value set on the Navigator object
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="applyKeyListeners">applyKeyListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>applyKeyListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Attaches DOM listeners for keyboard support. 
+Tab/Shift-Tab looping, Enter Key Submit on Year element,
+Up/Down/PgUp/PgDown year increment on Year element
+<p>
+NOTE: MacOSX Safari 2.x doesn't let you tab to buttons and 
+MacOSX Gecko does not let you tab to buttons or select controls,
+so for these browsers, Tab/Shift-Tab looping is limited to the 
+elements which can be reached using the tab key.
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="applyListeners">applyListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>applyListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Attaches DOM event listeners to the rendered elements
+<p>
+The method will call applyKeyListeners, to setup keyboard specific 
+listeners
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cancel">cancel</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cancel</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Hides the navigator and mask, without updating the Calendar/CalendarGroup's state
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="clearError">clearError</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>clearError</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Clears the navigator's error message and hides the error panel
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="clearErrors">clearErrors</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>clearErrors</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Clears all validation and error messages in the UI
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="clearYearError">clearYearError</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>clearYearError</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the validation error UI for the year control
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="createMask">createMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>createMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the Mask HTMLElement and appends it to the Calendar/CalendarGroups
+container.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="createNav">createNav</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>createNav</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the navigator's containing HTMLElement, it's contents, and appends 
+the containg element to the Calendar/CalendarGroup's container.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Destroys the Navigator object and any HTML references
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="erase">erase</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>erase</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes all renderered HTML elements for the Navigator from
+the DOM, purges event listeners and clears (nulls) any property
+references to HTML references
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getMonth">getMonth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getMonth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current month set on the navigator
+Note: This may not be the month set in the UI, if 
+the UI contains an invalid value.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The Navigator's current month index</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getYear">getYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getYear</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current year set on the navigator
+Note: This may not be the year set in the UI, if 
+the UI contains an invalid value.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The Navigator's current year value</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="hide">hide</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>hide</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Hides the navigator and mask
+The show method will fire the Calendar/CalendarGroup's beforeHideNav event and hideNav events
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="hideMask">hideMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>hideMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Hides the navigator's mask element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         cal
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Init lifecycle method called as part of construction
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>cal &lt;Calendar&gt;</code>
+                                                             The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="purgeKeyListeners">purgeKeyListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>purgeKeyListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes/purges DOM listeners for keyboard support
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="purgeListeners">purgeListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>purgeListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes/purges DOM event listeners from the rendered elements
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="render">render</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>render</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the HTML for the navigator, adding it to the 
+document and attaches event listeners if it has not 
+already been rendered.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="renderButton">renderButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>renderButton</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the submit/cancel buttons for the navigator
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The HTML created for the Button UI</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="renderNavContents">renderNavContents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>renderNavContents</strong>
+                                           (
+                                                
+                                                        
+                                                         html
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the contents of the navigator
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>html &lt;Array&gt;</code>
+                                                             The HTML buffer to append the HTML to.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>A reference to the buffer passed in.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="renderYear">renderYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>renderYear</strong>
+                                           (
+                                                
+                                                        
+                                                         html
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the year label and control for the navigator
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>html &lt;Array&gt;</code>
+                                                             The HTML buffer to append the HTML to.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>A reference to the buffer passed in.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setError">setError</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setError</strong>
+                                           (
+                                                
+                                                        
+                                                         msg
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays an error message in the Navigator's error panel
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>msg &lt;String&gt;</code>
+                                                             The error message to display
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setInitialFocus">setInitialFocus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setInitialFocus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the initial focus, based on the configured value
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setMonth">setMonth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setMonth</strong>
+                                           (
+                                                
+                                                        
+                                                         nMonth
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the current month on the Navigator, and updates the UI
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>nMonth &lt;Number&gt;</code>
+                                                             The month index, from 0 (Jan) through 11 (Dec).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setYear">setYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setYear</strong>
+                                           (
+                                                
+                                                        
+                                                         nYear
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the current year on the Navigator, and updates the UI. If the 
+provided year is invalid, it will not be set.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>nYear &lt;Number&gt;</code>
+                                                             The full year value to set the Navigator to.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setYearError">setYearError</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setYearError</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays the validation error UI for the year control
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="show">show</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>show</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays the navigator and mask, updating the input controls to reflect the 
+currently set month and year. The show method will invoke the render method
+if the navigator has not been renderered already, allowing for lazy rendering
+of the control.
+The show method will fire the Calendar/CalendarGroup's beforeShowNav and showNav events
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="showMask">showMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>showMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays the navigator's mask element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="submit">submit</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>submit</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Updates the Calendar/CalendarGroup's pagedate with the currently set month and year if valid.
+<p>
+If the currently set month/year is invalid, a validation error will be displayed and the 
+Calendar/CalendarGroup's pagedate will not be updated.
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="validate">validate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>validate</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Validates the current state of the UI controls
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true, if the current UI state contains valid values, false if not</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_date.html">date</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_number.html">number</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class="selected"><a href="YAHOO.widget.CalendarNavigator.html">YAHOO.widget.CalendarNavigator</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class=""><a href="CalendarNavigator.js.html">CalendarNavigator.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#__isIEQuirks">__isIEQuirks</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#__isMac">__isMac</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#__rendered">__rendered</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_DEFAULT_CFG">_DEFAULT_CFG</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_doc">_doc</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_month">_month</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_year">_year</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#cal">cal</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#cancelEl">cancelEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#errorEl">errorEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#firstCtrl">firstCtrl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#id">id</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#lastCtrl">lastCtrl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#maskEl">maskEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#monthEl">monthEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#navEl">navEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#submitEl">submitEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX">YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES">YAHOO.widget.CalendarNavigator.CLASSES</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.BUTTON">YAHOO.widget.CalendarNavigator.CLASSES.BUTTON</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS">YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT">YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.ERROR">YAHOO.widget.CalendarNavigator.CLASSES.ERROR</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.INVALID">YAHOO.widget.CalendarNavigator.CLASSES.INVALID</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.MASK">YAHOO.widget.CalendarNavigator.CLASSES.MASK</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.MONTH">YAHOO.widget.CalendarNavigator.CLASSES.MONTH</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL">YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.NAV">YAHOO.widget.CalendarNavigator.CLASSES.NAV</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE">YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.YEAR">YAHOO.widget.CalendarNavigator.CLASSES.YEAR</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL">YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.ERROR_SUFFIX">YAHOO.widget.CalendarNavigator.ERROR_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.ID_SUFFIX">YAHOO.widget.CalendarNavigator.ID_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.MONTH_SUFFIX">YAHOO.widget.CalendarNavigator.MONTH_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX">YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.TRIM">YAHOO.widget.CalendarNavigator.TRIM</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.UPDATE_DELAY">YAHOO.widget.CalendarNavigator.UPDATE_DELAY</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.YEAR_SUFFIX">YAHOO.widget.CalendarNavigator.YEAR_SUFFIX</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.YR_MAJOR_INC">YAHOO.widget.CalendarNavigator.YR_MAJOR_INC</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS">YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.YR_MINOR_INC">YAHOO.widget.CalendarNavigator.YR_MINOR_INC</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.CalendarNavigator.YR_PATTERN">YAHOO.widget.CalendarNavigator.YR_PATTERN</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#yearEl">yearEl</a>
+                                        <!--<code>&lt;HTMLElement&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#__getCfg">__getCfg</a>
+                                </li>
+                                <li class="protected"><!--<code>Number</code>-->
+                                <a href="#_getMonthFromUI">_getMonthFromUI</a>
+                                </li>
+                                <li class="protected"><!--<code>Number</code>-->
+                                <a href="#_getYearFromUI">_getYearFromUI</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_handleDirectionKeys">_handleDirectionKeys</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_handleEnterKey">_handleEnterKey</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_handleShiftTabKey">_handleShiftTabKey</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_handleTabKey">_handleTabKey</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_setFirstLastElements">_setFirstLastElements</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_show">_show</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_syncMask">_syncMask</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_updateMonthUI">_updateMonthUI</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_updateYearUI">_updateYearUI</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#applyKeyListeners">applyKeyListeners</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#applyListeners">applyListeners</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cancel">cancel</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#clearError">clearError</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#clearErrors">clearErrors</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#clearYearError">clearYearError</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#createMask">createMask</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#createNav">createNav</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#erase">erase</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#getMonth">getMonth</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#getYear">getYear</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#hide">hide</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#hideMask">hideMask</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#purgeKeyListeners">purgeKeyListeners</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#purgeListeners">purgeListeners</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#render">render</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#renderButton">renderButton</a>
+                                </li>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#renderNavContents">renderNavContents</a>
+                                </li>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#renderYear">renderYear</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setError">setError</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setInitialFocus">setInitialFocus</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setMonth">setMonth</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setYear">setYear</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setYearError">setYearError</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#show">show</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#showMask">showMask</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#submit">submit</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#validate">validate</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container  YAHOO.widget.Panel   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                 &gt; YAHOO.widget.Panel 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Panel</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Panel</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+
+                                                , 
+                                                userConfig
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                    	The element ID representing the Panel <em>OR</em>
+                                                </dd>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                    	The element representing the Panel
+                                                </dd>
+                                                <dd>
+                                                    <code>userConfig
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                    	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the default CSS class used for a Panel
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the default CSS class used for a Panel's wrapping container
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Module.html#body">body</a>,
+                                        <a href="YAHOO.widget.Module.html#browser">browser</a>,
+                                        <a href="YAHOO.widget.Module.html#cfg">cfg</a>,
+                                        <a href="YAHOO.widget.Module.html#contructor">contructor</a>,
+                                        <a href="YAHOO.widget.Module.html#element">element</a>,
+                                        <a href="YAHOO.widget.Module.html#footer">footer</a>,
+                                        <a href="YAHOO.widget.Module.html#header">header</a>,
+                                        <a href="YAHOO.widget.Module.html#id">id</a>,
+                                        <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>,
+                                        <a href="YAHOO.widget.Module.html#isSecure">isSecure</a>,
+                                        <a href="YAHOO.widget.Module.html#platform">platform</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay._initialized">YAHOO.widget.Overlay._initialized</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="buildMask">buildMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>buildMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Builds the mask that is laid over the document when the Panel is configured to be modal.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="buildWrapper">buildWrapper</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>buildWrapper</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configClose">configClose</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configClose</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configDraggable">configDraggable</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configDraggable</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "draggable" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configHeight">configHeight</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configHeight</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "height" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configKeyListeners">configKeyListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configKeyListeners</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "keylisteners" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configModal">configModal</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configModal</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configUnderlay">configUnderlay</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configUnderlay</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "underlay" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configWidth">configWidth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configWidth</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "width" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configzIndex">configzIndex</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configzIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "zIndex" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="hideMask">hideMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>hideMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Hides the modality mask.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+
+                                                
+                                                        , 
+                                                         userConfig
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String&gt;</code>
+                                                            	The element ID representing the Overlay <em>OR</em>
+                                                        </dd>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                            	The element representing the Overlay
+                                                        </dd>
+                                                        <dd>
+                                                            <code>userConfig &lt;Object&gt;</code>
+                                                            	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initDefaultConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initEvents">initEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onDomResize">onDomResize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onDomResize</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler fired when the resize monitor element is resized.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;DOMEvent&gt;</code>
+                                                            	The resize DOM event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="registerDragDrop">registerDragDrop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>registerDragDrop</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers the Panel's header for drag & drop capability.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="removeMask">removeMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>removeMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the modality mask.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="render">render</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>render</strong>
+                                           (
+                                                
+                                                        
+                                                         appendToNode
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>appendToNode &lt;String&gt;</code>
+                                                            	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+                                                        </dd>
+                                                        <dd>
+                                                            <code>appendToNode &lt;HTMLElement&gt;</code>
+                                                            	The element to which the Module should be appended to prior to rendering
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>Success or failure of the render</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="showMask">showMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>showMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Shows the modality mask.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="sizeMask">sizeMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>sizeMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the size of the modality mask to cover the entire scrollable area of the document
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="sizeUnderlay">sizeUnderlay</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>sizeUnderlay</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adjusts the size of the shadow based on the size of the element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a String representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string representation of the Panel.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>,
+                                            <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>,
+                                            <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>,
+                                            <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a>,
+                                            <a href="YAHOO.widget.Module.html#configVisible">configVisible</a>,
+                                            <a href="YAHOO.widget.Module.html#destroy">destroy</a>,
+                                            <a href="YAHOO.widget.Module.html#hide">hide</a>,
+                                            <a href="YAHOO.widget.Module.html#init">init</a>,
+                                            <a href="YAHOO.widget.Module.html#initDefaultConfig">initDefaultConfig</a>,
+                                            <a href="YAHOO.widget.Module.html#initEvents">initEvents</a>,
+                                            <a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>,
+                                            <a href="YAHOO.widget.Module.html#onDomResize">onDomResize</a>,
+                                            <a href="YAHOO.widget.Module.html#render">render</a>,
+                                            <a href="YAHOO.widget.Module.html#setBody">setBody</a>,
+                                            <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>,
+                                            <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>,
+                                            <a href="YAHOO.widget.Module.html#show">show</a>,
+                                            <a href="YAHOO.widget.Module.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.widget.Overlay.html#align">align</a>,
+                                            <a href="YAHOO.widget.Overlay.html#center">center</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configContext">configContext</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configHeight">configHeight</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configWidth">configWidth</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configX">configX</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configY">configY</a>,
+                                            <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>,
+                                            <a href="YAHOO.widget.Overlay.html#destroy">destroy</a>,
+                                            <a href="YAHOO.widget.Overlay.html#doCenterOnDOMEvent">doCenterOnDOMEvent</a>,
+                                            <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>,
+                                            <a href="YAHOO.widget.Overlay.html#hideIframe">hideIframe</a>,
+                                            <a href="YAHOO.widget.Overlay.html#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a>,
+                                            <a href="YAHOO.widget.Overlay.html#init">init</a>,
+                                            <a href="YAHOO.widget.Overlay.html#initDefaultConfig">initDefaultConfig</a>,
+                                            <a href="YAHOO.widget.Overlay.html#initEvents">initEvents</a>,
+                                            <a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>,
+                                            <a href="YAHOO.widget.Overlay.html#onDomResize">onDomResize</a>,
+                                            <a href="YAHOO.widget.Overlay.html#showIframe">showIframe</a>,
+                                            <a href="YAHOO.widget.Overlay.html#showMacGeckoScrollbars">showMacGeckoScrollbars</a>,
+                                            <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a>,
+                                            <a href="YAHOO.widget.Overlay.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="dragEvent">dragEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>dragEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent when the Panel is dragged
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="hideMaskEvent">hideMaskEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>hideMaskEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired after the modality mask is hidden
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="showMaskEvent">showMaskEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>showMaskEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired after the modality mask is shown
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Module.html#appendEvent">appendEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#beforeHideEvent">beforeHideEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#beforeInitEvent">beforeInitEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#beforeRenderEvent">beforeRenderEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#beforeShowEvent">beforeShowEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#changeBodyEvent">changeBodyEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#changeContentEvent">changeContentEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#changeFooterEvent">changeFooterEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#changeHeaderEvent">changeHeaderEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#destroyEvent">destroyEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>,
+                                        <a href="YAHOO.widget.Module.html#YAHOO.widget.Module.textResizeEvent">YAHOO.widget.Module.textResizeEvent</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Overlay.html#beforeMoveEvent">beforeMoveEvent</a>,
+                                        <a href="YAHOO.widget.Overlay.html#moveEvent">moveEvent</a>,
+                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowResizeEvent">YAHOO.widget.Overlay.windowResizeEvent</a>,
+                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowScrollEvent">YAHOO.widget.Overlay.windowScrollEvent</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <h4><a name="close">close</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Panel should display a "close" button
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="draggable">draggable</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Panel should be draggable
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="keylisteners">keylisteners</a>
+                                        <code>- YAHOO.util.KeyListener[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A KeyListener (or array of KeyListeners) that will be enabled when the Panel is shown, and disabled when the Panel is hidden.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="modal">modal</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Panel should be displayed in a modal fashion, automatically creating a transparent mask over the document that will not be removed until the Panel is dismissed.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="underlay">underlay</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: shadow
+                                    </div>        
+
+                                    <hr />
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Module.html#effect">effect</a>,
+                                        <a href="YAHOO.widget.Module.html#monitorresize">monitorresize</a>,
+                                        <a href="YAHOO.widget.Module.html#visible">visible</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.widget.Overlay.html#constraintoviewport">constraintoviewport</a>,
+                                        <a href="YAHOO.widget.Overlay.html#context">context</a>,
+                                        <a href="YAHOO.widget.Overlay.html#fixedcenter">fixedcenter</a>,
+                                        <a href="YAHOO.widget.Overlay.html#height">height</a>,
+                                        <a href="YAHOO.widget.Overlay.html#iframe">iframe</a>,
+                                        <a href="YAHOO.widget.Overlay.html#width">width</a>,
+                                        <a href="YAHOO.widget.Overlay.html#x">x</a>,
+                                        <a href="YAHOO.widget.Overlay.html#xy">xy</a>,
+                                        <a href="YAHOO.widget.Overlay.html#y">y</a>,
+                                        <a href="YAHOO.widget.Overlay.html#zIndex">zIndex</a>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#buildMask">buildMask</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#buildWrapper">buildWrapper</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configClose">configClose</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configDraggable">configDraggable</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configHeight">configHeight</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configKeyListeners">configKeyListeners</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configModal">configModal</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configUnderlay">configUnderlay</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configWidth">configWidth</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configzIndex">configzIndex</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#hideMask">hideMask</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initEvents">initEvents</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onDomResize">onDomResize</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#registerDragDrop">registerDragDrop</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#removeMask">removeMask</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#render">render</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#showMask">showMask</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#sizeMask">sizeMask</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#sizeUnderlay">sizeUnderlay</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#dragEvent">dragEvent</a>
+                                </li>
+                                <li>
+                                <a href="#hideMaskEvent">hideMaskEvent</a>
+                                </li>
+                                <li>
+                                <a href="#showMaskEvent">showMaskEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#close">close</a>
+                                </li>
+                                <li>
+                                <a href="#draggable">draggable</a>
+                                </li>
+                                <li>
+                                <a href="#keylisteners">keylisteners</a>
+                                </li>
+                                <li>
+                                <a href="#modal">modal</a>
+                                </li>
+                                <li>
+                                <a href="#underlay">underlay</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

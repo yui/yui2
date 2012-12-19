@@ -1,0 +1,561 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: animation  YAHOO.util.AnimMgr   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>animation&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_animation.html">animation</a>
+                 &gt; YAHOO.util.AnimMgr 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.AnimMgr</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Handles animation queueing and threading.
+Used by Anim and subclasses.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="delay">delay</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Interval delay in milliseconds, defaults to fastest possible.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="fps">fps</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Base frame rate (frames per second). 
+Arbitrarily high for better x-browser calibration (slower browsers drop more frames).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="queue">queue</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The current queue of registered animation objects.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="thread">thread</a>
+                                        <code>- private Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the animation Interval.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="tweenCount">tweenCount</a>
+                                        <code>- private Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of active animations.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="correctFrame">correctFrame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>correctFrame</strong>
+                                           (
+                                                
+                                                        
+                                                         tween
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            On the fly frame correction to keep animation on time.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tween &lt;Object&gt;</code>
+                                                             The Anim instance being corrected.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerElement">registerElement</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>registerElement</strong>
+                                           (
+                                                
+                                                        
+                                                         tween
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds an animation instance to the animation queue.
+All animation instances must be registered in order to animate.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tween &lt;object&gt;</code>
+                                                             The Anim instance to be be registered
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="run">run</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>run</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Called per Interval to handle each animation frame.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="start">start</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>start</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Starts the animation thread.
+Only one thread can run at a time.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="stop">stop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>stop</strong>
+                                           (
+                                                
+                                                        
+                                                         tween
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Stops the animation thread or a specific animation instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tween &lt;object&gt;</code>
+                                                             A specific Anim instance to stop (optional)
+If no instance given, Manager stops thread and all animations.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="unRegister">unRegister</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>unRegister</strong>
+                                           (
+                                                
+                                                        
+                                                         tween
+                                                    
+                                                
+                                                        , 
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            removes an animation instance from the animation queue.
+All animation instances must be registered in order to animate.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tween &lt;object&gt;</code>
+                                                             The Anim instance to be be registered
+                                                        </dd>
+                                                        <dd>
+                                                            <code>index &lt;Int&gt;</code>
+                                                             The index of the Anim instance
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class="selected"><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#delay">delay</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#fps">fps</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#queue">queue</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#thread">thread</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#tweenCount">tweenCount</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#correctFrame">correctFrame</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#registerElement">registerElement</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#run">run</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#start">start</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#stop">stop</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#unRegister">unRegister</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

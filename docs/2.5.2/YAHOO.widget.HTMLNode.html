@@ -1,0 +1,482 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: treeview  YAHOO.widget.HTMLNode   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                 &gt; YAHOO.widget.HTMLNode 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.HTMLNode</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        This implementation takes either a string or object for the
+oData argument.  If is it a string, we will use it for the display
+of this node (and it can contain any html code).  If the parameter
+is an object, we look for a parameter called "html" that will be
+used for this node's display.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.HTMLNode</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                oData
+
+                                                , 
+                                                oParent
+
+                                                , 
+                                                expanded
+
+                                                , 
+                                                hasIcon
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>oData
+                                                    &lt;object&gt; 
+                                                    </code>
+                                                      a string or object containing the data that will
+be used to render this node.  
+Valid configuration properties: 
+<dl>
+<dt>html</dt>
+<dd>The html content for the node</dd>
+</dl>
+All other attributes are made available in noderef.data, which
+can be used to store custom attributes.  TreeView.getNode(s)ByProperty
+can be used to retreive a node by one of the attributes.
+                                                </dd>
+                                                <dd>
+                                                    <code>oParent
+                                                    &lt;YAHOO.widget.Node&gt; 
+                                                    </code>
+                                                      this node's parent node
+                                                </dd>
+                                                <dd>
+                                                    <code>expanded
+                                                    &lt;boolean&gt; 
+                                                    </code>
+                                                      the initial expanded/collapsed state
+                                                </dd>
+                                                <dd>
+                                                    <code>hasIcon
+                                                    &lt;boolean&gt; 
+                                                    </code>
+                                                      specifies whether or not leaf nodes should
+be rendered with or without a horizontal line line icon. If the icon
+is not displayed, the content fills the space it would have occupied.
+This option operates independently of the leaf node presentation logic
+for dynamic nodes.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="property_contentElId">contentElId</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The generated id that will contain the data passed in by the implementer.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_contentStyle">contentStyle</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The CSS class for the html content container.  Defaults to ygtvhtml, but 
+can be overridden to provide a custom presentation for a specific node.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_html">html</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML content to use for this node's display
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_initContent">initContent</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Sets up the node label
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_setHtml">setHtml</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Synchronizes the node.data, node.html, and the node's content
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Node.html#property__dynLoad">_dynLoad</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Node.html#property__type">_type</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_children">children</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_childrenRendered">childrenRendered</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_data">data</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_dataLoader">dataLoader</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_depth">depth</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_dynamicLoadComplete">dynamicLoadComplete</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_expanded">expanded</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_hasIcon">hasIcon</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_href">href</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_iconMode">iconMode</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_index">index</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_isLeaf">isLeaf</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_isLoading">isLoading</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_multiExpand">multiExpand</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_nextSibling">nextSibling</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_nowrap">nowrap</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_parent">parent</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_previousSibling">previousSibling</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_renderHidden">renderHidden</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_target">target</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Node.html#property_tree">tree</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getContentEl">getContentEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getContentEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the outer html element for this node's content
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>the element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.Node.html#method_appendChild">appendChild</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_appendTo">appendTo</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_applyParent">applyParent</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_collapse
+toggle style.">collapse
+toggle style.</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_collapseAll">collapseAll</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_completeRender">completeRender</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_expand">expand</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_expandAll">expandAll</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getAncestor">getAncestor</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getChildrenEl">getChildrenEl</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getChildrenElId">getChildrenElId</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.Node.html#method_getChildrenHtml">getChildrenHtml</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getDepthStyle">getDepthStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getEl">getEl</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getElId">getElId</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getHoverStyle">getHoverStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getHtml">getHtml</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getIconMode">getIconMode</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getNodeHtml">getNodeHtml</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getSiblings">getSiblings</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getStyle">getStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getToggleEl">getToggleEl</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getToggleElId">getToggleElId</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_getToggleLink">getToggleLink</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_hasChildren">hasChildren</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_hideChildren">hideChildren</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_insertAfter">insertAfter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_insertBefore">insertBefore</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.Node.html#method_isChildOf">isChildOf</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_isDynamic">isDynamic</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_isRoot">isRoot</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_loadComplete">loadComplete</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_refresh">refresh</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.Node.html#method_renderChildren">renderChildren</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_setDynamicLoad">setDynamicLoad</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_showChildren">showChildren</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_toggle">toggle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Node.html#method_toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Node.html#event_parentChange">parentChange</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_contentElId">contentElId</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_contentStyle">contentStyle</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_html">html</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_initContent">initContent</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_setHtml">setHtml</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getContentEl">getContentEl</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

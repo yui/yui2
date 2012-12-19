@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: imagecropper   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>imagecropper&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_imagecropper.html">imagecropper</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: imagecropper
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        <p>Creates a Image Cropper control.</p>
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search imagecropper:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_active", "url": "YAHOO.widget.ImageCropper.html#property__active"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeInitHeightChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeInitHeightChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeInitialXYChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeInitialXYChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeInitWidthChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeInitWidthChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeKeyTickChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeKeyTickChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeMinHeightChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeMinHeightChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeMinWidthChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeMinWidthChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeRatioChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeRatioChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeShiftKeyTickChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeShiftKeyTickChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeStatusChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeStatusChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "beforeUseKeysChange", "url": "YAHOO.widget.ImageCropper.html#event_beforeUseKeysChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_createMask", "url": "YAHOO.widget.ImageCropper.html#method__createMask"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_createResize", "url": "YAHOO.widget.ImageCropper.html#method__createResize"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_createWrap", "url": "YAHOO.widget.ImageCropper.html#method__createWrap"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "CSS_MAIN", "url": "YAHOO.widget.ImageCropper.html#property_CSS_MAIN"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "CSS_MASK", "url": "YAHOO.widget.ImageCropper.html#property_CSS_MASK"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "CSS_RESIZE_MASK", "url": "YAHOO.widget.ImageCropper.html#property_CSS_RESIZE_MASK"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "destroy", "url": "YAHOO.widget.ImageCropper.html#method_destroy"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "dragEvent", "url": "YAHOO.widget.ImageCropper.html#event_dragEvent"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getCropCoords", "url": "YAHOO.widget.ImageCropper.html#method_getCropCoords"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getCropperById", "url": "YAHOO.widget.ImageCropper.html#method_getCropperById"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getEl", "url": "YAHOO.widget.ImageCropper.html#method_getEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getMaskEl", "url": "YAHOO.widget.ImageCropper.html#method_getMaskEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getResizeEl", "url": "YAHOO.widget.ImageCropper.html#method_getResizeEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getResizeMaskEl", "url": "YAHOO.widget.ImageCropper.html#method_getResizeMaskEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getResizeObject", "url": "YAHOO.widget.ImageCropper.html#method_getResizeObject"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "getWrapEl", "url": "YAHOO.widget.ImageCropper.html#method_getWrapEl"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleB4DragEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleB4DragEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleBeforeResizeEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleBeforeResizeEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleDragEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleDragEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleEndResizeEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleEndResizeEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleKeyPress", "url": "YAHOO.widget.ImageCropper.html#method__handleKeyPress"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleMouseOut", "url": "YAHOO.widget.ImageCropper.html#method__handleMouseOut"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleMouseOver", "url": "YAHOO.widget.ImageCropper.html#method__handleMouseOver"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleResizeEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleResizeEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleResizeMaskEl", "url": "YAHOO.widget.ImageCropper.html#method__handleResizeMaskEl"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_handleStartResizeEvent", "url": "YAHOO.widget.ImageCropper.html#method__handleStartResizeEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_image", "url": "YAHOO.widget.ImageCropper.html#property__image"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "init", "url": "YAHOO.widget.ImageCropper.html#method_init"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "initAttributes", "url": "YAHOO.widget.ImageCropper.html#method_initAttributes"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initHeight", "url": "YAHOO.widget.ImageCropper.html#config_initHeight"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initHeightChange", "url": "YAHOO.widget.ImageCropper.html#event_initHeightChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initialXY", "url": "YAHOO.widget.ImageCropper.html#config_initialXY"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initialXYChange", "url": "YAHOO.widget.ImageCropper.html#event_initialXYChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initWidth", "url": "YAHOO.widget.ImageCropper.html#config_initWidth"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "initWidthChange", "url": "YAHOO.widget.ImageCropper.html#event_initWidthChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_instances", "url": "YAHOO.widget.ImageCropper.html#property__instances"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "keyTick", "url": "YAHOO.widget.ImageCropper.html#config_keyTick"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "keyTickChange", "url": "YAHOO.widget.ImageCropper.html#event_keyTickChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_mask", "url": "YAHOO.widget.ImageCropper.html#property__mask"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "minHeight", "url": "YAHOO.widget.ImageCropper.html#config_minHeight"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "minHeightChange", "url": "YAHOO.widget.ImageCropper.html#event_minHeightChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "minWidth", "url": "YAHOO.widget.ImageCropper.html#config_minWidth"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "minWidthChange", "url": "YAHOO.widget.ImageCropper.html#event_minWidthChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_moveEl", "url": "YAHOO.widget.ImageCropper.html#method__moveEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "moveEvent", "url": "YAHOO.widget.ImageCropper.html#event_moveEvent"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "ratio", "url": "YAHOO.widget.ImageCropper.html#config_ratio"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "ratioChange", "url": "YAHOO.widget.ImageCropper.html#event_ratioChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "reset", "url": "YAHOO.widget.ImageCropper.html#method_reset"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_resize", "url": "YAHOO.widget.ImageCropper.html#property__resize"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_resizeEl", "url": "YAHOO.widget.ImageCropper.html#property__resizeEl"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "resizeEvent", "url": "YAHOO.widget.ImageCropper.html#event_resizeEvent"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_resizeMaskEl", "url": "YAHOO.widget.ImageCropper.html#property__resizeMaskEl"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_setBackgroundImage", "url": "YAHOO.widget.ImageCropper.html#method__setBackgroundImage"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_setBackgroundPosition", "url": "YAHOO.widget.ImageCropper.html#method__setBackgroundPosition"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_setConstraints", "url": "YAHOO.widget.ImageCropper.html#method__setConstraints"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "shiftKeyTick", "url": "YAHOO.widget.ImageCropper.html#config_shiftKeyTick"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "shiftKeyTickChange", "url": "YAHOO.widget.ImageCropper.html#event_shiftKeyTickChange"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "startResizeEvent", "url": "YAHOO.widget.ImageCropper.html#event_startResizeEvent"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "status", "url": "YAHOO.widget.ImageCropper.html#config_status"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "statusChange", "url": "YAHOO.widget.ImageCropper.html#event_statusChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_syncBackgroundPosition", "url": "YAHOO.widget.ImageCropper.html#method__syncBackgroundPosition"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "toString", "url": "YAHOO.widget.ImageCropper.html#method_toString"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "useKeys", "url": "YAHOO.widget.ImageCropper.html#config_useKeys"}, {"access": "", "host": "YAHOO.widget.ImageCropper", "name": "useKeysChange", "url": "YAHOO.widget.ImageCropper.html#event_useKeysChange"}, {"access": "private", "host": "YAHOO.widget.ImageCropper", "name": "_wrap", "url": "YAHOO.widget.ImageCropper.html#property__wrap"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="crop.js.html">crop.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

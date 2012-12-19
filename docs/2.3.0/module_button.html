@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: button   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Button&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_button.html">button</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: button
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        <p>The Button Control enables the creation of rich, graphical 
+buttons that function like traditional HTML form buttons.  <em>Unlike</em> 
+tradition HTML form buttons, buttons created with the Button Control can have 
+a label that is different from its value.  With the inclusion of the optional 
+<a href="module_menu.html">Menu Control</a>, the Button Control can also be
+used to create menu buttons and split buttons, controls that are not 
+available natively in HTML.  The Button Control can also be thought of as a 
+way to create more visually engaging implementations of the browser's 
+default radio-button and check-box controls.</p>
+<p>The Button Control supports the following types:</p>
+<dl>
+<dt>push</dt>
+<dd>Basic push button that can execute a user-specified command when 
+pressed.</dd>
+<dt>link</dt>
+<dd>Navigates to a specified url when pressed.</dd>
+<dt>submit</dt>
+<dd>Submits the parent form when pressed.</dd>
+<dt>reset</dt>
+<dd>Resets the parent form when pressed.</dd>
+<dt>checkbox</dt>
+<dd>Maintains a "checked" state that can be toggled on and off.</dd>
+<dt>radio</dt>
+<dd>Maintains a "checked" state that can be toggled on and off.  Use with 
+the ButtonGroup class to create a set of controls that are mutually 
+exclusive; checking one button in the set will uncheck all others in 
+the group.</dd>
+<dt>menu</dt>
+<dd>When pressed will show/hide a menu.</dd>
+<dt>split</dt>
+<dd>Can execute a user-specified command or display a menu when pressed.</dd>
+</dl>
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search button:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "protected", "host": "YAHOO.widget.Button", "name": "_activationButtonPressed", "url": "YAHOO.widget.Button.html#_activationButtonPressed"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_activationKeyPressed", "url": "YAHOO.widget.Button.html#_activationKeyPressed"}, {"access": "", "host": "YAHOO.widget.Button", "name": "ACTIVATION_KEYS", "url": "YAHOO.widget.Button.html#ACTIVATION_KEYS"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "addButton", "url": "YAHOO.widget.ButtonGroup.html#addButton"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "addButtons", "url": "YAHOO.widget.ButtonGroup.html#addButtons"}, {"access": "", "host": "YAHOO.widget.Button", "name": "addHiddenFieldsToForm", "url": "YAHOO.widget.Button.html#addHiddenFieldsToForm"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_addListenersToForm", "url": "YAHOO.widget.Button.html#_addListenersToForm"}, {"access": "", "host": "YAHOO.widget.Button", "name": "addStateCSSClasses", "url": "YAHOO.widget.Button.html#addStateCSSClasses"}, {"access": "", "host": "YAHOO.widget.Button", "name": "blur", "url": "YAHOO.widget.Button.html#blur"}, {"access": "", "host": "YAHOO.widget.Button", "name": "blur", "url": "YAHOO.widget.Button.html#blur"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_button", "url": "YAHOO.widget.Button.html#_button"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_buttons", "url": "YAHOO.widget.ButtonGroup.html#_buttons"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "check", "url": "YAHOO.widget.ButtonGroup.html#check"}, {"access": "", "host": "YAHOO.widget.Button", "name": "CHECK_ACTIVATION_KEYS", "url": "YAHOO.widget.Button.html#CHECK_ACTIVATION_KEYS"}, {"access": "", "host": "YAHOO.widget.Button", "name": "CHECKBOX_CHECKED_TITLE", "url": "YAHOO.widget.Button.html#CHECKBOX_CHECKED_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "CHECKBOX_DEFAULT_TITLE", "url": "YAHOO.widget.Button.html#CHECKBOX_DEFAULT_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "checked", "url": "YAHOO.widget.Button.html#checked"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "checkedButton", "url": "YAHOO.widget.ButtonGroup.html#checkedButton"}, {"access": "", "host": "YAHOO.widget.Button", "name": "container", "url": "YAHOO.widget.Button.html#container"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "container", "url": "YAHOO.widget.ButtonGroup.html#container"}, {"access": "", "host": "YAHOO.widget.Button", "name": "createButtonElement", "url": "YAHOO.widget.Button.html#createButtonElement"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_createGroupElement", "url": "YAHOO.widget.ButtonGroup.html#_createGroupElement"}, {"access": "", "host": "YAHOO.widget.Button", "name": "createHiddenFields", "url": "YAHOO.widget.Button.html#createHiddenFields"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "createInputElement", "url": "YAHOO.widget.Button.html#createInputElement"}, {"access": "", "host": "YAHOO.widget.Button", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.Button.html#CSS_CLASS_NAME"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.ButtonGroup.html#CSS_CLASS_NAME"}, {"access": "", "host": "YAHOO.widget.Button", "name": "destroy", "url": "YAHOO.widget.Button.html#destroy"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "destroy", "url": "YAHOO.widget.ButtonGroup.html#destroy"}, {"access": "", "host": "YAHOO.widget.Button", "name": "disabled", "url": "YAHOO.widget.Button.html#disabled"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "disabled", "url": "YAHOO.widget.ButtonGroup.html#disabled"}, {"access": "", "host": "YAHOO.widget.Button", "name": "focus", "url": "YAHOO.widget.Button.html#focus"}, {"access": "", "host": "YAHOO.widget.Button", "name": "focus", "url": "YAHOO.widget.Button.html#focus"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "focus", "url": "YAHOO.widget.ButtonGroup.html#focus"}, {"access": "", "host": "YAHOO.widget.Button", "name": "focusmenu", "url": "YAHOO.widget.Button.html#focusmenu"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "getButton", "url": "YAHOO.widget.ButtonGroup.html#getButton"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "getButtons", "url": "YAHOO.widget.ButtonGroup.html#getButtons"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "getCount", "url": "YAHOO.widget.ButtonGroup.html#getCount"}, {"access": "", "host": "YAHOO.widget.Button", "name": "getForm", "url": "YAHOO.widget.Button.html#getForm"}, {"access": "", "host": "YAHOO.widget.Button", "name": "getHiddenFields", "url": "YAHOO.widget.Button.html#getHiddenFields"}, {"access": "", "host": "YAHOO.widget.Button", "name": "getMenu", "url": "YAHOO.widget.Button.html#getMenu"}, {"access": "", "host": "YAHOO.widget.Button", "name": "hasFocus", "url": "YAHOO.widget.Button.html#hasFocus"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_hasKeyEventHandlers", "url": "YAHOO.widget.Button.html#_hasKeyEventHandlers"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_hasMouseEventHandlers", "url": "YAHOO.widget.Button.html#_hasMouseEventHandlers"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_hiddenFields", "url": "YAHOO.widget.Button.html#_hiddenFields"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_hideMenu", "url": "YAHOO.widget.Button.html#_hideMenu"}, {"access": "", "host": "YAHOO.widget.Button", "name": "href", "url": "YAHOO.widget.Button.html#href"}, {"access": "", "host": "YAHOO.widget.Button", "name": "init", "url": "YAHOO.widget.Button.html#init"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "init", "url": "YAHOO.widget.ButtonGroup.html#init"}, {"access": "", "host": "YAHOO.widget.Button", "name": "initAttributes", "url": "YAHOO.widget.Button.html#initAttributes"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "initAttributes", "url": "YAHOO.widget.ButtonGroup.html#initAttributes"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "initConfig", "url": "YAHOO.widget.Button.html#initConfig"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_isActivationKey", "url": "YAHOO.widget.Button.html#_isActivationKey"}, {"access": "", "host": "YAHOO.widget.Button", "name": "isActive", "url": "YAHOO.widget.Button.html#isActive"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_isSplitButtonOptionKey", "url": "YAHOO.widget.Button.html#_isSplitButtonOptionKey"}, {"access": "", "host": "YAHOO.widget.Button", "name": "label", "url": "YAHOO.widget.Button.html#label"}, {"access": "", "host": "YAHOO.widget.Button", "name": "lazyloadmenu", "url": "YAHOO.widget.Button.html#lazyloadmenu"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_menu", "url": "YAHOO.widget.Button.html#_menu"}, {"access": "", "host": "YAHOO.widget.Button", "name": "menu", "url": "YAHOO.widget.Button.html#menu"}, {"access": "", "host": "YAHOO.widget.Button", "name": "MENUBUTTON_DEFAULT_TITLE", "url": "YAHOO.widget.Button.html#MENUBUTTON_DEFAULT_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "MENUBUTTON_MENU_VISIBLE_TITLE", "url": "YAHOO.widget.Button.html#MENUBUTTON_MENU_VISIBLE_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "menuclassname", "url": "YAHOO.widget.Button.html#menuclassname"}, {"access": "", "host": "YAHOO.widget.Button", "name": "name", "url": "YAHOO.widget.Button.html#name"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "name", "url": "YAHOO.widget.ButtonGroup.html#name"}, {"access": "", "host": "YAHOO.widget.Button", "name": "NODE_NAME", "url": "YAHOO.widget.Button.html#NODE_NAME"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "NODE_NAME", "url": "YAHOO.widget.ButtonGroup.html#NODE_NAME"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onAppendTo", "url": "YAHOO.widget.Button.html#_onAppendTo"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_onAppendTo", "url": "YAHOO.widget.ButtonGroup.html#_onAppendTo"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onBlur", "url": "YAHOO.widget.Button.html#_onBlur"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_onButtonCheckedChange", "url": "YAHOO.widget.ButtonGroup.html#_onButtonCheckedChange"}, {"access": "", "host": "YAHOO.widget.Button", "name": "onclick", "url": "YAHOO.widget.Button.html#onclick"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onClick", "url": "YAHOO.widget.Button.html#_onClick"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onclickAttributeValue", "url": "YAHOO.widget.Button.html#_onclickAttributeValue"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onDocumentKeyUp", "url": "YAHOO.widget.Button.html#_onDocumentKeyUp"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onDocumentMouseDown", "url": "YAHOO.widget.Button.html#_onDocumentMouseDown"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onDocumentMouseUp", "url": "YAHOO.widget.Button.html#_onDocumentMouseUp"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onFocus", "url": "YAHOO.widget.Button.html#_onFocus"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onFormReset", "url": "YAHOO.widget.Button.html#_onFormReset"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onKeyDown", "url": "YAHOO.widget.Button.html#_onKeyDown"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_onKeyDown", "url": "YAHOO.widget.ButtonGroup.html#_onKeyDown"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onKeyUp", "url": "YAHOO.widget.Button.html#_onKeyUp"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuClick", "url": "YAHOO.widget.Button.html#_onMenuClick"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuHide", "url": "YAHOO.widget.Button.html#_onMenuHide"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuItemAdded", "url": "YAHOO.widget.Button.html#_onMenuItemAdded"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuItemSelected", "url": "YAHOO.widget.Button.html#_onMenuItemSelected"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuKeyDown", "url": "YAHOO.widget.Button.html#_onMenuKeyDown"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuRender", "url": "YAHOO.widget.Button.html#_onMenuRender"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onMenuShow", "url": "YAHOO.widget.Button.html#_onMenuShow"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onMouseDown", "url": "YAHOO.widget.Button.html#_onMouseDown"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onMouseOut", "url": "YAHOO.widget.Button.html#_onMouseOut"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onMouseOver", "url": "YAHOO.widget.Button.html#_onMouseOver"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onMouseUp", "url": "YAHOO.widget.Button.html#_onMouseUp"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_onOption", "url": "YAHOO.widget.Button.html#_onOption"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "_onOverlayBeforeShow", "url": "YAHOO.widget.Button.html#_onOverlayBeforeShow"}, {"access": "", "host": "YAHOO.widget.Button", "name": "option", "url": "YAHOO.widget.Button.html#option"}, {"access": "", "host": "YAHOO.widget.Button", "name": "OPTION_AREA_WIDTH", "url": "YAHOO.widget.Button.html#OPTION_AREA_WIDTH"}, {"access": "", "host": "YAHOO.widget.Button", "name": "RADIO_CHECKED_TITLE", "url": "YAHOO.widget.Button.html#RADIO_CHECKED_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "RADIO_DEFAULT_TITLE", "url": "YAHOO.widget.Button.html#RADIO_DEFAULT_TITLE"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "removeButton", "url": "YAHOO.widget.ButtonGroup.html#removeButton"}, {"access": "", "host": "YAHOO.widget.Button", "name": "removeHiddenFields", "url": "YAHOO.widget.Button.html#removeHiddenFields"}, {"access": "", "host": "YAHOO.widget.Button", "name": "removeStateCSSClasses", "url": "YAHOO.widget.Button.html#removeStateCSSClasses"}, {"access": "", "host": "YAHOO.widget.Button", "name": "selectedMenuItem", "url": "YAHOO.widget.Button.html#selectedMenuItem"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "setAttributeFromDOMAttribute", "url": "YAHOO.widget.Button.html#setAttributeFromDOMAttribute"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "setAttributesFromSrcElement", "url": "YAHOO.widget.Button.html#setAttributesFromSrcElement"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setChecked", "url": "YAHOO.widget.Button.html#_setChecked"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setDisabled", "url": "YAHOO.widget.Button.html#_setDisabled"}, {"access": "protected", "host": "YAHOO.widget.ButtonGroup", "name": "_setDisabled", "url": "YAHOO.widget.ButtonGroup.html#_setDisabled"}, {"access": "private", "host": "YAHOO.widget.Button", "name": "setFormElementProperties", "url": "YAHOO.widget.Button.html#setFormElementProperties"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setHref", "url": "YAHOO.widget.Button.html#_setHref"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setLabel", "url": "YAHOO.widget.Button.html#_setLabel"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setMenu", "url": "YAHOO.widget.Button.html#_setMenu"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setOnClick", "url": "YAHOO.widget.Button.html#_setOnClick"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setSelectedMenuItem", "url": "YAHOO.widget.Button.html#_setSelectedMenuItem"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setTabIndex", "url": "YAHOO.widget.Button.html#_setTabIndex"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setTarget", "url": "YAHOO.widget.Button.html#_setTarget"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setTitle", "url": "YAHOO.widget.Button.html#_setTitle"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_setType", "url": "YAHOO.widget.Button.html#_setType"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "_showMenu", "url": "YAHOO.widget.Button.html#_showMenu"}, {"access": "", "host": "YAHOO.widget.Button", "name": "SPLITBUTTON_DEFAULT_TITLE", "url": "YAHOO.widget.Button.html#SPLITBUTTON_DEFAULT_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "SPLITBUTTON_OPTION_VISIBLE_TITLE", "url": "YAHOO.widget.Button.html#SPLITBUTTON_OPTION_VISIBLE_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "srcelement", "url": "YAHOO.widget.Button.html#srcelement"}, {"access": "protected", "host": "YAHOO.widget.Button", "name": "submitForm", "url": "YAHOO.widget.Button.html#submitForm"}, {"access": "", "host": "YAHOO.widget.Button", "name": "SUBMIT_TITLE", "url": "YAHOO.widget.Button.html#SUBMIT_TITLE"}, {"access": "", "host": "YAHOO.widget.Button", "name": "tabindex", "url": "YAHOO.widget.Button.html#tabindex"}, {"access": "", "host": "YAHOO.widget.Button", "name": "target", "url": "YAHOO.widget.Button.html#target"}, {"access": "", "host": "YAHOO.widget.Button", "name": "title", "url": "YAHOO.widget.Button.html#title"}, {"access": "", "host": "YAHOO.widget.Button", "name": "toString", "url": "YAHOO.widget.Button.html#toString"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "toString", "url": "YAHOO.widget.ButtonGroup.html#toString"}, {"access": "", "host": "YAHOO.widget.Button", "name": "type", "url": "YAHOO.widget.Button.html#type"}, {"access": "", "host": "YAHOO.widget.Button", "name": "value", "url": "YAHOO.widget.Button.html#value"}, {"access": "", "host": "YAHOO.widget.ButtonGroup", "name": "value", "url": "YAHOO.widget.ButtonGroup.html#value"}, {"access": "", "host": "YAHOO.widget.Button", "name": "YAHOO.widget.Button.onFormKeyPress", "url": "YAHOO.widget.Button.html#YAHOO.widget.Button.onFormKeyPress"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class="selected"><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a></li>
+                                <li class=""><a href="YAHOO.widget.ButtonGroup.html">YAHOO.widget.ButtonGroup</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="button.js.html">button.js</a></li>
+                                <li class=""><a href="buttongroup.js.html">buttongroup.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

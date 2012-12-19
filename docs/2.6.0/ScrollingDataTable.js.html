@@ -1,0 +1,1413 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable   ScrollingDataTable.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                
+                 &gt; ScrollingDataTable.js (source view) 
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+<span class="k">var</span> <span class="nx">lang</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+    <span class="nx">util</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
+    <span class="nx">widget</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">,</span>
+    <span class="nx">ua</span>     <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">,</span>
+    
+    <span class="nx">Dom</span>    <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+    <span class="nx">Ev</span>     <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+    <span class="nx">DS</span>     <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">DataSourceBase</span><span class="o">,</span>
+    <span class="nx">DT</span>     <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">,</span>
+    <span class="nx">Pag</span>    <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">;</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The ScrollingDataTable class extends the DataTable class to provide</span>
+<span class="c"> * functionality for x-scrolling, y-scrolling, and xy-scrolling.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class ScrollingDataTable</span>
+<span class="c"> * @extends YAHOO.widget.DataTable</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param elContainer {HTMLElement} Container element for the TABLE.</span>
+<span class="c"> * @param aColumnDefs {Object[]} Array of object literal Column definitions.</span>
+<span class="c"> * @param oDataSource {YAHOO.util.DataSource} DataSource instance.</span>
+<span class="c"> * @param oConfigs {object} (optional) Object literal of configuration values.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">ScrollingDataTable</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span><span class="nx">aColumnDefs</span><span class="o">,</span><span class="nx">oDataSource</span><span class="o">,</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">oConfigs</span> <span class="o">=</span> <span class="nx">oConfigs</span> <span class="o">||</span> <span class="o">{};</span>
+    
+    <span class="c">// Prevent infinite loop</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">.</span><span class="nx">scrollable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oConfigs</span><span class="o">.</span><span class="nx">scrollable</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">ScrollingDataTable</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elContainer</span><span class="o">,</span><span class="nx">aColumnDefs</span><span class="o">,</span><span class="nx">oDataSource</span><span class="o">,</span><span class="nx">oConfigs</span><span class="o">);</span> 
+
+    <span class="c">// Once per instance</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;columnShowEvent&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onColumnChange</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="k">var</span> <span class="nx">SDT</span> <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">ScrollingDataTable</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public constants</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">SDT</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Class name assigned to inner DataTable header container.</span>
+<span class="c">     *</span>
+<span class="c">     * @property DataTable.CLASS_HEADER</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @static</span>
+<span class="c">     * @final</span>
+<span class="c">     * @default &quot;yui-dt-hd&quot;</span>
+<span class="c">     */</span>
+    <span class="nx">CLASS_HEADER</span> <span class="o">:</span> <span class="s2">&quot;yui-dt-hd&quot;</span><span class="o">,</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Class name assigned to inner DataTable body container.</span>
+<span class="c">     *</span>
+<span class="c">     * @property DataTable.CLASS_BODY</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @static</span>
+<span class="c">     * @final</span>
+<span class="c">     * @default &quot;yui-dt-bd&quot;</span>
+<span class="c">     */</span>
+    <span class="nx">CLASS_BODY</span> <span class="o">:</span> <span class="s2">&quot;yui-dt-bd&quot;</span>
+<span class="o">});</span>
+
+<span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">SDT</span><span class="o">,</span> <span class="nx">DT</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/**</span>
+<span class="c"> * Container for fixed header TABLE element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elHdContainer</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elHdContainer</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fixed header TABLE element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elHdTable</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elHdTable</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Container for scrolling body TABLE element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elBdContainer</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elBdContainer</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Body THEAD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elBdThead</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elBdThead</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Offscreen container to temporarily clone SDT for auto-width calculation.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elTmpContainer</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elTmpContainer</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Offscreen TABLE element for auto-width calculation.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elTmpTable</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elTmpTable</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * True if x-scrollbar is currently visible.</span>
+<span class="c"> * @property _bScrollbarX</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_bScrollbarX</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Superclass methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Implementation of Element&#39;s abstract method. Sets up config values.</span>
+<span class="c"> *</span>
+<span class="c"> * @method initAttributes</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal definition of configuration values.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+
+<span class="nx">initAttributes</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">oConfigs</span> <span class="o">=</span> <span class="nx">oConfigs</span> <span class="o">||</span> <span class="o">{};</span>
+    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">initAttributes</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span>
+
+    <span class="c">/**</span>
+<span class="c">    * @attribute width</span>
+<span class="c">    * @description Table width for scrollable tables. Note: When setting width</span>
+<span class="c">    * and height at runtime, please set height first.</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">,</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oParam</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">oParam</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">oParam</span><span class="o">;</span>            
+                <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollX</span><span class="o">();</span>      
+                <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollOverhang</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="c">/**</span>
+<span class="c">    * @attribute height</span>
+<span class="c">    * @description Table body height for scrollable tables, not including headers.</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">,</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oParam</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">oParam</span><span class="o">;</span>    
+                <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollX</span><span class="o">();</span>   
+                <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollY</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollOverhang</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="c">/**</span>
+<span class="c">    * @attribute COLOR_COLUMNFILLER</span>
+<span class="c">    * @description CSS color value assigned to header filler on scrollable tables.  </span>
+<span class="c">    * @type String</span>
+<span class="c">    * @default &quot;#F2F2F2&quot;</span>
+<span class="c">    */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;COLOR_COLUMNFILLER&quot;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;#F2F2F2&quot;</span><span class="o">,</span>
+        <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">,</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oParam</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">oParam</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes DOM elements for a ScrollingDataTable, including creation of</span>
+<span class="c"> * two separate TABLE elements.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initDomElements</span>
+<span class="c"> * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID. </span>
+<span class="c"> * return {Boolean} False in case of error, otherwise true </span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initDomElements</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Outer and inner containers</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_initContainerEl</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// TABLEs</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_initTableEl</span><span class="o">();</span>
+        
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// COLGROUPs</span>
+<span class="c"></span>            <span class="c">///this._initColgroupEl(this._elHdTable, this._elTable);  </span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_initColgroupEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span><span class="o">);</span>        
+            
+            <span class="c">// THEADs</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_initTheadEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">);</span>
+            
+            <span class="c">// Primary TBODY</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_initTbodyEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">);</span>
+            <span class="c">// Message TBODY</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_initMsgTbodyEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">);</span>            
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elColgroup</span> <span class="o">||</span>  <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elThead</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTbody</span> <span class="o">||</span>
+            <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elBdThead</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate DataTable due to an invalid DOM elements&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Destroy&#39;s the DataTable outer and inner container elements, if available.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _destroyContainerEl</span>
+<span class="c"> * @param elContainer {HTMLElement} Reference to the container element. </span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_destroyContainerEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">CLASS_SCROLLABLE</span><span class="o">);</span>
+    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_destroyContainerEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elContainer</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes the DataTable outer container element and creates inner header</span>
+<span class="c"> * and body container elements.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initContainerEl</span>
+<span class="c"> * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initContainerEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initContainerEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elContainer</span><span class="o">);</span>
+    
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">elContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">;</span> <span class="c">// was constructor input, now is DOM ref</span>
+<span class="c"></span>        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">CLASS_SCROLLABLE</span><span class="o">);</span>
+        
+        <span class="c">// Container for header TABLE</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">elHdContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+        <span class="nx">elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">)</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;COLOR_COLUMNFILLER&quot;</span><span class="o">);</span>
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">elHdContainer</span><span class="o">,</span> <span class="nx">SDT</span><span class="o">.</span><span class="nx">CLASS_HEADER</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span> <span class="o">=</span> <span class="nx">elHdContainer</span><span class="o">;</span>
+        <span class="nx">elContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">elHdContainer</span><span class="o">);</span>
+    
+        <span class="c">// Container for body TABLE</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">elBdContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+        <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">)</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;height&quot;</span><span class="o">)</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">elBdContainer</span><span class="o">,</span> <span class="nx">SDT</span><span class="o">.</span><span class="nx">CLASS_BODY</span><span class="o">);</span>
+        <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">elBdContainer</span><span class="o">,</span> <span class="s2">&quot;scroll&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onScroll</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span> <span class="c">// to sync horiz scroll headers</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span> <span class="o">=</span> <span class="nx">elBdContainer</span><span class="o">;</span>
+        <span class="nx">elContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">elBdContainer</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Creates HTML markup CAPTION element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initCaptionEl</span>
+<span class="c"> * @param sCaption {String} Text for caption.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initCaptionEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">sCaption</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Not yet supported</span>
+<span class="c"></span>    <span class="c">/*if(this._elHdTable &amp;&amp; sCaption) {</span>
+<span class="c">        // Create CAPTION element</span>
+<span class="c">        if(!this._elCaption) { </span>
+<span class="c">            this._elCaption = this._elHdTable.createCaption();</span>
+<span class="c">        }</span>
+<span class="c">        // Set CAPTION value</span>
+<span class="c">        this._elCaption.innerHTML = sCaption;</span>
+<span class="c">    }</span>
+<span class="c">    else if(this._elCaption) {</span>
+<span class="c">        this._elCaption.parentNode.removeChild(this._elCaption);</span>
+<span class="c">    }*/</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Destroy&#39;s the DataTable head TABLE element, if available.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _destroyHdTableEl</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_destroyHdTableEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elTable</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">Ev</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">elTable</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">elTable</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">elTable</span><span class="o">);</span>
+        
+        <span class="c">// A little out of place, but where else can we null out these extra elements?</span>
+<span class="c"></span>        <span class="c">///this._elBdColgroup = null;</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdThead</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes ScrollingDataTable TABLE elements into the two inner containers.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initTableEl</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initTableEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Head TABLE</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_destroyHdTableEl</span><span class="o">();</span>
+    
+        <span class="c">// Create TABLE</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;table&quot;</span><span class="o">));</span>   
+    <span class="o">}</span> 
+    <span class="c">// Body TABLE</span>
+<span class="c"></span>    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initTableEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes ScrollingDataTable THEAD elements into the two inner containers.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initTheadEl</span>
+<span class="c"> * @param elHdTable {HTMLElement} (optional) Fixed header TABLE element reference.</span>
+<span class="c"> * @param elTable {HTMLElement} (optional) TABLE element reference.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initTheadEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elHdTable</span><span class="o">,</span> <span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">elHdTable</span> <span class="o">=</span> <span class="nx">elHdTable</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span><span class="o">;</span>
+    <span class="nx">elTable</span> <span class="o">=</span> <span class="nx">elTable</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">;</span>
+    
+    <span class="c">// Scrolling body&#39;s THEAD</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_initBdTheadEl</span><span class="o">(</span><span class="nx">elTable</span><span class="o">);</span>
+    <span class="c">// Standard fixed head THEAD</span>
+<span class="c"></span>    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initTheadEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elHdTable</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * SDT changes ID so as not to duplicate the accessibility TH IDs.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initThEl</span>
+<span class="c"> * @param elTh {HTMLElement} TH element reference.</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column object.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initThEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elTh</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initThEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elTh</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">);</span>
+    <span class="nx">elTh</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span><span class="s2">&quot;-fixedth-&quot;</span> <span class="o">+</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getSanitizedKey</span><span class="o">();</span> <span class="c">// Needed for getColumn by TH and ColumnDD</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Destroy&#39;s the DataTable body THEAD element, if available.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _destroyBdTheadEl</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_destroyBdTheadEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elBdThead</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdThead</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">elBdThead</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">elTable</span> <span class="o">=</span> <span class="nx">elBdThead</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+        <span class="nx">Ev</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">elBdThead</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">elTable</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">elBdThead</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdThead</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_destroyColumnHelpers</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes body THEAD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initBdTheadEl</span>
+<span class="c"> * @param elTable {HTMLElement} TABLE element into which to create THEAD.</span>
+<span class="c"> * @return {HTMLElement} Initialized THEAD element. </span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initBdTheadEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// Destroy previous</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_destroyBdTheadEl</span><span class="o">();</span>
+
+        <span class="k">var</span> <span class="nx">elThead</span> <span class="o">=</span> <span class="nx">elTable</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;thead&quot;</span><span class="o">),</span> <span class="nx">elTable</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+        
+        <span class="c">// Add TRs to the THEAD;</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">oColumnSet</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">,</span>
+            <span class="nx">colTree</span> <span class="o">=</span> <span class="nx">oColumnSet</span><span class="o">.</span><span class="nx">tree</span><span class="o">,</span>
+            <span class="nx">elTh</span><span class="o">,</span> <span class="nx">elTheadTr</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+
+        <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">k</span><span class="o">=</span><span class="nx">colTree</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">k</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">elTheadTr</span> <span class="o">=</span> <span class="nx">elThead</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;tr&quot;</span><span class="o">));</span>
+    
+            <span class="c">// ...and create TH cells</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">colTree</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">length</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">colTree</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">j</span><span class="o">];</span>
+                <span class="nx">elTh</span> <span class="o">=</span> <span class="nx">elTheadTr</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;th&quot;</span><span class="o">));</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_initBdThEl</span><span class="o">(</span><span class="nx">elTh</span><span class="o">,</span><span class="nx">oColumn</span><span class="o">,</span><span class="nx">i</span><span class="o">,</span><span class="nx">j</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdThead</span> <span class="o">=</span> <span class="nx">elThead</span><span class="o">;</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Accessibility TH cells for &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; keys created&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Populates TH element for the body THEAD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initBdThEl</span>
+<span class="c"> * @param elTh {HTMLElement} TH element reference.</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column object.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initBdThEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elTh</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">elTh</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()+</span><span class="s2">&quot;-th-&quot;</span> <span class="o">+</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getSanitizedKey</span><span class="o">();</span> <span class="c">// Needed for accessibility</span>
+<span class="c"></span>    <span class="nx">elTh</span><span class="o">.</span><span class="nx">rowSpan</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getRowspan</span><span class="o">();</span>
+    <span class="nx">elTh</span><span class="o">.</span><span class="nx">colSpan</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getColspan</span><span class="o">();</span>
+    <span class="c">// Assign abbr attribute</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">abbr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">elTh</span><span class="o">.</span><span class="nx">abbr</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">abbr</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c">// TODO: strip links and form elements</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">sKey</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getKey</span><span class="o">();</span>
+    <span class="k">var</span> <span class="nx">sLabel</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">.</span><span class="k">label</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oColumn</span><span class="o">.</span><span class="k">label</span> <span class="o">:</span> <span class="nx">sKey</span><span class="o">;</span>
+    <span class="nx">elTh</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">sLabel</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initializes ScrollingDataTable TBODY element for data</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initTbodyEl</span>
+<span class="c"> * @param elTable {HTMLElement} TABLE element into which to create TBODY .</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_initTbodyEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initTbodyEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elTable</span><span class="o">);</span>
+    
+    <span class="c">// Bug 2105534 - Safari gap</span>
+<span class="c"></span>    <span class="nx">elTable</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">marginTop</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">offsetTop</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">;</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus on the given element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _focusEl</span>
+<span class="c"> * @param el {HTMLElement} Element.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_focusEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">el</span> <span class="o">=</span> <span class="nx">el</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">oSelf</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_storeScrollPositions</span><span class="o">();</span>
+    <span class="c">// http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets</span>
+<span class="c"></span>    <span class="c">// The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing</span>
+<span class="c"></span>    <span class="c">// strange unexpected things as the user clicks on buttons and other controls.</span>
+<span class="c"></span>    
+    <span class="c">// Bug 1921135: Wrap the whole thing in a setTimeout</span>
+<span class="c"></span>    <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+                <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_restoreScrollPositions</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">},</span><span class="m">0</span><span class="o">);</span>
+    <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/**</span>
+<span class="c"> * Internal wrapper calls run() on render Chain instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _runRenderChain</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_runRenderChain</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_storeScrollPositions</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_oChainRender</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Stores scroll positions so they can be restored after a render. </span>
+<span class="c"> *</span>
+<span class="c"> * @method _storeScrollPositions</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+ <span class="nx">_storeScrollPositions</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollTop</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollLeft</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Restores scroll positions to stored value. </span>
+<span class="c"> *</span>
+<span class="c"> * @method _retoreScrollPositions</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+ <span class="nx">_restoreScrollPositions</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Reset scroll positions</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_nScrollTop</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollTop</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollTop</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span> 
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_nScrollLeft</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollLeft</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_nScrollLeft</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span> 
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Helper function calculates and sets a validated width for a Column in a ScrollingDataTable.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _validateColumnWidth</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column instance.</span>
+<span class="c"> * @param elTd {HTMLElement} TD element to validate against.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_validateColumnWidth</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">elTd</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Only Columns without widths that are not hidden</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">width</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">hidden</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">elTh</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getThEl</span><span class="o">();</span>
+        <span class="c">// Unset a calculated auto-width</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">_calculatedWidth</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="s2">&quot;auto&quot;</span><span class="o">,</span> <span class="s2">&quot;visible&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c">// Compare auto-widths</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">elTh</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">!==</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">elWider</span> <span class="o">=</span> <span class="o">(</span><span class="nx">elTh</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">&gt;</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">?</span>
+                    <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getThLinerEl</span><span class="o">()</span> <span class="o">:</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>               
+
+            <span class="c">// Grab the wider liner width, unless the minWidth is wider</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">newWidth</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span>
+                <span class="o">(</span><span class="nx">elWider</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">-(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">elWider</span><span class="o">,</span><span class="s2">&quot;paddingLeft&quot;</span><span class="o">),</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">)</span> <span class="o">-</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">elWider</span><span class="o">,</span><span class="s2">&quot;paddingRight&quot;</span><span class="o">),</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">)),</span>
+                <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">);</span>
+                
+            <span class="k">var</span> <span class="nx">sOverflow</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="o">;</span>
+            
+            <span class="c">// Now validate against maxAutoWidth</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">((</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">newWidth</span> <span class="o">&gt;</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">newWidth</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span><span class="o">;</span>
+                <span class="nx">sOverflow</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c">// Set to the wider auto-width</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">newWidth</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="o">,</span> <span class="nx">sOverflow</span><span class="o">);</span>
+            <span class="nx">oColumn</span><span class="o">.</span><span class="nx">_calculatedWidth</span> <span class="o">=</span> <span class="nx">newWidth</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * For one or all Columns of a ScrollingDataTable, when Column is not hidden,</span>
+<span class="c"> * and width is not set, syncs widths of header and body cells and </span>
+<span class="c"> * validates that width against minWidth and/or maxAutoWidth as necessary.</span>
+<span class="c"> *</span>
+<span class="c"> * @method validateColumnWidths</span>
+<span class="c"> * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns&#39; widths are validated.</span>
+<span class="c"> */</span>
+<span class="nx">validateColumnWidths</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Validate there is at least one TR with proper TDs</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">allKeys</span>   <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">,</span>
+        <span class="nx">allKeysLength</span> <span class="o">=</span> <span class="nx">allKeys</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+        <span class="nx">elRow</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getFirstTrEl</span><span class="o">();</span>
+
+    <span class="c">// Reset overhang for IE</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_setOverhangValue</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">allKeys</span> <span class="o">&amp;&amp;</span> <span class="nx">elRow</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">elRow</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="nx">allKeysLength</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// Temporarily unsnap container since it causes inaccurate calculations</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">sWidth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">sWidth</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        
+        <span class="c">//Validate just one Column</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span> <span class="o">&amp;&amp;</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">getKeyIndex</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_validateColumnWidth</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">elRow</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">[</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">getKeyIndex</span><span class="o">()]);</span>
+        <span class="o">}</span>
+        <span class="c">// Iterate through all Columns to unset calculated widths in one pass</span>
+<span class="c"></span>        <span class="k">else</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">elTd</span><span class="o">,</span> <span class="nx">todos</span> <span class="o">=</span> <span class="o">[],</span> <span class="nx">thisTodo</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">allKeysLength</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">allKeys</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="c">// Only Columns without widths that are not hidden, unset a calculated auto-width</span>
+<span class="c"></span>                <span class="k">if</span><span class="o">(!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">width</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">hidden</span> <span class="o">&amp;&amp;</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">_calculatedWidth</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">todos</span><span class="o">[</span><span class="nx">todos</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">;</span>      
+                <span class="o">}</span>
+            <span class="o">}</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">todos</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">todos</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="s2">&quot;auto&quot;</span><span class="o">,</span> <span class="s2">&quot;visible&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+            
+            <span class="nx">todos</span> <span class="o">=</span> <span class="o">[];</span>
+
+            <span class="c">// Iterate through all Columns and make the store the adjustments to make in one pass</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">allKeysLength</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">allKeys</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="nx">elTd</span> <span class="o">=</span> <span class="nx">elRow</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="c">// Only Columns without widths that are not hidden</span>
+<span class="c"></span>                <span class="k">if</span><span class="o">(!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">width</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">hidden</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">elTh</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getThEl</span><span class="o">();</span>
+
+                    <span class="c">// Compare auto-widths</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">elTh</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">!==</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">elWider</span> <span class="o">=</span> <span class="o">(</span><span class="nx">elTh</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">&gt;</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">?</span>
+                                <span class="nx">oColumn</span><span class="o">.</span><span class="nx">getThLinerEl</span><span class="o">()</span> <span class="o">:</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>               
+                
+                        <span class="c">// Grab the wider liner width, unless the minWidth is wider</span>
+<span class="c"></span>                        <span class="k">var</span> <span class="nx">newWidth</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span>
+                            <span class="o">(</span><span class="nx">elWider</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">-(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">elWider</span><span class="o">,</span><span class="s2">&quot;paddingLeft&quot;</span><span class="o">),</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">)</span> <span class="o">-</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">elWider</span><span class="o">,</span><span class="s2">&quot;paddingRight&quot;</span><span class="o">),</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">)),</span>
+                            <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">);</span>
+                            
+                        <span class="k">var</span> <span class="nx">sOverflow</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="o">;</span>
+                        
+                        <span class="c">// Now validate against maxAutoWidth</span>
+<span class="c"></span>                        <span class="k">if</span><span class="o">((</span><span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">newWidth</span> <span class="o">&gt;</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="nx">newWidth</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">maxAutoWidth</span><span class="o">;</span>
+                            <span class="nx">sOverflow</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+                        <span class="o">}</span>
+                
+                        <span class="nx">todos</span><span class="o">[</span><span class="nx">todos</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">newWidth</span><span class="o">,</span> <span class="nx">sOverflow</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+            <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">todos</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nx">thisTodo</span> <span class="o">=</span> <span class="nx">todos</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="c">// Set to the wider auto-width</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">thisTodo</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">thisTodo</span><span class="o">[</span><span class="m">1</span><span class="o">]+</span><span class="s2">&quot;px&quot;</span><span class="o">,</span> <span class="nx">thisTodo</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+                <span class="nx">thisTodo</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">_calculatedWidth</span> <span class="o">=</span> <span class="nx">thisTodo</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
+    
+        <span class="c">// Resnap unsnapped containers</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">sWidth</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">sWidth</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">sWidth</span><span class="o">;</span>
+        <span class="o">}</span> 
+    <span class="o">}</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">_syncScroll</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_restoreScrollPositions</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Syncs padding around scrollable tables, including Column header right-padding</span>
+<span class="c"> * and container width and height.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _syncScroll</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_syncScroll</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollX</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollY</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_syncScrollOverhang</span><span class="o">();</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// Bug 1925874</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c">// Bug 1926125</span>
+<span class="c"></span>            <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">style</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+ <span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Snaps container width for y-scrolling tables.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _syncScrollY</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_syncScrollY</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elTbody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">,</span>
+        <span class="nx">elBdContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">;</span>
+    
+    <span class="c">// X-scrolling not enabled</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// Snap outer container width to content</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> 
+                <span class="o">(</span><span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">scrollHeight</span> <span class="o">&gt;</span> <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">clientHeight</span><span class="o">)</span> <span class="o">?</span>
+                <span class="c">// but account for y-scrollbar since it is visible</span>
+<span class="c"></span>                <span class="o">(</span><span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">clientWidth</span> <span class="o">+</span> <span class="m">19</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">:</span>
+                <span class="c">// no y-scrollbar, just borders</span>
+<span class="c"></span>                <span class="o">(</span><span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">clientWidth</span> <span class="o">+</span> <span class="m">2</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Snaps container height for x-scrolling tables in IE. Syncs message TBODY width.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _syncScrollX</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_syncScrollX</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elTbody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">,</span>
+        <span class="nx">elBdContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">;</span>
+    
+    <span class="c">// IE 6 and 7 only when y-scrolling not enabled</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;height&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// Snap outer container height to content</span>
+<span class="c"></span>        <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> 
+                <span class="c">// but account for x-scrollbar if it is visible</span>
+<span class="c"></span>                <span class="o">(</span><span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">scrollWidth</span> <span class="o">&gt;</span> <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">)</span> <span class="o">?</span>
+                <span class="o">(</span><span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="m">18</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">:</span> 
+                <span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c">// Sync message tbody</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">rows</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTheadEl</span><span class="o">().</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Adds/removes Column header overhang as necesary.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _syncScrollOverhang</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_syncScrollOverhang</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elBdContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">,</span>
+        <span class="c">// Overhang should be either 1 (default) or 18px, depending on the location of the right edge of the table</span>
+<span class="c"></span>        <span class="nx">nPadding</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+    
+    <span class="c">// Y-scrollbar is visible, which is when the overhang needs to jut out</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">((</span><span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">scrollHeight</span> <span class="o">&gt;</span> <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">clientHeight</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+        <span class="c">// X-scrollbar is also visible, which means the right is jagged, not flush with the Column</span>
+<span class="c"></span>        <span class="o">(</span><span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">scrollWidth</span> <span class="o">&gt;</span> <span class="nx">elBdContainer</span><span class="o">.</span><span class="nx">clientWidth</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">nPadding</span> <span class="o">=</span> <span class="m">18</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">_setOverhangValue</span><span class="o">(</span><span class="nx">nPadding</span><span class="o">);</span>
+    
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets Column header overhang to given width.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _setOverhangValue</span>
+<span class="c"> * @param nBorderWidth {Number} Value of new border for overhang. </span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_setOverhangValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">nBorderWidth</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">aLastHeaders</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">headers</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">headers</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">]</span> <span class="o">||</span> <span class="o">[],</span>
+        <span class="nx">len</span> <span class="o">=</span> <span class="nx">aLastHeaders</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
+        <span class="nx">sPrefix</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span><span class="o">+</span><span class="s2">&quot;-fixedth-&quot;</span><span class="o">,</span>
+        <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">nBorderWidth</span> <span class="o">+</span> <span class="s2">&quot;px solid &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;COLOR_COLUMNFILLER&quot;</span><span class="o">);</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elThead</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">sPrefix</span><span class="o">+</span><span class="nx">aLastHeaders</span><span class="o">[</span><span class="nx">i</span><span class="o">]).</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderRight</span> <span class="o">=</span> <span class="nx">sValue</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elThead</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/**</span>
+<span class="c"> * Returns DOM reference to the DataTable&#39;s fixed header container element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getHdContainerEl</span>
+<span class="c"> * @return {HTMLElement} Reference to DIV element.</span>
+<span class="c"> */</span>
+<span class="nx">getHdContainerEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns DOM reference to the DataTable&#39;s scrolling body container element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getBdContainerEl</span>
+<span class="c"> * @return {HTMLElement} Reference to DIV element.</span>
+<span class="c"> */</span>
+<span class="nx">getBdContainerEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns DOM reference to the DataTable&#39;s fixed header TABLE element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getHdTableEl</span>
+<span class="c"> * @return {HTMLElement} Reference to TABLE element.</span>
+<span class="c"> */</span>
+<span class="nx">getHdTableEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdTable</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns DOM reference to the DataTable&#39;s scrolling body TABLE element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getBdTableEl</span>
+<span class="c"> * @return {HTMLElement} Reference to TABLE element.</span>
+<span class="c"> */</span>
+<span class="nx">getBdTableEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTable</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Disables ScrollingDataTable UI.</span>
+<span class="c"> *</span>
+<span class="c"> * @method disable</span>
+<span class="c"> */</span>
+<span class="nx">disable</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elMask</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elMask</span><span class="o">;</span>
+    <span class="nx">elMask</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="nx">elMask</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="nx">elMask</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;disableEvent&quot;</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Removes given Column. NOTE: You cannot remove nested Columns. You can only remove</span>
+<span class="c"> * non-nested Columns, and top-level parent Columns (which will remove all</span>
+<span class="c"> * children Columns).</span>
+<span class="c"> *</span>
+<span class="c"> * @method removeColumn</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column instance.</span>
+<span class="c"> * @return oColumn {YAHOO.widget.Column} Removed Column instance.</span>
+<span class="c"> */</span>
+<span class="nx">removeColumn</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Store scroll pos</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">hdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">bdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    
+    <span class="c">// Call superclass method</span>
+<span class="c"></span>    <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">removeColumn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">);</span>
+    
+    <span class="c">// Restore scroll pos</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">hdPos</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">bdPos</span><span class="o">;</span>
+    
+    <span class="k">return</span> <span class="nx">oColumn</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Inserts given Column at the index if given, otherwise at the end. NOTE: You</span>
+<span class="c"> * can only add non-nested Columns and top-level parent Columns. You cannot add</span>
+<span class="c"> * a nested Column to an existing parent.</span>
+<span class="c"> *</span>
+<span class="c"> * @method insertColumn</span>
+<span class="c"> * @param oColumn {Object | YAHOO.widget.Column} Object literal Column</span>
+<span class="c"> * definition or a Column instance.</span>
+<span class="c"> * @param index {Number} (optional) New tree index.</span>
+<span class="c"> * @return oColumn {YAHOO.widget.Column} Inserted Column instance. </span>
+<span class="c"> */</span>
+<span class="nx">insertColumn</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Store scroll pos</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">hdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">bdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    
+    <span class="c">// Call superclass method</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">oNewColumn</span> <span class="o">=</span> <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">insertColumn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">index</span><span class="o">);</span>
+    
+    <span class="c">// Restore scroll pos</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">hdPos</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">bdPos</span><span class="o">;</span>
+    
+    <span class="k">return</span> <span class="nx">oNewColumn</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Removes given Column and inserts into given tree index. NOTE: You</span>
+<span class="c"> * can only reorder non-nested Columns and top-level parent Columns. You cannot</span>
+<span class="c"> * reorder a nested Column to an existing parent.</span>
+<span class="c"> *</span>
+<span class="c"> * @method reorderColumn</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column instance.</span>
+<span class="c"> * @param index {Number} New tree index.</span>
+<span class="c"> */</span>
+<span class="nx">reorderColumn</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Store scroll pos</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">hdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">bdPos</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+    
+    <span class="c">// Call superclass method</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">oNewColumn</span> <span class="o">=</span> <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">reorderColumn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">index</span><span class="o">);</span>
+    
+    <span class="c">// Restore scroll pos</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">hdPos</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">bdPos</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="nx">oNewColumn</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets given Column to given pixel width. If new width is less than minWidth</span>
+<span class="c"> * width, sets to minWidth. Updates oColumn.width value.</span>
+<span class="c"> *</span>
+<span class="c"> * @method setColumnWidth</span>
+<span class="c"> * @param oColumn {YAHOO.widget.Column} Column instance.</span>
+<span class="c"> * @param nWidth {Number} New width in pixels.</span>
+<span class="c"> */</span>
+<span class="nx">setColumnWidth</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">nWidth</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">oColumn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// Validate new width against minWidth</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">nWidth</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">nWidth</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nWidth</span> <span class="o">&gt;</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">)</span> <span class="o">?</span> <span class="nx">nWidth</span> <span class="o">:</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">;</span>
+
+            <span class="c">// Save state</span>
+<span class="c"></span>            <span class="nx">oColumn</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">nWidth</span><span class="o">;</span>
+            
+            <span class="c">// Resize the DOM elements</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">nWidth</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_syncScroll</span><span class="o">();</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;columnSetWidthEvent&quot;</span><span class="o">,{</span><span class="nx">column</span><span class="o">:</span><span class="nx">oColumn</span><span class="o">,</span><span class="nx">width</span><span class="o">:</span><span class="nx">nWidth</span><span class="o">});</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Set width of Column &quot;</span> <span class="o">+</span> <span class="nx">oColumn</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nx">nWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c">// Unsets a width to auto-size</span>
+<span class="c"></span>        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">nWidth</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// Save state</span>
+<span class="c"></span>            <span class="nx">oColumn</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">nWidth</span><span class="o">;</span>
+            
+            <span class="c">// Resize the DOM elements</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_setColumnWidth</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="s2">&quot;auto&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">validateColumnWidths</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;columnUnsetWidthEvent&quot;</span><span class="o">,{</span><span class="nx">column</span><span class="o">:</span><span class="nx">oColumn</span><span class="o">});</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Column &quot;</span> <span class="o">+</span> <span class="nx">oColumn</span> <span class="o">+</span> <span class="s2">&quot; width unset&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not set width of Column &quot;</span> <span class="o">+</span> <span class="nx">oColumn</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nx">nWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Displays message within secondary TBODY.</span>
+<span class="c"> *</span>
+<span class="c"> * @method showTableMessage</span>
+<span class="c"> * @param sHTML {String} (optional) Value for innerHTMlang.</span>
+<span class="c"> * @param sClassName {String} (optional) Classname.</span>
+<span class="c"> */</span>
+<span class="nx">showTableMessage</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">sHTML</span><span class="o">,</span> <span class="nx">sClassName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elCell</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTd</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">sHTML</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">sHTML</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">sClassName</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">,</span> <span class="nx">sClassName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c">// Needed for SDT only</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elThead</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTheadEl</span><span class="o">();</span>
+    <span class="k">var</span> <span class="nx">elTable</span> <span class="o">=</span> <span class="nx">elThead</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">newWidth</span> <span class="o">=</span> <span class="nx">elTable</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTheadEl</span><span class="o">().</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elMsgTbody</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;tableMsgShowEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">html</span><span class="o">:</span><span class="nx">sHTML</span><span class="o">,</span> <span class="nx">className</span><span class="o">:</span><span class="nx">sClassName</span><span class="o">});</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataTable showing message: &quot;</span> <span class="o">+</span> <span class="nx">sHTML</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private Custom Event Handlers</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Handles Column mutations</span>
+<span class="c"> *</span>
+<span class="c"> * @method onColumnChange</span>
+<span class="c"> * @param oArgs {Object} Custom Event data.</span>
+<span class="c"> */</span>
+<span class="nx">_onColumnChange</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oArg</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Figure out which Column changed</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">oColumn</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oArg</span><span class="o">.</span><span class="nx">column</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oArg</span><span class="o">.</span><span class="nx">column</span> <span class="o">:</span>
+            <span class="o">(</span><span class="nx">oArg</span><span class="o">.</span><span class="nx">editor</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oArg</span><span class="o">.</span><span class="nx">editor</span><span class="o">.</span><span class="nx">column</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_storeScrollPositions</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">validateColumnWidths</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">);</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private DOM Event Handlers</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Syncs scrolltop and scrollleft of all TABLEs.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _onScroll</span>
+<span class="c"> * @param e {HTMLEvent} The scroll event.</span>
+<span class="c"> * @param oSelf {YAHOO.widget.ScrollingDataTable} ScrollingDataTable instance.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_onScroll</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oCellEditor</span> <span class="o">&amp;&amp;</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oCellEditor</span><span class="o">.</span><span class="nx">isActive</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;editorBlurEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">_oCellEditor</span><span class="o">});</span>
+        <span class="nx">oSelf</span><span class="o">.</span><span class="nx">cancelCellEditor</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="k">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+    <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;tableScrollEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="o">});</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Handles keydown events on the THEAD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _onTheadKeydown</span>
+<span class="c"> * @param e {HTMLEvent} The key event.</span>
+<span class="c"> * @param oSelf {YAHOO.widget.ScrollingDataTable} ScrollingDataTable instance.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_onTheadKeydown</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// If tabbing to next TH label link causes THEAD to scroll,</span>
+<span class="c"></span>    <span class="c">// need to sync scrollLeft with TBODY</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">Ev</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">===</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">((</span><span class="nx">oSelf</span> <span class="k">instanceof</span> <span class="nx">SDT</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_sId</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_elBdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_elHdContainer</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">},</span><span class="m">0</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="k">var</span> <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">Ev</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+    <span class="k">var</span> <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">while</span><span class="o">(</span><span class="nx">elTarget</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">elTag</span> <span class="o">!=</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">switch</span><span class="o">(</span><span class="nx">elTag</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">case</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="nx">case</span> <span class="s2">&quot;input&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">&quot;textarea&quot;</span><span class="o">:</span>
+                <span class="c">// TODO: implement textareaKeyEvent</span>
+<span class="c"></span>                <span class="k">break</span><span class="o">;</span>
+            <span class="nx">case</span> <span class="s2">&quot;thead&quot;</span><span class="o">:</span>
+                <span class="nx">bKeepBubbling</span> <span class="o">=</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;theadKeyEvent&quot;</span><span class="o">,{</span><span class="nx">target</span><span class="o">:</span><span class="nx">elTarget</span><span class="o">,</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="o">});</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="nx">default</span><span class="o">:</span>
+                <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">bKeepBubbling</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">elTarget</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">elTarget</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">elTag</span> <span class="o">=</span> <span class="nx">elTarget</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;tableKeyEvent&quot;</span><span class="o">,{</span><span class="nx">target</span><span class="o">:(</span><span class="nx">elTarget</span> <span class="o">||</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">),</span><span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="o">});</span>
+<span class="o">}</span>
+
+
+
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a fixed scrolling DataTable has a scroll.</span>
+<span class="c"> *</span>
+<span class="c"> * @event tableScrollEvent</span>
+<span class="c"> * @param oArgs.event {HTMLEvent} The event object.</span>
+<span class="c"> * @param oArgs.target {HTMLElement} The DataTable&#39;s CONTAINER element (in IE)</span>
+<span class="c"> * or the DataTable&#39;s TBODY element (everyone else).</span>
+<span class="c"> *</span>
+<span class="c"> */</span>
+
+
+
+
+<span class="o">});</span>
+
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class=""><a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CellEditor.html">YAHOO.widget.CellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CheckboxCellEditor.html">YAHOO.widget.CheckboxCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.DateCellEditor.html">YAHOO.widget.DateCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.DropdownCellEditor.html">YAHOO.widget.DropdownCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.RadioCellEditor.html">YAHOO.widget.RadioCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                                <li class=""><a href="YAHOO.widget.ScrollingDataTable.html">YAHOO.widget.ScrollingDataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.TextareaCellEditor.html">YAHOO.widget.TextareaCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.TextboxCellEditor.html">YAHOO.widget.TextboxCellEditor</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CellEditor.js.html">CellEditor.js</a></li>
+                                <li class=""><a href="Chain.js.html">Chain.js</a></li>
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                                <li class="selected"><a href="ScrollingDataTable.js.html">ScrollingDataTable.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

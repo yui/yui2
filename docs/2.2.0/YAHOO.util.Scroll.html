@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: animation  YAHOO.util.Scroll   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>animation&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_animation.html">animation</a>
+                 &gt; YAHOO.util.Scroll 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Scroll</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Anim subclass for scrolling elements to a position defined by the "scroll"
+member of "attributes".  All "scroll" members are arrays with x, y scroll positions.
+<p>Usage: <code>var myAnim = new YAHOO.util.Scroll(el, { scroll: { to: [0, 800] } }, 1, YAHOO.util.Easing.easeOut);</code></p>
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.Scroll</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+                                                , 
+                                                attributes
+
+                                                , 
+                                                duration
+
+                                                , 
+                                                method
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String or HTMLElement&gt; 
+                                                    </code>
+                                                     Reference to the element that will be animated
+                                                </dd>
+                                                <dd>
+                                                    <code>attributes
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     The attribute(s) to be animated.  
+Each attribute is an object with at minimum a "to" or "by" member defined.  
+Additional optional members are "from" (defaults to current value), "units" (defaults to "px").  
+All attribute names use camelCase.
+                                                </dd>
+                                                <dd>
+                                                    <code>duration
+                                                    &lt;Number&gt; 
+                                                    </code>
+                                                     (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
+                                                </dd>
+                                                <dd>
+                                                    <code>method
+                                                    &lt;Function&gt; 
+                                                    </code>
+                                                     (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.Anim.html#_onComplete">_onComplete</a>,
+                                        <a href="YAHOO.util.Anim.html#_onStart">_onStart</a>,
+                                        <a href="YAHOO.util.Anim.html#_onTween">_onTween</a>,
+                                        <a href="YAHOO.util.Anim.html#actualFrames">actualFrames</a>,
+                                        <a href="YAHOO.util.Anim.html#attributes">attributes</a>,
+                                        <a href="YAHOO.util.Anim.html#currentFrame">currentFrame</a>,
+                                        <a href="YAHOO.util.Anim.html#duration">duration</a>,
+                                        <a href="YAHOO.util.Anim.html#el">el</a>,
+                                        <a href="YAHOO.util.Anim.html#isAnimated">isAnimated</a>,
+                                        <a href="YAHOO.util.Anim.html#method">method</a>,
+                                        <a href="YAHOO.util.Anim.html#startTime">startTime</a>,
+                                        <a href="YAHOO.util.Anim.html#totalFrames">totalFrames</a>,
+                                        <a href="YAHOO.util.Anim.html#useSeconds">useSeconds</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.Anim.html#animate">animate</a>,
+                                            <a href="YAHOO.util.Anim.html#doMethod">doMethod</a>,
+                                            <a href="YAHOO.util.Anim.html#getAttribute">getAttribute</a>,
+                                            <a href="YAHOO.util.Anim.html#getDefaultUnit">getDefaultUnit</a>,
+                                            <a href="YAHOO.util.Anim.html#getEl">getEl</a>,
+                                            <a href="YAHOO.util.Anim.html#getStartTime">getStartTime</a>,
+                                            <a href="YAHOO.util.Anim.html#init">init</a>,
+                                            <a href="YAHOO.util.Anim.html#isAnimated">isAnimated</a>,
+                                            <a href="YAHOO.util.Anim.html#onTween">onTween</a>,
+                                            <a href="YAHOO.util.Anim.html#setAttribute">setAttribute</a>,
+                                            <a href="YAHOO.util.Anim.html#setRuntimeAttribute">setRuntimeAttribute</a>,
+                                            <a href="YAHOO.util.Anim.html#stop">stop</a>,
+                                            <a href="YAHOO.util.Anim.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.Anim.html#onComplete">onComplete</a>,
+                                        <a href="YAHOO.util.Anim.html#onStart">onStart</a>,
+                                        <a href="YAHOO.util.Anim.html#onTween">onTween</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class="selected"><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: logger   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_logger.html">logger</a>
+                
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                   
+                    <h3>Module: logger
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Logger widget provides a simple way to read or write log messages in
+JavaScript code. Integration with the YUI Library's debug builds allow
+implementers to access under-the-hood events, errors, and debugging messages.
+Output may be read through a LogReader console and/or output to a browser
+console.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search logger:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"url": "LogReader.html#bottom", "host": "LogReader", "name": "bottom"}, {"url": "LogReader.html#_btnClear", "host": "LogReader", "name": "_btnClear"}, {"url": "LogReader.html#_btnCollapse", "host": "LogReader", "name": "_btnCollapse"}, {"url": "LogReader.html#_btnPause", "host": "LogReader", "name": "_btnPause"}, {"url": "LogReader.html#_buffer", "host": "LogReader", "name": "_buffer"}, {"url": "LogMsg.html#category", "host": "LogMsg", "name": "category"}, {"url": "YAHOO.widget.Logger.html#categoryCreateEvent", "host": "YAHOO.widget.Logger", "name": "categoryCreateEvent"}, {"url": "LogReader.html#_categoryFilters", "host": "LogReader", "name": "_categoryFilters"}, {"url": "LogReader.html#_clearConsole", "host": "LogReader", "name": "_clearConsole"}, {"url": "LogReader.html#collapse", "host": "LogReader", "name": "collapse"}, {"url": "LogReader.html#_consoleMsgCount", "host": "LogReader", "name": "_consoleMsgCount"}, {"url": "LogReader.html#_createCategoryCheckbox", "host": "LogReader", "name": "_createCategoryCheckbox"}, {"url": "YAHOO.widget.Logger.html#_createNewCategory", "host": "YAHOO.widget.Logger", "name": "_createNewCategory"}, {"url": "YAHOO.widget.Logger.html#_createNewSource", "host": "YAHOO.widget.Logger", "name": "_createNewSource"}, {"url": "LogReader.html#_createSourceCheckbox", "host": "LogReader", "name": "_createSourceCheckbox"}, {"url": "YAHOO.widget.Logger.html#disableBrowserConsole", "host": "YAHOO.widget.Logger", "name": "disableBrowserConsole"}, {"url": "LogReader.html#_elBtns", "host": "LogReader", "name": "_elBtns"}, {"url": "LogReader.html#_elCategoryFilters", "host": "LogReader", "name": "_elCategoryFilters"}, {"url": "LogReader.html#_elCollapse", "host": "LogReader", "name": "_elCollapse"}, {"url": "LogReader.html#_elConsole", "host": "LogReader", "name": "_elConsole"}, {"url": "LogReader.html#_elContainer", "host": "LogReader", "name": "_elContainer"}, {"url": "LogReader.html#_elDefaultContainer", "host": "LogReader", "name": "_elDefaultContainer"}, {"url": "LogReader.html#_elFt", "host": "LogReader", "name": "_elFt"}, {"url": "LogReader.html#_elHd", "host": "LogReader", "name": "_elHd"}, {"url": "LogReader.html#_elSourceFilters", "host": "LogReader", "name": "_elSourceFilters"}, {"url": "YAHOO.widget.Logger.html#enableBrowserConsole", "host": "YAHOO.widget.Logger", "name": "enableBrowserConsole"}, {"url": "LogReader.html#expand", "host": "LogReader", "name": "expand"}, {"url": "LogReader.html#_filterLogs", "host": "LogReader", "name": "_filterLogs"}, {"url": "LogReader.html#fontSize", "host": "LogReader", "name": "fontSize"}, {"url": "LogReader.html#footerEnabled", "host": "LogReader", "name": "footerEnabled"}, {"url": "LogReader.html#formatMsg", "host": "LogReader", "name": "formatMsg"}, {"url": "LogReader.html#getLastTime", "host": "LogReader", "name": "getLastTime"}, {"url": "LogWriter.html#getSource", "host": "LogWriter", "name": "getSource"}, {"url": "YAHOO.widget.Logger.html#getStack", "host": "YAHOO.widget.Logger", "name": "getStack"}, {"url": "YAHOO.widget.Logger.html#getStartTime", "host": "YAHOO.widget.Logger", "name": "getStartTime"}, {"url": "LogReader.html#height", "host": "LogReader", "name": "height"}, {"url": "LogReader.html#hide", "host": "LogReader", "name": "hide"}, {"url": "LogReader.html#html2Text", "host": "LogReader", "name": "html2Text"}, {"url": "LogReader.html#isCollapsed", "host": "LogReader", "name": "isCollapsed"}, {"url": "YAHOO.widget.Logger.html#_isNewCategory", "host": "YAHOO.widget.Logger", "name": "_isNewCategory"}, {"url": "YAHOO.widget.Logger.html#_isNewSource", "host": "YAHOO.widget.Logger", "name": "_isNewSource"}, {"url": "LogReader.html#_lastTime", "host": "LogReader", "name": "_lastTime"}, {"url": "LogReader.html#left", "host": "LogReader", "name": "left"}, {"url": "LogWriter.html#log", "host": "LogWriter", "name": "log"}, {"url": "YAHOO.widget.Logger.html#log", "host": "YAHOO.widget.Logger", "name": "log"}, {"url": "LogReader.html#logReaderEnabled", "host": "LogReader", "name": "logReaderEnabled"}, {"url": "YAHOO.widget.Logger.html#logResetEvent", "host": "YAHOO.widget.Logger", "name": "logResetEvent"}, {"url": "LogReader.html#_memberName", "host": "LogReader", "name": "_memberName"}, {"url": "LogMsg.html#msg", "host": "LogMsg", "name": "msg"}, {"url": "LogReader.html#newestOnTop", "host": "LogReader", "name": "newestOnTop"}, {"url": "YAHOO.widget.Logger.html#newLogEvent", "host": "YAHOO.widget.Logger", "name": "newLogEvent"}, {"url": "LogReader.html#_onCategoryCreate", "host": "LogReader", "name": "_onCategoryCreate"}, {"url": "LogReader.html#_onCheckCategory", "host": "LogReader", "name": "_onCheckCategory"}, {"url": "LogReader.html#_onCheckSource", "host": "LogReader", "name": "_onCheckSource"}, {"url": "LogReader.html#_onClickClearBtn", "host": "LogReader", "name": "_onClickClearBtn"}, {"url": "LogReader.html#_onClickCollapseBtn", "host": "LogReader", "name": "_onClickCollapseBtn"}, {"url": "LogReader.html#_onClickPauseBtn", "host": "LogReader", "name": "_onClickPauseBtn"}, {"url": "LogReader.html#_onNewLog", "host": "LogReader", "name": "_onNewLog"}, {"url": "LogReader.html#_onReset", "host": "LogReader", "name": "_onReset"}, {"url": "LogReader.html#_onSourceCreate", "host": "LogReader", "name": "_onSourceCreate"}, {"url": "YAHOO.widget.Logger.html#_onWindowError", "host": "YAHOO.widget.Logger", "name": "_onWindowError"}, {"url": "LogReader.html#pause", "host": "LogReader", "name": "pause"}, {"url": "LogReader.html#_printBuffer", "host": "LogReader", "name": "_printBuffer"}, {"url": "YAHOO.widget.Logger.html#_printToBrowserConsole", "host": "YAHOO.widget.Logger", "name": "_printToBrowserConsole"}, {"url": "LogReader.html#_printToConsole", "host": "LogReader", "name": "_printToConsole"}, {"url": "YAHOO.widget.Logger.html#reset", "host": "YAHOO.widget.Logger", "name": "reset"}, {"url": "LogReader.html#resume", "host": "LogReader", "name": "resume"}, {"url": "LogReader.html#right", "host": "LogReader", "name": "right"}, {"url": "LogWriter.html#setSource", "host": "LogWriter", "name": "setSource"}, {"url": "LogReader.html#setTitle", "host": "LogReader", "name": "setTitle"}, {"url": "LogReader.html#show", "host": "LogReader", "name": "show"}, {"url": "LogReader.html#_sName", "host": "LogReader", "name": "_sName"}, {"url": "LogMsg.html#source", "host": "LogMsg", "name": "source"}, {"url": "LogWriter.html#_source", "host": "LogWriter", "name": "_source"}, {"url": "YAHOO.widget.Logger.html#sourceCreateEvent", "host": "YAHOO.widget.Logger", "name": "sourceCreateEvent"}, {"url": "LogMsg.html#sourceDetail", "host": "LogMsg", "name": "sourceDetail"}, {"url": "LogReader.html#_sourceFilters", "host": "LogReader", "name": "_sourceFilters"}, {"url": "LogReader.html#thresholdMax", "host": "LogReader", "name": "thresholdMax"}, {"url": "LogReader.html#thresholdMin", "host": "LogReader", "name": "thresholdMin"}, {"url": "LogMsg.html#time", "host": "LogMsg", "name": "time"}, {"url": "LogReader.html#_timeout", "host": "LogReader", "name": "_timeout"}, {"url": "LogReader.html#_title", "host": "LogReader", "name": "_title"}, {"url": "LogReader.html#top", "host": "LogReader", "name": "top"}, {"url": "LogReader.html#toString", "host": "LogReader", "name": "toString"}, {"url": "LogWriter.html#toString", "host": "LogWriter", "name": "toString"}, {"url": "LogReader.html#verboseOutput", "host": "LogReader", "name": "verboseOutput"}, {"url": "LogReader.html#width", "host": "LogReader", "name": "width"}];
+                    </script>
+
+                    <script type="text/javascript" src="assets/api-js"></script>
+                    <script type="text/javascript" src="assets/ac-js"></script>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="LogMsg.html">LogMsg</a></li>
+                                <li class=""><a href="LogReader.html">LogReader</a></li>
+                                <li class=""><a href="LogWriter.html">LogWriter</a></li>
+                                <li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Logger.js.html">Logger.js</a></li>
+                                <li class=""><a href="LogMsg.js.html">LogMsg.js</a></li>
+                                <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
+                                <li class=""><a href="LogWriter.js.html">LogWriter.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

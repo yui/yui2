@@ -1,0 +1,863 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: logger  YAHOO.widget.Logger   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_logger.html">logger</a>
+                 &gt; YAHOO.widget.Logger 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
+                            Class <b>YAHOO.widget.Logger</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The singleton Logger class provides core log management functionality. Saves
+logs written through the global YAHOO.log function or written by a LogWriter
+instance. Provides access to logs for reading by a LogReader instance or
+native browser console such as the Firebug extension to Firefox or Safari's
+JavaScript console through integration with the console.log() method.
+                    </div>
+
+
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_createNewCategory">_createNewCategory</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createNewCategory</strong>
+                                           (
+                                                
+                                                        
+                                                         sCategory
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates a new category of log messages and fires categoryCreateEvent.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sCategory &lt;String&gt;</code>
+                                                              Category name.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_createNewSource">_createNewSource</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createNewSource</strong>
+                                           (
+                                                
+                                                        
+                                                         sSource
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates a new source of log messages and fires sourceCreateEvent.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sSource &lt;String&gt;</code>
+                                                              Source name.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_isNewCategory">_isNewCategory</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>_isNewCategory</strong>
+                                           (
+                                                
+                                                        
+                                                         sCategory
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks to see if a category has already been created.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sCategory &lt;String&gt;</code>
+                                                              Category name.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>Returns true if category is unknown, else returns false.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_isNewSource">_isNewSource</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>_isNewSource</strong>
+                                           (
+                                                
+                                                        
+                                                         sSource
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks to see if a source already exists.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sSource &lt;String&gt;</code>
+                                                              Source name.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>Returns true if source is unknown, else returns false.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onWindowError">_onWindowError</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_onWindowError</strong>
+                                           (
+                                                
+                                                        
+                                                         sMsg
+                                                    
+                                                
+                                                        , 
+                                                         sUrl
+                                                    
+                                                
+                                                        , 
+                                                         sLine
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles logging of messages due to window error events.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMsg &lt;String&gt;</code>
+                                                              The error message.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sUrl &lt;String&gt;</code>
+                                                              URL of the error.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sLine &lt;String&gt;</code>
+                                                              Line number of the error.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_printToBrowserConsole">_printToBrowserConsole</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_printToBrowserConsole</strong>
+                                           (
+                                                
+                                                        
+                                                         oEntry
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Outputs a log message to global console.log() function.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oEntry &lt;Object&gt;</code>
+                                                              Log entry object.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="disableBrowserConsole">disableBrowserConsole</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>disableBrowserConsole</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Disables output to the browser's global console.log() function, which is used
+by the Firebug extension to Firefox as well as Safari.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="enableBrowserConsole">enableBrowserConsole</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>enableBrowserConsole</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Enables output to the browser's global console.log() function, which is used
+by the Firebug extension to Firefox as well as Safari.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getStack">getStack</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object[]
+                                            <strong>getStack</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor to internal stack of log message objects.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object[]
+                                                    </code></dt>
+                                                    <dd>Array of log message objects.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getStartTime">getStartTime</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>getStartTime</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor to internal start time.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>Internal date of when Logger singleton was initialized.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="log">log</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>log</strong>
+                                           (
+                                                
+                                                        
+                                                         sMsg
+                                                    
+                                                
+                                                        , 
+                                                         sCategory
+                                                    
+                                                
+                                                        , 
+                                                         sSource
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Saves a log message to the stack and fires newLogEvent. If the log message is
+assigned to an unknown category, creates a new category. If the log message is
+from an unknown source, creates a new source.  If browser console is enabled,
+outputs the log message to browser console.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMsg &lt;String&gt;</code>
+                                                              The log message.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sCategory &lt;String&gt;</code>
+                                                              Category of log message, or null.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sSource &lt;String&gt;</code>
+                                                              Source of LogWriter, or null if global.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="reset">reset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>reset</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets internal stack and startTime, enables Logger, and fires logResetEvent.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="categoryCreateEvent">categoryCreateEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>categoryCreateEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         sCategory
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a new category has been created.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sCategory &lt;String&gt;</code>
+                                                              Category name.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="logResetEvent">logResetEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>logResetEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Logger has been reset has been created.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="newLogEvent">newLogEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>newLogEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         sMsg
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a new log message has been created.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMsg &lt;String&gt;</code>
+                                                              Log message.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="sourceCreateEvent">sourceCreateEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>sourceCreateEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         sSource
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a new source has been named.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sSource &lt;String&gt;</code>
+                                                              Source name.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="LogMsg.html">LogMsg</a></li>
+                                <li class=""><a href="LogReader.html">LogReader</a></li>
+                                <li class=""><a href="LogWriter.html">LogWriter</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Logger.js.html">Logger.js</a></li>
+                                <li class=""><a href="LogMsg.js.html">LogMsg.js</a></li>
+                                <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
+                                <li class=""><a href="LogWriter.js.html">LogWriter.js</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_createNewCategory">_createNewCategory</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_createNewSource">_createNewSource</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#_isNewCategory">_isNewCategory</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#_isNewSource">_isNewSource</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onWindowError">_onWindowError</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_printToBrowserConsole">_printToBrowserConsole</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#disableBrowserConsole">disableBrowserConsole</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#enableBrowserConsole">enableBrowserConsole</a>
+                                </li>
+                                <li><!--<code>Object[]</code>-->
+                                <a href="#getStack">getStack</a>
+                                </li>
+                                <li><!--<code>Date</code>-->
+                                <a href="#getStartTime">getStartTime</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#log">log</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#reset">reset</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#categoryCreateEvent">categoryCreateEvent</a>
+                                </li>
+                                <li>
+                                <a href="#logResetEvent">logResetEvent</a>
+                                </li>
+                                <li>
+                                <a href="#newLogEvent">newLogEvent</a>
+                                </li>
+                                <li>
+                                <a href="#sourceCreateEvent">sourceCreateEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

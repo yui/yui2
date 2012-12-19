@@ -1,0 +1,2305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: slider  YAHOO.widget.Slider   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_slider.html">slider</a>
+                 &gt; YAHOO.widget.Slider 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Slider</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A DragDrop implementation that can be used as a background for a
+slider.  It takes a reference to the thumb instance 
+so it can delegate some of the events to it.  The goal is to make the 
+thumb jump to the location on the background when the background is 
+clicked.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Slider</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                id
+
+                                                , 
+                                                sGroup
+
+                                                , 
+                                                oThumb
+
+                                                , 
+                                                sType
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                         The id of the element linked to this instance
+                                                </dd>
+                                                <dd>
+                                                    <code>sGroup
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     The group of related DragDrop items
+                                                </dd>
+                                                <dd>
+                                                    <code>oThumb
+                                                    &lt;SliderThumb&gt; 
+                                                    </code>
+                                                     The thumb for this slider
+                                                </dd>
+                                                <dd>
+                                                    <code>sType
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                      The type of slider (horiz, vert, region)
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="animate">animate</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag that determines if the thumb will animate when moved
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="animationDuration">animationDuration</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If animation is configured, specifies the length of the animation
+in seconds.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0.2
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="backgroundEnabled">backgroundEnabled</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set to false to disable a background click thumb move
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="baselinePos">baselinePos</a>
+                                        <code>- [int, int]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The basline position of the background element, used
+to determine if the background has moved since the last
+operation.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="enableKeys">enableKeys</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Enables the arrow, home and end keys, defaults to true.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="isTarget">isTarget</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Overrides the isTarget property in YAHOO.util.DragDrop
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="keyIncrement">keyIncrement</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Specifies the number of pixels the arrow keys will move the slider.
+Default is 25.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="moveComplete">moveComplete</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            moveComplete is set to true when the slider has moved to its final
+destination.  For animated slider, this value can be checked in 
+the onChange handler to make it possible to execute logic only
+when the move is complete rather than at all points along the way.
+Deprecated because this flag is only useful when the background is
+clicked and the slider is animated.  If the user drags the thumb,
+the flag is updated when the drag is over ... the final onDrag event
+fires before the mouseup the ends the drag, so the implementer will
+never see it.
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>use the slideEnd event instead
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="thumb">thumb</a>
+                                        <code>- YAHOO.widget.SliderThumb</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A YAHOO.widget.SliderThumb instance that we will use to 
+reposition the thumb when the background is clicked
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="thumbCenterPoint">thumbCenterPoint</a>
+                                        <code>- {"x": int, "y": int}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The center of the slider element is stored so we can 
+place it in the correct position when the background is clicked.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="tickPause">tickPause</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Adjustment factor for tick animation, the more ticks, the
+faster the animation (by default)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="type">type</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The type of the slider (horiz, vert, region)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
+                                        <code>- static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            By default, animation is available if the animation library is detected.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.DragDrop.html#__ygDragDrop">__ygDragDrop</a>,
+                                        <a href="YAHOO.util.DragDrop.html#_domRef">_domRef</a>,
+                                        <a href="YAHOO.util.DragDrop.html#available">available</a>,
+                                        <a href="YAHOO.util.DragDrop.html#config">config</a>,
+                                        <a href="YAHOO.util.DragDrop.html#constrainX">constrainX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#constrainY">constrainY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#dragElId">dragElId</a>,
+                                        <a href="YAHOO.util.DragDrop.html#groups">groups</a>,
+                                        <a href="YAHOO.util.DragDrop.html#handleElId">handleElId</a>,
+                                        <a href="YAHOO.util.DragDrop.html#hasOuterHandles">hasOuterHandles</a>,
+                                        <a href="YAHOO.util.DragDrop.html#id">id</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>,
+                                        <a href="YAHOO.util.DragDrop.html#locked">locked</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maxX">maxX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maxY">maxY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#minX">minX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#minY">minY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>,
+                                        <a href="YAHOO.util.DragDrop.html#startPageX">startPageX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#startPageY">startPageY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>,
+                                        <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
+                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_getNextX">_getNextX</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getNextX</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the next X tick value based on the current coord and the target coord.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_getNextY">_getNextY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getNextY</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the next Y tick value based on the current coord and the target coord.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="b4MouseDown">b4MouseDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>b4MouseDown</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets the constraints before moving the thumb.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="endMove">endMove</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>endMove</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the slider movement ends
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="fireEvents">fireEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>fireEvents</strong>
+                                           (
+                                                
+                                                        
+                                                         thumbEvent
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires the change event if the value has been changed.  Ignored if we are in
+the middle of an animation as the event will fire when the animation is
+complete
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>thumbEvent &lt;boolean&gt;</code>
+                                                             set to true if this event is fired from an event
+that occurred on the thumb.  If it is, the state of the
+thumb dd object should be correct.  Otherwise, the event
+originated on the background, so the thumb state needs to
+be refreshed before proceeding.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="focus">focus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>focus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Try to focus the element when clicked so we can add
+accessibility features
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getThumb">getThumb</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        SliderThumb
+                                            <strong>getThumb</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a reference to this slider's thumb
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        SliderThumb
+                                                    </code></dt>
+                                                    <dd>this slider's thumb</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getValue">getValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong>getValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the slider's thumb offset from the start position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the current value</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getXValue">getXValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong>getXValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the slider's thumb X offset from the start position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the current horizontal offset</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getYValue">getYValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong>getYValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the slider's thumb Y offset from the start position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the current vertical offset</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleKeyDown">handleKeyDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleKeyDown</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when a keydown event happens with the control focused.
+Updates the slider value and display when the keypress is an
+arrow key, home, or end as long as enableKeys is set to true.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the keydown event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleKeyPress">handleKeyPress</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleKeyPress</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when a keypress event happens with the control focused.
+Prevents the default behavior for navigation keys.  The actual
+logic for moving the slider thumb in response to a key event
+happens in handleKeyDown.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the keypress event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleThumbChange">handleThumbChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>handleThumbChange</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Internal handler for the slider thumb's onChange event
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initSlider">initSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         sType
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the slider.  Executed in the constructor
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sType &lt;string&gt;</code>
+                                                             the type of slider (horiz, vert, region)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initThumb">initThumb</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initThumb</strong>
+                                           (
+                                                
+                                                        
+                                                         t
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the slider's thumb. Executed in the constructor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>t &lt;YAHOO.widget.SliderThumb&gt;</code>
+                                                             the slider thumb
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="lock">lock</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>lock</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Locks the slider, overrides YAHOO.util.DragDrop
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="moveOneTick">moveOneTick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>moveOneTick</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Move the slider one tick mark towards its final coordinate.  Used
+for the animation when tick marks are defined
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>the &lt;int[]&gt;</code>
+                                                             destination coordinate
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="moveThumb">moveThumb</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>moveThumb</strong>
+                                           (
+                                                
+                                                        
+                                                         x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Move the associated slider moved to a timeout to try to get around the 
+mousedown stealing moz does when I move the slider element between the 
+cursor and the background during the mouseup event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>x &lt;int&gt;</code>
+                                                             the X coordinate of the click
+                                                        </dd>
+                                                        <dd>
+                                                            <code>y &lt;int&gt;</code>
+                                                             the Y coordinate of the click
+                                                        </dd>
+                                                        <dd>
+                                                            <code>skipAnim &lt;boolean&gt;</code>
+                                                             don't animate if the move happend onDrag
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onAvailable">onAvailable</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onAvailable</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed when the slider element is available
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onChange">onChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onChange</strong>
+                                           (
+                                                
+                                                        
+                                                         firstOffset
+                                                    
+                                                
+                                                        , 
+                                                         secondOffset
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event that fires when the value of the slider has changed
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>firstOffset &lt;int&gt;</code>
+                                                             the number of pixels the thumb has moved
+from its start position. Normal horizontal and vertical sliders will only
+have the firstOffset.  Regions will have both, the first is the horizontal
+offset, the second the vertical.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>secondOffset &lt;int&gt;</code>
+                                                             the y offset for region sliders
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use instance.subscribe("change") instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onDrag">onDrag</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>onDrag</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the onDrag event for the slider background
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onMouseDown">onMouseDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>onMouseDown</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles the mousedown event for the slider background
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onSliderEnd">onSliderEnd</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onSliderEnd</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event that fires at the end of a slider thumb move
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use instance.subscribe("slideEnd") instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="onSlideStart">onSlideStart</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onSlideStart</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event that fires when the at the beginning of the slider thumb move
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use instance.subscribe("slideStart") instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setRegionValue">setRegionValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>setRegionValue</strong>
+                                           (
+                                                
+                                                        
+                                                         newOffset
+                                                    
+                                                
+                                                        , 
+                                                         newOffset2
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         force
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Provides a way to set the value of the region slider in code.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>newOffset &lt;int&gt;</code>
+                                                             the number of pixels the thumb should be
+positioned away from the initial start point (x axis for region)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>newOffset2 &lt;int&gt;</code>
+                                                             the number of pixels the thumb should be
+positioned away from the initial start point (y axis for region)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>skipAnim &lt;boolean&gt;</code>
+                                                             set to true to disable the animation
+for this move action (but not others).
+                                                        </dd>
+                                                        <dd>
+                                                            <code>force &lt;boolean&gt;</code>
+                                                             ignore the locked setting and set value anyway
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the move was performed, false if it failed</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setStartSliderState">setStartSliderState</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setStartSliderState</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initialization that sets up the value offsets once the elements are ready
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setThumbCenterPoint">setThumbCenterPoint</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setThumbCenterPoint</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            When the thumb is available, we cache the centerpoint of the element so
+we can position the element correctly when the background is clicked
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setValue">setValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>setValue</strong>
+                                           (
+                                                
+                                                        
+                                                         newOffset
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         force
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Provides a way to set the value of the slider in code.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>newOffset &lt;int&gt;</code>
+                                                             the number of pixels the thumb should be
+positioned away from the initial start point
+                                                        </dd>
+                                                        <dd>
+                                                            <code>skipAnim &lt;boolean&gt;</code>
+                                                             set to true to disable the animation
+for this move action (but not others).
+                                                        </dd>
+                                                        <dd>
+                                                            <code>force &lt;boolean&gt;</code>
+                                                             ignore the locked setting and set value anyway
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the move was performed, false if it failed</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="thumbMouseUp">thumbMouseUp</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>thumbMouseUp</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles mouseup event on the slider background
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Slider toString
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>string representation of the instance</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unlock">unlock</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>unlock</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unlocks the slider, overrides YAHOO.util.DragDrop
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="verifyOffset">verifyOffset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>verifyOffset</strong>
+                                           (
+                                                
+                                                        
+                                                         checkPos
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks the background position element position.  If it has moved from the
+baseline position, the constraints for the thumb are reset
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>checkPos &lt;boolean&gt;</code>
+                                                              check the position instead of using cached value
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>True if the offset is the same as the baseline.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Slider
+                                            <strong>YAHOO.widget.Slider.getHorizSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         sBGElId
+                                                    
+                                                
+                                                        , 
+                                                         sHandleElId
+                                                    
+                                                
+                                                        , 
+                                                         iLeft
+                                                    
+                                                
+                                                        , 
+                                                         iRight
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Factory method for creating a horizontal slider
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sBGElId &lt;String&gt;</code>
+                                                             the id of the slider's background element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sHandleElId &lt;String&gt;</code>
+                                                             the id of the thumb element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iLeft &lt;int&gt;</code>
+                                                             the number of pixels the element can move left
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iRight &lt;int&gt;</code>
+                                                             the number of pixels the element can move right
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iTickSize &lt;int&gt;</code>
+                                                             optional parameter for specifying that the element 
+should move a certain number pixels at a time.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Slider
+                                                    </code></dt>
+                                                    <dd>a horizontal slider control</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Slider
+                                            <strong>YAHOO.widget.Slider.getSliderRegion</strong>
+                                           (
+                                                
+                                                        
+                                                         sBGElId
+                                                    
+                                                
+                                                        , 
+                                                         sHandleElId
+                                                    
+                                                
+                                                        , 
+                                                         iLeft
+                                                    
+                                                
+                                                        , 
+                                                         iRight
+                                                    
+                                                
+                                                        , 
+                                                         iUp
+                                                    
+                                                
+                                                        , 
+                                                         iDown
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Factory method for creating a slider region like the one in the color
+picker example
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sBGElId &lt;String&gt;</code>
+                                                             the id of the slider's background element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sHandleElId &lt;String&gt;</code>
+                                                             the id of the thumb element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iLeft &lt;int&gt;</code>
+                                                             the number of pixels the element can move left
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iRight &lt;int&gt;</code>
+                                                             the number of pixels the element can move right
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iUp &lt;int&gt;</code>
+                                                             the number of pixels the element can move up
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iDown &lt;int&gt;</code>
+                                                             the number of pixels the element can move down
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iTickSize &lt;int&gt;</code>
+                                                             optional parameter for specifying that the element 
+should move a certain number pixels at a time.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Slider
+                                                    </code></dt>
+                                                    <dd>a slider region control</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Slider
+                                            <strong>YAHOO.widget.Slider.getVertSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         sBGElId
+                                                    
+                                                
+                                                        , 
+                                                         sHandleElId
+                                                    
+                                                
+                                                        , 
+                                                         iUp
+                                                    
+                                                
+                                                        , 
+                                                         iDown
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Factory method for creating a vertical slider
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sBGElId &lt;String&gt;</code>
+                                                             the id of the slider's background element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sHandleElId &lt;String&gt;</code>
+                                                             the id of the thumb element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iUp &lt;int&gt;</code>
+                                                             the number of pixels the element can move up
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iDown &lt;int&gt;</code>
+                                                             the number of pixels the element can move down
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iTickSize &lt;int&gt;</code>
+                                                             optional parameter for specifying that the element 
+should move a certain number pixels at a time.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Slider
+                                                    </code></dt>
+                                                    <dd>a vertical slider control</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#applyConfig">applyConfig</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4Drag">b4Drag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragDrop">b4DragDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragOut">b4DragOut</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragOver">b4DragOver</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4EndDrag">b4EndDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4MouseDown">b4MouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4StartDrag">b4StartDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearConstraints">clearConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearTicks">clearTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#endDrag">endDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getTick">getTick</a>,
+                                            <a href="YAHOO.util.DragDrop.html#handleMouseDown">handleMouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#handleOnAvailable">handleOnAvailable</a>,
+                                            <a href="YAHOO.util.DragDrop.html#init">init</a>,
+                                            <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>,
+                                            <a href="YAHOO.util.DragDrop.html#lock">lock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onInvalidDrop">onInvalidDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>,
+                                            <a href="YAHOO.util.DragDrop.html#padding">padding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeFromGroup">removeFromGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setInitialPosition">setInitialPosition</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setStartPosition">setStartPosition</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setXTicks">setXTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setYTicks">setYTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#toString">toString</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="change">change</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>change</strong>
+
+                                            (
+                                                
+                                                        
+                                                         newOffset|x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event the fires when the value of the control changes.  If 
+the control is animated the event will fire every point
+along the way.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>newOffset|x &lt;int&gt;</code>
+                                                             the new offset for normal sliders, or the new
+x offset for region sliders
+                                                        </dd>
+                                                        <dd>
+                                                            <code>y &lt;int&gt;</code>
+                                                             the number of pixels the thumb has moved on the y axis
+(region sliders only)
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="slideEnd">slideEnd</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>slideEnd</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event that fires at the end of a slider thumb move
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="slideStart">slideStart</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>slideStart</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event that fires at the beginning of a slider thumb move.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
+                                <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Slider.js.html">Slider.js</a></li>
+                                <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#animate">animate</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#animationDuration">animationDuration</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#backgroundEnabled">backgroundEnabled</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#baselinePos">baselinePos</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#enableKeys">enableKeys</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#isTarget">isTarget</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#keyIncrement">keyIncrement</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#moveComplete">moveComplete</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#thumb">thumb</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#thumbCenterPoint">thumbCenterPoint</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#tickPause">tickPause</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#type">type</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_getNextX">_getNextX</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_getNextY">_getNextY</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#b4MouseDown">b4MouseDown</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#endMove">endMove</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#fireEvents">fireEvents</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#focus">focus</a>
+                                </li>
+                                <li><!--<code>SliderThumb</code>-->
+                                <a href="#getThumb">getThumb</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getValue">getValue</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getXValue">getXValue</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getYValue">getYValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleKeyDown">handleKeyDown</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleKeyPress">handleKeyPress</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleThumbChange">handleThumbChange</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initSlider">initSlider</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initThumb">initThumb</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#lock">lock</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#moveOneTick">moveOneTick</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#moveThumb">moveThumb</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onAvailable">onAvailable</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onChange">onChange</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onDrag">onDrag</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onMouseDown">onMouseDown</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onSliderEnd">onSliderEnd</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#onSlideStart">onSlideStart</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#setRegionValue">setRegionValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setStartSliderState">setStartSliderState</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setThumbCenterPoint">setThumbCenterPoint</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#setValue">setValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#thumbMouseUp">thumbMouseUp</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#unlock">unlock</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#verifyOffset">verifyOffset</a>
+                                </li>
+                                <li><!--<code>Slider</code>-->
+                                <a href="#YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a>
+                                </li>
+                                <li><!--<code>Slider</code>-->
+                                <a href="#YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a>
+                                </li>
+                                <li><!--<code>Slider</code>-->
+                                <a href="#YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#change">change</a>
+                                </li>
+                                <li>
+                                <a href="#slideEnd">slideEnd</a>
+                                </li>
+                                <li>
+                                <a href="#slideStart">slideStart</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

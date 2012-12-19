@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: imageloader  YAHOO.util.ImageLoader.imgObj   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>imageloader&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_imageloader.html">imageloader</a>
+                 &gt; YAHOO.util.ImageLoader.imgObj 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.ImageLoader.imgObj</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.util.ImageLoader.srcImgObj.html">YAHOO.util.ImageLoader.srcImgObj</a>
+                                    <a href="YAHOO.util.ImageLoader.bgImgObj.html">YAHOO.util.ImageLoader.bgImgObj</a>
+                                    <a href="YAHOO.util.ImageLoader.pngBgImgObj.html">YAHOO.util.ImageLoader.pngBgImgObj</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        Base class for image objects to be registered with the groups
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.ImageLoader.imgObj</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                domId
+
+                                                , 
+                                                url
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>domId
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                    	HTML DOM id of the image element
+                                                </dd>
+                                                <dd>
+                                                    <code>url
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                    	URL for the image
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_fetched">_fetched</a>
+                                        <code>- private Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether the image has already been fetched. In the case of a foldCondional group, keeps track for when the trigger is fired so images aren't fetched twice
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="domId">domId</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            HTML DOM id of the image element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="height">height</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Pixel height of the image. Will be set as a "height" attribute after the image is fetched.
+Detaults to the natural height of the image.
+Only appropriate with src images
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="setVisible">setVisible</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether the style.visibility should be set to "visible" after the image is fetched.
+Used when setting src images as visibility:hidden prior to image fetching
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="url">url</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            URL for the image
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="width">width</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Pixel width of the image. Will be set as a "width" attribute after the image is fetched.
+Detaults to the natural width of the image.
+Only appropriate with src images
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_applyUrl">_applyUrl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_applyUrl</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Inserts the image URL into the DOM so that the image is displayed.
+Must be overridden by child class
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;Object&gt;</code>
+                                                            	HTML DOM element
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="fetch">fetch</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>fetch</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays the image; puts the URL into the DOM
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.ImageLoader.bgImgObj.html">YAHOO.util.ImageLoader.bgImgObj</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.group.html">YAHOO.util.ImageLoader.group</a></li>
+                                <li class="selected"><a href="YAHOO.util.ImageLoader.imgObj.html">YAHOO.util.ImageLoader.imgObj</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.pngBgImgObj.html">YAHOO.util.ImageLoader.pngBgImgObj</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.srcImgObj.html">YAHOO.util.ImageLoader.srcImgObj</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ImageLoader.js.html">ImageLoader.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_fetched">_fetched</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#domId">domId</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#height">height</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#setVisible">setVisible</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#url">url</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#width">width</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_applyUrl">_applyUrl</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#fetch">fetch</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

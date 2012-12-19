@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: autocomplete   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>AutoComplete Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_autocomplete.html">autocomplete</a>
+                
+                
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                   
+                    <h3>Module: autocomplete
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The AutoComplete control provides the front-end logic for text-entry suggestion and
+completion functionality.
+                    </div>
+
+
+
+<div class="yui-gc">
+    <div class="yui-u first">
+                    <form onsubmit="return false">
+                        <p>Search autocomplete:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.AutoComplete", "name": "allowBrowserAutocomplete", "url": "YAHOO.widget.AutoComplete.html#property_allowBrowserAutocomplete"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "alwaysShowContainer", "url": "YAHOO.widget.AutoComplete.html#property_alwaysShowContainer"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "animHoriz", "url": "YAHOO.widget.AutoComplete.html#property_animHoriz"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "animSpeed", "url": "YAHOO.widget.AutoComplete.html#property_animSpeed"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "animVert", "url": "YAHOO.widget.AutoComplete.html#property_animVert"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "applyLocalFilter", "url": "YAHOO.widget.AutoComplete.html#property_applyLocalFilter"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "AutoComplete._cloneObject", "url": "YAHOO.widget.AutoComplete.html#method_AutoComplete._cloneObject"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "autoHighlight", "url": "YAHOO.widget.AutoComplete.html#property_autoHighlight"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_bContainerOpen", "url": "YAHOO.widget.AutoComplete.html#property__bContainerOpen"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_bFocused", "url": "YAHOO.widget.AutoComplete.html#property__bFocused"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_bItemSelected", "url": "YAHOO.widget.AutoComplete.html#property__bItemSelected"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_bOverContainer", "url": "YAHOO.widget.AutoComplete.html#property__bOverContainer"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_clearInterval", "url": "YAHOO.widget.AutoComplete.html#method__clearInterval"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_clearSelection", "url": "YAHOO.widget.AutoComplete.html#method__clearSelection"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "collapseContainer", "url": "YAHOO.widget.AutoComplete.html#method_collapseContainer"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "containerCollapseEvent", "url": "YAHOO.widget.AutoComplete.html#event_containerCollapseEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "containerExpandEvent", "url": "YAHOO.widget.AutoComplete.html#event_containerExpandEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "containerPopulateEvent", "url": "YAHOO.widget.AutoComplete.html#event_containerPopulateEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "dataErrorEvent", "url": "YAHOO.widget.AutoComplete.html#event_dataErrorEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "dataRequestEvent", "url": "YAHOO.widget.AutoComplete.html#event_dataRequestEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "dataReturnEvent", "url": "YAHOO.widget.AutoComplete.html#event_dataReturnEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "dataSource", "url": "YAHOO.widget.AutoComplete.html#property_dataSource"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "delimChar", "url": "YAHOO.widget.AutoComplete.html#property_delimChar"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "destroy", "url": "YAHOO.widget.AutoComplete.html#method_destroy"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "doBeforeExpandContainer", "url": "YAHOO.widget.AutoComplete.html#method_doBeforeExpandContainer"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "doBeforeLoadData", "url": "YAHOO.widget.AutoComplete.html#method_doBeforeLoadData"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "doBeforeSendQuery", "url": "YAHOO.widget.AutoComplete.html#method_doBeforeSendQuery"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elBody", "url": "YAHOO.widget.AutoComplete.html#property__elBody"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elContainer", "url": "YAHOO.widget.AutoComplete.html#property__elContainer"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elContent", "url": "YAHOO.widget.AutoComplete.html#property__elContent"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elCurListItem", "url": "YAHOO.widget.AutoComplete.html#property__elCurListItem"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elFooter", "url": "YAHOO.widget.AutoComplete.html#property__elFooter"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elHeader", "url": "YAHOO.widget.AutoComplete.html#property__elHeader"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elIFrame", "url": "YAHOO.widget.AutoComplete.html#property__elIFrame"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elList", "url": "YAHOO.widget.AutoComplete.html#property__elList"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elShadow", "url": "YAHOO.widget.AutoComplete.html#property__elShadow"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_elTextbox", "url": "YAHOO.widget.AutoComplete.html#property__elTextbox"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_enableIntervalDetection", "url": "YAHOO.widget.AutoComplete.html#method__enableIntervalDetection"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "filterResults", "url": "YAHOO.widget.AutoComplete.html#method_filterResults"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "forceSelection", "url": "YAHOO.widget.AutoComplete.html#property_forceSelection"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "formatResult", "url": "YAHOO.widget.AutoComplete.html#method_formatResult"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "generateRequest", "url": "YAHOO.widget.AutoComplete.html#method_generateRequest"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getContainerEl", "url": "YAHOO.widget.AutoComplete.html#method_getContainerEl"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getInputEl", "url": "YAHOO.widget.AutoComplete.html#method_getInputEl"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getListEl", "url": "YAHOO.widget.AutoComplete.html#method_getListEl"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getListItemData", "url": "YAHOO.widget.AutoComplete.html#method_getListItemData"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getListItemIndex", "url": "YAHOO.widget.AutoComplete.html#method_getListItemIndex"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getListItemMatch", "url": "YAHOO.widget.AutoComplete.html#method_getListItemMatch"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getListItems", "url": "YAHOO.widget.AutoComplete.html#method_getListItems"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "getSubsetMatches", "url": "YAHOO.widget.AutoComplete.html#method_getSubsetMatches"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "handleResponse", "url": "YAHOO.widget.AutoComplete.html#method_handleResponse"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "highlightClassName", "url": "YAHOO.widget.AutoComplete.html#property_highlightClassName"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_iFrameSrc", "url": "YAHOO.widget.AutoComplete.html#property__iFrameSrc"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_initContainerEl", "url": "YAHOO.widget.AutoComplete.html#method__initContainerEl"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_initContainerHelperEls", "url": "YAHOO.widget.AutoComplete.html#method__initContainerHelperEls"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_initListEl", "url": "YAHOO.widget.AutoComplete.html#method__initListEl"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "__initProps", "url": "YAHOO.widget.AutoComplete.html#method___initProps"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "isContainerOpen", "url": "YAHOO.widget.AutoComplete.html#method_isContainerOpen"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "isFocused", "url": "YAHOO.widget.AutoComplete.html#method_isFocused"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_isIgnoreKey", "url": "YAHOO.widget.AutoComplete.html#method__isIgnoreKey"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "itemArrowFromEvent", "url": "YAHOO.widget.AutoComplete.html#event_itemArrowFromEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "itemArrowToEvent", "url": "YAHOO.widget.AutoComplete.html#event_itemArrowToEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "itemMouseOutEvent", "url": "YAHOO.widget.AutoComplete.html#event_itemMouseOutEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "itemMouseOverEvent", "url": "YAHOO.widget.AutoComplete.html#event_itemMouseOverEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "itemSelectEvent", "url": "YAHOO.widget.AutoComplete.html#event_itemSelectEvent"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_jumpSelection", "url": "YAHOO.widget.AutoComplete.html#method__jumpSelection"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "maxResultsDisplayed", "url": "YAHOO.widget.AutoComplete.html#property_maxResultsDisplayed"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "minQueryLength", "url": "YAHOO.widget.AutoComplete.html#property_minQueryLength"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_moveSelection", "url": "YAHOO.widget.AutoComplete.html#method__moveSelection"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_nDelayID", "url": "YAHOO.widget.AutoComplete.html#property__nDelayID"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_nDisplayedItems", "url": "YAHOO.widget.AutoComplete.html#property__nDisplayedItems"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_nIndex", "url": "YAHOO.widget.AutoComplete.html#property__nIndex"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_nKeyCode", "url": "YAHOO.widget.AutoComplete.html#property__nKeyCode"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_nTypeAheadDelayID", "url": "YAHOO.widget.AutoComplete.html#property__nTypeAheadDelayID"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_oAnim", "url": "YAHOO.widget.AutoComplete.html#property__oAnim"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onContainerClick", "url": "YAHOO.widget.AutoComplete.html#method__onContainerClick"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onContainerMouseout", "url": "YAHOO.widget.AutoComplete.html#method__onContainerMouseout"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onContainerMouseover", "url": "YAHOO.widget.AutoComplete.html#method__onContainerMouseover"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onContainerResize", "url": "YAHOO.widget.AutoComplete.html#method__onContainerResize"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onContainerScroll", "url": "YAHOO.widget.AutoComplete.html#method__onContainerScroll"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onInterval", "url": "YAHOO.widget.AutoComplete.html#method__onInterval"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onItemMouseclick", "url": "YAHOO.widget.AutoComplete.html#method__onItemMouseclick"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onItemMouseout", "url": "YAHOO.widget.AutoComplete.html#method__onItemMouseout"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onItemMouseover", "url": "YAHOO.widget.AutoComplete.html#method__onItemMouseover"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onTextboxBlur", "url": "YAHOO.widget.AutoComplete.html#method__onTextboxBlur"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onTextboxFocus", "url": "YAHOO.widget.AutoComplete.html#method__onTextboxFocus"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onTextboxKeyDown", "url": "YAHOO.widget.AutoComplete.html#method__onTextboxKeyDown"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onTextboxKeyPress", "url": "YAHOO.widget.AutoComplete.html#method__onTextboxKeyPress"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onTextboxKeyUp", "url": "YAHOO.widget.AutoComplete.html#method__onTextboxKeyUp"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_onWindowUnload", "url": "YAHOO.widget.AutoComplete.html#method__onWindowUnload"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_populateList", "url": "YAHOO.widget.AutoComplete.html#method__populateList"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "prehighlightClassName", "url": "YAHOO.widget.AutoComplete.html#property_prehighlightClassName"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "preparseRawResponse", "url": "YAHOO.widget.AutoComplete.html#method_preparseRawResponse"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryDelay", "url": "YAHOO.widget.AutoComplete.html#property_queryDelay"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_queryInterval", "url": "YAHOO.widget.AutoComplete.html#property__queryInterval"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryInterval", "url": "YAHOO.widget.AutoComplete.html#property_queryInterval"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryMatchCase", "url": "YAHOO.widget.AutoComplete.html#property_queryMatchCase"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryMatchContains", "url": "YAHOO.widget.AutoComplete.html#property_queryMatchContains"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryMatchSubset", "url": "YAHOO.widget.AutoComplete.html#property_queryMatchSubset"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "queryQuestionMark", "url": "YAHOO.widget.AutoComplete.html#property_queryQuestionMark"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "resultTypeList", "url": "YAHOO.widget.AutoComplete.html#property_resultTypeList"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sCurQuery", "url": "YAHOO.widget.AutoComplete.html#property__sCurQuery"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "selectionEnforceEvent", "url": "YAHOO.widget.AutoComplete.html#event_selectionEnforceEvent"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_selectItem", "url": "YAHOO.widget.AutoComplete.html#method__selectItem"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_selectText", "url": "YAHOO.widget.AutoComplete.html#method__selectText"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sendQuery", "url": "YAHOO.widget.AutoComplete.html#method__sendQuery"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "sendQuery", "url": "YAHOO.widget.AutoComplete.html#method_sendQuery"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "setBody", "url": "YAHOO.widget.AutoComplete.html#method_setBody"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "setFooter", "url": "YAHOO.widget.AutoComplete.html#method_setFooter"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "setHeader", "url": "YAHOO.widget.AutoComplete.html#method_setHeader"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sInitInputValue", "url": "YAHOO.widget.AutoComplete.html#property__sInitInputValue"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sLastTextboxValue", "url": "YAHOO.widget.AutoComplete.html#event__sLastTextboxValue"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sName", "url": "YAHOO.widget.AutoComplete.html#property__sName"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_sPastSelections", "url": "YAHOO.widget.AutoComplete.html#property__sPastSelections"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "supressInputUpdate", "url": "YAHOO.widget.AutoComplete.html#property_supressInputUpdate"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "textboxBlurEvent", "url": "YAHOO.widget.AutoComplete.html#event_textboxBlurEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "textboxChangeEvent", "url": "YAHOO.widget.AutoComplete.html#event_textboxChangeEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "textboxFocusEvent", "url": "YAHOO.widget.AutoComplete.html#event_textboxFocusEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "textboxKeyEvent", "url": "YAHOO.widget.AutoComplete.html#event_textboxKeyEvent"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_textMatchesOption", "url": "YAHOO.widget.AutoComplete.html#method__textMatchesOption"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_toggleContainer", "url": "YAHOO.widget.AutoComplete.html#method__toggleContainer"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_toggleContainerHelpers", "url": "YAHOO.widget.AutoComplete.html#method__toggleContainerHelpers"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_toggleHighlight", "url": "YAHOO.widget.AutoComplete.html#method__toggleHighlight"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_togglePrehighlight", "url": "YAHOO.widget.AutoComplete.html#method__togglePrehighlight"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "toString", "url": "YAHOO.widget.AutoComplete.html#method_toString"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "typeAhead", "url": "YAHOO.widget.AutoComplete.html#property_typeAhead"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_typeAhead", "url": "YAHOO.widget.AutoComplete.html#method__typeAhead"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "typeAheadDelay", "url": "YAHOO.widget.AutoComplete.html#property_typeAheadDelay"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "typeAheadEvent", "url": "YAHOO.widget.AutoComplete.html#event_typeAheadEvent"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "unmatchedItemSelectEvent", "url": "YAHOO.widget.AutoComplete.html#event_unmatchedItemSelectEvent"}, {"access": "private", "host": "YAHOO.widget.AutoComplete", "name": "_updateValue", "url": "YAHOO.widget.AutoComplete.html#method__updateValue"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "useIFrame", "url": "YAHOO.widget.AutoComplete.html#property_useIFrame"}, {"access": "", "host": "YAHOO.widget.AutoComplete", "name": "useShadow", "url": "YAHOO.widget.AutoComplete.html#property_useShadow"}];
+                    </script>
+	    </div>
+    <div class="yui-u">
+
+	    </div>
+</div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class="selected"><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.AutoComplete.html">YAHOO.widget.AutoComplete</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="AutoComplete.js.html">AutoComplete.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: event   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: event
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Event Utility provides utilities for managing DOM Events and tools
+for building event systems
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search event:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Event", "name": "addListener", "url": "YAHOO.util.Event.html#method_addListener"}, {"access": "", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE", "url": "YAHOO.util.Event.html#property_ADJ_SCOPE"}, {"access": "private", "host": "YAHOO.util.Event", "name": "clearCache", "url": "YAHOO.util.Event.html#method_clearCache"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "contains", "url": "YAHOO.util.Subscriber.html#method_contains"}, {"access": "private", "host": "YAHOO.util.Event", "name": "counter", "url": "YAHOO.util.Event.html#property_counter"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "createEvent", "url": "YAHOO.util.EventProvider.html#method_createEvent"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disable", "url": "YAHOO.util.KeyListener.html#method_disable"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disabledEvent", "url": "YAHOO.util.KeyListener.html#event_disabledEvent"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReady", "url": "YAHOO.util.Event.html#property_DOMReady"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReadyEvent", "url": "YAHOO.util.Event.html#event_DOMReadyEvent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_dri", "url": "YAHOO.util.Event.html#property__dri"}, {"access": "", "host": "YAHOO.util.Event", "name": "EL", "url": "YAHOO.util.Event.html#property_EL"}, {"access": "private", "host": "YAHOO.util.Event", "name": "elCache\nDOM element cache", "url": "YAHOO.util.Event.html#property_elCache\nDOM element cache"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enable", "url": "YAHOO.util.KeyListener.html#method_enable"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabled", "url": "YAHOO.util.KeyListener.html#property_enabled"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabledEvent", "url": "YAHOO.util.KeyListener.html#event_enabledEvent"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "fireEvent", "url": "YAHOO.util.EventProvider.html#method_fireEvent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "fireLegacyEvent", "url": "YAHOO.util.Event.html#method_fireLegacyEvent"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "fn", "url": "YAHOO.util.Subscriber.html#property_fn"}, {"access": "", "host": "YAHOO.util.Event", "name": "FN", "url": "YAHOO.util.Event.html#property_FN"}, {"access": "", "host": "YAHOO.util.Event", "name": "generateId", "url": "YAHOO.util.Event.html#method_generateId"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getCacheIndex", "url": "YAHOO.util.Event.html#method__getCacheIndex"}, {"access": "", "host": "YAHOO.util.Event", "name": "getCharCode", "url": "YAHOO.util.Event.html#method_getCharCode"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getEl", "url": "YAHOO.util.Event.html#method_getEl"}, {"access": "", "host": "YAHOO.util.Event", "name": "getEvent", "url": "YAHOO.util.Event.html#method_getEvent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getLegacyIndex", "url": "YAHOO.util.Event.html#method_getLegacyIndex"}, {"access": "", "host": "YAHOO.util.Event", "name": "getListeners", "url": "YAHOO.util.Event.html#method_getListeners"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageX", "url": "YAHOO.util.Event.html#method_getPageX"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageY", "url": "YAHOO.util.Event.html#method_getPageY"}, {"access": "", "host": "YAHOO.util.Event", "name": "getRelatedTarget", "url": "YAHOO.util.Event.html#method_getRelatedTarget"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "getScope", "url": "YAHOO.util.Subscriber.html#method_getScope"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScroll", "url": "YAHOO.util.Event.html#method__getScroll"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollLeft", "url": "YAHOO.util.Event.html#method__getScrollLeft"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollTop", "url": "YAHOO.util.Event.html#method__getScrollTop"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTarget", "url": "YAHOO.util.Event.html#method_getTarget"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTime", "url": "YAHOO.util.Event.html#method_getTime"}, {"access": "", "host": "YAHOO.util.Event", "name": "getXY", "url": "YAHOO.util.Event.html#method_getXY"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "handleKeyPress", "url": "YAHOO.util.KeyListener.html#method_handleKeyPress"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "hasEvent", "url": "YAHOO.util.EventProvider.html#method_hasEvent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_interval", "url": "YAHOO.util.Event.html#property__interval"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isIE", "url": "YAHOO.util.Event.html#property_isIE"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isSafari", "url": "YAHOO.util.Event.html#property_isSafari"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_isValidCollection", "url": "YAHOO.util.Event.html#method__isValidCollection"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "KEY", "url": "YAHOO.util.KeyListener.html#property_KEY"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "keyEvent", "url": "YAHOO.util.KeyListener.html#event_keyEvent"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError"}, {"access": "", "host": "YAHOO.util.Event", "name": "lastError", "url": "YAHOO.util.Event.html#property_lastError"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyEvents", "url": "YAHOO.util.Event.html#property_legacyEvents"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyHandlers", "url": "YAHOO.util.Event.html#property_legacyHandlers"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyMap", "url": "YAHOO.util.Event.html#property_legacyMap"}, {"access": "private", "host": "YAHOO.util.Event", "name": "listeners", "url": "YAHOO.util.Event.html#property_listeners"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_load", "url": "YAHOO.util.Event.html#method__load"}, {"access": "private", "host": "YAHOO.util.Event", "name": "loadComplete", "url": "YAHOO.util.Event.html#property_loadComplete"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "obj", "url": "YAHOO.util.Subscriber.html#property_obj"}, {"access": "", "host": "YAHOO.util.Event", "name": "OBJ", "url": "YAHOO.util.Event.html#property_OBJ"}, {"access": "", "host": "YAHOO.util.Event", "name": "on", "url": "YAHOO.util.Event.html#method_on"}, {"access": "", "host": "YAHOO.util.Event", "name": "onAvailable", "url": "YAHOO.util.Event.html#method_onAvailable"}, {"access": "private", "host": "YAHOO.util.Event", "name": "onAvailStack", "url": "YAHOO.util.Event.html#property_onAvailStack"}, {"access": "", "host": "YAHOO.util.Event", "name": "onContentReady", "url": "YAHOO.util.Event.html#method_onContentReady"}, {"access": "", "host": "YAHOO.util.Event", "name": "onDOMReady", "url": "YAHOO.util.Event.html#method_onDOMReady"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "override", "url": "YAHOO.util.Subscriber.html#property_override"}, {"access": "", "host": "YAHOO.util.Event", "name": "OVERRIDE", "url": "YAHOO.util.Event.html#property_OVERRIDE"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL", "url": "YAHOO.util.Event.html#property_POLL_INTERVAL"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_RETRYS", "url": "YAHOO.util.Event.html#property_POLL_RETRYS"}, {"access": "", "host": "YAHOO.util.Event", "name": "preventDefault", "url": "YAHOO.util.Event.html#method_preventDefault"}, {"access": "", "host": "YAHOO.util.Event", "name": "purgeElement", "url": "YAHOO.util.Event.html#method_purgeElement"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_ready", "url": "YAHOO.util.Event.html#method__ready"}, {"access": "private", "host": "YAHOO.util.Event", "name": "regCE", "url": "YAHOO.util.Event.html#method_regCE"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeListener", "url": "YAHOO.util.Event.html#method_removeListener"}, {"access": "", "host": "YAHOO.util.Event", "name": "resolveTextNode", "url": "YAHOO.util.Event.html#method_resolveTextNode"}, {"access": "private", "host": "YAHOO.util.Event", "name": "retryCount", "url": "YAHOO.util.Event.html#property_retryCount"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleAdd", "url": "YAHOO.util.Event.html#method__simpleAdd"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleRemove", "url": "YAHOO.util.Event.html#method__simpleRemove"}, {"access": "private", "host": "YAHOO.util.Event", "name": "startInterval", "url": "YAHOO.util.Event.html#method_startInterval"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopEvent", "url": "YAHOO.util.Event.html#method_stopEvent"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopPropagation", "url": "YAHOO.util.Event.html#method_stopPropagation"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "subscribe", "url": "YAHOO.util.EventProvider.html#method_subscribe"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers"}, {"access": "", "host": "YAHOO.util.Event", "name": "throwErrors", "url": "YAHOO.util.Event.html#property_throwErrors"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "toString", "url": "YAHOO.util.Subscriber.html#method_toString"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "toString", "url": "YAHOO.util.KeyListener.html#method_toString"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_tryPreloadAttach", "url": "YAHOO.util.Event.html#method__tryPreloadAttach"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type"}, {"access": "", "host": "YAHOO.util.Event", "name": "TYPE", "url": "YAHOO.util.Event.html#property_TYPE"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_unload", "url": "YAHOO.util.Event.html#method__unload"}, {"access": "private", "host": "YAHOO.util.Event", "name": "unloadListeners", "url": "YAHOO.util.Event.html#property_unloadListeners"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "unsubscribe", "url": "YAHOO.util.EventProvider.html#method_unsubscribe"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll"}, {"access": "", "host": "YAHOO.util.EventProvider", "name": "unsubscribeAll", "url": "YAHOO.util.EventProvider.html#method_unsubscribeAll"}, {"access": "private", "host": "YAHOO.util.Event", "name": "useLegacyEvent", "url": "YAHOO.util.Event.html#method_useLegacyEvent"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkit", "url": "YAHOO.util.Event.html#property_webkit"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkitKeymap", "url": "YAHOO.util.Event.html#property_webkitKeymap"}, {"access": "", "host": "YAHOO.util.Event", "name": "WFN", "url": "YAHOO.util.Event.html#property_WFN"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYDOWN", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYDOWN"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYUP", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYUP"}, {"access": "private", "host": "YAHOO.util.EventProvider", "name": "__yui_events", "url": "YAHOO.util.EventProvider.html#property___yui_events"}, {"access": "private", "host": "YAHOO.util.EventProvider", "name": "__yui_subscribers", "url": "YAHOO.util.EventProvider.html#property___yui_subscribers"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

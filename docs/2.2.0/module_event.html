@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: event   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                   
+                    <h3>Module: event
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Event Utility provides utilities for managing DOM Events and tools
+for building event systems
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search event:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"url": "YAHOO.util.Event.html#addListener", "host": "YAHOO.util.Event", "name": "addListener"}, {"url": "YAHOO.util.Event.html#ADJ_SCOPE", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE"}, {"url": "YAHOO.util.Event.html#clearCache", "host": "YAHOO.util.Event", "name": "clearCache"}, {"url": "YAHOO.util.Subscriber.html#contains", "host": "YAHOO.util.Subscriber", "name": "contains"}, {"url": "YAHOO.util.Event.html#counter", "host": "YAHOO.util.Event", "name": "counter"}, {"url": "YAHOO.util.EventProvider.html#createEvent", "host": "YAHOO.util.EventProvider", "name": "createEvent"}, {"url": "YAHOO.util.CustomEvent.html#_delete", "host": "YAHOO.util.CustomEvent", "name": "_delete"}, {"url": "YAHOO.util.Event.html#EL", "host": "YAHOO.util.Event", "name": "EL"}, {"url": "YAHOO.util.Event.html#elCache\nDOM element cache", "host": "YAHOO.util.Event", "name": "elCache\nDOM element cache"}, {"url": "YAHOO.util.CustomEvent.html#fire", "host": "YAHOO.util.CustomEvent", "name": "fire"}, {"url": "YAHOO.util.EventProvider.html#fireEvent", "host": "YAHOO.util.EventProvider", "name": "fireEvent"}, {"url": "YAHOO.util.Event.html#fireLegacyEvent", "host": "YAHOO.util.Event", "name": "fireLegacyEvent"}, {"url": "YAHOO.util.Subscriber.html#fn", "host": "YAHOO.util.Subscriber", "name": "fn"}, {"url": "YAHOO.util.Event.html#FN", "host": "YAHOO.util.Event", "name": "FN"}, {"url": "YAHOO.util.Event.html#generateId", "host": "YAHOO.util.Event", "name": "generateId"}, {"url": "YAHOO.util.Event.html#_getCacheIndex", "host": "YAHOO.util.Event", "name": "_getCacheIndex"}, {"url": "YAHOO.util.Event.html#getCharCode", "host": "YAHOO.util.Event", "name": "getCharCode"}, {"url": "YAHOO.util.Event.html#getEl", "host": "YAHOO.util.Event", "name": "getEl"}, {"url": "YAHOO.util.Event.html#getEvent", "host": "YAHOO.util.Event", "name": "getEvent"}, {"url": "YAHOO.util.Event.html#getLegacyIndex", "host": "YAHOO.util.Event", "name": "getLegacyIndex"}, {"url": "YAHOO.util.Event.html#getListeners", "host": "YAHOO.util.Event", "name": "getListeners"}, {"url": "YAHOO.util.Event.html#getPageX", "host": "YAHOO.util.Event", "name": "getPageX"}, {"url": "YAHOO.util.Event.html#getPageY", "host": "YAHOO.util.Event", "name": "getPageY"}, {"url": "YAHOO.util.Event.html#getRelatedTarget", "host": "YAHOO.util.Event", "name": "getRelatedTarget"}, {"url": "YAHOO.util.Subscriber.html#getScope", "host": "YAHOO.util.Subscriber", "name": "getScope"}, {"url": "YAHOO.util.Event.html#_getScroll", "host": "YAHOO.util.Event", "name": "_getScroll"}, {"url": "YAHOO.util.Event.html#_getScrollLeft", "host": "YAHOO.util.Event", "name": "_getScrollLeft"}, {"url": "YAHOO.util.Event.html#_getScrollTop", "host": "YAHOO.util.Event", "name": "_getScrollTop"}, {"url": "YAHOO.util.Event.html#getTarget", "host": "YAHOO.util.Event", "name": "getTarget"}, {"url": "YAHOO.util.Event.html#getTime", "host": "YAHOO.util.Event", "name": "getTime"}, {"url": "YAHOO.util.Event.html#getXY", "host": "YAHOO.util.Event", "name": "getXY"}, {"url": "YAHOO.util.EventProvider.html#hasEvent", "host": "YAHOO.util.EventProvider", "name": "hasEvent"}, {"url": "YAHOO.util.Event.html#_interval", "host": "YAHOO.util.Event", "name": "_interval"}, {"url": "YAHOO.util.Event.html#isIE", "host": "YAHOO.util.Event", "name": "isIE"}, {"url": "YAHOO.util.Event.html#isSafari", "host": "YAHOO.util.Event", "name": "isSafari"}, {"url": "YAHOO.util.Event.html#_isValidCollection", "host": "YAHOO.util.Event", "name": "_isValidCollection"}, {"url": "YAHOO.util.Event.html#lastError", "host": "YAHOO.util.Event", "name": "lastError"}, {"url": "YAHOO.util.Event.html#legacyEvents", "host": "YAHOO.util.Event", "name": "legacyEvents"}, {"url": "YAHOO.util.Event.html#legacyHandlers", "host": "YAHOO.util.Event", "name": "legacyHandlers"}, {"url": "YAHOO.util.Event.html#legacyMap", "host": "YAHOO.util.Event", "name": "legacyMap"}, {"url": "YAHOO.util.Event.html#listeners", "host": "YAHOO.util.Event", "name": "listeners"}, {"url": "YAHOO.util.Event.html#_load", "host": "YAHOO.util.Event", "name": "_load"}, {"url": "YAHOO.util.Event.html#loadComplete", "host": "YAHOO.util.Event", "name": "loadComplete"}, {"url": "YAHOO.util.Subscriber.html#obj", "host": "YAHOO.util.Subscriber", "name": "obj"}, {"url": "YAHOO.util.Event.html#OBJ", "host": "YAHOO.util.Event", "name": "OBJ"}, {"url": "YAHOO.util.Event.html#on", "host": "YAHOO.util.Event", "name": "on"}, {"url": "YAHOO.util.Event.html#onAvailable", "host": "YAHOO.util.Event", "name": "onAvailable"}, {"url": "YAHOO.util.Event.html#onAvailStack", "host": "YAHOO.util.Event", "name": "onAvailStack"}, {"url": "YAHOO.util.Event.html#onContentReady", "host": "YAHOO.util.Event", "name": "onContentReady"}, {"url": "YAHOO.util.Subscriber.html#override", "host": "YAHOO.util.Subscriber", "name": "override"}, {"url": "YAHOO.util.Event.html#POLL_INTERVAL", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL"}, {"url": "YAHOO.util.Event.html#POLL_RETRYS", "host": "YAHOO.util.Event", "name": "POLL_RETRYS"}, {"url": "YAHOO.util.Event.html#preventDefault", "host": "YAHOO.util.Event", "name": "preventDefault"}, {"url": "YAHOO.util.Event.html#purgeElement", "host": "YAHOO.util.Event", "name": "purgeElement"}, {"url": "YAHOO.util.Event.html#regCE", "host": "YAHOO.util.Event", "name": "regCE"}, {"url": "YAHOO.util.Event.html#removeListener", "host": "YAHOO.util.Event", "name": "removeListener"}, {"url": "YAHOO.util.Event.html#resolveTextNode", "host": "YAHOO.util.Event", "name": "resolveTextNode"}, {"url": "YAHOO.util.Event.html#retryCount", "host": "YAHOO.util.Event", "name": "retryCount"}, {"url": "YAHOO.util.CustomEvent.html#scope", "host": "YAHOO.util.CustomEvent", "name": "scope"}, {"url": "YAHOO.util.CustomEvent.html#signature", "host": "YAHOO.util.CustomEvent", "name": "signature"}, {"url": "YAHOO.util.CustomEvent.html#silent", "host": "YAHOO.util.CustomEvent", "name": "silent"}, {"url": "YAHOO.util.Event.html#_simpleAdd", "host": "YAHOO.util.Event", "name": "_simpleAdd"}, {"url": "YAHOO.util.Event.html#_simpleRemove", "host": "YAHOO.util.Event", "name": "_simpleRemove"}, {"url": "YAHOO.util.Event.html#startInterval", "host": "YAHOO.util.Event", "name": "startInterval"}, {"url": "YAHOO.util.Event.html#stopEvent", "host": "YAHOO.util.Event", "name": "stopEvent"}, {"url": "YAHOO.util.Event.html#stopPropagation", "host": "YAHOO.util.Event", "name": "stopPropagation"}, {"url": "YAHOO.util.CustomEvent.html#subscribe", "host": "YAHOO.util.CustomEvent", "name": "subscribe"}, {"url": "YAHOO.util.EventProvider.html#subscribe", "host": "YAHOO.util.EventProvider", "name": "subscribe"}, {"url": "YAHOO.util.CustomEvent.html#subscribeEvent", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent"}, {"url": "YAHOO.util.CustomEvent.html#subscribers", "host": "YAHOO.util.CustomEvent", "name": "subscribers"}, {"url": "YAHOO.util.CustomEvent.html#toString", "host": "YAHOO.util.CustomEvent", "name": "toString"}, {"url": "YAHOO.util.Subscriber.html#toString", "host": "YAHOO.util.Subscriber", "name": "toString"}, {"url": "YAHOO.util.Event.html#_tryPreloadAttach", "host": "YAHOO.util.Event", "name": "_tryPreloadAttach"}, {"url": "YAHOO.util.CustomEvent.html#type", "host": "YAHOO.util.CustomEvent", "name": "type"}, {"url": "YAHOO.util.Event.html#TYPE", "host": "YAHOO.util.Event", "name": "TYPE"}, {"url": "YAHOO.util.Event.html#_unload", "host": "YAHOO.util.Event", "name": "_unload"}, {"url": "YAHOO.util.Event.html#unloadListeners", "host": "YAHOO.util.Event", "name": "unloadListeners"}, {"url": "YAHOO.util.CustomEvent.html#unsubscribe", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe"}, {"url": "YAHOO.util.EventProvider.html#unsubscribe", "host": "YAHOO.util.EventProvider", "name": "unsubscribe"}, {"url": "YAHOO.util.CustomEvent.html#unsubscribeAll", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll"}, {"url": "YAHOO.util.EventProvider.html#unsubscribeAll", "host": "YAHOO.util.EventProvider", "name": "unsubscribeAll"}, {"url": "YAHOO.util.Event.html#useLegacyEvent", "host": "YAHOO.util.Event", "name": "useLegacyEvent"}, {"url": "YAHOO.util.Event.html#webkit", "host": "YAHOO.util.Event", "name": "webkit"}, {"url": "YAHOO.util.Event.html#WFN", "host": "YAHOO.util.Event", "name": "WFN"}, {"url": "YAHOO.util.CustomEvent.html#YAHOO.util.CustomEvent.FLAT", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT"}, {"url": "YAHOO.util.CustomEvent.html#YAHOO.util.CustomEvent.LIST", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST"}, {"url": "YAHOO.util.EventProvider.html#__yui_events", "host": "YAHOO.util.EventProvider", "name": "__yui_events"}, {"url": "YAHOO.util.EventProvider.html#__yui_subscribers", "host": "YAHOO.util.EventProvider", "name": "__yui_subscribers"}];
+                    </script>
+
+                    <script type="text/javascript" src="assets/api-js"></script>
+                    <script type="text/javascript" src="assets/ac-js"></script>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

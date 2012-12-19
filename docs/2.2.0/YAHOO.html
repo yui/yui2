@@ -1,0 +1,513 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yahoo  YAHOO   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>YAHOO Global&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yahoo.html">yahoo</a>
+                 &gt; YAHOO 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
+                            Class <b>YAHOO</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The YAHOO global namespace object.  If YAHOO is already defined, the
+existing YAHOO object will not be overwritten so that defined
+namespaces are preserved.
+                    </div>
+
+
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="augment">augment</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>augment</strong>
+                                           (
+                                                
+                                                        
+                                                         r
+                                                    
+                                                
+                                                        , 
+                                                         s
+                                                    
+                                                
+                                                        , 
+                                                         arguments
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            An alias for <a href="YAHOO.lang.html#augment">YAHOO.lang.augment</a>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>r &lt;Function&gt;</code>
+                                                              the object to receive the augmentation
+                                                        </dd>
+                                                        <dd>
+                                                            <code>s &lt;Function&gt;</code>
+                                                              the object that supplies the properties to augment
+                                                        </dd>
+                                                        <dd>
+                                                            <code>arguments &lt;String*&gt;</code>
+                                                             zero or more properties methods to augment the
+receiver with.  If none specified, everything
+in the supplier will be used unless it would
+overwrite an existing property in the receiver
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="extend">extend</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>extend</strong>
+                                           (
+                                                
+                                                        
+                                                         subc
+                                                    
+                                                
+                                                        , 
+                                                         superc
+                                                    
+                                                
+                                                        , 
+                                                         overrides
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>subc &lt;Function&gt;</code>
+                                                               the object to modify
+                                                        </dd>
+                                                        <dd>
+                                                            <code>superc &lt;Function&gt;</code>
+                                                             the object to inherit
+                                                        </dd>
+                                                        <dd>
+                                                            <code>overrides &lt;Object&gt;</code>
+                                                              additional properties/methods to add to the
+subclass prototype.  These will override the
+matching items obtained from the superclass 
+if present.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the global by creating the default namespaces and applying
+any new configuration information that is detected.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="log">log</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Boolean
+                                            <strong>log</strong>
+                                           (
+                                                
+                                                        
+                                                         msg
+                                                    
+                                                
+                                                        , 
+                                                         cat
+                                                    
+                                                
+                                                        , 
+                                                         src
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Uses YAHOO.widget.Logger to output a log message, if the widget is
+available.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>msg &lt;String&gt;</code>
+                                                              The message to log.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>cat &lt;String&gt;</code>
+                                                              The log category for the message.  Default
+categories are "info", "warn", "error", time".
+Custom categories can be used as well. (opt)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>src &lt;String&gt;</code>
+                                                              The source of the the message (opt)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True if the log operation was successful.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="namespace">namespace</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Object
+                                            <strong>namespace</strong>
+                                           (
+                                                
+                                                        
+                                                         arguments
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the namespace specified and creates it if it doesn't exist
+<pre>
+YAHOO.namespace("property.package");
+YAHOO.namespace("YAHOO.property.package");
+</pre>
+Either of the above would create YAHOO.property, then
+YAHOO.property.package
+Be careful when naming packages. Reserved words may work in some browsers
+and not others. For instance, the following will fail in Safari:
+<pre>
+YAHOO.namespace("really.long.nested.namespace");
+</pre>
+This fails because "long" is a future reserved word in ECMAScript
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>arguments &lt;String*&gt;</code>
+                                                             1-n namespaces to create
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>A reference to the last namespace object created</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="register">register</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>register</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         mainClass
+                                                    
+                                                
+                                                        , 
+                                                         data
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers a module with the YAHOO object
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>name &lt;String&gt;</code>
+                                                                the name of the module (event, slider, etc)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>mainClass &lt;Function&gt;</code>
+                                                             a reference to class in the module.  This
+class will be tagged with the version info
+so that it will be possible to identify the
+version that is in use when multiple versions
+have loaded
+                                                        </dd>
+                                                        <dd>
+                                                            <code>data &lt;Object&gt;</code>
+                                                                  metadata object for the module.  Currently it
+is expected to contain a "version" property
+and a "build" property at minimum.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class="selected"><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.html">YAHOO</a></li>
+                                <li class=""><a href="YAHOO.env.html">YAHOO.env</a></li>
+                                <li class=""><a href="YAHOO.lang.html">YAHOO.lang</a></li>
+                                <li class=""><a href="YAHOO_config.html">YAHOO_config</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="YAHOO.js.html">YAHOO.js</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#augment">augment</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#extend">extend</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#log">log</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#namespace">namespace</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#register">register</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

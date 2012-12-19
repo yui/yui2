@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: logger   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_logger.html">logger</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: logger
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Logger widget provides a simple way to read or write log messages in
+JavaScript code. Integration with the YUI Library's debug builds allow
+implementers to access under-the-hood events, errors, and debugging messages.
+Output may be read through a LogReader console and/or output to a browser
+console.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search logger:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.LogReader", "name": "bottom", "url": "YAHOO.widget.LogReader.html#bottom"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_browserConsoleEnabled", "url": "YAHOO.widget.Logger.html#_browserConsoleEnabled"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_btnClear", "url": "YAHOO.widget.LogReader.html#_btnClear"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_btnCollapse", "url": "YAHOO.widget.LogReader.html#_btnCollapse"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_btnPause", "url": "YAHOO.widget.LogReader.html#_btnPause"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_buffer", "url": "YAHOO.widget.LogReader.html#_buffer"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "categories", "url": "YAHOO.widget.Logger.html#categories"}, {"access": "", "host": "YAHOO.widget.LogMsg", "name": "category", "url": "YAHOO.widget.LogMsg.html#category"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "categoryCreateEvent", "url": "YAHOO.widget.Logger.html#categoryCreateEvent"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_categoryFilters", "url": "YAHOO.widget.LogReader.html#_categoryFilters"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "clearConsole", "url": "YAHOO.widget.LogReader.html#clearConsole"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "collapse", "url": "YAHOO.widget.LogReader.html#collapse"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_consoleMsgCount", "url": "YAHOO.widget.LogReader.html#_consoleMsgCount"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_createCategoryCheckbox", "url": "YAHOO.widget.LogReader.html#_createCategoryCheckbox"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_createNewCategory", "url": "YAHOO.widget.Logger.html#_createNewCategory"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_createNewSource", "url": "YAHOO.widget.Logger.html#_createNewSource"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_createSourceCheckbox", "url": "YAHOO.widget.LogReader.html#_createSourceCheckbox"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "disableBrowserConsole", "url": "YAHOO.widget.Logger.html#disableBrowserConsole"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "draggable", "url": "YAHOO.widget.LogReader.html#draggable"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elBtns", "url": "YAHOO.widget.LogReader.html#_elBtns"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elCategoryFilters", "url": "YAHOO.widget.LogReader.html#_elCategoryFilters"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elCollapse", "url": "YAHOO.widget.LogReader.html#_elCollapse"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elConsole", "url": "YAHOO.widget.LogReader.html#_elConsole"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elContainer", "url": "YAHOO.widget.LogReader.html#_elContainer"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elDefaultContainer", "url": "YAHOO.widget.LogReader.html#_elDefaultContainer"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elFt", "url": "YAHOO.widget.LogReader.html#_elFt"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elHd", "url": "YAHOO.widget.LogReader.html#_elHd"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_elSourceFilters", "url": "YAHOO.widget.LogReader.html#_elSourceFilters"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "enableBrowserConsole", "url": "YAHOO.widget.Logger.html#enableBrowserConsole"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "expand", "url": "YAHOO.widget.LogReader.html#expand"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_filterCheckboxes", "url": "YAHOO.widget.LogReader.html#_filterCheckboxes"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_filterLogs", "url": "YAHOO.widget.LogReader.html#_filterLogs"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "fontSize", "url": "YAHOO.widget.LogReader.html#fontSize"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "footerEnabled", "url": "YAHOO.widget.LogReader.html#footerEnabled"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "formatMsg", "url": "YAHOO.widget.LogReader.html#formatMsg"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "getCategories", "url": "YAHOO.widget.LogReader.html#getCategories"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "getCheckbox", "url": "YAHOO.widget.LogReader.html#getCheckbox"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "getLastTime", "url": "YAHOO.widget.LogReader.html#getLastTime"}, {"access": "", "host": "YAHOO.widget.LogWriter", "name": "getSource", "url": "YAHOO.widget.LogWriter.html#getSource"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "getSources", "url": "YAHOO.widget.LogReader.html#getSources"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "getStack", "url": "YAHOO.widget.Logger.html#getStack"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "getStartTime", "url": "YAHOO.widget.Logger.html#getStartTime"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "height", "url": "YAHOO.widget.LogReader.html#height"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "hide", "url": "YAHOO.widget.LogReader.html#hide"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "hideCategory", "url": "YAHOO.widget.LogReader.html#hideCategory"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "hideSource", "url": "YAHOO.widget.LogReader.html#hideSource"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "html2Text", "url": "YAHOO.widget.LogReader.html#html2Text"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initCategories", "url": "YAHOO.widget.LogReader.html#_initCategories"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initConsoleEl", "url": "YAHOO.widget.LogReader.html#_initConsoleEl"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initContainerEl", "url": "YAHOO.widget.LogReader.html#_initContainerEl"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initDragDrop", "url": "YAHOO.widget.LogReader.html#_initDragDrop"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initFooterEl", "url": "YAHOO.widget.LogReader.html#_initFooterEl"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initHeaderEl", "url": "YAHOO.widget.LogReader.html#_initHeaderEl"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_initSources", "url": "YAHOO.widget.LogReader.html#_initSources"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "isCollapsed", "url": "YAHOO.widget.LogReader.html#isCollapsed"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_isNewCategory", "url": "YAHOO.widget.Logger.html#_isNewCategory"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_isNewSource", "url": "YAHOO.widget.Logger.html#_isNewSource"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "isPaused", "url": "YAHOO.widget.LogReader.html#isPaused"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_lastTime", "url": "YAHOO.widget.Logger.html#_lastTime"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_lastTime", "url": "YAHOO.widget.LogReader.html#_lastTime"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "left", "url": "YAHOO.widget.LogReader.html#left"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "log", "url": "YAHOO.widget.Logger.html#log"}, {"access": "", "host": "YAHOO.widget.LogWriter", "name": "log", "url": "YAHOO.widget.LogWriter.html#log"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "loggerEnabled", "url": "YAHOO.widget.Logger.html#loggerEnabled"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "logReaderEnabled", "url": "YAHOO.widget.LogReader.html#logReaderEnabled"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "logResetEvent", "url": "YAHOO.widget.Logger.html#logResetEvent"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "maxStackEntries", "url": "YAHOO.widget.Logger.html#maxStackEntries"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_memberName", "url": "YAHOO.widget.LogReader.html#_memberName"}, {"access": "", "host": "YAHOO.widget.LogMsg", "name": "msg", "url": "YAHOO.widget.LogMsg.html#msg"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "newestOnTop", "url": "YAHOO.widget.LogReader.html#newestOnTop"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "newLogEvent", "url": "YAHOO.widget.Logger.html#newLogEvent"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onCategoryCreate", "url": "YAHOO.widget.LogReader.html#_onCategoryCreate"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onCheckCategory", "url": "YAHOO.widget.LogReader.html#_onCheckCategory"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onCheckSource", "url": "YAHOO.widget.LogReader.html#_onCheckSource"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onClickClearBtn", "url": "YAHOO.widget.LogReader.html#_onClickClearBtn"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onClickCollapseBtn", "url": "YAHOO.widget.LogReader.html#_onClickCollapseBtn"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onClickPauseBtn", "url": "YAHOO.widget.LogReader.html#_onClickPauseBtn"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onNewLog", "url": "YAHOO.widget.LogReader.html#_onNewLog"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onReset", "url": "YAHOO.widget.LogReader.html#_onReset"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_onSourceCreate", "url": "YAHOO.widget.LogReader.html#_onSourceCreate"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_onWindowError", "url": "YAHOO.widget.Logger.html#_onWindowError"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "outputBuffer", "url": "YAHOO.widget.LogReader.html#outputBuffer"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "pause", "url": "YAHOO.widget.LogReader.html#pause"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_printBuffer", "url": "YAHOO.widget.LogReader.html#_printBuffer"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_printToBrowserConsole", "url": "YAHOO.widget.Logger.html#_printToBrowserConsole"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_printToConsole", "url": "YAHOO.widget.LogReader.html#_printToConsole"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "reset", "url": "YAHOO.widget.Logger.html#reset"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "resume", "url": "YAHOO.widget.LogReader.html#resume"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "right", "url": "YAHOO.widget.LogReader.html#right"}, {"access": "", "host": "YAHOO.widget.LogWriter", "name": "setSource", "url": "YAHOO.widget.LogWriter.html#setSource"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "setTitle", "url": "YAHOO.widget.LogReader.html#setTitle"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "show", "url": "YAHOO.widget.LogReader.html#show"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "showCategory", "url": "YAHOO.widget.LogReader.html#showCategory"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "showSource", "url": "YAHOO.widget.LogReader.html#showSource"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_sName", "url": "YAHOO.widget.LogReader.html#_sName"}, {"access": "", "host": "YAHOO.widget.LogMsg", "name": "source", "url": "YAHOO.widget.LogMsg.html#source"}, {"access": "private", "host": "YAHOO.widget.LogWriter", "name": "_source", "url": "YAHOO.widget.LogWriter.html#_source"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "sourceCreateEvent", "url": "YAHOO.widget.Logger.html#sourceCreateEvent"}, {"access": "", "host": "YAHOO.widget.LogMsg", "name": "sourceDetail", "url": "YAHOO.widget.LogMsg.html#sourceDetail"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_sourceFilters", "url": "YAHOO.widget.LogReader.html#_sourceFilters"}, {"access": "", "host": "YAHOO.widget.Logger", "name": "sources", "url": "YAHOO.widget.Logger.html#sources"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_stack", "url": "YAHOO.widget.Logger.html#_stack"}, {"access": "private", "host": "YAHOO.widget.Logger", "name": "_startTime", "url": "YAHOO.widget.Logger.html#_startTime"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "thresholdMax", "url": "YAHOO.widget.LogReader.html#thresholdMax"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "thresholdMin", "url": "YAHOO.widget.LogReader.html#thresholdMin"}, {"access": "", "host": "YAHOO.widget.LogMsg", "name": "time", "url": "YAHOO.widget.LogMsg.html#time"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_timeout", "url": "YAHOO.widget.LogReader.html#_timeout"}, {"access": "private", "host": "YAHOO.widget.LogReader", "name": "_title", "url": "YAHOO.widget.LogReader.html#_title"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "top", "url": "YAHOO.widget.LogReader.html#top"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "toString", "url": "YAHOO.widget.LogReader.html#toString"}, {"access": "", "host": "YAHOO.widget.LogWriter", "name": "toString", "url": "YAHOO.widget.LogWriter.html#toString"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "verboseOutput", "url": "YAHOO.widget.LogReader.html#verboseOutput"}, {"access": "", "host": "YAHOO.widget.LogReader", "name": "width", "url": "YAHOO.widget.LogReader.html#width"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class="selected"><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                                <li class=""><a href="YAHOO.widget.LogMsg.html">YAHOO.widget.LogMsg</a></li>
+                                <li class=""><a href="YAHOO.widget.LogReader.html">YAHOO.widget.LogReader</a></li>
+                                <li class=""><a href="YAHOO.widget.LogWriter.html">YAHOO.widget.LogWriter</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Logger.js.html">Logger.js</a></li>
+                                <li class=""><a href="LogMsg.js.html">LogMsg.js</a></li>
+                                <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
+                                <li class=""><a href="LogWriter.js.html">LogWriter.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: element   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>element&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_element.html">element</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: element
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        Element provides an wrapper object to simplify adding
+event listeners, using dom methods, and managing attributes.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search element:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#addClass"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#addListener"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#appendChild"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#appendTo"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#available"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "_configs", "url": "YAHOO.util.AttributeProvider.html#_configs"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "configure", "url": "YAHOO.util.Attribute.html#configure"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "configureAttribute", "url": "YAHOO.util.AttributeProvider.html#configureAttribute"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#contentReady"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#DOM_EVENTS"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#element"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireBeforeChangeEvent", "url": "YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireChangeEvent", "url": "YAHOO.util.AttributeProvider.html#fireChangeEvent"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#fireQueue"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "get", "url": "YAHOO.util.AttributeProvider.html#get"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#getAttributeConfig"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeKeys", "url": "YAHOO.util.AttributeProvider.html#getAttributeKeys"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#getElementsByClassName"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#getElementsByTagName"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#getStyle"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getValue", "url": "YAHOO.util.Attribute.html#getValue"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#hasChildNodes"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#hasClass"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#initAttributes"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_initialConfig", "url": "YAHOO.util.Attribute.html#_initialConfig"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#insertBefore"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "method", "url": "YAHOO.util.Attribute.html#method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "name", "url": "YAHOO.util.Attribute.html#name"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#on"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "owner", "url": "YAHOO.util.Attribute.html#owner"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "readOnly", "url": "YAHOO.util.Attribute.html#readOnly"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "refresh", "url": "YAHOO.util.Attribute.html#refresh"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "refresh", "url": "YAHOO.util.AttributeProvider.html#refresh"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "register", "url": "YAHOO.util.AttributeProvider.html#register"}, {"access": "private", "host": "YAHOO.util.Element", "name": "_registerHTMLAttr", "url": "YAHOO.util.Element.html#_registerHTMLAttr"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#removeChild"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#removeClass"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#removeListener"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#replaceChild"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#replaceClass"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "resetAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#resetAttributeConfig"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetConfig", "url": "YAHOO.util.Attribute.html#resetConfig"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetValue", "url": "YAHOO.util.Attribute.html#resetValue"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "resetValue", "url": "YAHOO.util.AttributeProvider.html#resetValue"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "set", "url": "YAHOO.util.AttributeProvider.html#set"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#setAttributeConfig"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributes", "url": "YAHOO.util.AttributeProvider.html#setAttributes"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#setStyle"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setValue", "url": "YAHOO.util.Attribute.html#setValue"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#subscribe"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "validator", "url": "YAHOO.util.Attribute.html#validator"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "value", "url": "YAHOO.util.Attribute.html#value"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "writeOnce", "url": "YAHOO.util.Attribute.html#writeOnce"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_written", "url": "YAHOO.util.Attribute.html#_written"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class="selected"><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
+                                <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Attribute.js.html">Attribute.js</a></li>
+                                <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
+                                <li class=""><a href="Element.js.html">Element.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

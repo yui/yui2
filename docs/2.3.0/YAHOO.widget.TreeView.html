@@ -1,0 +1,2277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: treeview  YAHOO.widget.TreeView   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                 &gt; YAHOO.widget.TreeView 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.TreeView</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Contains the tree view state data and the root node.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.TreeView</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                id
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>id
+                                                    &lt;string|HTMLElement&gt; 
+                                                    </code>
+                                                     The id of the element, or the element
+itself that the tree will be inserted into.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_animCount">_animCount</a>
+                                        <code>- private int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The current number of animations that are executing
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_collapseAnim">_collapseAnim</a>
+                                        <code>- private string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The animation to use for collapsing children, if any
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_el">_el</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The host element for this tree
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_expandAnim">_expandAnim</a>
+                                        <code>- private string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The animation to use for expanding children, if any
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_nodes">_nodes</a>
+                                        <code>- private Node[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flat collection of all nodes in this tree.  This is a sparse
+array, so the length property can't be relied upon for a
+node count for the tree.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="id">id</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The id of tree container element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="locked">locked</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            We lock the tree control while waiting for the dynamic loader to return
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="maxAnim">maxAnim</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The maximum number of animations to run at one time.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="YAHOO.widget.TreeView.counter">YAHOO.widget.TreeView.counter</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Counter for generating a new unique element id
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.TreeView.nodeCount">YAHOO.widget.TreeView.nodeCount</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Running count of all nodes created in all trees.  This is 
+used to provide unique identifies for all nodes.  Deleting
+nodes does not change the nodeCount.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="YAHOO.widget.TreeView.trees">YAHOO.widget.TreeView.trees</a>
+                                        <code>- private static Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Global cache of tree instances
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_deleteNode">_deleteNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_deleteNode</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deletes the node and recurses children
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="animateCollapse">animateCollapse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>animateCollapse</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Perform the collapse animation if configured, or just show the
+element if not configured or too many animations are in progress
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                              the element to animate
+                                                        </dd>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.util.Node&gt;</code>
+                                                              the node that was expanded
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if animation could be invoked, false otherwise</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="animateExpand">animateExpand</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>animateExpand</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Perform the expand animation if configured, or just show the
+element if not configured or too many animations are in progress
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                              the element to animate
+                                                        </dd>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.util.Node&gt;</code>
+                                                              the node that was expanded
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if animation could be invoked, false otherwise</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="collapseAll">collapseAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>collapseAll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Collapses all expanded child nodes in the entire tree.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="collapseComplete">collapseComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>collapseComplete</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Function executed when the collapse animation completes
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="draw">draw</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>draw</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the tree boilerplate and visible nodes
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="expandAll">expandAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>expandAll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Expands all child nodes.  Note: this conflicts with the "multiExpand"
+node property.  If expand all is called in a tree with nodes that
+do not allow multiple siblings to be displayed, only the last sibling
+will be expanded.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="expandComplete">expandComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>expandComplete</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Function executed when the expand animation completes
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="generateId">generateId</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>generateId</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Generates an unique id for an element if it doesn't yet have one
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getEl">getEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the tree's host element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>the host element</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getNodeByIndex">getNodeByIndex</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Node
+                                            <strong>getNodeByIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         nodeIndex
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a node in the tree that has the specified index (this index
+is created internally, so this function probably will only be used
+in html generated for a given node.)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>nodeIndex &lt;int&gt;</code>
+                                                             the index of the node wanted
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Node
+                                                    </code></dt>
+                                                    <dd>the node with index=nodeIndex, null if no match</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getNodeByProperty">getNodeByProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Node
+                                            <strong>getNodeByProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         property
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a node that has a matching property and value in the data
+object that was passed into its constructor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>property &lt;object&gt;</code>
+                                                             the property to search (usually a string)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             the value we want to find (usuall an int or string)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Node
+                                                    </code></dt>
+                                                    <dd>the matching node, null if no match</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getNodesByProperty">getNodesByProperty</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getNodesByProperty</strong>
+                                           (
+                                                
+                                                        
+                                                         property
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a collection of nodes that have a matching property 
+and value in the data object that was passed into its constructor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>property &lt;object&gt;</code>
+                                                             the property to search (usually a string)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;object&gt;</code>
+                                                             the value we want to find (usuall an int or string)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>the matching collection of nodes, null if no match</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getRoot">getRoot</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Node
+                                            <strong>getRoot</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the root node of this tree
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Node
+                                                    </code></dt>
+                                                    <dd>the root node</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the tree
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onCollapse">onCollapse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onCollapse</strong>
+                                           (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Abstract method that is executed when a node is collapsed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;Node&gt;</code>
+                                                              the node that was collapsed.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use treeobj.subscribe("collapse") instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onExpand">onExpand</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onExpand</strong>
+                                           (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Abstract method that is executed when a node is expanded
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;Node&gt;</code>
+                                                              the node that was expanded
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use treeobj.subscribe("expand") instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="popNode">popNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>popNode</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the node from the tree, preserving the child collection 
+to make it possible to insert the branch into another part of the 
+tree, or another tree.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>the &lt;Node&gt;</code>
+                                                             node to remove
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="regNode">regNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>regNode</strong>
+                                           (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Nodes register themselves with the tree instance when they are created.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;Node&gt;</code>
+                                                              the node to register
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="removeChildren">removeChildren</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>removeChildren</strong>
+                                           (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deletes this nodes child collection, recursively.  Also collapses
+the node, and resets the dynamic load flag.  The primary use for
+this method is to purge a node and allow it to fetch its data
+dynamically again.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;Node&gt;</code>
+                                                             the node to purge
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="removeNode">removeNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>removeNode</strong>
+                                           (
+                                                
+                                                        
+                                                         The
+                                                    
+                                                
+                                                        , 
+                                                         autoRefresh
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the node and its children, and optionally refreshes the 
+branch of the tree that was affected.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>The &lt;Node&gt;</code>
+                                                             node to remove
+                                                        </dd>
+                                                        <dd>
+                                                            <code>autoRefresh &lt;boolean&gt;</code>
+                                                             automatically refreshes branch if true
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>False is there was a problem, true otherwise.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setCollapseAnim">setCollapseAnim</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setCollapseAnim</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets up the animation for collapsing children
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>the &lt;string&gt;</code>
+                                                             type of animation (acceptable values defined in 
+YAHOO.widget.TVAnim)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setDynamicLoad">setDynamicLoad</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setDynamicLoad</strong>
+                                           (
+                                                
+                                                        
+                                                         fnDataLoader
+                                                    
+                                                
+                                                        , 
+                                                         iconMode
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Configures this tree to dynamically load all child data
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fnDataLoader &lt;function&gt;</code>
+                                                             the function that will be called to get the data
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iconMode &lt;int&gt;</code>
+                                                              configures the icon that is displayed when a dynamic
+load node is expanded the first time without children.  By default, the 
+"collapse" icon will be used.  If set to 1, the leaf node icon will be
+displayed.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setExpandAnim">setExpandAnim</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setExpandAnim</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets up the animation for expanding children
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;string&gt;</code>
+                                                             the type of animation (acceptable values defined 
+in YAHOO.widget.TVAnim)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setUpLabel">setUpLabel</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setUpLabel</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets up the node label
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;object&gt;</code>
+                                                             string containing the label, or an object with a label property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            TreeView instance toString
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>string representation of the tree</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="YAHOO.widget.TreeView.addHandler">YAHOO.widget.TreeView.addHandler</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>YAHOO.widget.TreeView.addHandler</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a DOM event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;object&gt;</code>
+                                                             the elment to bind the handler to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sType &lt;string&gt;</code>
+                                                             the type of event handler
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fn &lt;function&gt;</code>
+                                                             the callback to invoke
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="YAHOO.widget.TreeView.getNode">YAHOO.widget.TreeView.getNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Node
+                                            <strong>YAHOO.widget.TreeView.getNode</strong>
+                                           (
+                                                
+                                                        
+                                                         treeId
+                                                    
+                                                
+                                                        , 
+                                                         nodeIndex
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Global method for getting a node by its id.  Used in the generated
+tree html.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>treeId &lt;String&gt;</code>
+                                                              the id of the tree instance
+                                                        </dd>
+                                                        <dd>
+                                                            <code>nodeIndex &lt;String&gt;</code>
+                                                              the index of the node to return
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Node
+                                                    </code></dt>
+                                                    <dd>the node instance requested, null if not found</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="YAHOO.widget.TreeView.getTree">YAHOO.widget.TreeView.getTree</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        TreeView
+                                            <strong>YAHOO.widget.TreeView.getTree</strong>
+                                           (
+                                                
+                                                        
+                                                         treeId
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Global method for getting a tree by its id.  Used in the generated
+tree html.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>treeId &lt;String&gt;</code>
+                                                              the id of the tree instance
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        TreeView
+                                                    </code></dt>
+                                                    <dd>the tree instance requested, null if not found.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="YAHOO.widget.TreeView.preload">YAHOO.widget.TreeView.preload</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>YAHOO.widget.TreeView.preload</strong>
+                                           (
+                                                
+                                                        
+                                                         prefix
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Attempts to preload the images defined in the styles used to draw the tree by
+rendering off-screen elements that use the styles.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>prefix &lt;string&gt;</code>
+                                                             the prefix to use to generate the names of the
+images to preload, default is ygtv
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="YAHOO.widget.TreeView.removeHandler">YAHOO.widget.TreeView.removeHandler</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>YAHOO.widget.TreeView.removeHandler</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         sType
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Remove a DOM event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;object&gt;</code>
+                                                             the elment to bind the handler to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sType &lt;string&gt;</code>
+                                                             the type of event handler
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fn &lt;function&gt;</code>
+                                                             the callback to invoke
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="animComplete">animComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>animComplete</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            When animation is enabled, this event fires when the animation
+completes
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that is expanding/collapsing
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="animStart">animStart</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>animStart</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            When animation is enabled, this event fires when the animation
+starts
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that is expanding/collapsing
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="collapse">collapse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>collapse</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when a node is going to be collapsed.  Return false to stop
+the collapse.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that is collapsing
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="collapseComplete">collapseComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>collapseComplete</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after a node is successfully collapsed.  This event will not fire
+if the "collapse" event was cancelled.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that was collapsed
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="expand">expand</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>expand</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when a node is going to be expanded.  Return false to stop
+the collapse.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that is expanding
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="expandComplete">expandComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>expandComplete</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after a node is successfully expanded.  This event will not fire
+if the "expand" event was cancelled.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node that was expanded
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="labelClick">labelClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>labelClick</strong>
+
+                                            (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Custom event that is fired when the text node label is clicked.  The
+custom event is defined on the tree instance, so there is a single
+event that handles all nodes in the tree.  The node clicked is 
+provided as an argument
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;YAHOO.widget.Node&gt;</code>
+                                                             the node clicked
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class="selected"><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_animCount">_animCount</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_collapseAnim">_collapseAnim</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_el">_el</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_expandAnim">_expandAnim</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_nodes">_nodes</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#id">id</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#locked">locked</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#maxAnim">maxAnim</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#YAHOO.widget.TreeView.counter">YAHOO.widget.TreeView.counter</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.TreeView.nodeCount">YAHOO.widget.TreeView.nodeCount</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#YAHOO.widget.TreeView.trees">YAHOO.widget.TreeView.trees</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_deleteNode">_deleteNode</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#animateCollapse">animateCollapse</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#animateExpand">animateExpand</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#collapseAll">collapseAll</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#collapseComplete">collapseComplete</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#draw">draw</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#expandAll">expandAll</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#expandComplete">expandComplete</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#generateId">generateId</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#getEl">getEl</a>
+                                </li>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#getNodeByIndex">getNodeByIndex</a>
+                                </li>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#getNodeByProperty">getNodeByProperty</a>
+                                </li>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#getNodesByProperty">getNodesByProperty</a>
+                                </li>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#getRoot">getRoot</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onCollapse">onCollapse</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onExpand">onExpand</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#popNode">popNode</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#regNode">regNode</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#removeChildren">removeChildren</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#removeNode">removeNode</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setCollapseAnim">setCollapseAnim</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setDynamicLoad">setDynamicLoad</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setExpandAnim">setExpandAnim</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setUpLabel">setUpLabel</a>
+                                </li>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#YAHOO.widget.TreeView.addHandler">YAHOO.widget.TreeView.addHandler</a>
+                                </li>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#YAHOO.widget.TreeView.getNode">YAHOO.widget.TreeView.getNode</a>
+                                </li>
+                                <li class=""><!--<code>TreeView</code>-->
+                                <a href="#YAHOO.widget.TreeView.getTree">YAHOO.widget.TreeView.getTree</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#YAHOO.widget.TreeView.preload">YAHOO.widget.TreeView.preload</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#YAHOO.widget.TreeView.removeHandler">YAHOO.widget.TreeView.removeHandler</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#animComplete">animComplete</a>
+                                </li>
+                                <li class="">
+                                <a href="#animStart">animStart</a>
+                                </li>
+                                <li class="">
+                                <a href="#collapse">collapse</a>
+                                </li>
+                                <li class="">
+                                <a href="#collapseComplete">collapseComplete</a>
+                                </li>
+                                <li class="">
+                                <a href="#expand">expand</a>
+                                </li>
+                                <li class="">
+                                <a href="#expandComplete">expandComplete</a>
+                                </li>
+                                <li class="">
+                                <a href="#labelClick">labelClick</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

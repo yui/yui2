@@ -1,0 +1,697 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable  ColumnEditor   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                 &gt; ColumnEditor 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>ColumnEditor</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The ColumnEditor defines and manages inline editing functionality for a
+DataTable Column.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>ColumnEditor</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                elCell
+
+                                                , 
+                                                oRecord
+
+                                                , 
+                                                oColumn
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>elCell
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                      The cell to edit.
+                                                </dd>
+                                                <dd>
+                                                    <code>oRecord
+                                                    &lt;YAHOO.widget.Record&gt; 
+                                                    </code>
+                                                      The DataTable Record of the cell.
+                                                </dd>
+                                                <dd>
+                                                    <code>oColumn
+                                                    &lt;YAHOO.widget.Column&gt; 
+                                                    </code>
+                                                      The DataTable Column of the cell.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="_nCount">_nCount</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal instance counter.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="column">column</a>
+                                        <code>- YAHOO.widget.Column</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the ColumnEditor's Column instance.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="container">container</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to the container DOM element for the ColumnEditor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="input">input</a>
+                                        <code>- HTMLElement || HTMLElement[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to form element(s) of the ColumnEditor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="type">type</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type of editor: "textbox", etc.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="createTextareaEditor">createTextareaEditor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTML
+                                            <strong>createTextareaEditor</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates a textarea editor in the DOM.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTML
+                                                    </code></dt>
+                                                    <dd>???</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="createTextboxEditor">createTextboxEditor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTML
+                                            <strong>createTextboxEditor</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates a textbox editor in the DOM.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTML
+                                                    </code></dt>
+                                                    <dd>???</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getTextareaEditorValue">getTextareaEditorValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getTextareaEditorValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns ColumnEditor value
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>String</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getTextboxEditorValue">getTextboxEditorValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getTextboxEditorValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns ColumnEditor value
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>String</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getValue">getValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns ColumnEditor data value.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>Object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="hide">hide</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>hide</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Hides ColumnEditor
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="show">show</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>show</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Shows ColumnEditor.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              The cell to edit.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              The DataTable Record of the cell.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              The DataTable Column of the cell.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="showTextareaEditor">showTextareaEditor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>showTextareaEditor</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Shows ColumnEditor
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              The cell to edit.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              The DataTable Record of the cell.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              The DataTable Column of the cell.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="showTextboxEditor">showTextboxEditor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>showTextboxEditor</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Shows ColumnEditor
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              The cell to edit.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              The DataTable Record of the cell.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              The DataTable Column of the cell.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="Column.html">Column</a></li>
+                                <li class="selected"><a href="ColumnEditor.html">ColumnEditor</a></li>
+                                <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
+                                <li class=""><a href="DataTable.html">DataTable</a></li>
+                                <li class=""><a href="Record.html">Record</a></li>
+                                <li class=""><a href="RecordSet.html">RecordSet</a></li>
+                                <li class=""><a href="Sort.html">Sort</a></li>
+                                <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#_nCount">_nCount</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#column">column</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#container">container</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#input">input</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#type">type</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>HTML</code>-->
+                                <a href="#createTextareaEditor">createTextareaEditor</a>
+                                </li>
+                                <li><!--<code>HTML</code>-->
+                                <a href="#createTextboxEditor">createTextboxEditor</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getTextareaEditorValue">getTextareaEditorValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getTextboxEditorValue">getTextboxEditorValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getValue">getValue</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#hide">hide</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#show">show</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#showTextareaEditor">showTextareaEditor</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#showTextboxEditor">showTextboxEditor</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

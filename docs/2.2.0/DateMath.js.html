@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar   DateMath.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Calendar&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                
+                 &gt; DateMath.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c">* YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility</span>
+<span class="c">* used for adding, subtracting, and comparing dates.</span>
+<span class="c">* @namespace YAHOO.widget</span>
+<span class="c">* @class DateMath</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateMath</span> <span class="o">=</span> <span class="o">{</span>
+	<span class="c">/**</span>
+<span class="c">	* Constant field representing Day</span>
+<span class="c">	* @property DAY</span>
+<span class="c">	* @static</span>
+<span class="c">	* @final</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="nx">DAY</span> <span class="o">:</span> <span class="s2">&quot;D&quot;</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Constant field representing Week</span>
+<span class="c">	* @property WEEK</span>
+<span class="c">	* @static</span>
+<span class="c">	* @final</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="nx">WEEK</span> <span class="o">:</span> <span class="s2">&quot;W&quot;</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Constant field representing Year</span>
+<span class="c">	* @property YEAR</span>
+<span class="c">	* @static</span>
+<span class="c">	* @final</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="nx">YEAR</span> <span class="o">:</span> <span class="s2">&quot;Y&quot;</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Constant field representing Month</span>
+<span class="c">	* @property MONTH</span>
+<span class="c">	* @static</span>
+<span class="c">	* @final</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="nx">MONTH</span> <span class="o">:</span> <span class="s2">&quot;M&quot;</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Constant field representing one day, in milliseconds</span>
+<span class="c">	* @property ONE_DAY_MS</span>
+<span class="c">	* @static</span>
+<span class="c">	* @final</span>
+<span class="c">	* @type Number</span>
+<span class="c">	*/</span>
+	<span class="nx">ONE_DAY_MS</span> <span class="o">:</span> <span class="m">1000</span><span class="o">*</span><span class="m">60</span><span class="o">*</span><span class="m">60</span><span class="o">*</span><span class="m">24</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Adds the specified amount of time to the this instance.</span>
+<span class="c">	* @method add</span>
+<span class="c">	* @param {Date} date	The JavaScript Date object to perform addition on</span>
+<span class="c">	* @param {String} field	The field constant to be used for performing addition.</span>
+<span class="c">	* @param {Number} amount	The number of units (measured in the field constant) to add to the date.</span>
+<span class="c">	* @return {Date} The resulting Date object</span>
+<span class="c">	*/</span>
+	<span class="nx">add</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">field</span><span class="o">,</span> <span class="nx">amount</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getTime</span><span class="o">());</span>
+		<span class="nx">switch</span> <span class="o">(</span><span class="nx">field</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">case</span> <span class="k">this</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">:</span>
+				<span class="k">var</span> <span class="nx">newMonth</span> <span class="o">=</span> <span class="nx">date</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">amount</span><span class="o">;</span>
+				<span class="k">var</span> <span class="nx">years</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+
+				<span class="k">if</span> <span class="o">(</span><span class="nx">newMonth</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">while</span> <span class="o">(</span><span class="nx">newMonth</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">newMonth</span> <span class="o">+=</span> <span class="m">12</span><span class="o">;</span>
+						<span class="nx">years</span> <span class="o">-=</span> <span class="m">1</span><span class="o">;</span>
+					<span class="o">}</span>
+				<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">newMonth</span> <span class="o">&gt;</span> <span class="m">11</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">while</span> <span class="o">(</span><span class="nx">newMonth</span> <span class="o">&gt;</span> <span class="m">11</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">newMonth</span> <span class="o">-=</span> <span class="m">12</span><span class="o">;</span>
+						<span class="nx">years</span> <span class="o">+=</span> <span class="m">1</span><span class="o">;</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+				
+				<span class="nx">d</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">newMonth</span><span class="o">);</span>
+				<span class="nx">d</span><span class="o">.</span><span class="nx">setFullYear</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">()</span> <span class="o">+</span> <span class="nx">years</span><span class="o">);</span>
+				<span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="k">this</span><span class="o">.</span><span class="nx">DAY</span><span class="o">:</span>
+				<span class="nx">d</span><span class="o">.</span><span class="nx">setDate</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getDate</span><span class="o">()</span> <span class="o">+</span> <span class="nx">amount</span><span class="o">);</span>
+				<span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="k">this</span><span class="o">.</span><span class="nx">YEAR</span><span class="o">:</span>
+				<span class="nx">d</span><span class="o">.</span><span class="nx">setFullYear</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">()</span> <span class="o">+</span> <span class="nx">amount</span><span class="o">);</span>
+				<span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="k">this</span><span class="o">.</span><span class="nx">WEEK</span><span class="o">:</span>
+				<span class="nx">d</span><span class="o">.</span><span class="nx">setDate</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getDate</span><span class="o">()</span> <span class="o">+</span> <span class="o">(</span><span class="nx">amount</span> <span class="o">*</span> <span class="m">7</span><span class="o">));</span>
+				<span class="k">break</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">d</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Subtracts the specified amount of time from the this instance.</span>
+<span class="c">	* @method subtract</span>
+<span class="c">	* @param {Date} date	The JavaScript Date object to perform subtraction on</span>
+<span class="c">	* @param {Number} field	The this field constant to be used for performing subtraction.</span>
+<span class="c">	* @param {Number} amount	The number of units (measured in the field constant) to subtract from the date.</span>
+<span class="c">	* @return {Date} The resulting Date object</span>
+<span class="c">	*/</span>
+	<span class="nx">subtract</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">field</span><span class="o">,</span> <span class="nx">amount</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">field</span><span class="o">,</span> <span class="o">(</span><span class="nx">amount</span><span class="o">*-</span><span class="m">1</span><span class="o">));</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Determines whether a given date is before another date on the calendar.</span>
+<span class="c">	* @method before</span>
+<span class="c">	* @param {Date} date		The Date object to compare with the compare argument</span>
+<span class="c">	* @param {Date} compareTo	The Date object to use for the comparison</span>
+<span class="c">	* @return {Boolean} true if the date occurs before the compared date; false if not.</span>
+<span class="c">	*/</span>
+	<span class="nx">before</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">compareTo</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">ms</span> <span class="o">=</span> <span class="nx">compareTo</span><span class="o">.</span><span class="nx">getTime</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">&lt;</span> <span class="nx">ms</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Determines whether a given date is after another date on the calendar.</span>
+<span class="c">	* @method after</span>
+<span class="c">	* @param {Date} date		The Date object to compare with the compare argument</span>
+<span class="c">	* @param {Date} compareTo	The Date object to use for the comparison</span>
+<span class="c">	* @return {Boolean} true if the date occurs after the compared date; false if not.</span>
+<span class="c">	*/</span>
+	<span class="nx">after</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">compareTo</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">ms</span> <span class="o">=</span> <span class="nx">compareTo</span><span class="o">.</span><span class="nx">getTime</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">&gt;</span> <span class="nx">ms</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Determines whether a given date is between two other dates on the calendar.</span>
+<span class="c">	* @method between</span>
+<span class="c">	* @param {Date} date		The date to check for</span>
+<span class="c">	* @param {Date} dateBegin	The start of the range</span>
+<span class="c">	* @param {Date} dateEnd		The end of the range</span>
+<span class="c">	* @return {Boolean} true if the date occurs between the compared dates; false if not.</span>
+<span class="c">	*/</span>
+	<span class="nx">between</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">dateBegin</span><span class="o">,</span> <span class="nx">dateEnd</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">after</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">dateBegin</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">before</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">dateEnd</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* Retrieves a JavaScript Date object representing January 1 of any given year.</span>
+<span class="c">	* @method getJan1</span>
+<span class="c">	* @param {Number} calendarYear		The calendar year for which to retrieve January 1</span>
+<span class="c">	* @return {Date}	January 1 of the calendar year specified.</span>
+<span class="c">	*/</span>
+	<span class="nx">getJan1</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">calendarYear</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">calendarYear</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">1</span><span class="o">);</span> 
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Calculates the number of days the specified date is from January 1 of the specified calendar year.</span>
+<span class="c">	* Passing January 1 to this function would return an offset value of zero.</span>
+<span class="c">	* @method getDayOffset</span>
+<span class="c">	* @param {Date}	date	The JavaScript date for which to find the offset</span>
+<span class="c">	* @param {Number} calendarYear	The calendar year to use for determining the offset</span>
+<span class="c">	* @return {Number}	The number of days since January 1 of the given year</span>
+<span class="c">	*/</span>
+	<span class="nx">getDayOffset</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">calendarYear</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">beginYear</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getJan1</span><span class="o">(</span><span class="nx">calendarYear</span><span class="o">);</span> <span class="c">// Find the start of the year. This will be in week 1.</span>
+<span class="c"></span>		
+		<span class="c">// Find the number of days the passed in date is away from the calendar year start</span>
+<span class="c"></span>		<span class="k">var</span> <span class="nx">dayOffset</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">ceil</span><span class="o">((</span><span class="nx">date</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()-</span><span class="nx">beginYear</span><span class="o">.</span><span class="nx">getTime</span><span class="o">())</span> <span class="o">/</span> <span class="k">this</span><span class="o">.</span><span class="nx">ONE_DAY_MS</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nx">dayOffset</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Calculates the week number for the given date. This function assumes that week 1 is the</span>
+<span class="c">	* week in which January 1 appears, regardless of whether the week consists of a full 7 days.</span>
+<span class="c">	* The calendar year can be specified to help find what a the week number would be for a given</span>
+<span class="c">	* date if the date overlaps years. For instance, a week may be considered week 1 of 2005, or</span>
+<span class="c">	* week 53 of 2004. Specifying the optional calendarYear allows one to make this distinction</span>
+<span class="c">	* easily.</span>
+<span class="c">	* @method getWeekNumber</span>
+<span class="c">	* @param {Date}	date	The JavaScript date for which to find the week number</span>
+<span class="c">	* @param {Number} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is</span>
+<span class="c">	*											the calendar year of parameter &quot;date&quot;.</span>
+<span class="c">	* @param {Number} weekStartsOn	OPTIONAL - The integer (0-6) representing which day a week begins on. Default is 0 (for Sunday).</span>
+<span class="c">	* @return {Number}	The week number of the given date.</span>
+<span class="c">	*/</span>
+	<span class="nx">getWeekNumber</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">calendarYear</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">date</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">clearTime</span><span class="o">(</span><span class="nx">date</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">nearestThurs</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">+</span> <span class="o">(</span><span class="m">4</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">ONE_DAY_MS</span><span class="o">)</span> <span class="o">-</span> <span class="o">((</span><span class="nx">date</span><span class="o">.</span><span class="nx">getDay</span><span class="o">())</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">ONE_DAY_MS</span><span class="o">));</span>
+
+		<span class="k">var</span> <span class="nx">jan1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">nearestThurs</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">(),</span><span class="m">0</span><span class="o">,</span><span class="m">1</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">dayOfYear</span> <span class="o">=</span> <span class="o">((</span><span class="nx">nearestThurs</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">-</span> <span class="nx">jan1</span><span class="o">.</span><span class="nx">getTime</span><span class="o">())</span> <span class="o">/</span> <span class="k">this</span><span class="o">.</span><span class="nx">ONE_DAY_MS</span><span class="o">)</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">weekNum</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">ceil</span><span class="o">((</span><span class="nx">dayOfYear</span><span class="o">)/</span> <span class="m">7</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nx">weekNum</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Determines if a given week overlaps two different years.</span>
+<span class="c">	* @method isYearOverlapWeek</span>
+<span class="c">	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.</span>
+<span class="c">	* @return {Boolean}	true if the date overlaps two different years.</span>
+<span class="c">	*/</span>
+	<span class="nx">isYearOverlapWeek</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">weekBeginDate</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">overlaps</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">nextWeek</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">weekBeginDate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">DAY</span><span class="o">,</span> <span class="m">6</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">nextWeek</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">()</span> <span class="o">!=</span> <span class="nx">weekBeginDate</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">())</span> <span class="o">{</span>
+			<span class="nx">overlaps</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">overlaps</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Determines if a given week overlaps two different months.</span>
+<span class="c">	* @method isMonthOverlapWeek</span>
+<span class="c">	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.</span>
+<span class="c">	* @return {Boolean}	true if the date overlaps two different months.</span>
+<span class="c">	*/</span>
+	<span class="nx">isMonthOverlapWeek</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">weekBeginDate</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">overlaps</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">nextWeek</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">weekBeginDate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">DAY</span><span class="o">,</span> <span class="m">6</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">nextWeek</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">!=</span> <span class="nx">weekBeginDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">())</span> <span class="o">{</span>
+			<span class="nx">overlaps</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">overlaps</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Gets the first day of a month containing a given date.</span>
+<span class="c">	* @method findMonthStart</span>
+<span class="c">	* @param {Date}	date	The JavaScript Date used to calculate the month start</span>
+<span class="c">	* @return {Date}		The JavaScript Date representing the first day of the month</span>
+<span class="c">	*/</span>
+	<span class="nx">findMonthStart</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">date</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">(),</span> <span class="nx">date</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">(),</span> <span class="m">1</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nx">start</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Gets the last day of a month containing a given date.</span>
+<span class="c">	* @method findMonthEnd</span>
+<span class="c">	* @param {Date}	date	The JavaScript Date used to calculate the month end</span>
+<span class="c">	* @return {Date}		The JavaScript Date representing the last day of the month</span>
+<span class="c">	*/</span>
+	<span class="nx">findMonthEnd</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">findMonthStart</span><span class="o">(</span><span class="nx">date</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">nextMonth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">start</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">end</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">subtract</span><span class="o">(</span><span class="nx">nextMonth</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">DAY</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nx">end</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Clears the time fields from a given date, effectively setting the time to 12 noon.</span>
+<span class="c">	* @method clearTime</span>
+<span class="c">	* @param {Date}	date	The JavaScript Date for which the time fields will be cleared</span>
+<span class="c">	* @return {Date}		The JavaScript Date cleared of all time fields</span>
+<span class="c">	*/</span>
+	<span class="nx">clearTime</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">date</span><span class="o">.</span><span class="nx">setHours</span><span class="o">(</span><span class="m">12</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">);</span>
+		<span class="k">return</span> <span class="nx">date</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class="selected"><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

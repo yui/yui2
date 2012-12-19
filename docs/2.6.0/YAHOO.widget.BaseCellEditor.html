@@ -1,0 +1,2081 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable  YAHOO.widget.BaseCellEditor   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                 &gt; YAHOO.widget.BaseCellEditor 
+                
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.BaseCellEditor</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.widget.CellEditor.html">YAHOO.widget.CellEditor</a>
+                                    <a href="YAHOO.widget.DropdownCellEditor.html">YAHOO.widget.DropdownCellEditor</a>
+                                    <a href="YAHOO.widget.TextboxCellEditor.html">YAHOO.widget.TextboxCellEditor</a>
+                                    <a href="YAHOO.widget.TextareaCellEditor.html">YAHOO.widget.TextareaCellEditor</a>
+                                    <a href="YAHOO.widget.DateCellEditor.html">YAHOO.widget.DateCellEditor</a>
+                                    <a href="YAHOO.widget.CheckboxCellEditor.html">YAHOO.widget.CheckboxCellEditor</a>
+                                    <a href="YAHOO.widget.RadioCellEditor.html">YAHOO.widget.RadioCellEditor</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        The BaseCellEditor class provides base functionality common to all inline cell
+editors for a DataTable widget.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.BaseCellEditor</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                sType
+
+                                                , 
+                                                oConfigs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>sType
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                      Type indicator, to map to YAHOO.widget.DataTable.Editors.
+                                                </dd>
+                                                <dd>
+                                                    <code>oConfigs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                      (Optional) Object literal of configs.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="property__elCancelBtn">_elCancelBtn</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to Cancel button, if available.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__elContainer">_elContainer</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Container for inline editor.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__elSaveBtn">_elSaveBtn</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to Save button, if available.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__elTd">_elTd</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            TD element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property__oColumn">_oColumn</a>
+                                        <code>- YAHOO.widget.Column</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Column instance.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__oDataTable">_oDataTable</a>
+                                        <code>- private YAHOO.widget.DataTable</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            DataTable instance.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__oRecord">_oRecord</a>
+                                        <code>- private YAHOO.widget.Record</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Record instance.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__sId">_sId</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Unique id assigned to instance "yui-ceditorN", useful prefix for generating unique
+DOM ID strings and log messages.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__sType">_sType</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Editor type.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_asyncSubmitter">asyncSubmitter</a>
+                                        <code>- HTMLFunction</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Implementer defined function that can submit the input value to a server. This
+function must accept the arguments fnCallback and oNewValue. When the submission
+is complete, the function must also call fnCallback(bSuccess, oNewValue) to 
+finish the save routine in the CellEditor. This function can also be used to 
+perform extra validation or input value manipulation.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_CellEditor._nCount">CellEditor._nCount</a>
+                                        <code>- private static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Global instance counter.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_CellEditor.CLASS_CELLEDITOR">CellEditor.CLASS_CELLEDITOR</a>
+                                        <code>- static String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class applied to CellEditor container.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "yui-ceditor"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_defaultValue">defaultValue</a>
+                                        <code>- MIXED</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default value in case Record data is undefined. NB: Null values will not trigger
+the default value.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_disableBtns">disableBtns</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if Save/Cancel buttons should not be displayed in the CellEditor.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_isActive">isActive</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if currently active.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_LABEL_CANCEL">LABEL_CANCEL</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Text to display on Cancel button.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Cancel"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_LABEL_SAVE">LABEL_SAVE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Text to display on Save button.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Save"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_validator">validator</a>
+                                        <code>- HTMLFunction</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Validator function for input data, called from the DataTable instance scope,
+receives the arguments (inputValue, currentValue, editorInstance) and returns
+either the validated (or type-converted) value or undefined.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_value">value</a>
+                                        <code>- MIXED</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Current value.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__initConfigs">_initConfigs</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_initConfigs</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initialize configs.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__initEvents">_initEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_initEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initialize Custom Events.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_attach">attach</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>attach</strong>
+                                           (
+                                                
+                                                        
+                                                         oDataTable
+                                                    
+                                                
+                                                        , 
+                                                         elCell
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Attach CellEditor for a new interaction.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oDataTable &lt;YAHOO.widget.DataTable&gt;</code>
+                                                              Associated DataTable instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Cell to edit.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_block">block</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>block</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires blockEvent
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_cancel">cancel</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cancel</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Cancels CellEditor input and hides UI.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Nulls out the entire CellEditor instance and related objects, removes attached
+event listeners, and clears out DOM elements inside the container, removes
+container from the DOM.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_doAfterRender">doAfterRender</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>doAfterRender</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Access to add additional event listeners.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_focus">focus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets focus in CellEditor.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getColumn">getColumn</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Column
+                                            <strong>getColumn</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns reference to associated Column instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Column
+                                                    </code></dt>
+                                                    <dd>Column instance.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getContainerEl">getContainerEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getContainerEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns container element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>Reference to container element.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getDataTable">getDataTable</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.DataTable
+                                            <strong>getDataTable</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns reference to associated DataTable instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.DataTable
+                                                    </code></dt>
+                                                    <dd>DataTable instance.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getId">getId</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>getId</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CellEditor unique ID.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Unique ID of the CellEditor instance.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getInputValue">getInputValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getInputValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Retrieves input value from CellEditor.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getRecord">getRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record
+                                            <strong>getRecord</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns reference to associated Record instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record
+                                                    </code></dt>
+                                                    <dd>Record instance.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getTdEl">getTdEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement
+                                            <strong>getTdEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns reference to associated TD element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement
+                                                    </code></dt>
+                                                    <dd>TD element.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_handleDisabledBtns">handleDisabledBtns</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleDisabledBtns</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            After rendering form, if disabledBtns is set to true, then sets up a mechanism
+to save input without them.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_move">move</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>move</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Moves container into position for display.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_render">render</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>render</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders DOM elements and attaches event listeners.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_renderBtns">renderBtns</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>renderBtns</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders Save/Cancel buttons.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_renderForm">renderForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>renderForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders form elements.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_resetForm">resetForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>resetForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets CellEditor UI to initial state.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_save">save</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>save</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Saves value of CellEditor and hides UI.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_show">show</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>show</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays CellEditor UI in the correct position.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CellEditor instance name, for logging.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Unique name of the CellEditor instance.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_unblock">unblock</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>unblock</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires unblockEvent
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3 id="events">Events</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_blurEvent">blurEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>blurEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor has a blur event.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_cancelEvent">cancelEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>cancelEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor input is canceled.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_invalidDataEvent">invalidDataEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>invalidDataEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.newData
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.oldData
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor input is reverted due to invalid data.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.newData &lt;Object&gt;</code>
+                                                              New data value from form input field.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.oldData &lt;Object&gt;</code>
+                                                              Old data value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_keydownEvent">keydownEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keydownEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor has a keydown.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.event &lt;HTMLEvent&gt;</code>
+                                                              The event object.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_revertEvent">revertEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>revertEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.newData
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.oldData
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor input is reverted due to asyncSubmitter failure.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.newData &lt;Object&gt;</code>
+                                                              New data value from form input field.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.oldData &lt;Object&gt;</code>
+                                                              Old data value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_saveEvent">saveEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>saveEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.newData
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.oldData
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor input is saved.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.newData &lt;Object&gt;</code>
+                                                              New data value from form input field.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.oldData &lt;Object&gt;</code>
+                                                              Old data value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_showEvent">showEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>showEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.editor
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a CellEditor is shown.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.editor &lt;YAHOO.widget.CellEditor&gt;</code>
+                                                              The CellEditor instance.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class="selected"><a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CellEditor.html">YAHOO.widget.CellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CheckboxCellEditor.html">YAHOO.widget.CheckboxCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.DateCellEditor.html">YAHOO.widget.DateCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.DropdownCellEditor.html">YAHOO.widget.DropdownCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.RadioCellEditor.html">YAHOO.widget.RadioCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                                <li class=""><a href="YAHOO.widget.ScrollingDataTable.html">YAHOO.widget.ScrollingDataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.TextareaCellEditor.html">YAHOO.widget.TextareaCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.TextboxCellEditor.html">YAHOO.widget.TextboxCellEditor</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CellEditor.js.html">CellEditor.js</a></li>
+                                <li class=""><a href="Chain.js.html">Chain.js</a></li>
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                                <li class=""><a href="ScrollingDataTable.js.html">ScrollingDataTable.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#property__elCancelBtn">_elCancelBtn</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__elContainer">_elContainer</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__elSaveBtn">_elSaveBtn</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__elTd">_elTd</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property__oColumn">_oColumn</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__oDataTable">_oDataTable</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__oRecord">_oRecord</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__sId">_sId</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property__sType">_sType</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_asyncSubmitter">asyncSubmitter</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#property_CellEditor._nCount">CellEditor._nCount</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_CellEditor.CLASS_CELLEDITOR">CellEditor.CLASS_CELLEDITOR</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_defaultValue">defaultValue</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_disableBtns">disableBtns</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_isActive">isActive</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_LABEL_CANCEL">LABEL_CANCEL</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_LABEL_SAVE">LABEL_SAVE</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_validator">validator</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_value">value</a>
+                                        <!--<code>&lt;MIXED&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__initConfigs">_initConfigs</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__initEvents">_initEvents</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_attach">attach</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_block">block</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_cancel">cancel</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_doAfterRender">doAfterRender</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_focus">focus</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Column</code>-->
+                                <a href="#method_getColumn">getColumn</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getContainerEl">getContainerEl</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.DataTable</code>-->
+                                <a href="#method_getDataTable">getDataTable</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_getId">getId</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_getInputValue">getInputValue</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record</code>-->
+                                <a href="#method_getRecord">getRecord</a>
+                                </li>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getTdEl">getTdEl</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_handleDisabledBtns">handleDisabledBtns</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_move">move</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_render">render</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_renderBtns">renderBtns</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_renderForm">renderForm</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_resetForm">resetForm</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_save">save</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_show">show</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_unblock">unblock</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#event_blurEvent">blurEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_cancelEvent">cancelEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_invalidDataEvent">invalidDataEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_keydownEvent">keydownEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_revertEvent">revertEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_saveEvent">saveEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_showEvent">showEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

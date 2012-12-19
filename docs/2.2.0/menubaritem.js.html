@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: menu   menubaritem.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Menu&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_menu.html">menu</a>
+                
+                 &gt; menubaritem.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c">* Creates an item for a menu bar.</span>
+<span class="c">* </span>
+<span class="c">* @param {String} p_oObject String specifying the text of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="c">* specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the menu bar item. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">* @class MenuBarItem</span>
+<span class="c">* @constructor</span>
+<span class="c">* @extends YAHOO.widget.MenuItem</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oObject</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span>
+        <span class="k">this</span><span class="o">,</span> 
+        <span class="nx">p_oObject</span><span class="o">,</span> 
+        <span class="nx">p_oConfig</span>
+    <span class="o">);</span>
+
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuItem</span><span class="o">,</span> <span class="o">{</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method init</span>
+<span class="c">* @description The MenuBarItem class&#39;s initialization method. This method is </span>
+<span class="c">* automatically called by the constructor, and sets up all DOM references for </span>
+<span class="c">* pre-existing markup, and creates required markup if it is not already present.</span>
+<span class="c">* @param {String} p_oObject String specifying the text of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="c">* specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the menu bar item. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">*/</span>
+<span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oObject</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">SUBMENU_TYPE</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">SUBMENU_TYPE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Menu</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+
+    <span class="c">/* </span>
+<span class="c">        Call the init of the superclass (YAHOO.widget.MenuItem)</span>
+<span class="c">        Note: We don&#39;t pass the user config in here yet </span>
+<span class="c">        because we only want it executed once, at the lowest </span>
+<span class="c">        subclass level.</span>
+<span class="c">    */</span> 
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBarItem</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>  
+
+
+    <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="nx">oConfig</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Constants</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c">* @property CSS_CLASS_NAME</span>
+<span class="c">* @description String representing the CSS class(es) to be applied to the </span>
+<span class="c">* &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu bar item.</span>
+<span class="c">* @default &quot;yuimenubaritem&quot;</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenubaritem&quot;</span><span class="o">,</span>
+
+
+
+<span class="c">// Public methods</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method toString</span>
+<span class="c">* @description Returns a string representing the menu bar item.</span>
+<span class="c">* @return {String}</span>
+<span class="c">*/</span>
+<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;MenuBarItem: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">));</span>
+
+<span class="o">}</span>
+    
+<span class="o">});</span> <span class="c">// END YAHOO.lang.extend</span>
+<span class="c"></span></pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class="selected"><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

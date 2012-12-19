@@ -1,0 +1,978 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container   Tooltip.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                
+                 &gt; Tooltip.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">    * Tooltip is an implementation of Overlay that behaves like an OS tooltip, </span>
+<span class="c">    * displaying when the user mouses over a particular element, and </span>
+<span class="c">    * disappearing on mouse out.</span>
+<span class="c">    * @namespace YAHOO.widget</span>
+<span class="c">    * @class Tooltip</span>
+<span class="c">    * @extends YAHOO.widget.Overlay</span>
+<span class="c">    * @constructor</span>
+<span class="c">    * @param {String} el The element ID representing the Tooltip &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">    * @param {HTMLElement} el The element representing the Tooltip</span>
+<span class="c">    * @param {Object} userConfig The configuration object literal containing </span>
+<span class="c">    * the configuration that should be set for this Overlay. See configuration </span>
+<span class="c">    * documentation for more details.</span>
+<span class="c">    */</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Tooltip</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Tooltip</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">);</span>
+    
+    <span class="o">};</span>
+
+
+    <span class="k">var</span> <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+        <span class="nx">Tooltip</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Tooltip</span><span class="o">,</span>
+    
+        <span class="nx">m_oShadowTemplate</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Constant representing the Tooltip&#39;s configuration properties</span>
+<span class="c">        * @property DEFAULT_CONFIG</span>
+<span class="c">        * @private</span>
+<span class="c">        * @final</span>
+<span class="c">        * @type Object</span>
+<span class="c">        */</span>
+        <span class="nx">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="o">{</span>
+        
+            <span class="s2">&quot;PREVENT_OVERLAP&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;preventoverlap&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span> 
+                <span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;x&quot;</span><span class="o">,</span> <span class="s2">&quot;y&quot;</span><span class="o">,</span> <span class="s2">&quot;xy&quot;</span><span class="o">]</span> 
+            <span class="o">},</span>
+        
+            <span class="s2">&quot;SHOW_DELAY&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;showdelay&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="m">200</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isNumber</span> 
+            <span class="o">},</span> 
+        
+            <span class="s2">&quot;AUTO_DISMISS_DELAY&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;autodismissdelay&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="m">5000</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isNumber</span> 
+            <span class="o">},</span> 
+        
+            <span class="s2">&quot;HIDE_DELAY&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;hidedelay&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="m">250</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isNumber</span> 
+            <span class="o">},</span> 
+        
+            <span class="s2">&quot;TEXT&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="o">,</span> 
+                <span class="nx">suppressEvent</span><span class="o">:</span> <span class="kc">true</span> 
+            <span class="o">},</span> 
+        
+            <span class="s2">&quot;CONTAINER&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;container&quot;</span>
+            <span class="o">}</span>
+        
+        <span class="o">};</span>
+
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the Tooltip CSS class</span>
+<span class="c">    * @property YAHOO.widget.Tooltip.CSS_TOOLTIP</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Tooltip</span><span class="o">.</span><span class="nx">CSS_TOOLTIP</span> <span class="o">=</span> <span class="s2">&quot;yui-tt&quot;</span><span class="o">;</span>
+
+
+    <span class="c">/* </span>
+<span class="c">        &quot;hide&quot; event handler that sets a Tooltip instance&#39;s &quot;width&quot;</span>
+<span class="c">        configuration property back to its original value before </span>
+<span class="c">        &quot;setWidthToOffsetWidth&quot; was called.</span>
+<span class="c">    */</span>
+    
+    <span class="k">function</span> <span class="nx">restoreOriginalWidth</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">sOriginalWidth</span> <span class="o">=</span> <span class="nx">p_oObject</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+            <span class="nx">sNewWidth</span> <span class="o">=</span> <span class="nx">p_oObject</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
+            <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+            <span class="nx">sCurrentWidth</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">sCurrentWidth</span> <span class="o">==</span> <span class="nx">sNewWidth</span><span class="o">)</span> <span class="o">{</span>
+            
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">sOriginalWidth</span><span class="o">);</span>
+        
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="s2">&quot;hide&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onHide</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>
+    
+    <span class="o">}</span>
+
+    <span class="c">/* </span>
+<span class="c">        &quot;beforeShow&quot; event handler that sets a Tooltip instance&#39;s &quot;width&quot;</span>
+<span class="c">        configuration property to the value of its root HTML </span>
+<span class="c">        elements&#39;s offsetWidth</span>
+<span class="c">    */</span>
+
+    <span class="k">function</span> <span class="nx">setWidthToOffsetWidth</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">oBody</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span>
+            <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span>
+            <span class="nx">sOriginalWidth</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">),</span>
+            <span class="nx">sNewWidth</span><span class="o">,</span>
+            <span class="nx">oClone</span><span class="o">;</span>
+
+        
+        <span class="k">if</span> <span class="o">((!</span><span class="nx">sOriginalWidth</span> <span class="o">||</span> <span class="nx">sOriginalWidth</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+            <span class="o">(</span><span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="nx">oBody</span> <span class="o">||</span> 
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportWidth</span><span class="o">()</span> <span class="o">||</span> 
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;y&quot;</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportHeight</span><span class="o">()))</span> <span class="o">{</span>
+
+            <span class="nx">oClone</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+            <span class="nx">oClone</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+            <span class="nx">oClone</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="s2">&quot;0px&quot;</span><span class="o">;</span>
+            <span class="nx">oClone</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s2">&quot;0px&quot;</span><span class="o">;</span>
+            
+            <span class="nx">oBody</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oClone</span><span class="o">);</span>
+
+            <span class="nx">sNewWidth</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oClone</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
+            
+            <span class="nx">oBody</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">oClone</span><span class="o">);</span>
+            
+            <span class="nx">oClone</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">sNewWidth</span><span class="o">);</span>
+            
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;xy&quot;</span><span class="o">);</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;hide&quot;</span><span class="o">,</span> <span class="nx">restoreOriginalWidth</span><span class="o">,</span> 
+                <span class="o">[(</span><span class="nx">sOriginalWidth</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">),</span> <span class="nx">sNewWidth</span><span class="o">]);</span>
+        
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+
+    <span class="c">// &quot;onDOMReady&quot; that renders the ToolTip</span>
+<span class="c"></span>
+    <span class="k">function</span> <span class="nx">onDOMReady</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="k">this</span><span class="o">.</span><span class="nx">render</span><span class="o">(</span><span class="nx">p_oObject</span><span class="o">);</span>
+    
+    <span class="o">}</span>
+
+
+    <span class="c">//  &quot;init&quot; event handler that automatically renders the Tooltip</span>
+<span class="c"></span>
+    <span class="k">function</span> <span class="nx">onInit</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">onDOMReady</span><span class="o">(</span><span class="nx">onDOMReady</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">),</span> <span class="k">this</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">Tooltip</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Overlay</span><span class="o">,</span> <span class="o">{</span> 
+    
+        <span class="c">/**</span>
+<span class="c">        * The Tooltip initialization method. This method is automatically </span>
+<span class="c">        * called by the constructor. A Tooltip is automatically rendered by </span>
+<span class="c">        * the init method, and it also is set to be invisible by default, </span>
+<span class="c">        * and constrained to viewport by default as well.</span>
+<span class="c">        * @method init</span>
+<span class="c">        * @param {String} el The element ID representing the Tooltip &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} el The element representing the Tooltip</span>
+<span class="c">        * @param {Object} userConfig The configuration object literal </span>
+<span class="c">        * containing the configuration that should be set for this Tooltip. </span>
+<span class="c">        * See configuration documentation for more details.</span>
+<span class="c">        */</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    
+            <span class="nx">Tooltip</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="o">);</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Tooltip</span><span class="o">);</span>
+    
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">Tooltip</span><span class="o">.</span><span class="nx">CSS_TOOLTIP</span><span class="o">);</span>
+    
+            <span class="k">if</span> <span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="o">}</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="s2">&quot;constraintoviewport&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">setBody</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span> <span class="nx">setWidthToOffsetWidth</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;init&quot;</span><span class="o">,</span> <span class="nx">onInit</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;render&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">onRender</span><span class="o">);</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Tooltip</span><span class="o">);</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Initializes the class&#39;s configurable properties which can be </span>
+<span class="c">        * changed using the Overlay&#39;s Config object (cfg).</span>
+<span class="c">        * @method initDefaultConfig</span>
+<span class="c">        */</span>
+        <span class="nx">initDefaultConfig</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+            <span class="nx">Tooltip</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">initDefaultConfig</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * Specifies whether the Tooltip should be kept from overlapping </span>
+<span class="c">            * its context element.</span>
+<span class="c">            * @config preventoverlap</span>
+<span class="c">            * @type Boolean</span>
+<span class="c">            * @default true</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">PREVENT_OVERLAP</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">PREVENT_OVERLAP</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">PREVENT_OVERLAP</span><span class="o">.</span><span class="nx">validator</span><span class="o">,</span> 
+                <span class="nx">supercedes</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">PREVENT_OVERLAP</span><span class="o">.</span><span class="nx">supercedes</span>
+            <span class="o">});</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * The number of milliseconds to wait before showing a Tooltip </span>
+<span class="c">            * on mouseover.</span>
+<span class="c">            * @config showdelay</span>
+<span class="c">            * @type Number</span>
+<span class="c">            * @default 200</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">SHOW_DELAY</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configShowDelay</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="m">200</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">SHOW_DELAY</span><span class="o">.</span><span class="nx">validator</span>
+            <span class="o">});</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * The number of milliseconds to wait before automatically </span>
+<span class="c">            * dismissing a Tooltip after the mouse has been resting on the </span>
+<span class="c">            * context element.</span>
+<span class="c">            * @config autodismissdelay</span>
+<span class="c">            * @type Number</span>
+<span class="c">            * @default 5000</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">AUTO_DISMISS_DELAY</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configAutoDismissDelay</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">AUTO_DISMISS_DELAY</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">AUTO_DISMISS_DELAY</span><span class="o">.</span><span class="nx">validator</span>
+            <span class="o">});</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * The number of milliseconds to wait before hiding a Tooltip </span>
+<span class="c">            * on mouseover.</span>
+<span class="c">            * @config hidedelay</span>
+<span class="c">            * @type Number</span>
+<span class="c">            * @default 250</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">HIDE_DELAY</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configHideDelay</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">HIDE_DELAY</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">HIDE_DELAY</span><span class="o">.</span><span class="nx">validator</span>
+            <span class="o">});</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * Specifies the Tooltip&#39;s text.</span>
+<span class="c">            * @config text</span>
+<span class="c">            * @type String</span>
+<span class="c">            * @default null</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">TEXT</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configText</span><span class="o">,</span>
+                <span class="nx">suppressEvent</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">TEXT</span><span class="o">.</span><span class="nx">suppressEvent</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * Specifies the container element that the Tooltip&#39;s markup </span>
+<span class="c">            * should be rendered into.</span>
+<span class="c">            * @config container</span>
+<span class="c">            * @type HTMLElement/String</span>
+<span class="c">            * @default document.body</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">CONTAINER</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configContainer</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span>
+            <span class="o">});</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * Specifies the element or elements that the Tooltip should be </span>
+<span class="c">            * anchored to on mouseover.</span>
+<span class="c">            * @config context</span>
+<span class="c">            * @type HTMLElement[]/String[]</span>
+<span class="c">            * @default null</span>
+<span class="c">            */</span> 
+
+            <span class="c">/**</span>
+<span class="c">            * String representing the width of the Tooltip.  &lt;em&gt;Please note:</span>
+<span class="c">            * &lt;/em&gt; As of version 2.3 if either no value or a value of &quot;auto&quot; </span>
+<span class="c">            * is specified, and the Toolip&#39;s &quot;container&quot; configuration property</span>
+<span class="c">            * is set to something other than &lt;code&gt;document.body&lt;/code&gt; or </span>
+<span class="c">            * its &quot;context&quot; element resides outside the immediately visible </span>
+<span class="c">            * portion of the document, the width of the Tooltip will be </span>
+<span class="c">            * calculated based on the offsetWidth of its root HTML and set just </span>
+<span class="c">            * before it is made visible.  The original value will be </span>
+<span class="c">            * restored when the Tooltip is hidden. This ensures the Tooltip is </span>
+<span class="c">            * rendered at a usable width.  For more information see </span>
+<span class="c">            * SourceForge bug #1685496 and SourceForge </span>
+<span class="c">            * bug #1735423.</span>
+<span class="c">            * @config width</span>
+<span class="c">            * @type String</span>
+<span class="c">            * @default null</span>
+<span class="c">            */</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">// BEGIN BUILT-IN PROPERTY EVENT HANDLERS //</span>
+<span class="c"></span>        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the &quot;text&quot; property is changed.</span>
+<span class="c">        * @method configText</span>
+<span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
+<span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
+<span class="c">        * handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">        * @param {Object} obj The scope object. For configuration handlers, </span>
+<span class="c">        * this will usually equal the owner.</span>
+<span class="c">        */</span>
+        <span class="nx">configText</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">text</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setBody</span><span class="o">(</span><span class="nx">text</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the &quot;container&quot; property </span>
+<span class="c">        * is changed.</span>
+<span class="c">        * @method configContainer</span>
+<span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
+<span class="c">        * @param {Object[]} args The CustomEvent arguments. For </span>
+<span class="c">        * configuration handlers, args[0] will equal the newly applied value </span>
+<span class="c">        * for the property.</span>
+<span class="c">        * @param {Object} obj The scope object. For configuration handlers,</span>
+<span class="c">        * this will usually equal the owner.</span>
+<span class="c">        */</span>
+        <span class="nx">configContainer</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">container</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">,</span> 
+                    <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">container</span><span class="o">),</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="o">}</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * @method _removeEventListeners</span>
+<span class="c">        * @description Removes all of the DOM event handlers from the HTML</span>
+<span class="c">        *  element(s) that trigger the display of the tooltip.</span>
+<span class="c">        * @protected</span>
+<span class="c">        */</span>
+        <span class="nx">_removeEventListeners</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">aElements</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_context</span><span class="o">,</span>
+                <span class="nx">nElements</span><span class="o">,</span>
+                <span class="nx">oElement</span><span class="o">,</span>
+                <span class="nx">i</span><span class="o">;</span>
+        
+            
+            <span class="k">if</span> <span class="o">(</span><span class="nx">aElements</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="nx">nElements</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+                
+                <span class="k">if</span> <span class="o">(</span><span class="nx">nElements</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                
+                    <span class="nx">i</span> <span class="o">=</span> <span class="nx">nElements</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+                    
+                    <span class="k">do</span> <span class="o">{</span>
+        
+                        <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+        
+                        <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">,</span> 
+                            <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseOver</span><span class="o">);</span>
+
+                        <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> 
+                            <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseMove</span><span class="o">);</span>
+
+                        <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span> 
+                            <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseOut</span><span class="o">);</span>
+                    
+                    <span class="o">}</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="nx">i</span><span class="o">--);</span>
+                
+                <span class="o">}</span>
+        
+            <span class="o">}</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the &quot;context&quot; property </span>
+<span class="c">        * is changed.</span>
+<span class="c">        * @method configContext</span>
+<span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
+<span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
+<span class="c">        * handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">        * @param {Object} obj The scope object. For configuration handlers,</span>
+<span class="c">        * this will usually equal the owner.</span>
+<span class="c">        */</span>
+        <span class="nx">configContext</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+                <span class="nx">aElements</span><span class="o">,</span>
+                <span class="nx">nElements</span><span class="o">,</span>
+                <span class="nx">oElement</span><span class="o">,</span>
+                <span class="nx">i</span><span class="o">;</span>
+            
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">context</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="c">// Normalize parameter into an array</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span> <span class="o">(</span><span class="nx">context</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">))</span> <span class="o">{</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">context</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;context&quot;</span><span class="o">,</span> 
+                            <span class="o">[</span><span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">context</span><span class="o">)],</span> <span class="kc">true</span><span class="o">);</span>
+
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// Assuming this is an element</span>
+<span class="c"></span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;context&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">context</span><span class="o">],</span> <span class="kc">true</span><span class="o">);</span>
+
+                    <span class="o">}</span>
+
+                    <span class="nx">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;context&quot;</span><span class="o">);</span>
+
+                <span class="o">}</span>
+        
+        
+                <span class="c">// Remove any existing mouseover/mouseout listeners</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">_removeEventListeners</span><span class="o">();</span>
+        
+                <span class="c">// Add mouseover/mouseout listeners to context elements</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">_context</span> <span class="o">=</span> <span class="nx">context</span><span class="o">;</span>
+        
+                <span class="nx">aElements</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_context</span><span class="o">;</span>
+                
+                <span class="k">if</span> <span class="o">(</span><span class="nx">aElements</span><span class="o">)</span> <span class="o">{</span>
+            
+                    <span class="nx">nElements</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+                    
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">nElements</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    
+                        <span class="nx">i</span> <span class="o">=</span> <span class="nx">nElements</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+                        
+                        <span class="k">do</span> <span class="o">{</span>
+            
+                            <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">,</span> 
+                                <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseOver</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> 
+                                <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseMove</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oElement</span><span class="o">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span> 
+                                <span class="k">this</span><span class="o">.</span><span class="nx">onContextMouseOut</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+                        
+                        <span class="o">}</span>
+                        <span class="k">while</span> <span class="o">(</span><span class="nx">i</span><span class="o">--);</span>
+                    
+                    <span class="o">}</span>
+            
+                <span class="o">}</span>
+        
+            <span class="o">}</span>
+        <span class="o">},</span>
+        
+        <span class="c">// END BUILT-IN PROPERTY EVENT HANDLERS //</span>
+<span class="c"></span>        
+        <span class="c">// BEGIN BUILT-IN DOM EVENT HANDLERS //</span>
+<span class="c"></span>        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the user moves the mouse while </span>
+<span class="c">        * over the context element.</span>
+<span class="c">        * @method onContextMouseMove</span>
+<span class="c">        * @param {DOMEvent} e The current DOM event</span>
+<span class="c">        * @param {Object} obj The object argument</span>
+<span class="c">        */</span>
+        <span class="nx">onContextMouseMove</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">obj</span><span class="o">.</span><span class="nx">pageX</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="nx">obj</span><span class="o">.</span><span class="nx">pageY</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the user mouses over the </span>
+<span class="c">        * context element.</span>
+<span class="c">        * @method onContextMouseOver</span>
+<span class="c">        * @param {DOMEvent} e The current DOM event</span>
+<span class="c">        * @param {Object} obj The object argument</span>
+<span class="c">        */</span>
+        <span class="nx">onContextMouseOver</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">clearTimeout</span><span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">);</span>
+
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Clearing hide timer: &quot;</span> <span class="o">+</span> 
+                    <span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="o">}</span>
+        
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">context</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">onContextMouseMove</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">context</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">_tempTitle</span> <span class="o">=</span> <span class="nx">context</span><span class="o">.</span><span class="nx">title</span><span class="o">;</span>
+                <span class="nx">context</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * The unique process ID associated with the thread responsible </span>
+<span class="c">            * for showing the Tooltip.</span>
+<span class="c">            * @type int</span>
+<span class="c">            */</span>
+            <span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">doShow</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">context</span><span class="o">);</span>
+            <span class="nx">obj</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting show tooltip timeout: &quot;</span> <span class="o">+</span> 
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The default event handler fired when the user mouses out of </span>
+<span class="c">        * the context element.</span>
+<span class="c">        * @method onContextMouseOut</span>
+<span class="c">        * @param {DOMEvent} e The current DOM event</span>
+<span class="c">        * @param {Object} obj The object argument</span>
+<span class="c">        */</span>
+        <span class="nx">onContextMouseOut</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">_tempTitle</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">_tempTitle</span><span class="o">;</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">_tempTitle</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">clearTimeout</span><span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span><span class="o">);</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Clearing show timer: &quot;</span> <span class="o">+</span> 
+                    <span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">showProcId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">clearTimeout</span><span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">);</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Clearing hide timer: &quot;</span> <span class="o">+</span> 
+                    <span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+        
+            <span class="nx">obj</span><span class="o">.</span><span class="nx">hideProcId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                <span class="nx">obj</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+    
+            <span class="o">},</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;hidedelay&quot;</span><span class="o">));</span>
+    
+        <span class="o">},</span>
+        
+        <span class="c">// END BUILT-IN DOM EVENT HANDLERS //</span>
+<span class="c"></span>        
+        <span class="c">/**</span>
+<span class="c">        * Processes the showing of the Tooltip by setting the timeout delay </span>
+<span class="c">        * and offset of the Tooltip.</span>
+<span class="c">        * @method doShow</span>
+<span class="c">        * @param {DOMEvent} e The current DOM event</span>
+<span class="c">        * @return {Number} The process ID of the timeout function associated </span>
+<span class="c">        * with doShow</span>
+<span class="c">        */</span>
+        <span class="nx">doShow</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">context</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">yOffset</span> <span class="o">=</span> <span class="m">25</span><span class="o">,</span>
+                <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span> <span class="o">&amp;&amp;</span> <span class="nx">context</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> 
+                <span class="nx">context</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">yOffset</span> <span class="o">+=</span> <span class="m">12</span><span class="o">;</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">return</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+                <span class="k">if</span> <span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">_tempTitle</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">setBody</span><span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">_tempTitle</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+        
+                <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Show tooltip&quot;</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+                <span class="nx">me</span><span class="o">.</span><span class="nx">moveTo</span><span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">pageX</span><span class="o">,</span> <span class="nx">me</span><span class="o">.</span><span class="nx">pageY</span> <span class="o">+</span> <span class="nx">yOffset</span><span class="o">);</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;preventoverlap&quot;</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">preventOverlap</span><span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">pageX</span><span class="o">,</span> <span class="nx">me</span><span class="o">.</span><span class="nx">pageY</span><span class="o">);</span>
+                <span class="o">}</span>
+        
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">context</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> 
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">onContextMouseMove</span><span class="o">);</span>
+        
+                <span class="nx">me</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
+                <span class="nx">me</span><span class="o">.</span><span class="nx">hideProcId</span> <span class="o">=</span> <span class="nx">me</span><span class="o">.</span><span class="nx">doHide</span><span class="o">();</span>
+
+                <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Hide tooltip time active: &quot;</span> <span class="o">+</span>
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">hideProcId</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+
+            <span class="o">},</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;showdelay&quot;</span><span class="o">));</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Sets the timeout for the auto-dismiss delay, which by default is 5 </span>
+<span class="c">        * seconds, meaning that a tooltip will automatically dismiss itself </span>
+<span class="c">        * after 5 seconds of being displayed.</span>
+<span class="c">        * @method doHide</span>
+<span class="c">        */</span>
+        <span class="nx">doHide</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        
+            <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting hide tooltip timeout&quot;</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+        
+            <span class="k">return</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+                <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Hide tooltip&quot;</span><span class="o">,</span> <span class="s2">&quot;time&quot;</span><span class="o">);</span>
+                <span class="nx">me</span><span class="o">.</span><span class="nx">hide</span><span class="o">();</span>
+        
+            <span class="o">},</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;autodismissdelay&quot;</span><span class="o">));</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Fired when the Tooltip is moved, this event handler is used to </span>
+<span class="c">        * prevent the Tooltip from overlapping with its context element.</span>
+<span class="c">        * @method preventOverlay</span>
+<span class="c">        * @param {Number} pageX The x coordinate position of the mouse pointer</span>
+<span class="c">        * @param {Number} pageY The y coordinate position of the mouse pointer</span>
+<span class="c">        */</span>
+        <span class="nx">preventOverlap</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">pageX</span><span class="o">,</span> <span class="nx">pageY</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span>
+                <span class="nx">mousePoint</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Point</span><span class="o">(</span><span class="nx">pageX</span><span class="o">,</span> <span class="nx">pageY</span><span class="o">),</span>
+                <span class="nx">elementRegion</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">);</span>
+        
+            <span class="nx">elementRegion</span><span class="o">.</span><span class="nx">top</span> <span class="o">-=</span> <span class="m">5</span><span class="o">;</span>
+            <span class="nx">elementRegion</span><span class="o">.</span><span class="nx">left</span> <span class="o">-=</span> <span class="m">5</span><span class="o">;</span>
+            <span class="nx">elementRegion</span><span class="o">.</span><span class="nx">right</span> <span class="o">+=</span> <span class="m">5</span><span class="o">;</span>
+            <span class="nx">elementRegion</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">+=</span> <span class="m">5</span><span class="o">;</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;context &quot;</span> <span class="o">+</span> <span class="nx">elementRegion</span><span class="o">,</span> <span class="s2">&quot;ttip&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;mouse &quot;</span> <span class="o">+</span> <span class="nx">mousePoint</span><span class="o">,</span> <span class="s2">&quot;ttip&quot;</span><span class="o">);</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">elementRegion</span><span class="o">.</span><span class="nx">contains</span><span class="o">(</span><span class="nx">mousePoint</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;OVERLAP&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;y&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">height</span> <span class="o">-</span> <span class="m">5</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+
+        <span class="c">/**</span>
+<span class="c">        * @method onRender</span>
+<span class="c">        * @description &quot;render&quot; event handler for the Tooltip.</span>
+<span class="c">        * @param {String} p_sType String representing the name of the event  </span>
+<span class="c">        * that was fired.</span>
+<span class="c">        * @param {Array} p_aArgs Array of arguments sent when the event </span>
+<span class="c">        * was fired.</span>
+<span class="c">        */</span>
+        <span class="nx">onRender</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">)</span> <span class="o">{</span>
+    
+            <span class="k">function</span> <span class="nx">sizeShadow</span><span class="o">()</span> <span class="o">{</span>
+    
+                <span class="k">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
+                    <span class="nx">oShadow</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">;</span>
+            
+                <span class="k">if</span> <span class="o">(</span><span class="nx">oShadow</span><span class="o">)</span> <span class="o">{</span>
+            
+                    <span class="nx">oShadow</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oElement</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="m">6</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+                    <span class="nx">oShadow</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oElement</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span> 
+            
+                <span class="o">}</span>
+            
+            <span class="o">}</span>
+
+
+            <span class="k">function</span> <span class="nx">addShadowVisibleClass</span><span class="o">()</span> <span class="o">{</span>
+            
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">,</span> <span class="s2">&quot;yui-tt-shadow-visible&quot;</span><span class="o">);</span>
+            
+            <span class="o">}</span>
+            
+
+            <span class="k">function</span> <span class="nx">removeShadowVisibleClass</span><span class="o">()</span> <span class="o">{</span>
+        
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">,</span> <span class="s2">&quot;yui-tt-shadow-visible&quot;</span><span class="o">);</span>
+            
+            <span class="o">}</span>
+    
+    
+            <span class="k">function</span> <span class="nx">createShadow</span><span class="o">()</span> <span class="o">{</span>
+    
+                <span class="k">var</span> <span class="nx">oShadow</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">,</span>
+                    <span class="nx">oElement</span><span class="o">,</span>
+                    <span class="nx">Module</span><span class="o">,</span>
+                    <span class="nx">nIE</span><span class="o">,</span>
+                    <span class="nx">me</span><span class="o">;</span>
+    
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">oShadow</span><span class="o">)</span> <span class="o">{</span>
+    
+                    <span class="nx">oElement</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span>
+                    <span class="nx">Module</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">;</span>
+                    <span class="nx">nIE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">;</span>
+                    <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    
+                    <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oShadowTemplate</span><span class="o">)</span> <span class="o">{</span>
+        
+                        <span class="nx">m_oShadowTemplate</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+                        <span class="nx">m_oShadowTemplate</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;yui-tt-shadow&quot;</span><span class="o">;</span>
+                    
+                    <span class="o">}</span>
+        
+                    <span class="nx">oShadow</span> <span class="o">=</span> <span class="nx">m_oShadowTemplate</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        
+                    <span class="nx">oElement</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oShadow</span><span class="o">);</span>
+                    
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span> <span class="o">=</span> <span class="nx">oShadow</span><span class="o">;</span>
+    
+                    <span class="nx">addShadowVisibleClass</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        
+                    <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span> <span class="nx">addShadowVisibleClass</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;beforeHide&quot;</span><span class="o">,</span> <span class="nx">removeShadowVisibleClass</span><span class="o">);</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">nIE</span> <span class="o">==</span> <span class="m">6</span> <span class="o">||</span> 
+                        <span class="o">(</span><span class="nx">nIE</span> <span class="o">==</span> <span class="m">7</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">))</span> <span class="o">{</span>
+                
+                        <span class="nb">window</span><span class="o">.</span><span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
+        
+                            <span class="nx">sizeShadow</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">me</span><span class="o">);</span> 
+        
+                        <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
+    
+                        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">sizeShadow</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">sizeShadow</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;changeContent&quot;</span><span class="o">,</span> <span class="nx">sizeShadow</span><span class="o">);</span>
+    
+                        <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">sizeShadow</span><span class="o">,</span> 
+                                                            <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                        
+                        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;destroy&quot;</span><span class="o">,</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        
+                            <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">sizeShadow</span><span class="o">,</span> 
+                                                                    <span class="k">this</span><span class="o">);</span>
+                        
+                        <span class="o">});</span>
+                
+                    <span class="o">}</span>
+                
+                <span class="o">}</span>
+    
+            <span class="o">}</span>
+    
+    
+            <span class="k">function</span> <span class="nx">onBeforeShow</span><span class="o">()</span> <span class="o">{</span>
+            
+                <span class="nx">createShadow</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    
+                <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span> <span class="nx">onBeforeShow</span><span class="o">);</span>
+            
+            <span class="o">}</span>
+    
+    
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">))</span> <span class="o">{</span>
+    
+                <span class="nx">createShadow</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            
+            <span class="o">}</span>
+            <span class="k">else</span> <span class="o">{</span>
+    
+                <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span> <span class="nx">onBeforeShow</span><span class="o">);</span>
+            
+            <span class="o">}</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Removes the Tooltip element from the DOM and sets all child </span>
+<span class="c">        * elements to null.</span>
+<span class="c">        * @method destroy</span>
+<span class="c">        */</span>
+        <span class="nx">destroy</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="c">// Remove any existing mouseover/mouseout listeners</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_removeEventListeners</span><span class="o">();</span>
+        
+            <span class="nx">Tooltip</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">destroy</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>  
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Returns a string representation of the object.</span>
+<span class="c">        * @method toString</span>
+<span class="c">        * @return {String} The string representation of the Tooltip</span>
+<span class="c">        */</span>
+        <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s2">&quot;Tooltip &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+        <span class="o">}</span>
+    
+    <span class="o">});</span>
+
+<span class="o">}());</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class="selected"><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

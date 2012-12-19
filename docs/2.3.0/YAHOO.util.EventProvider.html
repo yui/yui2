@@ -1,0 +1,612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: event  YAHOO.util.EventProvider   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                 &gt; YAHOO.util.EventProvider 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.EventProvider</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        EventProvider is designed to be used with YAHOO.augment to wrap 
+CustomEvents in an interface that allows events to be subscribed to 
+and fired by name.  This makes it possible for implementing code to
+subscribe to an event that either has not been created yet, or will
+not be created at all.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="__yui_events">__yui_events</a>
+                                        <code>- private Object[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Private storage of custom events
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="__yui_subscribers">__yui_subscribers</a>
+                                        <code>- private Object[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Private storage of custom event subscribers
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="createEvent">createEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        CustomEvent
+                                            <strong>createEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         p_type
+                                                    
+                                                
+                                                        , 
+                                                         p_config
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates a new custom event of the specified type.  If a custom event
+by that name already exists, it will not be re-created.  In either
+case the custom event is returned.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_type &lt;string&gt;</code>
+                                                              the type, or name of the event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_config &lt;object&gt;</code>
+                                                              optional config params.  Valid properties are:
+<ul>
+<li>
+scope: defines the default execution scope.  If not defined
+the default scope will be this instance.
+</li>
+<li>
+silent: if true, the custom event will not generate log messages.
+This is false by default.
+</li>
+<li>
+onSubscribeCallback: specifies a callback to execute when the
+event has a new subscriber.  This will fire immediately for
+each queued subscriber if any exist prior to the creation of
+the event.
+</li>
+</ul>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        CustomEvent
+                                                    </code></dt>
+                                                    <dd>the custom event</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="fireEvent">fireEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>fireEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         p_type
+                                                    
+                                                
+                                                        , 
+                                                         arguments
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fire a custom event by name.  The callback functions will be executed
+from the scope specified when the event was created, and with the 
+following parameters:
+<ul>
+<li>The first argument fire() was executed with</li>
+<li>The custom object (if any) that was passed into the subscribe() 
+method</li>
+</ul>
+If the custom event has not been explicitly created, it will be
+created now with the default config, scoped to the host object
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_type &lt;string&gt;</code>
+                                                                  the type, or name of the event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>arguments &lt;Object*&gt;</code>
+                                                              an arbitrary set of parameters to pass to 
+the handler.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>the return value from CustomEvent.fire</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="hasEvent">hasEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>hasEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns true if the custom event of the provided type has been created
+with createEvent.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;string&gt;</code>
+                                                              the type, or name of the event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="subscribe">subscribe</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>subscribe</strong>
+                                           (
+                                                
+                                                        
+                                                         p_type
+                                                    
+                                                
+                                                        , 
+                                                         p_fn
+                                                    
+                                                
+                                                        , 
+                                                         p_obj
+                                                    
+                                                
+                                                        , 
+                                                         p_override
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subscribe to a CustomEvent by event type
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_type &lt;string&gt;</code>
+                                                                    the type, or name of the event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_fn &lt;function&gt;</code>
+                                                                    the function to exectute when the event fires
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_obj &lt;Object&gt;</code>
+                                                                     An object to be passed along when the event 
+fires
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_override &lt;boolean&gt;</code>
+                                                               If true, the obj passed in becomes the 
+execution scope of the listener
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="unsubscribe">unsubscribe</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>unsubscribe</strong>
+                                           (
+                                                
+                                                        
+                                                         p_type
+                                                    
+                                                
+                                                        , 
+                                                         p_fn
+                                                    
+                                                
+                                                        , 
+                                                         p_obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unsubscribes one or more listeners the from the specified event
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_type &lt;string&gt;</code>
+                                                                The type, or name of the event.  If the type
+is not specified, it will attempt to remove
+the listener from all hosted events.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_fn &lt;Function&gt;</code>
+                                                                The subscribed function to unsubscribe, if not
+supplied, all subscribers will be removed.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_obj &lt;Object&gt;</code>
+                                                                 The custom object passed to subscribe.  This is
+optional, but if supplied will be used to
+disambiguate multiple listeners that are the same
+(e.g., you subscribe many object using a function
+that lives on the prototype)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the subscriber was found and detached.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="unsubscribeAll">unsubscribeAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>unsubscribeAll</strong>
+                                           (
+                                                
+                                                        
+                                                         p_type
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes all listeners from the specified event.  If the event type
+is not specified, all listeners from all hosted custom events will
+be removed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_type &lt;string&gt;</code>
+                                                                The type, or name of the event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class="selected"><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#__yui_events">__yui_events</a>
+                                        <!--<code>&lt;Object[]&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#__yui_subscribers">__yui_subscribers</a>
+                                        <!--<code>&lt;Object[]&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>CustomEvent</code>-->
+                                <a href="#createEvent">createEvent</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#fireEvent">fireEvent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#hasEvent">hasEvent</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#subscribe">subscribe</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#unsubscribe">unsubscribe</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#unsubscribeAll">unsubscribeAll</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: logger   LogMsg.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_logger.html">logger</a>
+                
+                 &gt; LogMsg.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * The LogMsg class defines a single log message.</span>
+<span class="c"> *</span>
+<span class="c"> * @class LogMsg</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} Object literal of configuration params.</span>
+<span class="c"> */</span>
+ <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Parse configs</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">param</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">[</span><span class="nx">param</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">param</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+ <span class="o">};</span>
+ 
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Log message.</span>
+<span class="c"> *</span>
+<span class="c"> * @property msg</span>
+<span class="c"> * @type String</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">msg</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+ 
+<span class="c">/**</span>
+<span class="c"> * Log timestamp.</span>
+<span class="c"> *</span>
+<span class="c"> * @property time</span>
+<span class="c"> * @type Date</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">time</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Log category.</span>
+<span class="c"> *</span>
+<span class="c"> * @property category</span>
+<span class="c"> * @type String</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">category</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Log source. The first word passed in as the source argument.</span>
+<span class="c"> *</span>
+<span class="c"> * @property source</span>
+<span class="c"> * @type String</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">source</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Log source detail. The remainder of the string passed in as the source argument, not</span>
+<span class="c"> * including the first word (if any).</span>
+<span class="c"> *</span>
+<span class="c"> * @property sourceDetail</span>
+<span class="c"> * @type String</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">sourceDetail</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="LogMsg.html">LogMsg</a></li>
+                                <li class=""><a href="LogReader.html">LogReader</a></li>
+                                <li class=""><a href="LogWriter.html">LogWriter</a></li>
+                                <li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Logger.js.html">Logger.js</a></li>
+                                <li class="selected"><a href="LogMsg.js.html">LogMsg.js</a></li>
+                                <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
+                                <li class=""><a href="LogWriter.js.html">LogWriter.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

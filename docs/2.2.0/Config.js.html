@@ -1,0 +1,597 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container   Config.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                
+                 &gt; Config.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/*</span>
+<span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
+<span class="c">Code licensed under the BSD License:</span>
+<span class="c">http://developer.yahoo.net/yui/license.txt</span>
+<span class="c">Version 0.12.2</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.</span>
+<span class="c">* @namespace YAHOO.util</span>
+<span class="c">* @class Config</span>
+<span class="c">* @constructor</span>
+<span class="c">* @param {Object}	owner	The owner Object to which this Config Object belongs</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">owner</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span> <span class="o">(</span><span class="nx">owner</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">owner</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* Object reference to the owner of this Config Object</span>
+<span class="c">	* @property owner</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span>
+	<span class="nx">owner</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Boolean flag that specifies whether a queue is currently being executed</span>
+<span class="c">	* @property queueInProgress</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	*/</span>
+	<span class="nx">queueInProgress</span> <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+
+	<span class="c">/**</span>
+<span class="c">	* Validates that the value passed in is a Boolean.</span>
+<span class="c">	* @method checkBoolean</span>
+<span class="c">	* @param	{Object}	val	The value to validate</span>
+<span class="c">	* @return	{Boolean}	true, if the value is valid</span>
+<span class="c">	*/</span>	
+	<span class="nx">checkBoolean</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">val</span> <span class="o">==</span> <span class="s1">&#39;boolean&#39;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Validates that the value passed in is a number.</span>
+<span class="c">	* @method checkNumber</span>
+<span class="c">	* @param	{Object}	val	The value to validate</span>
+<span class="c">	* @return	{Boolean}	true, if the value is valid</span>
+<span class="c">	*/</span>
+	<span class="nx">checkNumber</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* Initializes the configuration Object and all of its local members.</span>
+<span class="c">* @method init</span>
+<span class="c">* @param {Object}	owner	The owner Object to which this Config Object belongs</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">init</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">owner</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="k">this</span><span class="o">.</span><span class="nx">owner</span> <span class="o">=</span> <span class="nx">owner</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Object reference to the owner of this Config Object</span>
+<span class="c">	* @event configChangedEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">configChangedEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;configChanged&quot;</span><span class="o">);</span>
+
+	<span class="k">this</span><span class="o">.</span><span class="nx">queueInProgress</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+	<span class="c">/* Private Members */</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Maintains the local collection of configuration property objects and their specified values</span>
+<span class="c">	* @property config</span>
+<span class="c">	* @private</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span> 
+	<span class="k">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="o">{};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Maintains the local collection of configuration property objects as they were initially applied.</span>
+<span class="c">	* This object is used when resetting a property.</span>
+<span class="c">	* @property initialConfig</span>
+<span class="c">	* @private</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span> 
+	<span class="k">var</span> <span class="nx">initialConfig</span> <span class="o">=</span> <span class="o">{};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Maintains the local, normalized CustomEvent queue</span>
+<span class="c">	* @property eventQueue</span>
+<span class="c">	* @private</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span> 
+	<span class="k">var</span> <span class="nx">eventQueue</span> <span class="o">=</span> <span class="o">[];</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fires a configuration property event using the specified value. </span>
+<span class="c">	* @method fireEvent</span>
+<span class="c">	* @private</span>
+<span class="c">	* @param {String}	key			The configuration property&#39;s name</span>
+<span class="c">	* @param {value}	Object		The value of the correct type for the property</span>
+<span class="c">	*/</span> 
+	<span class="k">var</span> <span class="nx">fireEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">value</span> <span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
+		<span class="o">}</span>	
+	<span class="o">};</span>
+	<span class="c">/* End Private Members */</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Adds a property to the Config Object&#39;s private config hash.</span>
+<span class="c">	* @method addProperty</span>
+<span class="c">	* @param {String}	key	The configuration property&#39;s name</span>
+<span class="c">	* @param {Object}	propertyObject	The Object containing all of this property&#39;s arguments</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">addProperty</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">propertyObject</span> <span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">propertyObject</span><span class="o">;</span>
+
+		<span class="nx">propertyObject</span><span class="o">.</span><span class="nx">event</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="nx">key</span><span class="o">);</span>
+		<span class="nx">propertyObject</span><span class="o">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">propertyObject</span><span class="o">.</span><span class="nx">handler</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">propertyObject</span><span class="o">.</span><span class="nx">event</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">propertyObject</span><span class="o">.</span><span class="nx">handler</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">owner</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">propertyObject</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		
+		<span class="k">if</span> <span class="o">(!</span> <span class="nx">propertyObject</span><span class="o">.</span><span class="nx">suppressEvent</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">propertyObject</span><span class="o">.</span><span class="nx">value</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Returns a key-value configuration map of the values currently set in the Config Object.</span>
+<span class="c">	* @method getConfig</span>
+<span class="c">	* @return {Object} The current config, represented in a key-value map</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">getConfig</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cfg</span> <span class="o">=</span> <span class="o">{};</span>
+			
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">cfg</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">property</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		
+		<span class="k">return</span> <span class="nx">cfg</span><span class="o">;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Returns the value of specified property.</span>
+<span class="c">	* @method getProperty</span>
+<span class="c">	* @param {String} key	The name of the property</span>
+<span class="c">	* @return {Object}		The value of the specified property</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">getProperty</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nx">property</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">undefined</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Resets the specified property&#39;s value to its initial value.</span>
+<span class="c">	* @method resetProperty</span>
+<span class="c">	* @param {String} key	The name of the property</span>
+<span class="c">	* @return {Boolean} True is the property was reset, false if not</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">resetProperty</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">initialConfig</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">initialConfig</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span>	<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">initialConfig</span><span class="o">[</span><span class="nx">key</span><span class="o">]);</span>
+			<span class="o">}</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Sets the value of a property. If the silent property is passed as true, the property&#39;s event will not be fired.</span>
+<span class="c">	* @method setProperty</span>
+<span class="c">	* @param {String} key		The name of the property</span>
+<span class="c">	* @param {String} value		The value to set the property to</span>
+<span class="c">	* @param {Boolean} silent	Whether the value should be set silently, without firing the property event.</span>
+<span class="c">	* @return {Boolean}			True, if the set was successful, false if it failed.</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">setProperty</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">queueInProgress</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span><span class="nx">value</span><span class="o">);</span> <span class="c">// Currently running through a queue... </span>
+<span class="c"></span>			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="nx">property</span><span class="o">.</span><span class="nx">validator</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">property</span><span class="o">.</span><span class="nx">validator</span><span class="o">(</span><span class="nx">value</span><span class="o">))</span> <span class="o">{</span> <span class="c">// validator</span>
+<span class="c"></span>					<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+				<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+					<span class="nx">property</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+					<span class="k">if</span> <span class="o">(!</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">fireEvent</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
+						<span class="k">this</span><span class="o">.</span><span class="nx">configChangedEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">([</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">]);</span>
+					<span class="o">}</span>
+					<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+				<span class="o">}</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is</span>
+<span class="c">	* moved from its current position to the end of the queue.</span>
+<span class="c">	* @method queueProperty</span>
+<span class="c">	* @param {String} key	The name of the property</span>
+<span class="c">	* @param {String} value	The value to set the property to</span>
+<span class="c">	* @return {Boolean}		true, if the set was successful, false if it failed.</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">queueProperty</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+							
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">validator</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">property</span><span class="o">.</span><span class="nx">validator</span><span class="o">(</span><span class="nx">value</span><span class="o">))</span> <span class="o">{</span> <span class="c">// validator</span>
+<span class="c"></span>				<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+				<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+					<span class="nx">property</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+				<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+					<span class="nx">value</span> <span class="o">=</span> <span class="nx">property</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+				<span class="o">}</span>
+
+				<span class="k">var</span> <span class="nx">foundDuplicate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">eventQueue</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+					<span class="k">var</span> <span class="nx">queueItem</span> <span class="o">=</span> <span class="nx">eventQueue</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+
+					<span class="k">if</span> <span class="o">(</span><span class="nx">queueItem</span><span class="o">)</span> <span class="o">{</span>
+						<span class="k">var</span> <span class="nx">queueItemKey</span> <span class="o">=</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+						<span class="k">var</span> <span class="nx">queueItemValue</span> <span class="o">=</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+						
+						<span class="k">if</span> <span class="o">(</span><span class="nx">queueItemKey</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
+							<span class="c">// found a dupe... push to end of queue, null current item, and break</span>
+<span class="c"></span>							<span class="nx">eventQueue</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+							<span class="nx">eventQueue</span><span class="o">.</span><span class="nx">push</span><span class="o">([</span><span class="nx">key</span><span class="o">,</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="nx">value</span> <span class="o">:</span> <span class="nx">queueItemValue</span><span class="o">)]);</span>
+							<span class="nx">foundDuplicate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+							<span class="k">break</span><span class="o">;</span>
+						<span class="o">}</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+				
+				<span class="k">if</span> <span class="o">(!</span> <span class="nx">foundDuplicate</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="c">// this is a refire, or a new property in the queue</span>
+<span class="c"></span>					<span class="nx">eventQueue</span><span class="o">.</span><span class="nx">push</span><span class="o">([</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">]);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="nx">property</span><span class="o">.</span><span class="nx">supercedes</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">s</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">s</span><span class="o">&lt;</span><span class="nx">property</span><span class="o">.</span><span class="nx">supercedes</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">s</span><span class="o">++)</span> <span class="o">{</span>
+					<span class="k">var</span> <span class="nx">supercedesCheck</span> <span class="o">=</span> <span class="nx">property</span><span class="o">.</span><span class="nx">supercedes</span><span class="o">[</span><span class="nx">s</span><span class="o">];</span>
+
+					<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">q</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">q</span><span class="o">&lt;</span><span class="nx">eventQueue</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">q</span><span class="o">++)</span> <span class="o">{</span>
+						<span class="k">var</span> <span class="nx">queueItemCheck</span> <span class="o">=</span> <span class="nx">eventQueue</span><span class="o">[</span><span class="nx">q</span><span class="o">];</span>
+
+						<span class="k">if</span> <span class="o">(</span><span class="nx">queueItemCheck</span><span class="o">)</span> <span class="o">{</span>
+							<span class="k">var</span> <span class="nx">queueItemCheckKey</span> <span class="o">=</span> <span class="nx">queueItemCheck</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+							<span class="k">var</span> <span class="nx">queueItemCheckValue</span> <span class="o">=</span> <span class="nx">queueItemCheck</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+							
+							<span class="k">if</span> <span class="o">(</span> <span class="nx">queueItemCheckKey</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="nx">supercedesCheck</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">)</span> <span class="o">{</span>
+								<span class="nx">eventQueue</span><span class="o">.</span><span class="nx">push</span><span class="o">([</span><span class="nx">queueItemCheckKey</span><span class="o">,</span> <span class="nx">queueItemCheckValue</span><span class="o">]);</span>
+								<span class="nx">eventQueue</span><span class="o">[</span><span class="nx">q</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+								<span class="k">break</span><span class="o">;</span>
+							<span class="o">}</span>
+						<span class="o">}</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fires the event for a property using the property&#39;s current value.</span>
+<span class="c">	* @method refireEvent</span>
+<span class="c">	* @param {String} key	The name of the property</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">refireEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">property</span><span class="o">.</span><span class="nx">value</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">queueInProgress</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="nx">key</span><span class="o">);</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="nx">fireEvent</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">property</span><span class="o">.</span><span class="nx">value</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Applies a key-value Object literal to the configuration, replacing any existing values, and queueing the property events.</span>
+<span class="c">	* Although the values will be set, fireQueue() must be called for their associated events to execute.</span>
+<span class="c">	* @method applyConfig</span>
+<span class="c">	* @param {Object}	userConfig	The configuration Object literal</span>
+<span class="c">	* @param {Boolean}	init		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">applyConfig</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">,</span> <span class="nx">init</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">init</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">initialConfig</span> <span class="o">=</span> <span class="nx">userConfig</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">queueProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">[</span><span class="nx">prop</span><span class="o">]);</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Refires the events for all configuration properties using their current values.</span>
+<span class="c">	* @method refresh</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">refresh</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="nx">prop</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fires the normalized list of queued property change events</span>
+<span class="c">	* @method fireQueue</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">fireQueue</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">queueInProgress</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">eventQueue</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">queueItem</span> <span class="o">=</span> <span class="nx">eventQueue</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">queueItem</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+				<span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+				
+				<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+				<span class="nx">property</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+
+				<span class="nx">fireEvent</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span><span class="nx">value</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">queueInProgress</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="nx">eventQueue</span> <span class="o">=</span> <span class="o">[];</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Subscribes an external handler to the change event for any given property. </span>
+<span class="c">	* @method subscribeToConfigEvent</span>
+<span class="c">	* @param {String}	key			The property name</span>
+<span class="c">	* @param {Function}	handler		The handler function to use subscribe to the property&#39;s event</span>
+<span class="c">	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)</span>
+<span class="c">	* @param {Boolean}	override	Optional. If true, will override &quot;this&quot; within the handler to map to the scope Object passed into the method.</span>
+<span class="c">	* @return {Boolean}				True, if the subscription was successful, otherwise false.</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">handler</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(!</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">.</span><span class="nx">alreadySubscribed</span><span class="o">(</span><span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">,</span> <span class="nx">handler</span><span class="o">,</span> <span class="nx">obj</span><span class="o">))</span> <span class="o">{</span>
+				<span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">handler</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Unsubscribes an external handler from the change event for any given property. </span>
+<span class="c">	* @method unsubscribeFromConfigEvent</span>
+<span class="c">	* @param {String}	key			The property name</span>
+<span class="c">	* @param {Function}	handler		The handler function to use subscribe to the property&#39;s event</span>
+<span class="c">	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)</span>
+<span class="c">	* @return {Boolean}				True, if the unsubscription was successful, otherwise false.</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">unsubscribeFromConfigEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">handler</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+
+		<span class="k">var</span> <span class="nx">property</span> <span class="o">=</span> <span class="nx">config</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nx">property</span><span class="o">.</span><span class="nx">event</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">handler</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Returns a string representation of the Config object</span>
+<span class="c">	* @method toString</span>
+<span class="c">	* @return {String}	The Config object in string format.</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="s2">&quot;Config&quot;</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">owner</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">output</span> <span class="o">+=</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">owner</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">output</span><span class="o">;</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Returns a string representation of the Config object&#39;s current CustomEvent queue</span>
+<span class="c">	* @method outputEventQueue</span>
+<span class="c">	* @return {String}	The string list of CustomEvents currently queued for execution</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">outputEventQueue</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">q</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">q</span><span class="o">&lt;</span><span class="nx">eventQueue</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">q</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">queueItem</span> <span class="o">=</span> <span class="nx">eventQueue</span><span class="o">[</span><span class="nx">q</span><span class="o">];</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">queueItem</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">output</span> <span class="o">+=</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nx">queueItem</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="nx">output</span><span class="o">;</span>
+	<span class="o">};</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Checks to determine if a particular function/Object pair are already subscribed to the specified CustomEvent</span>
+<span class="c">* @method YAHOO.util.Config.alreadySubscribed</span>
+<span class="c">* @static</span>
+<span class="c">* @param {YAHOO.util.CustomEvent} evt	The CustomEvent for which to check the subscriptions</span>
+<span class="c">* @param {Function}	fn	The function to look for in the subscribers list</span>
+<span class="c">* @param {Object}	obj	The execution scope Object for the subscription</span>
+<span class="c">* @return {Boolean}	true, if the function/Object pair is already subscribed to the CustomEvent passed in</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">.</span><span class="nx">alreadySubscribed</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">evt</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">e</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">e</span><span class="o">&lt;</span><span class="nx">evt</span><span class="o">.</span><span class="nx">subscribers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">e</span><span class="o">++)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">subsc</span> <span class="o">=</span> <span class="nx">evt</span><span class="o">.</span><span class="nx">subscribers</span><span class="o">[</span><span class="nx">e</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">subsc</span> <span class="o">&amp;&amp;</span> <span class="nx">subsc</span><span class="o">.</span><span class="nx">obj</span> <span class="o">==</span> <span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">subsc</span><span class="o">.</span><span class="nx">fn</span> <span class="o">==</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

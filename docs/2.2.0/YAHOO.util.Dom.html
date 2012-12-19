@@ -1,0 +1,1481 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dom  YAHOO.util.Dom   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>dom&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dom.html">dom</a>
+                 &gt; YAHOO.util.Dom 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Dom</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Provides helper methods for DOM elements.
+                    </div>
+
+
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="addClass">addClass</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addClass</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         className
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a class name to a given element or collection of elements.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             The element or collection to add the class to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>className &lt;String&gt;</code>
+                                                             the class name to add to the class attribute
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="batch">batch</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement | Array
+                                            <strong>batch</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         method
+                                                    
+                                                
+                                                        , 
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         override
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an array of elements that have had the supplied method applied.
+The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) ).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             (optional) An element or array of elements to apply the method to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>method &lt;Function&gt;</code>
+                                                             The method to apply to the element(s)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>o &lt;Any&gt;</code>
+                                                             (optional) An optional arg that is passed to the supplied method
+                                                        </dd>
+                                                        <dd>
+                                                            <code>override &lt;Boolean&gt;</code>
+                                                             (optional) Whether or not to override the scope of "method" with "o"
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement | Array
+                                                    </code></dt>
+                                                    <dd>The element(s) with the method applied</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="generateId">generateId</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String | Array
+                                            <strong>generateId</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         prefix
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Generates a unique ID
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             (optional) An optional element array of elements to add an ID to (no ID is added if one is already present).
+                                                        </dd>
+                                                        <dd>
+                                                            <code>prefix &lt;String&gt;</code>
+                                                             (optional) an optional prefix to use (defaults to "yui-gen").
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String | Array
+                                                    </code></dt>
+                                                    <dd>The generated ID, or array of generated IDs (or original ID if already present on an element)</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="get">get</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTMLElement | Array
+                                            <strong>get</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an HTMLElement reference.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement |Array&gt;</code>
+                                                             Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTMLElement | Array
+                                                    </code></dt>
+                                                    <dd>A DOM reference to an HTML element or an array of HTMLElements.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getClientHeight">getClientHeight</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getClientHeight</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the height of the client (viewport).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The height of the viewable area of the page.</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> Now using getViewportHeight.  This interface left intact for back compat.
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getClientWidth">getClientWidth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getClientWidth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the width of the client (viewport).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The width of the viewable area of the page.</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> Now using getViewportWidth.  This interface left intact for back compat.
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getDocumentHeight">getDocumentHeight</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getDocumentHeight</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the height of the document.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The height of the actual document (which includes the body and its margin).</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getDocumentWidth">getDocumentWidth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getDocumentWidth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the width of the document.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The width of the actual document (which includes the body and its margin).</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getElementsBy">getElementsBy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getElementsBy</strong>
+                                           (
+                                                
+                                                        
+                                                         method
+                                                    
+                                                
+                                                        , 
+                                                         tag
+                                                    
+                                                
+                                                        , 
+                                                         root
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+For optimized performance, include a tag and/or root node when possible.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>method &lt;Function&gt;</code>
+                                                             - A boolean method for testing elements which receives the element as its only argument.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>tag &lt;String&gt;</code>
+                                                             (optional) The tag name of the elements being collected
+                                                        </dd>
+                                                        <dd>
+                                                            <code>root &lt;String | HTMLElement&gt;</code>
+                                                             (optional) The HTMLElement or an ID to use as the starting point
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>Array of HTMLElements</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getElementsByClassName">getElementsByClassName</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getElementsByClassName</strong>
+                                           (
+                                                
+                                                        
+                                                         className
+                                                    
+                                                
+                                                        , 
+                                                         tag
+                                                    
+                                                
+                                                        , 
+                                                         root
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a array of HTMLElements with the given class.
+For optimized performance, include a tag and/or root node when possible.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>className &lt;String&gt;</code>
+                                                             The class name to match against
+                                                        </dd>
+                                                        <dd>
+                                                            <code>tag &lt;String&gt;</code>
+                                                             (optional) The tag name of the elements being collected
+                                                        </dd>
+                                                        <dd>
+                                                            <code>root &lt;String | HTMLElement&gt;</code>
+                                                             (optional) The HTMLElement or an ID to use as the starting point
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>An array of elements that have the given class name</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getRegion">getRegion</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Region | Array
+                                            <strong>getRegion</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the region position of the given element.
+The element must be part of the DOM tree to have a region (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Region | Array
+                                                    </code></dt>
+                                                    <dd>A Region or array of Region instances containing "top, left, bottom, right" member data.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getStyle">getStyle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String | Array
+                                            <strong>getStyle</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         property
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Normalizes currentStyle and ComputedStyle.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement |Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>property &lt;String&gt;</code>
+                                                             The style property whose value is returned.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String | Array
+                                                    </code></dt>
+                                                    <dd>The current value of the style property for the element(s).</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getViewportHeight">getViewportHeight</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getViewportHeight</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current height of the viewport.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The height of the viewable area of the page (excludes scrollbars).</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getViewportWidth">getViewportWidth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getViewportWidth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current width of the viewport.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>The width of the viewable area of the page (excludes scrollbars).</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getX">getX</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String | Array
+                                            <strong>getX</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String | Array
+                                                    </code></dt>
+                                                    <dd>The X position of the element(s)</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getXY">getXY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getXY</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd>The XY position of the element(s)</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getY">getY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String | Array
+                                            <strong>getY</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String | Array
+                                                    </code></dt>
+                                                    <dd>The Y position of the element(s)</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="hasClass">hasClass</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean | Array
+                                            <strong>hasClass</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         className
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether an HTMLElement has the given className.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             The element or collection to test
+                                                        </dd>
+                                                        <dd>
+                                                            <code>className &lt;String&gt;</code>
+                                                             the class name to search for
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean | Array
+                                                    </code></dt>
+                                                    <dd>A boolean value or array of boolean values</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="inDocument">inDocument</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>inDocument</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether an HTMLElement is present in the current document.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement&gt;</code>
+                                                             The element to search for
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>Whether or not the element is present in the current document</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isAncestor">isAncestor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>isAncestor</strong>
+                                           (
+                                                
+                                                        
+                                                         haystack
+                                                    
+                                                
+                                                        , 
+                                                         needle
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether an HTMLElement is an ancestor of another HTML element in the DOM hierarchy.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>haystack &lt;String | HTMLElement&gt;</code>
+                                                             The possible ancestor
+                                                        </dd>
+                                                        <dd>
+                                                            <code>needle &lt;String | HTMLElement&gt;</code>
+                                                             The possible descendent
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>Whether or not the haystack is an ancestor of needle</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="removeClass">removeClass</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>removeClass</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         className
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes a class name from a given element or collection of elements.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             The element or collection to remove the class from
+                                                        </dd>
+                                                        <dd>
+                                                            <code>className &lt;String&gt;</code>
+                                                             the class name to remove from the class attribute
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="replaceClass">replaceClass</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>replaceClass</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         oldClassName
+                                                    
+                                                
+                                                        , 
+                                                         newClassName
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Replace a class with another class for a given element or collection of elements.
+If no oldClassName is present, the newClassName is simply added.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             The element or collection to remove the class from
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oldClassName &lt;String&gt;</code>
+                                                             the class name to be replaced
+                                                        </dd>
+                                                        <dd>
+                                                            <code>newClassName &lt;String&gt;</code>
+                                                             the class name that will be replacing the old class name
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setStyle">setStyle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setStyle</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         property
+                                                    
+                                                
+                                                        , 
+                                                         val
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>property &lt;String&gt;</code>
+                                                             The style property to be set.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>val &lt;String&gt;</code>
+                                                             The value to apply to the given property.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setX">setX</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setX</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         x
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Set the X position of an html element in page coordinates, regardless of how the element is positioned.
+The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>x &lt;Int&gt;</code>
+                                                             The value to use as the X coordinate for the element(s).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setXY">setXY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setXY</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         pos
+                                                    
+                                                
+                                                        , 
+                                                         noRetry
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Set the position of an html element in page coordinates, regardless of how the element is positioned.
+The element(s) must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+                                                        </dd>
+                                                        <dd>
+                                                            <code>pos &lt;Array&gt;</code>
+                                                             Contains X & Y values for new position (coordinates are page-based)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>noRetry &lt;Boolean&gt;</code>
+                                                             By default we try and set the position a second time if the first fails
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setY">setY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setY</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         x
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Set the Y position of an html element in page coordinates, regardless of how the element is positioned.
+The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String | HTMLElement | Array&gt;</code>
+                                                             Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>x &lt;Int&gt;</code>
+                                                             To use as the Y coordinate for the element(s).
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class="selected"><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
+                                <li class=""><a href="YAHOO.util.Point.html">YAHOO.util.Point</a></li>
+                                <li class=""><a href="YAHOO.util.Region.html">YAHOO.util.Region</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Dom.js.html">Dom.js</a></li>
+                                <li class=""><a href="Region.js.html">Region.js</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#addClass">addClass</a>
+                                </li>
+                                <li><!--<code>HTMLElement | Array</code>-->
+                                <a href="#batch">batch</a>
+                                </li>
+                                <li><!--<code>String | Array</code>-->
+                                <a href="#generateId">generateId</a>
+                                </li>
+                                <li><!--<code>HTMLElement | Array</code>-->
+                                <a href="#get">get</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getClientHeight">getClientHeight</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getClientWidth">getClientWidth</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getDocumentHeight">getDocumentHeight</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getDocumentWidth">getDocumentWidth</a>
+                                </li>
+                                <li><!--<code>Array</code>-->
+                                <a href="#getElementsBy">getElementsBy</a>
+                                </li>
+                                <li><!--<code>Array</code>-->
+                                <a href="#getElementsByClassName">getElementsByClassName</a>
+                                </li>
+                                <li><!--<code>Region | Array</code>-->
+                                <a href="#getRegion">getRegion</a>
+                                </li>
+                                <li><!--<code>String | Array</code>-->
+                                <a href="#getStyle">getStyle</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getViewportHeight">getViewportHeight</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getViewportWidth">getViewportWidth</a>
+                                </li>
+                                <li><!--<code>String | Array</code>-->
+                                <a href="#getX">getX</a>
+                                </li>
+                                <li><!--<code>Array</code>-->
+                                <a href="#getXY">getXY</a>
+                                </li>
+                                <li><!--<code>String | Array</code>-->
+                                <a href="#getY">getY</a>
+                                </li>
+                                <li><!--<code>Boolean | Array</code>-->
+                                <a href="#hasClass">hasClass</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#inDocument">inDocument</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#isAncestor">isAncestor</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#removeClass">removeClass</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#replaceClass">replaceClass</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setStyle">setStyle</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setX">setX</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setXY">setXY</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setY">setY</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

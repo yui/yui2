@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: connection   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>connection&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_connection.html">connection</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: connection
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Connection Manager provides a simplified interface to the XMLHttpRequest
+object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the
+interactive states and server response, returning the results to a pre-defined
+callback you create.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search connection:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Connect", "name": "abort", "url": "YAHOO.util.Connect.html#abort"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "abortEvent", "url": "YAHOO.util.Connect.html#abortEvent"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "appendPostData", "url": "YAHOO.util.Connect.html#appendPostData"}, {"access": "", "host": "YAHOO.util.Connect", "name": "asyncRequest", "url": "YAHOO.util.Connect.html#asyncRequest"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "completeEvent", "url": "YAHOO.util.Connect.html#completeEvent"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createExceptionObject", "url": "YAHOO.util.Connect.html#createExceptionObject"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createFrame", "url": "YAHOO.util.Connect.html#createFrame"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createResponseObject", "url": "YAHOO.util.Connect.html#createResponseObject"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createXhrObject", "url": "YAHOO.util.Connect.html#createXhrObject"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_customEvents", "url": "YAHOO.util.Connect.html#_customEvents"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_post_header", "url": "YAHOO.util.Connect.html#_default_post_header"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_xhr_header", "url": "YAHOO.util.Connect.html#_default_xhr_header"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "failureEvent", "url": "YAHOO.util.Connect.html#failureEvent"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_formNode", "url": "YAHOO.util.Connect.html#_formNode"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "getConnectionObject", "url": "YAHOO.util.Connect.html#getConnectionObject"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleReadyState", "url": "YAHOO.util.Connect.html#handleReadyState"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleTransactionResponse", "url": "YAHOO.util.Connect.html#handleTransactionResponse"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_default_header", "url": "YAHOO.util.Connect.html#_has_default_header"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_http_headers", "url": "YAHOO.util.Connect.html#_has_http_headers"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_hasSubmitListener", "url": "YAHOO.util.Connect.html#_hasSubmitListener"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_http_header", "url": "YAHOO.util.Connect.html#_http_header"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "initCustomEvents", "url": "YAHOO.util.Connect.html#initCustomEvents"}, {"access": "", "host": "YAHOO.util.Connect", "name": "initHeader", "url": "YAHOO.util.Connect.html#initHeader"}, {"access": "", "host": "YAHOO.util.Connect", "name": "isCallInProgress", "url": "YAHOO.util.Connect.html#isCallInProgress"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFileUpload", "url": "YAHOO.util.Connect.html#_isFileUpload"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFormSubmit", "url": "YAHOO.util.Connect.html#_isFormSubmit"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_msxml_progid", "url": "YAHOO.util.Connect.html#_msxml_progid"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_poll", "url": "YAHOO.util.Connect.html#_poll"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_polling_interval", "url": "YAHOO.util.Connect.html#_polling_interval"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "releaseObject", "url": "YAHOO.util.Connect.html#releaseObject"}, {"access": "", "host": "YAHOO.util.Connect", "name": "resetDefaultHeaders", "url": "YAHOO.util.Connect.html#resetDefaultHeaders"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "resetFormState", "url": "YAHOO.util.Connect.html#resetFormState"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultPostHeader", "url": "YAHOO.util.Connect.html#setDefaultPostHeader"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultXhrHeader", "url": "YAHOO.util.Connect.html#setDefaultXhrHeader"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setForm", "url": "YAHOO.util.Connect.html#setForm"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "setHeader", "url": "YAHOO.util.Connect.html#setHeader"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setPollingInterval", "url": "YAHOO.util.Connect.html#setPollingInterval"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setProgId", "url": "YAHOO.util.Connect.html#setProgId"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_sFormData", "url": "YAHOO.util.Connect.html#_sFormData"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "startEvent", "url": "YAHOO.util.Connect.html#startEvent"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_submitElementValue", "url": "YAHOO.util.Connect.html#_submitElementValue"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "successEvent", "url": "YAHOO.util.Connect.html#successEvent"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_timeOut", "url": "YAHOO.util.Connect.html#_timeOut"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_transaction_id", "url": "YAHOO.util.Connect.html#_transaction_id"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "uploadFile", "url": "YAHOO.util.Connect.html#uploadFile"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_post_header", "url": "YAHOO.util.Connect.html#_use_default_post_header"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_xhr_header", "url": "YAHOO.util.Connect.html#_use_default_xhr_header"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class="selected"><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Connect.html">YAHOO.util.Connect</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="connection.js.html">connection.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

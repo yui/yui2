@@ -1,0 +1,478 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest   ArrayAssert.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                
+                 &gt; ArrayAssert.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// ArrayAssert object</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * The ArrayAssert object provides functions to test JavaScript array objects</span>
+<span class="c"> * for a variety of cases.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @class ArrayAssert</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+ 
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ArrayAssert</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is present in an array. This uses the triple equals </span>
+<span class="c">     * sign so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} needle The value that is expected in the array.</span>
+<span class="c">     * @param {Array} haystack An array of values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method contains</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">contains</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needle</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">found</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value (&quot;</span> <span class="o">+</span> <span class="nx">needle</span> <span class="o">+</span> <span class="s2">&quot;) not found in array.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a set of values are present in an array. This uses the triple equals </span>
+<span class="c">     * sign so no type cohersion may occur. For this assertion to pass, all values must</span>
+<span class="c">     * be found.</span>
+<span class="c">     * @param {Object[]} needles An array of values that are expected in the array.</span>
+<span class="c">     * @param {Array} haystack An array of values to check.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method containsItems</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">containsItems</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needles</span> <span class="c">/*:Object[]*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">needles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">contains</span><span class="o">(</span><span class="nx">needles</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">haystack</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value not found in array.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value matching some condition is present in an array. This uses</span>
+<span class="c">     * a function to determine a match.</span>
+<span class="c">     * @param {Function} matcher A function that returns true if the items matches or false if not.</span>
+<span class="c">     * @param {Array} haystack An array of values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method containsMatch</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">containsMatch</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">matcher</span> <span class="c">/*:Function*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="c">//check for valid matcher</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.containsMatch(): First argument must be a function.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">found</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">matcher</span><span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;No match found in array.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not present in an array. This uses the triple equals </span>
+<span class="c">     * sign so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} needle The value that is expected in the array.</span>
+<span class="c">     * @param {Array} haystack An array of values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method doesNotContain</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">doesNotContain</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needle</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">found</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">found</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value found in array.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a set of values are not present in an array. This uses the triple equals </span>
+<span class="c">     * sign so no type cohersion may occur. For this assertion to pass, all values must</span>
+<span class="c">     * not be found.</span>
+<span class="c">     * @param {Object[]} needles An array of values that are not expected in the array.</span>
+<span class="c">     * @param {Array} haystack An array of values to check.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method doesNotContainItems</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">doesNotContainItems</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needles</span> <span class="c">/*:Object[]*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">needles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">doesNotContain</span><span class="o">(</span><span class="nx">needles</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">haystack</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">},</span>
+        
+    <span class="c">/**</span>
+<span class="c">     * Asserts that no values matching a condition are present in an array. This uses</span>
+<span class="c">     * a function to determine a match.</span>
+<span class="c">     * @param {Function} matcher A function that returns true if the items matches or false if not.</span>
+<span class="c">     * @param {Array} haystack An array of values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method doesNotContainMatch</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">doesNotContainMatch</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">matcher</span> <span class="c">/*:Function*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="c">//check for valid matcher</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.doesNotContainMatch(): First argument must be a function.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">found</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">matcher</span><span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">found</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value found in array.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+        
+    <span class="c">/**</span>
+<span class="c">     * Asserts that the given value is contained in an array at the specified index.</span>
+<span class="c">     * This uses the triple equals sign so no type cohersion will occur.</span>
+<span class="c">     * @param {Object} needle The value to look for.</span>
+<span class="c">     * @param {Array} haystack The array to search in.</span>
+<span class="c">     * @param {int} index The index at which the value should exist.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method indexOf</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">indexOf</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needle</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">index</span> <span class="c">/*:int*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+    
+        <span class="c">//try to find the value in the array</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">){</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value exists at index &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; but should be at index &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="c">//if it makes it here, it wasn&#39;t found at all</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value doesn&#39;t exist in array.&quot;</span><span class="o">);</span>        
+    <span class="o">},</span>
+        
+    <span class="c">/**</span>
+<span class="c">     * Asserts that the values in an array are equal, and in the same position,</span>
+<span class="c">     * as values in another array. This uses the double equals sign</span>
+<span class="c">     * so type cohersion may occur. Note that the array objects themselves</span>
+<span class="c">     * need not be the same for this test to pass.</span>
+<span class="c">     * @param {Array} expected An array of the expected values.</span>
+<span class="c">     * @param {Array} actual Any array of the actual values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method itemsAreEqual</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">itemsAreEqual</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="c">//one may be longer than the other, so get the maximum length</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">message</span> <span class="o">||</span> 
+                    <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not equal.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that the values in an array are equivalent, and in the same position,</span>
+<span class="c">     * as values in another array. This uses a function to determine if the values</span>
+<span class="c">     * are equivalent. Note that the array objects themselves</span>
+<span class="c">     * need not be the same for this test to pass.</span>
+<span class="c">     * @param {Array} expected An array of the expected values.</span>
+<span class="c">     * @param {Array} actual Any array of the actual values.</span>
+<span class="c">     * @param {Function} comparator A function that returns true if the values are equivalent</span>
+<span class="c">     *      or false if not.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @return {Void}</span>
+<span class="c">     * @method itemsAreEquivalent</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">itemsAreEquivalent</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                           <span class="nx">comparator</span> <span class="c">/*:Function*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="c">//make sure the comparator is valid</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">comparator</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.itemsAreEquivalent(): Third argument must be a function.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="c">//one may be longer than the other, so get the maximum length</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">comparator</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">])){</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not equivalent.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that an array is empty.</span>
+<span class="c">     * @param {Array} actual The array to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isEmpty</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isEmpty</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Array should be empty.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>    
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that an array is not empty.</span>
+<span class="c">     * @param {Array} actual The array to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNotEmpty</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNotEmpty</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Array should not be empty.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>    
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that the values in an array are the same, and in the same position,</span>
+<span class="c">     * as values in another array. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion will occur. Note that the array objects themselves</span>
+<span class="c">     * need not be the same for this test to pass.</span>
+<span class="c">     * @param {Array} expected An array of the expected values.</span>
+<span class="c">     * @param {Array} actual Any array of the actual values.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method itemsAreSame</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">itemsAreSame</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> 
+                          <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        
+        <span class="c">//one may be longer than the other, so get the maximum length</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+        
+        <span class="c">//begin checking values</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areSame</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> 
+                <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not the same.&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that the given value is contained in an array at the specified index,</span>
+<span class="c">     * starting from the back of the array.</span>
+<span class="c">     * This uses the triple equals sign so no type cohersion will occur.</span>
+<span class="c">     * @param {Object} needle The value to look for.</span>
+<span class="c">     * @param {Array} haystack The array to search in.</span>
+<span class="c">     * @param {int} index The index at which the value should exist.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method lastIndexOf</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">lastIndexOf</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needle</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">haystack</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">index</span> <span class="c">/*:int*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+    
+        <span class="c">//try to find the value in the array</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">){</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value exists at index &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; but should be at index &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        
+        <span class="c">//if it makes it here, it wasn&#39;t found at all</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value doesn&#39;t exist in array.&quot;</span><span class="o">);</span>        
+    <span class="o">}</span>
+    
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

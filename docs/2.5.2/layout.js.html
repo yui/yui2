@@ -1,0 +1,805 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: layout   layout.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>layout&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_layout.html">layout</a>
+                
+                 &gt; layout.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * @description &lt;p&gt;Provides a fixed layout containing, top, bottom, left, right and center layout units. It can be applied to either the body or an element.&lt;/p&gt;</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @requires yahoo, dom, element, event</span>
+<span class="c"> * @module layout</span>
+<span class="c"> * @beta</span>
+<span class="c"> */</span>
+<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
+
+    <span class="c">/**</span>
+<span class="c">     * @constructor</span>
+<span class="c">     * @class Layout</span>
+<span class="c">     * @extends YAHOO.util.Element</span>
+<span class="c">     * @description &lt;p&gt;Provides a fixed layout containing, top, bottom, left, right and center layout units. It can be applied to either the body or an element.&lt;/p&gt;</span>
+<span class="c">     * @param {String/HTMLElement} el The element to make contain a layout.</span>
+<span class="c">     * @param {Object} attrs Object liternal containing configuration parameters.</span>
+<span class="c">    */</span>
+
+    <span class="k">var</span> <span class="nx">Layout</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Creating the Layout Object&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">config</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+            <span class="nx">el</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="nx">element</span><span class="o">:</span> <span class="nx">el</span><span class="o">,</span>
+            <span class="nx">attributes</span><span class="o">:</span> <span class="nx">config</span> <span class="o">||</span> <span class="o">{}</span>
+        <span class="o">};</span>
+
+        <span class="nx">Layout</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">);</span>    
+    <span class="o">};</span>
+
+    <span class="c">/**</span>
+<span class="c">    * @private</span>
+<span class="c">    * @static</span>
+<span class="c">    * @property _instances</span>
+<span class="c">    * @description Internal hash table for all layout instances</span>
+<span class="c">    * @type Object</span>
+<span class="c">    */</span> 
+    <span class="nx">Layout</span><span class="o">.</span><span class="nx">_instances</span> <span class="o">=</span> <span class="o">{};</span>
+    <span class="c">/**</span>
+<span class="c">    * @static</span>
+<span class="c">    * @method getLayoutById </span>
+<span class="c">    * @description Get&#39;s a layout object by the HTML id of the element associated with the Layout object.</span>
+<span class="c">    * @return {Object} The Layout Object</span>
+<span class="c">    */</span> 
+    <span class="nx">Layout</span><span class="o">.</span><span class="nx">getLayoutById</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">Layout</span><span class="o">.</span><span class="nx">_instances</span><span class="o">[</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">Layout</span><span class="o">.</span><span class="nx">_instances</span><span class="o">[</span><span class="nx">id</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">Layout</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Element</span><span class="o">,</span> <span class="o">{</span>
+        <span class="c">/**</span>
+<span class="c">        * @property browser</span>
+<span class="c">        * @description A modified version of the YAHOO.env.ua object</span>
+<span class="c">        * @type Object</span>
+<span class="c">        */</span>
+        <span class="nx">browser</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">;</span>
+            <span class="nx">b</span><span class="o">.</span><span class="nx">standardsMode</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="nx">b</span><span class="o">.</span><span class="nx">secure</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nx">b</span><span class="o">;</span>
+        <span class="o">}(),</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _rendered</span>
+<span class="c">        * @description Set to true when the layout is rendered</span>
+<span class="c">        * @type Boolean</span>
+<span class="c">        */</span>
+        <span class="nx">_rendered</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _zIndex</span>
+<span class="c">        * @description The zIndex to set all LayoutUnits to</span>
+<span class="c">        * @type Number</span>
+<span class="c">        */</span>
+        <span class="nx">_zIndex</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _sizes</span>
+<span class="c">        * @description A collection of the current sizes of all usable LayoutUnits to be used for calculations</span>
+<span class="c">        * @type Object</span>
+<span class="c">        */</span>
+        <span class="nx">_sizes</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _setBodySize</span>
+<span class="c">        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)</span>
+<span class="c">        * @description Used to set the body size of the layout, sets the height and width of the parent container</span>
+<span class="c">        */</span>
+        <span class="nx">_setBodySize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">w</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isBody</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getClientHeight</span><span class="o">();</span>
+                <span class="nx">w</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getClientWidth</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+                <span class="nx">w</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">w</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">clientWidth</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">h</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">h</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">clientHeight</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">w</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">h</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">h</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">doc</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">h</span><span class="o">:</span> <span class="nx">h</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="nx">w</span> <span class="o">};</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting Body height and width: (&#39;</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setSides</span><span class="o">(</span><span class="nx">set</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _setSides</span>
+<span class="c">        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)</span>
+<span class="c">        * @description Used to set the size and position of the left, right, top and bottom units</span>
+<span class="c">        */</span>
+        <span class="nx">_setSides</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting side units&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">h1</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="m">0</span><span class="o">),</span>
+                <span class="nx">h2</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="m">0</span><span class="o">),</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">doc</span><span class="o">.</span><span class="nx">h</span><span class="o">,</span>
+                <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">doc</span><span class="o">.</span><span class="nx">w</span><span class="o">;</span>
+            <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">h</span><span class="o">:</span> <span class="nx">h1</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">)</span> <span class="o">?</span> <span class="nx">w</span> <span class="o">:</span> <span class="m">0</span><span class="o">),</span>
+                <span class="nx">t</span><span class="o">:</span> <span class="m">0</span>
+            <span class="o">};</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">h</span><span class="o">:</span> <span class="nx">h2</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">)</span> <span class="o">?</span> <span class="nx">w</span> <span class="o">:</span> <span class="m">0</span><span class="o">)</span>
+            <span class="o">};</span>
+            
+            <span class="k">var</span> <span class="nx">newH</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span> <span class="o">-</span> <span class="o">(</span><span class="nx">h1</span> <span class="o">+</span> <span class="nx">h2</span><span class="o">));</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">h</span><span class="o">:</span> <span class="nx">newH</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="m">0</span><span class="o">)</span>
+            <span class="o">};</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">right</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">h</span><span class="o">:</span> <span class="nx">newH</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="m">0</span><span class="o">),</span>
+                <span class="nx">l</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">)</span> <span class="o">?</span> <span class="o">(</span><span class="nx">w</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">))</span> <span class="o">:</span> <span class="m">0</span><span class="o">),</span>
+                <span class="nx">t</span><span class="o">:</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">h</span> <span class="o">:</span> <span class="m">0</span><span class="o">)</span>
+            <span class="o">};</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_right</span> <span class="o">&amp;&amp;</span> <span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">right</span><span class="o">.</span><span class="nx">t</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">_collapsing</span><span class="o">)</span> <span class="o">{</span> 
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">right</span><span class="o">.</span><span class="nx">l</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_right</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">right</span><span class="o">.</span><span class="nx">h</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">l</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">h</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">t</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">t</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">h</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_left</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">bottom</span><span class="o">.</span><span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">h</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">h</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">bottom</span><span class="o">.</span><span class="nx">t</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_bottom</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">bottom</span><span class="o">.</span><span class="nx">w</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_top</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">w</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting sizes: (&#39;</span> <span class="o">+</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setCenter</span><span class="o">(</span><span class="nx">set</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _setCenter</span>
+<span class="c">        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)</span>
+<span class="c">        * @description Used to set the size and position of the center unit</span>
+<span class="c">        */</span>
+        <span class="nx">_setCenter</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">h</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">doc</span><span class="o">.</span><span class="nx">w</span> <span class="o">-</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">w</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">right</span><span class="o">.</span><span class="nx">w</span><span class="o">));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_center</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_center</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_center</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">h</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_center</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">w</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">center</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">h</span><span class="o">:</span> <span class="nx">h</span><span class="o">,</span> <span class="nx">w</span><span class="o">:</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">t</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">top</span><span class="o">.</span><span class="nx">h</span><span class="o">,</span> <span class="nx">l</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">.</span><span class="nx">left</span><span class="o">.</span><span class="nx">w</span> <span class="o">};</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting Center size to: (&#39;</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method getSizes</span>
+<span class="c">        * @description Get a reference to the internal Layout Unit sizes object used to build the layout wireframe</span>
+<span class="c">        * @return {Object} An object of the layout unit sizes</span>
+<span class="c">        */</span>
+        <span class="nx">getSizes</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method getUnitById</span>
+<span class="c">        * @param {String} id The HTML element id of the unit</span>
+<span class="c">        * @description Get the LayoutUnit by it&#39;s HTML id</span>
+<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} The LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">getUnitById</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LayoutUnit</span><span class="o">.</span><span class="nx">getLayoutUnitById</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method getUnitByPosition</span>
+<span class="c">        * @param {String} pos The position of the unit in this layout</span>
+<span class="c">        * @description Get the LayoutUnit by it&#39;s position in this layout</span>
+<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} The LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">getUnitByPosition</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">pos</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">pos</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">pos</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">[</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">pos</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">[</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">pos</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method removeUnit</span>
+<span class="c">        * @param {Object} unit The LayoutUnit that you want to remove</span>
+<span class="c">        * @description Remove the unit from this layout and resize the layout.</span>
+<span class="c">        */</span>
+        <span class="nx">removeUnit</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">unit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">[</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;position&#39;</span><span class="o">)]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">();</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method addUnit</span>
+<span class="c">        * @param {Object} cfg The config for the LayoutUnit that you want to add</span>
+<span class="c">        * @description Add a unit to this layout and if the layout is rendered, resize the layout. </span>
+<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} The LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">addUnit</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">cfg</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">position</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;No position property passed&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">[</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">position</span><span class="o">])</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Position already exists&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Adding Unit at position: &#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">position</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
+                <span class="nx">el</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">element</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="nx">delete</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">element</span> <span class="o">=</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+                <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">();</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="s1">&#39;yui-layout-wrap&#39;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">standardsMode</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">zoom</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+                <span class="nx">element</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">zoom</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">w</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">height</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">height</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">width</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">w</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">width</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">var</span> <span class="nx">unitConfig</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">unitConfig</span><span class="o">,</span> <span class="nx">cfg</span><span class="o">);</span> <span class="c">// break obj ref</span>
+<span class="c"></span>
+            <span class="nx">unitConfig</span><span class="o">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+            <span class="nx">unitConfig</span><span class="o">.</span><span class="nx">wrap</span> <span class="o">=</span> <span class="nx">element</span><span class="o">;</span>
+            <span class="nx">unitConfig</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span><span class="o">;</span>
+            <span class="nx">unitConfig</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span><span class="o">;</span>
+
+            <span class="k">var</span> <span class="nx">unit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LayoutUnit</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">unitConfig</span><span class="o">);</span>
+
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;heightChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;widthChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;gutterChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">[</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="o">.</span><span class="nx">position</span><span class="o">]</span> <span class="o">=</span> <span class="nx">unit</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_rendered</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="nx">unit</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _createUnits</span>
+<span class="c">        * @description Private method to create units from the config that was passed in.</span>
+<span class="c">        */</span>
+        <span class="nx">_createUnits</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">units</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;units&#39;</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">units</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">units</span><span class="o">,</span> <span class="nx">i</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">addUnit</span><span class="o">(</span><span class="nx">units</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method resize</span>
+<span class="c">        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)</span>
+<span class="c">        * @description Starts the chain of resize routines that will resize all the units.</span>
+<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.Layout.html&quot;&gt;YAHOO.widget.Layout&lt;/a&gt;} The Layout instance</span>
+<span class="c">        */</span>
+        <span class="nx">resize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">retVal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;beforeResize&#39;</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">retVal</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">set</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isBody</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setBodySize</span><span class="o">(</span><span class="nx">set</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="k">this</span><span class="o">,</span> <span class="nx">sizes</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span> <span class="o">});</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _setupBodyElements</span>
+<span class="c">        * @description Sets up the main doc element when using the body as the main element.</span>
+<span class="c">        */</span>
+        <span class="nx">_setupBodyElements</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;layout-doc&#39;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;layout-doc&#39;</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_createUnits</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setBodySize</span><span class="o">();</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;yui-layout-doc&#39;</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _setupElements</span>
+<span class="c">        * @description Sets up the main doc element when not using the body as the main element.</span>
+<span class="c">        */</span>
+        <span class="nx">_setupElements</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="s1">&#39;doc&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_createUnits</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setBodySize</span><span class="o">();</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;yui-layout-doc&#39;</span><span class="o">);</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _isBody</span>
+<span class="c">        * @description Flag to determine if we are using the body as the root element.</span>
+<span class="c">        * @type Boolean</span>
+<span class="c">        */</span>
+        <span class="nx">_isBody</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _doc</span>
+<span class="c">        * @description Reference to the root element</span>
+<span class="c">        * @type HTMLElement</span>
+<span class="c">        */</span>
+        <span class="nx">_doc</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _left</span>
+<span class="c">        * @description Reference to the left LayoutUnit Object</span>
+<span class="c">        * @type {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} A LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">_left</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _right</span>
+<span class="c">        * @description Reference to the right LayoutUnit Object</span>
+<span class="c">        * @type {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} A LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">_right</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _top</span>
+<span class="c">        * @description Reference to the top LayoutUnit Object</span>
+<span class="c">        * @type {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} A LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">_top</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _bottom</span>
+<span class="c">        * @description Reference to the bottom LayoutUnit Object</span>
+<span class="c">        * @type {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} A LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">_bottom</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @property _center</span>
+<span class="c">        * @description Reference to the center LayoutUnit Object</span>
+<span class="c">        * @type {&lt;a href=&quot;YAHOO.widget.LayoutUnit.html&quot;&gt;YAHOO.widget.LayoutUnit&lt;/a&gt;} A LayoutUnit instance</span>
+<span class="c">        */</span>
+        <span class="nx">_center</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method init</span>
+<span class="c">        * @description The Layout class&#39; initialization method</span>
+<span class="c">        */</span>        
+        <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;init&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_zIndex</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="nx">Layout</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">);</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;parent&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_zIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;parent&#39;</span><span class="o">).</span><span class="nx">_zIndex</span> <span class="o">+</span> <span class="m">10</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span> <span class="o">=</span> <span class="o">{};</span>
+
+            <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="nx">Layout</span><span class="o">.</span><span class="nx">_instances</span><span class="o">[</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method render</span>
+<span class="c">        * @description This method starts the render process, applying classnames and creating elements</span>
+<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.Layout.html&quot;&gt;YAHOO.widget.Layout&lt;/a&gt;} The Layout instance</span>
+<span class="c">        */</span>        
+        <span class="nx">render</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Render&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Layout&#39;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_stamp</span><span class="o">();</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;body&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_isBody</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span> <span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span> <span class="s1">&#39;yui-skin-sam&#39;</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="c">//Move the class up so we can have a css chain</span>
+<span class="c"></span>                    <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="s1">&#39;yui-skin-sam&#39;</span><span class="o">);</span>
+                    <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span> <span class="s1">&#39;yui-skin-sam&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_setupBodyElements</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_isBody</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-layout&#39;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_setupElements</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_rendered</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;render&#39;</span><span class="o">);</span>
+
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method _stamp</span>
+<span class="c">        * @description Stamps the root node with a secure classname for ease of use. Also sets the this.browser.standardsMode variable.</span>
+<span class="c">        */</span>        
+        <span class="nx">_stamp</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s1">&#39;CSS1Compat&#39;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">standardsMode</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;https&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="s1">&#39;secure&#39;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">secure</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @private</span>
+<span class="c">        * @method initAttributes</span>
+<span class="c">        * @description Processes the config</span>
+<span class="c">        */</span>        
+        <span class="nx">initAttributes</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Layout</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">initAttributes</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+            <span class="c">/**</span>
+<span class="c">            * @attribute units</span>
+<span class="c">            * @description An array of config definitions for the LayoutUnits to add to this layout</span>
+<span class="c">            * @type Array</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;units&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">units</span> <span class="o">||</span> <span class="o">[]</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * @attribute minHeight</span>
+<span class="c">            * @description The minimum height in pixels</span>
+<span class="c">            * @type Number</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">minHeight</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * @attribute minWidth</span>
+<span class="c">            * @description The minimum width in pixels</span>
+<span class="c">            * @type Number</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">minWidth</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * @attribute height</span>
+<span class="c">            * @description The height in pixels</span>
+<span class="c">            * @type Number</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">height</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
+                <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">h</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * @attribute width</span>
+<span class="c">            * @description The width in pixels</span>
+<span class="c">            * @type Number</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">width</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
+                <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+
+            <span class="c">/**</span>
+<span class="c">            * @attribute parent</span>
+<span class="c">            * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize events together.</span>
+<span class="c">            * @type Object YAHOO.widget.Layout</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;parent&#39;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">parent</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
+                <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">p</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+        <span class="o">},</span>
+        <span class="c">/**</span>
+<span class="c">        * @method toString</span>
+<span class="c">        * @description Returns a string representing the Layout.</span>
+<span class="c">        * @return {String}</span>
+<span class="c">        */</span>        
+        <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="s1">&#39;Layout #&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="s1">&#39;Layout&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+    <span class="c">/**</span>
+<span class="c">    * @event resize</span>
+<span class="c">    * @description Fired when this.resize is called</span>
+<span class="c">    * @type YAHOO.util.CustomEvent</span>
+<span class="c">    */</span>
+    <span class="c">/**</span>
+<span class="c">    * @event startResize</span>
+<span class="c">    * @description Fired when the Resize Utility for a Unit fires it&#39;s startResize Event.</span>
+<span class="c">    * @type YAHOO.util.CustomEvent</span>
+<span class="c">    */</span>
+    <span class="c">/**</span>
+<span class="c">    * @event beforeResize</span>
+<span class="c">    * @description Firef at the beginning of the resize method. If you return false, the resize is cancelled.</span>
+<span class="c">    * @type YAHOO.util.CustomEvent</span>
+<span class="c">    */</span>
+    <span class="c">/**</span>
+<span class="c">    * @event render</span>
+<span class="c">    * @description Fired after the render method completes.</span>
+<span class="c">    * @type YAHOO.util.CustomEvent</span>
+<span class="c">    */</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Layout</span> <span class="o">=</span> <span class="nx">Layout</span><span class="o">;</span>
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class="selected"><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a></li>
+                                <li class=""><a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="layout.js.html">layout.js</a></li>
+                                <li class=""><a href="layoutunit.js.html">layoutunit.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

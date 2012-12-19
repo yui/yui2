@@ -1,0 +1,995 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: tabview  YAHOO.widget.Tab   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>tabview&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_tabview.html">tabview</a>
+                 &gt; YAHOO.widget.Tab 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Tab</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A representation of a Tab's label and content.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Tab</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                element
+
+                                                , 
+                                                properties
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>element
+                                                    &lt;HTMLElement | String&gt; 
+                                                    </code>
+                                                      (optional) The html element that 
+represents the TabView. An element will be created if none provided.
+                                                </dd>
+                                                <dd>
+                                                    <code>properties
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     A key map of initial properties
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="ACTIVE_CLASSNAME">ACTIVE_CLASSNAME</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The class name applied to active tabs.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "on"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="dataConnection">dataConnection</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Provides a reference to the connection request object when data is
+loaded dynamically.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="DISABLED_CLASSNAME">DISABLED_CLASSNAME</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The class name applied to disabled tabs.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "disabled"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="LABEL_INNER_TAGNAME">LABEL_INNER_TAGNAME</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The default tag name for a Tab's inner element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "em"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="loadHandler">loadHandler</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object containing success and failure callbacks for loading data.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="LOADING_CLASSNAME">LOADING_CLASSNAME</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The class name applied to dynamic tabs while loading.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "disabled"
+                                    </div>        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.Element.html#DOM_EVENTS">DOM_EVENTS</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.AttributeProvider.html#_configs">_configs</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
+                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="initAttributes">initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initAttributes</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            setAttributeConfigs TabView specific properties.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             Hash of initial attributes
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Provides a readable name for the tab.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>String</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.Element.html#_registerHTMLAttr">_registerHTMLAttr</a>,
+                                            <a href="YAHOO.util.Element.html#addClass">addClass</a>,
+                                            <a href="YAHOO.util.Element.html#addListener">addListener</a>,
+                                            <a href="YAHOO.util.Element.html#appendChild">appendChild</a>,
+                                            <a href="YAHOO.util.Element.html#appendTo">appendTo</a>,
+                                            <a href="YAHOO.util.Element.html#fireQueue">fireQueue</a>,
+                                            <a href="YAHOO.util.Element.html#getElementsByClassName">getElementsByClassName</a>,
+                                            <a href="YAHOO.util.Element.html#getElementsByTagName">getElementsByTagName</a>,
+                                            <a href="YAHOO.util.Element.html#getStyle">getStyle</a>,
+                                            <a href="YAHOO.util.Element.html#hasChildNodes">hasChildNodes</a>,
+                                            <a href="YAHOO.util.Element.html#hasClass">hasClass</a>,
+                                            <a href="YAHOO.util.Element.html#initAttributes">initAttributes</a>,
+                                            <a href="YAHOO.util.Element.html#insertBefore">insertBefore</a>,
+                                            <a href="YAHOO.util.Element.html#on">on</a>,
+                                            <a href="YAHOO.util.Element.html#removeChild">removeChild</a>,
+                                            <a href="YAHOO.util.Element.html#removeClass">removeClass</a>,
+                                            <a href="YAHOO.util.Element.html#removeListener">removeListener</a>,
+                                            <a href="YAHOO.util.Element.html#replaceChild">replaceChild</a>,
+                                            <a href="YAHOO.util.Element.html#replaceClass">replaceClass</a>,
+                                            <a href="YAHOO.util.Element.html#setStyle">setStyle</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.AttributeProvider.html#configureAttribute">configureAttribute</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent">fireBeforeChangeEvent</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#fireChangeEvent">fireChangeEvent</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#get">get</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#getAttributeConfig">getAttributeConfig</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#getAttributeKeys">getAttributeKeys</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#refresh">refresh</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#register">register</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#resetAttributeConfig">resetAttributeConfig</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#resetValue">resetValue</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#set">set</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#setAttributeConfig">setAttributeConfig</a>,
+                                            <a href="YAHOO.util.AttributeProvider.html#setAttributes">setAttributes</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
+                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>,
+                                            <a href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="activeChange">activeChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>activeChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the active state is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> activeChange<br>
+<code>&lt;Boolean&gt;
+prevValue</code> the previous value<br>
+<code>&lt;Boolean&gt;
+newValue</code> the updated value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('activeChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="beforeActiveChange">beforeActiveChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeActiveChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the active state is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p>If handler returns false, the change will be cancelled, and the value will not
+be set.</p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeActiveChange<br>
+<code>&lt;Boolean&gt;
+prevValue</code> the current value<br>
+<code>&lt;Boolean&gt;
+newValue</code> the new value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('beforeActiveChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="beforeContentChange">beforeContentChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeContentChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the tab content is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p>If handler returns false, the change will be cancelled, and the value will not
+be set.</p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeContentChange<br>
+<code>&lt;String&gt;
+prevValue</code> the current value<br>
+<code>&lt;String&gt;
+newValue</code> the new value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('beforeContentChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="beforeLabelChange">beforeLabelChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeLabelChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the tab label is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p>If handler returns false, the change will be cancelled, and the value will not
+be set.</p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeLabelChange<br>
+<code>&lt;String&gt;
+prevValue</code> the current value<br>
+<code>&lt;String&gt;
+newValue</code> the new value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('beforeLabelChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="contentChange">contentChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>contentChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the tab content is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> contentChange<br>
+<code>&lt;String&gt;
+prevValue</code> the previous value<br>
+<code>&lt;Boolean&gt;
+newValue</code> the updated value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('contentChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="labelChange">labelChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>labelChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the tab label is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> labelChange<br>
+<code>&lt;String&gt;
+prevValue</code> the previous value<br>
+<code>&lt;String&gt;
+newValue</code> the updated value</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('labelChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.Element.html#available">available</a>,
+                                        <a href="YAHOO.util.Element.html#contentReady">contentReady</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <h4><a name="activationEvent">activationEvent</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The event that triggers the tab's activation.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="active">active</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not the tab is currently active.
+If a dataSrc is set for the tab, the content will be loaded from
+the given source.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="cacheData">cacheData</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not content should be reloaded for every view.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="content">content</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The tab's content.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="contentEl">contentEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTMLElement that contains the tab's content.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="contentVisible">contentVisible</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Whether or not the tab's content is visible.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="dataLoaded">dataLoaded</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not any data has been loaded from the server.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="dataSrc">dataSrc</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The tab's data source, used for loading content dynamically.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="dataTimeout">dataTimeout</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number if milliseconds before aborting and calling failure handler.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="disabled">disabled</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not the tab is disabled.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="href">href</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The href of the tab's anchor element.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: '#'
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="label">label</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The tab's label text (or innerHTML).
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="labelEl">labelEl</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The element that contains the tab's label.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    <h4><a name="loadMethod">loadMethod</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The method to use for the data request.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "GET"
+                                    </div>        
+
+                                    <hr />
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.Element.html#element">element</a>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class="selected"><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a></li>
+                                <li class=""><a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Tab.js.html">Tab.js</a></li>
+                                <li class=""><a href="TabView.js.html">TabView.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#ACTIVE_CLASSNAME">ACTIVE_CLASSNAME</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#dataConnection">dataConnection</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_CLASSNAME">DISABLED_CLASSNAME</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#LABEL_INNER_TAGNAME">LABEL_INNER_TAGNAME</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#loadHandler">loadHandler</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#LOADING_CLASSNAME">LOADING_CLASSNAME</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#initAttributes">initAttributes</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#activeChange">activeChange</a>
+                                </li>
+                                <li>
+                                <a href="#beforeActiveChange">beforeActiveChange</a>
+                                </li>
+                                <li>
+                                <a href="#beforeContentChange">beforeContentChange</a>
+                                </li>
+                                <li>
+                                <a href="#beforeLabelChange">beforeLabelChange</a>
+                                </li>
+                                <li>
+                                <a href="#contentChange">contentChange</a>
+                                </li>
+                                <li>
+                                <a href="#labelChange">labelChange</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#activationEvent">activationEvent</a>
+                                </li>
+                                <li>
+                                <a href="#active">active</a>
+                                </li>
+                                <li>
+                                <a href="#cacheData">cacheData</a>
+                                </li>
+                                <li>
+                                <a href="#content">content</a>
+                                </li>
+                                <li>
+                                <a href="#contentEl">contentEl</a>
+                                </li>
+                                <li>
+                                <a href="#contentVisible">contentVisible</a>
+                                </li>
+                                <li>
+                                <a href="#dataLoaded">dataLoaded</a>
+                                </li>
+                                <li>
+                                <a href="#dataSrc">dataSrc</a>
+                                </li>
+                                <li>
+                                <a href="#dataTimeout">dataTimeout</a>
+                                </li>
+                                <li>
+                                <a href="#disabled">disabled</a>
+                                </li>
+                                <li>
+                                <a href="#href">href</a>
+                                </li>
+                                <li>
+                                <a href="#label">label</a>
+                                </li>
+                                <li>
+                                <a href="#labelEl">labelEl</a>
+                                </li>
+                                <li>
+                                <a href="#loadMethod">loadMethod</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

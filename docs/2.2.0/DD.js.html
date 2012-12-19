@@ -1,0 +1,424 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop   DD.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                
+                 &gt; DD.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * A DragDrop implementation where the linked element follows the </span>
+<span class="c"> * mouse cursor during a drag.</span>
+<span class="c"> * @class DD</span>
+<span class="c"> * @extends YAHOO.util.DragDrop</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param {String} id the id of the linked element </span>
+<span class="c"> * @param {String} sGroup the group of related DragDrop items</span>
+<span class="c"> * @param {object} config an object containing configurable attributes</span>
+<span class="c"> *                Valid properties for DD: </span>
+<span class="c"> *                    scroll</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDrop</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * When set to true, the utility automatically tries to scroll the browser</span>
+<span class="c">     * window wehn a drag and drop element is dragged near the viewport boundary.</span>
+<span class="c">     * Defaults to true.</span>
+<span class="c">     * @property scroll</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     */</span>
+    <span class="nx">scroll</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+
+    <span class="c">/**</span>
+<span class="c">     * Sets the pointer offset to the distance between the linked element&#39;s top </span>
+<span class="c">     * left corner and the location the element was clicked</span>
+<span class="c">     * @method autoOffset</span>
+<span class="c">     * @param {int} iPageX the X coordinate of the click</span>
+<span class="c">     * @param {int} iPageY the Y coordinate of the click</span>
+<span class="c">     */</span>
+    <span class="nx">autoOffset</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">iPageX</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startPageX</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">iPageY</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startPageY</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setDelta</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+        <span class="c">// this.logger.log(&quot;autoOffset el pos: &quot; + aCoord + &quot;, delta: &quot; + x + &quot;,&quot; + y);</span>
+<span class="c"></span>    <span class="o">},</span>
+
+    <span class="c">/** </span>
+<span class="c">     * Sets the pointer offset.  You can call this directly to force the </span>
+<span class="c">     * offset to be in a particular location (e.g., pass in 0,0 to set it </span>
+<span class="c">     * to the center of the object, as done in YAHOO.widget.Slider)</span>
+<span class="c">     * @method setDelta</span>
+<span class="c">     * @param {int} iDeltaX the distance from the left</span>
+<span class="c">     * @param {int} iDeltaY the distance from the top</span>
+<span class="c">     */</span>
+    <span class="nx">setDelta</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iDeltaX</span><span class="o">,</span> <span class="nx">iDeltaY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">deltaX</span> <span class="o">=</span> <span class="nx">iDeltaX</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">deltaY</span> <span class="o">=</span> <span class="nx">iDeltaY</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;deltaX:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaX</span> <span class="o">+</span> <span class="s2">&quot;, deltaY:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaY</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Sets the drag element to the location of the mousedown or click event, </span>
+<span class="c">     * maintaining the cursor location relative to the location on the element </span>
+<span class="c">     * that was clicked.  Override this if you want to place the element in a </span>
+<span class="c">     * location other than where the cursor is.</span>
+<span class="c">     * @method setDragElPos</span>
+<span class="c">     * @param {int} iPageX the X coordinate of the mousedown or drag event</span>
+<span class="c">     * @param {int} iPageY the Y coordinate of the mousedown or drag event</span>
+<span class="c">     */</span>
+    <span class="nx">setDragElPos</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// the first time we do this, we are going to check to make sure</span>
+<span class="c"></span>        <span class="c">// the element has css positioning</span>
+<span class="c"></span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">alignElWithMouse</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Sets the element to the location of the mousedown or click event, </span>
+<span class="c">     * maintaining the cursor location relative to the location on the element </span>
+<span class="c">     * that was clicked.  Override this if you want to place the element in a </span>
+<span class="c">     * location other than where the cursor is.</span>
+<span class="c">     * @method alignElWithMouse</span>
+<span class="c">     * @param {HTMLElement} el the element to move</span>
+<span class="c">     * @param {int} iPageX the X coordinate of the mousedown or drag event</span>
+<span class="c">     * @param {int} iPageY the Y coordinate of the mousedown or drag event</span>
+<span class="c">     */</span>
+    <span class="nx">alignElWithMouse</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">oCoord</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTargetCoord</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">);</span>
+        <span class="c">// this.logger.log(&quot;****alignElWithMouse : &quot; + el.id + &quot;, &quot; + aCoord + &quot;, &quot; + el.style.display);</span>
+<span class="c"></span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">deltaSetXY</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">aCoord</span> <span class="o">=</span> <span class="o">[</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">];</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setXY</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">aCoord</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">deltaSetXY</span> <span class="o">=</span> <span class="o">[</span> <span class="nx">newLeft</span> <span class="o">-</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">newTop</span> <span class="o">-</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span> <span class="o">];</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaSetXY</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span><span class="o">,</span>  <span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaSetXY</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">this</span><span class="o">.</span><span class="nx">cachePosition</span><span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">autoScroll</span><span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Saves the most recent position so that we can reset the constraints and</span>
+<span class="c">     * tick marks on-demand.  We need to know this so that we can calculate the</span>
+<span class="c">     * number of pixels the element is offset from its original position.</span>
+<span class="c">     * @method cachePosition</span>
+<span class="c">     * @param iPageX the current x position (optional, this just makes it so we</span>
+<span class="c">     * don&#39;t have to look it up again)</span>
+<span class="c">     * @param iPageY the current y position (optional, this just makes it so we</span>
+<span class="c">     * don&#39;t have to look it up again)</span>
+<span class="c">     */</span>
+    <span class="nx">cachePosition</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">iPageX</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">lastPageX</span> <span class="o">=</span> <span class="nx">iPageX</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">lastPageY</span> <span class="o">=</span> <span class="nx">iPageY</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">aCoord</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">lastPageX</span> <span class="o">=</span> <span class="nx">aCoord</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">lastPageY</span> <span class="o">=</span> <span class="nx">aCoord</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Auto-scroll the window if the dragged object has been moved beyond the </span>
+<span class="c">     * visible window boundary.</span>
+<span class="c">     * @method autoScroll</span>
+<span class="c">     * @param {int} x the drag element&#39;s x position</span>
+<span class="c">     * @param {int} y the drag element&#39;s y position</span>
+<span class="c">     * @param {int} h the height of the drag element</span>
+<span class="c">     * @param {int} w the width of the drag element</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">autoScroll</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="nx">h</span><span class="o">,</span> <span class="nx">w</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">scroll</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// The client height</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">clientH</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">getClientHeight</span><span class="o">();</span>
+
+            <span class="c">// The client width</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">clientW</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">getClientWidth</span><span class="o">();</span>
+
+            <span class="c">// The amt scrolled down</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">st</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">getScrollTop</span><span class="o">();</span>
+
+            <span class="c">// The amt scrolled right</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">sl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">getScrollLeft</span><span class="o">();</span>
+
+            <span class="c">// Location of the bottom of the element</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">bot</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">+</span> <span class="nx">y</span><span class="o">;</span>
+
+            <span class="c">// Location of the right of the element</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">right</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="nx">x</span><span class="o">;</span>
+
+            <span class="c">// The distance from the cursor to the bottom of the visible area, </span>
+<span class="c"></span>            <span class="c">// adjusted so that we don&#39;t scroll if the cursor is beyond the</span>
+<span class="c"></span>            <span class="c">// element drag constraints</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">toBot</span> <span class="o">=</span> <span class="o">(</span><span class="nx">clientH</span> <span class="o">+</span> <span class="nx">st</span> <span class="o">-</span> <span class="nx">y</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaY</span><span class="o">);</span>
+
+            <span class="c">// The distance from the cursor to the right of the visible area</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">toRight</span> <span class="o">=</span> <span class="o">(</span><span class="nx">clientW</span> <span class="o">+</span> <span class="nx">sl</span> <span class="o">-</span> <span class="nx">x</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaX</span><span class="o">);</span>
+
+            <span class="c">// this.logger.log( &quot; x: &quot; + x + &quot; y: &quot; + y + &quot; h: &quot; + h + </span>
+<span class="c"></span>            <span class="c">// &quot; clientH: &quot; + clientH + &quot; clientW: &quot; + clientW + </span>
+<span class="c"></span>            <span class="c">// &quot; st: &quot; + st + &quot; sl: &quot; + sl + &quot; bot: &quot; + bot + </span>
+<span class="c"></span>            <span class="c">// &quot; right: &quot; + right + &quot; toBot: &quot; + toBot + &quot; toRight: &quot; + toRight);</span>
+<span class="c"></span>
+            <span class="c">// How close to the edge the cursor must be before we scroll</span>
+<span class="c"></span>            <span class="c">// var thresh = (document.all) ? 100 : 40;</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">thresh</span> <span class="o">=</span> <span class="m">40</span><span class="o">;</span>
+
+            <span class="c">// How many pixels to scroll per autoscroll op.  This helps to reduce </span>
+<span class="c"></span>            <span class="c">// clunky scrolling. IE is more sensitive about this ... it needs this </span>
+<span class="c"></span>            <span class="c">// value to be higher.</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">scrAmt</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">all</span><span class="o">)</span> <span class="o">?</span> <span class="m">80</span> <span class="o">:</span> <span class="m">30</span><span class="o">;</span>
+
+            <span class="c">// Scroll down if we are near the bottom of the visible page and the </span>
+<span class="c"></span>            <span class="c">// obj extends below the crease</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">bot</span> <span class="o">&gt;</span> <span class="nx">clientH</span> <span class="o">&amp;&amp;</span> <span class="nx">toBot</span> <span class="o">&lt;</span> <span class="nx">thresh</span> <span class="o">)</span> <span class="o">{</span> 
+                <span class="nb">window</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">sl</span><span class="o">,</span> <span class="nx">st</span> <span class="o">+</span> <span class="nx">scrAmt</span><span class="o">);</span> 
+            <span class="o">}</span>
+
+            <span class="c">// Scroll up if the window is scrolled down and the top of the object</span>
+<span class="c"></span>            <span class="c">// goes above the top border</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">st</span> <span class="o">&amp;&amp;</span> <span class="nx">st</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">y</span> <span class="o">-</span> <span class="nx">st</span> <span class="o">&lt;</span> <span class="nx">thresh</span> <span class="o">)</span> <span class="o">{</span> 
+                <span class="nb">window</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">sl</span><span class="o">,</span> <span class="nx">st</span> <span class="o">-</span> <span class="nx">scrAmt</span><span class="o">);</span> 
+            <span class="o">}</span>
+
+            <span class="c">// Scroll right if the obj is beyond the right border and the cursor is</span>
+<span class="c"></span>            <span class="c">// near the border.</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">right</span> <span class="o">&gt;</span> <span class="nx">clientW</span> <span class="o">&amp;&amp;</span> <span class="nx">toRight</span> <span class="o">&lt;</span> <span class="nx">thresh</span> <span class="o">)</span> <span class="o">{</span> 
+                <span class="nb">window</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">sl</span> <span class="o">+</span> <span class="nx">scrAmt</span><span class="o">,</span> <span class="nx">st</span><span class="o">);</span> 
+            <span class="o">}</span>
+
+            <span class="c">// Scroll left if the window has been scrolled to the right and the obj</span>
+<span class="c"></span>            <span class="c">// extends past the left border</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">sl</span> <span class="o">&amp;&amp;</span> <span class="nx">sl</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">x</span> <span class="o">-</span> <span class="nx">sl</span> <span class="o">&lt;</span> <span class="nx">thresh</span> <span class="o">)</span> <span class="o">{</span> 
+                <span class="nb">window</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">sl</span> <span class="o">-</span> <span class="nx">scrAmt</span><span class="o">,</span> <span class="nx">st</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Finds the location the element should be placed if we want to move</span>
+<span class="c">     * it to where the mouse location less the click offset would place us.</span>
+<span class="c">     * @method getTargetCoord</span>
+<span class="c">     * @param {int} iPageX the X coordinate of the click</span>
+<span class="c">     * @param {int} iPageY the Y coordinate of the click</span>
+<span class="c">     * @return an object that contains the coordinates (Object.x and Object.y)</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">getTargetCoord</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c">// this.logger.log(&quot;getTargetCoord: &quot; + iPageX + &quot;, &quot; + iPageY);</span>
+<span class="c"></span>
+        <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">iPageX</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaX</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">iPageY</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaY</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">constrainX</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">minX</span><span class="o">)</span> <span class="o">{</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">minX</span><span class="o">;</span> <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxX</span><span class="o">)</span> <span class="o">{</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxX</span><span class="o">;</span> <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">constrainY</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">minY</span><span class="o">)</span> <span class="o">{</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">minY</span><span class="o">;</span> <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxY</span><span class="o">)</span> <span class="o">{</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxY</span><span class="o">;</span> <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTick</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">xTicks</span><span class="o">);</span>
+        <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTick</span><span class="o">(</span><span class="nx">y</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">yTicks</span><span class="o">);</span>
+
+        <span class="c">// this.logger.log(&quot;getTargetCoord &quot; + </span>
+<span class="c"></span>                <span class="c">// &quot; iPageX: &quot; + iPageX +</span>
+<span class="c"></span>                <span class="c">// &quot; iPageY: &quot; + iPageY +</span>
+<span class="c"></span>                <span class="c">// &quot; x: &quot; + x + &quot;, y: &quot; + y);</span>
+<span class="c"></span>
+        <span class="k">return</span> <span class="o">{</span><span class="nx">x</span><span class="o">:</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">:</span><span class="nx">y</span><span class="o">};</span>
+    <span class="o">},</span>
+
+    <span class="c">/*</span>
+<span class="c">     * Sets up config options specific to this class. Overrides</span>
+<span class="c">     * YAHOO.util.DragDrop, but all versions of this method through the </span>
+<span class="c">     * inheritance chain are called</span>
+<span class="c">     */</span>
+    <span class="nx">applyConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">scroll</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">scroll</span> <span class="o">!==</span> <span class="kc">false</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/*</span>
+<span class="c">     * Event that fires prior to the onMouseDown event.  Overrides </span>
+<span class="c">     * YAHOO.util.DragDrop.</span>
+<span class="c">     */</span>
+    <span class="nx">b4MouseDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setStartPosition</span><span class="o">();</span>
+        <span class="c">// this.resetConstraints();</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">autoOffset</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> 
+                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
+    <span class="o">},</span>
+
+    <span class="c">/*</span>
+<span class="c">     * Event that fires prior to the onDrag event.  Overrides </span>
+<span class="c">     * YAHOO.util.DragDrop.</span>
+<span class="c">     */</span>
+    <span class="nx">b4Drag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setDragElPos</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> 
+                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
+    <span class="o">},</span>
+
+    <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;DD &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c">//////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>    <span class="c">// Debugging ygDragDrop events that can be overridden</span>
+<span class="c"></span>    <span class="c">//////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>    <span class="c">/*</span>
+<span class="c">    startDrag: function(x, y) {</span>
+<span class="c">        this.logger.log(this.id.toString()  + &quot; startDrag&quot;);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    onDrag: function(e) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; onDrag&quot;);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    onDragEnter: function(e, id) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; onDragEnter: &quot; + id);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    onDragOver: function(e, id) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; onDragOver: &quot; + id);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    onDragOut: function(e, id) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; onDragOut: &quot; + id);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    onDragDrop: function(e, id) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; onDragDrop: &quot; + id);</span>
+<span class="c">    },</span>
+<span class="c"></span>
+<span class="c">    endDrag: function(e) {</span>
+<span class="c">        this.logger.log(this.id.toString() + &quot; endDrag&quot;);</span>
+<span class="c">    }</span>
+<span class="c"></span>
+<span class="c">    */</span>
+
+<span class="o">});</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

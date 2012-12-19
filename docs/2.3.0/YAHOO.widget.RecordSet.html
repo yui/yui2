@@ -1,0 +1,1457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable  YAHOO.widget.RecordSet   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                 &gt; YAHOO.widget.RecordSet 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.RecordSet</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A RecordSet defines and manages a set of Records.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.RecordSet</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                data
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>data
+                                                    &lt;Object || Object[]&gt; 
+                                                    </code>
+                                                      An object literal or an array of data.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_length">_length</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal counter of how many Records are in the RecordSet.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_nCount">_nCount</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal variable to give unique indexes to Record instances.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_sName">_sName</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Unique instance name.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="RecordSet._nCount">RecordSet._nCount</a>
+                                        <code>- private static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal class variable to name multiple Recordset instances.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_addRecord">_addRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        YAHOO.widget.Record
+                                            <strong>_addRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                                        , 
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds one Record to the RecordSet at the given index. If index is null,
+then adds the Record to the end of the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              An object literal of data.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              (optional) Position index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record
+                                                    </code></dt>
+                                                    <dd>A Record instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_deleteRecord">_deleteRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_deleteRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                                        , 
+                                                         range
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deletes Records from the RecordSet at the given index. If range is null,
+then only one Record is deleted.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              Position index.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>range &lt;Number&gt;</code>
+                                                              (optional) How many Records to delete
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addRecord">addRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record
+                                            <strong>addRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                                        , 
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds one Record to the RecordSet at the given index. If index is null,
+then adds the Record to the end of the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              An object literal of data.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              (optional) Position index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record
+                                                    </code></dt>
+                                                    <dd>A Record instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addRecords">addRecords</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record[]
+                                            <strong>addRecords</strong>
+                                           (
+                                                
+                                                        
+                                                         aData
+                                                    
+                                                
+                                                        , 
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds multiple Records at once to the RecordSet at the given index with the
+given data. If index is null, then the new Records are added to the end of
+the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>aData &lt;Object[]&gt;</code>
+                                                              An array of object literal data.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              (optional) Position index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record[]
+                                                    </code></dt>
+                                                    <dd>An array of Record instances.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="deleteRecord">deleteRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>deleteRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                                        , 
+                                                         range
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the Record at the given position index from the RecordSet. If a range
+is also provided, removes that many Records, starting from the index. Length
+of RecordSet is correspondingly shortened.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              Record's RecordSet position index.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>range &lt;Number&gt;</code>
+                                                              (optional) How many Records to delete.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>A copy of the data held by the deleted Record.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="deleteRecords">deleteRecords</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>deleteRecords</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                                        , 
+                                                         range
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the Record at the given position index from the RecordSet. If a range
+is also provided, removes that many Records, starting from the index. Length
+of RecordSet is correspondingly shortened.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              Record's RecordSet position index.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>range &lt;Number&gt;</code>
+                                                              (optional) How many Records to delete.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getLength">getLength</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getLength</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the number of Records held in the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Number of records in the RecordSet.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getRecord">getRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record
+                                            <strong>getRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns Record at given position index.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                              Record's Recordset position index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record
+                                                    </code></dt>
+                                                    <dd>Record object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getRecordIndex">getRecordIndex</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getRecordIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         oRecord
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns position index for the given Record.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Record's RecordSet position index.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="replaceRecords">replaceRecords</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record || YAHOO.widget.Record[]
+                                            <strong>replaceRecords</strong>
+                                           (
+                                                
+                                                        
+                                                         data
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Replaces all Records in RecordSet with new data.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>data &lt;Object || Object[]&gt;</code>
+                                                              An object literal of data or an array of
+object literal data.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record || YAHOO.widget.Record[]
+                                                    </code></dt>
+                                                    <dd>A Record instance or
+an array of Records.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="reset">reset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>reset</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deletes all Records from the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="sortRecords">sortRecords</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record[]
+                                            <strong>sortRecords</strong>
+                                           (
+                                                
+                                                        
+                                                         fnSort
+                                                    
+                                                
+                                                        , 
+                                                         desc
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sorts all Records by given function.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fnSort &lt;Function&gt;</code>
+                                                              Reference to a sort function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>desc &lt;Boolean&gt;</code>
+                                                              True if sort direction is descending, false if sort
+direction is ascending.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record[]
+                                                    </code></dt>
+                                                    <dd>Sorted array of Records.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor to the unique name of the RecordSet instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Unique name of the RecordSet instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="updateKey">updateKey</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>updateKey</strong>
+                                           (
+                                                
+                                                        
+                                                         record
+                                                    
+                                                
+                                                        , 
+                                                         sKey
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Updates given Record at given key with given data.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>record &lt;YAHOO.widget.Record | Number&gt;</code>
+                                                              A Record instance, or Record's
+RecordSet position index.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sKey &lt;String&gt;</code>
+                                                              Key name.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;object&gt;</code>
+                                                             {Object) New data.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="updateRecord">updateRecord</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Record
+                                            <strong>updateRecord</strong>
+                                           (
+                                                
+                                                        
+                                                         record
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Updates given Record with given data.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>record &lt;YAHOO.widget.Record | Number&gt;</code>
+                                                              A Record instance, or Record's
+RecordSet position index.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;object&gt;</code>
+                                                             {Object) Object literal of new data.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Record
+                                                    </code></dt>
+                                                    <dd>Updated Record, or null.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="keyUpdateEvent">keyUpdateEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keyUpdateEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.record
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.key
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.newData
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.oldData
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a Record Key is updated with new data.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.record &lt;YAHOO.widget.Record&gt;</code>
+                                                              The Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.key &lt;String&gt;</code>
+                                                              The updated key.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.newData &lt;Object&gt;</code>
+                                                              New data.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.oldData &lt;Object&gt;</code>
+                                                              Old data.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="recordAddEvent">recordAddEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>recordAddEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.record
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.data
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a new Record is added to the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.record &lt;YAHOO.widget.Record&gt;</code>
+                                                              The Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.data &lt;Object&gt;</code>
+                                                              Data added.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="recordDeleteEvent">recordDeleteEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>recordDeleteEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.data
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.index
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a Record is deleted from the RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.data &lt;Object&gt;</code>
+                                                              A copy of the data held by the Record,
+or an array of data object literals if multiple Records were deleted at once.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.index &lt;Object&gt;</code>
+                                                              Index of the deleted Record.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="recordsAddEvent">recordsAddEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>recordsAddEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.records
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.data
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when multiple Records are added to the RecordSet at once.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.records &lt;YAHOO.widget.Record[]&gt;</code>
+                                                              An array of Record instances.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.data &lt;Object[]&gt;</code>
+                                                              Data added.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="recordsDeleteEvent">recordsDeleteEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>recordsDeleteEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.data
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.index
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when multiple Records are deleted from the RecordSet at once.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.data &lt;Object[]&gt;</code>
+                                                              An array of data object literals copied
+from the Records.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.index &lt;Object&gt;</code>
+                                                              Index of the first deleted Record.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="recordUpdateEvent">recordUpdateEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>recordUpdateEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.record
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.newData
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.oldData
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a Record is updated with new data.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.record &lt;YAHOO.widget.Record&gt;</code>
+                                                              The Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.newData &lt;Object&gt;</code>
+                                                              New data.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.oldData &lt;Object&gt;</code>
+                                                              Old data.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="resetEvent">resetEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>resetEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when all Records are deleted from the RecordSet at once.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class="selected"><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_length">_length</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_nCount">_nCount</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_sName">_sName</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#RecordSet._nCount">RecordSet._nCount</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>YAHOO.widget.Record</code>-->
+                                <a href="#_addRecord">_addRecord</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_deleteRecord">_deleteRecord</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record</code>-->
+                                <a href="#addRecord">addRecord</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record[]</code>-->
+                                <a href="#addRecords">addRecords</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#deleteRecord">deleteRecord</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#deleteRecords">deleteRecords</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#getLength">getLength</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record</code>-->
+                                <a href="#getRecord">getRecord</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#getRecordIndex">getRecordIndex</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record || YAHOO.widget.Record[]</code>-->
+                                <a href="#replaceRecords">replaceRecords</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#reset">reset</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record[]</code>-->
+                                <a href="#sortRecords">sortRecords</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#updateKey">updateKey</a>
+                                </li>
+                                <li class=""><!--<code>YAHOO.widget.Record</code>-->
+                                <a href="#updateRecord">updateRecord</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#keyUpdateEvent">keyUpdateEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#recordAddEvent">recordAddEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#recordDeleteEvent">recordDeleteEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#recordsAddEvent">recordsAddEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#recordsDeleteEvent">recordsDeleteEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#recordUpdateEvent">recordUpdateEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#resetEvent">resetEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

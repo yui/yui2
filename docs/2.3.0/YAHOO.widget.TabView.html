@@ -1,0 +1,1072 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: tabview  YAHOO.widget.TabView   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>tabview&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_tabview.html">tabview</a>
+                 &gt; YAHOO.widget.TabView 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.TabView</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A widget to control tabbed views.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.TabView</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el(optional)
+
+                                                , 
+                                                attr
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el(optional)
+                                                    &lt;HTMLElement | String | Object&gt; 
+                                                    </code>
+                                                     The html 
+element that represents the TabView, or the attribute object to use. 
+An element will be created if none provided.
+                                                </dd>
+                                                <dd>
+                                                    <code>attr
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     (optional) A key map of the tabView's 
+initial attributes.  Ignored if first arg is attributes object.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_contentParent">_contentParent</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The container of the tabView's content elements.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_tabParent">_tabParent</a>
+                                        <code>- private HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The container of the tabView's label elements.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="CLASSNAME">CLASSNAME</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The className to add when building from scratch.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "navset"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="CONTENT_PARENT_CLASSNAME">CONTENT_PARENT_CLASSNAME</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The className of the HTMLElement containing the TabView's label elements
+to look for when building from existing markup, or to add when building
+from scratch. 
+All childNodes of the content container are treated as content elements when
+building from existing markup.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nav-content"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TAB_PARENT_CLASSNAME">TAB_PARENT_CLASSNAME</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The className of the HTMLElement containing the TabView's tab elements
+to look for when building from existing markup, or to add when building
+from scratch. 
+All childNodes of the tab container are treated as Tabs when building
+from existing markup.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nav"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="" href="YAHOO.util.Element.html#DOM_EVENTS">DOM_EVENTS</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#_configs">_configs</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="addTab">addTab</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addTab</strong>
+                                           (
+                                                
+                                                        
+                                                         tab
+                                                    
+                                                
+                                                        , 
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a Tab to the TabView instance.  
+If no index is specified, the tab is added to the end of the tab list.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tab &lt;YAHOO.widget.Tab&gt;</code>
+                                                             A Tab instance to add.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>index &lt;Integer&gt;</code>
+                                                             The position to add the tab.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="contentTransition">contentTransition</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>contentTransition</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The transiton to use when switching between tabs.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="DOMEventHandler">DOMEventHandler</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>DOMEventHandler</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Routes childNode events.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;event&gt;</code>
+                                                             The Dom event that is being handled.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getTab">getTab</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getTab</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the Tab instance at the specified index.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Integer&gt;</code>
+                                                             The position of the Tab.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>YAHOO.widget.Tab</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getTabIndex">getTabIndex</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getTabIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         tab
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the index of given tab.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tab &lt;YAHOO.widget.Tab&gt;</code>
+                                                             The tab whose index will be returned.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>int</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initAttributes">initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initAttributes</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            setAttributeConfigs TabView specific properties.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             Hash of initial attributes
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="initTabs">initTabs</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>initTabs</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates Tab instances from a collection of HTMLElements.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="removeTab">removeTab</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>removeTab</strong>
+                                           (
+                                                
+                                                        
+                                                         item
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the specified Tab from the TabView.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>item &lt;YAHOO.widget.Tab&gt;</code>
+                                                             The Tab instance to be removed.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Provides a readable name for the TabView instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>String</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.util.Element.html#_registerHTMLAttr">_registerHTMLAttr</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.Element.html#addClass">addClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#addListener">addListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#appendChild">appendChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#appendTo">appendTo</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#fireQueue">fireQueue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getElementsByClassName">getElementsByClassName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getElementsByTagName">getElementsByTagName</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#getStyle">getStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#hasChildNodes">hasChildNodes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#hasClass">hasClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#initAttributes">initAttributes</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#insertBefore">insertBefore</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#on">on</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeChild">removeChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeClass">removeClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#removeListener">removeListener</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#replaceChild">replaceChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#replaceClass">replaceClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#setStyle">setStyle</a><span class="">,</span>                                            <a class="" href="YAHOO.util.Element.html#subscribe">subscribe</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.AttributeProvider.html#configureAttribute">configureAttribute</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent">fireBeforeChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#fireChangeEvent">fireChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#get">get</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#getAttributeConfig">getAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#getAttributeKeys">getAttributeKeys</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#refresh">refresh</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#register">register</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#resetValue">resetValue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#set">set</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#setAttributeConfig">setAttributeConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#setAttributes">setAttributes</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="activeTabChange">activeTabChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>activeTabChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the activeTab is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> activeTabChange<br>
+<code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+prevValue</code> the formerly active tab<br>
+<code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+newValue</code> the new active tab</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('activeTabChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeActiveTabChange">beforeActiveTabChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeActiveTabChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the activeTab is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p>If handler returns false, the change will be cancelled, and the value will not
+be set.</p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeActiveTabChange<br>
+<code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+prevValue</code> the currently active tab<br>
+<code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
+newValue</code> the tab to be made active</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('beforeActiveTabChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeOrientationChange">beforeOrientationChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeOrientationChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the orientation is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p>If handler returns false, the change will be cancelled, and the value will not
+be set.</p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeOrientationChange<br>
+<code>&lt;String&gt;
+prevValue</code> the current orientation<br>
+<code>&lt;String&gt;
+newValue</code> the new orientation to be applied</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('beforeOrientationChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="orientationChange">orientationChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>orientationChange</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the orientation is changed.
+<p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> orientationChange<br>
+<code>&lt;String&gt;
+prevValue</code> the former orientation<br>
+<code>&lt;String&gt;
+newValue</code> the new orientation</p>
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var previous = e.prevValue};<br>
+myTabs.addListener('orientationChange', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#available">available</a><span class="">,</span>                                        <a class="" href="YAHOO.util.Element.html#contentReady">contentReady</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="activeIndex">activeIndex</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The index of the tab currently active.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="activeTab">activeTab</a>
+                                        <code>- YAHOO.widget.Tab</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The tab currently active.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="orientation">orientation</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            How the Tabs should be oriented relative to the TabView.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "top"
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="tabs">tabs</a>
+                                        <code>- Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Tabs belonging to the TabView instance.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.util.Element.html">YAHOO.util.Element</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.Element.html#element">element</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class="selected"><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a></li>
+                                <li class="selected"><a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Tab.js.html">Tab.js</a></li>
+                                <li class=""><a href="TabView.js.html">TabView.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_contentParent">_contentParent</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_tabParent">_tabParent</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#CLASSNAME">CLASSNAME</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#CONTENT_PARENT_CLASSNAME">CONTENT_PARENT_CLASSNAME</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TAB_PARENT_CLASSNAME">TAB_PARENT_CLASSNAME</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addTab">addTab</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#contentTransition">contentTransition</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#DOMEventHandler">DOMEventHandler</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#getTab">getTab</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#getTabIndex">getTabIndex</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initAttributes">initAttributes</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#initTabs">initTabs</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#removeTab">removeTab</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#activeTabChange">activeTabChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeActiveTabChange">beforeActiveTabChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeOrientationChange">beforeOrientationChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#orientationChange">orientationChange</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#activeIndex">activeIndex</a>
+                                </li>
+                                <li class="">
+                                <a href="#activeTab">activeTab</a>
+                                </li>
+                                <li class="">
+                                <a href="#orientation">orientation</a>
+                                </li>
+                                <li class="">
+                                <a href="#tabs">tabs</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

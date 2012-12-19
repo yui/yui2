@@ -1,0 +1,581 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dom  YAHOO.util.Region   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>dom&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dom.html">dom</a>
+                 &gt; YAHOO.util.Region 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Region</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.util.Point.html">YAHOO.util.Point</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        A region is a representation of an object on a grid.  It is defined
+by the top, right, bottom, left extents, so is rectangular by default.  If 
+other shapes are required, this class could be extended to support it.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.Region</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                t
+
+                                                , 
+                                                r
+
+                                                , 
+                                                b
+
+                                                , 
+                                                l
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>t
+                                                    &lt;Int&gt; 
+                                                    </code>
+                                                     the top extent
+                                                </dd>
+                                                <dd>
+                                                    <code>r
+                                                    &lt;Int&gt; 
+                                                    </code>
+                                                     the right extent
+                                                </dd>
+                                                <dd>
+                                                    <code>b
+                                                    &lt;Int&gt; 
+                                                    </code>
+                                                     the bottom extent
+                                                </dd>
+                                                <dd>
+                                                    <code>l
+                                                    &lt;Int&gt; 
+                                                    </code>
+                                                     the left extent
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="0">0</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's left extent as index, for symmetry with set/getXY
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="1">1</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's top extent as index, for symmetry with set/getXY
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="bottom">bottom</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's bottom extent
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="left">left</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's left extent
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="right">right</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's right extent
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="top">top</a>
+                                        <code>- Int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The region's top extent
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="contains">contains</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>contains</strong>
+                                           (
+                                                
+                                                        
+                                                         region
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns true if this region contains the region passed in
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>region &lt;Region&gt;</code>
+                                                             The region to evaluate
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True if the region is contained with this region, 
+else false</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getArea">getArea</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Int
+                                            <strong>getArea</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the area of the region
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Int
+                                                    </code></dt>
+                                                    <dd>the region's area</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getRegion">getRegion</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Region
+                                            <strong>getRegion</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a region that is occupied by the DOM element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                             The element
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Region
+                                                    </code></dt>
+                                                    <dd>The region that the element occupies</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="intersect">intersect</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Region
+                                            <strong>intersect</strong>
+                                           (
+                                                
+                                                        
+                                                         region
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the region where the passed in region overlaps with this one
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>region &lt;Region&gt;</code>
+                                                             The region that intersects
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Region
+                                                    </code></dt>
+                                                    <dd>The overlap region, or null if there is no overlap</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            toString
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>string the region properties</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="union">union</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Region
+                                            <strong>union</strong>
+                                           (
+                                                
+                                                        
+                                                         region
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the region representing the smallest region that can contain both
+the passed in region and this region.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>region &lt;Region&gt;</code>
+                                                             The region that to create the union with
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Region
+                                                    </code></dt>
+                                                    <dd>The union region</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class="selected"><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
+                                <li class=""><a href="YAHOO.util.Point.html">YAHOO.util.Point</a></li>
+                                <li class="selected"><a href="YAHOO.util.Region.html">YAHOO.util.Region</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Dom.js.html">Dom.js</a></li>
+                                <li class=""><a href="Region.js.html">Region.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#0">0</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li><a href="#1">1</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li><a href="#bottom">bottom</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li><a href="#left">left</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li><a href="#right">right</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                                <li><a href="#top">top</a>
+                                        <!--<code>&lt;Int&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#contains">contains</a>
+                                </li>
+                                <li><!--<code>Int</code>-->
+                                <a href="#getArea">getArea</a>
+                                </li>
+                                <li><!--<code>Region</code>-->
+                                <a href="#getRegion">getRegion</a>
+                                </li>
+                                <li><!--<code>Region</code>-->
+                                <a href="#intersect">intersect</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li><!--<code>Region</code>-->
+                                <a href="#union">union</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

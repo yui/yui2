@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable   RecordSet.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                
+                 &gt; RecordSet.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * A RecordSet defines and manages a set of Records.</span>
+<span class="c"> *</span>
+<span class="c"> * @class RecordSet</span>
+<span class="c"> * @param data {Object || Object[]} An object literal or an array of data.</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Internal variables</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_nIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_records</span> <span class="o">=</span> <span class="o">[];</span>
+    
+    <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">addRecords</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Fired when a Record is updated with new data.</span>
+<span class="c">     *</span>
+<span class="c">     * @event recordUpdateEvent</span>
+<span class="c">     * @param oArgs.record {YAHOO.widget.Record} The Record instance.</span>
+<span class="c">     * @param oArgs.key {String} The Record key.</span>
+<span class="c">     * @param oArgs.newData {Object} New data.</span>
+<span class="c">     * @param oArgs.oldData {Object} Old data.</span>
+<span class="c">     *</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;recordUpdateEvent&quot;</span><span class="o">);</span>
+    
+    
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;RecordSet initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">};</span>
+
+<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="k">else</span> <span class="o">{</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Missing dependency: YAHOO.util.EventProvider&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Internal class variable to index multiple data table instances.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _nCount</span>
+<span class="c"> * @type number</span>
+<span class="c"> * @private</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">_nCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Instance index.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _nIndex</span>
+<span class="c"> * @type number</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_nIndex</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * Internal counter of how many records are in the RecordSet</span>
+<span class="c"> *</span>
+<span class="c"> * @property _length</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_length</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Public accessor to the unique name of the RecordSet instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method toString</span>
+<span class="c"> * @return {string} Unique name of the RecordSet instance</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s2">&quot;RecordSet instance &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns the number of non-null records in the sparse RecordSet</span>
+<span class="c"> *</span>
+<span class="c"> * @method getLength</span>
+<span class="c"> * @return {Number} Number records in the RecordSet</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getLength</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_length</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns record with given name, at the given index, or null.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getRecord</span>
+<span class="c"> * @param identifier {String || Number} Record ID or record index</span>
+<span class="c"> * @return {Object} Record object</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getRecord</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">identifier</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">identifier</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">identifier</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">String</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">==</span> <span class="nx">identifier</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">[</span><span class="nx">identifier</span><span class="o">];</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns an array of Records from the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getRecords</span>
+<span class="c"> * @param i {number} Index of which record to start at</span>
+<span class="c"> * @param range {number} (optional) Number of records to get</span>
+<span class="c"> * @return {Array} Array of records starting at given index and lenth equal to</span>
+<span class="c"> * given range. If range is null, entire RecordSet array is returned.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getRecords</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">range</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">i</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span><span class="m">10</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">i</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">range</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="nx">i</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nx">range</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">range</span><span class="o">,</span><span class="m">10</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">range</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">i</span><span class="o">+</span><span class="nx">range</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns index for the given record.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getRecordIndex</span>
+<span class="c"> * @param oRecord {object} Record object</span>
+<span class="c"> * @return {number} index</span>
+<span class="c"> */</span>
+
+<span class="c">/*YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {</span>
+<span class="c">    //TODO: return i;</span>
+<span class="c">};*/</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns the record(2) with the given value at the given key.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getRecordBy</span>
+<span class="c"> * @param sKey {String} Key to search.</span>
+<span class="c"> * @param oValue {Object} to match against.</span>
+<span class="c"> * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} Record or array of</span>
+<span class="c"> * Records with the given value at the given key, or null.</span>
+<span class="c"> */</span>
+<span class="c">/*YAHOO.widget.RecordSet.prototype.getRecordBy = function(sKey, oValue) {</span>
+<span class="c">     TODO: redo to match new algorithm</span>
+<span class="c">    var record = null;</span>
+<span class="c">    var length = this._records.length;</span>
+<span class="c">    for(var i=length-1; i&gt;0; i--) {</span>
+<span class="c">        record = this._records[i];</span>
+<span class="c">        if(record &amp;&amp; (record.extid == extId)) {</span>
+<span class="c">            return record;</span>
+<span class="c">        }</span>
+<span class="c">    }</span>
+<span class="c">    return null;</span>
+<span class="c"></span>
+<span class="c">};*/</span>
+
+<span class="c">/**</span>
+<span class="c"> * Updates given Record at given key with given data.</span>
+<span class="c"> *</span>
+<span class="c"> * @method updateRecord</span>
+<span class="c"> * @param oRecord {YAHOO.widget.Record} A Record instance.</span>
+<span class="c"> * @param sKey {String} Key.</span>
+<span class="c"> * @param oData {Object) New data.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">updateRecord</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRecord</span><span class="o">,</span> <span class="nx">sKey</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">oldData</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="o">[</span><span class="nx">sKey</span><span class="o">];</span>
+    <span class="nx">oRecord</span><span class="o">[</span><span class="nx">sKey</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;recordUpdateEvent&quot;</span><span class="o">,{</span><span class="nx">record</span><span class="o">:</span><span class="nx">oRecord</span><span class="o">,</span><span class="nx">key</span><span class="o">:</span><span class="nx">sKey</span><span class="o">,</span><span class="nx">newData</span><span class="o">:</span><span class="nx">oData</span><span class="o">,</span><span class="nx">oldData</span><span class="o">:</span><span class="nx">oldData</span><span class="o">});</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Adds one Record to the RecordSet at the given index. If index is null,</span>
+<span class="c"> * then adds the Record to the end of the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method addRecord</span>
+<span class="c"> * @param oObjectLiteral {Object} An object literal of data.</span>
+<span class="c"> * @param index {Number} (optional) Position index.</span>
+<span class="c"> * @return {YAHOO.widget.Record} A Record instance.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addRecord</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oObjectLiteral</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oObjectLiteral</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">oRecord</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">(</span><span class="nx">oObjectLiteral</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="nx">oRecord</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">oRecord</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_length</span><span class="o">++;</span>
+        <span class="k">return</span> <span class="nx">oRecord</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Adds multiple Records to the RecordSet at the given index. If index is null,</span>
+<span class="c"> * then adds the Records to the end of the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method addRecords</span>
+<span class="c"> * @param data {Object[]} An array of object literal data.</span>
+<span class="c"> * @param index {Number} (optional) Position index.</span>
+<span class="c"> * @return {YAHOO.widget.Record} An array of Record instances.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addRecords</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="c">// Can&#39;t go backwards bc we need to preserve order</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">index</span><span class="o">);</span>
+                <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
+           <span class="o">}</span>
+           <span class="k">return</span> <span class="nx">newRecords</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Convenience method to append the given data to the end of the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method append</span>
+<span class="c"> * @param data {Object || Object[]} An object literal or array of data.</span>
+<span class="c"> * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">append</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="c">// Cant&#39;t go backwards bc we need to preserve order</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
+           <span class="o">}</span>
+           <span class="k">return</span> <span class="nx">newRecords</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Convenience method to insert the given data into the beginning of the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method insert</span>
+<span class="c"> * @param data {Object || Object[]} An object literal or array of data.</span>
+<span class="c"> * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">insert</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="c">// Can&#39;t go backwards bc we need to preserve order</span>
+<span class="c"></span>            <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">&gt;-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="m">0</span><span class="o">);</span>
+                <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
+           <span class="o">}</span>
+           <span class="k">return</span> <span class="nx">newRecords</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Replaces all Records in RecordSet with new data.</span>
+<span class="c"> *</span>
+<span class="c"> * @method replace</span>
+<span class="c"> * @param data {Object || Object[]} An object literal or array or data.</span>
+<span class="c"> * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">replace</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">reset</span><span class="o">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">append</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sorts RecordSet by given function.</span>
+<span class="c"> *</span>
+<span class="c"> * @method sort</span>
+<span class="c"> * @param fnSort {Function} Reference to a sort function.</span>
+<span class="c"> * @return {Array} Sorted array of Records</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">sort</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fnSort</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="nx">fnSort</span><span class="o">);</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c"> * Removes the record at the given index from the RecordSet. If a range is</span>
+<span class="c"> * given, starts at the given index and removes all records in the range.</span>
+<span class="c"> *</span>
+<span class="c"> * @method deleteRecord</span>
+<span class="c"> * @param i {Number} Record index</span>
+<span class="c"> * @param range {Number} (optional) Range of records to remove, or null.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">deleteRecord</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">range</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(!</span><span class="nx">range</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">range</span><span class="o">))</span> <span class="o">{</span>
+        <span class="nx">range</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">i</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">range</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_length</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_length</span> <span class="o">-</span> <span class="nx">range</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Removes all Records from the RecordSet.</span>
+<span class="c"> *</span>
+<span class="c"> * @method reset</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_records</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_length</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+<span class="o">};</span>
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * The Record class defines a DataTable record.</span>
+<span class="c"> *</span>
+<span class="c"> * @class Record</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (optional) Object literal of key/value pairs.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oLiteral</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oLiteral</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sKey</span> <span class="k">in</span> <span class="nx">oLiteral</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">sKey</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">[</span><span class="nx">sKey</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oLiteral</span><span class="o">[</span><span class="nx">sKey</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;yui-dtrec&quot;</span><span class="o">+</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+<span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Internal class variable to index multiple data table instances.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _nCount</span>
+<span class="c"> * @type number</span>
+<span class="c"> * @private</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public member variables</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Unique name assigned at instantation, indicates original order.</span>
+<span class="c"> *</span>
+<span class="c"> * @property id</span>
+<span class="c"> * @type string</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="Column.html">Column</a></li>
+                                <li class=""><a href="ColumnEditor.html">ColumnEditor</a></li>
+                                <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
+                                <li class=""><a href="DataTable.html">DataTable</a></li>
+                                <li class=""><a href="Record.html">Record</a></li>
+                                <li class=""><a href="RecordSet.html">RecordSet</a></li>
+                                <li class=""><a href="Sort.html">Sort</a></li>
+                                <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class="selected"><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

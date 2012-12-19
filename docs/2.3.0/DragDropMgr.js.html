@@ -1,0 +1,1580 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop   DragDropMgr.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                
+                 &gt; DragDropMgr.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * The drag and drop utility provides a framework for building drag and drop</span>
+<span class="c"> * applications.  In addition to enabling drag and drop for specific elements,</span>
+<span class="c"> * the drag and drop elements are tracked by the manager class, and the</span>
+<span class="c"> * interactions between the various elements are tracked during the drag and</span>
+<span class="c"> * the implementing code is notified about these important moments.</span>
+<span class="c"> * @module dragdrop</span>
+<span class="c"> * @title Drag and Drop</span>
+<span class="c"> * @requires yahoo,dom,event</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> */</span>
+
+<span class="c">// Only load the library once.  Rewriting the manager class would orphan </span>
+<span class="c">// existing drag and drop instances.</span>
+<span class="c"></span><span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDropMgr</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="c">/**</span>
+<span class="c"> * DragDropMgr is a singleton that tracks the element interaction for </span>
+<span class="c"> * all DragDrop items in the window.  Generally, you will not call </span>
+<span class="c"> * this class directly, but it does have helper methods that could </span>
+<span class="c"> * be useful in your DragDrop implementations.</span>
+<span class="c"> * @class DragDropMgr</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDropMgr</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="o">{</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Two dimensional Array of registered DragDrop objects.  The first </span>
+<span class="c">         * dimension is the DragDrop item group, the second the DragDrop </span>
+<span class="c">         * object.</span>
+<span class="c">         * @property ids</span>
+<span class="c">         * @type {string: string}</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">ids</span><span class="o">:</span> <span class="o">{},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Array of element ids defined as drag handles.  Used to determine </span>
+<span class="c">         * if the element that generated the mousedown event is actually the </span>
+<span class="c">         * handle and not the html element itself.</span>
+<span class="c">         * @property handleIds</span>
+<span class="c">         * @type {string: string}</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">handleIds</span><span class="o">:</span> <span class="o">{},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * the DragDrop object that is currently being dragged</span>
+<span class="c">         * @property dragCurrent</span>
+<span class="c">         * @type DragDrop</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         **/</span>
+        <span class="nx">dragCurrent</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * the DragDrop object(s) that are being hovered over</span>
+<span class="c">         * @property dragOvers</span>
+<span class="c">         * @type Array</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">dragOvers</span><span class="o">:</span> <span class="o">{},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * the X distance between the cursor and the object being dragged</span>
+<span class="c">         * @property deltaX</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">deltaX</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * the Y distance between the cursor and the object being dragged</span>
+<span class="c">         * @property deltaY</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">deltaY</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Flag to determine if we should prevent the default behavior of the</span>
+<span class="c">         * events we define. By default this is true, but this can be set to </span>
+<span class="c">         * false if you need the default behavior (not recommended)</span>
+<span class="c">         * @property preventDefault</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">preventDefault</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Flag to determine if we should stop the propagation of the events </span>
+<span class="c">         * we generate. This is true by default but you may want to set it to</span>
+<span class="c">         * false if the html element contains other features that require the</span>
+<span class="c">         * mouse click.</span>
+<span class="c">         * @property stopPropagation</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">stopPropagation</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Internal flag that is set to true when drag and drop has been</span>
+<span class="c">         * initialized</span>
+<span class="c">         * @property initialized</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">initialized</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * All drag and drop can be disabled.</span>
+<span class="c">         * @property locked</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">locked</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Provides additional information about the the current set of</span>
+<span class="c">         * interactions.  Can be accessed from the event handlers. It</span>
+<span class="c">         * contains the following properties:</span>
+<span class="c">         *</span>
+<span class="c">         *       out:       onDragOut interactions</span>
+<span class="c">         *       enter:     onDragEnter interactions</span>
+<span class="c">         *       over:      onDragOver interactions</span>
+<span class="c">         *       drop:      onDragDrop interactions</span>
+<span class="c">         *       point:     The location of the cursor</span>
+<span class="c">         *       draggedRegion: The location of dragged element at the time</span>
+<span class="c">         *                      of the interaction</span>
+<span class="c">         *       sourceRegion: The location of the source elemtn at the time</span>
+<span class="c">         *                     of the interaction</span>
+<span class="c">         *       validDrop: boolean</span>
+<span class="c">         * @property interactionInfo</span>
+<span class="c">         * @type object</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">interactionInfo</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Called the first time an element is registered.</span>
+<span class="c">         * @method init</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * In point mode, drag and drop interaction is defined by the </span>
+<span class="c">         * location of the cursor during the drag/drop</span>
+<span class="c">         * @property POINT</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         * @final</span>
+<span class="c">         */</span>
+        <span class="nx">POINT</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * In intersect mode, drag and drop interaction is defined by the </span>
+<span class="c">         * cursor position or the amount of overlap of two or more drag and </span>
+<span class="c">         * drop objects.</span>
+<span class="c">         * @property INTERSECT</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         * @final</span>
+<span class="c">         */</span>
+        <span class="nx">INTERSECT</span><span class="o">:</span> <span class="m">1</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * In intersect mode, drag and drop interaction is defined only by the </span>
+<span class="c">         * overlap of two or more drag and drop objects.</span>
+<span class="c">         * @property STRICT_INTERSECT</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         * @final</span>
+<span class="c">         */</span>
+        <span class="nx">STRICT_INTERSECT</span><span class="o">:</span> <span class="m">2</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The current drag and drop mode.  Default: POINT</span>
+<span class="c">         * @property mode</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">mode</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Runs method on all drag and drop objects</span>
+<span class="c">         * @method _execOnAll</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_execOnAll</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMethod</span><span class="o">,</span> <span class="nx">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">oDD</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">j</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">oDD</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="nx">oDD</span><span class="o">[</span><span class="nx">sMethod</span><span class="o">].</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oDD</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Drag and drop initialization.  Sets up the global event handlers</span>
+<span class="c">         * @method _onLoad</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_onLoad</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span>
+
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DragDropMgr onload&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">,</span>   <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseUp</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseMove</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">&quot;unload&quot;</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onUnload</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">&quot;resize&quot;</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="c">// Event.on(window,   &quot;mouseout&quot;,    this._test);</span>
+<span class="c"></span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Reset constraints on all drag and drop objs</span>
+<span class="c">         * @method _onResize</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_onResize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;window resize&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">&quot;resetConstraints&quot;</span><span class="o">,</span> <span class="o">[]);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Lock all drag and drop functionality</span>
+<span class="c">         * @method lock</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">lock</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Unlock all drag and drop functionality</span>
+<span class="c">         * @method unlock</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">unlock</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Is drag and drop locked?</span>
+<span class="c">         * @method isLocked</span>
+<span class="c">         * @return {boolean} True if drag and drop is locked, false otherwise.</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isLocked</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">locked</span><span class="o">;</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Location cache that is set for all drag drop objects when a drag is</span>
+<span class="c">         * initiated, cleared when the drag is finished.</span>
+<span class="c">         * @property locationCache</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">locationCache</span><span class="o">:</span> <span class="o">{},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Set useCache to false if you want to force object the lookup of each</span>
+<span class="c">         * drag and drop linked element constantly during a drag.</span>
+<span class="c">         * @property useCache</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">useCache</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The number of pixels that the mouse needs to move after the </span>
+<span class="c">         * mousedown before the drag is initiated.  Default=3;</span>
+<span class="c">         * @property clickPixelThresh</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">clickPixelThresh</span><span class="o">:</span> <span class="m">3</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The number of milliseconds after the mousedown event to initiate the</span>
+<span class="c">         * drag if we don&#39;t get a mouseup event. Default=1000</span>
+<span class="c">         * @property clickTimeThresh</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">clickTimeThresh</span><span class="o">:</span> <span class="m">1000</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Flag that indicates that either the drag pixel threshold or the </span>
+<span class="c">         * mousdown time threshold has been met</span>
+<span class="c">         * @property dragThreshMet</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">dragThreshMet</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Timeout used for the click time threshold</span>
+<span class="c">         * @property clickTimeout</span>
+<span class="c">         * @type Object</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">clickTimeout</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The X position of the mousedown event stored for later use when a </span>
+<span class="c">         * drag threshold is met.</span>
+<span class="c">         * @property startX</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">startX</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The Y position of the mousedown event stored for later use when a </span>
+<span class="c">         * drag threshold is met.</span>
+<span class="c">         * @property startY</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">startY</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Each DragDrop instance must be registered with the DragDropMgr.  </span>
+<span class="c">         * This is executed in DragDrop.init()</span>
+<span class="c">         * @method regDragDrop</span>
+<span class="c">         * @param {DragDrop} oDD the DragDrop object to register</span>
+<span class="c">         * @param {String} sGroup the name of the group this element belongs to</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">regDragDrop</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDD</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">initialized</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span> <span class="o">}</span>
+            
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">]</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">][</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oDD</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Removes the supplied dd instance from the supplied group. Executed</span>
+<span class="c">         * by DragDrop.removeFromGroup, so don&#39;t call this function directly.</span>
+<span class="c">         * @method removeDDFromGroup</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">removeDDFromGroup</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDD</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">]</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
+                <span class="nx">delete</span> <span class="nx">obj</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Unregisters a drag and drop item.  This is executed in </span>
+<span class="c">         * DragDrop.unreg, use that method instead of calling this directly.</span>
+<span class="c">         * @method _remove</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_remove</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDD</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">g</span> <span class="k">in</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">g</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">g</span><span class="o">][</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">g</span><span class="o">][</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
+                    <span class="c">//YAHOO.log(&quot;NEW LEN &quot; + this.ids.length, &quot;warn&quot;);</span>
+<span class="c"></span>                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Each DragDrop handle element must be registered.  This is done</span>
+<span class="c">         * automatically when executing DragDrop.setHandleElId()</span>
+<span class="c">         * @method regHandle</span>
+<span class="c">         * @param {String} sDDId the DragDrop id this element is a handle for</span>
+<span class="c">         * @param {String} sHandleId the id of the element that is the drag </span>
+<span class="c">         * handle</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">regHandle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">sDDId</span><span class="o">,</span> <span class="nx">sHandleId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">sDDId</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">sDDId</span><span class="o">]</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">sDDId</span><span class="o">][</span><span class="nx">sHandleId</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sHandleId</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Utility function to determine if a given element has been </span>
+<span class="c">         * registered as a drag drop item.</span>
+<span class="c">         * @method isDragDrop</span>
+<span class="c">         * @param {String} id the element id to check</span>
+<span class="c">         * @return {boolean} true if this element is a DragDrop item, </span>
+<span class="c">         * false otherwise</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isDragDrop</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDDById</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the drag and drop instances that are in all groups the</span>
+<span class="c">         * passed in instance belongs to.</span>
+<span class="c">         * @method getRelated</span>
+<span class="c">         * @param {DragDrop} p_oDD the obj to get related data for</span>
+<span class="c">         * @param {boolean} bTargetsOnly if true, only return targetable objs</span>
+<span class="c">         * @return {DragDrop[]} the related instances</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getRelated</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oDD</span><span class="o">,</span> <span class="nx">bTargetsOnly</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">oDDs</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">p_oDD</span><span class="o">.</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">j</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">dd</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">j</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">dd</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="nx">bTargetsOnly</span> <span class="o">||</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">isTarget</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">oDDs</span><span class="o">[</span><span class="nx">oDDs</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">dd</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="nx">oDDs</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns true if the specified dd target is a legal target for </span>
+<span class="c">         * the specifice drag obj</span>
+<span class="c">         * @method isLegalTarget</span>
+<span class="c">         * @param {DragDrop} the drag obj</span>
+<span class="c">         * @param {DragDrop} the target</span>
+<span class="c">         * @return {boolean} true if the target is a legal target for the </span>
+<span class="c">         * dd obj</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isLegalTarget</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">oDD</span><span class="o">,</span> <span class="nx">oTargetDD</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRelated</span><span class="o">(</span><span class="nx">oDD</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">targets</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">targets</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">==</span> <span class="nx">oTargetDD</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * My goal is to be able to transparently determine if an object is</span>
+<span class="c">         * typeof DragDrop, and the exact subclass of DragDrop.  typeof </span>
+<span class="c">         * returns &quot;object&quot;, oDD.constructor.toString() always returns</span>
+<span class="c">         * &quot;DragDrop&quot; and not the name of the subclass.  So for now it just</span>
+<span class="c">         * evaluates a well-known variable in DragDrop.</span>
+<span class="c">         * @method isTypeOfDD</span>
+<span class="c">         * @param {Object} the object to evaluate</span>
+<span class="c">         * @return {boolean} true if typeof oDD = DragDrop</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isTypeOfDD</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">oDD</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="nx">oDD</span> <span class="o">&amp;&amp;</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">__ygDragDrop</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Utility function to determine if a given element has been </span>
+<span class="c">         * registered as a drag drop handle for the given Drag Drop object.</span>
+<span class="c">         * @method isHandle</span>
+<span class="c">         * @param {String} id the element id to check</span>
+<span class="c">         * @return {boolean} true if this element is a DragDrop handle, false </span>
+<span class="c">         * otherwise</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isHandle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">sDDId</span><span class="o">,</span> <span class="nx">sHandleId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">sDDId</span><span class="o">]</span> <span class="o">&amp;&amp;</span> 
+                            <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">sDDId</span><span class="o">][</span><span class="nx">sHandleId</span><span class="o">]</span> <span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the DragDrop instance for a given id</span>
+<span class="c">         * @method getDDById</span>
+<span class="c">         * @param {String} id the id of the DragDrop object</span>
+<span class="c">         * @return {DragDrop} the drag drop object, null if it is not found</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getDDById</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">id</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Fired after a registered DragDrop object gets the mousedown event.</span>
+<span class="c">         * Sets up the events required to track the object being dragged</span>
+<span class="c">         * @method handleMouseDown</span>
+<span class="c">         * @param {Event} e the event</span>
+<span class="c">         * @param oDD the DragDrop object being dragged</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">handleMouseDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">oDD</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">currentTarget</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">=</span> <span class="nx">oDD</span><span class="o">;</span>
+
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+
+            <span class="c">// track start position</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">startX</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">startY</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">deltaX</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">startX</span> <span class="o">-</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetLeft</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">deltaY</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">startY</span> <span class="o">-</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetTop</span><span class="o">;</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">clickTimeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="o">(</span> 
+                    <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                        <span class="k">var</span> <span class="nx">DDM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">;</span>
+                        <span class="nx">DDM</span><span class="o">.</span><span class="nx">startDrag</span><span class="o">(</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">startX</span><span class="o">,</span> <span class="nx">DDM</span><span class="o">.</span><span class="nx">startY</span><span class="o">);</span> 
+                    <span class="o">},</span> 
+                    <span class="k">this</span><span class="o">.</span><span class="nx">clickTimeThresh</span> <span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Fired when either the drag pixel threshol or the mousedown hold </span>
+<span class="c">         * time threshold has been met.</span>
+<span class="c">         * @method startDrag</span>
+<span class="c">         * @param x {int} the X position of the original mousedown</span>
+<span class="c">         * @param y {int} the Y position of the original mousedown</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">startDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing drag start events&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">clickTimeout</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">dc</span><span class="o">.</span><span class="nx">b4StartDrag</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">dc</span><span class="o">.</span><span class="nx">startDrag</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Internal function to handle the mouseup event.  Will be invoked </span>
+<span class="c">         * from the context of the document.</span>
+<span class="c">         * @method handleMouseUp</span>
+<span class="c">         * @param {Event} e the event</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">handleMouseUp</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">clickTimeout</span><span class="o">);</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;mouseup detected - completing drag&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;drag threshold not met&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">stopDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Utility to stop event propagation and event default, if these </span>
+<span class="c">         * features are turned on.</span>
+<span class="c">         * @method stopEvent</span>
+<span class="c">         * @param {Event} e the event as returned by this.getEvent()</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">stopEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">stopPropagation</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">stopPropagation</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/** </span>
+<span class="c">         * Ends the current drag, cleans up the state, and fires the endDrag</span>
+<span class="c">         * and mouseUp events.  Called internally when a mouseup is detected</span>
+<span class="c">         * during the drag.  Can be fired manually during the drag by passing</span>
+<span class="c">         * either another event (such as the mousemove event received in onDrag)</span>
+<span class="c">         * or a fake event with pageX and pageY defined (so that endDrag and</span>
+<span class="c">         * onMouseUp have usable position data.).  Alternatively, pass true</span>
+<span class="c">         * for the silent parameter so that the endDrag and onMouseUp events</span>
+<span class="c">         * are skipped (so no event data is needed.)</span>
+<span class="c">         *</span>
+<span class="c">         * @method stopDrag</span>
+<span class="c">         * @param {Event} e the mouseup event, another event (or a fake event) </span>
+<span class="c">         *                  with pageX and pageY defined, or nothing if the </span>
+<span class="c">         *                  silent parameter is true</span>
+<span class="c">         * @param {boolean} silent skips the enddrag and mouseup events if true</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">stopDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// YAHOO.log(&quot;mouseup - removing event handlers&quot;);</span>
+<span class="c"></span>
+            <span class="c">// Fire the drag end event for the item that was dragged</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing endDrag events&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">b4EndDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">endDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing dragdrop onMouseUp event&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">onMouseUp</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">dragOvers</span> <span class="o">=</span> <span class="o">{};</span>
+        <span class="o">},</span>
+
+        <span class="c">/** </span>
+<span class="c">         * Internal function to handle the mousemove event.  Will be invoked </span>
+<span class="c">         * from the context of the html element.</span>
+<span class="c">         *</span>
+<span class="c">         * @TODO figure out what we can do about mouse events lost when the </span>
+<span class="c">         * user drags objects beyond the window boundary.  Currently we can </span>
+<span class="c">         * detect this in internet explorer by verifying that the mouse is </span>
+<span class="c">         * down during the mousemove event.  Firefox doesn&#39;t give us the </span>
+<span class="c">         * button state on the mousemove event.</span>
+<span class="c">         * @method handleMouseMove</span>
+<span class="c">         * @param {Event} e the event</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">handleMouseMove</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">//YAHOO.log(&quot;handlemousemove&quot;);</span>
+<span class="c"></span>            
+            <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// YAHOO.log(&quot;no current drag obj&quot;);</span>
+<span class="c"></span>
+                <span class="c">// var button = e.which || e.button;</span>
+<span class="c"></span>                <span class="c">// YAHOO.log(&quot;which: &quot; + e.which + &quot;, button: &quot;+ e.button);</span>
+<span class="c"></span>
+                <span class="c">// check for IE mouseup outside of page boundary</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">isIE</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">button</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;button failure&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseUp</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">diffX</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startX</span> <span class="o">-</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
+                    <span class="k">var</span> <span class="nx">diffY</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startY</span> <span class="o">-</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
+                    <span class="c">// YAHOO.log(&quot;diffX: &quot; + diffX + &quot;diffY: &quot; + diffY);</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">diffX</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">clickPixelThresh</span> <span class="o">||</span> 
+                                <span class="nx">diffY</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">clickPixelThresh</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;pixel threshold met&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">startDrag</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startX</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">startY</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">dc</span><span class="o">.</span><span class="nx">b4Drag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Iterates over all of the DragDrop elements to find ones we are </span>
+<span class="c">         * hovering over or dropping on</span>
+<span class="c">         * @method fireEvents</span>
+<span class="c">         * @param {Event} e the event</span>
+<span class="c">         * @param {boolean} isDrop is this a drop op or a mouseover op?</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">fireEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">isDrop</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
+
+            <span class="c">// If the user did the mouse up outside of the window, we could </span>
+<span class="c"></span>            <span class="c">// get here even though we have ended the drag.</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(!</span><span class="nx">dc</span> <span class="o">||</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">pt</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Point</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">y</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">getTargetCoord</span><span class="o">(</span><span class="nx">pt</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">pt</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+            <span class="nx">curRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span><span class="o">(</span> <span class="nx">pos</span><span class="o">.</span><span class="nx">y</span><span class="o">,</span> 
+                                               <span class="nx">pos</span><span class="o">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span>
+                                               <span class="nx">pos</span><span class="o">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span> 
+                                               <span class="nx">pos</span><span class="o">.</span><span class="nx">x</span> <span class="o">);</span>
+            <span class="c">// cache the previous dragOver array</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">oldOvers</span> <span class="o">=</span> <span class="o">[];</span>
+
+            <span class="k">var</span> <span class="nx">outEvts</span>   <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">var</span> <span class="nx">overEvts</span>  <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">var</span> <span class="nx">dropEvts</span>  <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">var</span> <span class="nx">enterEvts</span> <span class="o">=</span> <span class="o">[];</span>
+
+
+            <span class="c">// Check to see if the object(s) we were hovering over is no longer </span>
+<span class="c"></span>            <span class="c">// being hovered over so we can fire the onDragOut event</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragOvers</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragOvers</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+
+                <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">ddo</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isOverTarget</span><span class="o">(</span><span class="nx">pt</span><span class="o">,</span> <span class="nx">ddo</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">mode</span><span class="o">,</span> <span class="nx">curRegion</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">outEvts</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">ddo</span> <span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="nx">oldOvers</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragOvers</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">sGroup</span> <span class="k">in</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// YAHOO.log(&quot;Processing group &quot; + sGroup);</span>
+<span class="c"></span>                
+                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;string&quot;</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">oDD</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">][</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">oDD</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">isTarget</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="nx">oDD</span> <span class="o">!=</span> <span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isOverTarget</span><span class="o">(</span><span class="nx">pt</span><span class="o">,</span> <span class="nx">oDD</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">mode</span><span class="o">,</span> <span class="nx">curRegion</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="c">// look for drop interactions</span>
+<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span><span class="nx">isDrop</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="nx">dropEvts</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">oDD</span> <span class="o">);</span>
+                            <span class="c">// look for drag enter and drag over interactions</span>
+<span class="c"></span>                            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                                <span class="c">// initial drag over: dragEnter fires</span>
+<span class="c"></span>                                <span class="k">if</span> <span class="o">(!</span><span class="nx">oldOvers</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
+                                    <span class="nx">enterEvts</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">oDD</span> <span class="o">);</span>
+                                <span class="c">// subsequent drag overs: dragOver fires</span>
+<span class="c"></span>                                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                                    <span class="nx">overEvts</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">oDD</span> <span class="o">);</span>
+                                <span class="o">}</span>
+
+                                <span class="k">this</span><span class="o">.</span><span class="nx">dragOvers</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oDD</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">interactionInfo</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">out</span><span class="o">:</span>       <span class="nx">outEvts</span><span class="o">,</span>
+                <span class="nx">enter</span><span class="o">:</span>     <span class="nx">enterEvts</span><span class="o">,</span>
+                <span class="nx">over</span><span class="o">:</span>      <span class="nx">overEvts</span><span class="o">,</span>
+                <span class="nx">drop</span><span class="o">:</span>      <span class="nx">dropEvts</span><span class="o">,</span>
+                <span class="nx">point</span><span class="o">:</span>     <span class="nx">pt</span><span class="o">,</span>
+                <span class="nx">draggedRegion</span><span class="o">:</span>    <span class="nx">curRegion</span><span class="o">,</span>
+                <span class="nx">sourceRegion</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">],</span>
+                <span class="nx">validDrop</span><span class="o">:</span> <span class="nx">isDrop</span>
+            <span class="o">};</span>
+
+            <span class="c">// notify about a drop that did not find a target</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">isDrop</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; dropped, but not on a target&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">interactionInfo</span><span class="o">.</span><span class="nx">validDrop</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="nx">dc</span><span class="o">.</span><span class="nx">onInvalidDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+            <span class="o">}</span>
+
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">mode</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">outEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOut: &quot;</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">enterEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragEnter: &quot;</span> <span class="o">+</span> <span class="nx">enterEvts</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragEnter</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">enterEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">overEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOver: &quot;</span> <span class="o">+</span> <span class="nx">overEvts</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragDrop: &quot;</span> <span class="o">+</span> <span class="nx">dropEvts</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c">// fire dragout events</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">outEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOut: &quot;</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                 
+                <span class="c">// fire enter events</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">enterEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; onDragEnter &quot;</span> <span class="o">+</span> <span class="nx">enterEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="c">// dc.b4DragEnter(e, oDD.id);</span>
+<span class="c"></span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragEnter</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">enterEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+         
+                <span class="c">// fire over events</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">overEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; onDragOver &quot;</span> <span class="o">+</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// fire drop events</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; dropped on &quot;</span> <span class="o">+</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Helper function for getting the best match from the list of drag </span>
+<span class="c">         * and drop objects returned by the drag and drop events when we are </span>
+<span class="c">         * in INTERSECT mode.  It returns either the first object that the </span>
+<span class="c">         * cursor is over, or the object that has the greatest overlap with </span>
+<span class="c">         * the dragged element.</span>
+<span class="c">         * @method getBestMatch</span>
+<span class="c">         * @param  {DragDrop[]} dds The array of drag and drop objects </span>
+<span class="c">         * targeted</span>
+<span class="c">         * @return {DragDrop}       The best single match</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getBestMatch</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">dds</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">winner</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">dds</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">len</span> <span class="o">==</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">winner</span> <span class="o">=</span> <span class="nx">dds</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c">// Loop through the targeted items</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">dd</span> <span class="o">=</span> <span class="nx">dds</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="c">// If the cursor is over the object, it wins.  If the </span>
+<span class="c"></span>                    <span class="c">// cursor is over multiple matches, the first one we come</span>
+<span class="c"></span>                    <span class="c">// to wins.</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">INTERSECT</span> <span class="o">&amp;&amp;</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">cursorIsOver</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">winner</span> <span class="o">=</span> <span class="nx">dd</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="c">// Otherwise the object with the most overlap wins</span>
+<span class="c"></span>                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="nx">winner</span> <span class="o">||</span> <span class="o">!</span><span class="nx">winner</span><span class="o">.</span><span class="nx">overlap</span> <span class="o">||</span> <span class="o">(</span><span class="nx">dd</span><span class="o">.</span><span class="nx">overlap</span> <span class="o">&amp;&amp;</span>
+                            <span class="nx">winner</span><span class="o">.</span><span class="nx">overlap</span><span class="o">.</span><span class="nx">getArea</span><span class="o">()</span> <span class="o">&lt;</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">overlap</span><span class="o">.</span><span class="nx">getArea</span><span class="o">()))</span> <span class="o">{</span>
+                            <span class="nx">winner</span> <span class="o">=</span> <span class="nx">dd</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="nx">winner</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Refreshes the cache of the top-left and bottom-right points of the </span>
+<span class="c">         * drag and drop objects in the specified group(s).  This is in the</span>
+<span class="c">         * format that is stored in the drag and drop instance, so typical </span>
+<span class="c">         * usage is:</span>
+<span class="c">         * &lt;code&gt;</span>
+<span class="c">         * YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);</span>
+<span class="c">         * &lt;/code&gt;</span>
+<span class="c">         * Alternatively:</span>
+<span class="c">         * &lt;code&gt;</span>
+<span class="c">         * YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});</span>
+<span class="c">         * &lt;/code&gt;</span>
+<span class="c">         * @TODO this really should be an indexed array.  Alternatively this</span>
+<span class="c">         * method could accept both.</span>
+<span class="c">         * @method refreshCache</span>
+<span class="c">         * @param {Object} groups an associative array of groups to refresh</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">refreshCache</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;refreshing element location cache&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+
+            <span class="c">// refresh everything if group array is not provided</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">groups</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">sGroup</span> <span class="k">in</span> <span class="nx">g</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;string&quot;</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">oDD</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">][</span><span class="nx">i</span><span class="o">];</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">oDD</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLocation</span><span class="o">(</span><span class="nx">oDD</span><span class="o">);</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">loc</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">;</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not get the loc for &quot;</span> <span class="o">+</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * This checks to make sure an element exists and is in the DOM.  The</span>
+<span class="c">         * main purpose is to handle cases where innerHTML is used to remove</span>
+<span class="c">         * drag and drop objects from the DOM.  IE provides an &#39;unspecified</span>
+<span class="c">         * error&#39; when trying to access the offsetParent of such an element</span>
+<span class="c">         * @method verifyEl</span>
+<span class="c">         * @param {HTMLElement} el the element to check</span>
+<span class="c">         * @return {boolean} true if the element looks usable</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">verifyEl</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetParent</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;detected problem with an element&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Returns a Region object containing the drag and drop element&#39;s position</span>
+<span class="c">         * and size, including the padding configured for it</span>
+<span class="c">         * @method getLocation</span>
+<span class="c">         * @param {DragDrop} oDD the drag and drop object to get the </span>
+<span class="c">         *                       location for</span>
+<span class="c">         * @return {YAHOO.util.Region} a Region object representing the total area</span>
+<span class="c">         *                             the element occupies, including any padding</span>
+<span class="c">         *                             the instance is configured for.</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getLocation</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDD</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">oDD</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">oDD</span> <span class="o">+</span> <span class="s2">&quot; is not a DD obj&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(),</span> <span class="nx">pos</span><span class="o">,</span> <span class="nx">x1</span><span class="o">,</span> <span class="nx">x2</span><span class="o">,</span> <span class="nx">y1</span><span class="o">,</span> <span class="nx">y2</span><span class="o">,</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">r</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">l</span><span class="o">;</span>
+
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="nx">pos</span><span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">pos</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;getXY failed&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nx">x1</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="nx">x2</span> <span class="o">=</span> <span class="nx">x1</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
+            <span class="nx">y1</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+            <span class="nx">y2</span> <span class="o">=</span> <span class="nx">y1</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">;</span>
+
+            <span class="nx">t</span> <span class="o">=</span> <span class="nx">y1</span> <span class="o">-</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">padding</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="nx">r</span> <span class="o">=</span> <span class="nx">x2</span> <span class="o">+</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">padding</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+            <span class="nx">b</span> <span class="o">=</span> <span class="nx">y2</span> <span class="o">+</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">padding</span><span class="o">[</span><span class="m">2</span><span class="o">];</span>
+            <span class="nx">l</span> <span class="o">=</span> <span class="nx">x1</span> <span class="o">-</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">padding</span><span class="o">[</span><span class="m">3</span><span class="o">];</span>
+
+            <span class="k">return</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span><span class="o">(</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">r</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">l</span> <span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Checks the cursor location to see if it over the target</span>
+<span class="c">         * @method isOverTarget</span>
+<span class="c">         * @param {YAHOO.util.Point} pt The point to evaluate</span>
+<span class="c">         * @param {DragDrop} oTarget the DragDrop object we are inspecting</span>
+<span class="c">         * @param {boolean} intersect true if we are in intersect mode</span>
+<span class="c">         * @param {YAHOO.util.Region} pre-cached location of the dragged element</span>
+<span class="c">         * @return {boolean} true if the mouse is over the target</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">isOverTarget</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">pt</span><span class="o">,</span> <span class="nx">oTarget</span><span class="o">,</span> <span class="nx">intersect</span><span class="o">,</span> <span class="nx">curRegion</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// use cache if available</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oTarget</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">loc</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">useCache</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cache not populated&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">loc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLocation</span><span class="o">(</span><span class="nx">oTarget</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oTarget</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">;</span>
+
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cache: &quot;</span> <span class="o">+</span> <span class="nx">loc</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">loc</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;could not get the location of the element&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c">//YAHOO.log(&quot;loc: &quot; + loc + &quot;, pt: &quot; + pt);</span>
+<span class="c"></span>            <span class="nx">oTarget</span><span class="o">.</span><span class="nx">cursorIsOver</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">.</span><span class="nx">contains</span><span class="o">(</span> <span class="nx">pt</span> <span class="o">);</span>
+
+            <span class="c">// DragDrop is using this as a sanity check for the initial mousedown</span>
+<span class="c"></span>            <span class="c">// in this case we are done.  In POINT mode, if the drag obj has no</span>
+<span class="c"></span>            <span class="c">// contraints, we are done. Otherwise we need to evaluate the </span>
+<span class="c"></span>            <span class="c">// region the target as occupies to determine if the dragged element</span>
+<span class="c"></span>            <span class="c">// overlaps with it.</span>
+<span class="c"></span>            
+            <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">dc</span> <span class="o">||</span> <span class="o">(!</span><span class="nx">intersect</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dc</span><span class="o">.</span><span class="nx">constrainX</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dc</span><span class="o">.</span><span class="nx">constrainY</span><span class="o">))</span> <span class="o">{</span>
+
+                <span class="c">//if (oTarget.cursorIsOver) {</span>
+<span class="c"></span>                    <span class="c">//YAHOO.log(&quot;over &quot; + oTarget + &quot;, &quot; + loc + &quot;, &quot; + pt, &quot;warn&quot;);</span>
+<span class="c"></span>                <span class="c">//}</span>
+<span class="c"></span>                <span class="k">return</span> <span class="nx">oTarget</span><span class="o">.</span><span class="nx">cursorIsOver</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nx">oTarget</span><span class="o">.</span><span class="nx">overlap</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="c">// Get the current location of the drag element, this is the</span>
+<span class="c"></span>            <span class="c">// location of the mouse event less the delta that represents</span>
+<span class="c"></span>            <span class="c">// where the original mousedown happened on the element.  We</span>
+<span class="c"></span>            <span class="c">// need to consider constraints and ticks as well.</span>
+<span class="c"></span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">curRegion</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">getTargetCoord</span><span class="o">(</span><span class="nx">pt</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">pt</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
+                <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+                <span class="nx">curRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span><span class="o">(</span> <span class="nx">pos</span><span class="o">.</span><span class="nx">y</span><span class="o">,</span> 
+                                                   <span class="nx">pos</span><span class="o">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span>
+                                                   <span class="nx">pos</span><span class="o">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span> 
+                                                   <span class="nx">pos</span><span class="o">.</span><span class="nx">x</span> <span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">var</span> <span class="nx">overlap</span> <span class="o">=</span> <span class="nx">curRegion</span><span class="o">.</span><span class="nx">intersect</span><span class="o">(</span><span class="nx">loc</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">overlap</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">oTarget</span><span class="o">.</span><span class="nx">overlap</span> <span class="o">=</span> <span class="nx">overlap</span><span class="o">;</span>
+                <span class="k">return</span> <span class="o">(</span><span class="nx">intersect</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="nx">oTarget</span><span class="o">.</span><span class="nx">cursorIsOver</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * unload event handler</span>
+<span class="c">         * @method _onUnload</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_onUnload</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">unregAll</span><span class="o">();</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Cleans up the drag and drop events and objects.</span>
+<span class="c">         * @method unregAll</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">unregAll</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;unregister all&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">stopDrag</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">&quot;unreg&quot;</span><span class="o">,</span> <span class="o">[]);</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">elementCache</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">elementCache</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">elementCache</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">ids</span> <span class="o">=</span> <span class="o">{};</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * A cache of DOM elements</span>
+<span class="c">         * @property elementCache</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">elementCache</span><span class="o">:</span> <span class="o">{},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Get the wrapper for the DOM element specified</span>
+<span class="c">         * @method getElWrapper</span>
+<span class="c">         * @param {String} id the id of the element to get</span>
+<span class="c">         * @return {YAHOO.util.DDM.ElementWrapper} the wrapped element</span>
+<span class="c">         * @private</span>
+<span class="c">         * @deprecated This wrapper isn&#39;t that useful</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getElWrapper</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">oWrapper</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">elementCache</span><span class="o">[</span><span class="nx">id</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">oWrapper</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oWrapper</span><span class="o">.</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">oWrapper</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">elementCache</span><span class="o">[</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> 
+                    <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ElementWrapper</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">id</span><span class="o">));</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="nx">oWrapper</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the actual DOM element</span>
+<span class="c">         * @method getElement</span>
+<span class="c">         * @param {String} id the id of the elment to get</span>
+<span class="c">         * @return {Object} The element</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.get instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getElement</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Returns the style property for the DOM element (i.e., </span>
+<span class="c">         * document.getElById(id).style)</span>
+<span class="c">         * @method getCss</span>
+<span class="c">         * @param {String} id the id of the elment to get</span>
+<span class="c">         * @return {Object} The style property of the element</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getCss</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
+            <span class="k">return</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Inner class for cached elements</span>
+<span class="c">         * @class DragDropMgr.ElementWrapper</span>
+<span class="c">         * @for DragDropMgr</span>
+<span class="c">         * @private</span>
+<span class="c">         * @deprecated</span>
+<span class="c">         */</span>
+        <span class="nx">ElementWrapper</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">/**</span>
+<span class="c">                 * The element</span>
+<span class="c">                 * @property el</span>
+<span class="c">                 */</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">el</span> <span class="o">=</span> <span class="nx">el</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="c">/**</span>
+<span class="c">                 * The element id</span>
+<span class="c">                 * @property id</span>
+<span class="c">                 */</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+                <span class="c">/**</span>
+<span class="c">                 * A reference to the style property</span>
+<span class="c">                 * @property css</span>
+<span class="c">                 */</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">css</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+            <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the X position of an html element</span>
+<span class="c">         * @method getPosX</span>
+<span class="c">         * @param el the element for which to get the position</span>
+<span class="c">         * @return {int} the X coordinate</span>
+<span class="c">         * @for DragDropMgr</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.getX instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getPosX</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the Y position of an html element</span>
+<span class="c">         * @method getPosY</span>
+<span class="c">         * @param el the element for which to get the position</span>
+<span class="c">         * @return {int} the Y coordinate</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.getY instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getPosY</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getY</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span> 
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Swap two nodes.  In IE, we use the native method, for others we </span>
+<span class="c">         * emulate the IE behavior</span>
+<span class="c">         * @method swapNode</span>
+<span class="c">         * @param n1 the first node to swap</span>
+<span class="c">         * @param n2 the other node to swap</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">swapNode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">n2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">n1</span><span class="o">.</span><span class="nx">swapNode</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">n1</span><span class="o">.</span><span class="nx">swapNode</span><span class="o">(</span><span class="nx">n2</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">n2</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">n2</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span> <span class="o">==</span> <span class="nx">n1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">p</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">n2</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">n2</span> <span class="o">==</span> <span class="nx">n1</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">p</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">n2</span><span class="o">,</span> <span class="nx">n1</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">n1</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="nx">n2</span><span class="o">,</span> <span class="nx">n1</span><span class="o">);</span>
+                    <span class="nx">p</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">n1</span><span class="o">,</span> <span class="nx">s</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the current scroll position</span>
+<span class="c">         * @method getScroll</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getScroll</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">l</span><span class="o">,</span> <span class="nx">dde</span><span class="o">=</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="nx">db</span><span class="o">=</span><span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">dde</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">dde</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">||</span> <span class="nx">dde</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">t</span> <span class="o">=</span> <span class="nx">dde</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
+                <span class="nx">l</span> <span class="o">=</span> <span class="nx">dde</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">db</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">t</span> <span class="o">=</span> <span class="nx">db</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
+                <span class="nx">l</span> <span class="o">=</span> <span class="nx">db</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;could not get scroll property&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="o">{</span> <span class="nx">top</span><span class="o">:</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">l</span> <span class="o">};</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the specified element style property</span>
+<span class="c">         * @method getStyle</span>
+<span class="c">         * @param {HTMLElement} el          the element</span>
+<span class="c">         * @param {string}      styleProp   the style property</span>
+<span class="c">         * @return {string} The value of the style property</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.getStyle</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">styleProp</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">styleProp</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Gets the scrollTop</span>
+<span class="c">         * @method getScrollTop</span>
+<span class="c">         * @return {int} the document&#39;s scrollTop</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getScrollTop</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getScroll</span><span class="o">().</span><span class="nx">top</span><span class="o">;</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Gets the scrollLeft</span>
+<span class="c">         * @method getScrollLeft</span>
+<span class="c">         * @return {int} the document&#39;s scrollTop</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getScrollLeft</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getScroll</span><span class="o">().</span><span class="nx">left</span><span class="o">;</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Sets the x/y position of an element to the location of the</span>
+<span class="c">         * target element.</span>
+<span class="c">         * @method moveToEl</span>
+<span class="c">         * @param {HTMLElement} moveEl      The element to move</span>
+<span class="c">         * @param {HTMLElement} targetEl    The position reference element</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">moveToEl</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">moveEl</span><span class="o">,</span> <span class="nx">targetEl</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">aCoord</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">targetEl</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;moveToEl: &quot;</span> <span class="o">+</span> <span class="nx">aCoord</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setXY</span><span class="o">(</span><span class="nx">moveEl</span><span class="o">,</span> <span class="nx">aCoord</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Gets the client height</span>
+<span class="c">         * @method getClientHeight</span>
+<span class="c">         * @return {int} client height in px</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.getViewportHeight instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getClientHeight</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportHeight</span><span class="o">();</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Gets the client width</span>
+<span class="c">         * @method getClientWidth</span>
+<span class="c">         * @return {int} client width in px</span>
+<span class="c">         * @deprecated use YAHOO.util.Dom.getViewportWidth instead</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">getClientWidth</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportWidth</span><span class="o">();</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Numeric array sort function</span>
+<span class="c">         * @method numericSort</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">numericSort</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="o">(</span><span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="o">);</span> <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Internal counter</span>
+<span class="c">         * @property _timeoutCount</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_timeoutCount</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Trying to make the load order less important.  Without this we get</span>
+<span class="c">         * an error if this file is loaded before the Event Utility.</span>
+<span class="c">         * @method _addListeners</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_addListeners</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">DDM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">DDM</span><span class="o">.</span><span class="nx">_onLoad</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">_timeoutCount</span> <span class="o">&gt;</span> <span class="m">2000</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DragDrop requires the Event Utility&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">setTimeout</span><span class="o">(</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">_addListeners</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nb">document</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">DDM</span><span class="o">.</span><span class="nx">_timeoutCount</span> <span class="o">+=</span> <span class="m">1</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Recursively searches the immediate parent and all child nodes for </span>
+<span class="c">         * the handle element in order to determine wheter or not it was </span>
+<span class="c">         * clicked.</span>
+<span class="c">         * @method handleWasClicked</span>
+<span class="c">         * @param node the html element to inspect</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">handleWasClicked</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isHandle</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">node</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;clicked node is a handle&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c">// check to see if this is a text node child of the one we want</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">node</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                <span class="c">// YAHOO.log(&quot;p: &quot; + p);</span>
+<span class="c"></span>
+                <span class="k">while</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isHandle</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">p</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; is not a handle&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                        <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+    <span class="o">};</span>
+
+<span class="o">}();</span>
+
+<span class="c">// shorter alias, save a few bytes</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDropMgr</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">_addListeners</span><span class="o">();</span>
+
+<span class="o">}</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class="selected"><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

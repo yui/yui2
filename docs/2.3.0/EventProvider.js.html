@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: event   EventProvider.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                
+                 &gt; EventProvider.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * EventProvider is designed to be used with YAHOO.augment to wrap </span>
+<span class="c"> * CustomEvents in an interface that allows events to be subscribed to </span>
+<span class="c"> * and fired by name.  This makes it possible for implementing code to</span>
+<span class="c"> * subscribe to an event that either has not been created yet, or will</span>
+<span class="c"> * not be created at all.</span>
+<span class="c"> *</span>
+<span class="c"> * @Class EventProvider</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Private storage of custom events</span>
+<span class="c">     * @property __yui_events</span>
+<span class="c">     * @type Object[]</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">__yui_events</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Private storage of custom event subscribers</span>
+<span class="c">     * @property __yui_subscribers</span>
+<span class="c">     * @type Object[]</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">__yui_subscribers</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Subscribe to a CustomEvent by event type</span>
+<span class="c">     *</span>
+<span class="c">     * @method subscribe</span>
+<span class="c">     * @param p_type     {string}   the type, or name of the event</span>
+<span class="c">     * @param p_fn       {function} the function to exectute when the event fires</span>
+<span class="c">     * @param p_obj      {Object}   An object to be passed along when the event </span>
+<span class="c">     *                              fires</span>
+<span class="c">     * @param p_override {boolean}  If true, the obj passed in becomes the </span>
+<span class="c">     *                              execution scope of the listener</span>
+<span class="c">     */</span>
+    <span class="nx">subscribe</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">,</span> <span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">p_override</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">ce</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">ce</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">ce</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">p_override</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="k">var</span> <span class="nx">subs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">subs</span><span class="o">[</span><span class="nx">p_type</span><span class="o">])</span> <span class="o">{</span>
+                <span class="nx">subs</span><span class="o">[</span><span class="nx">p_type</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="o">}</span>
+            <span class="nx">subs</span><span class="o">[</span><span class="nx">p_type</span><span class="o">].</span><span class="nx">push</span><span class="o">(</span>
+                <span class="o">{</span> <span class="nx">fn</span><span class="o">:</span> <span class="nx">p_fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">:</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">:</span> <span class="nx">p_override</span> <span class="o">}</span> <span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Unsubscribes one or more listeners the from the specified event</span>
+<span class="c">     * @method unsubscribe</span>
+<span class="c">     * @param p_type {string}   The type, or name of the event.  If the type</span>
+<span class="c">     *                          is not specified, it will attempt to remove</span>
+<span class="c">     *                          the listener from all hosted events.</span>
+<span class="c">     * @param p_fn   {Function} The subscribed function to unsubscribe, if not</span>
+<span class="c">     *                          supplied, all subscribers will be removed.</span>
+<span class="c">     * @param p_obj  {Object}   The custom object passed to subscribe.  This is</span>
+<span class="c">     *                        optional, but if supplied will be used to</span>
+<span class="c">     *                        disambiguate multiple listeners that are the same</span>
+<span class="c">     *                        (e.g., you subscribe many object using a function</span>
+<span class="c">     *                        that lives on the prototype)</span>
+<span class="c">     * @return {boolean} true if the subscriber was found and detached.</span>
+<span class="c">     */</span>
+    <span class="nx">unsubscribe</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">,</span> <span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">evts</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">p_type</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">ce</span> <span class="o">=</span> <span class="nx">evts</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ce</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nx">ce</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">evts</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">evts</span><span class="o">,</span> <span class="nx">i</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">ret</span> <span class="o">=</span> <span class="nx">ret</span> <span class="o">&amp;&amp;</span> <span class="nx">evts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="nx">ret</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Removes all listeners from the specified event.  If the event type</span>
+<span class="c">     * is not specified, all listeners from all hosted custom events will</span>
+<span class="c">     * be removed.</span>
+<span class="c">     * @method unsubscribeAll</span>
+<span class="c">     * @param p_type {string}   The type, or name of the event</span>
+<span class="c">     */</span>
+    <span class="nx">unsubscribeAll</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">p_type</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Creates a new custom event of the specified type.  If a custom event</span>
+<span class="c">     * by that name already exists, it will not be re-created.  In either</span>
+<span class="c">     * case the custom event is returned. </span>
+<span class="c">     *</span>
+<span class="c">     * @method createEvent</span>
+<span class="c">     *</span>
+<span class="c">     * @param p_type {string} the type, or name of the event</span>
+<span class="c">     * @param p_config {object} optional config params.  Valid properties are:</span>
+<span class="c">     *</span>
+<span class="c">     *  &lt;ul&gt;</span>
+<span class="c">     *    &lt;li&gt;</span>
+<span class="c">     *      scope: defines the default execution scope.  If not defined</span>
+<span class="c">     *      the default scope will be this instance.</span>
+<span class="c">     *    &lt;/li&gt;</span>
+<span class="c">     *    &lt;li&gt;</span>
+<span class="c">     *      silent: if true, the custom event will not generate log messages.</span>
+<span class="c">     *      This is false by default.</span>
+<span class="c">     *    &lt;/li&gt;</span>
+<span class="c">     *    &lt;li&gt;</span>
+<span class="c">     *      onSubscribeCallback: specifies a callback to execute when the</span>
+<span class="c">     *      event has a new subscriber.  This will fire immediately for</span>
+<span class="c">     *      each queued subscriber if any exist prior to the creation of</span>
+<span class="c">     *      the event.</span>
+<span class="c">     *    &lt;/li&gt;</span>
+<span class="c">     *  &lt;/ul&gt;</span>
+<span class="c">     *</span>
+<span class="c">     *  @return {CustomEvent} the custom event</span>
+<span class="c">     *</span>
+<span class="c">     */</span>
+    <span class="nx">createEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">,</span> <span class="nx">p_config</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="nx">p_config</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">])</span> <span class="o">{</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;EventProvider createEvent skipped: &#39;&quot;</span><span class="o">+</span><span class="nx">p_type</span><span class="o">+</span><span class="s2">&quot;&#39; already exists&quot;</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">scope</span>  <span class="o">=</span> <span class="nx">opts</span><span class="o">.</span><span class="nx">scope</span>  <span class="o">||</span> <span class="k">this</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">silent</span> <span class="o">=</span> <span class="o">(</span><span class="nx">opts</span><span class="o">.</span><span class="nx">silent</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">ce</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="nx">p_type</span><span class="o">,</span> <span class="nx">scope</span><span class="o">,</span> <span class="nx">silent</span><span class="o">,</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">.</span><span class="nx">FLAT</span><span class="o">);</span>
+            <span class="nx">events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">]</span> <span class="o">=</span> <span class="nx">ce</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">opts</span><span class="o">.</span><span class="nx">onSubscribeCallback</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">ce</span><span class="o">.</span><span class="nx">subscribeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">opts</span><span class="o">.</span><span class="nx">onSubscribeCallback</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="k">var</span> <span class="nx">qs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_subscribers</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">qs</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">qs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">ce</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">qs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">qs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">obj</span><span class="o">,</span> <span class="nx">qs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">override</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+    <span class="o">},</span>
+
+
+   <span class="c">/**</span>
+<span class="c">     * Fire a custom event by name.  The callback functions will be executed</span>
+<span class="c">     * from the scope specified when the event was created, and with the </span>
+<span class="c">     * following parameters:</span>
+<span class="c">     *   &lt;ul&gt;</span>
+<span class="c">     *   &lt;li&gt;The first argument fire() was executed with&lt;/li&gt;</span>
+<span class="c">     *   &lt;li&gt;The custom object (if any) that was passed into the subscribe() </span>
+<span class="c">     *       method&lt;/li&gt;</span>
+<span class="c">     *   &lt;/ul&gt;</span>
+<span class="c">     * If the custom event has not been explicitly created, it will be</span>
+<span class="c">     * created now with the default config, scoped to the host object</span>
+<span class="c">     * @method fireEvent</span>
+<span class="c">     * @param p_type    {string}  the type, or name of the event</span>
+<span class="c">     * @param arguments {Object*} an arbitrary set of parameters to pass to </span>
+<span class="c">     *                            the handler.</span>
+<span class="c">     * @return {boolean} the return value from CustomEvent.fire</span>
+<span class="c">     *                   </span>
+<span class="c">     */</span>
+    <span class="nx">fireEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_type</span><span class="o">,</span> <span class="nx">arg1</span><span class="o">,</span> <span class="nx">arg2</span><span class="o">,</span> <span class="nx">etc</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span> <span class="o">||</span> <span class="o">{};</span>
+        <span class="k">var</span> <span class="nx">ce</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">[</span><span class="nx">p_type</span><span class="o">];</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">ce</span><span class="o">)</span> <span class="o">{</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_type</span> <span class="o">+</span> <span class="s2">&quot;event fired before it was created.&quot;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">args</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">arguments</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nx">ce</span><span class="o">.</span><span class="nx">fire</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">ce</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns true if the custom event of the provided type has been created</span>
+<span class="c">     * with createEvent.</span>
+<span class="c">     * @method hasEvent</span>
+<span class="c">     * @param type {string} the type, or name of the event</span>
+<span class="c">     */</span>
+    <span class="nx">hasEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">__yui_events</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class=""><a href="Event.js.html">Event.js</a></li>
+                                <li class="selected"><a href="EventProvider.js.html">EventProvider.js</a></li>
+                                <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

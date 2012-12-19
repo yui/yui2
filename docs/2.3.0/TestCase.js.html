@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest   TestCase.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                
+                 &gt; TestCase.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;tool&quot;</span><span class="o">);</span>
+
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// TestCase object</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Test case containing various tests to run.</span>
+<span class="c"> * @param template An object containing any number of test methods, other methods,</span>
+<span class="c"> *                 an optional name, and anything else the test case needs.</span>
+<span class="c"> * @class TestCase</span>
+<span class="c"> * @namespace YAHOO.tool</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">template</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="o">{</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Special rules for the test case. Possible subobjects</span>
+<span class="c">     * are fail, for tests that should fail, and error, for</span>
+<span class="c">     * tests that should throw an error.</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_should</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">{};</span>
+    
+    <span class="c">//copy over all properties from the template to this object</span>
+<span class="c"></span>    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">template</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">template</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
+    <span class="o">}</span>    
+    
+    <span class="c">//check for a valid name</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">name</span><span class="o">)){</span>
+        <span class="c">/**</span>
+<span class="c">         * Name for the test case.</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;testCase&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>  
+
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Test Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>
+    <span class="c">/**</span>
+<span class="c">     * Function to run before each test is executed.</span>
+<span class="c">     */</span>
+    <span class="nx">setUp</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Function to run after each test is executed.</span>
+<span class="c">     */</span>
+    <span class="nx">tearDown</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:Void*/</span> <span class="o">{</span>    
+    <span class="o">}</span>
+<span class="o">};</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class="selected"><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1651 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container  YAHOO.widget.Dialog   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                 &gt; YAHOO.widget.Dialog 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Dialog</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        Dialog is an implementation of Panel that can be used to submit form 
+data. Built-in functionality for buttons with event handlers is included, 
+and button sets can be build dynamically, or the preincluded ones for 
+Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3
+ways -- via an asynchronous Connection utility call, a simple form 
+POST or GET, or manually.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Dialog</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+
+                                                , 
+                                                userConfig
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     The element ID representing the Dialog <em>OR</em>
+                                                </dd>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                     The element representing the Dialog
+                                                </dd>
+                                                <dd>
+                                                    <code>userConfig
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     The configuration object literal containing 
+the configuration that should be set for this Dialog. See configuration 
+documentation for more details.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="callback">callback</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The internally maintained callback object for use with the 
+Connection utility
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="callback.argument">callback.argument</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The arbitraty argument or arguments to pass to the Connection 
+callback functions
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="callback.failure">callback.failure</a>
+                                        <code>- Function</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The function to execute upon failure of the 
+Connection submission
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="callback.success">callback.success</a>
+                                        <code>- Function</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The function to execute upon success of the 
+Connection submission
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <code>- private final Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the Dialog's configuration properties
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="EVENT_TYPES">EVENT_TYPES</a>
+                                        <code>- private final Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the name of the Dialog's events
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="form">form</a>
+                                        <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-40002357">HTMLFormElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the Dialog's 
+<code>&#60;form&#62;</code> element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.Dialog.CSS_DIALOG">YAHOO.widget.Dialog.CSS_DIALOG</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the default CSS class used for a Dialog
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Panel.html#DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Panel.html#EVENT_TYPES">EVENT_TYPES</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="blurButtons">blurButtons</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>blurButtons</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Blurs all the buttons defined via the "buttons" 
+configuration property.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cancel">cancel</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>cancel</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executes the cancel of the Dialog followed by a hide.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configButtons">configButtons</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configButtons</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler for the "buttons" configuration property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configClose">configClose</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configClose</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "close" property is 
+changed. The method controls the appending or hiding of the close
+icon at the top right of the Dialog.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For 
+configuration handlers, args[0] will equal the newly applied value 
+for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configPostMethod">configPostMethod</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configPostMethod</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler for the "postmethod" configuration property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For 
+configuration handlers, args[0] will equal the newly applied value 
+for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the Panel element from the DOM and sets all child elements 
+to null.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doSubmit">doSubmit</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>doSubmit</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Submits the Dialog's form depending on the value of the 
+"postmethod" configuration property.  <strong>Please note:
+</strong> As of version 2.3 this method will automatically handle 
+asyncronous file uploads should the Dialog instance's form contain 
+<code>&#60;input type="file"&#62;</code> elements.  If a Dialog 
+instance will be handling asyncronous file uploads, its 
+<code>callback</code> property will need to be setup with a 
+<code>upload</code> handler rather than the standard 
+<code>success</code> and, or <code>failure</code> handlers.  For more 
+information, see the <a href="http://developer.yahoo.com/yui/
+connection/#file">Connection Manager documenation on file uploads</a>.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="focusDefaultButton">focusDefaultButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focusDefaultButton</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the focus to the button that is designated as the default via 
+the "buttons" configuration property. By default, this method is 
+called when the Dialog is made visible.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="focusFirst">focusFirst</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focusFirst</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets focus to the first element in the Dialog's form or the first 
+button defined via the "buttons" configuration property. Called 
+when the Dialog is made visible.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="focusFirstButton">focusFirstButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focusFirstButton</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the focus to the first button created via the "buttons"
+configuration property.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="focusLast">focusLast</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focusLast</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets focus to the last element in the Dialog's form or the last 
+button defined via the "buttons" configuration property.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="focusLastButton">focusLastButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focusLastButton</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the focus to the last button created via the "buttons" 
+configuration property.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getButtons">getButtons</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getButtons</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an array containing each of the Dialog's 
+buttons, by default an array of HTML <code>&#60;BUTTON&#60;</code> 
+elements.  If the Dialog's buttons were created using the 
+YAHOO.widget.Button class (via the inclusion of the optional Button 
+dependancy on the page), an array of YAHOO.widget.Button instances 
+is returned.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getData">getData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>getData</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a JSON-compatible data structure representing the data 
+currently contained in the form.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>A JSON object reprsenting the data of the 
+current form.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+
+                                                
+                                                        , 
+                                                         userConfig
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The Dialog initialization method, which is executed for Dialog and 
+all of its subclasses. This method is automatically called by the 
+constructor, and  sets up all DOM references for pre-existing markup, 
+and creates required markup if it is not already present.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String&gt;</code>
+                                                             The element ID representing the Dialog <em>OR</em>
+                                                        </dd>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                             The element representing the Dialog
+                                                        </dd>
+                                                        <dd>
+                                                            <code>userConfig &lt;Object&gt;</code>
+                                                             The configuration object literal 
+containing the configuration that should be set for this Dialog. 
+See configuration documentation for more details.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initDefaultConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the class's configurable properties which can be changed 
+using the Dialog's Config object (cfg).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initEvents">initEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the custom events for Dialog which are fired 
+automatically at appropriate times by the Dialog class.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerForm">registerForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>registerForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Prepares the Dialog's internal FORM object, creating one if one is
+not currently present.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="submit">submit</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>submit</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executes a submit of the Dialog followed by a hide, if validation 
+is successful.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string representation of the Dialog</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="validate">validate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>validate</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Built-in function hook for writing a validation function that will 
+be checked for a "true" value prior to a submit. This function, as 
+implemented by default, always returns true, so it should be 
+overridden if validation is necessary.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.widget.Panel.html#buildMask">buildMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#buildWrapper">buildWrapper</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configClose">configClose</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configDraggable">configDraggable</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configHeight">configHeight</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configKeyListeners">configKeyListeners</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configModal">configModal</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configUnderlay">configUnderlay</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configWidth">configWidth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configzIndex">configzIndex</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#hideMask">hideMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#registerDragDrop">registerDragDrop</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#removeMask">removeMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#showMask">showMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#sizeMask">sizeMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#sizeUnderlay">sizeUnderlay</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="asyncSubmitEvent">asyncSubmitEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>asyncSubmitEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired prior to asynchronous submission
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeSubmitEvent">beforeSubmitEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeSubmitEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired prior to submission
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cancelEvent">cancelEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>cancelEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired after cancel
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="formSubmitEvent">formSubmitEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>formSubmitEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired prior to form-based submission
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="manualSubmitEvent">manualSubmitEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>manualSubmitEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired prior to manual submission
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="submitEvent">submitEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>submitEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            CustomEvent fired after submission
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Panel.html#dragEvent">dragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#hideMaskEvent">hideMaskEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#showMaskEvent">showMaskEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="buttons">buttons</a>
+                                        <code>- {Array|String}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of object literals, each containing a set of properties 
+defining a button to be appended into the Dialog's footer.
+Each button object in the buttons array can have three properties:
+<dt>text:</dt>
+<dd>The text that will display on the face of the button.  <em>
+Please note:</em> As of version 2.3, the text can include 
+HTML.</dd>
+<dt>handler:</dt>
+<dd>Can be either:
+<ol>
+<li>A reference to a function that should fire when the 
+button is clicked.  (In this case scope of this function is 
+always its Dialog instance.)</li>
+<li>An object literal representing the code to be 
+executed when the button is clicked.  Format:<br> <code> {<br>  
+<strong>fn:</strong> Function,   &#47;&#47; The handler to call 
+when  the event fires.<br> <strong>obj:</strong> Object, 
+&#47;&#47; An  object to pass back to the handler.<br> <strong>
+scope:</strong>  Object &#47;&#47; The object to use for the 
+scope of the handler. <br> } </code> <br><em>Please note: this 
+functionality was added in version 2.3.</em></li>
+</ol>
+</dd>
+<dt>isDefault:</dt>
+<dd>An optional boolean value that specifies that a button 
+should be highlighted and focused by default.</dd>
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "none"
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="postmethod">postmethod</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The method to use for posting the Dialog's form. Possible values 
+are "async", "form", and "manual".
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: async
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Panel.html#close">close</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#draggable">draggable</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#keylisteners">keylisteners</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#modal">modal</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#underlay">underlay</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#callback">callback</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#callback.argument">callback.argument</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#callback.failure">callback.failure</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#callback.success">callback.success</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#EVENT_TYPES">EVENT_TYPES</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#form">form</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.Dialog.CSS_DIALOG">YAHOO.widget.Dialog.CSS_DIALOG</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#blurButtons">blurButtons</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#cancel">cancel</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configButtons">configButtons</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configClose">configClose</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configPostMethod">configPostMethod</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#doSubmit">doSubmit</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#focusDefaultButton">focusDefaultButton</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#focusFirst">focusFirst</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#focusFirstButton">focusFirstButton</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#focusLast">focusLast</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#focusLastButton">focusLastButton</a>
+                                </li>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#getButtons">getButtons</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#getData">getData</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initEvents">initEvents</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#registerForm">registerForm</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#submit">submit</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#validate">validate</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#asyncSubmitEvent">asyncSubmitEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeSubmitEvent">beforeSubmitEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#cancelEvent">cancelEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#formSubmitEvent">formSubmitEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#manualSubmitEvent">manualSubmitEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#submitEvent">submitEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#buttons">buttons</a>
+                                </li>
+                                <li class="">
+                                <a href="#postmethod">postmethod</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

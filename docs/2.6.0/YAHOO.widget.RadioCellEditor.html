@@ -1,0 +1,554 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable  YAHOO.widget.RadioCellEditor   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                 &gt; YAHOO.widget.RadioCellEditor 
+                
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.RadioCellEditor</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The RadioCellEditor class provides functionality for inline editing
+DataTable cell data with radio buttons.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.RadioCellEditor</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                oConfigs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>oConfigs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                      (Optional) Object literal of configs.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="property_radioOptions">radioOptions</a>
+                                        <code>- String[] | Object[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of radio values. Can either be a simple array (e.g., ["yes","no","maybe"])
+or a an array of objects (e.g., [{label:"yes", value:1}, {label:"no", value:-1},
+{label:"maybe", value:0}]).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_radios">radios</a>
+                                        <code>- HTMLElement[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to radio elements.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__elCancelBtn">_elCancelBtn</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__elContainer">_elContainer</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__elSaveBtn">_elSaveBtn</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__elTd">_elTd</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property__oColumn">_oColumn</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__oDataTable">_oDataTable</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__oRecord">_oRecord</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__sId">_sId</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.BaseCellEditor.html#property__sType">_sType</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_asyncSubmitter">asyncSubmitter</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_defaultValue">defaultValue</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_disableBtns">disableBtns</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_isActive">isActive</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_LABEL_CANCEL">LABEL_CANCEL</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_LABEL_SAVE">LABEL_SAVE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_validator">validator</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#property_value">value</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_focus">focus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets focus in RadioCellEditor.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getInputValue">getInputValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getInputValue</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Retrieves input value from RadioCellEditor.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_handleDisabledBtns">handleDisabledBtns</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleDisabledBtns</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            After rendering form, if disabledBtns is set to true, then sets up a mechanism
+to save input without them.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_renderForm">renderForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>renderForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Render a form with input(s) type=radio.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_resetForm">resetForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>resetForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets RadioCellEditor UI to initial state.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.BaseCellEditor.html#method__initConfigs">_initConfigs</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.BaseCellEditor.html#method__initEvents">_initEvents</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_attach">attach</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_block">block</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_cancel">cancel</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_doAfterRender">doAfterRender</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_focus">focus</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getColumn">getColumn</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getContainerEl">getContainerEl</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getDataTable">getDataTable</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getId">getId</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getInputValue">getInputValue</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getRecord">getRecord</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_getTdEl">getTdEl</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_handleDisabledBtns">handleDisabledBtns</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_move">move</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_renderBtns">renderBtns</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_renderForm">renderForm</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_resetForm">resetForm</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_save">save</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_show">show</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_toString">toString</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.BaseCellEditor.html#method_unblock">unblock</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_blurEvent">blurEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_cancelEvent">cancelEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_invalidDataEvent">invalidDataEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_keydownEvent">keydownEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_revertEvent">revertEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_saveEvent">saveEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.BaseCellEditor.html#event_showEvent">showEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class=""><a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CellEditor.html">YAHOO.widget.CellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CheckboxCellEditor.html">YAHOO.widget.CheckboxCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.DateCellEditor.html">YAHOO.widget.DateCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.DropdownCellEditor.html">YAHOO.widget.DropdownCellEditor</a></li>
+                                <li class="selected"><a href="YAHOO.widget.RadioCellEditor.html">YAHOO.widget.RadioCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                                <li class=""><a href="YAHOO.widget.ScrollingDataTable.html">YAHOO.widget.ScrollingDataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.TextareaCellEditor.html">YAHOO.widget.TextareaCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.TextboxCellEditor.html">YAHOO.widget.TextboxCellEditor</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CellEditor.js.html">CellEditor.js</a></li>
+                                <li class=""><a href="Chain.js.html">Chain.js</a></li>
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                                <li class=""><a href="ScrollingDataTable.js.html">ScrollingDataTable.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_radioOptions">radioOptions</a>
+                                        <!--<code>&lt;HTMLElement[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_radios">radios</a>
+                                        <!--<code>&lt;HTMLElement[]&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_focus">focus</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_getInputValue">getInputValue</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_handleDisabledBtns">handleDisabledBtns</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_renderForm">renderForm</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_resetForm">resetForm</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

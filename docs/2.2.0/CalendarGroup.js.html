@@ -1,0 +1,1180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar   CalendarGroup.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Calendar&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                
+                 &gt; CalendarGroup.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c">* YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates</span>
+<span class="c">* the ability to have multi-page calendar views that share a single dataset and are</span>
+<span class="c">* dependent on each other.</span>
+<span class="c">* </span>
+<span class="c">* The calendar group instance will refer to each of its elements using a 0-based index.</span>
+<span class="c">* For example, to construct the placeholder for a calendar group widget with id &quot;cal1&quot; and</span>
+<span class="c">* containerId of &quot;cal1Container&quot;, the markup would be as follows:</span>
+<span class="c">*	&lt;xmp&gt;</span>
+<span class="c">*		&lt;div id=&quot;cal1Container_0&quot;&gt;&lt;/div&gt;</span>
+<span class="c">*		&lt;div id=&quot;cal1Container_1&quot;&gt;&lt;/div&gt;</span>
+<span class="c">*	&lt;/xmp&gt;</span>
+<span class="c">* The tables for the calendars (&quot;cal1_0&quot; and &quot;cal1_1&quot;) will be inserted into those containers.</span>
+<span class="c">* @namespace YAHOO.widget</span>
+<span class="c">* @class CalendarGroup</span>
+<span class="c">* @constructor</span>
+<span class="c">* @param {String}	id			The id of the table element that will represent the calendar widget</span>
+<span class="c">* @param {String}	containerId	The id of the container div element that will wrap the calendar table</span>
+<span class="c">* @param {Object}	config		The configuration object containing the Calendar&#39;s arguments</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span> <span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Initializes the calendar group. All subclasses must call this method in order for the</span>
+<span class="c">* group to be initialized properly.</span>
+<span class="c">* @method init</span>
+<span class="c">* @param {String}	id			The id of the table element that will represent the calendar widget</span>
+<span class="c">* @param {String}	containerId	The id of the container div element that will wrap the calendar table</span>
+<span class="c">* @param {Object}	config		The configuration object containing the Calendar&#39;s arguments</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">init</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;CalendarGroup &quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">initEvents</span><span class="o">();</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">initStyles</span><span class="o">();</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The collection of Calendar pages contained within the CalendarGroup</span>
+<span class="c">	* @property pages</span>
+<span class="c">	* @type YAHOO.widget.Calendar[]</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">pages</span> <span class="o">=</span> <span class="o">[];</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The unique id associated with the CalendarGroup</span>
+<span class="c">	* @property id</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The unique id associated with the CalendarGroup container</span>
+<span class="c">	* @property containerId</span>
+<span class="c">	* @type String</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">containerId</span> <span class="o">=</span> <span class="nx">containerId</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The outer containing element for the CalendarGroup</span>
+<span class="c">	* @property oDomContainer</span>
+<span class="c">	* @type HTMLElement</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">containerId</span><span class="o">);</span>
+
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_CONTAINER</span><span class="o">);</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_MULTI_UP</span><span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The Config object used to hold the configuration variables for the CalendarGroup</span>
+<span class="c">	* @property cfg</span>
+<span class="c">	* @type YAHOO.util.Config</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The local object which contains the CalendarGroup&#39;s options</span>
+<span class="c">	* @property Options</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">Options</span> <span class="o">=</span> <span class="o">{};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The local object which contains the CalendarGroup&#39;s locale settings</span>
+<span class="c">	* @property Locale</span>
+<span class="c">	* @type Object</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">Locale</span> <span class="o">=</span> <span class="o">{};</span>
+
+	<span class="k">this</span><span class="o">.</span><span class="nx">setupConfig</span><span class="o">();</span>
+
+	<span class="k">if</span> <span class="o">(</span><span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">config</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+
+	<span class="c">// OPERA HACK FOR MISWRAPPED FLOATS</span>
+<span class="c"></span>	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">){</span>
+		<span class="k">var</span> <span class="nx">fixWidth</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">startW</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
+			<span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+				<span class="nx">w</span> <span class="o">+=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">w</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">};</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fixWidth</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initialized &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;-page CalendarGroup&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">);</span>
+<span class="o">};</span>
+
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setupConfig</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="c">/**</span>
+<span class="c">	* The number of pages to include in the CalendarGroup. This value can only be set once, in the CalendarGroup&#39;s constructor arguments.</span>
+<span class="c">	* @config pages</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 2</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;pages&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">2</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configPages</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The month/year representing the current visible Calendar date (mm/yyyy)</span>
+<span class="c">	* @config pagedate</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default today&#39;s date</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="k">new</span> <span class="nb">Date</span><span class="o">(),</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configPageDate</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The date or range of dates representing the current Calendar selection</span>
+<span class="c">	* @config selected</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default []</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:[],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The title to display above the CalendarGroup&#39;s month header</span>
+<span class="c">	* @config title</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;&quot;</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;title&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configTitle</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Whether or not a close button should be displayed for this CalendarGroup</span>
+<span class="c">	* @config close</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default false</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;close&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configClose</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.</span>
+<span class="c">	* @config iframe</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default true</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">true</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The minimum selectable date in the current Calendar (mm/dd/yyyy)</span>
+<span class="c">	* @config mindate</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default null</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;mindate&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The maximum selectable date in the current Calendar (mm/dd/yyyy)</span>
+<span class="c">	* @config maxdate</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default null</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;maxdate&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span>  <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">// Options properties</span>
+<span class="c"></span>
+	<span class="c">/**</span>
+<span class="c">	* True if the Calendar should allow multiple selections. False by default.</span>
+<span class="c">	* @config MULTI_SELECT</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default false</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MULTI_SELECT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The weekday the week begins on. Default is 0 (Sunday).</span>
+<span class="c">	* @config START_WEEKDAY</span>
+<span class="c">	* @type number</span>
+<span class="c">	* @default 0</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;START_WEEKDAY&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">0</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span>  <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* True if the Calendar should show weekday labels. True by default.</span>
+<span class="c">	* @config SHOW_WEEKDAYS</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default true</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;SHOW_WEEKDAYS&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">true</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* True if the Calendar should show week row headers. False by default.</span>
+<span class="c">	* @config SHOW_WEEK_HEADER</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default false</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;SHOW_WEEK_HEADER&quot;</span><span class="o">,{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* True if the Calendar should show week row footers. False by default.</span>
+<span class="c">	* @config SHOW_WEEK_FOOTER</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default false</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;SHOW_WEEK_FOOTER&quot;</span><span class="o">,{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* True if the Calendar should suppress weeks that are not a part of the current month. False by default.</span>
+<span class="c">	* @config HIDE_BLANK_WEEKS</span>
+<span class="c">	* @type Boolean</span>
+<span class="c">	* @default false</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;HIDE_BLANK_WEEKS&quot;</span><span class="o">,{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkBoolean</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The image that should be used for the left navigation arrow.</span>
+<span class="c">	* @config NAV_ARROW_LEFT</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @deprecated	You can customize the image by overriding the default CSS class for the left arrow - &quot;calnavleft&quot;</span>
+<span class="c">	* @default null</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_LEFT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The image that should be used for the right navigation arrow.</span>
+<span class="c">	* @config NAV_ARROW_RIGHT</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @deprecated	You can customize the image by overriding the default CSS class for the right arrow - &quot;calnavright&quot;</span>
+<span class="c">	* @default null</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;NAV_ARROW_RIGHT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">// Locale properties</span>
+<span class="c"></span>	
+	<span class="c">/**</span>
+<span class="c">	* The short month labels for the current locale.</span>
+<span class="c">	* @config MONTHS_SHORT</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;]</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MONTHS_SHORT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;Jan&quot;</span><span class="o">,</span> <span class="s2">&quot;Feb&quot;</span><span class="o">,</span> <span class="s2">&quot;Mar&quot;</span><span class="o">,</span> <span class="s2">&quot;Apr&quot;</span><span class="o">,</span> <span class="s2">&quot;May&quot;</span><span class="o">,</span> <span class="s2">&quot;Jun&quot;</span><span class="o">,</span> <span class="s2">&quot;Jul&quot;</span><span class="o">,</span> <span class="s2">&quot;Aug&quot;</span><span class="o">,</span> <span class="s2">&quot;Sep&quot;</span><span class="o">,</span> <span class="s2">&quot;Oct&quot;</span><span class="o">,</span> <span class="s2">&quot;Nov&quot;</span><span class="o">,</span> <span class="s2">&quot;Dec&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The long month labels for the current locale.</span>
+<span class="c">	* @config MONTHS_LONG</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;, &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MONTHS_LONG&quot;</span><span class="o">,</span>		<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;January&quot;</span><span class="o">,</span> <span class="s2">&quot;February&quot;</span><span class="o">,</span> <span class="s2">&quot;March&quot;</span><span class="o">,</span> <span class="s2">&quot;April&quot;</span><span class="o">,</span> <span class="s2">&quot;May&quot;</span><span class="o">,</span> <span class="s2">&quot;June&quot;</span><span class="o">,</span> <span class="s2">&quot;July&quot;</span><span class="o">,</span> <span class="s2">&quot;August&quot;</span><span class="o">,</span> <span class="s2">&quot;September&quot;</span><span class="o">,</span> <span class="s2">&quot;October&quot;</span><span class="o">,</span> <span class="s2">&quot;November&quot;</span><span class="o">,</span> <span class="s2">&quot;December&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The 1-character weekday labels for the current locale.</span>
+<span class="c">	* @config WEEKDAYS_1CHAR</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;S&quot;, &quot;M&quot;, &quot;T&quot;, &quot;W&quot;, &quot;T&quot;, &quot;F&quot;, &quot;S&quot;]</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;WEEKDAYS_1CHAR&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;S&quot;</span><span class="o">,</span> <span class="s2">&quot;M&quot;</span><span class="o">,</span> <span class="s2">&quot;T&quot;</span><span class="o">,</span> <span class="s2">&quot;W&quot;</span><span class="o">,</span> <span class="s2">&quot;T&quot;</span><span class="o">,</span> <span class="s2">&quot;F&quot;</span><span class="o">,</span> <span class="s2">&quot;S&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The short weekday labels for the current locale.</span>
+<span class="c">	* @config WEEKDAYS_SHORT</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;Su&quot;, &quot;Mo&quot;, &quot;Tu&quot;, &quot;We&quot;, &quot;Th&quot;, &quot;Fr&quot;, &quot;Sa&quot;]</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;WEEKDAYS_SHORT&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;Su&quot;</span><span class="o">,</span> <span class="s2">&quot;Mo&quot;</span><span class="o">,</span> <span class="s2">&quot;Tu&quot;</span><span class="o">,</span> <span class="s2">&quot;We&quot;</span><span class="o">,</span> <span class="s2">&quot;Th&quot;</span><span class="o">,</span> <span class="s2">&quot;Fr&quot;</span><span class="o">,</span> <span class="s2">&quot;Sa&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The medium weekday labels for the current locale.</span>
+<span class="c">	* @config WEEKDAYS_MEDIUM</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;]</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;WEEKDAYS_MEDIUM&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;Sun&quot;</span><span class="o">,</span> <span class="s2">&quot;Mon&quot;</span><span class="o">,</span> <span class="s2">&quot;Tue&quot;</span><span class="o">,</span> <span class="s2">&quot;Wed&quot;</span><span class="o">,</span> <span class="s2">&quot;Thu&quot;</span><span class="o">,</span> <span class="s2">&quot;Fri&quot;</span><span class="o">,</span> <span class="s2">&quot;Sat&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The long weekday labels for the current locale.</span>
+<span class="c">	* @config WEEKDAYS_LONG</span>
+<span class="c">	* @type String[]</span>
+<span class="c">	* @default [&quot;Sunday&quot;, &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;]</span>
+<span class="c">	*/</span>		
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;WEEKDAYS_LONG&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:[</span><span class="s2">&quot;Sunday&quot;</span><span class="o">,</span> <span class="s2">&quot;Monday&quot;</span><span class="o">,</span> <span class="s2">&quot;Tuesday&quot;</span><span class="o">,</span> <span class="s2">&quot;Wednesday&quot;</span><span class="o">,</span> <span class="s2">&quot;Thursday&quot;</span><span class="o">,</span> <span class="s2">&quot;Friday&quot;</span><span class="o">,</span> <span class="s2">&quot;Saturday&quot;</span><span class="o">],</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The setting that determines which length of month labels should be used. Possible values are &quot;short&quot; and &quot;long&quot;.</span>
+<span class="c">	* @config LOCALE_MONTHS</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;long&quot;</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;LOCALE_MONTHS&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;long&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The setting that determines which length of weekday labels should be used. Possible values are &quot;1char&quot;, &quot;short&quot;, &quot;medium&quot;, and &quot;long&quot;.</span>
+<span class="c">	* @config LOCALE_WEEKDAYS</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;short&quot;</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;LOCALE_WEEKDAYS&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;short&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The value used to delimit individual dates in a date string passed to various Calendar functions.</span>
+<span class="c">	* @config DATE_DELIMITER</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;,&quot;</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;DATE_DELIMITER&quot;</span><span class="o">,</span>		<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;,&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The value used to delimit date fields in a date string passed to various Calendar functions.</span>
+<span class="c">	* @config DATE_FIELD_DELIMITER</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;/&quot;</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;DATE_FIELD_DELIMITER&quot;</span><span class="o">,{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;/&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The value used to delimit date ranges in a date string passed to various Calendar functions.</span>
+<span class="c">	* @config DATE_RANGE_DELIMITER</span>
+<span class="c">	* @type String</span>
+<span class="c">	* @default &quot;-&quot;</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;DATE_RANGE_DELIMITER&quot;</span><span class="o">,{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;-&quot;</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">}</span> <span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	* The position of the month in a month/year date string</span>
+<span class="c">	* @config MY_MONTH_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 1</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MY_MONTH_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">1</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the year in a month/year date string</span>
+<span class="c">	* @config MY_YEAR_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 2</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MY_YEAR_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">2</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the month in a month/day date string</span>
+<span class="c">	* @config MD_MONTH_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 1</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MD_MONTH_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">1</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the day in a month/year date string</span>
+<span class="c">	* @config MD_DAY_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 2</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MD_DAY_POSITION&quot;</span><span class="o">,</span>		<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">2</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the month in a month/day/year date string</span>
+<span class="c">	* @config MDY_MONTH_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 1</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MDY_MONTH_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">1</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the day in a month/day/year date string</span>
+<span class="c">	* @config MDY_DAY_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 2</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MDY_DAY_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">2</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* The position of the year in a month/day/year date string</span>
+<span class="c">	* @config MDY_YEAR_POSITION</span>
+<span class="c">	* @type Number</span>
+<span class="c">	* @default 3</span>
+<span class="c">	*/</span>	
+	<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;MDY_YEAR_POSITION&quot;</span><span class="o">,</span>	<span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="m">3</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">delegateConfig</span><span class="o">,</span> <span class="nx">validator</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">checkNumber</span> <span class="o">}</span> <span class="o">);</span>
+
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Initializes CalendarGroup&#39;s built-in CustomEvents</span>
+<span class="c">* @method initEvents</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">initEvents</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Proxy subscriber to subscribe to the CalendarGroup&#39;s child Calendars&#39; CustomEvents</span>
+<span class="c">	* @method sub</span>
+<span class="c">	* @private</span>
+<span class="c">	* @param {Function} fn	The function to subscribe to this CustomEvent</span>
+<span class="c">	* @param {Object}	obj	The CustomEvent&#39;s scope object</span>
+<span class="c">	* @param {Boolean}	bOverride	Whether or not to apply scope correction</span>
+<span class="c">	*/</span>
+	<span class="k">var</span> <span class="nx">sub</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">bOverride</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">me</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="nx">me</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+			<span class="nx">cal</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;Event&quot;</span><span class="o">].</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">bOverride</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Proxy unsubscriber to unsubscribe from the CalendarGroup&#39;s child Calendars&#39; CustomEvents</span>
+<span class="c">	* @method unsub</span>
+<span class="c">	* @private</span>
+<span class="c">	* @param {Function} fn	The function to subscribe to this CustomEvent</span>
+<span class="c">	* @param {Object}	obj	The CustomEvent&#39;s scope object</span>
+<span class="c">	*/</span>
+	<span class="k">var</span> <span class="nx">unsub</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">me</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="nx">me</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+			<span class="nx">cal</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;Event&quot;</span><span class="o">].</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">};</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired before a selection is made</span>
+<span class="c">	* @event beforeSelectEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeSelectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;beforeSelect&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired when a selection is made</span>
+<span class="c">	* @event selectEvent</span>
+<span class="c">	* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">selectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;select&quot;</span><span class="o">);</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired before a selection is made</span>
+<span class="c">	* @event beforeDeselectEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;beforeDeselect&quot;</span><span class="o">);</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired when a selection is made</span>
+<span class="c">	* @event deselectEvent</span>
+<span class="c">	* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">deselectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;deselect&quot;</span><span class="o">);</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">deselectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">deselectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+	
+	<span class="c">/**</span>
+<span class="c">	* Fired when the Calendar page is changed</span>
+<span class="c">	* @event changePageEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;changePage&quot;</span><span class="o">);</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired before the Calendar is rendered</span>
+<span class="c">	* @event beforeRenderEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;beforeRender&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired when the Calendar is rendered</span>
+<span class="c">	* @event renderEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;render&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired when the Calendar is reset</span>
+<span class="c">	* @event resetEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">resetEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;reset&quot;</span><span class="o">);</span> 
+	<span class="k">this</span><span class="o">.</span><span class="nx">resetEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">resetEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+	<span class="c">/**</span>
+<span class="c">	* Fired when the Calendar is cleared</span>
+<span class="c">	* @event clearEvent</span>
+<span class="c">	*/</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">clearEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;clear&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">clearEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="nx">clearEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
+
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* The default Config handler for the &quot;pages&quot; property</span>
+<span class="c">* @method configPages</span>
+<span class="c">* @param {String} type	The CustomEvent type (usually the property name)</span>
+<span class="c">* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configPages</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">pageCount</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">pageCount</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">calId</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">p</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">calContainerId</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">containerId</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">p</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">childConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getConfig</span><span class="o">();</span>
+		<span class="nx">childConfig</span><span class="o">.</span><span class="nx">close</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="nx">childConfig</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">constructChild</span><span class="o">(</span><span class="nx">calId</span><span class="o">,</span> <span class="nx">calContainerId</span><span class="o">,</span> <span class="nx">childConfig</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">caldate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">caldate</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">);</span>
+		
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">Style</span><span class="o">.</span><span class="nx">CSS_SINGLE</span><span class="o">);</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="s2">&quot;groupcal&quot;</span><span class="o">);</span>
+		
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">===</span><span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="s2">&quot;first&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">==(</span><span class="nx">pageCount</span><span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="s2">&quot;last&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">index</span> <span class="o">=</span> <span class="nx">p</span><span class="o">;</span> 
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* The default Config handler for the &quot;pagedate&quot; property</span>
+<span class="c">* @method configPageDate</span>
+<span class="c">* @param {String} type	The CustomEvent type (usually the property name)</span>
+<span class="c">* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">configPageDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+	<span class="k">var</span> <span class="nx">firstPageDate</span><span class="o">;</span>
+	
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">firstPageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">_parsePageDate</span><span class="o">(</span><span class="nx">val</span><span class="o">);</span>
+			<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">firstPageDate</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">firstPageDate</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">pageDate</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
+			<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Delegates a configuration property to the CustomEvents associated with the CalendarGroup&#39;s children</span>
+<span class="c">* @method delegateConfig</span>
+<span class="c">* @param {String} type	The CustomEvent type (usually the property name)</span>
+<span class="c">* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">delegateConfig</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+	<span class="k">var</span> <span class="nx">cal</span><span class="o">;</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">p</span><span class="o">++)</span> <span class="o">{</span>
+		<span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">val</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* Adds a function to all child Calendars within this CalendarGroup.</span>
+<span class="c">* @method setChildFunction</span>
+<span class="c">* @param {String}		fnName		The name of the function</span>
+<span class="c">* @param {Function}		fn			The function to apply to each Calendar page object</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setChildFunction</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fnName</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">pageCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pages&quot;</span><span class="o">);</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">pageCount</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">][</span><span class="nx">fnName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">fn</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Calls a function within all child Calendars within this CalendarGroup.</span>
+<span class="c">* @method callChildFunction</span>
+<span class="c">* @param {String}		fnName		The name of the function</span>
+<span class="c">* @param {Array}		args		The arguments to pass to the function</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">callChildFunction</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fnName</span><span class="o">,</span> <span class="nx">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">pageCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pages&quot;</span><span class="o">);</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">pageCount</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">page</span><span class="o">[</span><span class="nx">fnName</span><span class="o">])</span> <span class="o">{</span>
+			<span class="k">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">page</span><span class="o">[</span><span class="nx">fnName</span><span class="o">];</span>
+			<span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">page</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>	
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Constructs a child calendar. This method can be overridden if a subclassed version of the default</span>
+<span class="c">* calendar is to be used.</span>
+<span class="c">* @method constructChild</span>
+<span class="c">* @param {String}	id			The id of the table element that will represent the calendar widget</span>
+<span class="c">* @param {String}	containerId	The id of the container div element that will wrap the calendar table</span>
+<span class="c">* @param {Object}	config		The configuration object containing the Calendar&#39;s arguments</span>
+<span class="c">* @return {YAHOO.widget.Calendar}	The YAHOO.widget.Calendar instance that is constructed</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">constructChild</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span><span class="nx">containerId</span><span class="o">,</span><span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">containerId</span><span class="o">);</span>
+	<span class="k">if</span> <span class="o">(!</span> <span class="nx">container</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+		<span class="nx">container</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">containerId</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">container</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span><span class="nx">containerId</span><span class="o">,</span><span class="nx">config</span><span class="o">);</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* Sets the calendar group&#39;s month explicitly. This month will be set into the first</span>
+<span class="c">* page of the multi-page calendar, and all other months will be iterated appropriately.</span>
+<span class="c">* @method setMonth</span>
+<span class="c">* @param {Number}	month		The numeric month, from 0 (January) to 11 (December)</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setMonth</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">month</span><span class="o">)</span> <span class="o">{</span>
+	<span class="nx">month</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">month</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+	<span class="k">var</span> <span class="nx">currYear</span><span class="o">;</span>
+	
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">currYear</span> <span class="o">=</span> <span class="nx">pageDate</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="nx">pageDate</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="nx">currYear</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">pageDate</span><span class="o">,</span> <span class="nx">month</span><span class="o">+</span><span class="nx">p</span><span class="o">);</span> 
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">pageDate</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Sets the calendar group&#39;s year explicitly. This year will be set into the first</span>
+<span class="c">* page of the multi-page calendar, and all other months will be iterated appropriately.</span>
+<span class="c">* @method setYear</span>
+<span class="c">* @param {Number}	year		The numeric 4-digit year</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setYear</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">year</span><span class="o">)</span> <span class="o">{</span>
+	<span class="nx">year</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">year</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;pageDate&quot;</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">((</span><span class="nx">pageDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span><span class="o">&gt;</span><span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">year</span><span class="o">+=</span><span class="m">1</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="nx">year</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+<span class="c">/**</span>
+<span class="c">* Calls the render function of all child calendars within the group.</span>
+<span class="c">* @method render</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">render</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">renderHeader</span><span class="o">();</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+	<span class="o">}</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">renderFooter</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Selects a date or a collection of dates on the current calendar. This method, by default,</span>
+<span class="c">* does not call the render method explicitly. Once selection has completed, render must be </span>
+<span class="c">* called for the changes to be reflected visually.</span>
+<span class="c">* @method select</span>
+<span class="c">* @param	{String/Date/Date[]}	date	The date string of dates to select in the current calendar. Valid formats are</span>
+<span class="c">*								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).</span>
+<span class="c">*								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).</span>
+<span class="c">*								This method can also take a JavaScript Date object or an array of Date objects.</span>
+<span class="c">* @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">select</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">select</span><span class="o">(</span><span class="nx">date</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Selects a date on the current calendar by referencing the index of the cell that should be selected.</span>
+<span class="c">* This method is used to easily select a single cell (usually with a mouse click) without having to do</span>
+<span class="c">* a full render. The selected style is applied to the cell directly.</span>
+<span class="c">* @method selectCell</span>
+<span class="c">* @param	{Number}	cellIndex	The index of the cell to select in the current calendar. </span>
+<span class="c">* @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">selectCell</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">cellIndex</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">selectCell</span><span class="o">(</span><span class="nx">cellIndex</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Deselects a date or a collection of dates on the current calendar. This method, by default,</span>
+<span class="c">* does not call the render method explicitly. Once deselection has completed, render must be </span>
+<span class="c">* called for the changes to be reflected visually.</span>
+<span class="c">* @method deselect</span>
+<span class="c">* @param	{String/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are</span>
+<span class="c">*								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).</span>
+<span class="c">*								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).</span>
+<span class="c">*								This method can also take a JavaScript Date object or an array of Date objects.	</span>
+<span class="c">* @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">deselect</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">deselect</span><span class="o">(</span><span class="nx">date</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Deselects all dates on the current calendar.</span>
+<span class="c">* @method deselectAll</span>
+<span class="c">* @return {Date[]}		Array of JavaScript Date objects representing all individual dates that are currently selected.</span>
+<span class="c">*						Assuming that this function executes properly, the return value should be an empty array.</span>
+<span class="c">*						However, the empty array is returned for the sake of being able to check the selection status</span>
+<span class="c">*						of the calendar.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">deselectAll</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">deselectAll</span><span class="o">();</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Deselects a date on the current calendar by referencing the index of the cell that should be deselected.</span>
+<span class="c">* This method is used to easily deselect a single cell (usually with a mouse click) without having to do</span>
+<span class="c">* a full render. The selected style is removed from the cell directly.</span>
+<span class="c">* @method deselectCell</span>
+<span class="c">* @param	{Number}	cellIndex	The index of the cell to deselect in the current calendar. </span>
+<span class="c">* @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">deselectCell</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">cellIndex</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">deselectCell</span><span class="o">(</span><span class="nx">cellIndex</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Resets the calendar widget to the originally selected month and year, and </span>
+<span class="c">* sets the calendar to the initial selection(s).</span>
+<span class="c">* @method reset</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">reset</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Clears the selected dates in the current calendar widget and sets the calendar</span>
+<span class="c">* to the current month and year.</span>
+<span class="c">* @method clear</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">clear</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">clear</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Navigates to the next month page in the calendar widget.</span>
+<span class="c">* @method nextMonth</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">nextMonth</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">nextMonth</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Navigates to the previous month page in the calendar widget.</span>
+<span class="c">* @method previousMonth</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">previousMonth</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span><span class="nx">p</span><span class="o">&gt;=</span><span class="m">0</span><span class="o">;--</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">previousMonth</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Navigates to the next year in the currently selected month in the calendar widget.</span>
+<span class="c">* @method nextYear</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">nextYear</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">nextYear</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Navigates to the previous year in the currently selected month in the calendar widget.</span>
+<span class="c">* @method previousYear</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">previousYear</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">previousYear</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* Gets the list of currently selected dates from the calendar.</span>
+<span class="c">* @return			An array of currently selected JavaScript Date objects.</span>
+<span class="c">* @type Date[]</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getSelectedDates</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+	<span class="k">var</span> <span class="nx">returnDates</span> <span class="o">=</span> <span class="o">[];</span>
+	<span class="k">var</span> <span class="nx">selected</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">);</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">d</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">d</span><span class="o">&lt;</span><span class="nx">selected</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">dateArray</span> <span class="o">=</span> <span class="nx">selected</span><span class="o">[</span><span class="nx">d</span><span class="o">];</span>
+
+		<span class="k">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">dateArray</span><span class="o">[</span><span class="m">0</span><span class="o">],</span><span class="nx">dateArray</span><span class="o">[</span><span class="m">1</span><span class="o">]-</span><span class="m">1</span><span class="o">,</span><span class="nx">dateArray</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+		<span class="nx">returnDates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">date</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="nx">returnDates</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span><span class="nx">b</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="nx">a</span><span class="o">-</span><span class="nx">b</span><span class="o">;</span> <span class="o">}</span> <span class="o">);</span>
+	<span class="k">return</span> <span class="nx">returnDates</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Adds a renderer to the render stack. The function reference passed to this method will be executed</span>
+<span class="c">* when a date cell matches the conditions specified in the date string for this renderer.</span>
+<span class="c">* @method addRenderer</span>
+<span class="c">* @param	{String}	sDates		A date string to associate with the specified renderer. Valid formats</span>
+<span class="c">*									include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)</span>
+<span class="c">* @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addRenderer</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sDates</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">addRenderer</span><span class="o">(</span><span class="nx">sDates</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Adds a month to the render stack. The function reference passed to this method will be executed</span>
+<span class="c">* when a date cell matches the month passed to this method.</span>
+<span class="c">* @method addMonthRenderer</span>
+<span class="c">* @param	{Number}	month		The month (1-12) to associate with this renderer</span>
+<span class="c">* @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addMonthRenderer</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">month</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">addMonthRenderer</span><span class="o">(</span><span class="nx">month</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Adds a weekday to the render stack. The function reference passed to this method will be executed</span>
+<span class="c">* when a date cell matches the weekday passed to this method.</span>
+<span class="c">* @method addWeekdayRenderer</span>
+<span class="c">* @param	{Number}	weekday		The weekday (0-6) to associate with this renderer</span>
+<span class="c">* @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addWeekdayRenderer</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">weekday</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">.</span><span class="nx">length</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">addWeekdayRenderer</span><span class="o">(</span><span class="nx">weekday</span><span class="o">,</span> <span class="nx">fnRender</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Renders the header for the CalendarGroup.</span>
+<span class="c">* @method renderHeader</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">renderHeader</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{};</span>
+
+<span class="c">/**</span>
+<span class="c">* Renders a footer for the 2-up calendar container. By default, this method is</span>
+<span class="c">* unimplemented.</span>
+<span class="c">* @method renderFooter</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">renderFooter</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{};</span>
+
+<span class="c">/**</span>
+<span class="c">* Adds the designated number of months to the current calendar month, and sets the current</span>
+<span class="c">* calendar page date to the new month.</span>
+<span class="c">* @method addMonths</span>
+<span class="c">* @param {Number}	count	The number of months to add to the current calendar</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addMonths</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">callChildFunction</span><span class="o">(</span><span class="s2">&quot;addMonths&quot;</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* Subtracts the designated number of months from the current calendar month, and sets the current</span>
+<span class="c">* calendar page date to the new month.</span>
+<span class="c">* @method subtractMonths</span>
+<span class="c">* @param {Number}	count	The number of months to subtract from the current calendar</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">subtractMonths</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">callChildFunction</span><span class="o">(</span><span class="s2">&quot;subtractMonths&quot;</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Adds the designated number of years to the current calendar, and sets the current</span>
+<span class="c">* calendar page date to the new month.</span>
+<span class="c">* @method addYears</span>
+<span class="c">* @param {Number}	count	The number of years to add to the current calendar</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addYears</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">callChildFunction</span><span class="o">(</span><span class="s2">&quot;addYears&quot;</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Subtcats the designated number of years from the current calendar, and sets the current</span>
+<span class="c">* calendar page date to the new month.</span>
+<span class="c">* @method subtractYears</span>
+<span class="c">* @param {Number}	count	The number of years to subtract from the current calendar</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">subtractYears</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">callChildFunction</span><span class="o">(</span><span class="s2">&quot;subtractYears&quot;</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c">* Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.</span>
+<span class="c">* The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained</span>
+<span class="c">* @method	_setMonthOnDate</span>
+<span class="c">* @private</span>
+<span class="c">* @param	{Date}	date	The Date object on which to set the month index</span>
+<span class="c">* @param	{Number}	iMonth	The month index to set</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_setMonthOnDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">iMonth</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c">// BUG in Safari 1.3, 2.0 (WebKit build &lt; 420), Date.setMonth does not work consistently if iMonth is not 0-11</span>
+<span class="c"></span>	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;safari&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">iMonth</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="nx">iMonth</span> <span class="o">&gt;</span> <span class="m">11</span><span class="o">))</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">DM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateMath</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">newDate</span> <span class="o">=</span> <span class="nx">DM</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">date</span><span class="o">,</span> <span class="nx">DM</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="nx">iMonth</span><span class="o">-</span><span class="nx">date</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">());</span>
+		<span class="nx">date</span><span class="o">.</span><span class="nx">setTime</span><span class="o">(</span><span class="nx">newDate</span><span class="o">.</span><span class="nx">getTime</span><span class="o">());</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="nx">date</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="nx">iMonth</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">};</span>
+
+
+<span class="c">/**</span>
+<span class="c">* CSS class representing the container for the calendar</span>
+<span class="c">* @property YAHOO.widget.CalendarGroup.CSS_CONTAINER</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_CONTAINER</span> <span class="o">=</span> <span class="s2">&quot;yui-calcontainer&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* CSS class representing the container for the calendar</span>
+<span class="c">* @property YAHOO.widget.CalendarGroup.CSS_MULTI_UP</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_MULTI_UP</span> <span class="o">=</span> <span class="s2">&quot;multi&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* CSS class representing the title for the 2-up calendar</span>
+<span class="c">* @property YAHOO.widget.CalendarGroup.CSS_2UPTITLE</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_2UPTITLE</span> <span class="o">=</span> <span class="s2">&quot;title&quot;</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* CSS class representing the close icon for the 2-up calendar</span>
+<span class="c">* @property YAHOO.widget.CalendarGroup.CSS_2UPCLOSE</span>
+<span class="c">* @static</span>
+<span class="c">* @final</span>
+<span class="c">* @deprecated	Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.</span>
+<span class="c">*					Calendar&#39;s &lt;a href=&quot;YAHOO.widget.Calendar.html#Style.CSS_CLOSE&quot;&gt;Style.CSS_CLOSE&lt;/a&gt; property now represents the CSS class used to render the close icon</span>
+<span class="c">* @type String</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">CSS_2UPCLOSE</span> <span class="o">=</span> <span class="s2">&quot;close-icon&quot;</span><span class="o">;</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">,</span> <span class="s2">&quot;buildDayLabel&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;buildMonthLabel&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderOutOfBoundsDate&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderRowHeader&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderRowFooter&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellDefault&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;styleCellDefault&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleHighlight1&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleHighlight2&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleHighlight3&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleHighlight4&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleToday&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellStyleSelected&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderCellNotThisMonth&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;renderBodyCellRestricted&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;initStyles&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;configTitle&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;configClose&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;hide&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;show&quot;</span><span class="o">,</span>
+																 <span class="s2">&quot;browser&quot;</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c">* Returns a string representation of the object.</span>
+<span class="c">* @method toString</span>
+<span class="c">* @return {String}	A string representation of the CalendarGroup object.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">return</span> <span class="s2">&quot;CalendarGroup &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalGrp</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c">* @class YAHOO.widget.Calendar2up</span>
+<span class="c">* @extends YAHOO.widget.CalendarGroup</span>
+<span class="c">* @deprecated The old Calendar2up class is no longer necessary, since CalendarGroup renders in a 2up view by default.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar2up</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar2up</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CalendarGroup</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c">* @deprecated The old Calendar2up class is no longer necessary, since CalendarGroup renders in a 2up view by default.</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Cal2up</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar2up</span><span class="o">;</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class="selected"><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

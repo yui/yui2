@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest   TestLogger.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                
+                 &gt; TestLogger.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;tool&quot;</span><span class="o">);</span>
+
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// TestLogger object</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Displays test execution progress and results, providing filters based on</span>
+<span class="c"> * different key events.</span>
+<span class="c"> * @namespace YAHOO.tool</span>
+<span class="c"> * @class TestLogger</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param {HTMLElement} element (Optional) The element to create the logger in.</span>
+<span class="c"> * @param {Object} config (Optional) Configuration options for the logger.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestLogger</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestLogger</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">element</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestLogger</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogReader</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="nx">footerEnabled</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="nx">newestOnTop</span> <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Formats message string to HTML for output to console.</span>
+<span class="c">     * @private</span>
+<span class="c">     * @method formatMsg</span>
+<span class="c">     * @param oLogMsg {Object} Log message object.</span>
+<span class="c">     * @return {String} HTML-formatted message for output to console.</span>
+<span class="c">     */</span>
+    <span class="nx">formatMsg</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">message</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="k">var</span> <span class="nx">category</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="nx">message</span><span class="o">.</span><span class="nx">category</span><span class="o">;</span>        
+        <span class="k">var</span> <span class="nx">text</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">html2Text</span><span class="o">(</span><span class="nx">message</span><span class="o">.</span><span class="nx">msg</span><span class="o">);</span>
+        
+        <span class="k">return</span> <span class="s2">&quot;&lt;pre&gt;&lt;p&gt;&lt;span class=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">category</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">category</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;&lt;/span&gt; &quot;</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/p&gt;&lt;/pre&gt;&quot;</span><span class="o">;</span>
+    
+    <span class="o">},</span>
+    
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Private Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    
+    <span class="c">/*</span>
+<span class="c">     * Initializes the logger.</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">init</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+    
+        <span class="c">//attach to any available TestRunner</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setTestRunner</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="c">//hide useless sources</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">hideSource</span><span class="o">(</span><span class="s2">&quot;global&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">hideSource</span><span class="o">(</span><span class="s2">&quot;LogReader&quot;</span><span class="o">);</span>
+        
+        <span class="c">//hide useless message categories</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">hideCategory</span><span class="o">(</span><span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">hideCategory</span><span class="o">(</span><span class="s2">&quot;window&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">hideCategory</span><span class="o">(</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
+        
+        <span class="c">//reset the logger</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">clearConsole</span><span class="o">();</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Clears the reference to the TestRunner from previous operations. This </span>
+<span class="c">     * unsubscribes all events and removes the object reference.</span>
+<span class="c">     * @return {Void}</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">clearTestRunner</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_runner</span><span class="o">){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_runner</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_runner</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Sets the source test runner that the logger should monitor.</span>
+<span class="c">     * @param {YAHOO.tool.TestRunner} testRunner The TestRunner to observe.</span>
+<span class="c">     * @return {Void}</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">setTestRunner</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testRunner</span> <span class="c">/*:YAHOO.tool.TestRunner*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+    
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_runner</span><span class="o">){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">clearTestRunner</span><span class="o">();</span>
+        <span class="o">}</span>
+        
+        <span class="k">this</span><span class="o">.</span><span class="nx">_runner</span> <span class="o">=</span> <span class="nx">testRunner</span><span class="o">;</span>
+        
+        <span class="c">//setup event _handlers</span>
+<span class="c"></span>        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_PASS_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_FAIL_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_IGNORE_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">BEGIN_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">COMPLETE_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_SUITE_BEGIN_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_SUITE_COMPLETE_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_CASE_BEGIN_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">testRunner</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">testRunner</span><span class="o">.</span><span class="nx">TEST_CASE_COMPLETE_EVENT</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleTestRunnerEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>    
+    <span class="o">},</span>
+    
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Event Handlers</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    
+    <span class="c">/**</span>
+<span class="c">     * Handles all TestRunner events, outputting appropriate data into the console.</span>
+<span class="c">     * @param {Object} data The event data object.</span>
+<span class="c">     * @return {Void}</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">_handleTestRunnerEvent</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">data</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+    
+        <span class="c">//shortcut variables</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">TestRunner</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">;</span>
+    
+        <span class="c">//data variables</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">message</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">messageType</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        
+        <span class="nx">switch</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">type</span><span class="o">){</span>
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">BEGIN_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Testing began at &quot;</span> <span class="o">+</span> <span class="o">(</span><span class="k">new</span> <span class="nb">Date</span><span class="o">()).</span><span class="nx">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">COMPLETE_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Testing completed at &quot;</span> <span class="o">+</span> <span class="o">(</span><span class="k">new</span> <span class="nb">Date</span><span class="o">()).</span><span class="nx">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;.\nPassed:&quot;</span> 
+                    <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">+</span> <span class="s2">&quot; Failed:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">+</span> <span class="s2">&quot; Total:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">total</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_FAIL_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testName</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">error</span><span class="o">.</span><span class="nx">getMessage</span><span class="o">();</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_IGNORE_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testName</span> <span class="o">+</span> <span class="s2">&quot;: ignored.&quot;</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;ignore&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_PASS_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testName</span> <span class="o">+</span> <span class="s2">&quot;: passed.&quot;</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;pass&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_SUITE_BEGIN_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Test suite \&quot;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;\&quot; started.&quot;</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_SUITE_COMPLETE_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Test suite \&quot;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;\&quot; completed.\nPassed:&quot;</span> 
+                    <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">+</span> <span class="s2">&quot; Failed:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">+</span> <span class="s2">&quot; Total:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">total</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_CASE_BEGIN_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Test case \&quot;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testCase</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;\&quot; started.&quot;</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+                
+            <span class="nx">case</span> <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">TEST_CASE_COMPLETE_EVENT</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Test case \&quot;&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">testCase</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;\&quot; completed.\nPassed:&quot;</span> 
+                    <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">+</span> <span class="s2">&quot; Failed:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">+</span> <span class="s2">&quot; Total:&quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">total</span><span class="o">;</span>
+                <span class="nx">messageType</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="nx">default</span><span class="o">:</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Unexpected event &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">.</span><span class="nx">type</span><span class="o">;</span>
+                <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
+    
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">message</span><span class="o">,</span> <span class="nx">messageType</span><span class="o">,</span> <span class="s2">&quot;TestRunner&quot;</span><span class="o">);</span>    
+    <span class="o">}</span>
+    
+<span class="o">});</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class="selected"><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

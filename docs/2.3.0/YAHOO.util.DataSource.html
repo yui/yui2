@@ -1,0 +1,2419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datasource  YAHOO.util.DataSource   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataSource Utility&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datasource.html">datasource</a>
+                 &gt; YAHOO.util.DataSource 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.DataSource</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The DataSource class defines and manages a live set of data for widgets to
+interact with. Examples of live databases include in-memory
+local data such as a JavaScript array, a JavaScript function, or JSON, or
+remote data such as data retrieved through an XHR connection.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.DataSource</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                oLiveData
+
+                                                , 
+                                                oConfigs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>oLiveData
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                      Pointer to live database.
+                                                </dd>
+                                                <dd>
+                                                    <code>oConfigs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                      (optional) Object literal of configuration values.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_aCache">_aCache</a>
+                                        <code>- private Object[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Local cache of data result object literals indexed chronologically.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_oQueue">_oQueue</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Local queue of request connections, enabled if queue needs to be managed.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_sName">_sName</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Name of DataSource instance.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_xhrCallback">_xhrCallback</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Define Connection Manager callback object
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="connMethodPost">connMethodPost</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If data is accessed over XHR via Connection Manager, true if data should be
+sent via POST, otherwise data will be sent via GET.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="connMgr">connMgr</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Alias to YUI Connection Manager. Allows implementers to specify their own
+subclasses of the YUI Connection Manager utility.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: YAHOO.util.Connect
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="connTimeout">connTimeout</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If data is accessed over XHR via Connection Manager, the connection timeout
+defines how many  milliseconds the XHR connection will wait for a server
+response. Any non-zero value will enable the Connection utility's
+Auto-Abort feature.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="connXhrMode">connXhrMode</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If data is accessed over XHR via Connection Manager, this setting defines
+request/response management in the following manner:
+<dl>
+<dt>queueRequests</dt>
+<dd>If a request is already in progress, wait until response is returned
+before sending the next request.</dd>
+<dt>cancelStaleRequests</dt>
+<dd>If a request is already in progress, cancel it before sending the next
+request.</dd>
+<dt>ignoreStaleResponses</dt>
+<dd>Send all requests, but handle only the response for the most recently
+sent request.</dd>
+<dt>allowAll</dt>
+<dd>Send all requests and handle all responses.</dd>
+</dl>
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "allowAll"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="DataSource._nIndex">DataSource._nIndex</a>
+                                        <code>- private static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal class variable to index multiple DataSource instances.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="DataSource._nTransactionId">DataSource._nTransactionId</a>
+                                        <code>- private static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal class variable to assign unique transaction IDs.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="dataType">dataType</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Where the live data is held.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: YAHOO.util.DataSource.TYPE_UNKNOWN
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="ERROR_DATAINVALID">ERROR_DATAINVALID</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Error message for invalid dataresponses.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Invalid data"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="ERROR_DATANULL">ERROR_DATANULL</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Error message for null data responses.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Null data"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="liveData">liveData</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Pointer to live database.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="maxCacheEntries">maxCacheEntries</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Max size of the local cache.  Set to 0 to turn off caching.  Caching is
+useful to reduce the number of server connections.  Recommended only for data
+sources that return comprehensive results for queries or when stale data is
+not an issue.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="responseSchema">responseSchema</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Response schema object literal takes a combination of the following properties:
+<dl>
+<dt>resultsList</dt> <dd>Pointer to array of tabular data</dd>
+<dt>resultNode</dt> <dd>Pointer to node name of row data (XML data only)</dd>
+<dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
+<dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
+<dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
+such as: {key:"fieldname",parser:YAHOO.util.DataSource.parseDate}</dd>
+</dl>
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="responseType">responseType</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Format of response.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: YAHOO.util.DataSource.TYPE_UNKNOWN
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_HTMLTABLE">TYPE_HTMLTABLE</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is an HTML TABLE element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 6
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_JSARRAY">TYPE_JSARRAY</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is a JavaScript Array.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_JSFUNCTION">TYPE_JSFUNCTION</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is a JavaScript Function.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 1
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_JSON">TYPE_JSON</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is JSON.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 3
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_TEXT">TYPE_TEXT</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is plain text.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 5
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_UNKNOWN">TYPE_UNKNOWN</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is unknown.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: -1
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_XHR">TYPE_XHR</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is hosted on a server via an XHR connection.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="TYPE_XML">TYPE_XML</a>
+                                        <code>- final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Type is XML.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 4
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_xhrFailure">_xhrFailure</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_xhrFailure</strong>
+                                           (
+                                                
+                                                        
+                                                         oResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Define Connection Manager failure handler
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oResponse &lt;Object&gt;</code>
+                                                              HTTPXMLRequest object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_xhrSuccess">_xhrSuccess</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_xhrSuccess</strong>
+                                           (
+                                                
+                                                        
+                                                         oResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Define Connection Manager success handler
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oResponse &lt;Object&gt;</code>
+                                                              HTTPXMLRequest object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addToCache">addToCache</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addToCache</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a new item to the cache. If cache is full, evicts the stalest item
+before adding the new item.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oResponse &lt;Object&gt;</code>
+                                                              Response object to cache.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="DataSource.parseDate">DataSource.parseDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Date
+                                            <strong>DataSource.parseDate</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Converts data to type Date.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;Date | String | Number&gt;</code>
+                                                              Data to convert.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>A Date instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="DataSource.parseNumber">DataSource.parseNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Number
+                                            <strong>DataSource.parseNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Converts data to type Number.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;String | Number | Boolean | Null&gt;</code>
+                                                              Data to convert. Beware, null
+returns as 0.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>A number, or null if NaN.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="DataSource.parseString">DataSource.parseString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Number
+                                            <strong>DataSource.parseString</strong>
+                                           (
+                                                
+                                                        
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Converts data to type String.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oData &lt;String | Number | Boolean | Date | Array | Object&gt;</code>
+                                                              Data to parse.
+The special values null and undefined will return null.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>A string, or null.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doBeforeCallback">doBeforeCallback</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>doBeforeCallback</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                                        , 
+                                                         oParsedResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method gives implementers access to the original raw response and
+the parsed response (parsed against the given schema) before the data
+is added to the cache (if applicable) and then sent back to callback function.
+This is your chance to access the raw response and/or populate the parsed
+response with any custom data.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oParsedResponse &lt;Object&gt;</code>
+                                                              The parsed response to return to calling object.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doBeforeParseData">doBeforeParseData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>doBeforeParseData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method gives implementers access to the original raw response
+before the data gets parsed. Implementers should take care not to return an
+unparsable or otherwise invalid raw response.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Raw response for parsing.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="flushCache">flushCache</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>flushCache</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Flushes cache.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getCachedResponse">getCachedResponse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>getCachedResponse</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oCallback
+                                                    
+                                                
+                                                        , 
+                                                         oCaller
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method passes request to cache and returns cached response if any,
+refreshing the hit in the cache as the newest item. Returns null if there is
+no cache hit.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCallback &lt;Function&gt;</code>
+                                                              Handler function to receive the response.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCaller &lt;Object&gt;</code>
+                                                              The Calling object that is making the request.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Cached response object or null.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="handleResponse">handleResponse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>handleResponse</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                                        , 
+                                                         oCallback
+                                                    
+                                                
+                                                        , 
+                                                         oCaller
+                                                    
+                                                
+                                                        , 
+                                                         tId
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Handles raw data response from live data source. Sends a parsed response object
+to the callback function in this format:
+fnCallback(oRequest, oParsedResponse)
+where the oParsedResponse object literal with the following properties:
+<ul>
+<li>tId {Number} Unique transaction ID</li>
+<li>results {Array} Array of parsed data results</li>
+<li>error {Boolean} True if there was an error</li>
+</ul>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCallback &lt;Function&gt;</code>
+                                                              Handler function to receive the response.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCaller &lt;Object&gt;</code>
+                                                              The calling object that is making the request.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>tId &lt;Number&gt;</code>
+                                                              Transaction ID.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isCacheHit">isCacheHit</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>isCacheHit</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oCachedRequest
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default overridable method matches given request to given cached request.
+Returns true if is a hit, returns false otherwise.  Implementers should
+override this method to customize the cache-matching algorithm.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCachedRequest &lt;Object&gt;</code>
+                                                              Cached request object.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>True if given request matches cached request, false otherwise.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="makeConnection">makeConnection</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>makeConnection</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oCallback
+                                                    
+                                                
+                                                        , 
+                                                         oCaller
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method provides default functionality to make a connection to
+live data in order to send request. The response coming back is then
+forwarded to the handleResponse function. This method should be customized
+to achieve more complex implementations.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCallback &lt;Function&gt;</code>
+                                                              Handler function to receive the response.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCaller &lt;Object&gt;</code>
+                                                              The Calling object that is making the request.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Transaction ID.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseArrayData">parseArrayData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parseArrayData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method parses raw array data into a response object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseHTMLTableData">parseHTMLTableData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parseHTMLTableData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method parses raw HTML TABLE element data into a response object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseJSONData">parseJSONData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parseJSONData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method parses raw JSON data into a response object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseTextData">parseTextData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parseTextData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method parses raw plain text data into a response object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseXMLData">parseXMLData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parseXMLData</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oRawResponse
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Overridable method parses raw XML data into a response object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRawResponse &lt;Object&gt;</code>
+                                                              The raw response from the live database.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Parsed response object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="sendRequest">sendRequest</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>sendRequest</strong>
+                                           (
+                                                
+                                                        
+                                                         oRequest
+                                                    
+                                                
+                                                        , 
+                                                         oCallback
+                                                    
+                                                
+                                                        , 
+                                                         oCaller
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            First looks for cached response, then sends request to live data.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oRequest &lt;Object&gt;</code>
+                                                              Request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCallback &lt;Function&gt;</code>
+                                                              Handler function to receive the response.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oCaller &lt;Object&gt;</code>
+                                                              The Calling object that is making the request.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Transaction ID, or null if response found in cache.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor to the unique name of the DataSource instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Unique name of the DataSource instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.util.EventProvider.html#createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                    </code>
+                                </div>
+                            </div>
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="cacheFlushEvent">cacheFlushEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>cacheFlushEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the local cache is flushed.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="cacheRequestEvent">cacheRequestEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>cacheRequestEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a request is made to the local cache.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="dataErrorEvent">dataErrorEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>dataErrorEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.message
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when an error is encountered with the live data source.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.message &lt;String&gt;</code>
+                                                              The error message.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getCachedResponseEvent">getCachedResponseEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>getCachedResponseEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.response
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.tId
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when data is retrieved from the local cache.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.response &lt;Object&gt;</code>
+                                                              The response object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.tId &lt;Number&gt;</code>
+                                                              Transaction ID.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="requestEvent">requestEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>requestEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a request is sent to the live data source.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="responseCacheEvent">responseCacheEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>responseCacheEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.response
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when response is cached.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.response &lt;Object&gt;</code>
+                                                              The parsed response object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="responseEvent">responseEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>responseEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.response
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when live data source sends response.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.response &lt;Object&gt;</code>
+                                                              The raw response object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="responseParseEvent">responseParseEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>responseParseEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         oArgs.request
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.response
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.callback
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.caller
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when response is parsed.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oArgs.request &lt;Object&gt;</code>
+                                                              The request object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.response &lt;Object&gt;</code>
+                                                              The parsed response object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.callback &lt;Function&gt;</code>
+                                                              The callback function.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oArgs.caller &lt;Object&gt;</code>
+                                                              The parent object of the callback function.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class="selected"><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.DataSource.html">YAHOO.util.DataSource</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DataSource.js.html">DataSource.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_aCache">_aCache</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_oQueue">_oQueue</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_sName">_sName</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_xhrCallback">_xhrCallback</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#connMethodPost">connMethodPost</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#connMgr">connMgr</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#connTimeout">connTimeout</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#connXhrMode">connXhrMode</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#DataSource._nIndex">DataSource._nIndex</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#DataSource._nTransactionId">DataSource._nTransactionId</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#dataType">dataType</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#ERROR_DATAINVALID">ERROR_DATAINVALID</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#ERROR_DATANULL">ERROR_DATANULL</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#liveData">liveData</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#maxCacheEntries">maxCacheEntries</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#responseSchema">responseSchema</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#responseType">responseType</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_HTMLTABLE">TYPE_HTMLTABLE</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_JSARRAY">TYPE_JSARRAY</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_JSFUNCTION">TYPE_JSFUNCTION</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_JSON">TYPE_JSON</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_TEXT">TYPE_TEXT</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_UNKNOWN">TYPE_UNKNOWN</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_XHR">TYPE_XHR</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#TYPE_XML">TYPE_XML</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_xhrFailure">_xhrFailure</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_xhrSuccess">_xhrSuccess</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addToCache">addToCache</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#DataSource.parseDate">DataSource.parseDate</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#DataSource.parseNumber">DataSource.parseNumber</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#DataSource.parseString">DataSource.parseString</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#doBeforeCallback">doBeforeCallback</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#doBeforeParseData">doBeforeParseData</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#flushCache">flushCache</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#getCachedResponse">getCachedResponse</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#handleResponse">handleResponse</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#isCacheHit">isCacheHit</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#makeConnection">makeConnection</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#parseArrayData">parseArrayData</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#parseHTMLTableData">parseHTMLTableData</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#parseJSONData">parseJSONData</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#parseTextData">parseTextData</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#parseXMLData">parseXMLData</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#sendRequest">sendRequest</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#cacheFlushEvent">cacheFlushEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#cacheRequestEvent">cacheRequestEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#dataErrorEvent">dataErrorEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#getCachedResponseEvent">getCachedResponseEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#requestEvent">requestEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#responseCacheEvent">responseCacheEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#responseEvent">responseEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#responseParseEvent">responseParseEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

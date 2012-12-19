@@ -1,0 +1,1528 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuiloader   yuiloader.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuiloader&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuiloader.html">yuiloader</a>
+                
+                 &gt; yuiloader.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * Provides dynamic loading for the YUI library.  It includes the dependency</span>
+<span class="c"> * info for the library, and will automatically pull in dependencies for</span>
+<span class="c"> * the modules requested.  It supports rollup files (such as utilities.js</span>
+<span class="c"> * and yahoo-dom-event.js), and will automatically use these when</span>
+<span class="c"> * appropriate in order to minimize the number of http connections</span>
+<span class="c"> * required to load all of the dependencies.</span>
+<span class="c"> * </span>
+<span class="c"> * @module yuiloader</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * YUILoader provides dynamic loading for YUI.</span>
+<span class="c"> * @class YAHOO.util.YUILoader</span>
+<span class="c"> * @todo</span>
+<span class="c"> *      version management, automatic sandboxing</span>
+<span class="c"> */</span>
+<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+ 
+    <span class="c">// Define YAHOO_config if it doesn&#39;t exist.  Only relevant if YAHOO is not</span>
+<span class="c"></span>    <span class="c">// already on the page</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO_config</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">YAHOO_config</span> <span class="o">=</span> <span class="o">{};</span>
+    <span class="o">}</span>
+
+    <span class="c">// YUI is locally scoped, only pieces of it will be referenced in YAHOO</span>
+<span class="c"></span>    <span class="c">// after YAHOO has been loaded.</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">YUI</span> <span class="o">=</span> <span class="o">{</span>
+
+        <span class="c">/*</span>
+<span class="c">         * The library metadata for the current release  The is the default</span>
+<span class="c">         * value for YAHOO.util.YUILoader.moduleInfo</span>
+<span class="c">         * @property YUIInfo</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">info</span><span class="o">:</span> <span class="o">{</span>
+
+    <span class="s1">&#39;base&#39;</span><span class="o">:</span> <span class="s1">&#39;http://yui.yahooapis.com/2.3.0/build/&#39;</span><span class="o">,</span>
+
+    <span class="s1">&#39;skin&#39;</span><span class="o">:</span> <span class="o">{</span>
+        <span class="s1">&#39;defaultSkin&#39;</span><span class="o">:</span> <span class="s1">&#39;sam&#39;</span><span class="o">,</span>
+        <span class="s1">&#39;base&#39;</span><span class="o">:</span> <span class="s1">&#39;assets/skins/&#39;</span><span class="o">,</span>
+        <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;skin.css&#39;</span><span class="o">,</span>
+        <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">3</span>
+    <span class="o">},</span>
+
+    <span class="s1">&#39;moduleInfo&#39;</span><span class="o">:</span> <span class="o">{</span>
+
+        <span class="s1">&#39;animation&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;animation/animation-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;autocomplete&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;autocomplete/autocomplete-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;button&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;button/button-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;menu&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;calendar&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;calendar/calendar-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;colorpicker&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;colorpicker/colorpicker-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;slider&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;connection&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;connection/connection-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;container&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;container/container-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="c">// button is optional, but creates a circular dep</span>
+<span class="c"></span>            <span class="c">//&#39;optional&#39;: [&#39;dragdrop&#39;, &#39;animation&#39;, &#39;button&#39;],</span>
+<span class="c"></span>            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;containercore&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;containercore&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;container/container_core-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;datasource&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;datasource/datasource-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;datatable&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;datatable/datatable-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;datasource&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;calendar&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;dom&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;dom/dom-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;dragdrop&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;dragdrop/dragdrop-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;editor&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;editor/editor-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;menu&#39;</span><span class="o">,</span> <span class="s1">&#39;container&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;button&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;element&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;element/element-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;event&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event/event-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;fonts&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;fonts/fonts-min.css&#39;</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;grids&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;grids/grids-min.css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;fonts&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;reset&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;history&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;history/history-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;imageloader&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;imageloader/imageloader-experimental-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;logger&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;logger/logger-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;menu&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;menu/menu-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;containercore&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;reset&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;reset/reset-min.css&#39;</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;reset-fonts-grids&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;reset-fonts-grids/reset-fonts-grids.css&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;reset&#39;</span><span class="o">,</span> <span class="s1">&#39;fonts&#39;</span><span class="o">,</span> <span class="s1">&#39;grids&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;slider&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;slider/slider-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;tabview&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;tabview/tabview-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;treeview&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;treeview/treeview-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;utilities&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;utilities/utilities.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;connection&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;yahoo-dom-event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">6</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;yahoo&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yahoo/yahoo-min.js&#39;</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;yahoo-dom-event&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yahoo-dom-event/yahoo-dom-event.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">3</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;yuiloader&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yuiloader/yuiloader-beta-min.js&#39;</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;yuitest&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yuitest/yuitest-beta-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;logger&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+ <span class="o">,</span> 
+
+        <span class="c">// Simple utils since we can&#39;t count on YAHOO.lang being available.</span>
+<span class="c"></span>        <span class="nx">ObjectUtil</span><span class="o">:</span> <span class="o">{</span>
+            <span class="nx">appendArray</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">o</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="nx">clone</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="o">{};</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">c</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="nx">c</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="nx">merge</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">o</span><span class="o">={},</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">j</span> <span class="k">in</span> <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="nx">o</span><span class="o">[</span><span class="nx">j</span><span class="o">]</span> <span class="o">=</span> <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">j</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="nx">o</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="nx">keys</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">ordered</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">a</span><span class="o">=[],</span> <span class="nx">i</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">a</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">i</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">a</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="nx">ArrayUtil</span><span class="o">:</span> <span class="o">{</span>
+
+            <span class="nx">appendArray</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a1</span><span class="o">,</span> <span class="nx">a2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nb">Array</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">push</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">a1</span><span class="o">,</span> <span class="nx">a2</span><span class="o">);</span>
+                <span class="c">/*</span>
+<span class="c">                for (var i=0; i&lt;a2.length; i=i+1) {</span>
+<span class="c">                    a1.push(a2[i]);</span>
+<span class="c">                }</span>
+<span class="c">                */</span>
+            <span class="o">},</span>
+
+            <span class="nx">indexOf</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="nx">i</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="nx">toObject</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="o">{};</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">o</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">o</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/*</span>
+<span class="c">             * Returns a unique array.  Does not maintain order, which is fine</span>
+<span class="c">             * for this application, and performs better than it would if it</span>
+<span class="c">             * did.</span>
+<span class="c">             */</span>
+            <span class="nx">uniq</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">keys</span><span class="o">(</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">ArrayUtil</span><span class="o">.</span><span class="nx">toObject</span><span class="o">(</span><span class="nx">a</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+
+        <span class="c">// loader instances</span>
+<span class="c"></span>        <span class="nx">loaders</span><span class="o">:</span> <span class="o">[],</span>
+
+        <span class="nx">finishInit</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">yahooref</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c">// YAHOO has been loaded either in this window or passed </span>
+<span class="c"></span>            <span class="c">// from the sandbox routine.  Set up local references </span>
+<span class="c"></span>            <span class="c">// to the loader and module metadata in the YAHOO object</span>
+<span class="c"></span>            <span class="c">// in question so additional modules can be loaded. </span>
+<span class="c"></span>
+            <span class="nx">yahooref</span> <span class="o">=</span> <span class="nx">yahooref</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">;</span>
+
+            <span class="nx">yahooref</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">YUIInfo</span><span class="o">=</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">;</span>
+            <span class="nx">yahooref</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">YUILoader</span><span class="o">=</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">YUILoader</span><span class="o">;</span>
+
+        <span class="o">},</span>
+
+        <span class="c">/*</span>
+<span class="c">         * Global handler for the module loaded event exposed by</span>
+<span class="c">         * YAHOO</span>
+<span class="c">         */</span>
+        <span class="nx">onModuleLoaded</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">minfo</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">mname</span> <span class="o">=</span> <span class="nx">minfo</span><span class="o">.</span><span class="nx">name</span><span class="o">,</span> <span class="nx">m</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">loaders</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YUI</span><span class="o">.</span><span class="nx">loaders</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">loadNext</span><span class="o">(</span><span class="nx">mname</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="c">//console.log(YAHOO.lang.dump(minfo));</span>
+<span class="c"></span>
+        <span class="o">},</span>
+
+        <span class="c">/*</span>
+<span class="c">         * Sets up the module metadata</span>
+<span class="c">         */</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">YAHOO_config</span><span class="o">,</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">load</span><span class="o">,</span> 
+                <span class="nx">y_loaded</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">);</span>
+
+
+            <span class="c">// add our listener to the existing YAHOO.env.listeners stack</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">y_loaded</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">listeners</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">onModuleLoaded</span><span class="o">);</span>
+
+            <span class="c">// define a listener in YAHOO_config that YAHOO will pick up</span>
+<span class="c"></span>            <span class="c">// when it is loaded.</span>
+<span class="c"></span>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">listener</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YUI</span><span class="o">.</span><span class="nx">cachedCallback</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">listener</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="nx">c</span><span class="o">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">minfo</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YUI</span><span class="o">.</span><span class="nx">onModuleLoaded</span><span class="o">(</span><span class="nx">minfo</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">cachedCallback</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">YUI</span><span class="o">.</span><span class="nx">cachedCallback</span><span class="o">(</span><span class="nx">minfo</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+            <span class="o">}</span>
+
+            <span class="c">// Fetch the required modules immediately if specified</span>
+<span class="c"></span>            <span class="c">// in YAHOO_config.  Otherwise detect YAHOO and fetch</span>
+<span class="c"></span>            <span class="c">// it if it doesn&#39;t exist so we have a place to put</span>
+<span class="c"></span>            <span class="c">// the loader.  The problem with this is that it will</span>
+<span class="c"></span>            <span class="c">// prevent rollups from working</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">o</span> <span class="o">||</span> <span class="o">!</span><span class="nx">y_loaded</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
+
+                <span class="k">var</span> <span class="nx">loader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">YUILoader</span><span class="o">(</span><span class="nx">o</span><span class="o">);</span>
+                <span class="nx">loader</span><span class="o">.</span><span class="nx">onLoadComplete</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+                        <span class="nx">YUI</span><span class="o">.</span><span class="nx">finishInit</span><span class="o">();</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">onLoadComplete</span><span class="o">)</span> <span class="o">{</span>
+
+                            <span class="nx">loader</span><span class="o">.</span><span class="nx">_pushEvents</span><span class="o">();</span>
+                            <span class="nx">o</span><span class="o">.</span><span class="nx">onLoadComplete</span><span class="o">(</span><span class="nx">loader</span><span class="o">);</span>
+                        <span class="o">}</span>
+
+                        
+                    <span class="o">};</span>
+
+                <span class="c">// If no load was requested, we must load YAHOO</span>
+<span class="c"></span>                <span class="c">// so we have a place to put the loader</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">y_loaded</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">loader</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">&quot;yahoo&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="nx">loader</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">o</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">YUI</span><span class="o">.</span><span class="nx">finishInit</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+    <span class="o">};</span>
+
+    <span class="nx">YUI</span><span class="o">.</span><span class="nx">YUILoader</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c">// Inform the library that it is being injected</span>
+<span class="c"></span>        <span class="nx">YAHOO_config</span><span class="o">.</span><span class="nx">injecting</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Internal callback to handle multiple internal insert() calls</span>
+<span class="c">         * so that css is inserted prior to js</span>
+<span class="c">         * @property _internalCallback</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Callback that will be executed when the loader is finished</span>
+<span class="c">         * with an insert</span>
+<span class="c">         * @method onLoadComplete</span>
+<span class="c">         * @type function</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">onLoadComplete</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The base directory.</span>
+<span class="c">         * @property base</span>
+<span class="c">         * @type string</span>
+<span class="c">         * @default build</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;base&quot;</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">base</span> <span class="o">:</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">.</span><span class="nx">base</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Should we allow rollups</span>
+<span class="c">         * @property allowRollup</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @default true</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;allowRollup&quot;</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">:</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Filter to apply to result url</span>
+<span class="c">         * @property filter</span>
+<span class="c">         * @type string|object</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">filter</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Create a sandbox rather than inserting into lib into.</span>
+<span class="c">         * the current context.  Not currently supported</span>
+<span class="c">         * property sandbox</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @default false</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">sandbox</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">sandbox</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The list of requested modules</span>
+<span class="c">         * @property required</span>
+<span class="c">         * @type {string: boolean}</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">required</span> <span class="o">=</span> <span class="o">{};</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The library metadata</span>
+<span class="c">         * @property moduleInfo</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">moduleInfo</span> <span class="o">||</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * List of rollup files found in the library metadata</span>
+<span class="c">         * @property rollups</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">rollups</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Whether or not to load optional dependencies for </span>
+<span class="c">         * the requested modules</span>
+<span class="c">         * @property loadOptional</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @default false</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">loadOptional</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">loadOptional</span> <span class="o">||</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * All of the derived dependencies in sorted order, which</span>
+<span class="c">         * will be populated when either calculate() or insert()</span>
+<span class="c">         * is called</span>
+<span class="c">         * @property sorted</span>
+<span class="c">         * @type string[]</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">sorted</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Set when beginning to compute the dependency tree. </span>
+<span class="c">         * Composed of what YAHOO reports to be loaded combined</span>
+<span class="c">         * with what has been loaded by the tool</span>
+<span class="c">         * @propery loaded</span>
+<span class="c">         * @type {string: boolean}</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="o">{};</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Flag to indicate the dependency tree needs to be recomputed</span>
+<span class="c">         * if insert is called again.</span>
+<span class="c">         * @property dirty</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @default true</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * List of modules inserted by the utility</span>
+<span class="c">         * @property inserted</span>
+<span class="c">         * @type {string: boolean}</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">inserted</span> <span class="o">=</span> <span class="o">{};</span>
+
+
+        <span class="c">/**</span>
+<span class="c">         * Provides the information used to skin the skinnable components.</span>
+<span class="c">         * The following skin definition would result in &#39;skin1&#39; and &#39;skin2&#39;</span>
+<span class="c">         * being loaded for calendar (if calendar was requested), and</span>
+<span class="c">         * &#39;sam&#39; for all other skinnable components:</span>
+<span class="c">         *</span>
+<span class="c">         *   &lt;code&gt;</span>
+<span class="c">         *   skin: {</span>
+<span class="c">         *</span>
+<span class="c">         *      // The default skin, which is automatically applied if not</span>
+<span class="c">         *      // overriden by a component-specific skin definition.</span>
+<span class="c">         *      // Change this in to apply a different skin globally</span>
+<span class="c">         *      defaultSkin: &#39;sam&#39;, </span>
+<span class="c">         *</span>
+<span class="c">         *      // This is combined with the loader base property to get</span>
+<span class="c">         *      // the default root directory for a skin. ex:</span>
+<span class="c">         *      // http://yui.yahooapis.com/2.3.0/build/assets/skins/sam/</span>
+<span class="c">         *      base: &#39;assets/skins/&#39;,</span>
+<span class="c">         *</span>
+<span class="c">         *      // The name of the rollup css file for the skin</span>
+<span class="c">         *      path: &#39;skin.css&#39;,</span>
+<span class="c">         *</span>
+<span class="c">         *      // The number of skinnable components requested that are</span>
+<span class="c">         *      // required before using the rollup file rather than the</span>
+<span class="c">         *      // individual component css files</span>
+<span class="c">         *      rollup: 3,</span>
+<span class="c">         *</span>
+<span class="c">         *      // Any component-specific overrides can be specified here,</span>
+<span class="c">         *      // making it possible to load different skins for different</span>
+<span class="c">         *      // components.  It is possible to load more than one skin</span>
+<span class="c">         *      // for a given component as well.</span>
+<span class="c">         *      overrides: {</span>
+<span class="c">         *          calendar: [&#39;skin1&#39;, &#39;skin2&#39;]</span>
+<span class="c">         *      }</span>
+<span class="c">         *   }</span>
+<span class="c">         *   &lt;/code&gt;</span>
+<span class="c">         *   @property skin</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">skin</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">skin</span> <span class="o">||</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">clone</span><span class="o">(</span><span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">.</span><span class="nx">skin</span><span class="o">);</span> 
+
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">require</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">require</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nx">YUI</span><span class="o">.</span><span class="nx">loaders</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">};</span>
+
+    <span class="nx">YUI</span><span class="o">.</span><span class="nx">YUILoader</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+
+        <span class="nx">FILTERS</span><span class="o">:</span> <span class="o">{</span>
+            <span class="nx">RAW</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="o">,</span> 
+                <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;.js&quot;</span>
+            <span class="o">},</span>
+            <span class="nx">DEBUG</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="o">,</span> 
+                <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;-debug.js&quot;</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="nx">SKIN_PREFIX</span><span class="o">:</span> <span class="s2">&quot;skin-&quot;</span><span class="o">,</span>
+
+        <span class="c">/** Add a new module to the component metadata.  The javascript </span>
+<span class="c">         * component must also use YAHOO.register to notify the loader </span>
+<span class="c">         * when it has been loaded, or a verifier function must be</span>
+<span class="c">         * provided</span>
+<span class="c">         * &lt;dl&gt;</span>
+<span class="c">         *     &lt;dt&gt;name:&lt;/dt&gt;       &lt;dd&gt;required, the component name&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;type:&lt;/dt&gt;       &lt;dd&gt;required, the component type (js or css)&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;path:&lt;/dt&gt;       &lt;dd&gt;required, the path to the script from &quot;base&quot;&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;requires:&lt;/dt&gt;   &lt;dd&gt;the modules required by this component&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;optional:&lt;/dt&gt;   &lt;dd&gt;the optional modules for this component&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;supersedes:&lt;/dt&gt; &lt;dd&gt;the modules this component replaces&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;rollup:&lt;/dt&gt;     &lt;dd&gt;the number of superseded modules required for automatic rollup&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;verifier:&lt;/dt&gt;   &lt;dd&gt;a function that is executed to determine when the module is fully loaded&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;fullpath:&lt;/dt&gt;   &lt;dd&gt;If fullpath is specified, this is used instead of the configured base + path&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;skinnable:&lt;/dt&gt;  &lt;dd&gt;flag to determine if skin assets should automatically be pulled in&lt;/dd&gt;</span>
+<span class="c">         * &lt;/dl&gt;</span>
+<span class="c">         * @method addModule</span>
+<span class="c">         * @param o An object containing the module data</span>
+<span class="c">         * @return {boolean} true if the module was added, false if </span>
+<span class="c">         * the object passed in did not provide all required attributes</span>
+<span class="c">         */</span>
+        <span class="nx">addModule</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">o</span> <span class="o">||</span> <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">name</span> <span class="o">||</span> <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">type</span> <span class="o">||</span> <span class="o">(!</span><span class="nx">o</span><span class="o">.</span><span class="nx">path</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">fullpath</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">o</span><span class="o">.</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Add a requirement for one or more module</span>
+<span class="c">         * @method require</span>
+<span class="c">         * @param what {string[] | string*} the modules to load</span>
+<span class="c">         */</span>
+        <span class="nx">require</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">what</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">what</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="nx">arguments</span> <span class="o">:</span> <span class="nx">what</span><span class="o">;</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseSkin</span><span class="o">(</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_addSkin</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">s</span><span class="o">.</span><span class="nx">module</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">,</span> <span class="nx">a</span><span class="o">);</span>
+        <span class="o">},</span>
+
+
+        <span class="c">/**</span>
+<span class="c">         * Adds the skin def to the module info</span>
+<span class="c">         * @method _addSkin</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_addSkin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c">// Add a module definition for the skin rollup css</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="nx">skin</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">addModule</span><span class="o">({</span>
+                    <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
+                    <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+                    <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">path</span><span class="o">,</span>
+                    <span class="c">//&#39;supersedes&#39;: &#39;*&#39;,</span>
+<span class="c"></span>                    <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">rollup</span>
+                <span class="o">});</span>
+            <span class="o">}</span>
+
+            <span class="c">// Add a module definition for the module-specific skin css</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">mod</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">addModule</span><span class="o">({</span>
+                        <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
+                        <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
+                        <span class="c">//&#39;path&#39;: this.skin.base + skin + &quot;/&quot; + mod + &quot;.css&quot;</span>
+<span class="c"></span>                        <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s2">&quot;.css&quot;</span>
+                    <span class="o">});</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns an object containing properties for all modules required</span>
+<span class="c">         * in order to load the requested module</span>
+<span class="c">         * @method getRequires</span>
+<span class="c">         * @param mod The module definition from moduleInfo</span>
+<span class="c">         */</span>
+        <span class="nx">getRequires</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">&amp;&amp;</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">expanded</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nx">mod</span><span class="o">.</span><span class="nx">requires</span><span class="o">=</span><span class="nx">mod</span><span class="o">.</span><span class="nx">requires</span> <span class="o">||</span> <span class="o">[];</span>
+            <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">d</span><span class="o">=[],</span> <span class="nx">r</span><span class="o">=</span><span class="nx">mod</span><span class="o">.</span><span class="nx">requires</span><span class="o">,</span> <span class="nx">o</span><span class="o">=</span><span class="nx">mod</span><span class="o">.</span><span class="nx">optional</span><span class="o">,</span> <span class="nx">s</span><span class="o">=</span><span class="nx">mod</span><span class="o">.</span><span class="nx">supersedes</span><span class="o">,</span> <span class="nx">info</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">r</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">d</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="nx">YUI</span><span class="o">.</span><span class="nx">ArrayUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="nx">d</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRequires</span><span class="o">(</span><span class="nx">info</span><span class="o">[</span><span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">]]));</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">o</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">loadOptional</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">o</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">d</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                    <span class="nx">YUI</span><span class="o">.</span><span class="nx">ArrayUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="nx">d</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRequires</span><span class="o">(</span><span class="nx">info</span><span class="o">[</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">]]));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="nx">mod</span><span class="o">.</span><span class="nx">expanded</span> <span class="o">=</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ArrayUtil</span><span class="o">.</span><span class="nx">uniq</span><span class="o">(</span><span class="nx">d</span><span class="o">);</span>
+
+            <span class="k">return</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">expanded</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns an object literal of the modules the supplied module satisfies</span>
+<span class="c">         * @method getProvides</span>
+<span class="c">         * @param mod The module definition from moduleInfo</span>
+<span class="c">         * @return what this module provides</span>
+<span class="c">         */</span>
+        <span class="nx">getProvides</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">mod</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">name</span><span class="o">];</span>
+
+            <span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="o">{};</span>
+            <span class="nx">o</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="nx">s</span> <span class="o">=</span> <span class="nx">mod</span> <span class="o">&amp;&amp;</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">supersedes</span><span class="o">;</span>
+
+            <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">s</span><span class="o">);</span>
+
+            <span class="c">// console.log(this.sorted + &quot;, &quot; + name + &quot; provides &quot; + YUI.ObjectUtil.keys(o));</span>
+<span class="c"></span>
+            <span class="k">return</span> <span class="nx">o</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Calculates the dependency tree, the result is stored in the sorted </span>
+<span class="c">         * property</span>
+<span class="c">         * @method calculate</span>
+<span class="c">         * @param o optional options object</span>
+<span class="c">         */</span>
+        <span class="nx">calculate</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dirty</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">_setup</span><span class="o">(</span><span class="nx">o</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_explode</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_skin</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">allowRollup</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_rollup</span><span class="o">();</span>
+                <span class="o">}</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_reduce</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_sort</span><span class="o">();</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Investigates the current YUI configuration on the page.  By default,</span>
+<span class="c">         * modules already detected will not be loaded again unless a force</span>
+<span class="c">         * option is encountered.  Called by calculate()</span>
+<span class="c">         * @method _setup</span>
+<span class="c">         * @param o optional options object</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_setup</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">clone</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">);</span> 
+            
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">sandbox</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="c">// add the ignore list to the list of loaded packages</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">ignore</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">,</span> <span class="nx">o</span><span class="o">.</span><span class="nx">ignore</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="c">// remove modules on the force list from the loaded list</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">force</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">o</span><span class="o">.</span><span class="nx">force</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">force</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">[</span><span class="nx">o</span><span class="o">.</span><span class="nx">force</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        
+
+        <span class="c">/**</span>
+<span class="c">         * Inspects the required modules list looking for additional </span>
+<span class="c">         * dependencies.  Expands the required list to include all </span>
+<span class="c">         * required modules.  Called by calculate()</span>
+<span class="c">         * @method _explode</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_explode</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">r</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">mod</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">mod</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="k">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getRequires</span><span class="o">(</span><span class="nx">mod</span><span class="o">);</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">req</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">req</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Sets up the requirements for the skin assets if any of the</span>
+<span class="c">         * requested modules are skinnable</span>
+<span class="c">         * @method _skin</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_skin</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">r</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">mod</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">mod</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span> <span class="o">&amp;&amp;</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">skinnable</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">o</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">override</span><span class="o">,</span> <span class="nx">j</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">o</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">length</span><span class="o">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">j</span><span class="o">],</span> <span class="nx">i</span><span class="o">));</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">defaultSkin</span><span class="o">,</span> <span class="nx">i</span><span class="o">));</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Returns the skin module name for the specified skin name.  If a</span>
+<span class="c">         * module name is supplied, the returned skin module name is </span>
+<span class="c">         * specific to the module passed in.</span>
+<span class="c">         * @method formatSkin</span>
+<span class="c">         * @param skin {string} the name of the skin</span>
+<span class="c">         * @param mod {string} optional: the name of a module to skin</span>
+<span class="c">         * @return {string} the full skin module name</span>
+<span class="c">         */</span>
+        <span class="nx">formatSkin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span> <span class="o">+</span> <span class="nx">skin</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nx">mod</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="nx">s</span><span class="o">;</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Reverses &lt;code&gt;formatSkin&lt;/code&gt;, providing the skin name and</span>
+<span class="c">         * module name if the string matches the pattern for skins.</span>
+<span class="c">         * @method parseSkin</span>
+<span class="c">         * @param mod {string} the module name to parse</span>
+<span class="c">         * @return {skin: string, module: string} the parsed skin name </span>
+<span class="c">         * and module name, or null if the supplied string does not match</span>
+<span class="c">         * the skin pattern</span>
+<span class="c">         */</span>
+        <span class="nx">parseSkin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;-&quot;</span><span class="o">);</span>
+                <span class="k">return</span> <span class="o">{</span><span class="nx">skin</span><span class="o">:</span> <span class="nx">a</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">module</span><span class="o">:</span> <span class="nx">a</span><span class="o">[</span><span class="m">2</span><span class="o">]};</span>
+            <span class="o">}</span> 
+
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Look for rollup packages to determine if all of the modules a</span>
+<span class="c">         * rollup supersedes are required.  If so, include the rollup to</span>
+<span class="c">         * help reduce the total number of connections required.  Called</span>
+<span class="c">         * by calculate()</span>
+<span class="c">         * @method _rollup</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_rollup</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">s</span><span class="o">,</span> <span class="nx">rollups</span><span class="o">={},</span> <span class="nx">r</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">,</span> <span class="nx">roll</span><span class="o">;</span>
+
+            <span class="c">// find and cache rollup modules</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">rollups</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">m</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="c">//if (m &amp;&amp; m.rollup &amp;&amp; m.supersedes) {</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="o">.</span><span class="nx">rollup</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">rollups</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">m</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">rollups</span> <span class="o">=</span> <span class="nx">rollups</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c">// make as many passes as needed to pick up rollup rollups</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">rolled</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+                <span class="c">// go through the rollup candidates</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">rollups</span><span class="o">)</span> <span class="o">{</span> 
+
+                    <span class="c">// there can be only one</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(!</span><span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="nx">m</span> <span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">supersedes</span><span class="o">;</span> <span class="nx">roll</span><span class="o">=</span><span class="kc">true</span><span class="o">;</span>
+
+                        <span class="k">if</span> <span class="o">(!</span><span class="nx">m</span><span class="o">.</span><span class="nx">rollup</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">continue</span><span class="o">;</span>
+                        <span class="o">}</span>
+
+
+                        <span class="k">var</span> <span class="nx">skin</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseSkin</span><span class="o">(</span><span class="nx">i</span><span class="o">),</span> <span class="nx">c</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">skin</span><span class="o">)</span> <span class="o">{</span>
+
+                            <span class="k">for</span> <span class="o">(</span><span class="nx">j</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="nx">i</span> <span class="o">!==</span> <span class="nx">j</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseSkin</span><span class="o">(</span><span class="nx">j</span><span class="o">))</span> <span class="o">{</span>
+                                    <span class="nx">c</span><span class="o">++;</span>
+                                    <span class="nx">roll</span> <span class="o">=</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&gt;=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">rollup</span><span class="o">);</span>
+                                    <span class="k">if</span> <span class="o">(</span><span class="nx">roll</span><span class="o">)</span> <span class="o">{</span>
+                                        <span class="k">break</span><span class="o">;</span>
+                                    <span class="o">}</span>
+                                <span class="o">}</span>
+                            <span class="o">}</span>
+
+
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                            <span class="c">// require all modules to trigger a rollup (using the </span>
+<span class="c"></span>                            <span class="c">// threshold value has not proved worthwhile)</span>
+<span class="c"></span>                            <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+
+                                <span class="c">// if the superseded module is loaded, we can&#39;t load the rollup</span>
+<span class="c"></span>                                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">]])</span> <span class="o">{</span>
+                                    <span class="nx">roll</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                                    <span class="k">break</span><span class="o">;</span>
+                                <span class="c">// increment the counter if this module is required.  if we are</span>
+<span class="c"></span>                                <span class="c">// beyond the rollup threshold, we will use the rollup module</span>
+<span class="c"></span>                                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">r</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">]])</span> <span class="o">{</span>
+                                    <span class="nx">c</span><span class="o">++;</span>
+                                    <span class="nx">roll</span> <span class="o">=</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&gt;=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">rollup</span><span class="o">);</span>
+                                    <span class="k">if</span> <span class="o">(</span><span class="nx">roll</span><span class="o">)</span> <span class="o">{</span>
+                                        <span class="k">break</span><span class="o">;</span>
+                                    <span class="o">}</span>
+                                <span class="o">}</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">roll</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="c">// add the rollup</span>
+<span class="c"></span>                            <span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                            <span class="nx">rolled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+                            <span class="c">// expand the rollup&#39;s dependencies</span>
+<span class="c"></span>                            <span class="k">this</span><span class="o">.</span><span class="nx">getRequires</span><span class="o">(</span><span class="nx">m</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// if we made it here w/o rolling up something, we are done</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">rolled</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Remove superceded modules and loaded modules.  Called by</span>
+<span class="c">         * calculate() after we have the mega list of all dependencies</span>
+<span class="c">         * @method _reduce</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_reduce</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">s</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">r</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c">// remove if already loaded</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">)</span> <span class="o">{</span> 
+                    <span class="nx">delete</span> <span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+
+                <span class="c">// remove anything this module supersedes</span>
+<span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                    <span class="k">var</span> <span class="nx">skinDef</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseSkin</span><span class="o">(</span><span class="nx">i</span><span class="o">);</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">skinDef</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c">//console.log(&quot;skin found in reduce: &quot; + skinDef.skin + &quot;, &quot; + skinDef.module);</span>
+<span class="c"></span>                        <span class="c">// the skin rollup will not have a module name</span>
+<span class="c"></span>                        <span class="k">if</span> <span class="o">(!</span><span class="nx">skinDef</span><span class="o">.</span><span class="nx">module</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">var</span> <span class="nx">skin_pre</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span> <span class="o">+</span> <span class="nx">skinDef</span><span class="o">.</span><span class="nx">skin</span><span class="o">;</span>
+                            <span class="c">//console.log(&quot;skin_pre: &quot; + skin_pre);</span>
+<span class="c"></span>                            <span class="k">for</span> <span class="o">(</span><span class="nx">j</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="nx">j</span> <span class="o">!==</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">skin_pre</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="c">//console.log (&quot;removing component skin: &quot; + j);</span>
+<span class="c"></span>                                    <span class="nx">delete</span> <span class="nx">r</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
+                                <span class="o">}</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                         <span class="nx">m</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                         <span class="nx">s</span> <span class="o">=</span> <span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="o">.</span><span class="nx">supersedes</span><span class="o">;</span>
+                         <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
+                             <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                                 <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">]</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+                                     <span class="nx">delete</span> <span class="nx">r</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">]];</span>
+                                 <span class="o">}</span>
+                             <span class="o">}</span>
+                         <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Sorts the dependency tree.  The last step of calculate()</span>
+<span class="c">         * @method _sort</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_sort</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c">// create an indexed list</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">s</span><span class="o">=[],</span> <span class="nx">info</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">,</span> <span class="nx">loaded</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">;</span>
+
+            <span class="c">// returns true if b is not loaded, and is required</span>
+<span class="c"></span>            <span class="c">// directly or by means of modules it supersedes.</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">requires</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">aa</span><span class="o">,</span> <span class="nx">bb</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">loaded</span><span class="o">[</span><span class="nx">bb</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">var</span> <span class="nx">ii</span><span class="o">,</span> <span class="nx">mm</span><span class="o">=</span><span class="nx">info</span><span class="o">[</span><span class="nx">aa</span><span class="o">],</span> <span class="nx">rr</span><span class="o">=</span><span class="nx">mm</span> <span class="o">&amp;&amp;</span> <span class="nx">mm</span><span class="o">.</span><span class="nx">expanded</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">rr</span> <span class="o">&amp;&amp;</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ArrayUtil</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">rr</span><span class="o">,</span> <span class="nx">bb</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">var</span> <span class="nx">ss</span><span class="o">=</span><span class="nx">info</span><span class="o">[</span><span class="nx">bb</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">info</span><span class="o">[</span><span class="nx">bb</span><span class="o">].</span><span class="nx">supersedes</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">ss</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">ii</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">ii</span><span class="o">&lt;</span><span class="nx">ss</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">ii</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">requires</span><span class="o">(</span><span class="nx">aa</span><span class="o">,</span> <span class="nx">ss</span><span class="o">[</span><span class="nx">ii</span><span class="o">]))</span> <span class="o">{</span>
+                            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">};</span>
+
+            <span class="c">// get the required items out of the obj into an array so we</span>
+<span class="c"></span>            <span class="c">// can sort</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">required</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">s</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">i</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="c">// pointer to the first unsorted item</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> 
+
+            <span class="c">// keep going until we make a pass without moving anything</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
+               
+                <span class="k">var</span> <span class="nx">l</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">moved</span><span class="o">=</span><span class="kc">false</span><span class="o">;</span>
+
+                <span class="c">// start the loop after items that are already sorted</span>
+<span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="nx">p</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="c">// check the next module on the list to see if its</span>
+<span class="c"></span>                    <span class="c">// dependencies have been met</span>
+<span class="c"></span>                    <span class="nx">a</span> <span class="o">=</span> <span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
+
+                    <span class="c">// check everything below current item and move if we</span>
+<span class="c"></span>                    <span class="c">// find a requirement for the current item</span>
+<span class="c"></span>                    <span class="k">for</span> <span class="o">(</span><span class="nx">k</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">;</span> <span class="nx">k</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">k</span><span class="o">=</span><span class="nx">k</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">requires</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">s</span><span class="o">[</span><span class="nx">k</span><span class="o">]))</span> <span class="o">{</span>
+
+                            <span class="c">// extract the dependency so we can move it up</span>
+<span class="c"></span>                            <span class="nx">b</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">k</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+
+                            <span class="c">// insert the dependency above the item that </span>
+<span class="c"></span>                            <span class="c">// requires it</span>
+<span class="c"></span>                            <span class="nx">s</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">j</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="nx">b</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
+
+                            <span class="nx">moved</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// jump out of loop if we moved something</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">moved</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="c">// this item is sorted, move our pointer and keep going</span>
+<span class="c"></span>                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">+</span> <span class="m">1</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// when we make it here and moved is false, we are </span>
+<span class="c"></span>                <span class="c">// finished sorting</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">moved</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">sorted</span> <span class="o">=</span> <span class="nx">s</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * inserts the requested modules and their dependencies.  </span>
+<span class="c">         * &lt;code&gt;type&lt;/code&gt; can be &quot;js&quot; or &quot;css&quot;.  Both script and </span>
+<span class="c">         * css are inserted if type is not provided.</span>
+<span class="c">         * @method insert</span>
+<span class="c">         * @param callback {Function} a function to execute when the load</span>
+<span class="c">         * is complete.</span>
+<span class="c">         * @param o optional options object</span>
+<span class="c">         * @param type {string} the type of dependency to insert</span>
+<span class="c">         */</span>
+        <span class="nx">insert</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c">//if (!this.onLoadComplete) {</span>
+<span class="c"></span>                <span class="c">//this.onLoadComplete = callback;</span>
+<span class="c"></span>            <span class="c">//}</span>
+<span class="c"></span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                            <span class="nx">self</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                            <span class="nx">self</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">&quot;js&quot;</span><span class="o">);</span>
+                        <span class="o">};</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">&quot;css&quot;</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
+
+            <span class="c">// store the callback for when we are done</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">onLoadComplete</span> <span class="o">=</span> <span class="nx">callback</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">onLoadComplete</span><span class="o">;</span>
+
+            <span class="c">// store the optional filter</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">.</span><span class="nx">filter</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">f</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">f</span> <span class="o">=</span> <span class="nx">f</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
+
+                <span class="c">// the logger must be available in order to use the debug</span>
+<span class="c"></span>                <span class="c">// versions of the library</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">===</span> <span class="s2">&quot;DEBUG&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">&quot;logger&quot;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">FILTERS</span><span class="o">[</span><span class="nx">f</span><span class="o">]</span> <span class="o">||</span> <span class="nx">f</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">FILTERS</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">filter</span><span class="o">]</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">filter</span><span class="o">;</span>
+
+            <span class="c">// store the options... not currently in use</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">insertOptions</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
+
+            <span class="c">// build the dependency list</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">calculate</span><span class="o">(</span><span class="nx">o</span><span class="o">);</span>
+
+            <span class="c">// set a flag to indicate the load has started</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="c">// keep the loadType (js, css or undefined) cached</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">loadType</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
+
+            <span class="c">// start the load</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">loadNext</span><span class="o">();</span>
+
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Executed every time a module is loaded, and if we are in a load</span>
+<span class="c">         * cycle, we attempt to load the next script.  Public so that it</span>
+<span class="c">         * is possible to call this if using a method other than</span>
+<span class="c">         * YAHOO.register to determine when scripts are fully loaded</span>
+<span class="c">         * @method loadNext</span>
+<span class="c">         * @param mname {string} optional the name of the module that has</span>
+<span class="c">         * been loaded (which is usually why it is time to load the next</span>
+<span class="c">         * one)</span>
+<span class="c">         */</span>
+        <span class="nx">loadNext</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">mname</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c">// console.log(&quot;loadNext executing, just loaded &quot; + mname);</span>
+<span class="c"></span>
+            <span class="c">// The global handler that is called when each module is loaded</span>
+<span class="c"></span>            <span class="c">// will pass that module name to this function.  Storing this</span>
+<span class="c"></span>            <span class="c">// data to avoid loading the same module multiple times</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">mname</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">[</span><span class="nx">mname</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="c">//var o = this.getProvides(mname);</span>
+<span class="c"></span>                <span class="c">//this.inserted = YUI.ObjectUtil.merge(this.inserted, o);</span>
+<span class="c"></span>            <span class="o">}</span>
+
+            <span class="c">// It is possible that this function is executed due to something</span>
+<span class="c"></span>            <span class="c">// else one the page loading a YUI module.  Only react when we</span>
+<span class="c"></span>            <span class="c">// are actively loading something</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">loading</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c">// if the module that was just loaded isn&#39;t what we were expecting,</span>
+<span class="c"></span>            <span class="c">// continue to wait</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">mname</span> <span class="o">&amp;&amp;</span> <span class="nx">mname</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">loading</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            
+            <span class="k">var</span> <span class="nx">s</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">sorted</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">url</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c">// This.inserted keeps track of what the loader has loaded</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// console.log(s[i] + &quot; alread loaded &quot;);</span>
+<span class="c"></span>                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// Because rollups will cause multiple load notifications</span>
+<span class="c"></span>                <span class="c">// from YAHOO, loadNext may be called multiple times for</span>
+<span class="c"></span>                <span class="c">// the same module when loading a rollup.  We can safely</span>
+<span class="c"></span>                <span class="c">// skip the subsequent requests</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="k">this</span><span class="o">.</span><span class="nx">loading</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// console.log(&quot;still loading &quot; + s[i] + &quot;, waiting&quot;);</span>
+<span class="c"></span>                    <span class="k">return</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// log(&quot;inserting &quot; + s[i]);</span>
+<span class="c"></span>
+                <span class="nx">m</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
+
+                <span class="c">// The load type is stored to offer the possibility to load</span>
+<span class="c"></span>                <span class="c">// the css separately from the script.</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">loadType</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">loadType</span> <span class="o">===</span> <span class="nx">m</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+
+                    <span class="c">// Insert the css node and continue.  It is possible</span>
+<span class="c"></span>                    <span class="c">// that the css file will load out of order ... this</span>
+<span class="c"></span>                    <span class="c">// may be a problem that needs to be addressed, but</span>
+<span class="c"></span>                    <span class="c">// unlike the script files, there is no notification</span>
+<span class="c"></span>                    <span class="c">// mechanism in place for the css files.</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;css&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="nx">url</span> <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">fullpath</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_url</span><span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">path</span><span class="o">);</span>
+                        
+                        <span class="k">this</span><span class="o">.</span><span class="nx">insertCss</span><span class="o">(</span><span class="nx">url</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+                    <span class="c">// Scripts must be loaded in order, so we wait for the</span>
+<span class="c"></span>                    <span class="c">// notification from YAHOO or a verifier function to </span>
+<span class="c"></span>                    <span class="c">// process the next script</span>
+<span class="c"></span>                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                        <span class="nx">url</span> <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">fullpath</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_url</span><span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">path</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">insertScript</span><span class="o">(</span><span class="nx">url</span><span class="o">);</span>
+
+                        <span class="c">// if a verifier was included for this module, execute</span>
+<span class="c"></span>                        <span class="c">// it, passing the name of the module, and a callback</span>
+<span class="c"></span>                        <span class="c">// that must be exectued when the verifier is done.</span>
+<span class="c"></span>                        <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">verifier</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span> <span class="nx">name</span><span class="o">=</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                            <span class="nx">m</span><span class="o">.</span><span class="nx">verifier</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                                    <span class="nx">self</span><span class="o">.</span><span class="nx">loadNext</span><span class="o">(</span><span class="nx">name</span><span class="o">);</span>
+                                <span class="o">});</span>
+                        <span class="o">}</span>
+
+                        <span class="k">return</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="c">// we are finished</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">loading</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+
+            <span class="c">// internal callback for loading css first</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="nx">f</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">onLoadComplete</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_pushEvents</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">onLoadComplete</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            <span class="o">}</span>
+
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * In IE, the onAvailable/onDOMReady events need help when Event is</span>
+<span class="c">         * loaded dynamically</span>
+<span class="c">         * @method _pushEvents</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_pushEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_load</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Generates the full url for a module</span>
+<span class="c">         * method _url</span>
+<span class="c">         * @param path {string} the path fragment</span>
+<span class="c">         * @return {string} the full url</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="nx">_url</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">path</span><span class="o">)</span> <span class="o">{</span>
+            
+            <span class="k">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">f</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">filter</span><span class="o">;</span>
+            <span class="nx">u</span> <span class="o">=</span> <span class="nx">u</span> <span class="o">+</span> <span class="nx">path</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">f</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// console.log(&quot;filter: &quot; + f + &quot;, &quot; + f.searchExp + </span>
+<span class="c"></span>                <span class="c">// &quot;, &quot; + f.replaceStr);</span>
+<span class="c"></span>                <span class="nx">u</span> <span class="o">=</span> <span class="nx">u</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="o">(</span><span class="nx">f</span><span class="o">.</span><span class="nx">searchExp</span><span class="o">),</span> <span class="nx">f</span><span class="o">.</span><span class="nx">replaceStr</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="c">// console.log(u);</span>
+<span class="c"></span>
+            <span class="k">return</span> <span class="nx">u</span><span class="o">;</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Inserts a script node</span>
+<span class="c">         * @method insertScript</span>
+<span class="c">         * @param url {string} the full url for the script</span>
+<span class="c">         * @param win {Window} optional window to target</span>
+<span class="c">         */</span>
+        <span class="nx">insertScript</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="c">//console.log(&quot;inserting script &quot; + url);</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;script&quot;</span><span class="o">),</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+
+            <span class="nx">n</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/javascript&quot;</span><span class="o">;</span>
+            <span class="nx">h</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">n</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Inserts a css link node</span>
+<span class="c">         * @method insertCss</span>
+<span class="c">         * @param url {string} the full url for the script</span>
+<span class="c">         * @param win {Window} optional window to target</span>
+<span class="c">         */</span>
+        <span class="nx">insertCss</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// console.log(&quot;inserting css &quot; + url);</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;link&quot;</span><span class="o">),</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+
+            <span class="nx">n</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/css&quot;</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">&quot;stylesheet&quot;</span><span class="o">;</span>
+            <span class="nx">h</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">n</span><span class="o">);</span>
+        <span class="o">},</span>
+       
+        <span class="c">/*</span>
+<span class="c">         * Interns the script for the requested modules.  The callback is</span>
+<span class="c">         * provided a reference to the sandboxed YAHOO object.  This only</span>
+<span class="c">         * applies to the script: css can not be sandboxed.  Not implemented.</span>
+<span class="c">         * @method sandbox</span>
+<span class="c">         * @param callback {Function} the callback to exectued when the load is</span>
+<span class="c">         *        complete.</span>
+<span class="c">         * @notimplemented</span>
+<span class="c">         */</span>
+        <span class="nx">sandbox</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">callback</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// this.calculate({</span>
+<span class="c"></span>                         <span class="c">//sandbox: true</span>
+<span class="c"></span>                     <span class="c">//});</span>
+<span class="c"></span>        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="nx">YUI</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span>
+
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class="selected"><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.YUILoader.html">YAHOO.util.YUILoader</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="yuiloader.js.html">yuiloader.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

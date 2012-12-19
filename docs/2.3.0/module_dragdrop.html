@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: dragdrop
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The drag and drop utility provides a framework for building drag and drop
+applications.  In addition to enabling drag and drop for specific elements,
+the drag and drop elements are tracked by the manager class, and the
+interactions between the various elements are tracked during the drag and
+the implementing code is notified about these important moments.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search dragdrop:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#addInvalidHandleClass"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleId", "url": "YAHOO.util.DragDrop.html#addInvalidHandleId"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleType", "url": "YAHOO.util.DragDrop.html#addInvalidHandleType"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_addListeners", "url": "YAHOO.util.DragDropMgr.html#_addListeners"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addToGroup", "url": "YAHOO.util.DragDrop.html#addToGroup"}, {"access": "", "host": "YAHOO.util.DD", "name": "alignElWithMouse", "url": "YAHOO.util.DD.html#alignElWithMouse"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "applyConfig", "url": "YAHOO.util.DragDrop.html#applyConfig"}, {"access": "", "host": "YAHOO.util.DD", "name": "autoOffset", "url": "YAHOO.util.DD.html#autoOffset"}, {"access": "private", "host": "YAHOO.util.DD", "name": "autoScroll", "url": "YAHOO.util.DD.html#autoScroll"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "available", "url": "YAHOO.util.DragDrop.html#available"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4Drag", "url": "YAHOO.util.DragDrop.html#b4Drag"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragDrop", "url": "YAHOO.util.DragDrop.html#b4DragDrop"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragOut", "url": "YAHOO.util.DragDrop.html#b4DragOut"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragOver", "url": "YAHOO.util.DragDrop.html#b4DragOver"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4EndDrag", "url": "YAHOO.util.DragDrop.html#b4EndDrag"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4MouseDown", "url": "YAHOO.util.DragDrop.html#b4MouseDown"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4StartDrag", "url": "YAHOO.util.DragDrop.html#b4StartDrag"}, {"access": "", "host": "YAHOO.util.DD", "name": "cachePosition", "url": "YAHOO.util.DD.html#cachePosition"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "centerFrame", "url": "YAHOO.util.DDProxy.html#centerFrame"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearConstraints", "url": "YAHOO.util.DragDrop.html#clearConstraints"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearTicks", "url": "YAHOO.util.DragDrop.html#clearTicks"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "clickPixelThresh", "url": "YAHOO.util.DragDropMgr.html#clickPixelThresh"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "clickTimeout", "url": "YAHOO.util.DragDropMgr.html#clickTimeout"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "clickTimeThresh", "url": "YAHOO.util.DragDropMgr.html#clickTimeThresh"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "config", "url": "YAHOO.util.DragDrop.html#config"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "constrainX", "url": "YAHOO.util.DragDrop.html#constrainX"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "constrainY", "url": "YAHOO.util.DragDrop.html#constrainY"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "createFrame", "url": "YAHOO.util.DDProxy.html#createFrame"}, {"access": "", "host": "YAHOO.util.DragDropMgr.ElementWrapper", "name": "css", "url": "YAHOO.util.DragDropMgr.ElementWrapper.html#css"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "cursorIsOver", "url": "YAHOO.util.DragDrop.html#cursorIsOver"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "deltaX", "url": "YAHOO.util.DragDrop.html#deltaX"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "deltaX", "url": "YAHOO.util.DragDropMgr.html#deltaX"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "deltaY", "url": "YAHOO.util.DragDrop.html#deltaY"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "deltaY", "url": "YAHOO.util.DragDropMgr.html#deltaY"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "_domRef", "url": "YAHOO.util.DragDrop.html#_domRef"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "dragCurrent", "url": "YAHOO.util.DragDropMgr.html#dragCurrent"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "dragElId", "url": "YAHOO.util.DragDrop.html#dragElId"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "dragOvers", "url": "YAHOO.util.DragDropMgr.html#dragOvers"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "dragThreshMet", "url": "YAHOO.util.DragDropMgr.html#dragThreshMet"}, {"access": "", "host": "YAHOO.util.DragDropMgr.ElementWrapper", "name": "el", "url": "YAHOO.util.DragDropMgr.ElementWrapper.html#el"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "elementCache", "url": "YAHOO.util.DragDropMgr.html#elementCache"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "endDrag", "url": "YAHOO.util.DragDrop.html#endDrag"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_execOnAll", "url": "YAHOO.util.DragDropMgr.html#_execOnAll"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "fireEvents", "url": "YAHOO.util.DragDropMgr.html#fireEvents"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getBestMatch", "url": "YAHOO.util.DragDropMgr.html#getBestMatch"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getClientHeight", "url": "YAHOO.util.DragDropMgr.html#getClientHeight"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getClientWidth", "url": "YAHOO.util.DragDropMgr.html#getClientWidth"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getCss", "url": "YAHOO.util.DragDropMgr.html#getCss"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getDDById", "url": "YAHOO.util.DragDropMgr.html#getDDById"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getDragEl", "url": "YAHOO.util.DragDrop.html#getDragEl"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getEl", "url": "YAHOO.util.DragDrop.html#getEl"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getElement", "url": "YAHOO.util.DragDropMgr.html#getElement"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "getElWrapper", "url": "YAHOO.util.DragDropMgr.html#getElWrapper"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getLocation", "url": "YAHOO.util.DragDropMgr.html#getLocation"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getPosX", "url": "YAHOO.util.DragDropMgr.html#getPosX"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getPosY", "url": "YAHOO.util.DragDropMgr.html#getPosY"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getRelated", "url": "YAHOO.util.DragDropMgr.html#getRelated"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "getScroll", "url": "YAHOO.util.DragDropMgr.html#getScroll"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getScrollLeft", "url": "YAHOO.util.DragDropMgr.html#getScrollLeft"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getScrollTop", "url": "YAHOO.util.DragDropMgr.html#getScrollTop"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "getStyle", "url": "YAHOO.util.DragDropMgr.html#getStyle"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "getTargetCoord", "url": "YAHOO.util.DragDrop.html#getTargetCoord"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "getTick", "url": "YAHOO.util.DragDrop.html#getTick"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "groups", "url": "YAHOO.util.DragDrop.html#groups"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleElId", "url": "YAHOO.util.DragDrop.html#handleElId"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "handleIds", "url": "YAHOO.util.DragDropMgr.html#handleIds"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleMouseDown", "url": "YAHOO.util.DragDrop.html#handleMouseDown"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "handleMouseDown", "url": "YAHOO.util.DragDropMgr.html#handleMouseDown"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "handleMouseMove", "url": "YAHOO.util.DragDropMgr.html#handleMouseMove"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "handleMouseUp", "url": "YAHOO.util.DragDropMgr.html#handleMouseUp"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleOnAvailable", "url": "YAHOO.util.DragDrop.html#handleOnAvailable"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "handleWasClicked", "url": "YAHOO.util.DragDropMgr.html#handleWasClicked"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "hasOuterHandles", "url": "YAHOO.util.DragDrop.html#hasOuterHandles"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "id", "url": "YAHOO.util.DragDrop.html#id"}, {"access": "", "host": "YAHOO.util.DragDropMgr.ElementWrapper", "name": "id", "url": "YAHOO.util.DragDropMgr.ElementWrapper.html#id"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "ids", "url": "YAHOO.util.DragDropMgr.html#ids"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "init", "url": "YAHOO.util.DragDrop.html#init"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "init", "url": "YAHOO.util.DragDropMgr.html#init"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "initFrame", "url": "YAHOO.util.DDProxy.html#initFrame"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "initialized", "url": "YAHOO.util.DragDropMgr.html#initialized"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "initTarget", "url": "YAHOO.util.DragDrop.html#initTarget"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "interactionInfo", "url": "YAHOO.util.DragDropMgr.html#interactionInfo"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "INTERSECT", "url": "YAHOO.util.DragDropMgr.html#INTERSECT"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleClasses", "url": "YAHOO.util.DragDrop.html#invalidHandleClasses"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleIds", "url": "YAHOO.util.DragDrop.html#invalidHandleIds"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleTypes", "url": "YAHOO.util.DragDrop.html#invalidHandleTypes"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "isDragDrop", "url": "YAHOO.util.DragDropMgr.html#isDragDrop"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "isHandle", "url": "YAHOO.util.DragDropMgr.html#isHandle"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "isLegalTarget", "url": "YAHOO.util.DragDropMgr.html#isLegalTarget"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isLocked", "url": "YAHOO.util.DragDrop.html#isLocked"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "isLocked", "url": "YAHOO.util.DragDropMgr.html#isLocked"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "isOverTarget", "url": "YAHOO.util.DragDropMgr.html#isOverTarget"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isTarget", "url": "YAHOO.util.DragDrop.html#isTarget"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "isTypeOfDD", "url": "YAHOO.util.DragDropMgr.html#isTypeOfDD"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isValidHandleChild", "url": "YAHOO.util.DragDrop.html#isValidHandleChild"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "locationCache", "url": "YAHOO.util.DragDropMgr.html#locationCache"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "lock", "url": "YAHOO.util.DragDrop.html#lock"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "lock", "url": "YAHOO.util.DragDropMgr.html#lock"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "locked", "url": "YAHOO.util.DragDrop.html#locked"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "locked", "url": "YAHOO.util.DragDropMgr.html#locked"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "maintainOffset", "url": "YAHOO.util.DragDrop.html#maintainOffset"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "maxX", "url": "YAHOO.util.DragDrop.html#maxX"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "maxY", "url": "YAHOO.util.DragDrop.html#maxY"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "minX", "url": "YAHOO.util.DragDrop.html#minX"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "minY", "url": "YAHOO.util.DragDrop.html#minY"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "mode", "url": "YAHOO.util.DragDropMgr.html#mode"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "moveToEl", "url": "YAHOO.util.DragDropMgr.html#moveToEl"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "numericSort", "url": "YAHOO.util.DragDropMgr.html#numericSort"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onAvailable", "url": "YAHOO.util.DragDrop.html#onAvailable"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDrag", "url": "YAHOO.util.DragDrop.html#onDrag"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragDrop", "url": "YAHOO.util.DragDrop.html#onDragDrop"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragEnter", "url": "YAHOO.util.DragDrop.html#onDragEnter"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOut", "url": "YAHOO.util.DragDrop.html#onDragOut"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOver", "url": "YAHOO.util.DragDrop.html#onDragOver"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onInvalidDrop", "url": "YAHOO.util.DragDrop.html#onInvalidDrop"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_onLoad", "url": "YAHOO.util.DragDropMgr.html#_onLoad"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseDown", "url": "YAHOO.util.DragDrop.html#onMouseDown"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseUp", "url": "YAHOO.util.DragDrop.html#onMouseUp"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_onResize", "url": "YAHOO.util.DragDropMgr.html#_onResize"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_onUnload", "url": "YAHOO.util.DragDropMgr.html#_onUnload"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "overlap", "url": "YAHOO.util.DragDrop.html#overlap"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "padding", "url": "YAHOO.util.DragDrop.html#padding"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "POINT", "url": "YAHOO.util.DragDropMgr.html#POINT"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "preventDefault", "url": "YAHOO.util.DragDropMgr.html#preventDefault"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "primaryButtonOnly", "url": "YAHOO.util.DragDrop.html#primaryButtonOnly"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "refreshCache", "url": "YAHOO.util.DragDropMgr.html#refreshCache"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "regDragDrop", "url": "YAHOO.util.DragDropMgr.html#regDragDrop"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "regHandle", "url": "YAHOO.util.DragDropMgr.html#regHandle"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_remove", "url": "YAHOO.util.DragDropMgr.html#_remove"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "removeDDFromGroup", "url": "YAHOO.util.DragDropMgr.html#removeDDFromGroup"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeFromGroup", "url": "YAHOO.util.DragDrop.html#removeFromGroup"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#removeInvalidHandleClass"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleId", "url": "YAHOO.util.DragDrop.html#removeInvalidHandleId"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleType", "url": "YAHOO.util.DragDrop.html#removeInvalidHandleType"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "resetConstraints", "url": "YAHOO.util.DragDrop.html#resetConstraints"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "resizeFrame", "url": "YAHOO.util.DDProxy.html#resizeFrame"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "_resizeProxy", "url": "YAHOO.util.DDProxy.html#_resizeProxy"}, {"access": "", "host": "YAHOO.util.DD", "name": "scroll", "url": "YAHOO.util.DD.html#scroll"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDelta", "url": "YAHOO.util.DD.html#setDelta"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setDragElId", "url": "YAHOO.util.DragDrop.html#setDragElId"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDragElPos", "url": "YAHOO.util.DD.html#setDragElPos"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setHandleElId", "url": "YAHOO.util.DragDrop.html#setHandleElId"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setInitialPosition", "url": "YAHOO.util.DragDrop.html#setInitialPosition"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setOuterHandleElId", "url": "YAHOO.util.DragDrop.html#setOuterHandleElId"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setPadding", "url": "YAHOO.util.DragDrop.html#setPadding"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setStartPosition", "url": "YAHOO.util.DragDrop.html#setStartPosition"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setXConstraint", "url": "YAHOO.util.DragDrop.html#setXConstraint"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setXTicks", "url": "YAHOO.util.DragDrop.html#setXTicks"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setYConstraint", "url": "YAHOO.util.DragDrop.html#setYConstraint"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setYTicks", "url": "YAHOO.util.DragDrop.html#setYTicks"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "showFrame", "url": "YAHOO.util.DDProxy.html#showFrame"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "startDrag", "url": "YAHOO.util.DragDrop.html#startDrag"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "startDrag", "url": "YAHOO.util.DragDropMgr.html#startDrag"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "startPageX", "url": "YAHOO.util.DragDrop.html#startPageX"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "startPageY", "url": "YAHOO.util.DragDrop.html#startPageY"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "startX", "url": "YAHOO.util.DragDropMgr.html#startX"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "startY", "url": "YAHOO.util.DragDropMgr.html#startY"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "stopDrag", "url": "YAHOO.util.DragDropMgr.html#stopDrag"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "stopEvent", "url": "YAHOO.util.DragDropMgr.html#stopEvent"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "stopPropagation", "url": "YAHOO.util.DragDropMgr.html#stopPropagation"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "STRICT_INTERSECT", "url": "YAHOO.util.DragDropMgr.html#STRICT_INTERSECT"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "swapNode", "url": "YAHOO.util.DragDropMgr.html#swapNode"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "_timeoutCount", "url": "YAHOO.util.DragDropMgr.html#_timeoutCount"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "toString", "url": "YAHOO.util.DragDrop.html#toString"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unlock", "url": "YAHOO.util.DragDrop.html#unlock"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "unlock", "url": "YAHOO.util.DragDropMgr.html#unlock"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unreg", "url": "YAHOO.util.DragDrop.html#unreg"}, {"access": "private", "host": "YAHOO.util.DragDropMgr", "name": "unregAll", "url": "YAHOO.util.DragDropMgr.html#unregAll"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "useCache", "url": "YAHOO.util.DragDropMgr.html#useCache"}, {"access": "", "host": "YAHOO.util.DragDropMgr", "name": "verifyEl", "url": "YAHOO.util.DragDropMgr.html#verifyEl"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "xTicks", "url": "YAHOO.util.DragDrop.html#xTicks"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "YAHOO.util.DDProxy.dragElId", "url": "YAHOO.util.DDProxy.html#YAHOO.util.DDProxy.dragElId"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "__ygDragDrop", "url": "YAHOO.util.DragDrop.html#__ygDragDrop"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "yTicks", "url": "YAHOO.util.DragDrop.html#yTicks"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

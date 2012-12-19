@@ -1,0 +1,803 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: imageloader  YAHOO.util.ImageLoader.group   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>imageloader&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_imageloader.html">imageloader</a>
+                 &gt; YAHOO.util.ImageLoader.group 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.ImageLoader.group</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A group for images. A group can have one time limit and a series of triggers. Thus the images belonging to this group must share these constraints.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.ImageLoader.group</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                trigEl
+
+                                                , 
+                                                trigAct
+
+                                                , 
+                                                timeout
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>trigEl
+                                                    &lt;String|HTMLElement&gt; 
+                                                    </code>
+                                                    	The HTML element id or reference to assign the trigger event to. Can be null for no trigger
+                                                </dd>
+                                                <dd>
+                                                    <code>trigAct
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     The type of event to assign to trigEl. Can be null for no trigger
+                                                </dd>
+                                                <dd>
+                                                    <code>timeout
+                                                    &lt;Number&gt; 
+                                                    </code>
+                                                    	Timeout (time limit) length, in seconds. Can be undefined, or <= 0, for no time limit
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_classImageEls">_classImageEls</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            HTML elements having the class name that is associated with this group
+Elements are stored during the _foldCheck function and reused later during the fetch function. Gives a slight performance improvement when className and foldConditional are both used
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_imgObjs">_imgObjs</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Collection of images registered with this group
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_timeout">_timeout</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Timeout object to keep a handle on the time limit
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_triggers">_triggers</a>
+                                        <code>- private Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Collection of triggers for this group.
+Keeps track of each trigger's element, event, and event-listener-callback "fetch" function
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="className">className</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Class name that will identify images belonging to the group. This class name will be removed from each element in order to fetch images.
+This class should have, in its CSS style definition, "background:none !important;"
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="foldConditional">foldConditional</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag to check if images are above the fold. If foldConditional is true, the group will check each of its image locations at page load. If any part of the image is within the client viewport, the image is displayed immediately
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="name">name</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Name for the group. Only used to identify the group in logging statements
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="timeoutLen">timeoutLen</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Timeout (time limit) length, in seconds
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_fetchByClass">_fetchByClass</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_fetchByClass</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Finds all elements in the Dom with the class name specified in the group. Removes the class from the element in order to let the style definitions trigger the image fetching
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_foldCheck">_foldCheck</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_foldCheck</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks the position of each image in the group. If any part of the image is within the client viewport, shows the image immediately.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getFetchTimeout">_getFetchTimeout</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Function
+                                            <strong>_getFetchTimeout</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the group's fetch method, with the proper closure, for use with setTimeout
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Function
+                                                    </code></dt>
+                                                    <dd>group's fetch method</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_onloadTasks">_onloadTasks</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_onloadTasks</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setup to do in the window's onload
+Initiates time limit for group; executes the fold check for the images
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addTrigger">addTrigger</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addTrigger</strong>
+                                           (
+                                                
+                                                        
+                                                         trigEl
+                                                    
+                                                
+                                                        , 
+                                                         trigAct
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a trigger to the group. Call this with the same style as YAHOO.util.Event.addListener
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>trigEl &lt;String|HTMLElement&gt;</code>
+                                                              The HTML element id or reference to assign the trigger event to
+                                                        </dd>
+                                                        <dd>
+                                                            <code>trigAct &lt;String&gt;</code>
+                                                             The type of event to assign to trigEl
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="fetch">fetch</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>fetch</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Displays the images in the group
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerBgImage">registerBgImage</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>registerBgImage</strong>
+                                           (
+                                                
+                                                        
+                                                         domId
+                                                    
+                                                
+                                                        , 
+                                                         url
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers a background image with the group
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>domId &lt;String&gt;</code>
+                                                            	HTML DOM id of the image element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>url &lt;String&gt;</code>
+                                                            	URL for the image
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>bgImgObj that was registered, for modifying any attributes in the object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerPngBgImage">registerPngBgImage</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>registerPngBgImage</strong>
+                                           (
+                                                
+                                                        
+                                                         domId
+                                                    
+                                                
+                                                        , 
+                                                         url
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers an alpha-channel-type png background image with the group
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>domId &lt;String&gt;</code>
+                                                            	HTML DOM id of the image element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>url &lt;String&gt;</code>
+                                                            	URL for the image
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>pngBgImgObj that was registered, for modifying any attributes in the object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerSrcImage">registerSrcImage</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>registerSrcImage</strong>
+                                           (
+                                                
+                                                        
+                                                         domId
+                                                    
+                                                
+                                                        , 
+                                                         url
+                                                    
+                                                
+                                                        , 
+                                                         width
+                                                    
+                                                
+                                                        , 
+                                                         height
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers a src image with the group
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>domId &lt;String&gt;</code>
+                                                            	HTML DOM id of the image element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>url &lt;String&gt;</code>
+                                                            	URL for the image
+                                                        </dd>
+                                                        <dd>
+                                                            <code>width &lt;Int&gt;</code>
+                                                            	pixel width of the image - defaults to image's natural size
+                                                        </dd>
+                                                        <dd>
+                                                            <code>height &lt;Int&gt;</code>
+                                                            	pixel height of the image - defaults to image's natural size
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>srcImgObj that was registered, for modifying any attributes in the object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.ImageLoader.bgImgObj.html">YAHOO.util.ImageLoader.bgImgObj</a></li>
+                                <li class="selected"><a href="YAHOO.util.ImageLoader.group.html">YAHOO.util.ImageLoader.group</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.imgObj.html">YAHOO.util.ImageLoader.imgObj</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.pngBgImgObj.html">YAHOO.util.ImageLoader.pngBgImgObj</a></li>
+                                <li class=""><a href="YAHOO.util.ImageLoader.srcImgObj.html">YAHOO.util.ImageLoader.srcImgObj</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ImageLoader.js.html">ImageLoader.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_classImageEls">_classImageEls</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_imgObjs">_imgObjs</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_timeout">_timeout</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_triggers">_triggers</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#className">className</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#foldConditional">foldConditional</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#name">name</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#timeoutLen">timeoutLen</a>
+                                        <!--<code>&lt;Number&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_fetchByClass">_fetchByClass</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_foldCheck">_foldCheck</a>
+                                </li>
+                                <li class="private"><!--<code>Function</code>-->
+                                <a href="#_getFetchTimeout">_getFetchTimeout</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_onloadTasks">_onloadTasks</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addTrigger">addTrigger</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#fetch">fetch</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#registerBgImage">registerBgImage</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#registerPngBgImage">registerPngBgImage</a>
+                                </li>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#registerSrcImage">registerSrcImage</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

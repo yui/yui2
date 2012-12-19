@@ -1,0 +1,542 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: menu   contextmenu.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Menu&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_menu.html">menu</a>
+                
+                 &gt; contextmenu.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c">* Creates a list of options or commands which are made visible in response to </span>
+<span class="c">* an HTML element&#39;s &quot;contextmenu&quot; event (&quot;mousedown&quot; for Opera).</span>
+<span class="c">*</span>
+<span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
+<span class="c">* &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the context menu.</span>
+<span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
+<span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for the </span>
+<span class="c">* context menu.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-</span>
+<span class="c">* html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the context menu.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-</span>
+<span class="c">* html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for </span>
+<span class="c">* the context menu.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the context menu. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">* @class ContextMenu</span>
+<span class="c">* @constructor</span>
+<span class="c">* @extends YAHOO.widget.Menu</span>
+<span class="c">* @namespace YAHOO.widget</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span>
+            <span class="k">this</span><span class="o">,</span> 
+            <span class="nx">p_oElement</span><span class="o">,</span>
+            <span class="nx">p_oConfig</span>
+        <span class="o">);</span>
+
+<span class="o">};</span>
+
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Menu</span><span class="o">,</span> <span class="o">{</span>
+
+
+
+<span class="c">// Private properties</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @property _oTrigger</span>
+<span class="c">* @description Object reference to the current value of the &quot;trigger&quot; </span>
+<span class="c">* configuration property.</span>
+<span class="c">* @default null</span>
+<span class="c">* @private</span>
+<span class="c">* @type String|&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/leve</span>
+<span class="c">* l-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|Array</span>
+<span class="c">*/</span>
+<span class="nx">_oTrigger</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @property _bCancelled</span>
+<span class="c">* @description Boolean indicating if the display of the context menu should </span>
+<span class="c">* be cancelled.</span>
+<span class="c">* @default false</span>
+<span class="c">* @private</span>
+<span class="c">* @type Boolean</span>
+<span class="c">*/</span>
+<span class="nx">_bCancelled</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+
+<span class="c">// Public properties</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @property contextEventTarget</span>
+<span class="c">* @description Object reference for the HTML element that was the target of the</span>
+<span class="c">* &quot;contextmenu&quot; DOM event (&quot;mousedown&quot; for Opera) that triggered the display of </span>
+<span class="c">* the context menu.</span>
+<span class="c">* @default null</span>
+<span class="c">* @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-</span>
+<span class="c">* html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;</span>
+<span class="c">*/</span>
+<span class="nx">contextEventTarget</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+
+<span class="c">// Events</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @event triggerContextMenuEvent</span>
+<span class="c">* @description Custom Event wrapper for the &quot;contextmenu&quot; DOM event </span>
+<span class="c">* (&quot;mousedown&quot; for Opera) fired by the element(s) that trigger the display of </span>
+<span class="c">* the context menu.</span>
+<span class="c">*/</span>
+<span class="nx">triggerContextMenuEvent</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+
+
+
+<span class="c">/**</span>
+<span class="c">* @method init</span>
+<span class="c">* @description The ContextMenu class&#39;s initialization method. This method is </span>
+<span class="c">* automatically called by the constructor, and sets up all DOM references for </span>
+<span class="c">* pre-existing markup, and creates required markup if it is not already present.</span>
+<span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
+<span class="c">* &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the context menu.</span>
+<span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
+<span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for </span>
+<span class="c">* the context menu.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-</span>
+<span class="c">* html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying the </span>
+<span class="c">* &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the context menu.</span>
+<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-</span>
+<span class="c">* html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object specifying </span>
+<span class="c">* the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for </span>
+<span class="c">* the context menu.</span>
+<span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
+<span class="c">* configuration for the context menu. See configuration class documentation </span>
+<span class="c">* for more details.</span>
+<span class="c">*/</span>
+<span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenuItem</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+
+    <span class="c">// Call the init of the superclass (YAHOO.widget.Menu)</span>
+<span class="c"></span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oElement</span><span class="o">);</span>
+
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">);</span>
+
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">p_oConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+    <span class="o">}</span>
+    
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">);</span>
+    
+<span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method initEvents</span>
+<span class="c">* @description Initializes the custom events for the context menu.</span>
+<span class="c">*/</span>
+<span class="nx">initEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">initEvents</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+    <span class="c">// Create custom events</span>
+<span class="c"></span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">triggerContextMenuEvent</span> <span class="o">=</span> 
+            <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;triggerContextMenuEvent&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+<span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method cancel</span>
+<span class="c">* @description Cancels the display of the context menu.</span>
+<span class="c">*/</span>
+<span class="nx">cancel</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">_bCancelled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Private methods</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method _removeEventHandlers</span>
+<span class="c">* @description Removes all of the DOM event handlers from the HTML element(s) </span>
+<span class="c">* whose &quot;context menu&quot; event (&quot;click&quot; for Opera) trigger the display of </span>
+<span class="c">* the context menu.</span>
+<span class="c">* @private</span>
+<span class="c">*/</span>
+<span class="nx">_removeEventHandlers</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">,</span>
+        <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
+
+
+    <span class="c">// Remove the event handlers from the trigger(s)</span>
+<span class="c"></span>
+    <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span>
+        <span class="nx">oTrigger</span><span class="o">,</span> 
+        <span class="o">(</span><span class="nx">bOpera</span> <span class="o">?</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">:</span> <span class="s2">&quot;contextmenu&quot;</span><span class="o">),</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">_onTriggerContextMenu</span>
+    <span class="o">);</span>    
+    
+    <span class="k">if</span><span class="o">(</span><span class="nx">bOpera</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">oTrigger</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onTriggerClick</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Private event handlers</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method _onTriggerClick</span>
+<span class="c">* @description &quot;click&quot; event handler for the HTML element(s) identified as the </span>
+<span class="c">* &quot;trigger&quot; for the context menu.  Used to cancel default behaviors in Opera.</span>
+<span class="c">* @private</span>
+<span class="c">* @param {Event} p_oEvent Object representing the DOM event object passed back </span>
+<span class="c">* by the event utility (YAHOO.util.Event).</span>
+<span class="c">* @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context </span>
+<span class="c">* menu that is handling the event.</span>
+<span class="c">*/</span>
+<span class="nx">_onTriggerClick</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">ctrlKey</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+
+    <span class="o">}</span>
+    
+<span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method _onTriggerContextMenu</span>
+<span class="c">* @description &quot;contextmenu&quot; event handler (&quot;mousedown&quot; for Opera) for the HTML </span>
+<span class="c">* element(s) that trigger the display of the context menu.</span>
+<span class="c">* @private</span>
+<span class="c">* @param {Event} p_oEvent Object representing the DOM event object passed back </span>
+<span class="c">* by the event utility (YAHOO.util.Event).</span>
+<span class="c">* @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context </span>
+<span class="c">* menu that is handling the event.</span>
+<span class="c">*/</span>
+<span class="nx">_onTriggerContextMenu</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">ctrlKey</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">return</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+
+    <span class="c">/*</span>
+<span class="c">        Prevent the browser&#39;s default context menu from appearing and </span>
+<span class="c">        stop the propagation of the &quot;contextmenu&quot; event so that </span>
+<span class="c">        other ContextMenu instances are not displayed.</span>
+<span class="c">    */</span>
+
+    <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+
+
+    <span class="c">// Hide any other ContextMenu instances that might be visible</span>
+<span class="c"></span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuManager</span><span class="o">.</span><span class="nx">hideVisible</span><span class="o">();</span>
+
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">contextEventTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">triggerContextMenuEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>
+
+
+    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_bCancelled</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c">// Position and display the context menu</span>
+<span class="c"></span>    
+        <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;xy&quot;</span><span class="o">,</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">));</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
+
+    <span class="o">}</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">_bCancelled</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Public methods</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method toString</span>
+<span class="c">* @description Returns a string representing the context menu.</span>
+<span class="c">* @return {String}</span>
+<span class="c">*/</span>
+<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;ContextMenu &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+
+<span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method initDefaultConfig</span>
+<span class="c">* @description Initializes the class&#39;s configurable properties which can be </span>
+<span class="c">* changed using the context menu&#39;s Config object (&quot;cfg&quot;).</span>
+<span class="c">*/</span>
+<span class="nx">initDefaultConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">initDefaultConfig</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+    <span class="c">/**</span>
+<span class="c">    * @config trigger</span>
+<span class="c">    * @description The HTML element(s) whose &quot;contextmenu&quot; event (&quot;mousedown&quot; </span>
+<span class="c">    * for Opera) trigger the display of the context menu.  Can be a string </span>
+<span class="c">    * representing the id attribute of the HTML element, an object reference </span>
+<span class="c">    * for the HTML element, or an array of strings or HTML element references.</span>
+<span class="c">    * @default null</span>
+<span class="c">    * @type String|&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">    * level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|Array</span>
+<span class="c">    */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;trigger&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configTrigger</span> <span class="o">});</span>
+
+<span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c">* @method destroy</span>
+<span class="c">* @description Removes the context menu&#39;s &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element </span>
+<span class="c">* (and accompanying child nodes) from the document.</span>
+<span class="c">*/</span>
+<span class="nx">destroy</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="c">// Remove the DOM event handlers from the current trigger(s)</span>
+<span class="c"></span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_removeEventHandlers</span><span class="o">();</span>
+    
+
+    <span class="c">// Continue with the superclass implementation of this method</span>
+<span class="c"></span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ContextMenu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">destroy</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="o">},</span>
+
+
+
+<span class="c">// Public event handlers for configuration properties</span>
+<span class="c"></span>
+
+<span class="c">/**</span>
+<span class="c">* @method configTrigger</span>
+<span class="c">* @description Event handler for when the value of the &quot;trigger&quot; configuration </span>
+<span class="c">* property changes. </span>
+<span class="c">* @param {String} p_sType String representing the name of the event that </span>
+<span class="c">* was fired.</span>
+<span class="c">* @param {Array} p_aArgs Array of arguments sent when the event was fired.</span>
+<span class="c">* @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context </span>
+<span class="c">* menu that fired the event.</span>
+<span class="c">*/</span>
+<span class="nx">configTrigger</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oMenu</span><span class="o">)</span> <span class="o">{</span>
+    
+    <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">oTrigger</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="nx">oTrigger</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c">/*</span>
+<span class="c">            If there is a current &quot;trigger&quot; - remove the event handlers </span>
+<span class="c">            from that element(s) before assigning new ones</span>
+<span class="c">        */</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">_removeEventHandlers</span><span class="o">();</span>
+
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_oTrigger</span> <span class="o">=</span> <span class="nx">oTrigger</span><span class="o">;</span>
+
+
+        <span class="c">/*</span>
+<span class="c">            Listen for the &quot;mousedown&quot; event in Opera b/c it does not </span>
+<span class="c">            support the &quot;contextmenu&quot; event</span>
+<span class="c">        */</span> 
+  
+        <span class="k">var</span> <span class="nx">bOpera</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span> <span class="o">==</span> <span class="s2">&quot;opera&quot;</span><span class="o">);</span>
+
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span>
+            <span class="nx">oTrigger</span><span class="o">,</span> 
+            <span class="o">(</span><span class="nx">bOpera</span> <span class="o">?</span> <span class="s2">&quot;mousedown&quot;</span> <span class="o">:</span> <span class="s2">&quot;contextmenu&quot;</span><span class="o">),</span> 
+            <span class="k">this</span><span class="o">.</span><span class="nx">_onTriggerContextMenu</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">,</span>
+            <span class="kc">true</span>
+        <span class="o">);</span>
+
+
+        <span class="c">/*</span>
+<span class="c">            Assign a &quot;click&quot; event handler to the trigger element(s) for</span>
+<span class="c">            Opera to prevent default browser behaviors.</span>
+<span class="c">        */</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="nx">bOpera</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span>
+                <span class="nx">oTrigger</span><span class="o">,</span> 
+                <span class="s2">&quot;click&quot;</span><span class="o">,</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">_onTriggerClick</span><span class="o">,</span>
+                <span class="k">this</span><span class="o">,</span>
+                <span class="kc">true</span>
+            <span class="o">);</span>
+
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+    
+        <span class="k">this</span><span class="o">.</span><span class="nx">_removeEventHandlers</span><span class="o">();</span>
+    
+    <span class="o">}</span>
+    
+<span class="o">}</span>
+
+<span class="o">});</span> <span class="c">// END YAHOO.lang.extend</span>
+<span class="c"></span></pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

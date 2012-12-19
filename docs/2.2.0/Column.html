@@ -1,0 +1,1585 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable  Column   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                 &gt; Column 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>Column</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The Column class defines and manages attributes of DataTable Columns
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>Column</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                oConfigs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>oConfigs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                      Object literal of configuration values.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="_children">_children</a>
+                                        <code>- private YAHOO.widget.Column[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of Column's chilren, or null.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_colspan">_colspan</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number of table cells the Column spans.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_id">_id</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Unique ID, also assigned as DOM ID.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_index">_index</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Reference to Column's index within its ColumnSet's key array, or null if not applicable.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_minWidth">_minWidth</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Minimum width the Column can support (in pixels). Value is populated only if table
+is fixedwidth, null otherwise.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_nCount">_nCount</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal instance counter.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_parent">_parent</a>
+                                        <code>- private YAHOO.widget.Column</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Column's parent, or null.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_rowspan">_rowspan</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number of table rows the Column spans.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="_width">_width</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Current offsetWidth of the Column (in pixels).
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="abbr">abbr</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Column head cell ABBR for accessibility.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="children">children</a>
+                                        <code>- Object[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of object literals that define children (nested headers) of a Column.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="className">className</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom CSS class to be applied to every cell in the Column.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="editor">editor</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Defines the type of editor for Column, otherwise Column is not editable.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="formatter">formatter</a>
+                                        <code>- HTMLFunction</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Defines a custom format function for Column, otherwise default is used,
+according to Column type.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="key">key</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Associated database field, or null.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="parser">parser</a>
+                                        <code>- HTMLFunction</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Defines a custom parse function for Column, otherwise default is used,
+according to Column type.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="resizeable">resizeable</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if Column is resizeable, false otherwise.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="sortable">sortable</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if Column is sortable, false otherwise.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="sortOptions.ascFunction">sortOptions.ascFunction</a>
+                                        <code>- Function</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom sort handler to arrange Column in ascending order.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="sortOptions.descFunction">sortOptions.descFunction</a>
+                                        <code>- Function</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom sort handler to arrange Column in descending order.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="text">text</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Text or HTML for display in Column's assocated TH element.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="type">type</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Data types: "string", "number", "date", "currency", "checkbox", "select",
+"email", "link".
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "string"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="width">width</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Column width.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="format">format</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        HTML
+                                            <strong>format</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Outputs markup into the given TD based on given Record.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              TD to format for display.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record that holds data for the row.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        HTML
+                                                    </code></dt>
+                                                    <dd>Markup.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatCheckbox">formatCheckbox</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatCheckbox</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "checkbox".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatCurrency">formatCurrency</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatCurrency</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "currency". Can be overridden for custom formatting.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatDate">formatDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatDate</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "date".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatEmail">formatEmail</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatEmail</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "email".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatLink">formatLink</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatLink</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "link".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatNumber">formatNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "number".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="formatSelect">formatSelect</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>formatSelect</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                                        , 
+                                                         oColumn
+                                                    
+                                                
+                                                        , 
+                                                         oData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Formats cells in Columns of type "select".
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              Table cell element.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              Record instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oColumn &lt;YAHOO.widget.Column&gt;</code>
+                                                              Column instance.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oData &lt;Object&gt;</code>
+                                                              Data value for the cell, or null
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getColSpan">getColSpan</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getColSpan</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor returns Column's colspan number.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Column's colspan number.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getId">getId</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>getId</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor returns Column's ID string.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Column's ID string.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getRowSpan">getRowSpan</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getRowSpan</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor returns Column's rowspan number.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>Column's rowspan number.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parse">parse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong>parse</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Takes innerHTML from TD and parses out data for storage in RecordSet.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;String&gt;</code>
+                                                              The TD's innerHTML value.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>Data.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parseCheckbox">parseCheckbox</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        bChecked
+                                            <strong>parseCheckbox</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default parse function for Columns of type "checkbox" takes markup and
+extracts data. Can be overridden for custom parsing.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;object&gt;</code>
+                                                            
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        bChecked
+                                                    </code></dt>
+                                                    <dd>True if checkbox is checked.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parseCurrency">parseCurrency</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        nAmount
+                                            <strong>parseCurrency</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default parse function for Columns of type "currency" takes markup and
+extracts data. Can be overridden for custom parsing.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;object&gt;</code>
+                                                            
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        nAmount
+                                                    </code></dt>
+                                                    <dd>Floating point amount.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parseDate">parseDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        oDate
+                                            <strong>parseDate</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default parse function for Columns of type "date" takes markup and extracts
+data. Can be overridden for custom parsing.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;object&gt;</code>
+                                                            
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        oDate
+                                                    </code></dt>
+                                                    <dd>Date instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parseNumber">parseNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        nNumber
+                                            <strong>parseNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default parse function for Columns of type "number" takes markup and extracts
+data. Can be overridden for custom parsing.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;object&gt;</code>
+                                                            
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        nNumber
+                                                    </code></dt>
+                                                    <dd>Number.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="parseSelect">parseSelect</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        sValue
+                                            <strong>parseSelect</strong>
+                                           (
+                                                
+                                                        
+                                                         sMarkup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Default parse function for Columns of type "select" takes markup and extracts
+data. Can be overridden for custom parsing.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sMarkup &lt;object&gt;</code>
+                                                            
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        sValue
+                                                    </code></dt>
+                                                    <dd>Value of selected option.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="showEditor">showEditor</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>showEditor</strong>
+                                           (
+                                                
+                                                        
+                                                         elCell
+                                                    
+                                                
+                                                        , 
+                                                         oRecord
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Outputs editor markup into the given TD based on given Record.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>elCell &lt;HTMLElement&gt;</code>
+                                                              The cell to edit.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oRecord &lt;YAHOO.widget.Record&gt;</code>
+                                                              The DataTable Record of the cell.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>YAHOO.widget.ColumnEditor</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="Column.html">Column</a></li>
+                                <li class=""><a href="ColumnEditor.html">ColumnEditor</a></li>
+                                <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
+                                <li class=""><a href="DataTable.html">DataTable</a></li>
+                                <li class=""><a href="Record.html">Record</a></li>
+                                <li class=""><a href="RecordSet.html">RecordSet</a></li>
+                                <li class=""><a href="Sort.html">Sort</a></li>
+                                <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#_children">_children</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_colspan">_colspan</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_id">_id</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_index">_index</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_minWidth">_minWidth</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_nCount">_nCount</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_parent">_parent</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_rowspan">_rowspan</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#_width">_width</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#abbr">abbr</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#children">children</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#className">className</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#editor">editor</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#formatter">formatter</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#key">key</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#parser">parser</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#resizeable">resizeable</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#sortable">sortable</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#sortOptions.ascFunction">sortOptions.ascFunction</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#sortOptions.descFunction">sortOptions.descFunction</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#text">text</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#type">type</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#width">width</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>HTML</code>-->
+                                <a href="#format">format</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatCheckbox">formatCheckbox</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatCurrency">formatCurrency</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatDate">formatDate</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatEmail">formatEmail</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatLink">formatLink</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatNumber">formatNumber</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#formatSelect">formatSelect</a>
+                                </li>
+                                <li><!--<code>Number</code>-->
+                                <a href="#getColSpan">getColSpan</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#getId">getId</a>
+                                </li>
+                                <li><!--<code>Number</code>-->
+                                <a href="#getRowSpan">getRowSpan</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#parse">parse</a>
+                                </li>
+                                <li><!--<code>bChecked</code>-->
+                                <a href="#parseCheckbox">parseCheckbox</a>
+                                </li>
+                                <li><!--<code>nAmount</code>-->
+                                <a href="#parseCurrency">parseCurrency</a>
+                                </li>
+                                <li><!--<code>oDate</code>-->
+                                <a href="#parseDate">parseDate</a>
+                                </li>
+                                <li><!--<code>nNumber</code>-->
+                                <a href="#parseNumber">parseNumber</a>
+                                </li>
+                                <li><!--<code>sValue</code>-->
+                                <a href="#parseSelect">parseSelect</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#showEditor">showEditor</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

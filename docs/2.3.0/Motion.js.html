@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: animation   Motion.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>animation&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_animation.html">animation</a>
+                
+                 &gt; Motion.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+<span class="c">/**</span>
+<span class="c"> * Anim subclass for moving elements along a path defined by the &quot;points&quot; </span>
+<span class="c"> * member of &quot;attributes&quot;.  All &quot;points&quot; are arrays with x, y coordinates.</span>
+<span class="c"> * &lt;p&gt;Usage: &lt;code&gt;var myAnim = new YAHOO.util.Motion(el, { points: { to: [800, 800] } }, 1, YAHOO.util.Easing.easeOut);&lt;/code&gt;&lt;/p&gt;</span>
+<span class="c"> * @class Motion</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @requires YAHOO.util.Anim</span>
+<span class="c"> * @requires YAHOO.util.AnimMgr</span>
+<span class="c"> * @requires YAHOO.util.Easing</span>
+<span class="c"> * @requires YAHOO.util.Bezier</span>
+<span class="c"> * @requires YAHOO.util.Dom</span>
+<span class="c"> * @requires YAHOO.util.Event</span>
+<span class="c"> * @requires YAHOO.util.CustomEvent </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @extends YAHOO.util.Anim</span>
+<span class="c"> * @param {String | HTMLElement} el Reference to the element that will be animated</span>
+<span class="c"> * @param {Object} attributes The attribute(s) to be animated.  </span>
+<span class="c"> * Each attribute is an object with at minimum a &quot;to&quot; or &quot;by&quot; member defined.  </span>
+<span class="c"> * Additional optional members are &quot;from&quot; (defaults to current value), &quot;units&quot; (defaults to &quot;px&quot;).  </span>
+<span class="c"> * All attribute names use camelCase.</span>
+<span class="c"> * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based</span>
+<span class="c"> * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)</span>
+<span class="c"> */</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Motion</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">,</span> <span class="nx">duration</span><span class="o">,</span>  <span class="nx">method</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span> <span class="c">// dont break existing subclasses not using YAHOO.extend</span>
+<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Motion</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">,</span> <span class="nx">duration</span><span class="o">,</span> <span class="nx">method</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Motion</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ColorAnim</span><span class="o">);</span>
+    
+    <span class="c">// shorthand</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">superclass</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Motion</span><span class="o">.</span><span class="nx">superclass</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Motion</span><span class="o">.</span><span class="nx">prototype</span><span class="o">;</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;Motion &quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="o">);</span>
+    <span class="o">};</span>
+    
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">points</span> <span class="o">=</span> <span class="sr">/^points$/i</span><span class="o">;</span>
+    
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">setAttribute</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span><span class="o">,</span> <span class="nx">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span>  <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">points</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="nx">unit</span> <span class="o">=</span> <span class="nx">unit</span> <span class="o">||</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+            <span class="nx">superclass</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="nx">val</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">unit</span><span class="o">);</span>
+            <span class="nx">superclass</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="nx">val</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">unit</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">superclass</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span><span class="o">,</span> <span class="nx">unit</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">getAttribute</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span>  <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">points</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="o">[</span>
+                <span class="nx">superclass</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;left&#39;</span><span class="o">),</span>
+                <span class="nx">superclass</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;top&#39;</span><span class="o">)</span>
+            <span class="o">];</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">superclass</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">doMethod</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">start</span><span class="o">,</span> <span class="nx">end</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">points</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">method</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">currentFrame</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">100</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">totalFrames</span><span class="o">)</span> <span class="o">/</span> <span class="m">100</span><span class="o">;</span>				
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Bezier</span><span class="o">.</span><span class="nx">getPosition</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">],</span> <span class="nx">t</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">superclass</span><span class="o">.</span><span class="nx">doMethod</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">start</span><span class="o">,</span> <span class="nx">end</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">setRuntimeAttribute</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">points</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+            <span class="k">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">attributes</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">start</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">control</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;control&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="o">[];</span>
+            <span class="k">var</span> <span class="nx">end</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="nx">control</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="nx">control</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="c">// could be single point or array of points</span>
+<span class="c"></span>                <span class="nx">control</span> <span class="o">=</span> <span class="o">[</span><span class="nx">control</span><span class="o">];</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// break reference to attributes.points.control</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">[];</span> 
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">control</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">tmp</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+                <span class="nx">control</span> <span class="o">=</span> <span class="nx">tmp</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;position&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;static&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="c">// default to relative</span>
+<span class="c"></span>                <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;position&#39;</span><span class="o">,</span> <span class="s1">&#39;relative&#39;</span><span class="o">);</span>
+            <span class="o">}</span>
+    
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">isset</span><span class="o">(</span><span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;from&#39;</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setXY</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;from&#39;</span><span class="o">]);</span> <span class="c">// set position to from point</span>
+<span class="c"></span>            <span class="o">}</span> 
+            <span class="k">else</span> <span class="o">{</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setXY</span><span class="o">(</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">);</span> <span class="o">}</span> <span class="c">// set it to current position</span>
+<span class="c"></span>            
+            <span class="nx">start</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;points&#39;</span><span class="o">);</span> <span class="c">// get actual top &amp; left</span>
+<span class="c"></span>            
+            <span class="c">// TO beats BY, per SMIL 2.1 spec</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">isset</span><span class="o">(</span><span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;to&#39;</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">end</span> <span class="o">=</span> <span class="nx">translateValues</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;to&#39;</span><span class="o">],</span> <span class="nx">start</span><span class="o">);</span>
+                
+                <span class="k">var</span> <span class="nx">pageXY</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">control</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">translateValues</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">start</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">isset</span><span class="o">(</span><span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;by&#39;</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">end</span> <span class="o">=</span> <span class="o">[</span> <span class="nx">start</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;by&#39;</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">start</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">attributes</span><span class="o">[</span><span class="s1">&#39;points&#39;</span><span class="o">][</span><span class="s1">&#39;by&#39;</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">];</span>
+                
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">control</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span> <span class="nx">start</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">],</span> <span class="nx">start</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">control</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">1</span><span class="o">]</span> <span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="nx">start</span><span class="o">];</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="nx">control</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">concat</span><span class="o">(</span><span class="nx">control</span><span class="o">);</span> 
+            <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">][</span><span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">end</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">superclass</span><span class="o">.</span><span class="nx">setRuntimeAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+    
+    <span class="k">var</span> <span class="nx">translateValues</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">,</span> <span class="nx">start</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">pageXY</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
+        <span class="nx">val</span> <span class="o">=</span> <span class="o">[</span> <span class="nx">val</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">pageXY</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="nx">start</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">val</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">pageXY</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">start</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">];</span>
+
+        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span> 
+    <span class="o">};</span>
+    
+    <span class="k">var</span> <span class="nx">isset</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">prop</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">prop</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">);</span>
+    <span class="o">};</span>
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class="selected"><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

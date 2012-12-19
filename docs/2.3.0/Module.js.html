@@ -1,0 +1,1335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container   Module.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                
+                 &gt; Module.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">    * The Container family of components is designed to enable developers to </span>
+<span class="c">    * create different kinds of content-containing modules on the web. Module </span>
+<span class="c">    * and Overlay are the most basic containers, and they can be used directly </span>
+<span class="c">    * or extended to build custom containers. Also part of the Container family </span>
+<span class="c">    * are four UI controls that extend Module and Overlay: Tooltip, Panel, </span>
+<span class="c">    * Dialog, and SimpleDialog.</span>
+<span class="c">    * @module container</span>
+<span class="c">    * @title Container</span>
+<span class="c">    * @requires yahoo, dom, event </span>
+<span class="c">    * @optional dragdrop, animation, button</span>
+<span class="c">    */</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Module is a JavaScript representation of the Standard Module Format. </span>
+<span class="c">    * Standard Module Format is a simple standard for markup containers where </span>
+<span class="c">    * child nodes representing the header, body, and footer of the content are </span>
+<span class="c">    * denoted using the CSS classes &quot;hd&quot;, &quot;bd&quot;, and &quot;ft&quot; respectively. </span>
+<span class="c">    * Module is the base class for all other classes in the YUI </span>
+<span class="c">    * Container package.</span>
+<span class="c">    * @namespace YAHOO.widget</span>
+<span class="c">    * @class Module</span>
+<span class="c">    * @constructor</span>
+<span class="c">    * @param {String} el The element ID representing the Module &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">    * @param {HTMLElement} el The element representing the Module</span>
+<span class="c">    * @param {Object} userConfig The configuration Object literal containing </span>
+<span class="c">    * the configuration that should be set for this module. See configuration </span>
+<span class="c">    * documentation for more details.</span>
+<span class="c">    */</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+    
+            <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">);</span>
+    
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;No element or element ID specified&quot;</span> <span class="o">+</span> 
+                <span class="s2">&quot; for Module instantiation&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+    
+        <span class="o">}</span>
+    
+    <span class="o">};</span>
+
+
+    <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+        <span class="nx">Config</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Config</span><span class="o">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">CustomEvent</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">,</span>
+        <span class="nx">Module</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Module</span><span class="o">,</span>
+        
+        <span class="nx">m_oModuleTemplate</span><span class="o">,</span>
+        <span class="nx">m_oHeaderTemplate</span><span class="o">,</span>
+        <span class="nx">m_oBodyTemplate</span><span class="o">,</span>
+        <span class="nx">m_oFooterTemplate</span><span class="o">,</span>
+
+        <span class="c">/**</span>
+<span class="c">        * Constant representing the name of the Module&#39;s events</span>
+<span class="c">        * @property EVENT_TYPES</span>
+<span class="c">        * @private</span>
+<span class="c">        * @final</span>
+<span class="c">        * @type Object</span>
+<span class="c">        */</span>
+        <span class="nx">EVENT_TYPES</span> <span class="o">=</span> <span class="o">{</span>
+        
+            <span class="s2">&quot;BEFORE_INIT&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeInit&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;INIT&quot;</span><span class="o">:</span> <span class="s2">&quot;init&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;APPEND&quot;</span><span class="o">:</span> <span class="s2">&quot;append&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;BEFORE_RENDER&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeRender&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;RENDER&quot;</span><span class="o">:</span> <span class="s2">&quot;render&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;CHANGE_HEADER&quot;</span><span class="o">:</span> <span class="s2">&quot;changeHeader&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;CHANGE_BODY&quot;</span><span class="o">:</span> <span class="s2">&quot;changeBody&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;CHANGE_FOOTER&quot;</span><span class="o">:</span> <span class="s2">&quot;changeFooter&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;CHANGE_CONTENT&quot;</span><span class="o">:</span> <span class="s2">&quot;changeContent&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;DESTORY&quot;</span><span class="o">:</span> <span class="s2">&quot;destroy&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;BEFORE_SHOW&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;SHOW&quot;</span><span class="o">:</span> <span class="s2">&quot;show&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;BEFORE_HIDE&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeHide&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;HIDE&quot;</span><span class="o">:</span> <span class="s2">&quot;hide&quot;</span>
+        
+        <span class="o">},</span>
+            
+        <span class="c">/**</span>
+<span class="c">        * Constant representing the Module&#39;s configuration properties</span>
+<span class="c">        * @property DEFAULT_CONFIG</span>
+<span class="c">        * @private</span>
+<span class="c">        * @final</span>
+<span class="c">        * @type Object</span>
+<span class="c">        */</span>
+        <span class="nx">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="o">{</span>
+        
+            <span class="s2">&quot;VISIBLE&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span> 
+            <span class="o">},</span>
+        
+            <span class="s2">&quot;EFFECT&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;effect&quot;</span><span class="o">,</span> 
+                <span class="nx">suppressEvent</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+                <span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;visible&quot;</span><span class="o">]</span> 
+            <span class="o">},</span>
+        
+            <span class="s2">&quot;MONITOR_RESIZE&quot;</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;monitorresize&quot;</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="kc">true</span>  
+            <span class="o">}</span>
+        
+        <span class="o">};</span>
+
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the prefix path to use for non-secure images</span>
+<span class="c">    * @property YAHOO.widget.Module.IMG_ROOT</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">IMG_ROOT</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the prefix path to use for securely served images</span>
+<span class="c">    * @property YAHOO.widget.Module.IMG_ROOT_SSL</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">IMG_ROOT_SSL</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant for the default CSS class name that represents a Module</span>
+<span class="c">    * @property YAHOO.widget.Module.CSS_MODULE</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_MODULE</span> <span class="o">=</span> <span class="s2">&quot;yui-module&quot;</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the module header</span>
+<span class="c">    * @property YAHOO.widget.Module.CSS_HEADER</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">=</span> <span class="s2">&quot;hd&quot;</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the module body</span>
+<span class="c">    * @property YAHOO.widget.Module.CSS_BODY</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">=</span> <span class="s2">&quot;bd&quot;</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the module footer</span>
+<span class="c">    * @property YAHOO.widget.Module.CSS_FOOTER</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">=</span> <span class="s2">&quot;ft&quot;</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Constant representing the url for the &quot;src&quot; attribute of the iframe </span>
+<span class="c">    * used to monitor changes to the browser&#39;s base font size</span>
+<span class="c">    * @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL</span>
+<span class="c">    * @static</span>
+<span class="c">    * @final</span>
+<span class="c">    * @type String</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">=</span> <span class="s2">&quot;javascript:false;&quot;</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Singleton CustomEvent fired when the font size is changed in the browser.</span>
+<span class="c">    * Opera&#39;s &quot;zoom&quot; functionality currently does not support text </span>
+<span class="c">    * size detection.</span>
+<span class="c">    * @event YAHOO.widget.Module.textResizeEvent</span>
+<span class="c">    */</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;textResize&quot;</span><span class="o">);</span>
+
+
+    <span class="k">function</span> <span class="nx">createModuleTemplate</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oModuleTemplate</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="nx">m_oModuleTemplate</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+            
+            <span class="nx">m_oModuleTemplate</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&quot;</span><span class="o">);</span>
+
+            <span class="nx">m_oHeaderTemplate</span> <span class="o">=</span> <span class="nx">m_oModuleTemplate</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
+            <span class="nx">m_oBodyTemplate</span> <span class="o">=</span> <span class="nx">m_oHeaderTemplate</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+            <span class="nx">m_oFooterTemplate</span> <span class="o">=</span> <span class="nx">m_oBodyTemplate</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">m_oModuleTemplate</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+
+    <span class="k">function</span> <span class="nx">createHeader</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oHeaderTemplate</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="nx">createModuleTemplate</span><span class="o">();</span>
+        
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="o">(</span><span class="nx">m_oHeaderTemplate</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">));</span>
+
+    <span class="o">}</span>
+    
+
+    <span class="k">function</span> <span class="nx">createBody</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oBodyTemplate</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="nx">createModuleTemplate</span><span class="o">();</span>
+        
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="o">(</span><span class="nx">m_oBodyTemplate</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">));</span>
+    
+    <span class="o">}</span>
+    
+
+    <span class="k">function</span> <span class="nx">createFooter</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oFooterTemplate</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="nx">createModuleTemplate</span><span class="o">();</span>
+        
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="o">(</span><span class="nx">m_oFooterTemplate</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">));</span>
+
+    <span class="o">}</span>
+    
+
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+    
+        <span class="c">/**</span>
+<span class="c">        * The class&#39;s constructor function</span>
+<span class="c">        * @property contructor</span>
+<span class="c">        * @type Function</span>
+<span class="c">        */</span>
+        <span class="nx">constructor</span><span class="o">:</span> <span class="nx">Module</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The main module element that contains the header, body, and footer</span>
+<span class="c">        * @property element</span>
+<span class="c">        * @type HTMLElement</span>
+<span class="c">        */</span>
+        <span class="nx">element</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The header element, denoted with CSS class &quot;hd&quot;</span>
+<span class="c">        * @property header</span>
+<span class="c">        * @type HTMLElement</span>
+<span class="c">        */</span>
+        <span class="nx">header</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The body element, denoted with CSS class &quot;bd&quot;</span>
+<span class="c">        * @property body</span>
+<span class="c">        * @type HTMLElement</span>
+<span class="c">        */</span>
+        <span class="nx">body</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The footer element, denoted with CSS class &quot;ft&quot;</span>
+<span class="c">        * @property footer</span>
+<span class="c">        * @type HTMLElement</span>
+<span class="c">        */</span>
+        <span class="nx">footer</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The id of the element</span>
+<span class="c">        * @property id</span>
+<span class="c">        * @type String</span>
+<span class="c">        */</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * A string representing the root path for all images created by</span>
+<span class="c">        * a Module instance.</span>
+<span class="c">        * @deprecated It is recommend that any images for a Module be applied</span>
+<span class="c">        * via CSS using the &quot;background-image&quot; property.</span>
+<span class="c">        * @property imageRoot</span>
+<span class="c">        * @type String</span>
+<span class="c">        */</span>
+        <span class="nx">imageRoot</span><span class="o">:</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">IMG_ROOT</span><span class="o">,</span>
+    
+        <span class="c">/**</span>
+<span class="c">        * Initializes the custom events for Module which are fired </span>
+<span class="c">        * automatically at appropriate times by the Module class.</span>
+<span class="c">        * @method initEvents</span>
+<span class="c">        */</span>
+        <span class="nx">initEvents</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">SIGNATURE</span> <span class="o">=</span> <span class="nx">CustomEvent</span><span class="o">.</span><span class="nx">LIST</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired prior to class initalization.</span>
+<span class="c">            * @event beforeInitEvent</span>
+<span class="c">            * @param {class} classRef class reference of the initializing </span>
+<span class="c">            * class, such as this.beforeInitEvent.fire(Module)</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">BEFORE_INIT</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired after class initalization.</span>
+<span class="c">            * @event initEvent</span>
+<span class="c">            * @param {class} classRef class reference of the initializing </span>
+<span class="c">            * class, such as this.beforeInitEvent.fire(Module)</span>
+<span class="c">            */</span>  
+            <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">INIT</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the Module is appended to the DOM</span>
+<span class="c">            * @event appendEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">appendEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">APPEND</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">appendEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired before the Module is rendered</span>
+<span class="c">            * @event beforeRenderEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span> <span class="o">=</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">BEFORE_RENDER</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired after the Module is rendered</span>
+<span class="c">            * @event renderEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">RENDER</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the header content of the Module </span>
+<span class="c">            * is modified</span>
+<span class="c">            * @event changeHeaderEvent</span>
+<span class="c">            * @param {String/HTMLElement} content String/element representing </span>
+<span class="c">            * the new header content</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeHeaderEvent</span> <span class="o">=</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">CHANGE_HEADER</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeHeaderEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+            
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the body content of the Module is modified</span>
+<span class="c">            * @event changeBodyEvent</span>
+<span class="c">            * @param {String/HTMLElement} content String/element representing </span>
+<span class="c">            * the new body content</span>
+<span class="c">            */</span>  
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeBodyEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">CHANGE_BODY</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeBodyEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+            
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the footer content of the Module </span>
+<span class="c">            * is modified</span>
+<span class="c">            * @event changeFooterEvent</span>
+<span class="c">            * @param {String/HTMLElement} content String/element representing </span>
+<span class="c">            * the new footer content</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeFooterEvent</span> <span class="o">=</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">CHANGE_FOOTER</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeFooterEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the content of the Module is modified</span>
+<span class="c">            * @event changeContentEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span> <span class="o">=</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">CHANGE_CONTENT</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired when the Module is destroyed</span>
+<span class="c">            * @event destroyEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">destroyEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">DESTORY</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">destroyEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+            
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired before the Module is shown</span>
+<span class="c">            * @event beforeShowEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeShowEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">BEFORE_SHOW</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeShowEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired after the Module is shown</span>
+<span class="c">            * @event showEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">SHOW</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired before the Module is hidden</span>
+<span class="c">            * @event beforeHideEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeHideEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">BEFORE_HIDE</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeHideEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * CustomEvent fired after the Module is hidden</span>
+<span class="c">            * @event hideEvent</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">hideEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">HIDE</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">hideEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
+        <span class="o">},</span> 
+        
+        <span class="c">/**</span>
+<span class="c">        * String representing the current user-agent platform</span>
+<span class="c">        * @property platform</span>
+<span class="c">        * @type String</span>
+<span class="c">        */</span>
+        <span class="nx">platform</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;windows&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;win32&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="k">return</span> <span class="s2">&quot;windows&quot;</span><span class="o">;</span>
+        
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;macintosh&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="k">return</span> <span class="s2">&quot;mac&quot;</span><span class="o">;</span>
+        
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        
+            <span class="o">}</span>
+        
+        <span class="o">}(),</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * String representing the user-agent of the browser</span>
+<span class="c">        * @deprecated Use YAHOO.env.ua</span>
+<span class="c">        * @property browser</span>
+<span class="c">        * @type String</span>
+<span class="c">        */</span>
+        <span class="nx">browser</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
+            
+            <span class="c">/*</span>
+<span class="c">                 Check Opera first in case of spoof and check Safari before</span>
+<span class="c">                 Gecko since Safari&#39;s user agent string includes &quot;like Gecko&quot;</span>
+<span class="c">            */</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;opera&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
+            
+                <span class="k">return</span> <span class="s1">&#39;opera&#39;</span><span class="o">;</span>
+            
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;msie 7&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            
+                <span class="k">return</span> <span class="s1">&#39;ie7&#39;</span><span class="o">;</span>
+            
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;msie&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            
+                <span class="k">return</span> <span class="s1">&#39;ie&#39;</span><span class="o">;</span>
+            
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;safari&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
+            
+                <span class="k">return</span> <span class="s1">&#39;safari&#39;</span><span class="o">;</span>
+            
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;gecko&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            
+                <span class="k">return</span> <span class="s1">&#39;gecko&#39;</span><span class="o">;</span>
+            
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            
+            <span class="o">}</span>
+        
+        <span class="o">}(),</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Boolean representing whether or not the current browsing context is </span>
+<span class="c">        * secure (https)</span>
+<span class="c">        * @property isSecure</span>
+<span class="c">        * @type Boolean</span>
+<span class="c">        */</span>
+        <span class="nx">isSecure</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;https&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        
+            <span class="o">}</span>
+        
+        <span class="o">}(),</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Initializes the custom events for Module which are fired </span>
+<span class="c">        * automatically at appropriate times by the Module class.</span>
+<span class="c">        */</span>
+        <span class="nx">initDefaultConfig</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+    
+            <span class="c">// Add properties //</span>
+<span class="c"></span>        
+            <span class="c">/**</span>
+<span class="c">            * Specifies whether the Module is visible on the page.</span>
+<span class="c">            * @config visible</span>
+<span class="c">            * @type Boolean</span>
+<span class="c">            * @default true</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">VISIBLE</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configVisible</span><span class="o">,</span> 
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">VISIBLE</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> 
+                <span class="nx">validator</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">VISIBLE</span><span class="o">.</span><span class="nx">validator</span>
+            <span class="o">});</span>
+            
+            <span class="c">/**</span>
+<span class="c">            * Object or array of objects representing the ContainerEffect </span>
+<span class="c">            * classes that are active for animating the container.</span>
+<span class="c">            * @config effect</span>
+<span class="c">            * @type Object</span>
+<span class="c">            * @default null</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">EFFECT</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">suppressEvent</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">EFFECT</span><span class="o">.</span><span class="nx">suppressEvent</span><span class="o">,</span> 
+                <span class="nx">supercedes</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">EFFECT</span><span class="o">.</span><span class="nx">supercedes</span>
+            <span class="o">});</span>
+            
+            <span class="c">/**</span>
+<span class="c">            * Specifies whether to create a special proxy iframe to monitor </span>
+<span class="c">            * for user font resizing in the document</span>
+<span class="c">            * @config monitorresize</span>
+<span class="c">            * @type Boolean</span>
+<span class="c">            * @default true</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">MONITOR_RESIZE</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">handler</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">configMonitorResize</span><span class="o">,</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">MONITOR_RESIZE</span><span class="o">.</span><span class="nx">value</span>
+            <span class="o">});</span>
+            
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * The Module class&#39;s initialization method, which is executed for</span>
+<span class="c">        * Module and all of its subclasses. This method is automatically </span>
+<span class="c">        * called by the constructor, and  sets up all DOM references for </span>
+<span class="c">        * pre-existing markup, and creates required markup if it is not </span>
+<span class="c">        * already present.</span>
+<span class="c">        * @method init</span>
+<span class="c">        * @param {String} el The element ID representing the Module &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} el The element representing the Module</span>
+<span class="c">        * @param {Object} userConfig The configuration Object literal </span>
+<span class="c">        * containing the configuration that should be set for this module. </span>
+<span class="c">        * See configuration documentation for more details.</span>
+<span class="c">        */</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">elId</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">child</span><span class="o">;</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">initEvents</span><span class="o">();</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Module</span><span class="o">);</span>
+        
+            <span class="c">/**</span>
+<span class="c">            * The Module&#39;s Config object used for monitoring </span>
+<span class="c">            * configuration properties.</span>
+<span class="c">            * @property cfg</span>
+<span class="c">            * @type YAHOO.util.Config</span>
+<span class="c">            */</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Config</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isSecure</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">imageRoot</span> <span class="o">=</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">IMG_ROOT_SSL</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">elId</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+        
+                <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+
+                <span class="k">if</span> <span class="o">(!</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="nx">el</span> <span class="o">=</span> <span class="o">(</span><span class="nx">createModuleTemplate</span><span class="o">()).</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+                    <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">elId</span><span class="o">;</span>
+
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="nx">child</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="nx">child</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">do</span> <span class="o">{</span>
+
+                    <span class="nx">switch</span> <span class="o">(</span><span class="nx">child</span><span class="o">.</span><span class="nx">className</span><span class="o">)</span> <span class="o">{</span>
+    
+                    <span class="nx">case</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span><span class="o">:</span>
+    
+                        <span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="nx">child</span><span class="o">;</span>
+    
+                        <span class="k">break</span><span class="o">;</span>
+    
+                    <span class="nx">case</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span><span class="o">:</span>
+    
+                        <span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">child</span><span class="o">;</span>
+    
+                        <span class="k">break</span><span class="o">;</span>
+    
+                    <span class="nx">case</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span><span class="o">:</span>
+    
+                        <span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">child</span><span class="o">;</span>
+    
+                        <span class="k">break</span><span class="o">;</span>
+    
+                    <span class="o">}</span>
+                    
+                <span class="o">}</span> <span class="k">while</span> <span class="o">((</span><span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">));</span>
+            
+            <span class="o">}</span>
+
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">initDefaultConfig</span><span class="o">();</span>
+        
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_MODULE</span><span class="o">);</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="o">}</span>
+        
+            <span class="c">/*</span>
+<span class="c">                Subscribe to the fireQueue() method of Config so that any </span>
+<span class="c">                queued configuration changes are excecuted upon render of </span>
+<span class="c">                the Module</span>
+<span class="c">            */</span> 
+            
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">Config</span><span class="o">.</span><span class="nx">alreadySubscribed</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">,</span> 
+                <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">))</span> <span class="o">{</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Module</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Initialized an empty IFRAME that is placed out of the visible area </span>
+<span class="c">        * that can be used to detect text resize.</span>
+<span class="c">        * @method initResizeMonitor</span>
+<span class="c">        */</span>
+        <span class="nx">initResizeMonitor</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">oDoc</span><span class="o">,</span> 
+                <span class="nx">oIFrame</span><span class="o">,</span> 
+                <span class="nx">sHTML</span><span class="o">;</span>
+        
+            <span class="k">function</span> <span class="nx">fireTextResize</span><span class="o">()</span> <span class="o">{</span>
+        
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+        
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
+        
+                <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;_yuiResizeMonitor&quot;</span><span class="o">);</span>
+        
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">oIFrame</span><span class="o">)</span> <span class="o">{</span>
+        
+                    <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">);</span>
+        
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isSecure</span> <span class="o">&amp;&amp;</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">&amp;&amp;</span> 
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+    
+                        <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span><span class="o">;</span>
+    
+                    <span class="o">}</span>
+
+
+                    <span class="c">/*</span>
+<span class="c">                        Need to set &quot;src&quot; attribute of the iframe to </span>
+<span class="c">                        prevent the browser from reporting duplicate </span>
+<span class="c">                        cookies. (See SourceForge bug #1721755)</span>
+<span class="c">                    */</span>
+        
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="nx">sHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;html&gt;&lt;head&gt;&lt;script &quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;type=\&quot;text/javascript\&quot;&gt;&quot;</span> <span class="o">+</span> 
+                                <span class="s2">&quot;window.onresize=function(){window.parent.&quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;YAHOO.widget.Module.textResizeEvent.&quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;fire();};window.parent.YAHOO.widget.Module.&quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;textResizeEvent.fire();&lt;/script&gt;&lt;/head&gt;&quot;</span> <span class="o">+</span> 
+                                <span class="s2">&quot;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="o">;</span>
+
+                        <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;data:text/html;charset=utf-8,&quot;</span> <span class="o">+</span> 
+                            <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">sHTML</span><span class="o">);</span>
+
+                    <span class="o">}</span>
+
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;_yuiResizeMonitor&quot;</span><span class="o">;</span>
+                    
+                    <span class="c">/*</span>
+<span class="c">                        Need to set &quot;position&quot; property before inserting the </span>
+<span class="c">                        iframe into the document or Safari&#39;s status bar will </span>
+<span class="c">                        forever indicate the iframe is loading </span>
+<span class="c">                        (See SourceForge bug #1723064)</span>
+<span class="c">                    */</span>
+                    
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+        
+                    <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">);</span>
+        
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;10em&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">&quot;10em&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderWidth</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">;</span>
+        
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
+        
+                        <span class="nx">oDoc</span> <span class="o">=</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
+        
+                        <span class="nx">oDoc</span><span class="o">.</span><span class="nx">open</span><span class="o">();</span>
+                        <span class="nx">oDoc</span><span class="o">.</span><span class="nx">close</span><span class="o">();</span>
+        
+                    <span class="o">}</span>
+
+                <span class="o">}</span>
+        
+                <span class="k">if</span> <span class="o">(</span><span class="nx">oIFrame</span> <span class="o">&amp;&amp;</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> 
+                        <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        
+                    <span class="k">if</span> <span class="o">(!</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeInitialized</span><span class="o">)</span> <span class="o">{</span>
+
+                        <span class="k">if</span> <span class="o">(!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> 
+                            <span class="nx">fireTextResize</span><span class="o">))</span> <span class="o">{</span>
+
+                            <span class="c">/*</span>
+<span class="c">                                 This will fail in IE if document.domain has </span>
+<span class="c">                                 changed, so we must change the listener to </span>
+<span class="c">                                 use the oIFrame element instead</span>
+<span class="c">                            */</span>
+
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="nx">fireTextResize</span><span class="o">);</span>
+
+                        <span class="o">}</span>
+
+                        <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeInitialized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+                    <span class="o">}</span>
+
+                    <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span> <span class="o">=</span> <span class="nx">oIFrame</span><span class="o">;</span>
+
+                <span class="o">}</span>
+        
+            <span class="o">}</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Event handler fired when the resize monitor element is resized.</span>
+<span class="c">        * @method onDomResize</span>
+<span class="c">        * @param {DOMEvent} e The DOM resize event</span>
+<span class="c">        * @param {Object} obj The scope object passed to the handler</span>
+<span class="c">        */</span>
+        <span class="nx">onDomResize</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">nLeft</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span>
+                <span class="nx">nTop</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">;</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">nTop</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span>  <span class="nx">nLeft</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Sets the Module&#39;s header content to the HTML specified, or appends </span>
+<span class="c">        * the passed element to the header. If no header is present, one will </span>
+<span class="c">        * be automatically created.</span>
+<span class="c">        * @method setHeader</span>
+<span class="c">        * @param {String} headerContent The HTML used to set the header </span>
+<span class="c">        * &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} headerContent The HTMLElement to append to </span>
+<span class="c">        * the header</span>
+<span class="c">        */</span>
+        <span class="nx">setHeader</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">headerContent</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oHeader</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="nx">createHeader</span><span class="o">());</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">headerContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">oHeader</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">headerContent</span><span class="o">;</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="nx">oHeader</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oHeader</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">headerContent</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeHeaderEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">headerContent</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Appends the passed element to the header. If no header is present, </span>
+<span class="c">        * one will be automatically created.</span>
+<span class="c">        * @method appendToHeader</span>
+<span class="c">        * @param {HTMLElement} element The element to append to the header</span>
+<span class="c">        */</span>
+        <span class="nx">appendToHeader</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oHeader</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="nx">createHeader</span><span class="o">());</span>
+        
+            <span class="nx">oHeader</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeHeaderEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Sets the Module&#39;s body content to the HTML specified, or appends the</span>
+<span class="c">        * passed element to the body. If no body is present, one will be </span>
+<span class="c">        * automatically created.</span>
+<span class="c">        * @method setBody</span>
+<span class="c">        * @param {String} bodyContent The HTML used to set the body &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} bodyContent The HTMLElement to append to the body</span>
+<span class="c">        */</span>
+        <span class="nx">setBody</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">bodyContent</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oBody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">createBody</span><span class="o">());</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">bodyContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">oBody</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">bodyContent</span><span class="o">;</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="nx">oBody</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oBody</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">bodyContent</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeBodyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">bodyContent</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Appends the passed element to the body. If no body is present, one </span>
+<span class="c">        * will be automatically created.</span>
+<span class="c">        * @method appendToBody</span>
+<span class="c">        * @param {HTMLElement} element The element to append to the body</span>
+<span class="c">        */</span>
+        <span class="nx">appendToBody</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oBody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">createBody</span><span class="o">());</span>
+        
+            <span class="nx">oBody</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeBodyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Sets the Module&#39;s footer content to the HTML specified, or appends </span>
+<span class="c">        * the passed element to the footer. If no footer is present, one will </span>
+<span class="c">        * be automatically created.</span>
+<span class="c">        * @method setFooter</span>
+<span class="c">        * @param {String} footerContent The HTML used to set the footer </span>
+<span class="c">        * &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} footerContent The HTMLElement to append to </span>
+<span class="c">        * the footer</span>
+<span class="c">        */</span>
+        <span class="nx">setFooter</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">footerContent</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oFooter</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">createFooter</span><span class="o">());</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">footerContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">oFooter</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">footerContent</span><span class="o">;</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="nx">oFooter</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oFooter</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">footerContent</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeFooterEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">footerContent</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Appends the passed element to the footer. If no footer is present, </span>
+<span class="c">        * one will be automatically created.</span>
+<span class="c">        * @method appendToFooter</span>
+<span class="c">        * @param {HTMLElement} element The element to append to the footer</span>
+<span class="c">        */</span>
+        <span class="nx">appendToFooter</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">oFooter</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">createFooter</span><span class="o">());</span>
+        
+            <span class="nx">oFooter</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeFooterEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Renders the Module by inserting the elements that are not already </span>
+<span class="c">        * in the main Module into their correct places. Optionally appends </span>
+<span class="c">        * the Module to the specified node prior to the render&#39;s execution. </span>
+<span class="c">        * NOTE: For Modules without existing markup, the appendToNode argument </span>
+<span class="c">        * is REQUIRED. If this argument is ommitted and the current element is </span>
+<span class="c">        * not present in the document, the function will return false, </span>
+<span class="c">        * indicating that the render was a failure.</span>
+<span class="c">        * @method render</span>
+<span class="c">        * @param {String} appendToNode The element id to which the Module </span>
+<span class="c">        * should be appended to prior to rendering &lt;em&gt;OR&lt;/em&gt;</span>
+<span class="c">        * @param {HTMLElement} appendToNode The element to which the Module </span>
+<span class="c">        * should be appended to prior to rendering</span>
+<span class="c">        * @param {HTMLElement} moduleElement OPTIONAL. The element that </span>
+<span class="c">        * represents the actual Standard Module container.</span>
+<span class="c">        * @return {Boolean} Success or failure of the render</span>
+<span class="c">        */</span>
+        <span class="nx">render</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">appendToNode</span><span class="o">,</span> <span class="nx">moduleElement</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
+                <span class="nx">firstChild</span><span class="o">;</span>
+        
+            <span class="k">function</span> <span class="nx">appendTo</span><span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">element</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
+                <span class="o">}</span>
+        
+                <span class="k">if</span> <span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">element</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">element</span><span class="o">);</span>
+                    <span class="nx">me</span><span class="o">.</span><span class="nx">appendEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">beforeRenderEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+        
+            <span class="k">if</span> <span class="o">(!</span> <span class="nx">moduleElement</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">moduleElement</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span>
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="nx">appendToNode</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="nx">appendTo</span><span class="o">(</span><span class="nx">appendToNode</span><span class="o">);</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> 
+
+                <span class="c">/*</span>
+<span class="c">                     No node was passed in. If the element is not already in </span>
+<span class="c">                     the Dom, this fails</span>
+<span class="c">                */</span>
+
+                <span class="k">if</span> <span class="o">(!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">))</span> <span class="o">{</span>
+
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Render failed. Must specify appendTo node if &quot;</span> <span class="o">+</span> 
+                        <span class="s2">&quot; Module isn&#39;t already in the DOM.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+        
+            <span class="c">// Need to get everything into the DOM if it isn&#39;t already</span>
+<span class="c"></span>        
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span><span class="o">))</span> <span class="o">{</span>
+
+                <span class="c">/*</span>
+<span class="c">                    There is a header, but it&#39;s not in the DOM yet... </span>
+<span class="c">                    need to add it</span>
+<span class="c">                */</span>
+
+                <span class="nx">firstChild</span> <span class="o">=</span> <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">firstChild</span><span class="o">)</span> <span class="o">{</span> <span class="c">// Insert before first child if exists</span>
+<span class="c"></span>
+                    <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span><span class="o">,</span> <span class="nx">firstChild</span><span class="o">);</span>
+
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// Append to empty body because there are no children</span>
+<span class="c"></span>
+                    <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span><span class="o">);</span>
+
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">))</span> <span class="o">{</span>
+
+                <span class="c">/*</span>
+<span class="c">                     There is a body, but it&#39;s not in the DOM yet... </span>
+<span class="c">                     need to add it</span>
+<span class="c">                */</span>
+
+
+                <span class="c">// Insert before footer if exists in DOM</span>
+<span class="c"></span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">&amp;&amp;</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">moduleElement</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">footer</span><span class="o">))</span> <span class="o">{</span> 
+
+                    <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">footer</span><span class="o">);</span>
+
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// Append to element because there is no footer</span>
+<span class="c"></span>
+                    <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">);</span>
+
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span><span class="o">))</span> <span class="o">{</span>
+
+                <span class="c">/*</span>
+<span class="c">                     There is a footer, but it&#39;s not in the DOM yet... </span>
+<span class="c">                     need to add it</span>
+<span class="c">                */</span>
+
+                <span class="nx">moduleElement</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span><span class="o">);</span>
+
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Removes the Module element from the DOM and sets all child elements </span>
+<span class="c">        * to null.</span>
+<span class="c">        * @method destroy</span>
+<span class="c">        */</span>
+        <span class="nx">destroy</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        
+            <span class="k">var</span> <span class="nx">parent</span><span class="o">,</span>
+                <span class="nx">e</span><span class="o">;</span>
+        
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">parent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">);</span>
+            <span class="o">}</span>
+        
+            <span class="k">this</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">destroy</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">destroyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+        
+            <span class="k">for</span> <span class="o">(</span><span class="nx">e</span> <span class="k">in</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">e</span> <span class="k">instanceof</span> <span class="nx">CustomEvent</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">e</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Shows the Module element by setting the visible configuration </span>
+<span class="c">        * property to true. Also fires two events: beforeShowEvent prior to </span>
+<span class="c">        * the visibility change, and showEvent after.</span>
+<span class="c">        * @method show</span>
+<span class="c">        */</span>
+        <span class="nx">show</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Hides the Module element by setting the visible configuration </span>
+<span class="c">        * property to false. Also fires two events: beforeHideEvent prior to </span>
+<span class="c">        * the visibility change, and hideEvent after.</span>
+<span class="c">        * @method hide</span>
+<span class="c">        */</span>
+        <span class="nx">hide</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">// BUILT-IN EVENT HANDLERS FOR MODULE //</span>
+<span class="c"></span>        
+        <span class="c">/**</span>
+<span class="c">        * Default event handler for changing the visibility property of a </span>
+<span class="c">        * Module. By default, this is achieved by switching the &quot;display&quot; style </span>
+<span class="c">        * between &quot;block&quot; and &quot;none&quot;.</span>
+<span class="c">        * This method is responsible for firing showEvent and hideEvent.</span>
+<span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
+<span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
+<span class="c">        * handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">        * @param {Object} obj The scope object. For configuration handlers, </span>
+<span class="c">        * this will usually equal the owner.</span>
+<span class="c">        * @method configVisible</span>
+<span class="c">        */</span>
+        <span class="nx">configVisible</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">visible</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">visible</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">beforeShowEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">beforeHideEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">hideEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Default event handler for the &quot;monitorresize&quot; configuration property</span>
+<span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
+<span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
+<span class="c">        * handlers, args[0] will equal the newly applied value for the property.</span>
+<span class="c">        * @param {Object} obj The scope object. For configuration handlers, </span>
+<span class="c">        * this will usually equal the owner.</span>
+<span class="c">        * @method configMonitorResize</span>
+<span class="c">        */</span>
+        <span class="nx">configMonitorResize</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">monitor</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">monitor</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">initResizeMonitor</span><span class="o">();</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">onDomResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">        * Returns a String representation of the Object.</span>
+<span class="c">        * @method toString</span>
+<span class="c">        * @return {String} The string representation of the Module</span>
+<span class="c">        */</span>
+        <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s2">&quot;Module &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+    <span class="o">};</span>
+    
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentProto</span><span class="o">(</span><span class="nx">Module</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
+
+<span class="o">}());</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class="selected"><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

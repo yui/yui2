@@ -1,0 +1,1324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container  YAHOO.widget.Tooltip   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                 &gt; YAHOO.widget.Tooltip 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Tooltip</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Tooltip is an implementation of Overlay that behaves like an OS tooltip, 
+displaying when the user mouses over a particular element, and 
+disappearing on mouse out.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Tooltip</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+
+                                                , 
+                                                userConfig
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     The element ID representing the Tooltip <em>OR</em>
+                                                </dd>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                     The element representing the Tooltip
+                                                </dd>
+                                                <dd>
+                                                    <code>userConfig
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     The configuration object literal containing 
+the configuration that should be set for this Overlay. See configuration 
+documentation for more details.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <code>- private final Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the Tooltip's configuration properties
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="showProcId">showProcId</a>
+                                        <code>- int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The unique process ID associated with the thread responsible 
+for showing the Tooltip.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.Tooltip.CSS_TOOLTIP">YAHOO.widget.Tooltip.CSS_TOOLTIP</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the Tooltip CSS class
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Overlay.html#DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Overlay.html#EVENT_TYPES">EVENT_TYPES</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay._initialized">YAHOO.widget.Overlay._initialized</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_removeEventListeners">_removeEventListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_removeEventListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes all of the DOM event handlers from the HTML
+element(s) that trigger the display of the tooltip.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configContainer">configContainer</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configContainer</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "container" property 
+is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For 
+configuration handlers, args[0] will equal the newly applied value 
+for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers,
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configContext">configContext</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configContext</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "context" property 
+is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers,
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configText">configText</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configText</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the "text" property is changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the Tooltip element from the DOM and sets all child 
+elements to null.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doHide">doHide</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>doHide</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the timeout for the auto-dismiss delay, which by default is 5 
+seconds, meaning that a tooltip will automatically dismiss itself 
+after 5 seconds of being displayed.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="doShow">doShow</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>doShow</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Processes the showing of the Tooltip by setting the timeout delay 
+and offset of the Tooltip.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;DOMEvent&gt;</code>
+                                                             The current DOM event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The process ID of the timeout function associated 
+with doShow</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+
+                                                
+                                                        , 
+                                                         userConfig
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The Tooltip initialization method. This method is automatically 
+called by the constructor. A Tooltip is automatically rendered by 
+the init method, and it also is set to be invisible by default, 
+and constrained to viewport by default as well.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String&gt;</code>
+                                                             The element ID representing the Tooltip <em>OR</em>
+                                                        </dd>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                             The element representing the Tooltip
+                                                        </dd>
+                                                        <dd>
+                                                            <code>userConfig &lt;Object&gt;</code>
+                                                             The configuration object literal 
+containing the configuration that should be set for this Tooltip. 
+See configuration documentation for more details.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initDefaultConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the class's configurable properties which can be 
+changed using the Overlay's Config object (cfg).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onContextMouseMove">onContextMouseMove</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onContextMouseMove</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the user moves the mouse while 
+over the context element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;DOMEvent&gt;</code>
+                                                             The current DOM event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The object argument
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onContextMouseOut">onContextMouseOut</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onContextMouseOut</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the user mouses out of 
+the context element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;DOMEvent&gt;</code>
+                                                             The current DOM event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The object argument
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onContextMouseOver">onContextMouseOver</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onContextMouseOver</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default event handler fired when the user mouses over the 
+context element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;DOMEvent&gt;</code>
+                                                             The current DOM event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The object argument
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onRender">onRender</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onRender</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "render" event handler for the Tooltip.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event  
+that was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event 
+was fired.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="preventOverlay">preventOverlay</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>preventOverlay</strong>
+                                           (
+                                                
+                                                        
+                                                         pageX
+                                                    
+                                                
+                                                        , 
+                                                         pageY
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Tooltip is moved, this event handler is used to 
+prevent the Tooltip from overlapping with its context element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>pageX &lt;Number&gt;</code>
+                                                             The x coordinate position of the mouse pointer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>pageY &lt;Number&gt;</code>
+                                                             The y coordinate position of the mouse pointer
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string representation of the Tooltip</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.widget.Overlay.html#align">align</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#bringToTop">bringToTop</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#center">center</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configContext">configContext</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configHeight">configHeight</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configIframe">configIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configVisible">configVisible</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configWidth">configWidth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configX">configX</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configXY">configXY</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configY">configY</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#doCenterOnDOMEvent">doCenterOnDOMEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#hideIframe">hideIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#moveTo">moveTo</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#onDomResize">onDomResize</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#showIframe">showIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#showMacGeckoScrollbars">showMacGeckoScrollbars</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#syncIframe">syncIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Overlay.html#beforeMoveEvent">beforeMoveEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#moveEvent">moveEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowResizeEvent">YAHOO.widget.Overlay.windowResizeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowScrollEvent">YAHOO.widget.Overlay.windowScrollEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="autodismissdelay">autodismissdelay</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of milliseconds to wait before automatically 
+dismissing a Tooltip after the mouse has been resting on the 
+context element.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 5000
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="container">container</a>
+                                        <code>- HTMLElement/String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Specifies the container element that the Tooltip's markup 
+should be rendered into.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: document.body
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="context">context</a>
+                                        <code>- HTMLElement[]/String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Specifies the element or elements that the Tooltip should be 
+anchored to on mouseover.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="hidedelay">hidedelay</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of milliseconds to wait before hiding a Tooltip 
+on mouseover.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 250
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="preventoverlap">preventoverlap</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Specifies whether the Tooltip should be kept from overlapping 
+its context element.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="showdelay">showdelay</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of milliseconds to wait before showing a Tooltip 
+on mouseover.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 200
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="text">text</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Specifies the Tooltip's text.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="width">width</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the width of the Tooltip.  <em>Please note:
+</em> As of version 2.3 if either no value or a value of "auto" 
+is specified, and the Toolip's "container" configuration property
+is set to something other than <code>document.body</code> or 
+its "context" element resides outside the immediately visible 
+portion of the document, the width of the Tooltip will be 
+calculated based on the offsetWidth of its root HTML and set just 
+before it is made visible.  The original value will be 
+restored when the Tooltip is hidden. This ensures the Tooltip is 
+rendered at a usable width.  For more information see 
+SourceForge bug #1685496 and SourceForge 
+bug #1735423.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Overlay.html#constraintoviewport">constraintoviewport</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#context">context</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#fixedcenter">fixedcenter</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#height">height</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#iframe">iframe</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#width">width</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#x">x</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#xy">xy</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#y">y</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#zIndex">zIndex</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#showProcId">showProcId</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.Tooltip.CSS_TOOLTIP">YAHOO.widget.Tooltip.CSS_TOOLTIP</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_removeEventListeners">_removeEventListeners</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configContainer">configContainer</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configContext">configContext</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configText">configText</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#doHide">doHide</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#doShow">doShow</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onContextMouseMove">onContextMouseMove</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onContextMouseOut">onContextMouseOut</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onContextMouseOver">onContextMouseOver</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onRender">onRender</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#preventOverlay">preventOverlay</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#autodismissdelay">autodismissdelay</a>
+                                </li>
+                                <li class="">
+                                <a href="#container">container</a>
+                                </li>
+                                <li class="">
+                                <a href="#context">context</a>
+                                </li>
+                                <li class="">
+                                <a href="#hidedelay">hidedelay</a>
+                                </li>
+                                <li class="">
+                                <a href="#preventoverlap">preventoverlap</a>
+                                </li>
+                                <li class="">
+                                <a href="#showdelay">showdelay</a>
+                                </li>
+                                <li class="">
+                                <a href="#text">text</a>
+                                </li>
+                                <li class="">
+                                <a href="#width">width</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest   Assert.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                
+                 &gt; Assert.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;util&quot;</span><span class="o">);</span>
+
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// Assert object</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * The Assert object provides functions to test JavaScript values against</span>
+<span class="c"> * known and expected results. Whenever a comparison (assertion) fails,</span>
+<span class="c"> * an error is thrown.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @class Assert</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Generic Assertion Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    
+    <span class="c">/** </span>
+<span class="c">     * Forces an assertion error to occur.</span>
+<span class="c">     * @param {String} message (Optional) The message to display with the failure.</span>
+<span class="c">     * @method fail</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">fail</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Test force-failed.&quot;</span><span class="o">);</span>
+    <span class="o">},</span>       
+    
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Equality Assertion Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------    </span>
+<span class="c"></span>    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is equal to another. This uses the double equals sign</span>
+<span class="c">     * so type cohersion may occur.</span>
+<span class="c">     * @param {Object} expected The expected value.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method areEqual</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">areEqual</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">expected</span> <span class="o">!=</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should be equal.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not equal to another. This uses the double equals sign</span>
+<span class="c">     * so type cohersion may occur.</span>
+<span class="c">     * @param {Object} unexpected The unexpected value.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method areNotEqual</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">areNotEqual</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">unexpected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> 
+                         <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">unexpected</span> <span class="o">==</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should not be equal.&quot;</span><span class="o">,</span> <span class="nx">unexpected</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not the same as another. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} unexpected The unexpected value.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method areNotSame</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">areNotSame</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">unexpected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">unexpected</span> <span class="o">===</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should not be the same.&quot;</span><span class="o">,</span> <span class="nx">unexpected</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is the same as another. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} expected The expected value.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method areSame</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">areSame</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">expected</span> <span class="o">!==</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should be the same.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>    
+    
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Boolean Assertion Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------    </span>
+<span class="c"></span>    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is false. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isFalse</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isFalse</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Boolean*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">!==</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be false.&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is true. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isTrue</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isTrue</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Boolean*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="kc">true</span> <span class="o">!==</span> <span class="nx">actual</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be true.&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">},</span>
+    
+    <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Special Value Assertion Methods</span>
+<span class="c"></span>    <span class="c">//-------------------------------------------------------------------------    </span>
+<span class="c"></span>    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not a number.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNaN</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nb">isNaN</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span><span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be NaN.&quot;</span><span class="o">,</span> <span class="kc">NaN</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not the special NaN value.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNotNaN</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNotNaN</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span><span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should not be NaN.&quot;</span><span class="o">,</span> <span class="kc">NaN</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not null. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNotNull</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNotNull</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNull</span><span class="o">(</span><span class="nx">actual</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values should not be null.&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is not undefined. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNotUndefined</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNotUndefined</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">actual</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should not be undefined.&quot;</span><span class="o">,</span> <span class="kc">undefined</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is null. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNull</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNull</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNull</span><span class="o">(</span><span class="nx">actual</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be null.&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+        
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is undefined. This uses the triple equals sign</span>
+<span class="c">     * so no type cohersion may occur.</span>
+<span class="c">     * @param {Object} expected The expected value.</span>
+<span class="c">     * @param {Object} actual The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isUndefined</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isUndefined</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">actual</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be undefined.&quot;</span><span class="o">,</span> <span class="kc">undefined</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>    
+    
+    <span class="c">//--------------------------------------------------------------------------</span>
+<span class="c"></span>    <span class="c">// Instance Assertion Methods</span>
+<span class="c"></span>    <span class="c">//--------------------------------------------------------------------------    </span>
+<span class="c"></span>   
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is an array.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isArray</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isArray</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be an array.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>
+   
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is a Boolean.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isBoolean</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isBoolean</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be a Boolean.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>
+   
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is a function.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isFunction</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isFunction</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be a function.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>
+   
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is an instance of a particular object. This may return</span>
+<span class="c">     * incorrect results when comparing objects from one frame to constructors in</span>
+<span class="c">     * another frame. For best results, don&#39;t use in a cross-frame manner.</span>
+<span class="c">     * @param {Function} expected The function that the object should be an instance of.</span>
+<span class="c">     * @param {Object} actual The object to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isInstanceOf</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isInstanceOf</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expected</span> <span class="c">/*:Function*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!(</span><span class="nx">actual</span> <span class="k">instanceof</span> <span class="nx">expected</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value isn&#39;t an instance of expected type.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is a number.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isNumber</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isNumber</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be a number.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>    
+    <span class="o">},</span>    
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is an object.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isObject</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isObject</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be an object.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is a string.</span>
+<span class="c">     * @param {Object} actual The value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isString</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isString</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">actual</span><span class="o">)){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be a string.&quot;</span><span class="o">,</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Asserts that a value is of a particular type. </span>
+<span class="c">     * @param {String} expectedType The expected type of the variable.</span>
+<span class="c">     * @param {Object} actualValue The actual value to test.</span>
+<span class="c">     * @param {String} message (Optional) The message to display if the assertion fails.</span>
+<span class="c">     * @method isTypeOf</span>
+<span class="c">     * @static</span>
+<span class="c">     */</span>
+    <span class="nx">isTypeOf</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">expectedType</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">actualValue</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span><span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">actualValue</span> <span class="o">!=</span> <span class="nx">expectedType</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value should be of type &quot;</span> <span class="o">+</span> <span class="nx">expected</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">,</span> <span class="k">typeof</span> <span class="nx">actual</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// Assertion errors</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * AssertionError is thrown whenever an assertion fails. It provides methods</span>
+<span class="c"> * to more easily get at error information and also provides a base class</span>
+<span class="c"> * from which more specific assertion errors can be derived.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {String} message The message to display when the error occurs.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @class AssertionError</span>
+<span class="c"> * @extends Error</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span> 
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+    
+    <span class="c">/*</span>
+<span class="c">     * Error message. Must be duplicated to ensure browser receives it.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property message</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">message</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="nx">message</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;AssertionError&quot;</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">,</span> <span class="nb">Error</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns a fully formatted error for an assertion failure. This should</span>
+<span class="c">     * be overridden by all subclasses to provide specific information.</span>
+<span class="c">     * @method getMessage</span>
+<span class="c">     * @return {String} A string describing the error.</span>
+<span class="c">     */</span>
+    <span class="nx">getMessage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:String*/</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">message</span><span class="o">;</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Returns a string representation of the error.</span>
+<span class="c">     * @method toString</span>
+<span class="c">     * @return {String} A string representation of the error.</span>
+<span class="c">     */</span>
+    <span class="nx">toString</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:String*/</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getMessage</span><span class="o">();</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Returns a primitive value version of the error. Same as toString().</span>
+<span class="c">     * @method valueOf</span>
+<span class="c">     * @return {String} A primitive value version of the error.</span>
+<span class="c">     */</span>
+    <span class="nx">valueOf</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:String*/</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">/**</span>
+<span class="c"> * ComparisonFailure is subclass of AssertionError that is thrown whenever</span>
+<span class="c"> * a comparison between two values fails. It provides mechanisms to retrieve</span>
+<span class="c"> * both the expected and actual value.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {String} message The message to display when the error occurs.</span>
+<span class="c"> * @param {Object} expected The expected value.</span>
+<span class="c"> * @param {Object} actual The actual value that caused the assertion to fail.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @extends YAHOO.util.AssertionError</span>
+<span class="c"> * @class ComparisonFailure</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span> 
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">expected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The expected value.</span>
+<span class="c">     * @type Object</span>
+<span class="c">     * @property expected</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">expected</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">expected</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The actual value.</span>
+<span class="c">     * @type Object</span>
+<span class="c">     * @property actual</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">actual</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">actual</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;ComparisonFailure&quot;</span><span class="o">;</span>
+    
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns a fully formatted error for an assertion failure. This message</span>
+<span class="c">     * provides information about the expected and actual values.</span>
+<span class="c">     * @method toString</span>
+<span class="c">     * @return {String} A string describing the error.</span>
+<span class="c">     */</span>
+    <span class="nx">getMessage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:String*/</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">message</span> <span class="o">+</span> <span class="s2">&quot;\nExpected: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">expected</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="k">typeof</span> <span class="k">this</span><span class="o">.</span><span class="nx">expected</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>  <span class="o">+</span>
+            <span class="s2">&quot;\nActual:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">actual</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="k">typeof</span> <span class="k">this</span><span class="o">.</span><span class="nx">actual</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">/**</span>
+<span class="c"> * UnexpectedValue is subclass of AssertionError that is thrown whenever</span>
+<span class="c"> * a value was unexpected in its scope. This typically means that a test</span>
+<span class="c"> * was performed to determine that a value was *not* equal to a certain</span>
+<span class="c"> * value.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {String} message The message to display when the error occurs.</span>
+<span class="c"> * @param {Object} unexpected The unexpected value.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @extends YAHOO.util.AssertionError</span>
+<span class="c"> * @class UnexpectedValue</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span> 
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">unexpected</span> <span class="c">/*:Object*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The unexpected value.</span>
+<span class="c">     * @type Object</span>
+<span class="c">     * @property unexpected</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">unexpected</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">unexpected</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;UnexpectedValue&quot;</span><span class="o">;</span>
+    
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns a fully formatted error for an assertion failure. The message</span>
+<span class="c">     * contains information about the unexpected value that was encountered.</span>
+<span class="c">     * @method getMessage</span>
+<span class="c">     * @return {String} A string describing the error.</span>
+<span class="c">     */</span>
+    <span class="nx">getMessage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:String*/</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">message</span> <span class="o">+</span> <span class="s2">&quot;\nUnexpected: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">unexpected</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="k">typeof</span> <span class="k">this</span><span class="o">.</span><span class="nx">unexpected</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;) &quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">/**</span>
+<span class="c"> * ShouldFail is subclass of AssertionError that is thrown whenever</span>
+<span class="c"> * a test was expected to fail but did not.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {String} message The message to display when the error occurs.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @extends YAHOO.util.AssertionError</span>
+<span class="c"> * @class ShouldFail</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>  
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldFail</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should fail but didn&#39;t.&quot;</span><span class="o">);</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;ShouldFail&quot;</span><span class="o">;</span>
+    
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldFail</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c"> * ShouldError is subclass of AssertionError that is thrown whenever</span>
+<span class="c"> * a test is expected to throw an error but doesn&#39;t.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {String} message The message to display when the error occurs.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @extends YAHOO.util.AssertionError</span>
+<span class="c"> * @class ShouldError</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>  
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should have thrown an error but didn&#39;t.&quot;</span><span class="o">);</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;ShouldError&quot;</span><span class="o">;</span>
+    
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldError</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c"> * UnexpectedError is subclass of AssertionError that is thrown whenever</span>
+<span class="c"> * an error occurs within the course of a test and the test was not expected</span>
+<span class="c"> * to throw an error.</span>
+<span class="c"> *</span>
+<span class="c"> * @param {Error} cause The unexpected error that caused this error to be </span>
+<span class="c"> *                      thrown.</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @extends YAHOO.util.AssertionError</span>
+<span class="c"> * @class UnexpectedError</span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>  
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">cause</span> <span class="c">/*:Object*/</span><span class="o">){</span>
+
+    <span class="c">//call superclass</span>
+<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;Unexpected error: &quot;</span> <span class="o">+</span> <span class="nx">cause</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The unexpected error that occurred.</span>
+<span class="c">     * @type Error</span>
+<span class="c">     * @property cause</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">cause</span> <span class="c">/*:Error*/</span> <span class="o">=</span> <span class="nx">cause</span><span class="o">;</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The name of the error that occurred.</span>
+<span class="c">     * @type String</span>
+<span class="c">     * @property name</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="s2">&quot;UnexpectedError&quot;</span><span class="o">;</span>
+    
+<span class="o">};</span>
+
+<span class="c">//inherit methods</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">);</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class="selected"><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

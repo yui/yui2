@@ -1,0 +1,847 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: container  YAHOO.widget.SimpleDialog   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_container.html">container</a>
+                 &gt; YAHOO.widget.SimpleDialog 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.SimpleDialog</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        SimpleDialog is a simple implementation of Dialog that can be used to 
+submit a single value. Forms can be processed in 3 ways -- via an 
+asynchronous Connection utility call, a simple form POST or GET, 
+or manually.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.SimpleDialog</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+
+                                                , 
+                                                userConfig
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     The element ID representing the SimpleDialog 
+<em>OR</em>
+                                                </dd>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                     The element representing the SimpleDialog
+                                                </dd>
+                                                <dd>
+                                                    <code>userConfig
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     The configuration object literal containing 
+the configuration that should be set for this SimpleDialog. See 
+configuration documentation for more details.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <code>- private final Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the SimpleDialog's configuration properties
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG">YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the default CSS class used for a SimpleDialog
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_ALARM">YAHOO.widget.SimpleDialog.ICON_ALARM</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for alarm
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_BLOCK">YAHOO.widget.SimpleDialog.ICON_BLOCK</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for a blocking action
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME">YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the name of the CSS class applied to the element 
+created by the "icon" configuration property.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_HELP">YAHOO.widget.SimpleDialog.ICON_HELP</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for help
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_INFO">YAHOO.widget.SimpleDialog.ICON_INFO</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for info
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_TIP">YAHOO.widget.SimpleDialog.ICON_TIP</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for a tip
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="YAHOO.widget.SimpleDialog.ICON_WARN">YAHOO.widget.SimpleDialog.ICON_WARN</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for the standard network icon for warn
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Panel.html#DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Panel.html#EVENT_TYPES">EVENT_TYPES</a>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="" href="YAHOO.widget.Dialog.html#callback">callback</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Dialog.html#callback.argument">callback.argument</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Dialog.html#callback.failure">callback.failure</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Dialog.html#callback.success">callback.success</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.Dialog.html#DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Dialog.html#EVENT_TYPES">EVENT_TYPES</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Dialog.html#form">form</a>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="configIcon">configIcon</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configIcon</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the "icon" property is set.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="configText">configText</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configText</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the "text" property is set.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+
+                                                
+                                                        , 
+                                                         userConfig
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The SimpleDialog initialization method, which is executed for 
+SimpleDialog and all of its subclasses. This method is automatically 
+called by the constructor, and  sets up all DOM references for 
+pre-existing markup, and creates required markup if it is not 
+already present.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;String&gt;</code>
+                                                             The element ID representing the SimpleDialog 
+<em>OR</em>
+                                                        </dd>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                             The element representing the SimpleDialog
+                                                        </dd>
+                                                        <dd>
+                                                            <code>userConfig &lt;Object&gt;</code>
+                                                             The configuration object literal 
+containing the configuration that should be set for this 
+SimpleDialog. See configuration documentation for more details.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initDefaultConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the class's configurable properties which can be changed 
+using the SimpleDialog's Config object (cfg).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="registerForm">registerForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>registerForm</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Prepares the SimpleDialog's internal FORM object, creating one if one 
+is not currently present, and adding the value hidden field.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>The string representation of the SimpleDialog</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.widget.Panel.html#buildMask">buildMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#buildWrapper">buildWrapper</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configClose">configClose</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configDraggable">configDraggable</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configHeight">configHeight</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configKeyListeners">configKeyListeners</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configModal">configModal</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configUnderlay">configUnderlay</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configWidth">configWidth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#configzIndex">configzIndex</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#hideMask">hideMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#registerDragDrop">registerDragDrop</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#removeMask">removeMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#showMask">showMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#sizeMask">sizeMask</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#sizeUnderlay">sizeUnderlay</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Panel.html#toString">toString</a>
+                                    </code>
+                                </div>
+                            </div>
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="" href="YAHOO.widget.Dialog.html#blurButtons">blurButtons</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#cancel">cancel</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#configButtons">configButtons</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#configClose">configClose</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#configPostMethod">configPostMethod</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#doSubmit">doSubmit</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#focusDefaultButton">focusDefaultButton</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#focusFirst">focusFirst</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#focusFirstButton">focusFirstButton</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#focusLast">focusLast</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#focusLastButton">focusLastButton</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#getButtons">getButtons</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#getData">getData</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#registerForm">registerForm</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#submit">submit</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#toString">toString</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Dialog.html#validate">validate</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Panel.html#dragEvent">dragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#hideMaskEvent">hideMaskEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#showMaskEvent">showMaskEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Dialog.html#asyncSubmitEvent">asyncSubmitEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#beforeSubmitEvent">beforeSubmitEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#cancelEvent">cancelEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#formSubmitEvent">formSubmitEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#manualSubmitEvent">manualSubmitEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#submitEvent">submitEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="icon">icon</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Sets the informational icon for the SimpleDialog
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "none"
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="text">text</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Sets the text for the SimpleDialog
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ""
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Panel.html#close">close</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#draggable">draggable</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#keylisteners">keylisteners</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#modal">modal</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Panel.html#underlay">underlay</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Dialog.html#buttons">buttons</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Dialog.html#postmethod">postmethod</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                                <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
+                                <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
+                                <li class=""><a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a></li>
+                                <li class=""><a href="YAHOO.widget.OverlayManager.html">YAHOO.widget.OverlayManager</a></li>
+                                <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
+                                <li class="selected"><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
+                                <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                                <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
+                                <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
+                                <li class=""><a href="Module.js.html">Module.js</a></li>
+                                <li class=""><a href="Overlay.js.html">Overlay.js</a></li>
+                                <li class=""><a href="OverlayManager.js.html">OverlayManager.js</a></li>
+                                <li class=""><a href="Panel.js.html">Panel.js</a></li>
+                                <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
+                                <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG">YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_ALARM">YAHOO.widget.SimpleDialog.ICON_ALARM</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_BLOCK">YAHOO.widget.SimpleDialog.ICON_BLOCK</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME">YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_HELP">YAHOO.widget.SimpleDialog.ICON_HELP</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_INFO">YAHOO.widget.SimpleDialog.ICON_INFO</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_TIP">YAHOO.widget.SimpleDialog.ICON_TIP</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#YAHOO.widget.SimpleDialog.ICON_WARN">YAHOO.widget.SimpleDialog.ICON_WARN</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configIcon">configIcon</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#configText">configText</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#registerForm">registerForm</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#icon">icon</a>
+                                </li>
+                                <li class="">
+                                <a href="#text">text</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

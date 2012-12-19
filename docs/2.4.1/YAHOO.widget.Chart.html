@@ -1,0 +1,2449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: charts  YAHOO.widget.Chart   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Charts Widget&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_charts.html">charts</a>
+                 &gt; YAHOO.widget.Chart 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Chart</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                          - uses 
+                            
+                                <a href="YAHOO.util.FlashAdapter.html">YAHOO.util.FlashAdapter</a>
+                            
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        Chart class for the YUI Charts widget.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Chart</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                type
+
+                                                , 
+                                                containerId
+
+                                                , 
+                                                dataSource
+
+                                                , 
+                                                attributes
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>type
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                      The char type. May be "line", "column", "bar", or "pie"
+                                                </dd>
+                                                <dd>
+                                                    <code>containerId
+                                                    &lt;HTMLElement&gt; 
+                                                    </code>
+                                                      Container element for the Flash Player instance.
+                                                </dd>
+                                                <dd>
+                                                    <code>dataSource
+                                                    &lt;YAHOO.util.DataSource&gt; 
+                                                    </code>
+                                                      DataSource instance.
+                                                </dd>
+                                                <dd>
+                                                    <code>attributes
+                                                    &lt;object&gt; 
+                                                    </code>
+                                                      (optional) Object literal of configuration values.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_dataSource">_dataSource</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Storage for the dataSource attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_dataTipFunction">_dataTipFunction</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Storage for the dataTipFunction attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_pollingID">_pollingID</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The id returned from the DataSource's setInterval function.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_pollingInterval">_pollingInterval</a>
+                                        <code>- private Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The time, in ms, between requests for data.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_request">_request</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Storage for the request attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_seriesDefs">_seriesDefs</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Storage for the series attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_type">_type</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The type of this chart instance.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="Chart.SWFURL">Chart.SWFURL</a>
+                                        <code>- private static final object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Storage for the dataTipFunction attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "assets/charts.swf"
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getCategoryNames">_getCategoryNames</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getCategoryNames</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the categoryNames attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getDataSource">_getDataSource</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getDataSource</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the dataSource attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getDataTipFunction">_getDataTipFunction</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getDataTipFunction</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the dataTipFunction attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getPolling">_getPolling</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getPolling</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the polling attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getRequest">_getRequest</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getRequest</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the request attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_getSeriesDefs">_getSeriesDefs</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_getSeriesDefs</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Getter for the series attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_initAttributes">_initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_initAttributes</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the attributes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_loadDataHandler">_loadDataHandler</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_loadDataHandler</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Called when the DataSource receives new data. The series definitions are used
+to build a data provider for the SWF chart.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_loadHandler">_loadHandler</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_loadHandler</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Called when the SWF is ready for communication. Sets the type, initializes
+the styles, and sets the DataSource.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_refreshData">_refreshData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_refreshData</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sends the request to the DataSource.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setCategoryNames">_setCategoryNames</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setCategoryNames</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the categoryNames attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setDataSource">_setDataSource</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setDataSource</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the dataSource attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setDataTipFunction">_setDataTipFunction</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setDataTipFunction</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the dataTipFunction attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setPolling">_setPolling</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setPolling</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the polling attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setRequest">_setRequest</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setRequest</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the request attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setSeriesDefs">_setSeriesDefs</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setSeriesDefs</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Setter for the series attribute.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setSeriesStyles">setSeriesStyles</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setSeriesStyles</strong>
+                                           (
+                                                
+                                                        
+                                                         styles
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the styles on all series in the Chart.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>styles &lt;Array&gt;</code>
+                                                              Initializer for all Chart series styles.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setStyle">setStyle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setStyle</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets a single style value on the Chart instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>name &lt;String&gt;</code>
+                                                              Name of the Chart style value to change.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;Object&gt;</code>
+                                                              New value to pass to the Chart style.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setStyles">setStyles</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setStyles</strong>
+                                           (
+                                                
+                                                        
+                                                         styles
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets all styles on the Chart instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>styles &lt;Object&gt;</code>
+                                                              Initializer for all Chart styles.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public accessor to the unique name of the Chart instance.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>Unique name of the Chart instance.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3 id="events">Events</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeCategorynamesChangeEvent">beforeCategorynamesChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeCategorynamesChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'categoryNames' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeDatasourceChangeEvent">beforeDatasourceChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeDatasourceChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'dataSource' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeDatatipfunctionChangeEvent">beforeDatatipfunctionChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeDatatipfunctionChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'dataTipFunction' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforePollingChangeEvent">beforePollingChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforePollingChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'polling' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeRequestChangeEvent">beforeRequestChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeRequestChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'request' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="beforeSeriesChangeEvent">beforeSeriesChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeSeriesChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'series' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="categoryNamesChangeEvent">categoryNamesChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>categoryNamesChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'categoryNames' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="dataSourceChangeEvent">dataSourceChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>dataSourceChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'dataSource' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="dataTipFunctionChangeEvent">dataTipFunctionChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>dataTipFunctionChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'dataTipFunction' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemClickEvent">itemClickEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemClickEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user clicks an item renderer in the chart with the mouse.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemDoubleClickEvent">itemDoubleClickEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemDoubleClickEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user double-clicks an item renderer in the chart with the mouse.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemDragEndEvent">itemDragEndEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemDragEndEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user releases the mouse during a drag action.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemDragEvent">itemDragEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemDragEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user moves the mouse during a drag action.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemDragStartEvent">itemDragStartEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemDragStartEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user presses the mouse down on an item to initiate a drag action.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemMouseOutEvent">itemMouseOutEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemMouseOutEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user moves the mouse out of the bounds of an item renderer in the chart.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="itemMouseOverEvent">itemMouseOverEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>itemMouseOverEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event.type
+                                                    
+                                                
+                                                        , 
+                                                         event.item
+                                                    
+                                                
+                                                        , 
+                                                         event.index
+                                                    
+                                                
+                                                        , 
+                                                         event.seriesIndex
+                                                    
+                                                
+                                                        , 
+                                                         event.x
+                                                    
+                                                
+                                                        , 
+                                                         event.y
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user moves the mouse over the bounds of an item renderer in the chart.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>event.type &lt;String&gt;</code>
+                                                              The event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.item &lt;Object&gt;</code>
+                                                              The data displayed by the renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.index &lt;Number&gt;</code>
+                                                              The position within the series that the item appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.seriesIndex &lt;Number&gt;</code>
+                                                              The position within the series definition that the series appears.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.x &lt;Number&gt;</code>
+                                                              The horizontal position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>event.y &lt;Number&gt;</code>
+                                                              The vertical position of the mouse, relative to the SWF.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="pollingChangeEvent">pollingChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>pollingChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'polling' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="requestChangeEvent">requestChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>requestChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'request' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="seriesChangeEvent">seriesChangeEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>seriesChangeEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'series' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="section field details">
+                            <h3 id="configattributes">Configuration Attributes</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="categoryNames">categoryNames</a>
+                                        <code>- Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Defines the names of the categories to be displayed in the Chart..
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="dataSource">dataSource</a>
+                                        <code>- DataSource</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The DataSource instance to display in the Chart.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="dataTipFunction">dataTipFunction</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The string representation of a globally-accessible function
+that may be called by the SWF to generate the datatip text for a Chart's item.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="polling">polling</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A numeric value indicating the number of milliseconds between
+polling requests to the DataSource.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="request">request</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Request to be sent to the Chart's DataSource.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="series">series</a>
+                                        <code>- Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Defines the series to be displayed by the Chart.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class="selected"><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_date.html">date</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_number.html">number</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                                <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
+                                <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianSeries.html">YAHOO.widget.CartesianSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CategoryAxis.html">YAHOO.widget.CategoryAxis</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnChart.html">YAHOO.widget.ColumnChart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSeries.html">YAHOO.widget.ColumnSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
+                                <li class=""><a href="YAHOO.widget.LineChart.html">YAHOO.widget.LineChart</a></li>
+                                <li class=""><a href="YAHOO.widget.LineSeries.html">YAHOO.widget.LineSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.NumericAxis.html">YAHOO.widget.NumericAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.PieChart.html">YAHOO.widget.PieChart</a></li>
+                                <li class=""><a href="YAHOO.widget.PieSeries.html">YAHOO.widget.PieSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.Series.html">YAHOO.widget.Series</a></li>
+                                <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                                <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
+                                <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
+                                <li class=""><a href="Chart.js.html">Chart.js</a></li>
+                                <li class=""><a href="ChartTypes.js.html">ChartTypes.js</a></li>
+                                <li class=""><a href="FlashAdapter.js.html">FlashAdapter.js</a></li>
+                                <li class=""><a href="NumericAxis.js.html">NumericAxis.js</a></li>
+                                <li class=""><a href="PieChart.js.html">PieChart.js</a></li>
+                                <li class=""><a href="Series.js.html">Series.js</a></li>
+                                <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
+                                <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_dataSource">_dataSource</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_dataTipFunction">_dataTipFunction</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_pollingID">_pollingID</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_pollingInterval">_pollingInterval</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_request">_request</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_seriesDefs">_seriesDefs</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_type">_type</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#Chart.SWFURL">Chart.SWFURL</a>
+                                        <!--<code>&lt;object&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getCategoryNames">_getCategoryNames</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getDataSource">_getDataSource</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getDataTipFunction">_getDataTipFunction</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getPolling">_getPolling</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getRequest">_getRequest</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_getSeriesDefs">_getSeriesDefs</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_initAttributes">_initAttributes</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_loadDataHandler">_loadDataHandler</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_loadHandler">_loadHandler</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_refreshData">_refreshData</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setCategoryNames">_setCategoryNames</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setDataSource">_setDataSource</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setDataTipFunction">_setDataTipFunction</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setPolling">_setPolling</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setRequest">_setRequest</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setSeriesDefs">_setSeriesDefs</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setSeriesStyles">setSeriesStyles</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setStyle">setStyle</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setStyles">setStyles</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#beforeCategorynamesChangeEvent">beforeCategorynamesChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeDatasourceChangeEvent">beforeDatasourceChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeDatatipfunctionChangeEvent">beforeDatatipfunctionChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforePollingChangeEvent">beforePollingChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeRequestChangeEvent">beforeRequestChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#beforeSeriesChangeEvent">beforeSeriesChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#categoryNamesChangeEvent">categoryNamesChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#dataSourceChangeEvent">dataSourceChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#dataTipFunctionChangeEvent">dataTipFunctionChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemClickEvent">itemClickEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemDoubleClickEvent">itemDoubleClickEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemDragEndEvent">itemDragEndEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemDragEvent">itemDragEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemDragStartEvent">itemDragStartEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemMouseOutEvent">itemMouseOutEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#itemMouseOverEvent">itemMouseOverEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#pollingChangeEvent">pollingChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#requestChangeEvent">requestChangeEvent</a>
+                                </li>
+                                <li class="">
+                                <a href="#seriesChangeEvent">seriesChangeEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#categoryNames">categoryNames</a>
+                                </li>
+                                <li class="">
+                                <a href="#dataSource">dataSource</a>
+                                </li>
+                                <li class="">
+                                <a href="#dataTipFunction">dataTipFunction</a>
+                                </li>
+                                <li class="">
+                                <a href="#polling">polling</a>
+                                </li>
+                                <li class="">
+                                <a href="#request">request</a>
+                                </li>
+                                <li class="">
+                                <a href="#series">series</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

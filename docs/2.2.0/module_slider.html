@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: slider   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_slider.html">slider</a>
+                
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                   
+                    <h3>Module: slider
+                    
+
+
+                    </h3>
+                    <div class="description summary">
+                        The Slider component is a UI control that enables the user to adjust 
+values in a finite range along one or two axes. Typically, the Slider 
+control is used in a web application as a rich, visual replacement 
+for an input box that takes a number as input. The Slider control can 
+also easily accommodate a second dimension, providing x,y output for 
+a selection point chosen from a rectangular region.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search slider:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"url": "YAHOO.widget.Slider.html#animate", "host": "YAHOO.widget.Slider", "name": "animate"}, {"url": "YAHOO.widget.Slider.html#animationDuration", "host": "YAHOO.widget.Slider", "name": "animationDuration"}, {"url": "YAHOO.widget.Slider.html#b4MouseDown", "host": "YAHOO.widget.Slider", "name": "b4MouseDown"}, {"url": "YAHOO.widget.Slider.html#backgroundEnabled", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled"}, {"url": "YAHOO.widget.Slider.html#baselinePos", "host": "YAHOO.widget.Slider", "name": "baselinePos"}, {"url": "YAHOO.widget.Slider.html#change", "host": "YAHOO.widget.Slider", "name": "change"}, {"url": "YAHOO.widget.SliderThumb.html#clearTicks", "host": "YAHOO.widget.SliderThumb", "name": "clearTicks"}, {"url": "YAHOO.widget.Slider.html#enableKeys", "host": "YAHOO.widget.Slider", "name": "enableKeys"}, {"url": "YAHOO.widget.Slider.html#endMove", "host": "YAHOO.widget.Slider", "name": "endMove"}, {"url": "YAHOO.widget.Slider.html#fireEvents", "host": "YAHOO.widget.Slider", "name": "fireEvents"}, {"url": "YAHOO.widget.Slider.html#focus", "host": "YAHOO.widget.Slider", "name": "focus"}, {"url": "YAHOO.widget.Slider.html#_getNextX", "host": "YAHOO.widget.Slider", "name": "_getNextX"}, {"url": "YAHOO.widget.Slider.html#_getNextY", "host": "YAHOO.widget.Slider", "name": "_getNextY"}, {"url": "YAHOO.widget.SliderThumb.html#getOffsetFromParent", "host": "YAHOO.widget.SliderThumb", "name": "getOffsetFromParent"}, {"url": "YAHOO.widget.Slider.html#getThumb", "host": "YAHOO.widget.Slider", "name": "getThumb"}, {"url": "YAHOO.widget.Slider.html#getValue", "host": "YAHOO.widget.Slider", "name": "getValue"}, {"url": "YAHOO.widget.SliderThumb.html#getValue", "host": "YAHOO.widget.SliderThumb", "name": "getValue"}, {"url": "YAHOO.widget.Slider.html#getXValue", "host": "YAHOO.widget.Slider", "name": "getXValue"}, {"url": "YAHOO.widget.SliderThumb.html#getXValue", "host": "YAHOO.widget.SliderThumb", "name": "getXValue"}, {"url": "YAHOO.widget.Slider.html#getYValue", "host": "YAHOO.widget.Slider", "name": "getYValue"}, {"url": "YAHOO.widget.SliderThumb.html#getYValue", "host": "YAHOO.widget.SliderThumb", "name": "getYValue"}, {"url": "YAHOO.widget.SliderThumb.html#_graduated", "host": "YAHOO.widget.SliderThumb", "name": "_graduated"}, {"url": "YAHOO.widget.Slider.html#handleKeyDown", "host": "YAHOO.widget.Slider", "name": "handleKeyDown"}, {"url": "YAHOO.widget.Slider.html#handleKeyPress", "host": "YAHOO.widget.Slider", "name": "handleKeyPress"}, {"url": "YAHOO.widget.Slider.html#handleThumbChange", "host": "YAHOO.widget.Slider", "name": "handleThumbChange"}, {"url": "YAHOO.widget.Slider.html#initSlider", "host": "YAHOO.widget.Slider", "name": "initSlider"}, {"url": "YAHOO.widget.SliderThumb.html#initSlider", "host": "YAHOO.widget.SliderThumb", "name": "initSlider"}, {"url": "YAHOO.widget.Slider.html#initThumb", "host": "YAHOO.widget.Slider", "name": "initThumb"}, {"url": "YAHOO.widget.SliderThumb.html#_isHoriz", "host": "YAHOO.widget.SliderThumb", "name": "_isHoriz"}, {"url": "YAHOO.widget.Slider.html#isTarget", "host": "YAHOO.widget.Slider", "name": "isTarget"}, {"url": "YAHOO.widget.SliderThumb.html#isTarget", "host": "YAHOO.widget.SliderThumb", "name": "isTarget"}, {"url": "YAHOO.widget.Slider.html#keyIncrement", "host": "YAHOO.widget.Slider", "name": "keyIncrement"}, {"url": "YAHOO.widget.Slider.html#lock", "host": "YAHOO.widget.Slider", "name": "lock"}, {"url": "YAHOO.widget.SliderThumb.html#maintainOffset", "host": "YAHOO.widget.SliderThumb", "name": "maintainOffset"}, {"url": "YAHOO.widget.Slider.html#moveComplete", "host": "YAHOO.widget.Slider", "name": "moveComplete"}, {"url": "YAHOO.widget.Slider.html#moveOneTick", "host": "YAHOO.widget.Slider", "name": "moveOneTick"}, {"url": "YAHOO.widget.Slider.html#moveThumb", "host": "YAHOO.widget.Slider", "name": "moveThumb"}, {"url": "YAHOO.widget.Slider.html#onAvailable", "host": "YAHOO.widget.Slider", "name": "onAvailable"}, {"url": "YAHOO.widget.Slider.html#onChange", "host": "YAHOO.widget.Slider", "name": "onChange"}, {"url": "YAHOO.widget.SliderThumb.html#onChange", "host": "YAHOO.widget.SliderThumb", "name": "onChange"}, {"url": "YAHOO.widget.Slider.html#onDrag", "host": "YAHOO.widget.Slider", "name": "onDrag"}, {"url": "YAHOO.widget.Slider.html#onMouseDown", "host": "YAHOO.widget.Slider", "name": "onMouseDown"}, {"url": "YAHOO.widget.Slider.html#onSliderEnd", "host": "YAHOO.widget.Slider", "name": "onSliderEnd"}, {"url": "YAHOO.widget.Slider.html#onSlideStart", "host": "YAHOO.widget.Slider", "name": "onSlideStart"}, {"url": "YAHOO.widget.SliderThumb.html#parentElId", "host": "YAHOO.widget.SliderThumb", "name": "parentElId"}, {"url": "YAHOO.widget.SliderThumb.html#_prevVal", "host": "YAHOO.widget.SliderThumb", "name": "_prevVal"}, {"url": "YAHOO.widget.SliderThumb.html#scroll", "host": "YAHOO.widget.SliderThumb", "name": "scroll"}, {"url": "YAHOO.widget.Slider.html#setRegionValue", "host": "YAHOO.widget.Slider", "name": "setRegionValue"}, {"url": "YAHOO.widget.Slider.html#setStartSliderState", "host": "YAHOO.widget.Slider", "name": "setStartSliderState"}, {"url": "YAHOO.widget.Slider.html#setThumbCenterPoint", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint"}, {"url": "YAHOO.widget.Slider.html#setValue", "host": "YAHOO.widget.Slider", "name": "setValue"}, {"url": "YAHOO.widget.Slider.html#slideEnd", "host": "YAHOO.widget.Slider", "name": "slideEnd"}, {"url": "YAHOO.widget.Slider.html#slideStart", "host": "YAHOO.widget.Slider", "name": "slideStart"}, {"url": "YAHOO.widget.SliderThumb.html#startOffset", "host": "YAHOO.widget.SliderThumb", "name": "startOffset"}, {"url": "YAHOO.widget.Slider.html#thumb", "host": "YAHOO.widget.Slider", "name": "thumb"}, {"url": "YAHOO.widget.Slider.html#thumbCenterPoint", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint"}, {"url": "YAHOO.widget.Slider.html#thumbMouseUp", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp"}, {"url": "YAHOO.widget.Slider.html#tickPause", "host": "YAHOO.widget.Slider", "name": "tickPause"}, {"url": "YAHOO.widget.SliderThumb.html#tickSize", "host": "YAHOO.widget.SliderThumb", "name": "tickSize"}, {"url": "YAHOO.widget.Slider.html#toString", "host": "YAHOO.widget.Slider", "name": "toString"}, {"url": "YAHOO.widget.SliderThumb.html#toString", "host": "YAHOO.widget.SliderThumb", "name": "toString"}, {"url": "YAHOO.widget.Slider.html#type", "host": "YAHOO.widget.Slider", "name": "type"}, {"url": "YAHOO.widget.Slider.html#unlock", "host": "YAHOO.widget.Slider", "name": "unlock"}, {"url": "YAHOO.widget.Slider.html#verifyOffset", "host": "YAHOO.widget.Slider", "name": "verifyOffset"}, {"url": "YAHOO.widget.Slider.html#YAHOO.widget.Slider.ANIM_AVAIL", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.ANIM_AVAIL"}, {"url": "YAHOO.widget.Slider.html#YAHOO.widget.Slider.getHorizSlider", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider"}, {"url": "YAHOO.widget.Slider.html#YAHOO.widget.Slider.getSliderRegion", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion"}, {"url": "YAHOO.widget.Slider.html#YAHOO.widget.Slider.getVertSlider", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider"}];
+                    </script>
+
+                    <script type="text/javascript" src="assets/api-js"></script>
+                    <script type="text/javascript" src="assets/ac-js"></script>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
+                                <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Slider.js.html">Slider.js</a></li>
+                                <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

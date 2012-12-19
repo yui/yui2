@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: logger   Logger.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_logger.html">logger</a>
+                
+                 &gt; Logger.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre> <span class="c">/**</span>
+<span class="c"> * The Logger widget provides a simple way to read or write log messages in</span>
+<span class="c"> * JavaScript code. Integration with the YUI Library&#39;s debug builds allow</span>
+<span class="c"> * implementers to access under-the-hood events, errors, and debugging messages.</span>
+<span class="c"> * Output may be read through a LogReader console and/or output to a browser</span>
+<span class="c"> * console.</span>
+<span class="c"> *</span>
+<span class="c"> * @module logger</span>
+<span class="c"> * @requires yahoo, event, dom</span>
+<span class="c"> * @optional dragdrop</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @title Logger Widget</span>
+<span class="c"> */</span>
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+
+<span class="c">/**</span>
+<span class="c"> * The singleton Logger class provides core log management functionality. Saves</span>
+<span class="c"> * logs written through the global YAHOO.log function or written by a LogWriter</span>
+<span class="c"> * instance. Provides access to logs for reading by a LogReader instance or</span>
+<span class="c"> * native browser console such as the Firebug extension to Firefox or Safari&#39;s</span>
+<span class="c"> * JavaScript console through integration with the console.log() method.</span>
+<span class="c"> *</span>
+<span class="c"> * @class Logger</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c">// Initialize members</span>
+<span class="c"></span>    <span class="nx">loggerEnabled</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="nx">_browserConsoleEnabled</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+    <span class="nx">categories</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="s2">&quot;warn&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">,</span><span class="s2">&quot;window&quot;</span><span class="o">],</span>
+    <span class="nx">sources</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;global&quot;</span><span class="o">],</span>
+    <span class="nx">_stack</span><span class="o">:</span> <span class="o">[],</span> <span class="c">// holds all log msgs</span>
+<span class="c"></span>    <span class="nx">maxStackEntries</span><span class="o">:</span> <span class="m">2500</span><span class="o">,</span>
+    <span class="nx">_startTime</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">().</span><span class="nx">getTime</span><span class="o">(),</span> <span class="c">// static start timestamp</span>
+<span class="c"></span>    <span class="nx">_lastTime</span><span class="o">:</span> <span class="kc">null</span> <span class="c">// timestamp of last logged message</span>
+<span class="c"></span><span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Saves a log message to the stack and fires newLogEvent. If the log message is</span>
+<span class="c"> * assigned to an unknown category, creates a new category. If the log message is</span>
+<span class="c"> * from an unknown source, creates a new source.  If browser console is enabled,</span>
+<span class="c"> * outputs the log message to browser console.</span>
+<span class="c"> *</span>
+<span class="c"> * @method log</span>
+<span class="c"> * @param sMsg {String} The log message.</span>
+<span class="c"> * @param sCategory {String} Category of log message, or null.</span>
+<span class="c"> * @param sSource {String} Source of LogWriter, or null if global.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">log</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMsg</span><span class="o">,</span> <span class="nx">sCategory</span><span class="o">,</span> <span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loggerEnabled</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(!</span><span class="nx">sCategory</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">sCategory</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="o">;</span> <span class="c">// default category</span>
+<span class="c"></span>        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">sCategory</span> <span class="o">=</span> <span class="nx">sCategory</span><span class="o">.</span><span class="nx">toLocaleLowerCase</span><span class="o">();</span>
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isNewCategory</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_createNewCategory</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">var</span> <span class="nx">sClass</span> <span class="o">=</span> <span class="s2">&quot;global&quot;</span><span class="o">;</span> <span class="c">// default source</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">sDetail</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">spaceIndex</span> <span class="o">=</span> <span class="nx">sSource</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot; &quot;</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">spaceIndex</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// Substring until first space</span>
+<span class="c"></span>                <span class="nx">sClass</span> <span class="o">=</span> <span class="nx">sSource</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">spaceIndex</span><span class="o">);</span>
+                <span class="c">// The rest of the source</span>
+<span class="c"></span>                <span class="nx">sDetail</span> <span class="o">=</span> <span class="nx">sSource</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">spaceIndex</span><span class="o">,</span><span class="nx">sSource</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">sClass</span> <span class="o">=</span> <span class="nx">sSource</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isNewSource</span><span class="o">(</span><span class="nx">sClass</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_createNewSource</span><span class="o">(</span><span class="nx">sClass</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">logEntry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogMsg</span><span class="o">({</span>
+            <span class="nx">msg</span><span class="o">:</span> <span class="nx">sMsg</span><span class="o">,</span>
+            <span class="nx">time</span><span class="o">:</span> <span class="nx">timestamp</span><span class="o">,</span>
+            <span class="nx">category</span><span class="o">:</span> <span class="nx">sCategory</span><span class="o">,</span>
+            <span class="nx">source</span><span class="o">:</span> <span class="nx">sClass</span><span class="o">,</span>
+            <span class="nx">sourceDetail</span><span class="o">:</span> <span class="nx">sDetail</span>
+        <span class="o">});</span>
+
+        <span class="k">var</span> <span class="nx">stack</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_stack</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">maxStackEntries</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">maxStackEntries</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">maxStackEntries</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">maxStackEntries</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+            <span class="o">(</span><span class="nx">stack</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="nx">maxStackEntries</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">stack</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="nx">stack</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">logEntry</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">newLogEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">logEntry</span><span class="o">);</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_browserConsoleEnabled</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_printToBrowserConsole</span><span class="o">(</span><span class="nx">logEntry</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets internal stack and startTime, enables Logger, and fires logResetEvent.</span>
+<span class="c"> *</span>
+<span class="c"> * @method reset</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_stack</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">().</span><span class="nx">getTime</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">loggerEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Logger reset&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">logResetEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Public accessor to internal stack of log message objects.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getStack</span>
+<span class="c"> * @return {Object[]} Array of log message objects.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">getStack</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_stack</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Public accessor to internal start time.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getStartTime</span>
+<span class="c"> * @return {Date} Internal date of when Logger singleton was initialized.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">getStartTime</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_startTime</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Disables output to the browser&#39;s global console.log() function, which is used</span>
+<span class="c"> * by the Firebug extension to Firefox as well as Safari.</span>
+<span class="c"> *</span>
+<span class="c"> * @method disableBrowserConsole</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">disableBrowserConsole</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Logger output to the function console.log() has been disabled.&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_browserConsoleEnabled</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Enables output to the browser&#39;s global console.log() function, which is used</span>
+<span class="c"> * by the Firebug extension to Firefox as well as Safari.</span>
+<span class="c"> *</span>
+<span class="c"> * @method enableBrowserConsole</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">enableBrowserConsole</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_browserConsoleEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Logger output to the function console.log() has been enabled.&quot;</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public events</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+ <span class="c">/**</span>
+<span class="c"> * Fired when a new category has been created.</span>
+<span class="c"> *</span>
+<span class="c"> * @event categoryCreateEvent</span>
+<span class="c"> * @param sCategory {String} Category name.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">categoryCreateEvent</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;categoryCreate&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+ <span class="c">/**</span>
+<span class="c"> * Fired when a new source has been named.</span>
+<span class="c"> *</span>
+<span class="c"> * @event sourceCreateEvent</span>
+<span class="c"> * @param sSource {String} Source name.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">sourceCreateEvent</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;sourceCreate&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+ <span class="c">/**</span>
+<span class="c"> * Fired when a new log message has been created.</span>
+<span class="c"> *</span>
+<span class="c"> * @event newLogEvent</span>
+<span class="c"> * @param sMsg {String} Log message.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">newLogEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;newLog&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when the Logger has been reset has been created.</span>
+<span class="c"> *</span>
+<span class="c"> * @event logResetEvent</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">logResetEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;logReset&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Creates a new category of log messages and fires categoryCreateEvent.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _createNewCategory</span>
+<span class="c"> * @param sCategory {String} Category name.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_createNewCategory</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">categories</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">categoryCreateEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Checks to see if a category has already been created.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _isNewCategory</span>
+<span class="c"> * @param sCategory {String} Category name.</span>
+<span class="c"> * @return {Boolean} Returns true if category is unknown, else returns false.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_isNewCategory</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sCategory</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">categories</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">sCategory</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">categories</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Creates a new source of log messages and fires sourceCreateEvent.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _createNewSource</span>
+<span class="c"> * @param sSource {String} Source name.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_createNewSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">sources</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">sSource</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">sourceCreateEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">sSource</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Checks to see if a source already exists.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _isNewSource</span>
+<span class="c"> * @param sSource {String} Source name.</span>
+<span class="c"> * @return {Boolean} Returns true if source is unknown, else returns false.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_isNewSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">sources</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">sSource</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">sources</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Outputs a log message to global console.log() function.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _printToBrowserConsole</span>
+<span class="c"> * @param oEntry {Object} Log entry object.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_printToBrowserConsole</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oEntry</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">console</span> <span class="o">&amp;&amp;</span> <span class="nx">console</span><span class="o">.</span><span class="nx">log</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">category</span> <span class="o">=</span> <span class="nx">oEntry</span><span class="o">.</span><span class="nx">category</span><span class="o">;</span>
+        <span class="k">var</span> <span class="k">label</span> <span class="o">=</span> <span class="nx">oEntry</span><span class="o">.</span><span class="nx">category</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="m">4</span><span class="o">).</span><span class="nx">toUpperCase</span><span class="o">();</span>
+
+        <span class="k">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="nx">oEntry</span><span class="o">.</span><span class="nx">time</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">time</span><span class="o">.</span><span class="nx">toLocaleTimeString</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">localTime</span>  <span class="o">=</span> <span class="nx">time</span><span class="o">.</span><span class="nx">toLocaleTimeString</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">localTime</span> <span class="o">=</span> <span class="nx">time</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">msecs</span> <span class="o">=</span> <span class="nx">time</span><span class="o">.</span><span class="nx">getTime</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">elapsedTime</span> <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_lastTime</span><span class="o">)</span> <span class="o">?</span>
+            <span class="o">(</span><span class="nx">msecs</span> <span class="o">-</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_lastTime</span><span class="o">)</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_lastTime</span> <span class="o">=</span> <span class="nx">msecs</span><span class="o">;</span>
+
+        <span class="k">var</span> <span class="nx">output</span> <span class="o">=</span>
+            <span class="nx">localTime</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span>
+            <span class="nx">elapsedTime</span> <span class="o">+</span> <span class="s2">&quot;ms): &quot;</span> <span class="o">+</span>
+            <span class="nx">oEntry</span><span class="o">.</span><span class="nx">source</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>
+            <span class="nx">oEntry</span><span class="o">.</span><span class="nx">msg</span><span class="o">;</span>
+
+        <span class="nx">console</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">output</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private event handlers</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Handles logging of messages due to window error events.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _onWindowError</span>
+<span class="c"> * @param sMsg {String} The error message.</span>
+<span class="c"> * @param sUrl {String} URL of the error.</span>
+<span class="c"> * @param sLine {String} Line number of the error.</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_onWindowError</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMsg</span><span class="o">,</span><span class="nx">sUrl</span><span class="o">,</span><span class="nx">sLine</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Logger is not in scope of this event handler</span>
+<span class="c"></span>    <span class="k">try</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sMsg</span><span class="o">+</span><span class="s1">&#39; (&#39;</span><span class="o">+</span><span class="nx">sUrl</span><span class="o">+</span><span class="s1">&#39;, line &#39;</span><span class="o">+</span><span class="nx">sLine</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="o">,</span> <span class="s2">&quot;window&quot;</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_origOnWindowError</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_origOnWindowError</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Enable handling of native JavaScript errors</span>
+<span class="c">// NB: Not all browsers support the window.onerror event</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">onerror</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Save any previously defined handler to call</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_origOnWindowError</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">onerror</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="nb">window</span><span class="o">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">_onWindowError</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// First log</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Logger initialized&quot;</span><span class="o">);</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class="selected"><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="LogMsg.html">LogMsg</a></li>
+                                <li class=""><a href="LogReader.html">LogReader</a></li>
+                                <li class=""><a href="LogWriter.html">LogWriter</a></li>
+                                <li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="Logger.js.html">Logger.js</a></li>
+                                <li class=""><a href="LogMsg.js.html">LogMsg.js</a></li>
+                                <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
+                                <li class=""><a href="LogWriter.js.html">LogWriter.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

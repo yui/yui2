@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: treeview   TextNode.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                
+                 &gt; TextNode.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * The default node presentation.  The first parameter should be</span>
+<span class="c"> * either a string that will be used as the node&#39;s label, or an object</span>
+<span class="c"> * that has a string propery called label.  By default, the clicking the</span>
+<span class="c"> * label will toggle the expanded/collapsed state of the node.  By</span>
+<span class="c"> * changing the href property of the instance, this behavior can be</span>
+<span class="c"> * changed so that the label will go to the specified href.</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class TextNode</span>
+<span class="c"> * @extends YAHOO.widget.Node</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oData {object} a string or object containing the data that will</span>
+<span class="c"> * be used to render this node</span>
+<span class="c"> * @param oParent {YAHOO.widget.Node} this node&#39;s parent node</span>
+<span class="c"> * @param expanded {boolean} the initial expanded/collapsed state</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setUpLabel</span><span class="o">(</span><span class="nx">oData</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="nx">logger</span>     <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Node</span><span class="o">,</span> <span class="o">{</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * The CSS class for the label href.  Defaults to ygtvlabel, but can be</span>
+<span class="c">     * overridden to provide a custom presentation for a specific node.</span>
+<span class="c">     * @property labelStyle</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="nx">labelStyle</span><span class="o">:</span> <span class="s2">&quot;ygtvlabel&quot;</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The derived element id of the label for this node</span>
+<span class="c">     * @property labelElId</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="nx">labelElId</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The text for the label.  It is assumed that the oData parameter will</span>
+<span class="c">     * either be a string that will be used as the label, or an object that</span>
+<span class="c">     * has a property called &quot;label&quot; that we will use.</span>
+<span class="c">     * @property label</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="k">label</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+    <span class="nx">textNodeParentChange</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+ 
+        <span class="c">/**</span>
+<span class="c">         * Custom event that is fired when the text node label is clicked.  The</span>
+<span class="c">         * custom event is defined on the tree instance, so there is a single</span>
+<span class="c">         * event that handles all nodes in the tree.  The node clicked is </span>
+<span class="c">         * provided as an argument</span>
+<span class="c">         *</span>
+<span class="c">         * @event labelClick</span>
+<span class="c">         * @for YAHOO.widget.TreeView</span>
+<span class="c">         * @param {YAHOO.widget.Node} node the node clicked</span>
+<span class="c">         */</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">tree</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">hasEvent</span><span class="o">(</span><span class="s2">&quot;labelClick&quot;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;labelClick&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">);</span>
+        <span class="o">}</span>
+       
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Sets up the node label</span>
+<span class="c">     * @method setUpLabel</span>
+<span class="c">     * @param oData string containing the label, or an object with a label property</span>
+<span class="c">     */</span>
+    <span class="nx">setUpLabel</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span> 
+        
+        <span class="c">// set up the custom event on the tree</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">textNodeParentChange</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;parentChange&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">textNodeParentChange</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">oData</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">oData</span> <span class="o">=</span> <span class="o">{</span> <span class="k">label</span><span class="o">:</span> <span class="nx">oData</span> <span class="o">};</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">data</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        
+        <span class="c">// update the link</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c">// set the target</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">.</span><span class="nx">target</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">target</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">=</span> <span class="s2">&quot;ygtvlabelel&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">;</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns the label element</span>
+<span class="c">     * @for YAHOO.widget.TextNode</span>
+<span class="c">     * @method getLabelEl</span>
+<span class="c">     * @return {object} the element</span>
+<span class="c">     */</span>
+    <span class="nx">getLabelEl</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">return</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.widget.Node</span>
+<span class="c"></span>    <span class="nx">getNodeHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Generating html&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;tr&gt;&#39;</span><span class="o">;</span>
+        
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">depth</span><span class="o">;++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">//sb[sb.length] = &#39;&lt;td&gt;&lt;div class=&quot;&#39; + this.getDepthStyle(i) + &#39;&quot;&gt;&amp;#160;&lt;/div&gt;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="c">//sb[sb.length] = &#39;&lt;td&gt;&lt;div class=&quot;&#39; + this.getDepthStyle(i) + &#39;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDepthStyle</span><span class="o">(</span><span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">getNode</span> <span class="o">=</span> <span class="s1">&#39;YAHOO.widget.TreeView.getNode(\&#39;&#39;</span> <span class="o">+</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;\&#39;,&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">;</span>
+
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td&#39;</span><span class="o">;</span>
+        <span class="c">// sb[sb.length] = &#39; onselectstart=&quot;return false&quot;&#39;;</span>
+<span class="c"></span>        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleElId</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasChildren</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseover=&quot;this.className=&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">getNode</span> <span class="o">+</span> <span class="s1">&#39;.getHoverStyle()&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseout=&quot;this.className=&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">getNode</span> <span class="o">+</span> <span class="s1">&#39;.getStyle()&quot;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onclick=&quot;javascript:&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleLink</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
+
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;ygtvspacer&quot;&gt;&#39;</span><span class="o">;</span>
+
+        <span class="c">/*</span>
+<span class="c">        sb[sb.length] = &#39;&lt;img id=&quot;&#39; + this.getSpacerId() + &#39;&quot;&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; alt=&quot;&quot;&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; tabindex=0&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; src=&quot;&#39; + this.spacerPath + &#39;&quot;&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; title=&quot;&#39; + this.getStateText() + &#39;&quot;&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; class=&quot;ygtvspacer&quot;&#39;;</span>
+<span class="c">        // sb[sb.length] = &#39; onkeypress=&quot;return &#39; + getNode + &#39;&quot;.onKeyPress()&quot;&#39;;</span>
+<span class="c">        sb[sb.length] = &#39; /&gt;&#39;;</span>
+<span class="c">        */</span>
+
+        <span class="c">//sb[sb.length] = &#39;&amp;#160;&#39;;</span>
+<span class="c"></span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td &#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">nowrap</span><span class="o">)</span> <span class="o">?</span> <span class="s1">&#39; nowrap=&quot;nowrap&quot; &#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;a&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; href=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; target=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onclick=&quot;return &#39;</span> <span class="o">+</span> <span class="nx">getNode</span> <span class="o">+</span> <span class="s1">&#39;.onLabelClick(&#39;</span> <span class="o">+</span> <span class="nx">getNode</span> <span class="o">+</span><span class="s1">&#39;)&quot;&#39;</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasChildren</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseover=&quot;document.getElementById(\&#39;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleElId</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;\&#39;).className=&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">getNode</span> <span class="o">+</span> <span class="s1">&#39;.getHoverStyle()&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseout=&quot;document.getElementById(\&#39;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleElId</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;\&#39;).className=&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">getNode</span> <span class="o">+</span> <span class="s1">&#39;.getStyle()&quot;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="nx">sb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+    <span class="o">},</span>
+
+
+    <span class="c">/**</span>
+<span class="c">     * Executed when the label is clicked.  Fires the labelClick custom event.</span>
+<span class="c">     * @method onLabelClick</span>
+<span class="c">     * @param me {Node} this node</span>
+<span class="c">     * @scope the anchor tag clicked</span>
+<span class="c">     * @return false to cancel the anchor click</span>
+<span class="c">     */</span>
+    <span class="nx">onLabelClick</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">me</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="nx">me</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;onLabelClick &quot;</span> <span class="o">+</span> <span class="nx">me</span><span class="o">.</span><span class="k">label</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nx">me</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;labelClick&quot;</span><span class="o">,</span> <span class="nx">me</span><span class="o">);</span>
+        <span class="c">//return true;</span>
+<span class="c"></span>    <span class="o">},</span>
+
+    <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">return</span> <span class="s2">&quot;TextNode (&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;) &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class="selected"><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

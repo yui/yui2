@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: animation   ColorAnim.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>animation&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_animation.html">animation</a>
+                
+                 &gt; ColorAnim.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+<span class="c">/**</span>
+<span class="c"> * Anim subclass for color transitions.</span>
+<span class="c"> * &lt;p&gt;Usage: &lt;code&gt;var myAnim = new Y.ColorAnim(el, { backgroundColor: { from: &#39;#FF0000&#39;, to: &#39;#FFFFFF&#39; } }, 1, Y.Easing.easeOut);&lt;/code&gt; Color values can be specified with either 112233, #112233, </span>
+<span class="c"> * [255,255,255], or rgb(255,255,255)&lt;/p&gt;</span>
+<span class="c"> * @class ColorAnim</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @requires YAHOO.util.Anim</span>
+<span class="c"> * @requires YAHOO.util.AnimMgr</span>
+<span class="c"> * @requires YAHOO.util.Easing</span>
+<span class="c"> * @requires YAHOO.util.Bezier</span>
+<span class="c"> * @requires YAHOO.util.Dom</span>
+<span class="c"> * @requires YAHOO.util.Event</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @extends YAHOO.util.Anim</span>
+<span class="c"> * @param {HTMLElement | String} el Reference to the element that will be animated</span>
+<span class="c"> * @param {Object} attributes The attribute(s) to be animated.</span>
+<span class="c"> * Each attribute is an object with at minimum a &quot;to&quot; or &quot;by&quot; member defined.</span>
+<span class="c"> * Additional optional members are &quot;from&quot; (defaults to current value), &quot;units&quot; (defaults to &quot;px&quot;).</span>
+<span class="c"> * All attribute names use camelCase.</span>
+<span class="c"> * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based</span>
+<span class="c"> * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)</span>
+<span class="c"> */</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ColorAnim</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">,</span> <span class="nx">duration</span><span class="o">,</span>  <span class="nx">method</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ColorAnim</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">,</span> <span class="nx">duration</span><span class="o">,</span> <span class="nx">method</span><span class="o">);</span>
+    <span class="o">};</span>
+    
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ColorAnim</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Anim</span><span class="o">);</span>
+    
+    <span class="c">// shorthand</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">superclass</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">ColorAnim</span><span class="o">.</span><span class="nx">superclass</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">ColorAnim</span><span class="o">.</span><span class="nx">prototype</span><span class="o">;</span>
+    
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;ColorAnim &quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="o">);</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">color</span> <span class="o">=</span> <span class="sr">/color$/i</span><span class="o">;</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">rgb</span>            <span class="o">=</span> <span class="sr">/^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i</span><span class="o">;</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">hex</span>            <span class="o">=</span> <span class="sr">/^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i</span><span class="o">;</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">hex3</span>          <span class="o">=</span> <span class="sr">/^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i</span><span class="o">;</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">transparent</span> <span class="o">=</span> <span class="sr">/^transparent|rgba\(0, 0, 0, 0\)$/</span><span class="o">;</span> <span class="c">// need rgba for safari</span>
+<span class="c"></span>    
+    <span class="c">/**</span>
+<span class="c">     * Attempts to parse the given string and return a 3-tuple.</span>
+<span class="c">     * @method parseColor</span>
+<span class="c">     * @param {String} s The string to parse.</span>
+<span class="c">     * @return {Array} The 3-tuple of rgb values.</span>
+<span class="c">     */</span>
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">parseColor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">3</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="nx">s</span><span class="o">;</span> <span class="o">}</span>
+    
+        <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">hex</span><span class="o">.</span><span class="nx">exec</span><span class="o">(</span><span class="nx">s</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">[</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="m">16</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">2</span><span class="o">],</span> <span class="m">16</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">3</span><span class="o">],</span> <span class="m">16</span><span class="o">)</span> <span class="o">];</span>
+        <span class="o">}</span>
+    
+        <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">rgb</span><span class="o">.</span><span class="nx">exec</span><span class="o">(</span><span class="nx">s</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">[</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="m">10</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">2</span><span class="o">],</span> <span class="m">10</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">3</span><span class="o">],</span> <span class="m">10</span><span class="o">)</span> <span class="o">];</span>
+        <span class="o">}</span>
+    
+        <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">hex3</span><span class="o">.</span><span class="nx">exec</span><span class="o">(</span><span class="nx">s</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">[</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">c</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="m">16</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">2</span><span class="o">]</span> <span class="o">+</span> <span class="nx">c</span><span class="o">[</span><span class="m">2</span><span class="o">],</span> <span class="m">16</span><span class="o">),</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">c</span><span class="o">[</span><span class="m">3</span><span class="o">]</span> <span class="o">+</span> <span class="nx">c</span><span class="o">[</span><span class="m">3</span><span class="o">],</span> <span class="m">16</span><span class="o">)</span> <span class="o">];</span>
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">getAttribute</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span>  <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">color</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">transparent</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span> <span class="c">// bgcolor default</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span> <span class="c">// try and get from an ancestor</span>
+<span class="c"></span>                <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+            
+                <span class="k">while</span> <span class="o">(</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">transparent</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="nx">parent</span> <span class="o">=</span> <span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                    <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;HTML&#39;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">val</span> <span class="o">=</span> <span class="s1">&#39;#fff&#39;</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">superclass</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
+    <span class="o">};</span>
+    
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">doMethod</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">start</span><span class="o">,</span> <span class="nx">end</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">val</span><span class="o">;</span>
+    
+        <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">color</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">start</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">val</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">superclass</span><span class="o">.</span><span class="nx">doMethod</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">start</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">end</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+            <span class="o">}</span>
+            
+            <span class="nx">val</span> <span class="o">=</span> <span class="s1">&#39;rgb(&#39;</span><span class="o">+</span><span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">val</span><span class="o">[</span><span class="m">0</span><span class="o">])+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">val</span><span class="o">[</span><span class="m">1</span><span class="o">])+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">val</span><span class="o">[</span><span class="m">2</span><span class="o">])+</span><span class="s1">&#39;)&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">superclass</span><span class="o">.</span><span class="nx">doMethod</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">start</span><span class="o">,</span> <span class="nx">end</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="nx">proto</span><span class="o">.</span><span class="nx">setRuntimeAttribute</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">superclass</span><span class="o">.</span><span class="nx">setRuntimeAttribute</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
+        
+        <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">color</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">attributes</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseColor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">start</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">end</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseColor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">end</span><span class="o">);</span>
+            <span class="c">// fix colors if going &quot;by&quot;</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">][</span><span class="s1">&#39;to&#39;</span><span class="o">]</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">][</span><span class="s1">&#39;by&#39;</span><span class="o">]</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">end</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseColor</span><span class="o">(</span><span class="nx">attributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">by</span><span class="o">);</span>
+            
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">start</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">end</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">start</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">+</span> <span class="nx">end</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">start</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">runtimeAttributes</span><span class="o">[</span><span class="nx">attr</span><span class="o">].</span><span class="nx">end</span> <span class="o">=</span> <span class="nx">end</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class="selected"><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                                <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
+                                <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
+                                <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
+                                <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
+                                <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
+                                <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                                <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
+                                <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
+                                <li class="selected"><a href="ColorAnim.js.html">ColorAnim.js</a></li>
+                                <li class=""><a href="Easing.js.html">Easing.js</a></li>
+                                <li class=""><a href="Motion.js.html">Motion.js</a></li>
+                                <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

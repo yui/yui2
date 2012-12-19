@@ -1,0 +1,3061 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar  YAHOO.widget.CalendarGroup   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Calendar&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                 &gt; YAHOO.widget.CalendarGroup 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.CalendarGroup</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates
+the ability to have multi-page calendar views that share a single dataset and are
+dependent on each other.
+The calendar group instance will refer to each of its elements using a 0-based index.
+For example, to construct the placeholder for a calendar group widget with id "cal1" and
+containerId of "cal1Container", the markup would be as follows:
+<xmp>
+<div id="cal1Container_0"></div>
+<div id="cal1Container_1"></div>
+</xmp>
+The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.CalendarGroup</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                id
+
+                                                , 
+                                                containerId
+
+                                                , 
+                                                config
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                    			The id of the table element that will represent the calendar widget
+                                                </dd>
+                                                <dd>
+                                                    <code>containerId
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                    	The id of the container div element that will wrap the calendar table
+                                                </dd>
+                                                <dd>
+                                                    <code>config
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                    		The configuration object containing the Calendar's arguments
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="cfg">cfg</a>
+                                        <code>- YAHOO.util.Config</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Config object used to hold the configuration variables for the CalendarGroup
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="containerId">containerId</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The unique id associated with the CalendarGroup container
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="id">id</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The unique id associated with the CalendarGroup
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="Locale">Locale</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The local object which contains the CalendarGroup's locale settings
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="oDomContainer">oDomContainer</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The outer containing element for the CalendarGroup
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="Options">Options</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The local object which contains the CalendarGroup's options
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="pages">pages</a>
+                                        <code>- YAHOO.widget.Calendar[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The collection of Calendar pages contained within the CalendarGroup
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.CalendarGroup.CSS_2UPCLOSE">YAHOO.widget.CalendarGroup.CSS_2UPCLOSE</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class representing the close icon for the 2-up calendar
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
+Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.CalendarGroup.CSS_2UPTITLE">YAHOO.widget.CalendarGroup.CSS_2UPTITLE</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class representing the title for the 2-up calendar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.CalendarGroup.CSS_CONTAINER">YAHOO.widget.CalendarGroup.CSS_CONTAINER</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class representing the container for the calendar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="YAHOO.widget.CalendarGroup.CSS_MULTI_UP">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class representing the container for the calendar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_setMonthOnDate">_setMonthOnDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setMonthOnDate</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         iMonth
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
+The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The Date object on which to set the month index
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iMonth &lt;Number&gt;</code>
+                                                            	The month index to set
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="addMonthRenderer">addMonthRenderer</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addMonthRenderer</strong>
+                                           (
+                                                
+                                                        
+                                                         month
+                                                    
+                                                
+                                                        , 
+                                                         fnRender
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a month to the render stack. The function reference passed to this method will be executed
+when a date cell matches the month passed to this method.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>month &lt;Number&gt;</code>
+                                                            		The month (1-12) to associate with this renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fnRender &lt;Function&gt;</code>
+                                                            	The function executed to render cells that match the render rules for this renderer.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="addMonths">addMonths</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addMonths</strong>
+                                           (
+                                                
+                                                        
+                                                         count
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds the designated number of months to the current calendar month, and sets the current
+calendar page date to the new month.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>count &lt;Number&gt;</code>
+                                                            	The number of months to add to the current calendar
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="addRenderer">addRenderer</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addRenderer</strong>
+                                           (
+                                                
+                                                        
+                                                         sDates
+                                                    
+                                                
+                                                        , 
+                                                         fnRender
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a renderer to the render stack. The function reference passed to this method will be executed
+when a date cell matches the conditions specified in the date string for this renderer.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sDates &lt;String&gt;</code>
+                                                            		A date string to associate with the specified renderer. Valid formats
+include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fnRender &lt;Function&gt;</code>
+                                                            	The function executed to render cells that match the render rules for this renderer.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="addWeekdayRenderer">addWeekdayRenderer</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addWeekdayRenderer</strong>
+                                           (
+                                                
+                                                        
+                                                         weekday
+                                                    
+                                                
+                                                        , 
+                                                         fnRender
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a weekday to the render stack. The function reference passed to this method will be executed
+when a date cell matches the weekday passed to this method.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>weekday &lt;Number&gt;</code>
+                                                            		The weekday (0-6) to associate with this renderer
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fnRender &lt;Function&gt;</code>
+                                                            	The function executed to render cells that match the render rules for this renderer.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="addYears">addYears</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addYears</strong>
+                                           (
+                                                
+                                                        
+                                                         count
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds the designated number of years to the current calendar, and sets the current
+calendar page date to the new month.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>count &lt;Number&gt;</code>
+                                                            	The number of years to add to the current calendar
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="callChildFunction">callChildFunction</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>callChildFunction</strong>
+                                           (
+                                                
+                                                        
+                                                         fnName
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Calls a function within all child Calendars within this CalendarGroup.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fnName &lt;String&gt;</code>
+                                                            		The name of the function
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Array&gt;</code>
+                                                            		The arguments to pass to the function
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="clear">clear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>clear</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Clears the selected dates in the current calendar widget and sets the calendar
+to the current month and year.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configPageDate">configPageDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configPageDate</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default Config handler for the "pagedate" property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configPages">configPages</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configPages</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The default Config handler for the "pages" property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="constructChild">constructChild</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.Calendar
+                                            <strong>constructChild</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                                        , 
+                                                         containerId
+                                                    
+                                                
+                                                        , 
+                                                         config
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Constructs a child calendar. This method can be overridden if a subclassed version of the default
+calendar is to be used.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                            			The id of the table element that will represent the calendar widget
+                                                        </dd>
+                                                        <dd>
+                                                            <code>containerId &lt;String&gt;</code>
+                                                            	The id of the container div element that will wrap the calendar table
+                                                        </dd>
+                                                        <dd>
+                                                            <code>config &lt;Object&gt;</code>
+                                                            		The configuration object containing the Calendar's arguments
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.Calendar
+                                                    </code></dt>
+                                                    <dd>The YAHOO.widget.Calendar instance that is constructed</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="delegateConfig">delegateConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>delegateConfig</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         args
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Delegates a configuration property to the CustomEvents associated with the CalendarGroup's children
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                            	The CustomEvent type (usually the property name)
+                                                        </dd>
+                                                        <dd>
+                                                            <code>args &lt;Object[]&gt;</code>
+                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="deselect">deselect</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date[]
+                                            <strong>deselect</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deselects a date or a collection of dates on the current calendar. This method, by default,
+does not call the render method explicitly. Once deselection has completed, render must be 
+called for the changes to be reflected visually.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;String/Date/Date[]&gt;</code>
+                                                            	The date string of dates to deselect in the current calendar. Valid formats are
+individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+This method can also take a JavaScript Date object or an array of Date objects.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date[]
+                                                    </code></dt>
+                                                    <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="deselectAll">deselectAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date[]
+                                            <strong>deselectAll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deselects all dates on the current calendar.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date[]
+                                                    </code></dt>
+                                                    <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.
+Assuming that this function executes properly, the return value should be an empty array.
+However, the empty array is returned for the sake of being able to check the selection status
+of the calendar.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="deselectCell">deselectCell</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date[]
+                                            <strong>deselectCell</strong>
+                                           (
+                                                
+                                                        
+                                                         cellIndex
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deselects a date on the current calendar by referencing the index of the cell that should be deselected.
+This method is used to easily deselect a single cell (usually with a mouse click) without having to do
+a full render. The selected style is removed from the cell directly.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>cellIndex &lt;Number&gt;</code>
+                                                            	The index of the cell to deselect in the current calendar.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date[]
+                                                    </code></dt>
+                                                    <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getSelectedDates">getSelectedDates</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getSelectedDates</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the list of currently selected dates from the calendar.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>An array of currently selected JavaScript Date objects.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                                        , 
+                                                         containerId
+                                                    
+                                                
+                                                        , 
+                                                         config
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the calendar group. All subclasses must call this method in order for the
+group to be initialized properly.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                            			The id of the table element that will represent the calendar widget
+                                                        </dd>
+                                                        <dd>
+                                                            <code>containerId &lt;String&gt;</code>
+                                                            	The id of the container div element that will wrap the calendar table
+                                                        </dd>
+                                                        <dd>
+                                                            <code>config &lt;Object&gt;</code>
+                                                            		The configuration object containing the Calendar's arguments
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initEvents">initEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes CalendarGroup's built-in CustomEvents
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="nextMonth">nextMonth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>nextMonth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Navigates to the next month page in the calendar widget.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="nextYear">nextYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>nextYear</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Navigates to the next year in the currently selected month in the calendar widget.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="previousMonth">previousMonth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>previousMonth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Navigates to the previous month page in the calendar widget.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="previousYear">previousYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>previousYear</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Navigates to the previous year in the currently selected month in the calendar widget.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="render">render</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>render</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Calls the render function of all child calendars within the group.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="renderFooter">renderFooter</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>renderFooter</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders a footer for the 2-up calendar container. By default, this method is
+unimplemented.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="renderHeader">renderHeader</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>renderHeader</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Renders the header for the CalendarGroup.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="reset">reset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>reset</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets the calendar widget to the originally selected month and year, and 
+sets the calendar to the initial selection(s).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="select">select</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date[]
+                                            <strong>select</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Selects a date or a collection of dates on the current calendar. This method, by default,
+does not call the render method explicitly. Once selection has completed, render must be 
+called for the changes to be reflected visually.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;String/Date/Date[]&gt;</code>
+                                                            	The date string of dates to select in the current calendar. Valid formats are
+individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+This method can also take a JavaScript Date object or an array of Date objects.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date[]
+                                                    </code></dt>
+                                                    <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="selectCell">selectCell</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date[]
+                                            <strong>selectCell</strong>
+                                           (
+                                                
+                                                        
+                                                         cellIndex
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Selects a date on the current calendar by referencing the index of the cell that should be selected.
+This method is used to easily select a single cell (usually with a mouse click) without having to do
+a full render. The selected style is applied to the cell directly.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>cellIndex &lt;Number&gt;</code>
+                                                            	The index of the cell to select in the current calendar.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date[]
+                                                    </code></dt>
+                                                    <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setChildFunction">setChildFunction</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setChildFunction</strong>
+                                           (
+                                                
+                                                        
+                                                         fnName
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds a function to all child Calendars within this CalendarGroup.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fnName &lt;String&gt;</code>
+                                                            		The name of the function
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fn &lt;Function&gt;</code>
+                                                            			The function to apply to each Calendar page object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setMonth">setMonth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setMonth</strong>
+                                           (
+                                                
+                                                        
+                                                         month
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the calendar group's month explicitly. This month will be set into the first
+page of the multi-page calendar, and all other months will be iterated appropriately.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>month &lt;Number&gt;</code>
+                                                            		The numeric month, from 0 (January) to 11 (December)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="setYear">setYear</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setYear</strong>
+                                           (
+                                                
+                                                        
+                                                         year
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the calendar group's year explicitly. This year will be set into the first
+page of the multi-page calendar, and all other months will be iterated appropriately.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>year &lt;Number&gt;</code>
+                                                            		The numeric 4-digit year
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="sub">sub</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>sub</strong>
+                                           (
+                                                
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         bOverride
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Proxy subscriber to subscribe to the CalendarGroup's child Calendars' CustomEvents
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fn &lt;Function&gt;</code>
+                                                            	The function to subscribe to this CustomEvent
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The CustomEvent's scope object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>bOverride &lt;Boolean&gt;</code>
+                                                            	Whether or not to apply scope correction
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="subtractMonths">subtractMonths</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>subtractMonths</strong>
+                                           (
+                                                
+                                                        
+                                                         count
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subtracts the designated number of months from the current calendar month, and sets the current
+calendar page date to the new month.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>count &lt;Number&gt;</code>
+                                                            	The number of months to subtract from the current calendar
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="subtractYears">subtractYears</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>subtractYears</strong>
+                                           (
+                                                
+                                                        
+                                                         count
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subtcats the designated number of years from the current calendar, and sets the current
+calendar page date to the new month.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>count &lt;Number&gt;</code>
+                                                            	The number of years to subtract from the current calendar
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representation of the object.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd>A string representation of the CalendarGroup object.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unsub">unsub</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>unsub</strong>
+                                           (
+                                                
+                                                        
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Proxy unsubscriber to unsubscribe from the CalendarGroup's child Calendars' CustomEvents
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fn &lt;Function&gt;</code>
+                                                            	The function to subscribe to this CustomEvent
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Object&gt;</code>
+                                                            	The CustomEvent's scope object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="beforeDeselectEvent">beforeDeselectEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeDeselectEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired before a selection is made
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="beforeRenderEvent">beforeRenderEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeRenderEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired before the Calendar is rendered
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="beforeSelectEvent">beforeSelectEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeSelectEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired before a selection is made
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="changePageEvent">changePageEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>changePageEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Calendar page is changed
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="clearEvent">clearEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>clearEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Calendar is cleared
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="deselectEvent">deselectEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>deselectEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         Array
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a selection is made
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Array &lt;Array&gt;</code>
+                                                             of Date field arrays in the format [YYYY, MM, DD].
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="renderEvent">renderEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>renderEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Calendar is rendered
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="resetEvent">resetEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>resetEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Calendar is reset
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="selectEvent">selectEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>selectEvent</strong>
+
+                                            (
+                                                
+                                                        
+                                                         Array
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when a selection is made
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>Array &lt;Array&gt;</code>
+                                                             of Date field arrays in the format [YYYY, MM, DD].
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <h4><a name="close">close</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not a close button should be displayed for this CalendarGroup
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DATE_DELIMITER">DATE_DELIMITER</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The value used to delimit individual dates in a date string passed to various Calendar functions.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ","
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The value used to delimit date fields in a date string passed to various Calendar functions.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "/"
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The value used to delimit date ranges in a date string passed to various Calendar functions.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "-"
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="HIDE_BLANK_WEEKS">HIDE_BLANK_WEEKS</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Calendar should suppress weeks that are not a part of the current month. False by default.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="iframe">iframe</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="LOCALE_MONTHS">LOCALE_MONTHS</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The setting that determines which length of month labels should be used. Possible values are "short" and "long".
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "long"
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="LOCALE_WEEKDAYS">LOCALE_WEEKDAYS</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The setting that determines which length of weekday labels should be used. Possible values are "1char", "short", "medium", and "long".
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "short"
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="maxdate">maxdate</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The maximum selectable date in the current Calendar (mm/dd/yyyy)
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MD_DAY_POSITION">MD_DAY_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the day in a month/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MD_MONTH_POSITION">MD_MONTH_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the month in a month/day date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 1
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MDY_DAY_POSITION">MDY_DAY_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the day in a month/day/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MDY_MONTH_POSITION">MDY_MONTH_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the month in a month/day/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 1
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MDY_YEAR_POSITION">MDY_YEAR_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the year in a month/day/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 3
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="mindate">mindate</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The minimum selectable date in the current Calendar (mm/dd/yyyy)
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MONTHS_LONG">MONTHS_LONG</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The long month labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MONTHS_SHORT">MONTHS_SHORT</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The short month labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MULTI_SELECT">MULTI_SELECT</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Calendar should allow multiple selections. False by default.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MY_MONTH_POSITION">MY_MONTH_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the month in a month/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 1
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="MY_YEAR_POSITION">MY_YEAR_POSITION</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The position of the year in a month/year date string
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="NAV_ARROW_LEFT">NAV_ARROW_LEFT</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The image that should be used for the left navigation arrow.
+                                        </div>
+                                    </div>
+ 
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"
+                                    </div>        
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="NAV_ARROW_RIGHT">NAV_ARROW_RIGHT</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The image that should be used for the right navigation arrow.
+                                        </div>
+                                    </div>
+ 
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong>You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
+                                    </div>        
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="pagedate">pagedate</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The month/year representing the current visible Calendar date (mm/yyyy)
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: today's date
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="pages">pages</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of pages to include in the CalendarGroup. This value can only be set once, in the CalendarGroup's constructor arguments.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="selected">selected</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The date or range of dates representing the current Calendar selection
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: []
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="SHOW_WEEK_FOOTER">SHOW_WEEK_FOOTER</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Calendar should show week row footers. False by default.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="SHOW_WEEK_HEADER">SHOW_WEEK_HEADER</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Calendar should show week row headers. False by default.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="SHOW_WEEKDAYS">SHOW_WEEKDAYS</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Calendar should show weekday labels. True by default.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="START_WEEKDAY">START_WEEKDAY</a>
+                                        <code>- number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The weekday the week begins on. Default is 0 (Sunday).
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: 0
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="title">title</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The title to display above the CalendarGroup's month header
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ""
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="WEEKDAYS_1CHAR">WEEKDAYS_1CHAR</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The 1-character weekday labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["S", "M", "T", "W", "T", "F", "S"]
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="WEEKDAYS_LONG">WEEKDAYS_LONG</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The long weekday labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The medium weekday labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="WEEKDAYS_SHORT">WEEKDAYS_SHORT</a>
+                                        <code>- String[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The short weekday labels for the current locale.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+                                    </div>        
+
+                                    <hr />
+
+                            </div>
+                        </div>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class="selected"><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#cfg">cfg</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#containerId">containerId</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#id">id</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#Locale">Locale</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#oDomContainer">oDomContainer</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#Options">Options</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#pages">pages</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.CalendarGroup.CSS_2UPCLOSE">YAHOO.widget.CalendarGroup.CSS_2UPCLOSE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.CalendarGroup.CSS_2UPTITLE">YAHOO.widget.CalendarGroup.CSS_2UPTITLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.CalendarGroup.CSS_CONTAINER">YAHOO.widget.CalendarGroup.CSS_CONTAINER</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li><a href="#YAHOO.widget.CalendarGroup.CSS_MULTI_UP">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_setMonthOnDate">_setMonthOnDate</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#addMonthRenderer">addMonthRenderer</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#addMonths">addMonths</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#addRenderer">addRenderer</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#addWeekdayRenderer">addWeekdayRenderer</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#addYears">addYears</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#callChildFunction">callChildFunction</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#clear">clear</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configPageDate">configPageDate</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configPages">configPages</a>
+                                </li>
+                                <li><!--<code>YAHOO.widget.Calendar</code>-->
+                                <a href="#constructChild">constructChild</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#delegateConfig">delegateConfig</a>
+                                </li>
+                                <li><!--<code>Date[]</code>-->
+                                <a href="#deselect">deselect</a>
+                                </li>
+                                <li><!--<code>Date[]</code>-->
+                                <a href="#deselectAll">deselectAll</a>
+                                </li>
+                                <li><!--<code>Date[]</code>-->
+                                <a href="#deselectCell">deselectCell</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getSelectedDates">getSelectedDates</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initEvents">initEvents</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#nextMonth">nextMonth</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#nextYear">nextYear</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#previousMonth">previousMonth</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#previousYear">previousYear</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#render">render</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#renderFooter">renderFooter</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#renderHeader">renderHeader</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#reset">reset</a>
+                                </li>
+                                <li><!--<code>Date[]</code>-->
+                                <a href="#select">select</a>
+                                </li>
+                                <li><!--<code>Date[]</code>-->
+                                <a href="#selectCell">selectCell</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setChildFunction">setChildFunction</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setMonth">setMonth</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#setYear">setYear</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#sub">sub</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#subtractMonths">subtractMonths</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#subtractYears">subtractYears</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#unsub">unsub</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#beforeDeselectEvent">beforeDeselectEvent</a>
+                                </li>
+                                <li>
+                                <a href="#beforeRenderEvent">beforeRenderEvent</a>
+                                </li>
+                                <li>
+                                <a href="#beforeSelectEvent">beforeSelectEvent</a>
+                                </li>
+                                <li>
+                                <a href="#changePageEvent">changePageEvent</a>
+                                </li>
+                                <li>
+                                <a href="#clearEvent">clearEvent</a>
+                                </li>
+                                <li>
+                                <a href="#deselectEvent">deselectEvent</a>
+                                </li>
+                                <li>
+                                <a href="#renderEvent">renderEvent</a>
+                                </li>
+                                <li>
+                                <a href="#resetEvent">resetEvent</a>
+                                </li>
+                                <li>
+                                <a href="#selectEvent">selectEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#close">close</a>
+                                </li>
+                                <li>
+                                <a href="#DATE_DELIMITER">DATE_DELIMITER</a>
+                                </li>
+                                <li>
+                                <a href="#DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a>
+                                </li>
+                                <li>
+                                <a href="#DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a>
+                                </li>
+                                <li>
+                                <a href="#HIDE_BLANK_WEEKS">HIDE_BLANK_WEEKS</a>
+                                </li>
+                                <li>
+                                <a href="#iframe">iframe</a>
+                                </li>
+                                <li>
+                                <a href="#LOCALE_MONTHS">LOCALE_MONTHS</a>
+                                </li>
+                                <li>
+                                <a href="#LOCALE_WEEKDAYS">LOCALE_WEEKDAYS</a>
+                                </li>
+                                <li>
+                                <a href="#maxdate">maxdate</a>
+                                </li>
+                                <li>
+                                <a href="#MD_DAY_POSITION">MD_DAY_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#MD_MONTH_POSITION">MD_MONTH_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#MDY_DAY_POSITION">MDY_DAY_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#MDY_MONTH_POSITION">MDY_MONTH_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#MDY_YEAR_POSITION">MDY_YEAR_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#mindate">mindate</a>
+                                </li>
+                                <li>
+                                <a href="#MONTHS_LONG">MONTHS_LONG</a>
+                                </li>
+                                <li>
+                                <a href="#MONTHS_SHORT">MONTHS_SHORT</a>
+                                </li>
+                                <li>
+                                <a href="#MULTI_SELECT">MULTI_SELECT</a>
+                                </li>
+                                <li>
+                                <a href="#MY_MONTH_POSITION">MY_MONTH_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#MY_YEAR_POSITION">MY_YEAR_POSITION</a>
+                                </li>
+                                <li>
+                                <a href="#NAV_ARROW_LEFT">NAV_ARROW_LEFT</a>
+                                </li>
+                                <li>
+                                <a href="#NAV_ARROW_RIGHT">NAV_ARROW_RIGHT</a>
+                                </li>
+                                <li>
+                                <a href="#pagedate">pagedate</a>
+                                </li>
+                                <li>
+                                <a href="#pages">pages</a>
+                                </li>
+                                <li>
+                                <a href="#selected">selected</a>
+                                </li>
+                                <li>
+                                <a href="#SHOW_WEEK_FOOTER">SHOW_WEEK_FOOTER</a>
+                                </li>
+                                <li>
+                                <a href="#SHOW_WEEK_HEADER">SHOW_WEEK_HEADER</a>
+                                </li>
+                                <li>
+                                <a href="#SHOW_WEEKDAYS">SHOW_WEEKDAYS</a>
+                                </li>
+                                <li>
+                                <a href="#START_WEEKDAY">START_WEEKDAY</a>
+                                </li>
+                                <li>
+                                <a href="#title">title</a>
+                                </li>
+                                <li>
+                                <a href="#WEEKDAYS_1CHAR">WEEKDAYS_1CHAR</a>
+                                </li>
+                                <li>
+                                <a href="#WEEKDAYS_LONG">WEEKDAYS_LONG</a>
+                                </li>
+                                <li>
+                                <a href="#WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a>
+                                </li>
+                                <li>
+                                <a href="#WEEKDAYS_SHORT">WEEKDAYS_SHORT</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

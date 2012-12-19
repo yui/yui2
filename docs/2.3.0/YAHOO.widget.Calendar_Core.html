@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar  YAHOO.widget.Calendar_Core   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Calendar&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                 &gt; YAHOO.widget.Calendar_Core 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Calendar_Core</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+                        <div class="deprecated"><strong>Deprecated:</strong>The old Calendar_Core class is no longer necessary.</div>
+  
+
+                    <div class="summary description">
+                        
+                    </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a class="private" href="YAHOO.widget.Calendar.html#_renderStack">_renderStack</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Calendar.html#_selectedDates">_selectedDates</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#browser">browser</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#cellDates">cellDates</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#cells">cells</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#cfg">cfg</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.Calendar.html#Config">Config</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#domEventMap">domEventMap</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#id">id</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#index">index</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Locale">Locale</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#oDomContainer">oDomContainer</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Options">Options</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#parent">parent</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#renderStack">renderStack</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_BODY">Style.CSS_BODY</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CALENDAR">Style.CSS_CALENDAR</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL">Style.CSS_CELL</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_BOTTOM">Style.CSS_CELL_BOTTOM</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_HIGHLIGHT1">Style.CSS_CELL_HIGHLIGHT1</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_HIGHLIGHT2">Style.CSS_CELL_HIGHLIGHT2</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_HIGHLIGHT3">Style.CSS_CELL_HIGHLIGHT3</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_HIGHLIGHT4">Style.CSS_CELL_HIGHLIGHT4</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_HOVER">Style.CSS_CELL_HOVER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_LEFT">Style.CSS_CELL_LEFT</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_OOB">Style.CSS_CELL_OOB</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_OOM">Style.CSS_CELL_OOM</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_RESTRICTED">Style.CSS_CELL_RESTRICTED</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_RIGHT">Style.CSS_CELL_RIGHT</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_SELECTABLE">Style.CSS_CELL_SELECTABLE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_SELECTED">Style.CSS_CELL_SELECTED</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_SELECTOR">Style.CSS_CELL_SELECTOR</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_TODAY">Style.CSS_CELL_TODAY</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CELL_TOP">Style.CSS_CELL_TOP</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_CONTAINER">Style.CSS_CONTAINER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_FOOTER">Style.CSS_FOOTER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_HEADER">Style.CSS_HEADER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_HEADER_TEXT">Style.CSS_HEADER_TEXT</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_NAV_LEFT">Style.CSS_NAV_LEFT</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_NAV_RIGHT">Style.CSS_NAV_RIGHT</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_ROW_FOOTER">Style.CSS_ROW_FOOTER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_ROW_HEADER">Style.CSS_ROW_HEADER</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_SINGLE">Style.CSS_SINGLE</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_WEEKDAY_CELL">Style.CSS_WEEKDAY_CELL</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#Style.CSS_WEEKDAY_ROW">Style.CSS_WEEKDAY_ROW</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Calendar.html#today">today</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                            <a class="private" href="YAHOO.widget.Calendar.html#_addRenderer">_addRenderer</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_fieldArraysAreEqual">_fieldArraysAreEqual</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_indexOfSelectedFieldArray">_indexOfSelectedFieldArray</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_parseDate">_parseDate</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_parseDates">_parseDates</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_parsePageDate">_parsePageDate</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_parseRange">_parseRange</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_toDate">_toDate</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#_toFieldArray">_toFieldArray</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#addMonthRenderer">addMonthRenderer</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#addMonths">addMonths</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#addRenderer">addRenderer</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#addWeekdayRenderer">addWeekdayRenderer</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#addYears">addYears</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#applyListeners">applyListeners</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#buildDayLabel">buildDayLabel</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#buildMonthLabel">buildMonthLabel</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#buildWeekdays">buildWeekdays</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#clear">clear</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#clearAllBodyCellStyles">clearAllBodyCellStyles</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#clearElement">clearElement</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configClose">configClose</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configIframe">configIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configLocale">configLocale</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configLocaleValues">configLocaleValues</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configMaxDate">configMaxDate</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configMinDate">configMinDate</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configOptions">configOptions</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configPageDate">configPageDate</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configSelected">configSelected</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#configTitle">configTitle</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#deselect">deselect</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#deselectAll">deselectAll</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#deselectCell">deselectCell</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#doCellMouseOut">doCellMouseOut</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#doCellMouseOver">doCellMouseOver</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#doSelectCell">doSelectCell</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#getDateByCellId">getDateByCellId</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#getDateFieldsByCellId">getDateFieldsByCellId</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#getSelectedDates">getSelectedDates</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#hide">hide</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#initStyles">initStyles</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#isDateOOB">isDateOOB</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#isDateOOM">isDateOOM</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#nextMonth">nextMonth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#nextYear">nextYear</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onBeforeDeselect">onBeforeDeselect</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onBeforeSelect">onBeforeSelect</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onChangePage">onChangePage</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onClear">onClear</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onDeselect">onDeselect</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onRender">onRender</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onReset">onReset</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#onSelect">onSelect</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#previousMonth">previousMonth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#previousYear">previousYear</a><span class="">,</span>                                            <a class="private" href="YAHOO.widget.Calendar.html#refreshLocale">refreshLocale</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderBody">renderBody</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderBodyCellRestricted">renderBodyCellRestricted</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellDefault">renderCellDefault</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellNotThisMonth">renderCellNotThisMonth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleHighlight1">renderCellStyleHighlight1</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleHighlight2">renderCellStyleHighlight2</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleHighlight3">renderCellStyleHighlight3</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleHighlight4">renderCellStyleHighlight4</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleSelected">renderCellStyleSelected</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderCellStyleToday">renderCellStyleToday</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderFooter">renderFooter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderHeader">renderHeader</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderOutOfBoundsDate">renderOutOfBoundsDate</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderRowFooter">renderRowFooter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#renderRowHeader">renderRowHeader</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#reset">reset</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#resetRenderers">resetRenderers</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#select">select</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#selectCell">selectCell</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#setMonth">setMonth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#setYear">setYear</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#show">show</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#styleCellDefault">styleCellDefault</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#subtractMonths">subtractMonths</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#subtractYears">subtractYears</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#toString">toString</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Calendar.html#validate">validate</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Calendar.html#beforeDeselectEvent">beforeDeselectEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#beforeRenderEvent">beforeRenderEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#beforeSelectEvent">beforeSelectEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#changePageEvent">changePageEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#clearEvent">clearEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#deselectEvent">deselectEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#renderEvent">renderEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#resetEvent">resetEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#selectEvent">selectEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Configuration attributes inherited from <a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.widget.Calendar.html#close">close</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#DATE_DELIMITER">DATE_DELIMITER</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#HIDE_BLANK_WEEKS">HIDE_BLANK_WEEKS</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#iframe">iframe</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#LOCALE_MONTHS">LOCALE_MONTHS</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#LOCALE_WEEKDAYS">LOCALE_WEEKDAYS</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#maxdate">maxdate</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MD_DAY_POSITION">MD_DAY_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MD_MONTH_POSITION">MD_MONTH_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MDY_DAY_POSITION">MDY_DAY_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MDY_MONTH_POSITION">MDY_MONTH_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MDY_YEAR_POSITION">MDY_YEAR_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#mindate">mindate</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MONTHS_LONG">MONTHS_LONG</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MONTHS_SHORT">MONTHS_SHORT</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MULTI_SELECT">MULTI_SELECT</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_LABEL_MONTH_POSITION">MY_LABEL_MONTH_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_LABEL_MONTH_SUFFIX">MY_LABEL_MONTH_SUFFIX</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_LABEL_YEAR_POSITION">MY_LABEL_YEAR_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_LABEL_YEAR_SUFFIX">MY_LABEL_YEAR_SUFFIX</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_MONTH_POSITION">MY_MONTH_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#MY_YEAR_POSITION">MY_YEAR_POSITION</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#NAV_ARROW_LEFT">NAV_ARROW_LEFT</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#NAV_ARROW_RIGHT">NAV_ARROW_RIGHT</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#pagedate">pagedate</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#selected">selected</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#SHOW_WEEK_FOOTER">SHOW_WEEK_FOOTER</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#SHOW_WEEK_HEADER">SHOW_WEEK_HEADER</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#SHOW_WEEKDAYS">SHOW_WEEKDAYS</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#START_WEEKDAY">START_WEEKDAY</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#title">title</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#WEEKDAYS_1CHAR">WEEKDAYS_1CHAR</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#WEEKDAYS_LONG">WEEKDAYS_LONG</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Calendar.html#WEEKDAYS_SHORT">WEEKDAYS_SHORT</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: calendar  YAHOO.widget.DateMath   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Calendar&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_calendar.html">calendar</a>
+                 &gt; YAHOO.widget.DateMath 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.DateMath</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
+used for adding, subtracting, and comparing dates.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="property_DAY">DAY</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing Day
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_MONTH">MONTH</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing Month
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_ONE_DAY_MS">ONE_DAY_MS</a>
+                                        <code>- static final Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing one day, in milliseconds
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_WEEK">WEEK</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing Week
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_WEEK_ONE_JAN_DATE">WEEK_ONE_JAN_DATE</a>
+                                        <code>- static Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing the date in first week of January
+which identifies the first week of the year.
+<p>
+In the U.S, Jan 1st is normally used based on a Sunday start of week.
+ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start of week.
+</p>
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_YEAR">YEAR</a>
+                                        <code>- static final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant field representing Year
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__addDays">_addDays</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_addDays</strong>
+                                           (
+                                                
+                                                        
+                                                         d
+                                                    
+                                                
+                                                        , 
+                                                         nDays
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Private helper method to account for bug in Safari 2 (webkit < 420)
+when Date.setDate(n) is called with n less than -128 or greater than 127.
+<p>
+Fix approach and original findings are available here:
+http://brianary.blogspot.com/2006/03/safari-date-bug.html
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>d &lt;Date&gt;</code>
+                                                             JavaScript date object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>nDays &lt;Number&gt;</code>
+                                                             The number of days to add to the date object (can be negative)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_add">add</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>add</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         field
+                                                    
+                                                
+                                                        , 
+                                                         amount
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds the specified amount of time to the this instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript Date object to perform addition on
+                                                        </dd>
+                                                        <dd>
+                                                            <code>field &lt;String&gt;</code>
+                                                            	The field constant to be used for performing addition.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>amount &lt;Number&gt;</code>
+                                                            	The number of units (measured in the field constant) to add to the date.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The resulting Date object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_after">after</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>after</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         compareTo
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether a given date is after another date on the calendar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            		The Date object to compare with the compare argument
+                                                        </dd>
+                                                        <dd>
+                                                            <code>compareTo &lt;Date&gt;</code>
+                                                            	The Date object to use for the comparison
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true if the date occurs after the compared date; false if not.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_before">before</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>before</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         compareTo
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether a given date is before another date on the calendar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            		The Date object to compare with the compare argument
+                                                        </dd>
+                                                        <dd>
+                                                            <code>compareTo &lt;Date&gt;</code>
+                                                            	The Date object to use for the comparison
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true if the date occurs before the compared date; false if not.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_between">between</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>between</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         dateBegin
+                                                    
+                                                
+                                                        , 
+                                                         dateEnd
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines whether a given date is between two other dates on the calendar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            		The date to check for
+                                                        </dd>
+                                                        <dd>
+                                                            <code>dateBegin &lt;Date&gt;</code>
+                                                            	The start of the range
+                                                        </dd>
+                                                        <dd>
+                                                            <code>dateEnd &lt;Date&gt;</code>
+                                                            		The end of the range
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true if the date occurs between the compared dates; false if not.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_clearTime">clearTime</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>clearTime</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Clears the time fields from a given date, effectively setting the time to 12 noon.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript Date for which the time fields will be cleared
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The JavaScript Date cleared of all time fields</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_findMonthEnd">findMonthEnd</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>findMonthEnd</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the last day of a month containing a given date.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript Date used to calculate the month end
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The JavaScript Date representing the last day of the month</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_findMonthStart">findMonthStart</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>findMonthStart</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the first day of a month containing a given date.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript Date used to calculate the month start
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The JavaScript Date representing the first day of the month</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getDate">getDate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>getDate</strong>
+                                           (
+                                                
+                                                        
+                                                         y
+                                                    
+                                                
+                                                        , 
+                                                         m
+                                                    
+                                                
+                                                        , 
+                                                         d
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a new JavaScript Date object, representing the given year, month and date. Time fields (hr, min, sec, ms) on the new Date object
+are set to 0. The method allows Date instances to be created with the a year less than 100. "new Date(year, month, date)" implementations 
+set the year to 19xx if a year (xx) which is less than 100 is provided.
+<p>
+<em>NOTE:</em>Validation on argument values is not performed. It is the caller's responsibility to ensure
+arguments are valid as per the ECMAScript-262 Date object specification for the new Date(year, month[, date]) constructor.
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>y &lt;Number&gt;</code>
+                                                             Year.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>m &lt;Number&gt;</code>
+                                                             Month index from 0 (Jan) to 11 (Dec).
+                                                        </dd>
+                                                        <dd>
+                                                            <code>d &lt;Number&gt;</code>
+                                                             (optional) Date from 1 to 31. If not provided, defaults to 1.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The JavaScript date object with year, month, date set as provided.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getDayOffset">getDayOffset</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getDayOffset</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         calendarYear
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Calculates the number of days the specified date is from January 1 of the specified calendar year.
+Passing January 1 to this function would return an offset value of zero.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript date for which to find the offset
+                                                        </dd>
+                                                        <dd>
+                                                            <code>calendarYear &lt;Number&gt;</code>
+                                                            	The calendar year to use for determining the offset
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The number of days since January 1 of the given year</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getFirstDayOfWeek">getFirstDayOfWeek</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>getFirstDayOfWeek</strong>
+                                           (
+                                                
+                                                        
+                                                         dt
+                                                    
+                                                
+                                                        , 
+                                                         startOfWeek
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the first day of the week, for the give date.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>dt &lt;Date&gt;</code>
+                                                             The date in the week for which the first day is required.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>startOfWeek &lt;Number&gt;</code>
+                                                             The index for the first day of the week, 0 = Sun, 1 = Mon ... 6 = Sat (defaults to 0)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The first day of the week</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getJan1">getJan1</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>getJan1</strong>
+                                           (
+                                                
+                                                        
+                                                         calendarYear
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Retrieves a JavaScript Date object representing January 1 of any given year.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>calendarYear &lt;Number&gt;</code>
+                                                            		The calendar year for which to retrieve January 1
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>January 1 of the calendar year specified.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_getWeekNumber">getWeekNumber</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Number
+                                            <strong>getWeekNumber</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         firstDayOfWeek
+                                                    
+                                                
+                                                        , 
+                                                         janDate
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Calculates the week number for the given date. Can currently support standard
+U.S. week numbers, based on Jan 1st defining the 1st week of the year, and 
+ISO8601 week numbers, based on Jan 4th defining the 1st week of the year.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                             The JavaScript date for which to find the week number
+                                                        </dd>
+                                                        <dd>
+                                                            <code>firstDayOfWeek &lt;Number&gt;</code>
+                                                             The index of the first day of the week (0 = Sun, 1 = Mon ... 6 = Sat).
+Defaults to 0
+                                                        </dd>
+                                                        <dd>
+                                                            <code>janDate &lt;Number&gt;</code>
+                                                             The date in the first week of January which defines week one for the year
+Defaults to the value of YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE, which is 1 (Jan 1st). 
+For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first week of the year.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Number
+                                                    </code></dt>
+                                                    <dd>The number of the week containing the given date.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_isMonthOverlapWeek">isMonthOverlapWeek</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>isMonthOverlapWeek</strong>
+                                           (
+                                                
+                                                        
+                                                         weekBeginDate
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines if a given week overlaps two different months.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>weekBeginDate &lt;Date&gt;</code>
+                                                            	The JavaScript Date representing the first day of the week.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true if the date overlaps two different months.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_isYearOverlapWeek">isYearOverlapWeek</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>isYearOverlapWeek</strong>
+                                           (
+                                                
+                                                        
+                                                         weekBeginDate
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines if a given week overlaps two different years.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>weekBeginDate &lt;Date&gt;</code>
+                                                            	The JavaScript Date representing the first day of the week.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd>true if the date overlaps two different years.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_subtract">subtract</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Date
+                                            <strong>subtract</strong>
+                                           (
+                                                
+                                                        
+                                                         date
+                                                    
+                                                
+                                                        , 
+                                                         field
+                                                    
+                                                
+                                                        , 
+                                                         amount
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Subtracts the specified amount of time from the this instance.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>date &lt;Date&gt;</code>
+                                                            	The JavaScript Date object to perform subtraction on
+                                                        </dd>
+                                                        <dd>
+                                                            <code>field &lt;Number&gt;</code>
+                                                            	The this field constant to be used for performing subtraction.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>amount &lt;Number&gt;</code>
+                                                            	The number of units (measured in the field constant) to subtract from the date.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Date
+                                                    </code></dt>
+                                                    <dd>The resulting Date object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class="selected"><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
+                                <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
+                                <li class=""><a href="YAHOO.widget.CalendarNavigator.html">YAHOO.widget.CalendarNavigator</a></li>
+                                <li class="selected"><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                                <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
+                                <li class=""><a href="CalendarNavigator.js.html">CalendarNavigator.js</a></li>
+                                <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_DAY">DAY</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_MONTH">MONTH</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_ONE_DAY_MS">ONE_DAY_MS</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_WEEK">WEEK</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_WEEK_ONE_JAN_DATE">WEEK_ONE_JAN_DATE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_YEAR">YEAR</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__addDays">_addDays</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_add">add</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_after">after</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_before">before</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_between">between</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_clearTime">clearTime</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_findMonthEnd">findMonthEnd</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_findMonthStart">findMonthStart</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_getDate">getDate</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#method_getDayOffset">getDayOffset</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_getFirstDayOfWeek">getFirstDayOfWeek</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_getJan1">getJan1</a>
+                                </li>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#method_getWeekNumber">getWeekNumber</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_isMonthOverlapWeek">isMonthOverlapWeek</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_isYearOverlapWeek">isYearOverlapWeek</a>
+                                </li>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_subtract">subtract</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

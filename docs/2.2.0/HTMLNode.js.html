@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: treeview   HTMLNode.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                
+                 &gt; HTMLNode.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * This implementation takes either a string or object for the</span>
+<span class="c"> * oData argument.  If is it a string, we will use it for the display</span>
+<span class="c"> * of this node (and it can contain any html code).  If the parameter</span>
+<span class="c"> * is an object, we look for a parameter called &quot;html&quot; that will be</span>
+<span class="c"> * used for this node&#39;s display.</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class HTMLNode</span>
+<span class="c"> * @extends YAHOO.widget.Node</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oData {object} a string or object containing the data that will</span>
+<span class="c"> * be used to render this node</span>
+<span class="c"> * @param oParent {YAHOO.widget.Node} this node&#39;s parent node</span>
+<span class="c"> * @param expanded {boolean} the initial expanded/collapsed state</span>
+<span class="c"> * @param hasIcon {boolean} specifies whether or not leaf nodes should</span>
+<span class="c"> * have an icon</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">HTMLNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">,</span> <span class="nx">hasIcon</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">initContent</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">hasIcon</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">HTMLNode</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Node</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The CSS class for the html content container.  Defaults to ygtvhtml, but </span>
+<span class="c">     * can be overridden to provide a custom presentation for a specific node.</span>
+<span class="c">     * @property contentStyle</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="nx">contentStyle</span><span class="o">:</span> <span class="s2">&quot;ygtvhtml&quot;</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The generated id that will contain the data passed in by the implementer.</span>
+<span class="c">     * @property contentElId</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="nx">contentElId</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The HTML content to use for this node&#39;s display</span>
+<span class="c">     * @property content</span>
+<span class="c">     * @type string</span>
+<span class="c">     */</span>
+    <span class="nx">content</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Sets up the node label</span>
+<span class="c">     * @property initContent</span>
+<span class="c">     * @param {object} An html string or object containing an html property</span>
+<span class="c">     * @param {boolean} hasIcon determines if the node will be rendered with an</span>
+<span class="c">     * icon or not</span>
+<span class="c">     */</span>
+    <span class="nx">initContent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">hasIcon</span><span class="o">)</span> <span class="o">{</span> 
+        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">oData</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">oData</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">html</span><span class="o">:</span> <span class="nx">oData</span> <span class="o">};</span>
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">html</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">html</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">contentElId</span> <span class="o">=</span> <span class="s2">&quot;ygtvcontentel&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">hasIcon</span> <span class="o">=</span> <span class="nx">hasIcon</span><span class="o">;</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Returns the outer html element for this node&#39;s content</span>
+<span class="c">     * @method getContentEl</span>
+<span class="c">     * @return {HTMLElement} the element</span>
+<span class="c">     */</span>
+    <span class="nx">getContentEl</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">return</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">contentElId</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.widget.Node</span>
+<span class="c"></span>    <span class="nx">getNodeHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Generating html&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;tr&gt;&#39;</span><span class="o">;</span>
+        
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">depth</span><span class="o">;++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">//sb[sb.length] = &#39;&lt;td class=&quot;&#39; + this.getDepthStyle(i) + &#39;&quot;&gt;&amp;#160;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDepthStyle</span><span class="o">(</span><span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasIcon</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleElId</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onclick=&quot;javascript:&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getToggleLink</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasChildren</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseover=&quot;this.className=&#39;</span><span class="o">;</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;YAHOO.widget.TreeView.getNode(\&#39;&#39;</span><span class="o">;</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;\&#39;,&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span>  <span class="s1">&#39;).getHoverStyle()&quot;&#39;</span><span class="o">;</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; onmouseout=&quot;this.className=&#39;</span><span class="o">;</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;YAHOO.widget.TreeView.getNode(\&#39;&#39;</span><span class="o">;</span>
+                <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;\&#39;,&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span>  <span class="s1">&#39;).getStyle()&quot;&#39;</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c">//sb[sb.length] = &#39;&gt;&amp;#160;&lt;/td&gt;&#39;;</span>
+<span class="c"></span>            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">contentElId</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">contentStyle</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">nowrap</span><span class="o">)</span> <span class="o">?</span> <span class="s1">&#39; nowrap=&quot;nowrap&quot; &#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">html</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="nx">sb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+        <span class="k">return</span> <span class="s2">&quot;HTMLNode (&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

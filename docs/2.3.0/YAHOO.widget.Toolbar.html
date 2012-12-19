@@ -1,0 +1,2120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: editor  YAHOO.widget.Toolbar   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>editor&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_editor.html">editor</a>
+                 &gt; YAHOO.widget.Toolbar 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.Toolbar</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.Toolbar</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                el
+
+                                                , 
+                                                attrs
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>el
+                                                    &lt;String/HTMLElement&gt; 
+                                                    </code>
+                                                     The element to turn into a toolbar.
+                                                </dd>
+                                                <dd>
+                                                    <code>attrs
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     Object liternal containing configuration parameters.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="protected">
+                                    <h4><a name="_buttonGroupList">_buttonGroupList</a>
+                                        <code>- protected Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal property list of current button groups in the toolbar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_buttonList">_buttonList</a>
+                                        <code>- protected Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal property list of current buttons in the toolbar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="_colorData">_colorData</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference containing colors hex and text values.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="_colorPicker">_colorPicker</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The HTML Element containing the colorPicker
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="_disabled">_disabled</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object to track button status when enabling/disabling the toolbar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_sep">_sep</a>
+                                        <code>- protected HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal reference to the separator HTML Element for cloning
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_sepCount">_sepCount</a>
+                                        <code>- protected Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal refernce for counting separators, so we can give them a useful class name for styling
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="_titlebar">_titlebar</a>
+                                        <code>- HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the titlebar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="_toolbarConfigs">_toolbarConfigs</a>
+                                        <code>- protected Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="browser">browser</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Standard browser detection
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_CONTAINER">CLASS_CONTAINER</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default CSS class to apply to the toolbar container element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_DISABLED">CLASS_DISABLED</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default CSS class to apply when the toolbar is disabled
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_DRAGHANDLE">CLASS_DRAGHANDLE</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default CSS class to apply to the toolbar's drag handle element
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_PREFIX">CLASS_PREFIX</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default prefix for dynamically created class names
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="CLASS_SEPARATOR">CLASS_SEPARATOR</a>
+                                        <code>- protected String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Default CSS class to apply to all separators in the toolbar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="dd">dd</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The DragDrop instance associated with the Toolbar
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="Dom">Dom</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4><a name="draghandle">draghandle</a>
+                                        <code>- protected HTMLElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_COLLAPSE">STR_COLLAPSE</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String for Toolbar Collapse Button
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_SPIN_DOWN">STR_SPIN_DOWN</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String for spinbutton down
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_SPIN_LABEL">STR_SPIN_LABEL</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="STR_SPIN_UP">STR_SPIN_UP</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String for spinbutton up
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_addMenuClasses">_addMenuClasses</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_addMenuClasses</strong>
+                                           (
+                                                
+                                                        
+                                                         ev
+                                                    
+                                                
+                                                        , 
+                                                         na
+                                                    
+                                                
+                                                        , 
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method is called from Menu's renderEvent to add a few more classes to the menu items
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>ev &lt;String&gt;</code>
+                                                             The event that fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>na &lt;Array&gt;</code>
+                                                             Array of event information.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>o &lt;Object&gt;</code>
+                                                             Button config object.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="_buttonClick">_buttonClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_buttonClick</strong>
+                                           (
+                                                
+                                                        
+                                                         ev
+                                                    
+                                                
+                                                        , 
+                                                         info
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Click handler for all buttons in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>ev &lt;String&gt;</code>
+                                                             The event that was passed in.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>info &lt;Object&gt;</code>
+                                                             Object literal of information about the button that was clicked.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_createColorPicker">_createColorPicker</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createColorPicker</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the core DOM reference to the color picker menu item.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the id of the toolbar to prefix this DOM container with.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_makeColorButton">_makeColorButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_makeColorButton</strong>
+                                           (
+                                                
+                                                        
+                                                         _oButton
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Called to turn a "color" button into a menu button with an Overlay for the menu.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>_oButton &lt;Object&gt;</code>
+                                                             <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_makeSpinButton">_makeSpinButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_makeSpinButton</strong>
+                                           (
+                                                
+                                                        
+                                                         _button
+                                                    
+                                                
+                                                        , 
+                                                         oButton
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Create a button similar to an OS Spin button.. It has an up/down arrow combo to scroll through a range of int values.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>_button &lt;Object&gt;</code>
+                                                             <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oButton &lt;Object&gt;</code>
+                                                             Object literal containing the buttons initial config
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_resetColorPicker">_resetColorPicker</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_resetColorPicker</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Clears the currently selected color or mouseover color in the color picker.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addButton">addButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addButton</strong>
+                                           (
+                                                
+                                                        
+                                                         oButton
+                                                    
+                                                
+                                                        , 
+                                                         after
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a new button to the toolbar. Buttons supported:
+push, split, menu, select, color, spin
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oButton &lt;Object&gt;</code>
+                                                             Object literal reference to the Button's Config
+                                                        </dd>
+                                                        <dd>
+                                                            <code>after &lt;HTMLElement&gt;</code>
+                                                             Optional HTML element to insert this button after in the DOM.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addButtonGroup">addButtonGroup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addButtonGroup</strong>
+                                           (
+                                                
+                                                        
+                                                         oGroup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a new button group to the toolbar. (uses addButton)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oGroup &lt;Object&gt;</code>
+                                                             Object literal reference to the Groups Config (contains an array of button configs)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addButtonToGroup">addButtonToGroup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addButtonToGroup</strong>
+                                           (
+                                                
+                                                        
+                                                         oButton
+                                                    
+                                                
+                                                        , 
+                                                         group
+                                                    
+                                                
+                                                        , 
+                                                         after
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a new button to a toolbar group. Buttons supported:
+push, split, menu, select, color, spin
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oButton &lt;Object&gt;</code>
+                                                             Object literal reference to the Button's Config
+                                                        </dd>
+                                                        <dd>
+                                                            <code>group &lt;String&gt;</code>
+                                                             The Group identifier passed into the initial config
+                                                        </dd>
+                                                        <dd>
+                                                            <code>after &lt;HTMLElement&gt;</code>
+                                                             Optional HTML element to insert this button after in the DOM.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addSeparator">addSeparator</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>addSeparator</strong>
+                                           (
+                                                
+                                                        
+                                                         cont
+                                                    
+                                                
+                                                        , 
+                                                         after
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a new button separator to the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>cont &lt;HTMLElement&gt;</code>
+                                                             Optional HTML element to insert this button into.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>after &lt;HTMLElement&gt;</code>
+                                                             Optional HTML element to insert this button after in the DOM.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="deselectAllButtons">deselectAllButtons</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>deselectAllButtons</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deselects all buttons in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="deselectButton">deselectButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>deselectButton</strong>
+                                           (
+                                                
+                                                        
+                                                         button
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Deselects a button in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>button &lt;String/Number&gt;</code>
+                                                             Deselect a button by it's id or index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Destroys the toolbar, all of it's elements and objects.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="destroyButton">destroyButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>destroyButton</strong>
+                                           (
+                                                
+                                                        
+                                                         button
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Destroy a button in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>button &lt;String/Number&gt;</code>
+                                                             Destroy a button by it's id or index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="disableButton">disableButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>disableButton</strong>
+                                           (
+                                                
+                                                        
+                                                         button
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Disables a button in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>button &lt;String/Number&gt;</code>
+                                                             Disable a button by it's id or index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="enableButton">enableButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>enableButton</strong>
+                                           (
+                                                
+                                                        
+                                                         button
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Enables a button in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>button &lt;String/Number&gt;</code>
+                                                             Enable a button by it's id or index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getButtonById">getButtonById</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
+                                            <strong>getButtonById</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets a button instance from the toolbar by is Dom id.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             The Dom id to query for.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getButtonByIndex">getButtonByIndex</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
+                                            <strong>getButtonByIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         index
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets a button instance from the toolbar by is index in _buttonList.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>index &lt;Number&gt;</code>
+                                                             The index of the button in _buttonList.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getButtonByValue">getButtonByValue</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>
+                                            <strong>getButtonByValue</strong>
+                                           (
+                                                
+                                                        
+                                                         value
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets a button instance or a menuitem instance from the toolbar by it's value.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>value &lt;String&gt;</code>
+                                                             The button value to query for.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getButtons">getButtons</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Array
+                                            <strong>getButtons</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an array of buttons in the current toolbar
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Array
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The Toolbar class's initialization method
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initAttributes">initAttributes</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initAttributes</strong>
+                                           (
+                                                
+                                                        
+                                                         attr
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes all of the configuration attributes used to create 
+the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>attr &lt;Object&gt;</code>
+                                                             Object literal specifying a set of 
+configuration attributes used to create the toolbar.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="selectButton">selectButton</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        Boolean
+                                            <strong>selectButton</strong>
+                                           (
+                                                
+                                                        
+                                                         button
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Selects a button in the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>button &lt;String/Number&gt;</code>
+                                                             select a button by it's id or index.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representing the toolbar.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="eventDetails">Events</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="buttonClick">buttonClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>buttonClick</strong>
+
+                                            (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when any botton receives a click event. Passes back a single object representing the buttons config object. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;Object&gt;</code>
+                                                             The object passed to this handler is the button config used to create the button.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toolbarCollapsed">toolbarCollapsed</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>toolbarCollapsed</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the toolbar is collapsed via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="toolbarExpanded">toolbarExpanded</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>toolbarExpanded</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the toolbar is expanded via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="valueClick">valueClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>valueClick</strong>
+
+                                            (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This is a special dynamic event that is created and dispatched based on the value property
+of the button config. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+Example:
+<code><pre>
+buttons : [
+{ type: 'button', value: 'test', value: 'testButton' }
+]</pre>
+</code>
+With the valueClick event you could subscribe to this buttons click event with this:
+tbar.in('testButtonClick', function() { alert('test button clicked'); })
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;Object&gt;</code>
+                                                             The object passed to this handler is the button config used to create the button.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4><a name="buttons">buttons</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object specifying the buttons to include in the toolbar
+Example:
+<code><pre>
+{
+{ id: 'b3', type: 'button', label: 'Underline', value: 'underline' },
+{ type: 'separator' },
+{ id: 'b4', type: 'menu', label: 'Align', value: 'align',
+menu: [
+{ text: "Left", value: 'alignleft' },
+{ text: "Center", value: 'aligncenter' },
+{ text: "Right", value: 'alignright' }
+]
+}
+}
+</pre></code>
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="collapse">collapse</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the the titlebar should have a collapse button.
+The collapse button will not remove the toolbar, it will minimize it to the titlebar
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="cont">cont</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the toolbar should show the group label's text string.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="disabled">disabled</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the toolbar should be disabled. It will also disable the draggable attribute if it is on.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="draggable">draggable</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the toolbar should be draggable.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="grouplabels">grouplabels</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the toolbar should show the group label's text string.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="titlebar">titlebar</a>
+                                        <code>- Boolean or String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the toolbar should have a titlebar. If
+passed a string, it will use that as the titlebar text
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+
+                            </div>
+                        </div>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class="selected"><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a></li>
+                                <li class=""><a href="YAHOO.widget.EditorInfo.html">YAHOO.widget.EditorInfo</a></li>
+                                <li class=""><a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a></li>
+                                <li class="selected"><a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="editor.js.html">editor.js</a></li>
+                                <li class=""><a href="toolbar.js.html">toolbar.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="protected"><a href="#_buttonGroupList">_buttonGroupList</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_buttonList">_buttonList</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#_colorData">_colorData</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#_colorPicker">_colorPicker</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#_disabled">_disabled</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_sep">_sep</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_sepCount">_sepCount</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#_titlebar">_titlebar</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#_toolbarConfigs">_toolbarConfigs</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#browser">browser</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_CONTAINER">CLASS_CONTAINER</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_DISABLED">CLASS_DISABLED</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_DRAGHANDLE">CLASS_DRAGHANDLE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_PREFIX">CLASS_PREFIX</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#CLASS_SEPARATOR">CLASS_SEPARATOR</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#dd">dd</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#Dom">Dom</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class="protected"><a href="#draghandle">draghandle</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_COLLAPSE">STR_COLLAPSE</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_SPIN_DOWN">STR_SPIN_DOWN</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_SPIN_LABEL">STR_SPIN_LABEL</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#STR_SPIN_UP">STR_SPIN_UP</a>
+                                        <!--<code>&lt;String&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_addMenuClasses">_addMenuClasses</a>
+                                </li>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#_buttonClick">_buttonClick</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_createColorPicker">_createColorPicker</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_makeColorButton">_makeColorButton</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_makeSpinButton">_makeSpinButton</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_resetColorPicker">_resetColorPicker</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addButton">addButton</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addButtonGroup">addButtonGroup</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addButtonToGroup">addButtonToGroup</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#addSeparator">addSeparator</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#deselectAllButtons">deselectAllButtons</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#deselectButton">deselectButton</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#destroy">destroy</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#destroyButton">destroyButton</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#disableButton">disableButton</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#enableButton">enableButton</a>
+                                </li>
+                                <li class=""><!--<code><a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a></code>-->
+                                <a href="#getButtonById">getButtonById</a>
+                                </li>
+                                <li class=""><!--<code><a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a></code>-->
+                                <a href="#getButtonByIndex">getButtonByIndex</a>
+                                </li>
+                                <li class=""><!--<code><a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></code>-->
+                                <a href="#getButtonByValue">getButtonByValue</a>
+                                </li>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#getButtons">getButtons</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initAttributes">initAttributes</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#selectButton">selectButton</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#buttonClick">buttonClick</a>
+                                </li>
+                                <li class="">
+                                <a href="#toolbarCollapsed">toolbarCollapsed</a>
+                                </li>
+                                <li class="">
+                                <a href="#toolbarExpanded">toolbarExpanded</a>
+                                </li>
+                                <li class="">
+                                <a href="#valueClick">valueClick</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li class="">
+                                <a href="#buttons">buttons</a>
+                                </li>
+                                <li class="">
+                                <a href="#collapse">collapse</a>
+                                </li>
+                                <li class="">
+                                <a href="#cont">cont</a>
+                                </li>
+                                <li class="">
+                                <a href="#disabled">disabled</a>
+                                </li>
+                                <li class="">
+                                <a href="#draggable">draggable</a>
+                                </li>
+                                <li class="">
+                                <a href="#grouplabels">grouplabels</a>
+                                </li>
+                                <li class="">
+                                <a href="#titlebar">titlebar</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

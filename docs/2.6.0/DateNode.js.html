@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: treeview   DateNode.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_treeview.html">treeview</a>
+                
+                 &gt; DateNode.js (source view) 
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+        <span class="nx">Calendar</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">;</span>
+        
+<span class="c">/**</span>
+<span class="c"> * A Date-specific implementation that differs from TextNode in that it uses </span>
+<span class="c"> * YAHOO.widget.Calendar as an in-line editor, if available</span>
+<span class="c"> * If Calendar is not available, it behaves as a plain TextNode.</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class DateNode</span>
+<span class="c"> * @extends YAHOO.widget.TextNode</span>
+<span class="c"> * @param oData {object} a string or object containing the data that will</span>
+<span class="c"> * be used to render this node.</span>
+<span class="c"> * Providing a string is the same as providing an object with a single property named label.</span>
+<span class="c"> * All values in the oData will be used to set equally named properties in the node</span>
+<span class="c"> * as long as the node does have such properties, they are not undefined, private nor functions.</span>
+<span class="c"> * All attributes are made available in noderef.data, which</span>
+<span class="c"> * can be used to store custom attributes.  TreeView.getNode(s)ByProperty</span>
+<span class="c"> * can be used to retrieve a node by one of the attributes.</span>
+<span class="c"> * @param oParent {YAHOO.widget.Node} this node&#39;s parent node</span>
+<span class="c"> * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) </span>
+<span class="c"> * @constructor</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateNode</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The node type</span>
+<span class="c">     * @property _type</span>
+<span class="c">     * @type string</span>
+<span class="c">     * @private</span>
+<span class="c">     * @default  &quot;DateNode&quot;</span>
+<span class="c">     */</span>
+    <span class="nx">_type</span><span class="o">:</span> <span class="s2">&quot;DateNode&quot;</span><span class="o">,</span>
+    
+    <span class="c">/**</span>
+<span class="c">    * Configuration object for the Calendar editor, if used.</span>
+<span class="c">    * See &lt;a href=&quot;http://developer.yahoo.com/yui/calendar/#internationalization&quot;&gt;http://developer.yahoo.com/yui/calendar/#internationalization&lt;/a&gt;</span>
+<span class="c">    * @property calendarConfig</span>
+<span class="c">    */</span>
+    <span class="nx">calendarConfig</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    
+    
+    
+    <span class="c">/** </span>
+<span class="c">     *  If YAHOO.widget.Calendar is available, it will pop up a Calendar to enter a new date.  Otherwise, it falls back to a plain &amp;lt;input&amp;gt;  textbox</span>
+<span class="c">     * @method fillEditorContainer</span>
+<span class="c">     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information</span>
+<span class="c">     * @return void</span>
+<span class="c">     */</span>
+    <span class="nx">fillEditorContainer</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="k">var</span> <span class="nx">cal</span><span class="o">,</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">;</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">Calendar</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">replaceClass</span><span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">,</span><span class="s1">&#39;ygtv-edit-DateNode&#39;</span><span class="o">,</span><span class="s1">&#39;ygtv-edit-TextNode&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">fillEditorContainer</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">editorData</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+            
+        <span class="k">if</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">;</span>
+            <span class="nx">editorData</span><span class="o">.</span><span class="nx">saveOnEnter</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            
+            <span class="nx">editorData</span><span class="o">.</span><span class="nx">node</span><span class="o">.</span><span class="nx">destroyEditorContents</span><span class="o">(</span><span class="nx">editorData</span><span class="o">);</span>
+
+            <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputObject</span> <span class="o">=</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Calendar</span><span class="o">(</span><span class="nx">container</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">)));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">calendarConfig</span><span class="o">)</span> <span class="o">{</span> 
+                <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">calendarConfig</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span> 
+                <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="nx">cal</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">_closeEditor</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+            <span class="o">},</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">cal</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputObject</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span> 
+
+        <span class="k">var</span> <span class="nx">delim</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;DATE_FIELD_DELIMITER&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">pageDate</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="nx">delim</span><span class="o">);</span>
+        <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s1">&#39;pagedate&#39;</span><span class="o">,</span><span class="nx">pageDate</span><span class="o">[</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;MDY_MONTH_POSITION&#39;</span><span class="o">)</span> <span class="o">-</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="nx">delim</span> <span class="o">+</span> <span class="nx">pageDate</span><span class="o">[</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;MDY_YEAR_POSITION&#39;</span><span class="o">)</span> <span class="o">-</span><span class="m">1</span><span class="o">]);</span>
+        <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">();</span>
+
+        <span class="nx">cal</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+        <span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+    <span class="o">},</span>
+    <span class="c">/**</span>
+<span class="c">    * Saves the date entered in the editor into the DateNode label property and displays it.</span>
+<span class="c">    * Overrides Node.saveEditorValue</span>
+<span class="c">    * @method saveEditorValue</span>
+<span class="c">     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information</span>
+<span class="c">     */</span>
+    <span class="nx">saveEditorValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">node</span><span class="o">,</span> <span class="nx">value</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">Calendar</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">value</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputElement</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputObject</span><span class="o">,</span>
+                <span class="nx">date</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">()[</span><span class="m">0</span><span class="o">],</span>
+                <span class="nx">dd</span> <span class="o">=</span> <span class="o">[];</span>
+                
+            <span class="nx">dd</span><span class="o">[</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;MDY_DAY_POSITION&#39;</span><span class="o">)</span> <span class="o">-</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="nx">date</span><span class="o">.</span><span class="nx">getDate</span><span class="o">();</span>
+            <span class="nx">dd</span><span class="o">[</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;MDY_MONTH_POSITION&#39;</span><span class="o">)</span> <span class="o">-</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="nx">date</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="m">1</span><span class="o">;</span>
+            <span class="nx">dd</span><span class="o">[</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;MDY_YEAR_POSITION&#39;</span><span class="o">)</span> <span class="o">-</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="nx">date</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
+            <span class="nx">value</span> <span class="o">=</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s1">&#39;DATE_FIELD_DELIMITER&#39;</span><span class="o">));</span>
+        <span class="o">}</span>
+
+        <span class="nx">node</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+        <span class="nx">node</span><span class="o">.</span><span class="nx">data</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+        <span class="nx">node</span><span class="o">.</span><span class="nx">getLabelEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class="selected"><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.DateNode.html">YAHOO.widget.DateNode</a></li>
+                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
+                                <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
+                                <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a></li>
+                                <li class=""><a href="YAHOO.widget.TreeView.html">YAHOO.widget.TreeView</a></li>
+                                <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
+                                <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="DateNode.js.html">DateNode.js</a></li>
+                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                                <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
+                                <li class=""><a href="Node.js.html">Node.js</a></li>
+                                <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
+                                <li class=""><a href="TextNode.js.html">TextNode.js</a></li>
+                                <li class=""><a href="TreeView.js.html">TreeView.js</a></li>
+                                <li class=""><a href="TreeViewEd.js.html">TreeViewEd.js</a></li>
+                                <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
+                                <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
+                                <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

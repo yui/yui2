@@ -1,0 +1,295 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop  YAHOO.util.DDTarget   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                 &gt; YAHOO.util.DDTarget 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.DDTarget</b>
+                        <span class="extends">
+                           - extends <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        A DragDrop implementation that does not move, but can be a drop 
+target.  You would get the same result by simply omitting implementation 
+for the event callbacks, but this way we reduce the processing cost of the 
+event listener and the callbacks.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.DDTarget</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                id
+
+                                                , 
+                                                sGroup
+
+                                                , 
+                                                config
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>id
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     the id of the element that is a drop target
+                                                </dd>
+                                                <dd>
+                                                    <code>sGroup
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     the group of related DragDrop objects
+                                                </dd>
+                                                <dd>
+                                                    <code>config
+                                                    &lt;object&gt; 
+                                                    </code>
+                                                     an object containing configurable attributes
+Valid properties for DDTarget in addition to those in 
+DragDrop: 
+none
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <div class="section field inheritance">
+                            <h4>Properties inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                            <div class="content">
+                                <code>
+                                    
+                                        <a href="YAHOO.util.DragDrop.html#__ygDragDrop">__ygDragDrop</a>,
+                                        <a href="YAHOO.util.DragDrop.html#_domRef">_domRef</a>,
+                                        <a href="YAHOO.util.DragDrop.html#available">available</a>,
+                                        <a href="YAHOO.util.DragDrop.html#config">config</a>,
+                                        <a href="YAHOO.util.DragDrop.html#constrainX">constrainX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#constrainY">constrainY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#dragElId">dragElId</a>,
+                                        <a href="YAHOO.util.DragDrop.html#groups">groups</a>,
+                                        <a href="YAHOO.util.DragDrop.html#handleElId">handleElId</a>,
+                                        <a href="YAHOO.util.DragDrop.html#hasOuterHandles">hasOuterHandles</a>,
+                                        <a href="YAHOO.util.DragDrop.html#id">id</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>,
+                                        <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>,
+                                        <a href="YAHOO.util.DragDrop.html#locked">locked</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maxX">maxX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#maxY">maxY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#minX">minX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#minY">minY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>,
+                                        <a href="YAHOO.util.DragDrop.html#startPageX">startPageX</a>,
+                                        <a href="YAHOO.util.DragDrop.html#startPageY">startPageY</a>,
+                                        <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>,
+                                        <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>
+                                </code>
+                            </div>
+                        </div>
+
+
+                            <div class="section field inheritance">
+                                <h4>Methods inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                                <div class="content">
+                                    <code>
+                                        
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#applyConfig">applyConfig</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4Drag">b4Drag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragDrop">b4DragDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragOut">b4DragOut</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4DragOver">b4DragOver</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4EndDrag">b4EndDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4MouseDown">b4MouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#b4StartDrag">b4StartDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearConstraints">clearConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#clearTicks">clearTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#endDrag">endDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>,
+                                            <a href="YAHOO.util.DragDrop.html#getTick">getTick</a>,
+                                            <a href="YAHOO.util.DragDrop.html#handleMouseDown">handleMouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#handleOnAvailable">handleOnAvailable</a>,
+                                            <a href="YAHOO.util.DragDrop.html#init">init</a>,
+                                            <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>,
+                                            <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>,
+                                            <a href="YAHOO.util.DragDrop.html#lock">lock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onInvalidDrop">onInvalidDrop</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>,
+                                            <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>,
+                                            <a href="YAHOO.util.DragDrop.html#padding">padding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeFromGroup">removeFromGroup</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>,
+                                            <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setInitialPosition">setInitialPosition</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setStartPosition">setStartPosition</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setXTicks">setXTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>,
+                                            <a href="YAHOO.util.DragDrop.html#setYTicks">setYTicks</a>,
+                                            <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>,
+                                            <a href="YAHOO.util.DragDrop.html#toString">toString</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>,
+                                            <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>
+                                    </code>
+                                </div>
+                            </div>
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class="selected"><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,940 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: history  YAHOO.util.History   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Browser History Manager&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_history.html">history</a>
+                 &gt; YAHOO.util.History 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.History</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The History class provides the ability to use the back/forward navigation
+buttons in a DHTML application. It also allows a DHTML application to
+be bookmarked in a specific state.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.util.History</strong>
+                                <code>
+                                    (
+                                    )
+                                </code>
+                                <div class="description">
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="_bhmReady">_bhmReady</a>
+                                        <code>- private boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag used to tell whether the Browser History Manager is ready.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_browser">_browser</a>
+                                        <code>- private string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String identifying which browser we are in.
+Different code is run depending on which browser you are using.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "unknown"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_fqstates">_fqstates</a>
+                                        <code>- private array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            List of fully qualified states. This is used only by Safari.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: []
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_iframe">_iframe</a>
+                                        <code>- private HTMLIFrameElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Our hidden IFrame used to store the browsing history.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_initialized">_initialized</a>
+                                        <code>- private boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag used to tell whether YAHOO.util.History.initialize has been called.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_modules">_modules</a>
+                                        <code>- private array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            List of registered modules.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: []
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_storageField">_storageField</a>
+                                        <code>- private HTMLInputElement|HTMLTextAreaElement</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            INPUT field (with type="hidden" or type="text") or TEXTAREA.
+This field keeps the value of the initial state, current state
+the list of all states across pages within a single browser session.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_storageFieldReady">_storageFieldReady</a>
+                                        <code>- private boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag used to tell whether the storage field is ready to be used.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_checkIframeLoaded">_checkIframeLoaded</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_checkIframeLoaded</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Periodically checks whether our internal IFrame is ready to be used.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_getHash">_getHash</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        string
+                                            <strong>_getHash</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            location.hash is a bit buggy on Opera. I have seen instances where
+navigating the history using the back/forward buttons, and hence
+changing the URL, would not change location.hash. That's ok, the
+implementation of an equivalent is trivial.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The hash portion of the document's location</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_handleFQStateChange">_handleFQStateChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_handleFQStateChange</strong>
+                                           (
+                                                
+                                                        
+                                                         fqstate
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the new currentState attribute of all modules depending on the new
+fully qualified state. Also notifies the modules which current state has
+changed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>fqstate &lt;string&gt;</code>
+                                                             Fully qualified state
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_initialize">_initialize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_initialize</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Finish up the initialization of the Browser History Manager.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_storeStates">_storeStates</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_storeStates</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Stores all the registered modules' initial state and current state.
+On Safari, we also store all the fully qualified states visited by
+the application within a single browser session. The storage takes
+place in the form field specified during initialization.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_trim">_trim</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        string
+                                            <strong>_trim</strong>
+                                           (
+                                                
+                                                        
+                                                         str
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Trims a string.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>str &lt;string&gt;</code>
+                                                             The string to be trimmed.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The trimmed string</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getBookmarkedState">getBookmarkedState</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>getBookmarkedState</strong>
+                                           (
+                                                
+                                                        
+                                                         module
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the state of a module according to the URL fragment
+identifier. This method is useful to initialize your modules
+if your application was bookmarked from a particular state.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>module &lt;string&gt;</code>
+                                                             Non-empty string representing your module.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The bookmarked state of the specified module.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getCurrentState">getCurrentState</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>getCurrentState</strong>
+                                           (
+                                                
+                                                        
+                                                         module
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current state of the specified module.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>module &lt;string&gt;</code>
+                                                             Non-empty string representing your module.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The current state of the specified module.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getQueryStringParameter">getQueryStringParameter</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>getQueryStringParameter</strong>
+                                           (
+                                                
+                                                        
+                                                         paramName
+                                                    
+                                                
+                                                        , 
+                                                         queryString
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the value of the specified query string parameter.
+This method is not used internally by the Browser History Manager.
+However, it is provided here as a helper since many applications
+using the Browser History Manager will want to read the value of
+url parameters to initialize themselves.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>paramName &lt;string&gt;</code>
+                                                             Name of the parameter we want to look up.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>queryString &lt;string&gt;</code>
+                                                             Optional URL to look at. If not specified,
+this method uses the URL in the address bar.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The value of the specified parameter, or null.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initialize">initialize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initialize</strong>
+                                           (
+                                                
+                                                        
+                                                         iframeTarget
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes the Browser History Manager. Call this method
+from a script block located right after the opening body tag.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>iframeTarget &lt;string&gt;</code>
+                                                             Optional - Path to an existing
+HTML document accessible from the same domain. If not
+specified, defaults to "blank.html"
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="navigate">navigate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>navigate</strong>
+                                           (
+                                                
+                                                        
+                                                         module
+                                                    
+                                                
+                                                        , 
+                                                         state
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Call this method when you want to store a new entry in the browser's history.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>module &lt;string&gt;</code>
+                                                             Non-empty string representing your module.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>state &lt;string&gt;</code>
+                                                             String representing the new state of the specified module.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>Indicates whether the new state was successfully added to the history.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="register">register</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>register</strong>
+                                           (
+                                                
+                                                        
+                                                         module
+                                                    
+                                                
+                                                        , 
+                                                         initialState
+                                                    
+                                                
+                                                        , 
+                                                         onStateChange
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Registers a new module.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>module &lt;string&gt;</code>
+                                                             Non-empty string uniquely identifying the
+module you wish to register.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>initialState &lt;string&gt;</code>
+                                                             The initial state of the specified
+module corresponding to its earliest history entry.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>onStateChange &lt;function&gt;</code>
+                                                             Callback called when the
+state of the specified module has changed.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="onLoadEvent">onLoadEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>onLoadEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when the Browser History Manager is ready.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class="selected"><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.History.html">YAHOO.util.History</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="history.js.html">history.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#_bhmReady">_bhmReady</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_browser">_browser</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_fqstates">_fqstates</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_iframe">_iframe</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_initialized">_initialized</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_modules">_modules</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_storageField">_storageField</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#_storageFieldReady">_storageFieldReady</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_checkIframeLoaded">_checkIframeLoaded</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#_getHash">_getHash</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_handleFQStateChange">_handleFQStateChange</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_initialize">_initialize</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_storeStates">_storeStates</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#_trim">_trim</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#getBookmarkedState">getBookmarkedState</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#getCurrentState">getCurrentState</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#getQueryStringParameter">getQueryStringParameter</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initialize">initialize</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#navigate">navigate</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#register">register</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#onLoadEvent">onLoadEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

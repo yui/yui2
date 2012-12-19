@@ -1,0 +1,1413 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: event   Event.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_event.html">event</a>
+                
+                 &gt; Event.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * The Event Utility provides utilities for managing DOM Events and tools</span>
+<span class="c"> * for building event systems</span>
+<span class="c"> *</span>
+<span class="c"> * @module event</span>
+<span class="c"> * @title Event Utility</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @requires yahoo</span>
+<span class="c"> */</span>
+
+<span class="c">// The first instance of Event will win if it is loaded more than once.</span>
+<span class="c">// @TODO this needs to be changed so that only the state data that needs to</span>
+<span class="c">// be preserved is kept, while methods are overwritten/added as needed.</span>
+<span class="c">// This means that the module pattern can&#39;t be used.</span>
+<span class="c"></span><span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="c">/**</span>
+<span class="c"> * The event utility provides functions to add and remove event listeners,</span>
+<span class="c"> * event cleansing.  It also tries to automatically remove listeners it</span>
+<span class="c"> * registers during the unload event.</span>
+<span class="c"> *</span>
+<span class="c"> * @class Event</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="c">/**</span>
+<span class="c">         * True after the onload event has fired</span>
+<span class="c">         * @property loadComplete</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">loadComplete</span> <span class="o">=</span>  <span class="kc">false</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Cache of wrapped listeners</span>
+<span class="c">         * @property listeners</span>
+<span class="c">         * @type array</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * User-defined unload function that will be fired before all events</span>
+<span class="c">         * are detached</span>
+<span class="c">         * @property unloadListeners</span>
+<span class="c">         * @type array</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Cache of DOM0 event handlers to work around issues with DOM2 events</span>
+<span class="c">         * in Safari</span>
+<span class="c">         * @property legacyEvents</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Listener stack for DOM0 events</span>
+<span class="c">         * @property legacyHandlers</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">legacyHandlers</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * The number of times to poll after window.onload.  This number is</span>
+<span class="c">         * increased if additional late-bound handlers are requested after</span>
+<span class="c">         * the page load.</span>
+<span class="c">         * @property retryCount</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">retryCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * onAvailable listeners</span>
+<span class="c">         * @property onAvailStack</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Lookup table for legacy events</span>
+<span class="c">         * @property legacyMap</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">legacyMap</span> <span class="o">=</span> <span class="o">[];</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Counter for auto id generation</span>
+<span class="c">         * @property counter</span>
+<span class="c">         * @static</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * addListener/removeListener can throw errors in unexpected scenarios.</span>
+<span class="c">         * These errors are suppressed, the method returns false, and this property</span>
+<span class="c">         * is set</span>
+<span class="c">         * @property lastError</span>
+<span class="c">         * @type Error</span>
+<span class="c">         */</span>
+        <span class="k">var</span> <span class="nx">lastError</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="o">{</span>
+
+            <span class="c">/**</span>
+<span class="c">             * The number of times we should look for elements that are not</span>
+<span class="c">             * in the DOM at the time the event is requested after the document</span>
+<span class="c">             * has been loaded.  The default is 200@amp;50 ms, so it will poll</span>
+<span class="c">             * for 10 seconds or until all outstanding handlers are bound</span>
+<span class="c">             * (whichever comes first).</span>
+<span class="c">             * @property POLL_RETRYS</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">POLL_RETRYS</span><span class="o">:</span> <span class="m">200</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * The poll interval in milliseconds</span>
+<span class="c">             * @property POLL_INTERVAL</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">POLL_INTERVAL</span><span class="o">:</span> <span class="m">20</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Element to bind, int constant</span>
+<span class="c">             * @property EL</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">EL</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Type of event, int constant</span>
+<span class="c">             * @property TYPE</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">TYPE</span><span class="o">:</span> <span class="m">1</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Function to execute, int constant</span>
+<span class="c">             * @property FN</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">FN</span><span class="o">:</span> <span class="m">2</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Function wrapped for scope correction and cleanup, int constant</span>
+<span class="c">             * @property WFN</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">WFN</span><span class="o">:</span> <span class="m">3</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Object passed in by the user that will be returned as a </span>
+<span class="c">             * parameter to the callback, int constant</span>
+<span class="c">             * @property OBJ</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">OBJ</span><span class="o">:</span> <span class="m">3</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Adjusted scope, either the element we are registering the event</span>
+<span class="c">             * on or the custom object passed in by the listener, int constant</span>
+<span class="c">             * @property ADJ_SCOPE</span>
+<span class="c">             * @type int</span>
+<span class="c">             * @static</span>
+<span class="c">             * @final</span>
+<span class="c">             */</span>
+            <span class="nx">ADJ_SCOPE</span><span class="o">:</span> <span class="m">4</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Safari detection is necessary to work around the preventDefault</span>
+<span class="c">             * bug that makes it so you can&#39;t cancel a href click from the </span>
+<span class="c">             * handler.  Since this function has been used outside of this</span>
+<span class="c">             * utility, it was changed to detect all KHTML browser to be more</span>
+<span class="c">             * friendly towards the non-Safari browsers that share the engine.</span>
+<span class="c">             * Internally, the preventDefault bug detection now uses the</span>
+<span class="c">             * webkit property.</span>
+<span class="c">             * @property isSafari</span>
+<span class="c">             * @private</span>
+<span class="c">             * @static</span>
+<span class="c">             * @deprecated</span>
+<span class="c">             */</span>
+            <span class="nx">isSafari</span><span class="o">:</span> <span class="o">(</span><span class="sr">/KHTML/gi</span><span class="o">).</span><span class="nx">test</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">),</span>
+            
+            <span class="c">/**</span>
+<span class="c">             * If WebKit is detected, we keep track of the version number of</span>
+<span class="c">             * the engine.</span>
+<span class="c">             * Safari 1.3.2 (312.6): 312.8.1 &lt;-- currently the latest</span>
+<span class="c">             *                       available on Mac OSX 10.3.</span>
+<span class="c">             * Safari 2.0.2: 416 &lt;-- hasOwnProperty introduced</span>
+<span class="c">             * Safari 2.0.4: 418 &lt;-- preventDefault fixed (I believe)</span>
+<span class="c">             * Safari 2.0.4 (419.3): 418.9.1 &lt;-- current release</span>
+<span class="c">             *</span>
+<span class="c">             * http://developer.apple.com/internet/safari/uamatrix.html</span>
+<span class="c">             * @property webkit</span>
+<span class="c">             */</span>
+            <span class="nx">webkit</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">v</span><span class="o">=</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/AppleWebKit\/([^ ]*)/</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">v</span><span class="o">&amp;&amp;</span><span class="nx">v</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nx">v</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}(),</span>
+            
+            <span class="c">/**</span>
+<span class="c">             * IE detection needed to properly calculate pageX and pageY.  </span>
+<span class="c">             * capabilities checking didn&#39;t seem to work because another </span>
+<span class="c">             * browser that does not provide the properties have the values </span>
+<span class="c">             * calculated in a different manner than IE.</span>
+<span class="c">             * @property isIE</span>
+<span class="c">             * @private</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">isIE</span><span class="o">:</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/opera/gi</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+                    <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/msie/gi</span><span class="o">)),</span>
+
+            <span class="c">/**</span>
+<span class="c">             * poll handle</span>
+<span class="c">             * @property _interval</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_interval</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+            <span class="c">/**</span>
+<span class="c">             * @method startInterval</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">startInterval</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+                    <span class="k">var</span> <span class="nx">callback</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">();</span> <span class="o">};</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span>
+                    <span class="c">// this.timeout = setTimeout(callback, i);</span>
+<span class="c"></span>                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Executes the supplied callback when the item with the supplied</span>
+<span class="c">             * id is found.  This is meant to be used to execute behavior as</span>
+<span class="c">             * soon as possible as the page loads.  If you use this after the</span>
+<span class="c">             * initial page load it will poll for a fixed time for the element.</span>
+<span class="c">             * The number of times it will poll and the frequency are</span>
+<span class="c">             * configurable.  By default it will poll for 10 seconds.</span>
+<span class="c">             *</span>
+<span class="c">             * @method onAvailable</span>
+<span class="c">             *</span>
+<span class="c">             * @param {string}   p_id the id of the element to look for.</span>
+<span class="c">             * @param {function} p_fn what to execute when the element is found.</span>
+<span class="c">             * @param {object}   p_obj an optional object to be passed back as</span>
+<span class="c">             *                   a parameter to p_fn.</span>
+<span class="c">             * @param {boolean}  p_override If set to true, p_fn will execute</span>
+<span class="c">             *                   in the scope of p_obj</span>
+<span class="c">             *</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">onAvailable</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_id</span><span class="o">,</span> <span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">p_override</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">onAvailStack</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="o">{</span> <span class="nx">id</span><span class="o">:</span>         <span class="nx">p_id</span><span class="o">,</span> 
+                                     <span class="nx">fn</span><span class="o">:</span>         <span class="nx">p_fn</span><span class="o">,</span> 
+                                     <span class="nx">obj</span><span class="o">:</span>        <span class="nx">p_obj</span><span class="o">,</span> 
+                                     <span class="nx">override</span><span class="o">:</span>   <span class="nx">p_override</span><span class="o">,</span> 
+                                     <span class="nx">checkReady</span><span class="o">:</span> <span class="kc">false</span>    <span class="o">}</span> <span class="o">);</span>
+
+                <span class="nx">retryCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">POLL_RETRYS</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Works the same way as onAvailable, but additionally checks the</span>
+<span class="c">             * state of sibling elements to determine if the content of the</span>
+<span class="c">             * available element is safe to modify.</span>
+<span class="c">             *</span>
+<span class="c">             * @method onContentReady</span>
+<span class="c">             *</span>
+<span class="c">             * @param {string}   p_id the id of the element to look for.</span>
+<span class="c">             * @param {function} p_fn what to execute when the element is ready.</span>
+<span class="c">             * @param {object}   p_obj an optional object to be passed back as</span>
+<span class="c">             *                   a parameter to p_fn.</span>
+<span class="c">             * @param {boolean}  p_override If set to true, p_fn will execute</span>
+<span class="c">             *                   in the scope of p_obj</span>
+<span class="c">             *</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">onContentReady</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_id</span><span class="o">,</span> <span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">p_override</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">onAvailStack</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="o">{</span> <span class="nx">id</span><span class="o">:</span>         <span class="nx">p_id</span><span class="o">,</span> 
+                                     <span class="nx">fn</span><span class="o">:</span>         <span class="nx">p_fn</span><span class="o">,</span> 
+                                     <span class="nx">obj</span><span class="o">:</span>        <span class="nx">p_obj</span><span class="o">,</span> 
+                                     <span class="nx">override</span><span class="o">:</span>   <span class="nx">p_override</span><span class="o">,</span>
+                                     <span class="nx">checkReady</span><span class="o">:</span> <span class="kc">true</span>      <span class="o">}</span> <span class="o">);</span>
+
+                <span class="nx">retryCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">POLL_RETRYS</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Appends an event handler</span>
+<span class="c">             *</span>
+<span class="c">             * @method addListener</span>
+<span class="c">             *</span>
+<span class="c">             * @param {Object}   el        The html element to assign the </span>
+<span class="c">             *                             event to</span>
+<span class="c">             * @param {String}   sType     The type of event to append</span>
+<span class="c">             * @param {Function} fn        The method the event invokes</span>
+<span class="c">             * @param {Object}   obj    An arbitrary object that will be </span>
+<span class="c">             *                             passed as a parameter to the handler</span>
+<span class="c">             * @param {boolean}  override  If true, the obj passed in becomes</span>
+<span class="c">             *                             the execution scope of the listener</span>
+<span class="c">             * @return {boolean} True if the action was successful or defered,</span>
+<span class="c">             *                        false if one or more of the elements </span>
+<span class="c">             *                        could not have the listener attached,</span>
+<span class="c">             *                        or if the operation throws an exception.</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+
+
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">fn</span> <span class="o">||</span> <span class="o">!</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// this.logger.debug(&quot;Error, function is not valid &quot; + fn);</span>
+<span class="c"></span>                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// The el argument can be an array of elements or element ids.</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">_isValidCollection</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">el</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">ok</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> 
+                                       <span class="nx">sType</span><span class="o">,</span> 
+                                       <span class="nx">fn</span><span class="o">,</span> 
+                                       <span class="nx">obj</span><span class="o">,</span> 
+                                       <span class="nx">override</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">ok</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">return</span> <span class="nx">ok</span><span class="o">;</span>
+
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">oEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+                    <span class="c">// If the el argument is a string, we assume it is </span>
+<span class="c"></span>                    <span class="c">// actually the id of the element.  If the page is loaded</span>
+<span class="c"></span>                    <span class="c">// we convert el to the actual element, otherwise we </span>
+<span class="c"></span>                    <span class="c">// defer attaching the event until onload event fires</span>
+<span class="c"></span>
+                    <span class="c">// check to see if we need to delay hooking up the event </span>
+<span class="c"></span>                    <span class="c">// until after the page loads.</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">oEl</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">el</span> <span class="o">=</span> <span class="nx">oEl</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="c">// defer adding the event until the element is available</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                           <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">);</span>
+                        <span class="o">});</span>
+
+                        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// Element should be an html element or an array if we get </span>
+<span class="c"></span>                <span class="c">// here.</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// this.logger.debug(&quot;unable to attach event &quot; + sType);</span>
+<span class="c"></span>                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// we need to make sure we fire registered unload events </span>
+<span class="c"></span>                <span class="c">// prior to automatically unhooking them.  So we hang on to </span>
+<span class="c"></span>                <span class="c">// these instead of attaching them to the window and fire the</span>
+<span class="c"></span>                <span class="c">// handles explicitly during our one unload event.</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;unload&quot;</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span> <span class="o">!==</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span>
+                            <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">];</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// this.logger.debug(&quot;Adding handler: &quot; + el + &quot;, &quot; + sType);</span>
+<span class="c"></span>
+                <span class="c">// if the user chooses to override the scope, we use the custom</span>
+<span class="c"></span>                <span class="c">// object passed in, otherwise the executing scope will be the</span>
+<span class="c"></span>                <span class="c">// HTML element that the event is registered on</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">override</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// wrap the function so we can return the obj object when</span>
+<span class="c"></span>                <span class="c">// the event fires;</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">wrappedFn</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> 
+                                <span class="nx">obj</span><span class="o">);</span>
+                    <span class="o">};</span>
+
+                <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">scope</span><span class="o">];</span>
+                <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+                <span class="c">// cache the listener so we can try to automatically unload</span>
+<span class="c"></span>                <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="nx">li</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">useLegacyEvent</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLegacyIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+
+                    <span class="c">// Add a new dom0 wrapper if one is not detected for this</span>
+<span class="c"></span>                    <span class="c">// element</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span> <span class="nx">legacyIndex</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> 
+                                <span class="nx">el</span> <span class="o">!=</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
+
+                        <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="nx">legacyEvents</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+                        <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> <span class="nx">legacyIndex</span><span class="o">;</span>
+
+                        <span class="c">// cache the signature for the DOM0 event, and </span>
+<span class="c"></span>                        <span class="c">// include the existing handler for the event, if any</span>
+<span class="c"></span>                        <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> 
+                            <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]];</span>
+                        <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
+
+                        <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> 
+                            <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">fireLegacyEvent</span><span class="o">(</span>
+                                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> <span class="nx">legacyIndex</span><span class="o">);</span>
+                            <span class="o">};</span>
+                    <span class="o">}</span>
+
+                    <span class="c">// add a reference to the wrapped listener to our custom</span>
+<span class="c"></span>                    <span class="c">// stack of events</span>
+<span class="c"></span>                    <span class="c">//legacyHandlers[legacyIndex].push(index);</span>
+<span class="c"></span>                    <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">].</span><span class="nx">push</span><span class="o">(</span><span class="nx">li</span><span class="o">);</span>
+
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c">// handle an error trying to attach an event.  If it fails</span>
+<span class="c"></span>                        <span class="c">// we need to clean up the cache</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * When using legacy events, the handler is routed to this object</span>
+<span class="c">             * so we can fire our custom listener stack.</span>
+<span class="c">             * @method fireLegacyEvent</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">fireLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">legacyIndex</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// this.logger.debug(&quot;fireLegacyEvent &quot; + legacyIndex);</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">ok</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="nx">le</span><span class="o">,</span><span class="nx">lh</span><span class="o">,</span><span class="nx">li</span><span class="o">,</span><span class="nx">scope</span><span class="o">,</span><span class="nx">ret</span><span class="o">;</span>
+                
+                <span class="nx">lh</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">lh</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">li</span> <span class="o">=</span> <span class="nx">lh</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span> <span class="o">&amp;&amp;</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">];</span>
+                        <span class="nx">ret</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+                        <span class="nx">ok</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">ret</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// Fire the original handler if we replaced one.  We fire this</span>
+<span class="c"></span>                <span class="c">// after the other events to keep stopPropagation/preventDefault</span>
+<span class="c"></span>                <span class="c">// that happened in the DOM0 handler from touching our DOM2</span>
+<span class="c"></span>                <span class="c">// substitute</span>
+<span class="c"></span>                <span class="nx">le</span> <span class="o">=</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">le</span> <span class="o">&amp;&amp;</span> <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">](</span><span class="nx">e</span><span class="o">);</span>
+                <span class="o">}</span>
+                
+                <span class="k">return</span> <span class="nx">ok</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the legacy event index that matches the supplied </span>
+<span class="c">             * signature</span>
+<span class="c">             * @method getLegacyIndex</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">getLegacyIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span> 
+                    <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Logic that determines when we should automatically use legacy</span>
+<span class="c">             * events instead of DOM2 events.  Currently this is limited to old</span>
+<span class="c">             * Safari browsers with a broken preventDefault</span>
+<span class="c">             * @method useLegacyEvent</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">useLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="s2">&quot;click&quot;</span><span class="o">==</span><span class="nx">sType</span> <span class="o">||</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">==</span><span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span><span class="o">&lt;</span><span class="m">418</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">},</span>
+                    
+            <span class="c">/**</span>
+<span class="c">             * Removes an event handler</span>
+<span class="c">             *</span>
+<span class="c">             * @method removeListener</span>
+<span class="c">             *</span>
+<span class="c">             * @param {Object} el the html element or the id of the element to </span>
+<span class="c">             * assign the event to.</span>
+<span class="c">             * @param {String} sType the type of event to remove.</span>
+<span class="c">             * @param {Function} fn the method the event invokes.  If fn is</span>
+<span class="c">             * undefined, then all event handlers for the type of event are </span>
+<span class="c">             * removed.</span>
+<span class="c">             * @return {boolean} true if the unbind was successful, false </span>
+<span class="c">             * otherwise.</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">removeListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+
+                <span class="c">// The el argument can be a string</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+                <span class="c">// The el argument can be an array of elements or element ids.</span>
+<span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">_isValidCollection</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">el</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">ok</span> <span class="o">=</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">ok</span> <span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">return</span> <span class="nx">ok</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">fn</span> <span class="o">||</span> <span class="o">!</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// this.logger.debug(&quot;Error, function is not valid &quot; + fn);</span>
+<span class="c"></span>                    <span class="c">//return false;</span>
+<span class="c"></span>                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+                <span class="o">}</span>
+
+
+                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;unload&quot;</span> <span class="o">==</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">li</span> <span class="o">&amp;&amp;</span> 
+                            <span class="nx">li</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> 
+                            <span class="nx">li</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> 
+                            <span class="nx">li</span><span class="o">[</span><span class="m">2</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+                                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">var</span> <span class="nx">cacheItem</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+                <span class="c">// The index is a hidden parameter; needed to remove it from</span>
+<span class="c"></span>                <span class="c">// the method signature because it was tempting users to</span>
+<span class="c"></span>                <span class="c">// try and take advantage of it, which is not possible.</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">arguments</span><span class="o">[</span><span class="m">3</span><span class="o">];</span>
+  
+                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;undefined&quot;</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">cacheItem</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">];</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span> <span class="o">||</span> <span class="o">!</span><span class="nx">cacheItem</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// this.logger.debug(&quot;cached listener not found&quot;);</span>
+<span class="c"></span>                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="c">// this.logger.debug(&quot;Removing handler: &quot; + el + &quot;, &quot; + sType);</span>
+<span class="c"></span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">useLegacyEvent</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLegacyIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+                    <span class="k">var</span> <span class="nx">llist</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">llist</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">llist</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="nx">li</span> <span class="o">=</span> <span class="nx">llist</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="nx">li</span> <span class="o">&amp;&amp;</span> 
+                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> 
+                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">]</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> 
+                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="nx">llist</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+                                    <span class="k">break</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
+                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="c">// removed the wrapped handler</span>
+<span class="c"></span>                <span class="nx">delete</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">][</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">];</span>
+                <span class="nx">delete</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">][</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">];</span>
+                <span class="nx">listeners</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
+
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the event&#39;s target element</span>
+<span class="c">             * @method getTarget</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @param {boolean} resolveTextNode when set to true the target&#39;s</span>
+<span class="c">             *                  parent will be returned if the target is a </span>
+<span class="c">             *                  text node.  @deprecated, the text node is</span>
+<span class="c">             *                  now resolved automatically</span>
+<span class="c">             * @return {HTMLElement} the event&#39;s target</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getTarget</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">,</span> <span class="nx">resolveTextNode</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">resolveTextNode</span><span class="o">(</span><span class="nx">t</span><span class="o">);</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * In some cases, some browsers will return a text node inside</span>
+<span class="c">             * the actual element that was targeted.  This normalizes the</span>
+<span class="c">             * return value for getTarget and getRelatedTarget.</span>
+<span class="c">             * @method resolveTextNode</span>
+<span class="c">             * @param {HTMLElement} node node to resolve</span>
+<span class="c">             * @return {HTMLElement} the normized node</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">resolveTextNode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// if (node &amp;&amp; node.nodeName &amp;&amp; </span>
+<span class="c"></span>                        <span class="c">// &quot;#TEXT&quot; == node.nodeName.toUpperCase()) {</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">node</span> <span class="o">&amp;&amp;</span> <span class="m">3</span> <span class="o">==</span> <span class="nx">node</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nx">node</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nx">node</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the event&#39;s pageX</span>
+<span class="c">             * @method getPageX</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {int} the event&#39;s pageX</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getPageX</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">pageX</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="m">0</span> <span class="o">!==</span> <span class="nx">x</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">x</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">clientX</span> <span class="o">||</span> <span class="m">0</span><span class="o">;</span>
+
+                    <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">isIE</span> <span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">x</span> <span class="o">+=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getScrollLeft</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">x</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the event&#39;s pageY</span>
+<span class="c">             * @method getPageY</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {int} the event&#39;s pageY</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getPageY</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">pageY</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="m">0</span> <span class="o">!==</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">y</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">clientY</span> <span class="o">||</span> <span class="m">0</span><span class="o">;</span>
+
+                    <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">isIE</span> <span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">y</span> <span class="o">+=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getScrollTop</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+
+                <span class="k">return</span> <span class="nx">y</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the pageX and pageY properties as an indexed array.</span>
+<span class="c">             * @method getXY</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {[x, y]} the pageX and pageY properties of the event</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getXY</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">ev</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">ev</span><span class="o">)];</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the event&#39;s related target </span>
+<span class="c">             * @method getRelatedTarget</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {HTMLElement} the event&#39;s relatedTarget</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getRelatedTarget</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">relatedTarget</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">t</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">toElement</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">fromElement</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">resolveTextNode</span><span class="o">(</span><span class="nx">t</span><span class="o">);</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the time of the event.  If the time is not included, the</span>
+<span class="c">             * event is modified using the current time.</span>
+<span class="c">             * @method getTime</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {Date} the time of the event</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getTime</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">ev</span><span class="o">.</span><span class="nx">time</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">().</span><span class="nx">getTime</span><span class="o">();</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="nx">ev</span><span class="o">.</span><span class="nx">time</span> <span class="o">=</span> <span class="nx">t</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span> 
+                        <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
+                        <span class="k">return</span> <span class="nx">t</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">time</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Convenience method for stopPropagation + preventDefault</span>
+<span class="c">             * @method stopEvent</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">stopEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">stopPropagation</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Stops event propagation</span>
+<span class="c">             * @method stopPropagation</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">stopPropagation</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">stopPropagation</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">ev</span><span class="o">.</span><span class="nx">stopPropagation</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">ev</span><span class="o">.</span><span class="nx">cancelBubble</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Prevents the default behavior of the event</span>
+<span class="c">             * @method preventDefault</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">preventDefault</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">ev</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">ev</span><span class="o">.</span><span class="nx">returnValue</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+             
+            <span class="c">/**</span>
+<span class="c">             * Finds the event in the window object, the caller&#39;s arguments, or</span>
+<span class="c">             * in the arguments of another method in the callstack.  This is</span>
+<span class="c">             * executed automatically for events registered through the event</span>
+<span class="c">             * manager, so the implementer should not normally need to execute</span>
+<span class="c">             * this function at all.</span>
+<span class="c">             * @method getEvent</span>
+<span class="c">             * @param {Event} e the event parameter from the handler</span>
+<span class="c">             * @return {Event} the event </span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="o">.</span><span class="nx">event</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">.</span><span class="nx">caller</span><span class="o">;</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">ev</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">arguments</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span> <span class="o">&amp;&amp;</span> <span class="nx">Event</span> <span class="o">==</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">constructor</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="nx">c</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">caller</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">ev</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the charcode for an event</span>
+<span class="c">             * @method getCharCode</span>
+<span class="c">             * @param {Event} ev the event</span>
+<span class="c">             * @return {int} the event&#39;s charCode</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">getCharCode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">charCode</span> <span class="o">||</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">||</span> <span class="m">0</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Locating the saved event handler data by function ref</span>
+<span class="c">             *</span>
+<span class="c">             * @method _getCacheIndex</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_getCacheIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span>                 <span class="o">&amp;&amp;</span> 
+                         <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span>  <span class="o">&amp;&amp;</span> 
+                         <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span>  <span class="o">&amp;&amp;</span> 
+                         <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">]</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="nx">i</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Generates an unique ID for the element if it does not already </span>
+<span class="c">             * have one.</span>
+<span class="c">             * @method generateId</span>
+<span class="c">             * @param el the element to create the id for</span>
+<span class="c">             * @return {string} the resulting id of the element</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">generateId</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;yuievtautoid-&quot;</span> <span class="o">+</span> <span class="nx">counter</span><span class="o">;</span>
+                    <span class="o">++</span><span class="nx">counter</span><span class="o">;</span>
+                    <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="nx">id</span><span class="o">;</span>
+            <span class="o">},</span>
+
+
+            <span class="c">/**</span>
+<span class="c">             * We want to be able to use getElementsByTagName as a collection</span>
+<span class="c">             * to attach a group of events to.  Unfortunately, different </span>
+<span class="c">             * browsers return different types of collections.  This function</span>
+<span class="c">             * tests to determine if the object is array-like.  It will also </span>
+<span class="c">             * fail if the object is an array, but is empty.</span>
+<span class="c">             * @method _isValidCollection</span>
+<span class="c">             * @param o the object to test</span>
+<span class="c">             * @return {boolean} true if the object is array-like and populated</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_isValidCollection</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">(</span> <span class="nx">o</span>                    <span class="o">&amp;&amp;</span> <span class="c">// o is something</span>
+<span class="c"></span>                         <span class="nx">o</span><span class="o">.</span><span class="nx">length</span>             <span class="o">&amp;&amp;</span> <span class="c">// o is indexed</span>
+<span class="c"></span>                         <span class="k">typeof</span> <span class="nx">o</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">&amp;&amp;</span> <span class="c">// o is not a string</span>
+<span class="c"></span>                         <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">tagName</span>           <span class="o">&amp;&amp;</span> <span class="c">// o is not an HTML element</span>
+<span class="c"></span>                         <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">alert</span>             <span class="o">&amp;&amp;</span> <span class="c">// o is not a window</span>
+<span class="c"></span>                         <span class="k">typeof</span> <span class="nx">o</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">);</span>
+
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * @private</span>
+<span class="c">             * @property elCache</span>
+<span class="c">             * DOM element cache</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">elCache</span><span class="o">:</span> <span class="o">{},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * We cache elements bound by id because when the unload event </span>
+<span class="c">             * fires, we can no longer use document.getElementById</span>
+<span class="c">             * @method getEl</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">getEl</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Clears the element cache</span>
+<span class="c">             * @deprecated Elements are not cached any longer</span>
+<span class="c">             * @method clearCache</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">clearCache</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * hook up any deferred listeners</span>
+<span class="c">             * @method _load</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_load</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">loadComplete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="k">var</span> <span class="nx">EU</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+                <span class="c">// Remove the listener to assist with the IE memory issue, but not</span>
+<span class="c"></span>                <span class="c">// for other browsers because FF 1.0x does not like it.</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isIE</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;load&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_load</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Polling function that runs before the onload event fires, </span>
+<span class="c">             * attempting to attach to DOM Nodes as soon as they are </span>
+<span class="c">             * available</span>
+<span class="c">             * @method _tryPreloadAttach</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_tryPreloadAttach</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">locked</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+                <span class="c">// this.logger.debug(&quot;tryPreloadAttach&quot;);</span>
+<span class="c"></span>
+                <span class="c">// keep trying until after the page is loaded.  We need to </span>
+<span class="c"></span>                <span class="c">// check the page load state prior to trying to bind the </span>
+<span class="c"></span>                <span class="c">// elements so that we can be certain all elements have been </span>
+<span class="c"></span>                <span class="c">// tested appropriately</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">tryAgain</span> <span class="o">=</span> <span class="o">!</span><span class="nx">loadComplete</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">tryAgain</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">tryAgain</span> <span class="o">=</span> <span class="o">(</span><span class="nx">retryCount</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="c">// onAvailable</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">notAvail</span> <span class="o">=</span> <span class="o">[];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">onAvailStack</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">onAvailStack</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">item</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">item</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="c">// The element is available, but not necessarily ready</span>
+<span class="c"></span>                            <span class="c">// @todo verify IE7 compatibility</span>
+<span class="c"></span>                            <span class="c">// @todo should we test parentNode.nextSibling?</span>
+<span class="c"></span>                            <span class="c">// @todo re-evaluate global content ready</span>
+<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">item</span><span class="o">.</span><span class="nx">checkReady</span> <span class="o">||</span> 
+                                    <span class="nx">loadComplete</span> <span class="o">||</span> 
+                                    <span class="nx">el</span><span class="o">.</span><span class="nx">nextSibling</span> <span class="o">||</span>
+                                    <span class="o">(</span><span class="nb">document</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+
+                                <span class="k">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="nx">item</span><span class="o">.</span><span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="k">if</span> <span class="o">(</span><span class="nx">item</span><span class="o">.</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">item</span><span class="o">.</span><span class="nx">obj</span><span class="o">;</span>
+                                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                                        <span class="nx">scope</span> <span class="o">=</span> <span class="nx">item</span><span class="o">.</span><span class="nx">override</span><span class="o">;</span>
+                                    <span class="o">}</span>
+                                <span class="o">}</span>
+                                <span class="nx">item</span><span class="o">.</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">item</span><span class="o">.</span><span class="nx">obj</span><span class="o">);</span>
+                                <span class="c">//delete onAvailStack[i];</span>
+<span class="c"></span>                                <span class="c">// null out instead of delete for Opera</span>
+<span class="c"></span>                                <span class="nx">onAvailStack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="nx">notAvail</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="nx">retryCount</span> <span class="o">=</span> <span class="o">(</span><span class="nx">notAvail</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="nx">retryCount</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">tryAgain</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// we may need to strip the nulled out items here</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Removes all listeners attached to the given element via addListener.</span>
+<span class="c">             * Optionally, the node&#39;s children can also be purged.</span>
+<span class="c">             * Optionally, you can specify a specific type of event to remove.</span>
+<span class="c">             * @method purgeElement</span>
+<span class="c">             * @param {HTMLElement} el the element to purge</span>
+<span class="c">             * @param {boolean} recurse recursively purge this element&#39;s children</span>
+<span class="c">             * as well.  Use with caution.</span>
+<span class="c">             * @param {string} sType optional type of listener to purge. If</span>
+<span class="c">             * left out, all listeners will be removed</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>
+            <span class="nx">purgeElement</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">recurse</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">elListeners</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getListeners</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">elListeners</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">elListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">elListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                        <span class="c">// can&#39;t use the index on the changing collection</span>
+<span class="c"></span>                        <span class="c">//this.removeListener(el, l.type, l.fn, l.index);</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">l</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">l</span><span class="o">.</span><span class="nx">fn</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">recurse</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">el</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">recurse</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns all listeners attached to the given element via addListener.</span>
+<span class="c">             * Optionally, you can specify a specific type of event to return.</span>
+<span class="c">             * @method getListeners</span>
+<span class="c">             * @param el {HTMLElement} the element to inspect </span>
+<span class="c">             * @param sType {string} optional type of listener to return. If</span>
+<span class="c">             * left out, all listeners will be returned</span>
+<span class="c">             * @return {Object} the listener. Contains the following fields:</span>
+<span class="c">             * &amp;nbsp;&amp;nbsp;type:   (string)   the type of event</span>
+<span class="c">             * &amp;nbsp;&amp;nbsp;fn:     (function) the callback supplied to addListener</span>
+<span class="c">             * &amp;nbsp;&amp;nbsp;obj:    (object)   the custom object supplied to addListener</span>
+<span class="c">             * &amp;nbsp;&amp;nbsp;adjust: (boolean)  whether or not to adjust the default scope</span>
+<span class="c">             * &amp;nbsp;&amp;nbsp;index:  (int)      its position in the Event util listener cache</span>
+<span class="c">             * @static</span>
+<span class="c">             */</span>           
+            <span class="nx">getListeners</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">results</span><span class="o">=[],</span> <span class="nx">searchLists</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">listeners</span><span class="o">,</span> <span class="nx">unloadListeners</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sType</span> <span class="o">==</span> <span class="s2">&quot;unload&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">unloadListeners</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">listeners</span><span class="o">];</span>
+                <span class="o">}</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">searchLists</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">j</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">searchList</span> <span class="o">=</span> <span class="nx">searchLists</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">searchList</span> <span class="o">&amp;&amp;</span> <span class="nx">searchList</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">searchList</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">searchList</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                            <span class="k">if</span> <span class="o">(</span> <span class="nx">l</span>  <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">===</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> 
+                                    <span class="o">(!</span><span class="nx">sType</span> <span class="o">||</span> <span class="nx">sType</span> <span class="o">===</span> <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
+                                <span class="nx">results</span><span class="o">.</span><span class="nx">push</span><span class="o">({</span>
+                                    <span class="nx">type</span><span class="o">:</span>   <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">],</span>
+                                    <span class="nx">fn</span><span class="o">:</span>     <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">],</span>
+                                    <span class="nx">obj</span><span class="o">:</span>    <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">OBJ</span><span class="o">],</span>
+                                    <span class="nx">adjust</span><span class="o">:</span> <span class="nx">l</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">],</span>
+                                    <span class="nx">index</span><span class="o">:</span>  <span class="nx">i</span>
+                                <span class="o">});</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">return</span> <span class="o">(</span><span class="nx">results</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">?</span> <span class="nx">results</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Removes all listeners registered by pe.event.  Called </span>
+<span class="c">             * automatically during the unload event.</span>
+<span class="c">             * @method _unload</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_unload</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="k">var</span> <span class="nx">EU</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">l</span><span class="o">,</span> <span class="nx">len</span><span class="o">,</span> <span class="nx">index</span><span class="o">;</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">l</span> <span class="o">=</span> <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">])</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">]</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">OBJ</span><span class="o">];</span>
+                            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">];</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">FN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">OBJ</span><span class="o">]</span> <span class="o">);</span>
+                        <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                        <span class="nx">l</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
+                        <span class="nx">scope</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="nx">listeners</span> <span class="o">&amp;&amp;</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">j</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="nx">j</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">index</span> <span class="o">=</span> <span class="nx">j</span><span class="o">-</span><span class="m">1</span><span class="o">;</span>
+                        <span class="nx">l</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">];</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="nx">EU</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">EL</span><span class="o">],</span> <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">],</span> 
+                                    <span class="nx">l</span><span class="o">[</span><span class="nx">EU</span><span class="o">.</span><span class="nx">FN</span><span class="o">],</span> <span class="nx">index</span><span class="o">);</span>
+                        <span class="o">}</span> 
+                        <span class="nx">j</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="nx">l</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
+
+                    <span class="nx">EU</span><span class="o">.</span><span class="nx">clearCache</span><span class="o">();</span>
+                <span class="o">}</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">legacyEvents</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// dereference the element</span>
+<span class="c"></span>                    <span class="c">//delete legacyEvents[i][0];</span>
+<span class="c"></span>                    <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+                    <span class="c">// delete the array item</span>
+<span class="c"></span>                    <span class="c">//delete legacyEvents[i];</span>
+<span class="c"></span>                    <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+                <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
+
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns scrollLeft</span>
+<span class="c">             * @method _getScrollLeft</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_getScrollLeft</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getScroll</span><span class="o">()[</span><span class="m">1</span><span class="o">];</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns scrollTop</span>
+<span class="c">             * @method _getScrollTop</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_getScrollTop</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getScroll</span><span class="o">()[</span><span class="m">0</span><span class="o">];</span>
+            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Returns the scrollTop and scrollLeft.  Used to calculate the </span>
+<span class="c">             * pageX and pageY in Internet Explorer</span>
+<span class="c">             * @method _getScroll</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_getScroll</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">dd</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">,</span> <span class="nx">db</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">dd</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">dd</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">||</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="o">[</span><span class="nx">dd</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">,</span> <span class="nx">dd</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">db</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="o">[</span><span class="nx">db</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">,</span> <span class="nx">db</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">];</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="o">[</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">];</span>
+                <span class="o">}</span>
+            <span class="o">},</span>
+            
+            <span class="c">/**</span>
+<span class="c">             * Used by old versions of CustomEvent, restored for backwards</span>
+<span class="c">             * compatibility</span>
+<span class="c">             * @method regCE</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">regCE</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="c">// does nothing</span>
+<span class="c"></span>            <span class="o">},</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Adds a DOM event directly without the caching, cleanup, scope adj, etc</span>
+<span class="c">             *</span>
+<span class="c">             * @method _simpleAdd</span>
+<span class="c">             * @param {HTMLElement} el      the element to bind the handler to</span>
+<span class="c">             * @param {string}      sType   the type of event handler</span>
+<span class="c">             * @param {function}    fn      the callback to invoke</span>
+<span class="c">             * @param {boolen}      capture capture or bubble phase</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_simpleAdd</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">addEventListener</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">capture</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">addEventListener</span><span class="o">(</span><span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="o">(</span><span class="nx">capture</span><span class="o">));</span>
+                    <span class="o">};</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">capture</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                    <span class="o">};</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span><span class="o">(){};</span>
+                <span class="o">}</span>
+            <span class="o">}(),</span>
+
+            <span class="c">/**</span>
+<span class="c">             * Basic remove listener</span>
+<span class="c">             *</span>
+<span class="c">             * @method _simpleRemove</span>
+<span class="c">             * @param {HTMLElement} el      the element to bind the handler to</span>
+<span class="c">             * @param {string}      sType   the type of event handler</span>
+<span class="c">             * @param {function}    fn      the callback to invoke</span>
+<span class="c">             * @param {boolen}      capture capture or bubble phase</span>
+<span class="c">             * @static</span>
+<span class="c">             * @private</span>
+<span class="c">             */</span>
+            <span class="nx">_simpleRemove</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">removeEventListener</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">capture</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">removeEventListener</span><span class="o">(</span><span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="o">(</span><span class="nx">capture</span><span class="o">));</span>
+                    <span class="o">};</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">detachEvent</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">detachEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                    <span class="o">};</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">function</span><span class="o">(){};</span>
+                <span class="o">}</span>
+            <span class="o">}()</span>
+        <span class="o">};</span>
+
+    <span class="o">}();</span>
+
+    <span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">EU</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * YAHOO.util.Event.on is an alias for addListener</span>
+<span class="c">         * @method on</span>
+<span class="c">         * @see addListener</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">EU</span><span class="o">.</span><span class="nx">on</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addListener</span><span class="o">;</span>
+
+        <span class="c">// YAHOO.mix(EU, YAHOO.util.EventProvider.prototype);</span>
+<span class="c"></span>        <span class="c">// EU.createEvent(&quot;DOMContentReady&quot;);</span>
+<span class="c"></span>        <span class="c">// EU.subscribe(&quot;DOMContentReady&quot;, EU._load);</span>
+<span class="c"></span>
+        <span class="k">if</span> <span class="o">(</span><span class="nb">document</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">EU</span><span class="o">.</span><span class="nx">_load</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="c">// EU._simpleAdd(document, &quot;DOMContentLoaded&quot;, EU._load);</span>
+<span class="c"></span>            <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;load&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_load</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
+        <span class="nx">EU</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">();</span>
+    <span class="o">})();</span>
+<span class="o">}</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class="selected"><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                                <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
+                                <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
+                                <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                                <li class="selected"><a href="Event.js.html">Event.js</a></li>
+                                <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

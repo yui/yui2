@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                   
+                    <h3>Module: datatable
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        The DataTable widget provides a progressively enhanced DHTML control for
+displaying tabular data across A-grade browsers.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search datatable:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"url": "Column.html#abbr", "host": "Column", "name": "abbr"}, {"url": "RecordSet.html#addRecord", "host": "RecordSet", "name": "addRecord"}, {"url": "RecordSet.html#addRecords", "host": "RecordSet", "name": "addRecords"}, {"url": "DataTable.html#_addRow", "host": "DataTable", "name": "_addRow"}, {"url": "DataTable.html#addRow", "host": "DataTable", "name": "addRow"}, {"url": "RecordSet.html#append", "host": "RecordSet", "name": "append"}, {"url": "DataTable.html#appendRow", "host": "DataTable", "name": "appendRow"}, {"url": "DataTable.html#_aSelectedRecords", "host": "DataTable", "name": "_aSelectedRecords"}, {"url": "DataTable.html#_bFocused", "host": "DataTable", "name": "_bFocused"}, {"url": "DataTable.html#caption", "host": "DataTable", "name": "caption"}, {"url": "DataTable.html#cellClickEvent", "host": "DataTable", "name": "cellClickEvent"}, {"url": "DataTable.html#cellDoubleclickEvent", "host": "DataTable", "name": "cellDoubleclickEvent"}, {"url": "DataTable.html#cellEditEvent", "host": "DataTable", "name": "cellEditEvent"}, {"url": "DataTable.html#cellFormatEvent", "host": "DataTable", "name": "cellFormatEvent"}, {"url": "DataTable.html#cellMousedownEvent", "host": "DataTable", "name": "cellMousedownEvent"}, {"url": "DataTable.html#cellMouseoutEvent", "host": "DataTable", "name": "cellMouseoutEvent"}, {"url": "DataTable.html#cellMouseoverEvent", "host": "DataTable", "name": "cellMouseoverEvent"}, {"url": "DataTable.html#checkboxClickEvent", "host": "DataTable", "name": "checkboxClickEvent"}, {"url": "Column.html#_children", "host": "Column", "name": "_children"}, {"url": "Column.html#children", "host": "Column", "name": "children"}, {"url": "DataTable.html#CLASS_BODY", "host": "DataTable", "name": "CLASS_BODY"}, {"url": "DataTable.html#CLASS_CHECKBOX", "host": "DataTable", "name": "CLASS_CHECKBOX"}, {"url": "DataTable.html#CLASS_CURRENCY", "host": "DataTable", "name": "CLASS_CURRENCY"}, {"url": "DataTable.html#CLASS_CURRENTPAGE", "host": "DataTable", "name": "CLASS_CURRENTPAGE"}, {"url": "DataTable.html#CLASS_DATE", "host": "DataTable", "name": "CLASS_DATE"}, {"url": "DataTable.html#CLASS_EDITABLE", "host": "DataTable", "name": "CLASS_EDITABLE"}, {"url": "DataTable.html#CLASS_EMAIL", "host": "DataTable", "name": "CLASS_EMAIL"}, {"url": "DataTable.html#CLASS_EMPTY", "host": "DataTable", "name": "CLASS_EMPTY"}, {"url": "DataTable.html#CLASS_EVEN", "host": "DataTable", "name": "CLASS_EVEN"}, {"url": "DataTable.html#CLASS_FIRSTLINK", "host": "DataTable", "name": "CLASS_FIRSTLINK"}, {"url": "DataTable.html#CLASS_FIRSTPAGE", "host": "DataTable", "name": "CLASS_FIRSTPAGE"}, {"url": "DataTable.html#CLASS_HEADCONTAINER", "host": "DataTable", "name": "CLASS_HEADCONTAINER"}, {"url": "DataTable.html#CLASS_HEADRESIZER", "host": "DataTable", "name": "CLASS_HEADRESIZER"}, {"url": "DataTable.html#CLASS_HEADTEXT", "host": "DataTable", "name": "CLASS_HEADTEXT"}, {"url": "DataTable.html#CLASS_HIGHLIGHT", "host": "DataTable", "name": "CLASS_HIGHLIGHT"}, {"url": "DataTable.html#CLASS_LASTLINK", "host": "DataTable", "name": "CLASS_LASTLINK"}, {"url": "DataTable.html#CLASS_LASTPAGE", "host": "DataTable", "name": "CLASS_LASTPAGE"}, {"url": "DataTable.html#CLASS_LINK", "host": "DataTable", "name": "CLASS_LINK"}, {"url": "DataTable.html#CLASS_LOADING", "host": "DataTable", "name": "CLASS_LOADING"}, {"url": "Column.html#className", "host": "Column", "name": "className"}, {"url": "DataTable.html#CLASS_NEXTLINK", "host": "DataTable", "name": "CLASS_NEXTLINK"}, {"url": "DataTable.html#CLASS_NEXTPAGE", "host": "DataTable", "name": "CLASS_NEXTPAGE"}, {"url": "DataTable.html#CLASS_NUMBER", "host": "DataTable", "name": "CLASS_NUMBER"}, {"url": "DataTable.html#CLASS_ODD", "host": "DataTable", "name": "CLASS_ODD"}, {"url": "DataTable.html#CLASS_PAGELINK", "host": "DataTable", "name": "CLASS_PAGELINK"}, {"url": "DataTable.html#CLASS_PAGELINKS", "host": "DataTable", "name": "CLASS_PAGELINKS"}, {"url": "DataTable.html#CLASS_PAGESELECT", "host": "DataTable", "name": "CLASS_PAGESELECT"}, {"url": "DataTable.html#CLASS_PREVLINK", "host": "DataTable", "name": "CLASS_PREVLINK"}, {"url": "DataTable.html#CLASS_PREVPAGE", "host": "DataTable", "name": "CLASS_PREVPAGE"}, {"url": "DataTable.html#CLASS_SCROLLABLE", "host": "DataTable", "name": "CLASS_SCROLLABLE"}, {"url": "DataTable.html#CLASS_SELECTED", "host": "DataTable", "name": "CLASS_SELECTED"}, {"url": "DataTable.html#CLASS_SORTABLE", "host": "DataTable", "name": "CLASS_SORTABLE"}, {"url": "DataTable.html#CLASS_SORTEDBYASC", "host": "DataTable", "name": "CLASS_SORTEDBYASC"}, {"url": "DataTable.html#CLASS_SORTEDBYDESC", "host": "DataTable", "name": "CLASS_SORTEDBYDESC"}, {"url": "DataTable.html#CLASS_STRING", "host": "DataTable", "name": "CLASS_STRING"}, {"url": "Column.html#_colspan", "host": "Column", "name": "_colspan"}, {"url": "ColumnEditor.html#column", "host": "ColumnEditor", "name": "column"}, {"url": "DataTable.html#columnResizeEvent", "host": "DataTable", "name": "columnResizeEvent"}, {"url": "DataTable.html#columnSortEvent", "host": "DataTable", "name": "columnSortEvent"}, {"url": "Sort.html#compareAsc", "host": "Sort", "name": "compareAsc"}, {"url": "Sort.html#compareDesc", "host": "Sort", "name": "compareDesc"}, {"url": "ColumnEditor.html#container", "host": "ColumnEditor", "name": "container"}, {"url": "DataTable.html#contextMenu", "host": "DataTable", "name": "contextMenu"}, {"url": "ColumnEditor.html#createTextareaEditor", "host": "ColumnEditor", "name": "createTextareaEditor"}, {"url": "ColumnEditor.html#createTextboxEditor", "host": "ColumnEditor", "name": "createTextboxEditor"}, {"url": "DataTable.html#dataReturnEvent", "host": "DataTable", "name": "dataReturnEvent"}, {"url": "DataTable.html#dataSource", "host": "DataTable", "name": "dataSource"}, {"url": "RecordSet.html#deleteRecord", "host": "RecordSet", "name": "deleteRecord"}, {"url": "DataTable.html#_deleteRow", "host": "DataTable", "name": "_deleteRow"}, {"url": "DataTable.html#deleteRow", "host": "DataTable", "name": "deleteRow"}, {"url": "DataTable.html#deleteSelectedRows", "host": "DataTable", "name": "deleteSelectedRows"}, {"url": "DataTable.html#doBeforeLoadData", "host": "DataTable", "name": "doBeforeLoadData"}, {"url": "DataTable.html#editCell", "host": "DataTable", "name": "editCell"}, {"url": "Column.html#editor", "host": "Column", "name": "editor"}, {"url": "DataTable.html#editorShowEvent", "host": "DataTable", "name": "editorShowEvent"}, {"url": "DataTable.html#_elBody", "host": "DataTable", "name": "_elBody"}, {"url": "DataTable.html#_elContainer", "host": "DataTable", "name": "_elContainer"}, {"url": "DataTable.html#_elTable", "host": "DataTable", "name": "_elTable"}, {"url": "DataTable.html#fixedWidth", "host": "DataTable", "name": "fixedWidth"}, {"url": "ColumnSet.html#flat", "host": "ColumnSet", "name": "flat"}, {"url": "DataTable.html#focusTable", "host": "DataTable", "name": "focusTable"}, {"url": "Column.html#format", "host": "Column", "name": "format"}, {"url": "DataTable.html#formatCell", "host": "DataTable", "name": "formatCell"}, {"url": "Column.html#formatCheckbox", "host": "Column", "name": "formatCheckbox"}, {"url": "Column.html#formatCurrency", "host": "Column", "name": "formatCurrency"}, {"url": "Column.html#formatDate", "host": "Column", "name": "formatDate"}, {"url": "Column.html#formatEmail", "host": "Column", "name": "formatEmail"}, {"url": "Column.html#formatLink", "host": "Column", "name": "formatLink"}, {"url": "Column.html#formatNumber", "host": "Column", "name": "formatNumber"}, {"url": "Column.html#formatSelect", "host": "Column", "name": "formatSelect"}, {"url": "Column.html#formatter", "host": "Column", "name": "formatter"}, {"url": "DataTable.html#getBody", "host": "DataTable", "name": "getBody"}, {"url": "DataTable.html#getCell", "host": "DataTable", "name": "getCell"}, {"url": "Column.html#getColSpan", "host": "Column", "name": "getColSpan"}, {"url": "DataTable.html#getColumnSet", "host": "DataTable", "name": "getColumnSet"}, {"url": "DataTable.html#getHead", "host": "DataTable", "name": "getHead"}, {"url": "Column.html#getId", "host": "Column", "name": "getId"}, {"url": "RecordSet.html#getLength", "host": "RecordSet", "name": "getLength"}, {"url": "RecordSet.html#getRecord", "host": "RecordSet", "name": "getRecord"}, {"url": "RecordSet.html#getRecordBy", "host": "RecordSet", "name": "getRecordBy"}, {"url": "RecordSet.html#getRecordIndex", "host": "RecordSet", "name": "getRecordIndex"}, {"url": "RecordSet.html#getRecords", "host": "RecordSet", "name": "getRecords"}, {"url": "DataTable.html#getRecordSet", "host": "DataTable", "name": "getRecordSet"}, {"url": "DataTable.html#getRow", "host": "DataTable", "name": "getRow"}, {"url": "Column.html#getRowSpan", "host": "Column", "name": "getRowSpan"}, {"url": "DataTable.html#getSelectedCells", "host": "DataTable", "name": "getSelectedCells"}, {"url": "DataTable.html#getSelectedRecordIds", "host": "DataTable", "name": "getSelectedRecordIds"}, {"url": "DataTable.html#getSelectedRows", "host": "DataTable", "name": "getSelectedRows"}, {"url": "DataTable.html#getTable", "host": "DataTable", "name": "getTable"}, {"url": "ColumnEditor.html#getTextareaEditorValue", "host": "ColumnEditor", "name": "getTextareaEditorValue"}, {"url": "ColumnEditor.html#getTextboxEditorValue", "host": "ColumnEditor", "name": "getTextboxEditorValue"}, {"url": "ColumnEditor.html#getValue", "host": "ColumnEditor", "name": "getValue"}, {"url": "DataTable.html#headCellClickEvent", "host": "DataTable", "name": "headCellClickEvent"}, {"url": "DataTable.html#headCellDoubleclickEvent", "host": "DataTable", "name": "headCellDoubleclickEvent"}, {"url": "DataTable.html#headCellMousedownEvent", "host": "DataTable", "name": "headCellMousedownEvent"}, {"url": "DataTable.html#headCellMouseoutEvent", "host": "DataTable", "name": "headCellMouseoutEvent"}, {"url": "DataTable.html#headCellMouseoverEvent", "host": "DataTable", "name": "headCellMouseoverEvent"}, {"url": "ColumnSet.html#headers", "host": "ColumnSet", "name": "headers"}, {"url": "ColumnEditor.html#hide", "host": "ColumnEditor", "name": "hide"}, {"url": "DataTable.html#hideTableMessages", "host": "DataTable", "name": "hideTableMessages"}, {"url": "DataTable.html#highlight", "host": "DataTable", "name": "highlight"}, {"url": "DataTable.html#highlightEvent", "host": "DataTable", "name": "highlightEvent"}, {"url": "Column.html#_id", "host": "Column", "name": "_id"}, {"url": "Record.html#id", "host": "Record", "name": "id"}, {"url": "Column.html#_index", "host": "Column", "name": "_index"}, {"url": "DataTable.html#_initHead", "host": "DataTable", "name": "_initHead"}, {"url": "DataTable.html#_initHeadCell", "host": "DataTable", "name": "_initHeadCell"}, {"url": "DataTable.html#initialRequest", "host": "DataTable", "name": "initialRequest"}, {"url": "DataTable.html#_initTable", "host": "DataTable", "name": "_initTable"}, {"url": "ColumnEditor.html#input", "host": "ColumnEditor", "name": "input"}, {"url": "RecordSet.html#insert", "host": "RecordSet", "name": "insert"}, {"url": "DataTable.html#insertRows", "host": "DataTable", "name": "insertRows"}, {"url": "DataTable.html#isEmpty", "host": "DataTable", "name": "isEmpty"}, {"url": "DataTable.html#isSelected", "host": "DataTable", "name": "isSelected"}, {"url": "Column.html#key", "host": "Column", "name": "key"}, {"url": "ColumnSet.html#keys", "host": "ColumnSet", "name": "keys"}, {"url": "RecordSet.html#_length", "host": "RecordSet", "name": "_length"}, {"url": "Column.html#_minWidth", "host": "Column", "name": "_minWidth"}, {"url": "DataTable.html#MSG_EMPTY", "host": "DataTable", "name": "MSG_EMPTY"}, {"url": "DataTable.html#MSG_LOADING", "host": "DataTable", "name": "MSG_LOADING"}, {"url": "ColumnSet.html#_nCount", "host": "ColumnSet", "name": "_nCount"}, {"url": "Column.html#_nCount", "host": "Column", "name": "_nCount"}, {"url": "ColumnEditor.html#_nCount", "host": "ColumnEditor", "name": "_nCount"}, {"url": "DataTable.html#_nCount", "host": "DataTable", "name": "_nCount"}, {"url": "RecordSet.html#_nCount", "host": "RecordSet", "name": "_nCount"}, {"url": "Record.html#_nCount", "host": "Record", "name": "_nCount"}, {"url": "DataTable.html#_nIndex", "host": "DataTable", "name": "_nIndex"}, {"url": "RecordSet.html#_nIndex", "host": "RecordSet", "name": "_nIndex"}, {"url": "DataTable.html#_oColumnSet", "host": "DataTable", "name": "_oColumnSet"}, {"url": "DataTable.html#_onBlur", "host": "DataTable", "name": "_onBlur"}, {"url": "DataTable.html#_onClick", "host": "DataTable", "name": "_onClick"}, {"url": "DataTable.html#onDataReturnAppendRows", "host": "DataTable", "name": "onDataReturnAppendRows"}, {"url": "DataTable.html#onDataReturnInsertRows", "host": "DataTable", "name": "onDataReturnInsertRows"}, {"url": "DataTable.html#onDataReturnPaginateRows", "host": "DataTable", "name": "onDataReturnPaginateRows"}, {"url": "DataTable.html#onDataReturnReplaceRows", "host": "DataTable", "name": "onDataReturnReplaceRows"}, {"url": "DataTable.html#_onDocumentKeyup", "host": "DataTable", "name": "_onDocumentKeyup"}, {"url": "DataTable.html#_onDoubleclick", "host": "DataTable", "name": "_onDoubleclick"}, {"url": "WidthResizer.html#onDrag", "host": "WidthResizer", "name": "onDrag"}, {"url": "DataTable.html#onEventEditCell", "host": "DataTable", "name": "onEventEditCell"}, {"url": "DataTable.html#onEventFormatCell", "host": "DataTable", "name": "onEventFormatCell"}, {"url": "DataTable.html#onEventHighlightCell", "host": "DataTable", "name": "onEventHighlightCell"}, {"url": "DataTable.html#onEventSelectCell", "host": "DataTable", "name": "onEventSelectCell"}, {"url": "DataTable.html#onEventSelectRow", "host": "DataTable", "name": "onEventSelectRow"}, {"url": "DataTable.html#onEventSortColumn", "host": "DataTable", "name": "onEventSortColumn"}, {"url": "DataTable.html#onEventUnhighlightCell", "host": "DataTable", "name": "onEventUnhighlightCell"}, {"url": "DataTable.html#_onKeydown", "host": "DataTable", "name": "_onKeydown"}, {"url": "DataTable.html#_onKeypress", "host": "DataTable", "name": "_onKeypress"}, {"url": "DataTable.html#_onKeyup", "host": "DataTable", "name": "_onKeyup"}, {"url": "WidthResizer.html#onMouseDown", "host": "WidthResizer", "name": "onMouseDown"}, {"url": "DataTable.html#_onMousedown", "host": "DataTable", "name": "_onMousedown"}, {"url": "DataTable.html#_onMouseout", "host": "DataTable", "name": "_onMouseout"}, {"url": "DataTable.html#_onMouseover", "host": "DataTable", "name": "_onMouseover"}, {"url": "WidthResizer.html#onMouseUp", "host": "WidthResizer", "name": "onMouseUp"}, {"url": "DataTable.html#_onPagerClick", "host": "DataTable", "name": "_onPagerClick"}, {"url": "DataTable.html#_onPagerSelect", "host": "DataTable", "name": "_onPagerSelect"}, {"url": "DataTable.html#_onRecordUpdate", "host": "DataTable", "name": "_onRecordUpdate"}, {"url": "DataTable.html#_onRowDelete", "host": "DataTable", "name": "_onRowDelete"}, {"url": "DataTable.html#_oRecordSet", "host": "DataTable", "name": "_oRecordSet"}, {"url": "DataTable.html#pageCurrent", "host": "DataTable", "name": "pageCurrent"}, {"url": "DataTable.html#pageLinksLength", "host": "DataTable", "name": "pageLinksLength"}, {"url": "DataTable.html#pageLinksStart", "host": "DataTable", "name": "pageLinksStart"}, {"url": "DataTable.html#pagers", "host": "DataTable", "name": "pagers"}, {"url": "DataTable.html#paginateEvent", "host": "DataTable", "name": "paginateEvent"}, {"url": "DataTable.html#paginateRows", "host": "DataTable", "name": "paginateRows"}, {"url": "Column.html#_parent", "host": "Column", "name": "_parent"}, {"url": "Column.html#parse", "host": "Column", "name": "parse"}, {"url": "Column.html#parseCheckbox", "host": "Column", "name": "parseCheckbox"}, {"url": "Column.html#parseCurrency", "host": "Column", "name": "parseCurrency"}, {"url": "Column.html#parseDate", "host": "Column", "name": "parseDate"}, {"url": "Column.html#parseNumber", "host": "Column", "name": "parseNumber"}, {"url": "Column.html#parser", "host": "Column", "name": "parser"}, {"url": "Column.html#parseSelect", "host": "Column", "name": "parseSelect"}, {"url": "DataTable.html#radioClickEvent", "host": "DataTable", "name": "radioClickEvent"}, {"url": "DataTable.html#recordSetUpdateEvent", "host": "DataTable", "name": "recordSetUpdateEvent"}, {"url": "RecordSet.html#recordUpdateEvent", "host": "RecordSet", "name": "recordUpdateEvent"}, {"url": "RecordSet.html#replace", "host": "RecordSet", "name": "replace"}, {"url": "DataTable.html#replaceRows", "host": "DataTable", "name": "replaceRows"}, {"url": "RecordSet.html#reset", "host": "RecordSet", "name": "reset"}, {"url": "Column.html#resizeable", "host": "Column", "name": "resizeable"}, {"url": "DataTable.html#_restripeRows", "host": "DataTable", "name": "_restripeRows"}, {"url": "DataTable.html#rowAppendEvent", "host": "DataTable", "name": "rowAppendEvent"}, {"url": "DataTable.html#rowDeleteEvent", "host": "DataTable", "name": "rowDeleteEvent"}, {"url": "DataTable.html#rowSingleSelect", "host": "DataTable", "name": "rowSingleSelect"}, {"url": "Column.html#_rowspan", "host": "Column", "name": "_rowspan"}, {"url": "DataTable.html#rowsPerPage", "host": "DataTable", "name": "rowsPerPage"}, {"url": "DataTable.html#rowsPerPageDropdown", "host": "DataTable", "name": "rowsPerPageDropdown"}, {"url": "DataTable.html#scrollable", "host": "DataTable", "name": "scrollable"}, {"url": "DataTable.html#_select", "host": "DataTable", "name": "_select"}, {"url": "DataTable.html#select", "host": "DataTable", "name": "select"}, {"url": "DataTable.html#selectEvent", "host": "DataTable", "name": "selectEvent"}, {"url": "ColumnEditor.html#show", "host": "ColumnEditor", "name": "show"}, {"url": "Column.html#showEditor", "host": "Column", "name": "showEditor"}, {"url": "DataTable.html#showEmptyMessage", "host": "DataTable", "name": "showEmptyMessage"}, {"url": "DataTable.html#showLoadingMessage", "host": "DataTable", "name": "showLoadingMessage"}, {"url": "DataTable.html#showPage", "host": "DataTable", "name": "showPage"}, {"url": "ColumnEditor.html#showTextareaEditor", "host": "ColumnEditor", "name": "showTextareaEditor"}, {"url": "ColumnEditor.html#showTextboxEditor", "host": "ColumnEditor", "name": "showTextboxEditor"}, {"url": "ColumnSet.html#_sName", "host": "ColumnSet", "name": "_sName"}, {"url": "DataTable.html#_sName", "host": "DataTable", "name": "_sName"}, {"url": "RecordSet.html#sort", "host": "RecordSet", "name": "sort"}, {"url": "Column.html#sortable", "host": "Column", "name": "sortable"}, {"url": "DataTable.html#sortColumn", "host": "DataTable", "name": "sortColumn"}, {"url": "DataTable.html#sortedBy", "host": "DataTable", "name": "sortedBy"}, {"url": "Column.html#sortOptions.ascFunction", "host": "Column", "name": "sortOptions.ascFunction"}, {"url": "Column.html#sortOptions.descFunction", "host": "Column", "name": "sortOptions.descFunction"}, {"url": "DataTable.html#startRecordIndex", "host": "DataTable", "name": "startRecordIndex"}, {"url": "DataTable.html#summary", "host": "DataTable", "name": "summary"}, {"url": "DataTable.html#tableClickEvent", "host": "DataTable", "name": "tableClickEvent"}, {"url": "DataTable.html#tableDoubleclickEvent", "host": "DataTable", "name": "tableDoubleclickEvent"}, {"url": "DataTable.html#tableFocusEvent", "host": "DataTable", "name": "tableFocusEvent"}, {"url": "DataTable.html#tableInitEvent", "host": "DataTable", "name": "tableInitEvent"}, {"url": "DataTable.html#tableMousedownEvent", "host": "DataTable", "name": "tableMousedownEvent"}, {"url": "DataTable.html#tableMouseoutEvent", "host": "DataTable", "name": "tableMouseoutEvent"}, {"url": "DataTable.html#tableMouseoverEvent", "host": "DataTable", "name": "tableMouseoverEvent"}, {"url": "Column.html#text", "host": "Column", "name": "text"}, {"url": "ColumnSet.html#toString", "host": "ColumnSet", "name": "toString"}, {"url": "DataTable.html#toString", "host": "DataTable", "name": "toString"}, {"url": "RecordSet.html#toString", "host": "RecordSet", "name": "toString"}, {"url": "DataTable.html#_totalPages", "host": "DataTable", "name": "_totalPages"}, {"url": "ColumnSet.html#tree", "host": "ColumnSet", "name": "tree"}, {"url": "Column.html#type", "host": "Column", "name": "type"}, {"url": "ColumnEditor.html#type", "host": "ColumnEditor", "name": "type"}, {"url": "DataTable.html#unhighlight", "host": "DataTable", "name": "unhighlight"}, {"url": "DataTable.html#unhighlightEvent", "host": "DataTable", "name": "unhighlightEvent"}, {"url": "DataTable.html#_unselect", "host": "DataTable", "name": "_unselect"}, {"url": "DataTable.html#unselect", "host": "DataTable", "name": "unselect"}, {"url": "DataTable.html#_unselectAllCells", "host": "DataTable", "name": "_unselectAllCells"}, {"url": "DataTable.html#unselectAllCells", "host": "DataTable", "name": "unselectAllCells"}, {"url": "DataTable.html#_unselectAllRows", "host": "DataTable", "name": "_unselectAllRows"}, {"url": "DataTable.html#unselectAllRows", "host": "DataTable", "name": "unselectAllRows"}, {"url": "DataTable.html#unselectEvent", "host": "DataTable", "name": "unselectEvent"}, {"url": "RecordSet.html#updateRecord", "host": "RecordSet", "name": "updateRecord"}, {"url": "DataTable.html#_updateRow", "host": "DataTable", "name": "_updateRow"}, {"url": "DataTable.html#updateRow", "host": "DataTable", "name": "updateRow"}, {"url": "Column.html#_width", "host": "Column", "name": "_width"}, {"url": "Column.html#width", "host": "Column", "name": "width"}];
+                    </script>
+
+                    <script type="text/javascript" src="assets/api-js"></script>
+                    <script type="text/javascript" src="assets/ac-js"></script>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="Column.html">Column</a></li>
+                                <li class=""><a href="ColumnEditor.html">ColumnEditor</a></li>
+                                <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
+                                <li class=""><a href="DataTable.html">DataTable</a></li>
+                                <li class=""><a href="Record.html">Record</a></li>
+                                <li class=""><a href="RecordSet.html">RecordSet</a></li>
+                                <li class=""><a href="Sort.html">Sort</a></li>
+                                <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

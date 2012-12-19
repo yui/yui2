@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop   DDProxy.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                
+                 &gt; DDProxy.js (source view) 
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+                    <div id="srcout">
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * A DragDrop implementation that inserts an empty, bordered div into</span>
+<span class="c"> * the document that follows the cursor during drag operations.  At the time of</span>
+<span class="c"> * the click, the frame div is resized to the dimensions of the linked html</span>
+<span class="c"> * element, and moved to the exact location of the linked element.</span>
+<span class="c"> *</span>
+<span class="c"> * References to the &quot;frame&quot; element refer to the single proxy element that</span>
+<span class="c"> * was created to be dragged in place of all DDProxy elements on the</span>
+<span class="c"> * page.</span>
+<span class="c"> *</span>
+<span class="c"> * @class DDProxy</span>
+<span class="c"> * @extends YAHOO.util.DD</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param {String} id the id of the linked html element</span>
+<span class="c"> * @param {String} sGroup the group of related DragDrop objects</span>
+<span class="c"> * @param {object} config an object containing configurable attributes</span>
+<span class="c"> *                Valid properties for DDProxy in addition to those in DragDrop: </span>
+<span class="c"> *                   resizeFrame, centerFrame, dragElId</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">initFrame</span><span class="o">();</span> 
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * The default drag frame div id</span>
+<span class="c"> * @property YAHOO.util.DDProxy.dragElId</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">dragElId</span> <span class="o">=</span> <span class="s2">&quot;ygddfdiv&quot;</span><span class="o">;</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * By default we resize the drag frame to be the same size as the element</span>
+<span class="c">     * we want to drag (this is to get the frame effect).  We can turn it off</span>
+<span class="c">     * if we want a different behavior.</span>
+<span class="c">     * @property resizeFrame</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     */</span>
+    <span class="nx">resizeFrame</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * By default the frame is positioned exactly where the drag element is, so</span>
+<span class="c">     * we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if</span>
+<span class="c">     * you do not have constraints on the obj is to have the drag frame centered</span>
+<span class="c">     * around the cursor.  Set centerFrame to true for this effect.</span>
+<span class="c">     * @property centerFrame</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     */</span>
+    <span class="nx">centerFrame</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Creates the proxy element if it does not yet exist</span>
+<span class="c">     * @method createFrame</span>
+<span class="c">     */</span>
+    <span class="nx">createFrame</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">body</span> <span class="o">||</span> <span class="o">!</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">setTimeout</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">createFrame</span><span class="o">();</span> <span class="o">},</span> <span class="m">50</span> <span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">div</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">div</span>    <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+            <span class="nx">div</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragElId</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">s</span>  <span class="o">=</span> <span class="nx">div</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+
+            <span class="nx">s</span><span class="o">.</span><span class="nx">position</span>   <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">cursor</span>     <span class="o">=</span> <span class="s2">&quot;move&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">border</span>     <span class="o">=</span> <span class="s2">&quot;2px solid #aaa&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">zIndex</span>     <span class="o">=</span> <span class="m">999</span><span class="o">;</span>
+
+            <span class="c">// appendChild can blow up IE if invoked prior to the window load event</span>
+<span class="c"></span>            <span class="c">// while rendering a table.  It is possible there are other scenarios </span>
+<span class="c"></span>            <span class="c">// that would cause this to happen as well.</span>
+<span class="c"></span>            <span class="nx">body</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">div</span><span class="o">,</span> <span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Initialization for the drag frame element.  Must be called in the</span>
+<span class="c">     * constructor of all subclasses</span>
+<span class="c">     * @method initFrame</span>
+<span class="c">     */</span>
+    <span class="nx">initFrame</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createFrame</span><span class="o">();</span>
+    <span class="o">},</span>
+
+    <span class="nx">applyConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DDProxy applyConfig&quot;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">resizeFrame</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">resizeFrame</span> <span class="o">!==</span> <span class="kc">false</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">centerFrame</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">centerFrame</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setDragElId</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">dragElId</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">dragElId</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Resizes the drag frame to the dimensions of the clicked object, positions </span>
+<span class="c">     * it over the object, and finally displays it</span>
+<span class="c">     * @method showFrame</span>
+<span class="c">     * @param {int} iPageX X click position</span>
+<span class="c">     * @param {int} iPageY Y click position</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">showFrame</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">dragEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">dragEl</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeProxy</span><span class="o">();</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">centerFrame</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setDelta</span><span class="o">(</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">width</span><span class="o">,</span>  <span class="m">10</span><span class="o">)/</span><span class="m">2</span><span class="o">),</span> 
+                           <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">s</span><span class="o">.</span><span class="nx">height</span><span class="o">,</span> <span class="m">10</span><span class="o">)/</span><span class="m">2</span><span class="o">)</span> <span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">setDragElPos</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">);</span>
+
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;visible&quot;</span><span class="o">);</span> 
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * The proxy is automatically resized to the dimensions of the linked</span>
+<span class="c">     * element when a drag is initiated, unless resizeFrame is set to false</span>
+<span class="c">     * @method _resizeProxy</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">_resizeProxy</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">resizeFrame</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">DOM</span>    <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">el</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+            <span class="k">var</span> <span class="nx">dragEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+
+            <span class="k">var</span> <span class="nx">bt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderTopWidth&quot;</span>    <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">br</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderRightWidth&quot;</span>  <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bb</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderBottomWidth&quot;</span> <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bl</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderLeftWidth&quot;</span>   <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bt</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bt</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">br</span><span class="o">))</span> <span class="o">{</span> <span class="nx">br</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bb</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bb</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bl</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bl</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;proxy size: &quot;</span> <span class="o">+</span> <span class="nx">bt</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nx">br</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">bb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">bl</span><span class="o">);</span>
+
+            <span class="k">var</span> <span class="nx">newWidth</span>  <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span>  <span class="o">-</span> <span class="nx">br</span> <span class="o">-</span> <span class="nx">bl</span><span class="o">);</span>                                                                                           
+            <span class="k">var</span> <span class="nx">newHeight</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">-</span> <span class="nx">bt</span> <span class="o">-</span> <span class="nx">bb</span><span class="o">);</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Resizing proxy element&quot;</span><span class="o">);</span>
+
+            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;width&quot;</span><span class="o">,</span>  <span class="nx">newWidth</span>  <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">);</span>
+            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">newHeight</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.util.DragDrop</span>
+<span class="c"></span>    <span class="nx">b4MouseDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setStartPosition</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">autoOffset</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setDragElPos</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.util.DragDrop</span>
+<span class="c"></span>    <span class="nx">b4StartDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// show the drag frame</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;start drag show frame, x: &quot;</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;, y: &quot;</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">showFrame</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.util.DragDrop</span>
+<span class="c"></span>    <span class="nx">b4EndDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; b4EndDrag&quot;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">(),</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
+    <span class="o">},</span>
+
+    <span class="c">// overrides YAHOO.util.DragDrop</span>
+<span class="c"></span>    <span class="c">// By default we try to move the element to the last location of the frame.  </span>
+<span class="c"></span>    <span class="c">// This is so that the default behavior mirrors that of YAHOO.util.DD.  </span>
+<span class="c"></span>    <span class="nx">endDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">DOM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; endDrag&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">lel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
+        <span class="k">var</span> <span class="nx">del</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
+
+        <span class="c">// Show the drag frame briefly so we can get its position</span>
+<span class="c"></span>        <span class="c">// del.style.visibility = &quot;&quot;;</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">);</span> 
+
+        <span class="c">// Hide the linked element before the move to get around a Safari </span>
+<span class="c"></span>        <span class="c">// rendering bug.</span>
+<span class="c"></span>        <span class="c">//lel.style.visibility = &quot;hidden&quot;;</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">moveToEl</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="nx">del</span><span class="o">);</span>
+        <span class="c">//del.style.visibility = &quot;hidden&quot;;</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
+        <span class="c">//lel.style.visibility = &quot;&quot;;</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">);</span> 
+    <span class="o">},</span>
+
+    <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;DDProxy &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">});</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class="selected"><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

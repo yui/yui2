@@ -1,0 +1,2729 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: dragdrop  YAHOO.util.DragDropMgr   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dragdrop.html">dragdrop</a>
+                 &gt; YAHOO.util.DragDropMgr 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        <code>static</code>
+                        
+                            Class <b>YAHOO.util.DragDropMgr</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        DragDropMgr is a singleton that tracks the element interaction for 
+all DragDrop items in the window.  Generally, you will not call 
+this class directly, but it does have helper methods that could 
+be useful in your DragDrop implementations.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="_timeoutCount">_timeoutCount</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal counter
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="clickPixelThresh">clickPixelThresh</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of pixels that the mouse needs to move after the 
+mousedown before the drag is initiated.  Default=3;
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="clickTimeout">clickTimeout</a>
+                                        <code>- private static Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Timeout used for the click time threshold
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="clickTimeThresh">clickTimeThresh</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The number of milliseconds after the mousedown event to initiate the
+drag if we don't get a mouseup event. Default=1000
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="deltaX">deltaX</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            the X distance between the cursor and the object being dragged
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="deltaY">deltaY</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            the Y distance between the cursor and the object being dragged
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="dragCurrent">dragCurrent</a>
+                                        <code>- private static DragDrop</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            the DragDrop object that is currently being dragged
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="dragOvers">dragOvers</a>
+                                        <code>- private static Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            the DragDrop object(s) that are being hovered over
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="dragThreshMet">dragThreshMet</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag that indicates that either the drag pixel threshold or the 
+mousdown time threshold has been met
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="elementCache">elementCache</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A cache of DOM elements
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="handleIds">handleIds</a>
+                                        <code>- private static {string: string}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of element ids defined as drag handles.  Used to determine 
+if the element that generated the mousedown event is actually the 
+handle and not the html element itself.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="ids">ids</a>
+                                        <code>- private static {string: string}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Two dimensional Array of registered DragDrop objects.  The first 
+dimension is the DragDrop item group, the second the DragDrop 
+object.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="initialized">initialized</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal flag that is set to true when drag and drop has been
+intialized
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="INTERSECT">INTERSECT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In intersect mode, drag and drop interaction is defined by the 
+cursor position or the amount of overlap of two or more drag and 
+drop objects.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="locationCache">locationCache</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Location cache that is set for all drag drop objects when a drag is
+initiated, cleared when the drag is finished.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="locked">locked</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            All drag and drop can be disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="mode">mode</a>
+                                        <code>- static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The current drag and drop mode.  Default: POINT
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="POINT">POINT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In point mode, drag and drop interaction is defined by the 
+location of the cursor during the drag/drop
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="preventDefault">preventDefault</a>
+                                        <code>- static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag to determine if we should prevent the default behavior of the
+events we define. By default this is true, but this can be set to 
+false if you need the default behavior (not recommended)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="startX">startX</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The X position of the mousedown event stored for later use when a 
+drag threshold is met.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="startY">startY</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The Y position of the mousedown event stored for later use when a 
+drag threshold is met.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="stopPropagation">stopPropagation</a>
+                                        <code>- static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag to determine if we should stop the propagation of the events 
+we generate. This is true by default but you may want to set it to
+false if the html element contains other features that require the
+mouse click.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="STRICT_INTERSECT">STRICT_INTERSECT</a>
+                                        <code>- static final int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            In intersect mode, drag and drop interaction is defined only by the 
+overlap of two or more drag and drop objects.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="useCache">useCache</a>
+                                        <code>- static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set useCache to false if you want to force object the lookup of each
+drag and drop linked element constantly during a drag.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_addListeners">_addListeners</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_addListeners</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Trying to make the load order less important.  Without this we get
+an error if this file is loaded before the Event Utility.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_execOnAll">_execOnAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_execOnAll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Runs method on all drag and drop objects
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onLoad">_onLoad</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_onLoad</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Drag and drop initialization.  Sets up the global event handlers
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onResize">_onResize</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_onResize</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Reset constraints on all drag and drop objs
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_onUnload">_onUnload</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_onUnload</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            unload event handler
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_remove">_remove</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>_remove</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unregisters a drag and drop item.  This is executed in 
+DragDrop.unreg, use that method instead of calling this directly.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="fireEvents">fireEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>fireEvents</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         isDrop
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Iterates over all of the DragDrop elements to find ones we are 
+hovering over or dropping on
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>isDrop &lt;boolean&gt;</code>
+                                                             is this a drop op or a mouseover op?
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getBestMatch">getBestMatch</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        DragDrop
+                                            <strong>getBestMatch</strong>
+                                           (
+                                                
+                                                        
+                                                         dds
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Helper function for getting the best match from the list of drag 
+and drop objects returned by the drag and drop events when we are 
+in INTERSECT mode.  It returns either the first object that the 
+cursor is over, or the object that has the greatest overlap with 
+the dragged element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>dds &lt;DragDrop[]&gt;</code>
+                                                             The array of drag and drop objects 
+targeted
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        DragDrop
+                                                    </code></dt>
+                                                    <dd>The best single match</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getClientHeight">getClientHeight</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getClientHeight</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the client height
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>client height in px</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.getViewportHeight instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getClientWidth">getClientWidth</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getClientWidth</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the client width
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>client width in px</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.getViewportWidth instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getCss">getCss</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Object
+                                            <strong>getCss</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the style property for the DOM element (i.e., 
+document.getElById(id).style)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the id of the elment to get
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The style property of the element</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getDDById">getDDById</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        DragDrop
+                                            <strong>getDDById</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the DragDrop instance for a given id
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the id of the DragDrop object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        DragDrop
+                                                    </code></dt>
+                                                    <dd>the drag drop object, null if it is not found</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getElement">getElement</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Object
+                                            <strong>getElement</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the actual DOM element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the id of the elment to get
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Object
+                                                    </code></dt>
+                                                    <dd>The element</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.get instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getElWrapper">getElWrapper</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        YAHOO.util.DDM.ElementWrapper
+                                            <strong>getElWrapper</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Get the wrapper for the DOM element specified
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the id of the element to get
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.util.DDM.ElementWrapper
+                                                    </code></dt>
+                                                    <dd>the wrapped element</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> This wrapper isn't that useful
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getLocation">getLocation</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        YAHOO.util.Region
+                                            <strong>getLocation</strong>
+                                           (
+                                                
+                                                        
+                                                         oDD
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a Region object containing the drag and drop element's position
+and size, including the padding configured for it
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oDD &lt;DragDrop&gt;</code>
+                                                             the drag and drop object to get the 
+location for
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.util.Region
+                                                    </code></dt>
+                                                    <dd>a Region object representing the total area
+the element occupies, including any padding
+the instance is configured for.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getPosX">getPosX</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getPosX</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the X position of an html element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;object&gt;</code>
+                                                             the element for which to get the position
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the X coordinate</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.getX instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getPosY">getPosY</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getPosY</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the Y position of an html element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;object&gt;</code>
+                                                             the element for which to get the position
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the Y coordinate</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.getY instead
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getRelated">getRelated</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        DragDrop[]
+                                            <strong>getRelated</strong>
+                                           (
+                                                
+                                                        
+                                                         p_oDD
+                                                    
+                                                
+                                                        , 
+                                                         bTargetsOnly
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the drag and drop instances that are in all groups the
+passed in instance belongs to.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_oDD &lt;DragDrop&gt;</code>
+                                                             the obj to get related data for
+                                                        </dd>
+                                                        <dd>
+                                                            <code>bTargetsOnly &lt;boolean&gt;</code>
+                                                             if true, only return targetable objs
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        DragDrop[]
+                                                    </code></dt>
+                                                    <dd>the related instances</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getScroll">getScroll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>getScroll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the current scroll position
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getScrollLeft">getScrollLeft</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getScrollLeft</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the scrollLeft
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the document's scrollTop</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getScrollTop">getScrollTop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        int
+                                            <strong>getScrollTop</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Gets the scrollTop
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        int
+                                                    </code></dt>
+                                                    <dd>the document's scrollTop</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getStyle">getStyle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        string
+                                            <strong>getStyle</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                                        , 
+                                                         styleProp
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the specified element style property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                                      the element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>styleProp &lt;string&gt;</code>
+                                                               the style property
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>The value of the style property</dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use YAHOO.util.Dom.getStyle
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleMouseDown">handleMouseDown</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>handleMouseDown</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                                        , 
+                                                         oDD
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired after a registered DragDrop object gets the mousedown event.
+Sets up the events required to track the object being dragged
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oDD &lt;object&gt;</code>
+                                                             the DragDrop object being dragged
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleMouseMove">handleMouseMove</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>handleMouseMove</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Internal function to handle the mousemove event.  Will be invoked 
+from the context of the html element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleMouseUp">handleMouseUp</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>handleMouseUp</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Internal function to handle the mouseup event.  Will be invoked 
+from the context of the document.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="handleWasClicked">handleWasClicked</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>handleWasClicked</strong>
+                                           (
+                                                
+                                                        
+                                                         node
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Recursively searches the immediate parent and all child nodes for 
+the handle element in order to determine wheter or not it was 
+clicked.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>node &lt;object&gt;</code>
+                                                             the html element to inspect
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Called the first time an element is registered.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isDragDrop">isDragDrop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isDragDrop</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Utility function to determine if a given element has been 
+registered as a drag drop item.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the element id to check
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if this element is a DragDrop item, 
+false otherwise</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isHandle">isHandle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isHandle</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Utility function to determine if a given element has been 
+registered as a drag drop handle for the given Drag Drop object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;String&gt;</code>
+                                                             the element id to check
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if this element is a DragDrop handle, false 
+otherwise</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isLegalTarget">isLegalTarget</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isLegalTarget</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns true if the specified dd target is a legal target for 
+the specifice drag obj
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>the &lt;DragDrop&gt;</code>
+                                                             drag obj
+                                                        </dd>
+                                                        <dd>
+                                                            <code>the &lt;DragDrop&gt;</code>
+                                                             target
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the target is a legal target for the 
+dd obj</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isLocked">isLocked</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isLocked</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Is drag and drop locked?
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>True if drag and drop is locked, false otherwise.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isOverTarget">isOverTarget</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isOverTarget</strong>
+                                           (
+                                                
+                                                        
+                                                         pt
+                                                    
+                                                
+                                                        , 
+                                                         oTarget
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Checks the cursor location to see if it over the target
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>pt &lt;YAHOO.util.Point&gt;</code>
+                                                             The point to evaluate
+                                                        </dd>
+                                                        <dd>
+                                                            <code>oTarget &lt;DragDrop&gt;</code>
+                                                             the DragDrop object we are inspecting
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the mouse is over the target</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="isTypeOfDD">isTypeOfDD</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isTypeOfDD</strong>
+                                           (
+                                                
+                                                        
+                                                         the
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            My goal is to be able to transparently determine if an object is
+typeof DragDrop, and the exact subclass of DragDrop.  typeof 
+returns "object", oDD.constructor.toString() always returns
+"DragDrop" and not the name of the subclass.  So for now it just
+evaluates a well-known variable in DragDrop.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>the &lt;Object&gt;</code>
+                                                             object to evaluate
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if typeof oDD = DragDrop</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="lock">lock</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>lock</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Lock all drag and drop functionality
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="moveToEl">moveToEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>moveToEl</strong>
+                                           (
+                                                
+                                                        
+                                                         moveEl
+                                                    
+                                                
+                                                        , 
+                                                         targetEl
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the x/y position of an element to the location of the
+target element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>moveEl &lt;HTMLElement&gt;</code>
+                                                                  The element to move
+                                                        </dd>
+                                                        <dd>
+                                                            <code>targetEl &lt;HTMLElement&gt;</code>
+                                                                The position reference element
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="numericSort">numericSort</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>numericSort</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Numeric array sort function
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="refreshCache">refreshCache</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>refreshCache</strong>
+                                           (
+                                                
+                                                        
+                                                         groups
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Refreshes the cache of the top-left and bottom-right points of the 
+drag and drop objects in the specified group(s).  This is in the
+format that is stored in the drag and drop instance, so typical 
+usage is:
+<code>
+YAHOO.util.DragDropMgr.refreshCache(ddinstance.groups);
+</code>
+Alternatively:
+<code>
+YAHOO.util.DragDropMgr.refreshCache({group1:true, group2:true});
+</code>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>groups &lt;Object&gt;</code>
+                                                             an associative array of groups to refresh
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="regDragDrop">regDragDrop</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>regDragDrop</strong>
+                                           (
+                                                
+                                                        
+                                                         oDD
+                                                    
+                                                
+                                                        , 
+                                                         sGroup
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Each DragDrop instance must be registered with the DragDropMgr.  
+This is executed in DragDrop.init()
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>oDD &lt;DragDrop&gt;</code>
+                                                             the DragDrop object to register
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sGroup &lt;String&gt;</code>
+                                                             the name of the group this element belongs to
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="regHandle">regHandle</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>regHandle</strong>
+                                           (
+                                                
+                                                        
+                                                         sDDId
+                                                    
+                                                
+                                                        , 
+                                                         sHandleId
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Each DragDrop handle element must be registered.  This is done
+automatically when executing DragDrop.setHandleElId()
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>sDDId &lt;String&gt;</code>
+                                                             the DragDrop id this element is a handle for
+                                                        </dd>
+                                                        <dd>
+                                                            <code>sHandleId &lt;String&gt;</code>
+                                                             the id of the element that is the drag 
+handle
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="removeDDFromGroup">removeDDFromGroup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>removeDDFromGroup</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the supplied dd instance from the supplied group. Executed
+by DragDrop.removeFromGroup, so don't call this function directly.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="startDrag">startDrag</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>startDrag</strong>
+                                           (
+                                                
+                                                        
+                                                         x
+                                                    
+                                                
+                                                        , 
+                                                         y
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fired when either the drag pixel threshol or the mousedown hold 
+time threshold has been met.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>x &lt;int&gt;</code>
+                                                              the X position of the original mousedown
+                                                        </dd>
+                                                        <dd>
+                                                            <code>y &lt;int&gt;</code>
+                                                              the Y position of the original mousedown
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="stopDrag">stopDrag</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>stopDrag</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Internal function to clean up event handlers after the drag 
+operation is complete
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="stopEvent">stopEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>stopEvent</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Utility to stop event propagation and event default, if these 
+features are turned on.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             the event as returned by this.getEvent()
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="swapNode">swapNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>swapNode</strong>
+                                           (
+                                                
+                                                        
+                                                         n1
+                                                    
+                                                
+                                                        , 
+                                                         n2
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Swap two nodes.  In IE, we use the native method, for others we 
+emulate the IE behavior
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>n1 &lt;object&gt;</code>
+                                                             the first node to swap
+                                                        </dd>
+                                                        <dd>
+                                                            <code>n2 &lt;object&gt;</code>
+                                                             the other node to swap
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unlock">unlock</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>unlock</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Unlock all drag and drop functionality
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="unregAll">unregAll</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>unregAll</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Cleans up the drag and drop events and objects.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="verifyEl">verifyEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>verifyEl</strong>
+                                           (
+                                                
+                                                        
+                                                         el
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This checks to make sure an element exists and is in the DOM.  The
+main purpose is to handle cases where innerHTML is used to remove
+drag and drop objects from the DOM.  IE provides an 'unspecified
+error' when trying to access the offsetParent of such an element
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>el &lt;HTMLElement&gt;</code>
+                                                             the element to check
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the element looks usable</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                                <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
+                                <li class="selected"><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
+                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                                <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
+                                <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
+                                <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
+                                <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#_timeoutCount">_timeoutCount</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#clickPixelThresh">clickPixelThresh</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#clickTimeout">clickTimeout</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#clickTimeThresh">clickTimeThresh</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#deltaX">deltaX</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#deltaY">deltaY</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#dragCurrent">dragCurrent</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#dragOvers">dragOvers</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#dragThreshMet">dragThreshMet</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#elementCache">elementCache</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#handleIds">handleIds</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#ids">ids</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#initialized">initialized</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#INTERSECT">INTERSECT</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#locationCache">locationCache</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#locked">locked</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#mode">mode</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#POINT">POINT</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#preventDefault">preventDefault</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#startX">startX</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#startY">startY</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#stopPropagation">stopPropagation</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#STRICT_INTERSECT">STRICT_INTERSECT</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li><a href="#useCache">useCache</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>void</code>-->
+                                <a href="#_addListeners">_addListeners</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_execOnAll">_execOnAll</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onLoad">_onLoad</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onResize">_onResize</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_onUnload">_onUnload</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_remove">_remove</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#fireEvents">fireEvents</a>
+                                </li>
+                                <li><!--<code>DragDrop</code>-->
+                                <a href="#getBestMatch">getBestMatch</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getClientHeight">getClientHeight</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getClientWidth">getClientWidth</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#getCss">getCss</a>
+                                </li>
+                                <li><!--<code>DragDrop</code>-->
+                                <a href="#getDDById">getDDById</a>
+                                </li>
+                                <li><!--<code>Object</code>-->
+                                <a href="#getElement">getElement</a>
+                                </li>
+                                <li><!--<code>YAHOO.util.DDM.ElementWrapper</code>-->
+                                <a href="#getElWrapper">getElWrapper</a>
+                                </li>
+                                <li><!--<code>YAHOO.util.Region</code>-->
+                                <a href="#getLocation">getLocation</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getPosX">getPosX</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getPosY">getPosY</a>
+                                </li>
+                                <li><!--<code>DragDrop[]</code>-->
+                                <a href="#getRelated">getRelated</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getScroll">getScroll</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getScrollLeft">getScrollLeft</a>
+                                </li>
+                                <li><!--<code>int</code>-->
+                                <a href="#getScrollTop">getScrollTop</a>
+                                </li>
+                                <li><!--<code>string</code>-->
+                                <a href="#getStyle">getStyle</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleMouseDown">handleMouseDown</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleMouseMove">handleMouseMove</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleMouseUp">handleMouseUp</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#handleWasClicked">handleWasClicked</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isDragDrop">isDragDrop</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isHandle">isHandle</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isLegalTarget">isLegalTarget</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isLocked">isLocked</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isOverTarget">isOverTarget</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#isTypeOfDD">isTypeOfDD</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#lock">lock</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#moveToEl">moveToEl</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#numericSort">numericSort</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#refreshCache">refreshCache</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#regDragDrop">regDragDrop</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#regHandle">regHandle</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#removeDDFromGroup">removeDDFromGroup</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#startDrag">startDrag</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#stopDrag">stopDrag</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#stopEvent">stopEvent</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#swapNode">swapNode</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#unlock">unlock</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#unregAll">unregAll</a>
+                                </li>
+                                <li><!--<code>boolean</code>-->
+                                <a href="#verifyEl">verifyEl</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

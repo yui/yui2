@@ -1,0 +1,3120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: menu  YAHOO.widget.MenuItem   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+</head>
+
+<body id="yahoo-com">
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>Menu&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_menu.html">menu</a>
+                 &gt; YAHOO.widget.MenuItem 
+                
+            </p>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.widget.MenuItem</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                        <dl class="subclasses">
+                            <dt>Known Subclasses:</dd>
+                            <dd>
+                                    <a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a>
+                                    <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a>
+                            </dd>
+                       </dl>
+                
+  
+
+                    <div class="summary description">
+                        Creates an item for a menu.
+                    </div>
+
+                        <div class="section constructor details">
+                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong>YAHOO.widget.MenuItem</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                p_oObject
+
+
+
+
+                                                , 
+                                                p_oConfig
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl>
+                                            <dt>Parameters:</dt>
+                                                <dd>
+                                                    <code>p_oObject
+                                                    &lt;String&gt; 
+                                                    </code>
+                                                     String specifying the text of the menu item.
+                                                </dd>
+                                                <dd>
+                                                    <code>p_oObject
+                                                    &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-74680021">HTMLLIElement</a>&gt; 
+                                                    </code>
+                                                     Object specifying 
+the <code>&#60;li&#62;</code> element of the menu item.
+                                                </dd>
+                                                <dd>
+                                                    <code>p_oObject
+                                                    &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-38450247">HTMLOptGroupElement</a>&gt; 
+                                                    </code>
+                                                     Object 
+specifying the <code>&#60;optgroup&#62;</code> element of the menu item.
+                                                </dd>
+                                                <dd>
+                                                    <code>p_oObject
+                                                    &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-70901257">HTMLOptionElement</a>&gt; 
+                                                    </code>
+                                                     Object 
+specifying the <code>&#60;option&#62;</code> element of the menu item.
+                                                </dd>
+                                                <dd>
+                                                    <code>p_oConfig
+                                                    &lt;Object&gt; 
+                                                    </code>
+                                                     Optional. Object literal specifying the 
+configuration for the menu item. See configuration class documentation 
+for more details.
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <h4><a name="_checkImage">_checkImage</a>
+                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-17701901">HTMLImageElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's checkmark image.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use _oCheckedIndicator.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="_oAnchor">_oAnchor</a>
+                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-48250443">HTMLAnchorElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's 
+<code>&#60;a&#62;</code> element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oCheckedIndicator">_oCheckedIndicator</a>
+                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's checkmark image.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oHelpTextEM">_oHelpTextEM</a>
+                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-58190037">HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's help text 
+<code>&#60;em&#62;</code> element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oOnclickAttributeValue">_oOnclickAttributeValue</a>
+                                        <code>- private Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's current value for the 
+"onclick" configuration attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oSubmenu">_oSubmenu</a>
+                                        <code>- private YAHOO.widget.Menu</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's submenu.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_oText">_oText</a>
+                                        <code>- private TextNode</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's text node.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="_sClassName">_sClassName</a>
+                                        <code>- private String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The current value of the "classname" configuration attribute.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="browser">browser</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the browser.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="CHECKED_IMAGE_ALT_TEXT">CHECKED_IMAGE_ALT_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the alt text for the image to be used 
+for the checked image.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked."
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use CHECKED_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="CHECKED_IMAGE_PATH">CHECKED_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for 
+the checked state.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/bsc/menuchk8_nrm_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.  See "checkedindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="CHECKED_TEXT">CHECKED_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text to be used for the checked 
+indicator element (<code>&#60;em&#62;<code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked."
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT">COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the alt text for the image to be used 
+for the submenu arrow indicator.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Collapsed.  Click to expand."
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use COLLAPSED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the <code>&#60;em&#62;<code>
+element used for the submenu arrow indicator.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu collapsed.  Click to expand submenu."
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="constructor">constructor</a>
+                                        <code>- YAHOO.widget.MenuItem</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's constructor function.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: YAHOO.widget.MenuItem
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="CSS_CLASS_NAME">CSS_CLASS_NAME</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the CSS class(es) to be applied to the 
+<code>&#60;li&#62;</code> element of the menu item.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "yuimenuitem"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="DISABLED_CHECKED_IMAGE_ALT_TEXT">DISABLED_CHECKED_IMAGE_ALT_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the alt text for the image to be used 
+for the checked image when the item is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked. (Item disabled.)"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use DISABLED_CHECKED_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_CHECKED_IMAGE_PATH">DISABLED_CHECKED_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for 
+the disabled checked state.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/bsc/menuchk8_dim_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text to be used for the checked 
+indicator element (<code>&#60;em&#62;<code>) when the menu item 
+is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Checked. (Item disabled.)"
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="DISABLED_SUBMENU_INDICATOR_ALT_TEXT">DISABLED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the alt text for the image to be used 
+for the submenu arrow indicator when the menu item is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Disabled."
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use DISABLED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for the 
+submenu arrow indicator when the menu item is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/alt1/menuarorght8_dim_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the submenu arrow indicator 
+element (<code>&#60;em&#62;<code>) when the menu item is disabled.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu collapsed.  (Item disabled.)."
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="element">element</a>
+                                        <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-74680021">HTMLLIElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's 
+<code>&#60;li&#62;</code> element.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level
+-one-html.html#ID-74680021">HTMLLIElement</a>
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="EXPANDED_SUBMENU_INDICATOR_ALT_TEXT">EXPANDED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the alt text for the image to be used 
+for the submenu arrow indicator when the submenu is visible.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Expanded.  Click to collapse."
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>Use EXPANDED_SUBMENU_INDICATOR_TEXT.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the text for the submenu arrow indicator 
+element (<code>&#60;em&#62;<code>) when the submenu is visible.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "Submenu expanded.  Click to collapse submenu."
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="groupIndex">groupIndex</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number indicating the index of the group to which the menu 
+item belongs.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="id">id</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Id of the menu item's root <code>&#60;li&#62;</code> 
+element.  This property should be set via the constructor using the 
+configuration object literal.  If an id is not specified, then one will 
+be created using the "generateId" method of the Dom utility.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="imageRoot">imageRoot</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the root path for all of the menu 
+item's images.
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="IMG_ROOT">IMG_ROOT</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the prefix path to use for 
+non-secure images.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "http://us.i1.yimg.com/us.yimg.com/i/"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="IMG_ROOT_SSL">IMG_ROOT_SSL</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the prefix path to use for securely 
+served images.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "https://a248.e.akamai.net/sec.yimg.com/i/"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="index">index</a>
+                                        <code>- Number</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Number indicating the ordinal position of the menu item in 
+its group.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="isSecure">isSecure</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean representing whether or not the current browsing 
+context is secure (HTTPS).
+                                        </div>
+                                    </div>
+     
+                                        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All menu item images are now applied via CSS 
+background images.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="parent">parent</a>
+                                        <code>- YAHOO.widget.Menu</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's parent menu.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="SELECTED_CHECKED_IMAGE_PATH">SELECTED_CHECKED_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for 
+the selected checked state.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/bsc/menuchk8_hov_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All checked indicator images are applied via a CSS 
+background image.  See "checkedindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for the 
+submenu arrow indicator when the menu item is selected.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/alt1/menuarorght8_hov_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="srcElement">srcElement</a>
+                                        <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-74680021">HTMLLIElement</a>|<a href="http://www.w3.
+org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">
+HTMLOptGroupElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-
+Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the HTML element (either 
+<code>&#60;li&#62;</code>, <code>&#60;optgroup&#62;</code> or 
+<code>&#60;option&#62;</code>) used create the menu item.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-74680021">HTMLLIElement</a>|<a href="http://www.
+w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247"
+>HTMLOptGroupElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-
+Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="SUBMENU_INDICATOR_IMAGE_PATH">SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <code>- final String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String representing the path to the image to be used for the 
+menu item's submenu arrow indicator.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: "nt/ic/ut/alt1/menuarorght8_nrm_1.gif"
+                                    </div>        
+
+                                    <div class="deprecated">
+                                        <strong>Deprecated: </strong>All submenu indicator images are applied via a CSS 
+background image.  See "submenuindicator" class name in menu.css.
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="SUBMENU_TYPE">SUBMENU_TYPE</a>
+                                        <code>- final YAHOO.widget.Menu</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object representing the type of menu to instantiate and 
+add when parsing the child nodes of the menu item's source HTML element.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    <h4><a name="submenuIndicator">submenuIndicator</a>
+                                        <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the <code>&#60;em&#62;</code> element 
+used to create the submenu indicator for the menu item.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>
+                                    </div>        
+
+
+                                    <hr />
+                                    <h4><a name="value">value</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object reference to the menu item's value.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="_checkDOMNode">_checkDOMNode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>_checkDOMNode</strong>
+                                           (
+                                                
+                                                        
+                                                         p_oObject
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines if an object is an HTML element.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_oObject &lt;Object&gt;</code>
+                                                             Object to be evaluated.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_checkString">_checkString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Boolean
+                                            <strong>_checkString</strong>
+                                           (
+                                                
+                                                        
+                                                         p_oObject
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Determines if an object is a string.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_oObject &lt;Object&gt;</code>
+                                                             Object to be evaluated.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        Boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_createRootNodeStructure">_createRootNodeStructure</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_createRootNodeStructure</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates the core DOM structure for the menu item.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_getFirstElement">_getFirstElement</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>
+                                            <strong>_getFirstElement</strong>
+                                           (
+                                                
+                                                        
+                                                         p_oElement
+                                                    
+                                                
+                                                        , 
+                                                         p_sTagName
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an HTML element's first HTML element node.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_oElement &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>&gt;</code>
+                                                             Object 
+reference specifying the element to be evaluated.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_sTagName &lt;String&gt;</code>
+                                                             Optional. String specifying the tagname of 
+the element to be retrieved.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a>
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_initSubTree">_initSubTree</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_initSubTree</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Iterates the source element's childNodes collection and uses 
+the child nodes to instantiate other menus.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="_preloadImage">_preloadImage</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_preloadImage</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sPath
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Preloads an image by creating an image element from the 
+specified path and appending the image to the body of the document.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sPath &lt;String&gt;</code>
+                                                             String specifying the path to the image.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> All menu item images are now applied via CSS 
+background images.
+                                            </div>        
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="blur">blur</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>blur</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Causes the menu item to lose focus and fires the 
+onblur event.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configChecked">configChecked</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configChecked</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "checked" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configClassName">configClassName</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configClassName</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "classname" configuration 
+property of a menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configDisabled">configDisabled</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configDisabled</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "disabled" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configEmphasis">configEmphasis</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configEmphasis</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "emphasis" configuration property
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configHelpText">configHelpText</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configHelpText</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "helptext" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configOnClick">configOnClick</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configOnClick</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "onclick" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configSelected">configSelected</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configSelected</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "selected" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configStrongEmphasis">configStrongEmphasis</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configStrongEmphasis</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "strongemphasis" configuration 
+property of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configSubmenu">configSubmenu</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configSubmenu</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "submenu" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configTarget">configTarget</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configTarget</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "target" configuration property 
+of the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configText">configText</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configText</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "text" configuration property of 
+the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="configURL">configURL</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>configURL</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                                        , 
+                                                         p_oItem
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Event handler for when the "url" configuration property of 
+the menu item changes.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oItem &lt;YAHOO.widget.MenuItem&gt;</code>
+                                                             Object representing the menu item
+that fired the event.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Removes the menu item's <code>&#60;li&#62;</code> element 
+from its parent <code>&#60;ul&#62;</code> element.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="focus">focus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>focus</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Causes the menu item to receive the focus and fires the 
+focus event.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getNextEnabledSibling">getNextEnabledSibling</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getNextEnabledSibling</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Finds the menu item's next enabled sibling.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>YAHOO.widget.MenuItem</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="getPreviousEnabledSibling">getPreviousEnabledSibling</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        YAHOO.widget.MenuItem
+                                            <strong>getPreviousEnabledSibling</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Finds the menu item's previous enabled sibling.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        YAHOO.widget.MenuItem
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="init">init</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>init</strong>
+                                           (
+                                                
+                                                        
+                                                         p_oObject
+                                                    
+                                                
+
+                                                
+
+                                                
+
+                                                
+                                                        , 
+                                                         p_oConfig
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            The MenuItem class's initialization method. This method is 
+automatically called by the constructor, and sets up all DOM references 
+for pre-existing markup, and creates required markup if it is not 
+already present.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_oObject &lt;String&gt;</code>
+                                                             String specifying the text of the menu item.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oObject &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-74680021">HTMLLIElement</a>&gt;</code>
+                                                             Object specifying 
+the <code>&#60;li&#62;</code> element of the menu item.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oObject &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-38450247">HTMLOptGroupElement</a>&gt;</code>
+                                                             Object 
+specifying the <code>&#60;optgroup&#62;</code> element of the menu item.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oObject &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+one-html.html#ID-70901257">HTMLOptionElement</a>&gt;</code>
+                                                             Object 
+specifying the <code>&#60;option&#62;</code> element of the menu item.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_oConfig &lt;Object&gt;</code>
+                                                             Optional. Object literal specifying the 
+configuration for the menu item. See configuration class documentation 
+for more details.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>initDefaultConfig</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Initializes an item's configurable properties.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="toString">toString</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        String
+                                            <strong>toString</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns a string representing the menu item.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        String
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Events</a></h3>
+                            <div class="content">
+                                    <h4>
+                                        <a name="blurEvent">blurEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>blurEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the menu item loses the input focus.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="clickEvent">clickEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>clickEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user clicks the on the menu item.  Passes 
+back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="destroyEvent">destroyEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>destroyEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the menu item's <code>&#60;li&#62;</code> 
+element is removed from its parent <code>&#60;ul&#62;</code> element.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="focusEvent">focusEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>focusEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the menu item receives focus.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="keyDownEvent">keyDownEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keyDownEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user presses a key when the menu item has 
+focus.  Passes back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="keyPressEvent">keyPressEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keyPressEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user presses an alphanumeric key when the 
+menu item has focus.  Passes back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="keyUpEvent">keyUpEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>keyUpEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user releases a key when the menu item has 
+focus.  Passes back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="mouseDownEvent">mouseDownEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>mouseDownEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user mouses down on the menu item.  Passes 
+back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="mouseOutEvent">mouseOutEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>mouseOutEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the mouse has left the menu item.  Passes back 
+the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="mouseOverEvent">mouseOverEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>mouseOverEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the mouse has entered the menu item.  Passes 
+back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    <h4>
+                                        <a name="mouseUpEvent">mouseUpEvent</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>mouseUpEvent</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the user releases a mouse button while the mouse 
+is over the menu item.  Passes back the DOM Event object as an argument.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                            </div>
+                        </div>
+
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <div class="content">
+                                    <h4><a name="checked">checked</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the menu item should be rendered 
+with a checkmark.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="classname">classname</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            CSS class to be applied to the menu item's root 
+<code>&#60;li&#62;</code> element.  The specified class(es) are 
+appended in addition to the default class as specified by the menu 
+item's CSS_CLASS_NAME constant.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="disabled">disabled</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the menu item should be disabled.  
+(Disabled menu items are  dimmed and will not respond to user input 
+or fire events.)
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="emphasis">emphasis</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the text of the menu item will be 
+rendered with emphasis.  When building a menu from existing HTML the 
+value of this property will be interpreted from the menu's markup.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="helptext">helptext</a>
+                                        <code>- String|<a href="http://www.w3.org/TR/
+2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
+HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String specifying additional instructional text to 
+accompany the text for the nenu item.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="onclick">onclick</a>
+                                        <code>- Object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object literal representing the code to be executed when 
+the button is clicked.  Format:<br> <code> {<br> 
+<strong>fn:</strong> Function,   &#47;&#47; The handler to call when 
+the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An 
+object to  pass back to the handler.<br> <strong>scope:</strong> 
+Object &#47;&#47; The object to use for the scope of the handler.
+<br> } </code>
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="selected">selected</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the menu item should 
+be highlighted.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="strongemphasis">strongemphasis</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Boolean indicating if the text of the menu item will be 
+rendered with strong emphasis.  When building a menu from existing 
+HTML the value of this property will be interpreted from the
+menu's markup.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="submenu">submenu</a>
+                                        <code>- Menu|String|Object|<a href="http://www.w3.org/TR/2000/
+WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
+HTMLElement</a></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object specifying the submenu to be appended to the 
+menu item.  The value can be one of the following: <ul><li>Object 
+specifying a Menu instance.</li><li>Object literal specifying the
+menu to be created.  Format: <code>{ id: [menu id], itemdata: 
+[<a href="YAHOO.widget.Menu.html#itemData">array of values for 
+items</a>] }</code>.</li><li>String specifying the id attribute 
+of the <code>&#60;div&#62;</code> element of the menu.</li><li>
+Object specifying the <code>&#60;div&#62;</code> element of the 
+menu.</li></ul>
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="target">target</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String specifying the value for the "target" attribute 
+of the menu item's anchor element. <strong>Specifying a target will 
+require the user to click directly on the menu item's anchor node in
+order to cause the browser to navigate to the specified URL.</strong> 
+When building a menu from existing HTML the value of this property 
+will be interpreted from the menu's markup.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="text">text</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String specifying the text label for the menu item.  
+When building a menu from existing HTML the value of this property
+will be interpreted from the menu's markup.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: ""
+                                    </div>        
+
+                                    <hr />
+                                    <h4><a name="url">url</a>
+                                        <code>- String</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            String specifying the URL for the menu item's anchor's 
+"href" attribute.  When building a menu from existing HTML the value 
+of this property will be interpreted from the menu's markup.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "#"
+                                    </div>        
+
+                                    <hr />
+
+                            </div>
+                        </div>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                                <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
+                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
+                                <li class="selected"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                                <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
+                                <li class=""><a href="menu.js.html">menu.js</a></li>
+                                <li class=""><a href="menubar.js.html">menubar.js</a></li>
+                                <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
+                                <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
+                                <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li><a href="#_checkImage">_checkImage</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oAnchor">_oAnchor</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oCheckedIndicator">_oCheckedIndicator</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oHelpTextEM">_oHelpTextEM</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oOnclickAttributeValue">_oOnclickAttributeValue</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oSubmenu">_oSubmenu</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_oText">_oText</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#_sClassName">_sClassName</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#browser">browser</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#CHECKED_IMAGE_ALT_TEXT">CHECKED_IMAGE_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#CHECKED_IMAGE_PATH">CHECKED_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#CHECKED_TEXT">CHECKED_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT">COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#constructor">constructor</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#CSS_CLASS_NAME">CSS_CLASS_NAME</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_CHECKED_IMAGE_ALT_TEXT">DISABLED_CHECKED_IMAGE_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_CHECKED_IMAGE_PATH">DISABLED_CHECKED_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_SUBMENU_INDICATOR_ALT_TEXT">DISABLED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_SUBMENU_INDICATOR_IMAGE_PATH">DISABLED_SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#element">element</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#EXPANDED_SUBMENU_INDICATOR_ALT_TEXT">EXPANDED_SUBMENU_INDICATOR_ALT_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#groupIndex">groupIndex</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#id">id</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#imageRoot">imageRoot</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#IMG_ROOT">IMG_ROOT</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#IMG_ROOT_SSL">IMG_ROOT_SSL</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#index">index</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#isSecure">isSecure</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#parent">parent</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#SELECTED_CHECKED_IMAGE_PATH">SELECTED_CHECKED_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#SELECTED_SUBMENU_INDICATOR_IMAGE_PATH">SELECTED_SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#srcElement">srcElement</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#SUBMENU_INDICATOR_IMAGE_PATH">SUBMENU_INDICATOR_IMAGE_PATH</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#SUBMENU_TYPE">SUBMENU_TYPE</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#submenuIndicator">submenuIndicator</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                                <li><a href="#value">value</a>
+                                        <!--<code>&lt;Object&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#_checkDOMNode">_checkDOMNode</a>
+                                </li>
+                                <li><!--<code>Boolean</code>-->
+                                <a href="#_checkString">_checkString</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_createRootNodeStructure">_createRootNodeStructure</a>
+                                </li>
+                                <li><!--<code><a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+level-one-html.html#ID-58190037">HTMLElement</a></code>-->
+                                <a href="#_getFirstElement">_getFirstElement</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_initSubTree">_initSubTree</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#_preloadImage">_preloadImage</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#blur">blur</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configChecked">configChecked</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configClassName">configClassName</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configDisabled">configDisabled</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configEmphasis">configEmphasis</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configHelpText">configHelpText</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configOnClick">configOnClick</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configSelected">configSelected</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configStrongEmphasis">configStrongEmphasis</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configSubmenu">configSubmenu</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configTarget">configTarget</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configText">configText</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#configURL">configURL</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#destroy">destroy</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#focus">focus</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#getNextEnabledSibling">getNextEnabledSibling</a>
+                                </li>
+                                <li><!--<code>YAHOO.widget.MenuItem</code>-->
+                                <a href="#getPreviousEnabledSibling">getPreviousEnabledSibling</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#init">init</a>
+                                </li>
+                                <li><!--<code>void</code>-->
+                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                </li>
+                                <li><!--<code>String</code>-->
+                                <a href="#toString">toString</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Events</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#blurEvent">blurEvent</a>
+                                </li>
+                                <li>
+                                <a href="#clickEvent">clickEvent</a>
+                                </li>
+                                <li>
+                                <a href="#destroyEvent">destroyEvent</a>
+                                </li>
+                                <li>
+                                <a href="#focusEvent">focusEvent</a>
+                                </li>
+                                <li>
+                                <a href="#keyDownEvent">keyDownEvent</a>
+                                </li>
+                                <li>
+                                <a href="#keyPressEvent">keyPressEvent</a>
+                                </li>
+                                <li>
+                                <a href="#keyUpEvent">keyUpEvent</a>
+                                </li>
+                                <li>
+                                <a href="#mouseDownEvent">mouseDownEvent</a>
+                                </li>
+                                <li>
+                                <a href="#mouseOutEvent">mouseOutEvent</a>
+                                </li>
+                                <li>
+                                <a href="#mouseOverEvent">mouseOverEvent</a>
+                                </li>
+                                <li>
+                                <a href="#mouseUpEvent">mouseUpEvent</a>
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Configuration Attributes</h4>
+                        <ul class="content">        
+                                <li>
+                                <a href="#checked">checked</a>
+                                </li>
+                                <li>
+                                <a href="#classname">classname</a>
+                                </li>
+                                <li>
+                                <a href="#disabled">disabled</a>
+                                </li>
+                                <li>
+                                <a href="#emphasis">emphasis</a>
+                                </li>
+                                <li>
+                                <a href="#helptext">helptext</a>
+                                </li>
+                                <li>
+                                <a href="#onclick">onclick</a>
+                                </li>
+                                <li>
+                                <a href="#selected">selected</a>
+                                </li>
+                                <li>
+                                <a href="#strongemphasis">strongemphasis</a>
+                                </li>
+                                <li>
+                                <a href="#submenu">submenu</a>
+                                </li>
+                                <li>
+                                <a href="#target">target</a>
+                                </li>
+                                <li>
+                                <a href="#text">text</a>
+                                </li>
+                                <li>
+                                <a href="#url">url</a>
+                                </li>
+                        </ul>
+                    </div>
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

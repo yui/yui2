@@ -1,0 +1,1495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuiloader  YAHOO.util.YUILoader   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuiloader&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuiloader.html">yuiloader</a>
+                 &gt; YAHOO.util.YUILoader 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.YUILoader</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        YUILoader provides dynamic loading for YUI.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_internalCallback">_internalCallback</a>
+                                        <code>- private object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Internal callback to handle multiple internal insert() calls
+so that css is inserted prior to js
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="allowRollup">allowRollup</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Should we allow rollups
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="base">base</a>
+                                        <code>- string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The base directory.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: build
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="dirty">dirty</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Flag to indicate the dependency tree needs to be recomputed
+if insert is called again.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="filter">filter</a>
+                                        <code>- string|object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Filter to apply to result url
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="inserted">inserted</a>
+                                        <code>- {string: boolean}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            List of modules inserted by the utility
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="loaded">loaded</a>
+                                        <code>- {string: boolean}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Set when beginning to compute the dependency tree. 
+Composed of what YAHOO reports to be loaded combined
+with what has been loaded by the tool
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="loadOptional">loadOptional</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Whether or not to load optional dependencies for 
+the requested modules
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="moduleInfo">moduleInfo</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The library metadata
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="required">required</a>
+                                        <code>- {string: boolean}</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The list of requested modules
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="rollups">rollups</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            List of rollup files found in the library metadata
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="sandbox">sandbox</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Create a sandbox rather than inserting into lib into.
+the current context.  Not currently supported
+property sandbox
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="skin">skin</a>
+                                        <code>- object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Provides the information used to skin the skinnable components.
+The following skin definition would result in 'skin1' and 'skin2'
+being loaded for calendar (if calendar was requested), and
+'sam' for all other skinnable components:
+<code>
+skin: {
+// The default skin, which is automatically applied if not
+// overriden by a component-specific skin definition.
+// Change this in to apply a different skin globally
+defaultSkin: 'sam', 
+// This is combined with the loader base property to get
+// the default root directory for a skin. ex:
+// http://yui.yahooapis.com/2.3.0/build/assets/skins/sam/
+base: 'assets/skins/',
+// The name of the rollup css file for the skin
+path: 'skin.css',
+// The number of skinnable components requested that are
+// required before using the rollup file rather than the
+// individual component css files
+rollup: 3,
+// Any component-specific overrides can be specified here,
+// making it possible to load different skins for different
+// components.  It is possible to load more than one skin
+// for a given component as well.
+overrides: {
+calendar: ['skin1', 'skin2']
+}
+}
+</code>
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="sorted">sorted</a>
+                                        <code>- string[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            All of the derived dependencies in sorted order, which
+will be populated when either calculate() or insert()
+is called
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_addSkin">_addSkin</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_addSkin</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Adds the skin def to the module info
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_explode">_explode</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_explode</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Inspects the required modules list looking for additional 
+dependencies.  Expands the required list to include all 
+required modules.  Called by calculate()
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_pushEvents">_pushEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_pushEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            In IE, the onAvailable/onDOMReady events need help when Event is
+loaded dynamically
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_reduce">_reduce</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_reduce</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Remove superceded modules and loaded modules.  Called by
+calculate() after we have the mega list of all dependencies
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_rollup">_rollup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_rollup</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Look for rollup packages to determine if all of the modules a
+rollup supersedes are required.  If so, include the rollup to
+help reduce the total number of connections required.  Called
+by calculate()
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_setup">_setup</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_setup</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Investigates the current YUI configuration on the page.  By default,
+modules already detected will not be loaded again unless a force
+option is encountered.  Called by calculate()
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             optional options object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_skin">_skin</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_skin</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets up the requirements for the skin assets if any of the
+requested modules are skinnable
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_sort">_sort</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_sort</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sorts the dependency tree.  The last step of calculate()
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="_url">_url</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        string
+                                            <strong>_url</strong>
+                                           (
+                                                
+                                                        
+                                                         path
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Generates the full url for a module
+method _url
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>path &lt;string&gt;</code>
+                                                              the path fragment
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>the full url</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="addModule">addModule</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong>addModule</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a new module to the component metadata.  The javascript 
+component must also use YAHOO.register to notify the loader 
+when it has been loaded, or a verifier function must be
+provided
+<dl>
+<dt>name:</dt>       <dd>required, the component name</dd>
+<dt>type:</dt>       <dd>required, the component type (js or css)</dd>
+<dt>path:</dt>       <dd>required, the path to the script from "base"</dd>
+<dt>requires:</dt>   <dd>the modules required by this component</dd>
+<dt>optional:</dt>   <dd>the optional modules for this component</dd>
+<dt>supersedes:</dt> <dd>the modules this component replaces</dd>
+<dt>rollup:</dt>     <dd>the number of superseded modules required for automatic rollup</dd>
+<dt>verifier:</dt>   <dd>a function that is executed to determine when the module is fully loaded</dd>
+<dt>fullpath:</dt>   <dd>If fullpath is specified, this is used instead of the configured base + path</dd>
+<dt>skinnable:</dt>  <dd>flag to determine if skin assets should automatically be pulled in</dd>
+</dl>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             An object containing the module data
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd>true if the module was added, false if 
+the object passed in did not provide all required attributes</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="calculate">calculate</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>calculate</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Calculates the dependency tree, the result is stored in the sorted 
+property
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             optional options object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="formatSkin">formatSkin</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong>formatSkin</strong>
+                                           (
+                                                
+                                                        
+                                                         skin
+                                                    
+                                                
+                                                        , 
+                                                         mod
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns the skin module name for the specified skin name.  If a
+module name is supplied, the returned skin module name is 
+specific to the module passed in.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>skin &lt;string&gt;</code>
+                                                              the name of the skin
+                                                        </dd>
+                                                        <dd>
+                                                            <code>mod &lt;string&gt;</code>
+                                                              optional: the name of a module to skin
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>the full skin module name</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getProvides">getProvides</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getProvides</strong>
+                                           (
+                                                
+                                                        
+                                                         mod
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an object literal of the modules the supplied module satisfies
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>mod &lt;object&gt;</code>
+                                                             The module definition from moduleInfo
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>what this module provides</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="getRequires">getRequires</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>getRequires</strong>
+                                           (
+                                                
+                                                        
+                                                         mod
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Returns an object containing properties for all modules required
+in order to load the requested module
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>mod &lt;object&gt;</code>
+                                                             The module definition from moduleInfo
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="insert">insert</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>insert</strong>
+                                           (
+                                                
+                                                        
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         type
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            inserts the requested modules and their dependencies.  
+<code>type</code> can be "js" or "css".  Both script and 
+css are inserted if type is not provided.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>callback &lt;Function&gt;</code>
+                                                              a function to execute when the load
+is complete.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             optional options object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>type &lt;string&gt;</code>
+                                                              the type of dependency to insert
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="insertCss">insertCss</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>insertCss</strong>
+                                           (
+                                                
+                                                        
+                                                         url
+                                                    
+                                                
+                                                        , 
+                                                         win
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Inserts a css link node
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>url &lt;string&gt;</code>
+                                                              the full url for the script
+                                                        </dd>
+                                                        <dd>
+                                                            <code>win &lt;Window&gt;</code>
+                                                              optional window to target
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="insertScript">insertScript</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>insertScript</strong>
+                                           (
+                                                
+                                                        
+                                                         url
+                                                    
+                                                
+                                                        , 
+                                                         win
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Inserts a script node
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>url &lt;string&gt;</code>
+                                                              the full url for the script
+                                                        </dd>
+                                                        <dd>
+                                                            <code>win &lt;Window&gt;</code>
+                                                              optional window to target
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="loadNext">loadNext</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>loadNext</strong>
+                                           (
+                                                
+                                                        
+                                                         mname
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Executed every time a module is loaded, and if we are in a load
+cycle, we attempt to load the next script.  Public so that it
+is possible to call this if using a method other than
+YAHOO.register to determine when scripts are fully loaded
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>mname &lt;string&gt;</code>
+                                                              optional the name of the module that has
+been loaded (which is usually why it is time to load the next
+one)
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="onLoadComplete">onLoadComplete</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>onLoadComplete</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Callback that will be executed when the loader is finished
+with an insert
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="parseSkin">parseSkin</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        skin: string, module: string
+                                            <strong>parseSkin</strong>
+                                           (
+                                                
+                                                        
+                                                         mod
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Reverses <code>formatSkin</code>, providing the skin name and
+module name if the string matches the pattern for skins.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>mod &lt;string&gt;</code>
+                                                              the module name to parse
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        skin: string, module: string
+                                                    </code></dt>
+                                                    <dd>the parsed skin name 
+and module name, or null if the supplied string does not match
+the skin pattern</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="require">require</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>require</strong>
+                                           (
+                                                
+                                                        
+                                                         what
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Add a requirement for one or more module
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>what &lt;string[] | string*&gt;</code>
+                                                              the modules to load
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class="selected"><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.YUILoader.html">YAHOO.util.YUILoader</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="yuiloader.js.html">yuiloader.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_internalCallback">_internalCallback</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#allowRollup">allowRollup</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#base">base</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#dirty">dirty</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#filter">filter</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#inserted">inserted</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#loaded">loaded</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#loadOptional">loadOptional</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#moduleInfo">moduleInfo</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#required">required</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#rollups">rollups</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#sandbox">sandbox</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#skin">skin</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#sorted">sorted</a>
+                                        <!--<code>&lt;string[]&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_addSkin">_addSkin</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_explode">_explode</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_pushEvents">_pushEvents</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_reduce">_reduce</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_rollup">_rollup</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_setup">_setup</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_skin">_skin</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#_sort">_sort</a>
+                                </li>
+                                <li class="private"><!--<code>string</code>-->
+                                <a href="#_url">_url</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#addModule">addModule</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#calculate">calculate</a>
+                                </li>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#formatSkin">formatSkin</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#getProvides">getProvides</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#getRequires">getRequires</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#insert">insert</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#insertCss">insertCss</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#insertScript">insertScript</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#loadNext">loadNext</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#onLoadComplete">onLoadComplete</a>
+                                </li>
+                                <li class=""><!--<code>skin: string, module: string</code>-->
+                                <a href="#parseSkin">parseSkin</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#require">require</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

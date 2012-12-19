@@ -1,0 +1,1877 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable   CellEditor.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                
+                 &gt; CellEditor.js (source view) 
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+<span class="k">var</span> <span class="nx">lang</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+    <span class="nx">util</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
+    <span class="nx">widget</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">,</span>
+    <span class="nx">ua</span>     <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">,</span>
+    
+    <span class="nx">Dom</span>    <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+    <span class="nx">Ev</span>     <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+    
+    <span class="nx">DT</span>     <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">;</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The BaseCellEditor class provides base functionality common to all inline cell</span>
+<span class="c"> * editors for a DataTable widget.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class BaseCellEditor</span>
+<span class="c"> * @uses YAHOO.util.EventProvider </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sType</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">||</span> <span class="s2">&quot;yui-ceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sType</span> <span class="o">=</span> <span class="nx">sType</span><span class="o">;</span>
+    
+    <span class="c">// Validate inputs</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_initConfigs</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">);</span> 
+    
+    <span class="c">// Create Custom Events</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_initEvents</span><span class="o">();</span>
+             
+    <span class="c">// Draw UI</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+<span class="o">};</span>
+
+<span class="k">var</span> <span class="nx">BCE</span> <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">;</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Static members</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/**</span>
+<span class="c"> * Global instance counter.</span>
+<span class="c"> *</span>
+<span class="c"> * @property CellEditor._nCount</span>
+<span class="c"> * @type Number</span>
+<span class="c"> * @static</span>
+<span class="c"> * @default 0</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_nCount</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Class applied to CellEditor container.</span>
+<span class="c"> *</span>
+<span class="c"> * @property CellEditor.CLASS_CELLEDITOR</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @static</span>
+<span class="c"> * @default &quot;yui-ceditor&quot;</span>
+<span class="c"> */</span>
+<span class="nx">CLASS_CELLEDITOR</span> <span class="o">:</span> <span class="s2">&quot;yui-ceditor&quot;</span>
+
+<span class="o">});</span>
+
+<span class="nx">BCE</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private members</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Unique id assigned to instance &quot;yui-ceditorN&quot;, useful prefix for generating unique</span>
+<span class="c"> * DOM ID strings and log messages.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _sId</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_sId</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Editor type.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _sType</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_sType</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * DataTable instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _oDataTable</span>
+<span class="c"> * @type YAHOO.widget.DataTable</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_oDataTable</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Column instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _oColumn</span>
+<span class="c"> * @type YAHOO.widget.Column</span>
+<span class="c"> * @default null</span>
+<span class="c"> */</span>
+<span class="nx">_oColumn</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Record instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _oRecord</span>
+<span class="c"> * @type YAHOO.widget.Record</span>
+<span class="c"> * @default null</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_oRecord</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * TD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elTd</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @default null</span>
+<span class="c"> * @private</span>
+<span class="c"> */</span>
+<span class="nx">_elTd</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Container for inline editor.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elContainer</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_elContainer</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Reference to Cancel button, if available.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elCancelBtn</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @default null</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_elCancelBtn</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Reference to Save button, if available.</span>
+<span class="c"> *</span>
+<span class="c"> * @property _elSaveBtn</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> * @default null</span>
+<span class="c"> * @private </span>
+<span class="c"> */</span>
+<span class="nx">_elSaveBtn</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Private methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Initialize configs.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initConfigs</span>
+<span class="c"> * @private   </span>
+<span class="c"> */</span>
+<span class="nx">_initConfigs</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Object literal defines CellEditor configs</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oConfigs</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sConfig</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">sConfig</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Initialize Custom Events.</span>
+<span class="c"> *</span>
+<span class="c"> * @method _initEvents</span>
+<span class="c"> * @private   </span>
+<span class="c"> */</span>
+<span class="nx">_initEvents</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;showEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;keydownEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;invalidDataEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;revertEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;saveEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cancelEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;blurEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;blockEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;unblockEvent&quot;</span><span class="o">);</span>
+<span class="o">},</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Implementer defined function that can submit the input value to a server. This</span>
+<span class="c"> * function must accept the arguments fnCallback and oNewValue. When the submission</span>
+<span class="c"> * is complete, the function must also call fnCallback(bSuccess, oNewValue) to </span>
+<span class="c"> * finish the save routine in the CellEditor. This function can also be used to </span>
+<span class="c"> * perform extra validation or input value manipulation. </span>
+<span class="c"> *</span>
+<span class="c"> * @property asyncSubmitter</span>
+<span class="c"> * @type HTMLFunction</span>
+<span class="c"> */</span>
+<span class="nx">asyncSubmitter</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Current value.</span>
+<span class="c"> *</span>
+<span class="c"> * @property value</span>
+<span class="c"> * @type MIXED</span>
+<span class="c"> */</span>
+<span class="nx">value</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Default value in case Record data is undefined. NB: Null values will not trigger</span>
+<span class="c"> * the default value.</span>
+<span class="c"> *</span>
+<span class="c"> * @property defaultValue</span>
+<span class="c"> * @type MIXED</span>
+<span class="c"> * @default null</span>
+<span class="c"> */</span>
+<span class="nx">defaultValue</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Validator function for input data, called from the DataTable instance scope,</span>
+<span class="c"> * receives the arguments (inputValue, currentValue, editorInstance) and returns</span>
+<span class="c"> * either the validated (or type-converted) value or undefined.</span>
+<span class="c"> *</span>
+<span class="c"> * @property validator</span>
+<span class="c"> * @type HTMLFunction</span>
+<span class="c"> * @default null</span>
+<span class="c"> */</span>
+<span class="nx">validator</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * True if currently active.</span>
+<span class="c"> *</span>
+<span class="c"> * @property isActive</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> */</span>
+<span class="nx">isActive</span> <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Text to display on Save button.</span>
+<span class="c"> *</span>
+<span class="c"> * @property LABEL_SAVE</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default &quot;Save&quot;</span>
+<span class="c"> */</span>
+<span class="nx">LABEL_SAVE</span> <span class="o">:</span> <span class="s2">&quot;Save&quot;</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Text to display on Cancel button.</span>
+<span class="c"> *</span>
+<span class="c"> * @property LABEL_CANCEL</span>
+<span class="c"> * @type String</span>
+<span class="c"> * @default &quot;Cancel&quot;</span>
+<span class="c"> */</span>
+<span class="nx">LABEL_CANCEL</span> <span class="o">:</span> <span class="s2">&quot;Cancel&quot;</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * True if Save/Cancel buttons should not be displayed in the CellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @property disableBtns</span>
+<span class="c"> * @type Boolean</span>
+<span class="c"> * @default false</span>
+<span class="c"> */</span>
+<span class="nx">disableBtns</span> <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * CellEditor instance name, for logging.</span>
+<span class="c"> *</span>
+<span class="c"> * @method toString</span>
+<span class="c"> * @return {String} Unique name of the CellEditor instance.</span>
+<span class="c"> */</span>
+
+<span class="nx">toString</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s2">&quot;CellEditor instance &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * CellEditor unique ID.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getId</span>
+<span class="c"> * @return {String} Unique ID of the CellEditor instance.</span>
+<span class="c"> */</span>
+
+<span class="nx">getId</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns reference to associated DataTable instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getDataTable</span>
+<span class="c"> * @return {YAHOO.widget.DataTable} DataTable instance.</span>
+<span class="c"> */</span>
+
+<span class="nx">getDataTable</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oDataTable</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns reference to associated Column instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getColumn</span>
+<span class="c"> * @return {YAHOO.widget.Column} Column instance.</span>
+<span class="c"> */</span>
+
+<span class="nx">getColumn</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oColumn</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns reference to associated Record instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getRecord</span>
+<span class="c"> * @return {YAHOO.widget.Record} Record instance.</span>
+<span class="c"> */</span>
+
+<span class="nx">getRecord</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oRecord</span><span class="o">;</span>
+<span class="o">},</span>
+
+
+
+<span class="c">/**</span>
+<span class="c"> * Returns reference to associated TD element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getTdEl</span>
+<span class="c"> * @return {HTMLElement} TD element.</span>
+<span class="c"> */</span>
+
+<span class="nx">getTdEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elTd</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns container element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getContainerEl</span>
+<span class="c"> * @return {HTMLElement} Reference to container element.</span>
+<span class="c"> */</span>
+
+<span class="nx">getContainerEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Nulls out the entire CellEditor instance and related objects, removes attached</span>
+<span class="c"> * event listeners, and clears out DOM elements inside the container, removes</span>
+<span class="c"> * container from the DOM.</span>
+<span class="c"> *</span>
+<span class="c"> * @method destroy</span>
+<span class="c"> */</span>
+<span class="nx">destroy</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
+    
+    <span class="c">// Column is late-binding in attach()</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">oColumn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">();</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">().</span><span class="nx">editor</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="k">var</span> <span class="nx">elContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">();</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Renders DOM elements and attaches event listeners.</span>
+<span class="c"> *</span>
+<span class="c"> * @method render</span>
+<span class="c"> */</span>
+<span class="nx">render</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Render Cell Editor container element as first child of body</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;-container&quot;</span><span class="o">;</span> <span class="c">// Needed for tracking blur event</span>
+<span class="c"></span>    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">tabIndex</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">CLASS_EDITOR</span><span class="o">;</span>
+    <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span> <span class="o">=</span> <span class="nx">elContainer</span><span class="o">;</span>
+    
+    <span class="c">// Handle ESC key</span>
+<span class="c"></span>    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">elContainer</span><span class="o">,</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// ESC cancels Cell Editor</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">((</span><span class="nx">e</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="m">27</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="c">// Pass through event</span>
+<span class="c"></span>        <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;keydownEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">,</span> <span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="o">});</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">renderForm</span><span class="o">();</span>
+
+    <span class="c">// Show Save/Cancel buttons</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">renderBtns</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">doAfterRender</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Renders Save/Cancel buttons.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderBtns</span>
+<span class="c"> */</span>
+<span class="nx">renderBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Buttons</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elBtnsDiv</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">));</span>
+    <span class="nx">elBtnsDiv</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">CLASS_BUTTON</span><span class="o">;</span>
+
+    <span class="c">// Save button</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elSaveBtn</span> <span class="o">=</span> <span class="nx">elBtnsDiv</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;button&quot;</span><span class="o">));</span>
+    <span class="nx">elSaveBtn</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">CLASS_DEFAULT</span><span class="o">;</span>
+    <span class="nx">elSaveBtn</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">LABEL_SAVE</span><span class="o">;</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">elSaveBtn</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">oArgs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elSaveBtn</span> <span class="o">=</span> <span class="nx">elSaveBtn</span><span class="o">;</span>
+
+    <span class="c">// Cancel button</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elCancelBtn</span> <span class="o">=</span> <span class="nx">elBtnsDiv</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;button&quot;</span><span class="o">));</span>
+    <span class="nx">elCancelBtn</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">LABEL_CANCEL</span><span class="o">;</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">elCancelBtn</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">oArgs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_elCancelBtn</span> <span class="o">=</span> <span class="nx">elCancelBtn</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Attach CellEditor for a new interaction.</span>
+<span class="c"> *</span>
+<span class="c"> * @method attach</span>
+<span class="c"> * @param oDataTable {YAHOO.widget.DataTable} Associated DataTable instance.</span>
+<span class="c"> * @param elCell {HTMLElement} Cell to edit.  </span>
+<span class="c"> */</span>
+<span class="nx">attach</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDataTable</span><span class="o">,</span> <span class="nx">elCell</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Validate </span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oDataTable</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_oDataTable</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">;</span>
+        
+        <span class="c">// Validate cell</span>
+<span class="c"></span>        <span class="nx">elCell</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">.</span><span class="nx">getTdEl</span><span class="o">(</span><span class="nx">elCell</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">elCell</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_elTd</span> <span class="o">=</span> <span class="nx">elCell</span><span class="o">;</span>
+
+            <span class="c">// Validate Column</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">(</span><span class="nx">elCell</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_oColumn</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">;</span>
+                
+                <span class="c">// Validate Record</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">oRecord</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">.</span><span class="nx">getRecord</span><span class="o">(</span><span class="nx">elCell</span><span class="o">);</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">oRecord</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_oRecord</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="o">;</span>
+                    <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="o">.</span><span class="nx">getData</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">().</span><span class="nx">getKey</span><span class="o">());</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="o">(</span><span class="nx">value</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">?</span> <span class="nx">value</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">defaultValue</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>            
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not attach CellEditor&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Moves container into position for display.</span>
+<span class="c"> *</span>
+<span class="c"> * @method move</span>
+<span class="c"> */</span>
+<span class="nx">move</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Move Editor</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">elContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">(),</span>
+        <span class="nx">elTd</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTdEl</span><span class="o">(),</span>
+        <span class="nx">x</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="nx">elTd</span><span class="o">),</span>
+        <span class="nx">y</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getY</span><span class="o">(</span><span class="nx">elTd</span><span class="o">);</span>
+
+    <span class="c">//TODO: remove scrolling logic</span>
+<span class="c"></span>    <span class="c">// SF doesn&#39;t get xy for cells in scrolling table</span>
+<span class="c"></span>    <span class="c">// when tbody display is set to block</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">x</span><span class="o">)</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">y</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">elTbody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">().</span><span class="nx">getTbodyEl</span><span class="o">();</span>
+        <span class="nx">x</span> <span class="o">=</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetLeft</span> <span class="o">+</span> <span class="c">// cell pos relative to table</span>
+<span class="c"></span>                <span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">)</span> <span class="o">-</span> <span class="c">// plus table pos relative to document</span>
+<span class="c"></span>                <span class="nx">elTbody</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span> <span class="c">// minus tbody scroll</span>
+<span class="c"></span>        <span class="nx">y</span> <span class="o">=</span> <span class="nx">elTd</span><span class="o">.</span><span class="nx">offsetTop</span> <span class="o">+</span> <span class="c">// cell pos relative to table</span>
+<span class="c"></span>                <span class="nx">Dom</span><span class="o">.</span><span class="nx">getY</span><span class="o">(</span><span class="nx">elTbody</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">)</span> <span class="o">-</span> <span class="c">// plus table pos relative to document</span>
+<span class="c"></span>                <span class="nx">elTbody</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">+</span> <span class="c">// minus tbody scroll</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">().</span><span class="nx">getTheadEl</span><span class="o">().</span><span class="nx">offsetHeight</span><span class="o">;</span> <span class="c">// account for fixed THEAD cells</span>
+<span class="c"></span>    <span class="o">}</span>
+
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="nx">elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Displays CellEditor UI in the correct position.</span>
+<span class="c"> *</span>
+<span class="c"> * @method show</span>
+<span class="c"> */</span>
+<span class="nx">show</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">resetForm</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">isActive</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;showEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">});</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;CellEditor shown&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span> 
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fires blockEvent</span>
+<span class="c"> *</span>
+<span class="c"> * @method block</span>
+<span class="c"> */</span>
+<span class="nx">block</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;blockEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">});</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;CellEditor blocked&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span> 
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fires unblockEvent</span>
+<span class="c"> *</span>
+<span class="c"> * @method unblock</span>
+<span class="c"> */</span>
+<span class="nx">unblock</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;unblockEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">});</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;CellEditor unblocked&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span> 
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Saves value of CellEditor and hides UI.</span>
+<span class="c"> *</span>
+<span class="c"> * @method save</span>
+<span class="c"> */</span>
+<span class="nx">save</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Get new value</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">inputValue</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getInputValue</span><span class="o">();</span>
+    <span class="k">var</span> <span class="nx">validValue</span> <span class="o">=</span> <span class="nx">inputValue</span><span class="o">;</span>
+    
+    <span class="c">// Validate new value</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">validator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">validValue</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">validator</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">(),</span> <span class="nx">inputValue</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">validValue</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resetForm</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;invalidDataEvent&quot;</span><span class="o">,</span>
+                    <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">,</span> <span class="nx">oldData</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">,</span> <span class="nx">newData</span><span class="o">:</span><span class="nx">inputValue</span><span class="o">});</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not save Cell Editor input due to invalid data &quot;</span> <span class="o">+</span>
+                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">inputValue</span><span class="o">),</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+        
+    <span class="k">var</span> <span class="nx">oSelf</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">finishSave</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">bSuccess</span><span class="o">,</span> <span class="nx">oNewValue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">oOrigValue</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">_cloneObject</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">value</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">bSuccess</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// Update new value</span>
+<span class="c"></span>            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">oNewValue</span><span class="o">;</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">().</span><span class="nx">updateCell</span><span class="o">(</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">getRecord</span><span class="o">(),</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">(),</span> <span class="nx">oNewValue</span><span class="o">);</span>
+            
+            <span class="c">// Hide CellEditor</span>
+<span class="c"></span>            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">isActive</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">().</span><span class="nx">_oCellEditor</span> <span class="o">=</span>  <span class="kc">null</span><span class="o">;</span>
+            
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;saveEvent&quot;</span><span class="o">,</span>
+                    <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oldData</span><span class="o">:</span><span class="nx">oOrigValue</span><span class="o">,</span> <span class="nx">newData</span><span class="o">:</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">value</span><span class="o">});</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Cell Editor input saved&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">resetForm</span><span class="o">();</span>
+            <span class="nx">oSelf</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;revertEvent&quot;</span><span class="o">,</span>
+                    <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="nx">oSelf</span><span class="o">,</span> <span class="nx">oldData</span><span class="o">:</span><span class="nx">oOrigValue</span><span class="o">,</span> <span class="nx">newData</span><span class="o">:</span><span class="nx">oNewValue</span><span class="o">});</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not save Cell Editor input &quot;</span> <span class="o">+</span>
+                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oNewValue</span><span class="o">),</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="nx">oSelf</span><span class="o">.</span><span class="nx">unblock</span><span class="o">();</span>
+    <span class="o">};</span>
+    
+    <span class="k">this</span><span class="o">.</span><span class="nx">block</span><span class="o">();</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">asyncSubmitter</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">asyncSubmitter</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">finishSave</span><span class="o">,</span> <span class="nx">validValue</span><span class="o">);</span>
+    <span class="o">}</span> 
+    <span class="k">else</span> <span class="o">{</span>   
+        <span class="nx">finishSave</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="nx">validValue</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Cancels CellEditor input and hides UI.</span>
+<span class="c"> *</span>
+<span class="c"> * @method cancel</span>
+<span class="c"> */</span>
+<span class="nx">cancel</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isActive</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">isActive</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">.</span><span class="nx">_oCellEditor</span> <span class="o">=</span>  <span class="kc">null</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cancelEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="o">});</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;CellEditor canceled&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unable to cancel CellEditor&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Renders form elements.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Access to add additional event listeners.</span>
+<span class="c"> *</span>
+<span class="c"> * @method doAfterRender</span>
+<span class="c"> */</span>
+<span class="nx">doAfterRender</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets CellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in CellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from CellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be implemented by subclass</span>
+<span class="c"></span><span class="o">}</span>
+
+<span class="o">};</span>
+
+<span class="nx">lang</span><span class="o">.</span><span class="nx">augmentProto</span><span class="o">(</span><span class="nx">BCE</span><span class="o">,</span> <span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// Custom Events</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor is shown.</span>
+<span class="c"> *</span>
+<span class="c"> * @event showEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor has a keydown.</span>
+<span class="c"> *</span>
+<span class="c"> * @event keydownEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> * @param oArgs.event {HTMLEvent} The event object.</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor input is reverted due to invalid data.</span>
+<span class="c"> *</span>
+<span class="c"> * @event invalidDataEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> * @param oArgs.newData {Object} New data value from form input field.</span>
+<span class="c"> * @param oArgs.oldData {Object} Old data value.</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor input is reverted due to asyncSubmitter failure.</span>
+<span class="c"> *</span>
+<span class="c"> * @event revertEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> * @param oArgs.newData {Object} New data value from form input field.</span>
+<span class="c"> * @param oArgs.oldData {Object} Old data value.</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor input is saved.</span>
+<span class="c"> *</span>
+<span class="c"> * @event saveEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> * @param oArgs.newData {Object} New data value from form input field.</span>
+<span class="c"> * @param oArgs.oldData {Object} Old data value.</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor input is canceled.</span>
+<span class="c"> *</span>
+<span class="c"> * @event cancelEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Fired when a CellEditor has a blur event.</span>
+<span class="c"> *</span>
+<span class="c"> * @event blurEvent</span>
+<span class="c"> * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. </span>
+<span class="c"> */</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The CheckboxCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data with checkboxes.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class CheckboxCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">CheckboxCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-checkboxceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">CheckboxCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// CheckboxCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CheckboxCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// CheckboxCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Array of checkbox values. Can either be a simple array (e.g., [&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;])</span>
+<span class="c"> * or a an array of objects (e.g., [{label:&quot;red&quot;, value:&quot;#FF0000&quot;},</span>
+<span class="c"> * {label:&quot;green&quot;, value:&quot;#00FF00&quot;}, {label:&quot;blue&quot;, value:&quot;#0000FF&quot;}]). </span>
+<span class="c"> *</span>
+<span class="c"> * @property checkboxOptions</span>
+<span class="c"> * @type String[] | Object[]</span>
+<span class="c"> */</span>
+<span class="nx">checkboxOptions</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Reference to the checkbox elements.</span>
+<span class="c"> *</span>
+<span class="c"> * @property checkboxes</span>
+<span class="c"> * @type HTMLElement[] </span>
+<span class="c"> */</span>
+<span class="nx">checkboxes</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Array of checked values</span>
+<span class="c"> *</span>
+<span class="c"> * @property value</span>
+<span class="c"> * @type String[] </span>
+<span class="c"> */</span>
+<span class="nx">value</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// CheckboxCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a form with input(s) type=checkbox.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxOptions</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">checkboxOption</span><span class="o">,</span> <span class="nx">checkboxValue</span><span class="o">,</span> <span class="nx">checkboxId</span><span class="o">,</span> <span class="nx">elLabel</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+        
+        <span class="c">// Create the checkbox buttons in an IE-friendly way...</span>
+<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxOptions</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">checkboxOption</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">checkboxOptions</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
+            <span class="nx">checkboxValue</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">checkboxOption</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">?</span>
+                    <span class="nx">checkboxOption</span><span class="o">.</span><span class="nx">value</span> <span class="o">:</span> <span class="nx">checkboxOption</span><span class="o">;</span>
+
+            <span class="nx">checkboxId</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;-chk&quot;</span> <span class="o">+</span> <span class="nx">j</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;input type=\&quot;checkbox\&quot;&quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot; id=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">checkboxId</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span> <span class="o">+</span> <span class="c">// Needed for label</span>
+<span class="c"></span>                    <span class="s2">&quot; value=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">checkboxValue</span> <span class="o">+</span> <span class="s2">&quot;\&quot; /&gt;&quot;</span><span class="o">;</span>
+            
+            <span class="c">// Create the labels in an IE-friendly way</span>
+<span class="c"></span>            <span class="nx">elLabel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;label&quot;</span><span class="o">));</span>
+            <span class="nx">elLabel</span><span class="o">.</span><span class="nx">htmlFor</span> <span class="o">=</span> <span class="nx">checkboxId</span><span class="o">;</span>
+            <span class="nx">elLabel</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">checkboxOption</span><span class="o">.</span><span class="k">label</span><span class="o">)</span> <span class="o">?</span>
+                    <span class="nx">checkboxOption</span><span class="o">.</span><span class="k">label</span> <span class="o">:</span> <span class="nx">checkboxOption</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+        <span class="c">// Store the reference to the checkbox elements</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">allCheckboxes</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="k">for</span><span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">allCheckboxes</span><span class="o">[</span><span class="nx">allCheckboxes</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">childNodes</span><span class="o">[</span><span class="nx">j</span><span class="o">*</span><span class="m">2</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span> <span class="o">=</span> <span class="nx">allCheckboxes</span><span class="o">;</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find checkboxOptions&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">(),</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">Ev</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">v</span><span class="o">).</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;input&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// Save on blur</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets CheckboxCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Normalize to array</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">originalValues</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span> <span class="o">:</span> <span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">];</span>
+    
+    <span class="c">// Match checks to value</span>
+<span class="c"></span>    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">k</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">originalValues</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">k</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">k</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">originalValues</span><span class="o">[</span><span class="nx">k</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in CheckboxCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">focus</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from CheckboxCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">checkedValues</span> <span class="o">=</span> <span class="o">[];</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">checkedValues</span><span class="o">[</span><span class="nx">checkedValues</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">checkboxes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>  
+    <span class="k">return</span> <span class="nx">checkedValues</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to CheckboxCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">CheckboxCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The DataCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data with a YUI Calendar.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class DateCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">DateCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-dateceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">DateCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;date&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// CheckboxCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// DateCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Reference to Calendar instance.</span>
+<span class="c"> *</span>
+<span class="c"> * @property calendar</span>
+<span class="c"> * @type YAHOO.widget.Calendar</span>
+<span class="c"> */</span>
+<span class="nx">calendar</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Default value.</span>
+<span class="c"> *</span>
+<span class="c"> * @property defaultValue</span>
+<span class="c"> * @type Date</span>
+<span class="c"> * @default new Date()</span>
+<span class="c"> */</span>
+<span class="nx">defaultValue</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(),</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// DateCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a Calendar.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// Calendar widget</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">calContainer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">));</span>
+        <span class="nx">calContainer</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;-dateContainer&quot;</span><span class="o">;</span> <span class="c">// Needed for Calendar constructor</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">calendar</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Calendar</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;-date&quot;</span><span class="o">,</span>
+                <span class="nx">calContainer</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+        <span class="nx">calendar</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+        <span class="nx">calContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">cssFloat</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">calFloatClearer</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;br&quot;</span><span class="o">));</span>
+            <span class="nx">calFloatClearer</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">clear</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+        <span class="k">this</span><span class="o">.</span><span class="nx">calendar</span> <span class="o">=</span> <span class="nx">calendar</span><span class="o">;</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find YUI Calendar&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+    
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">calendar</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="c">// Save on select</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets DateCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">selectedValue</span> <span class="o">=</span> <span class="o">(</span><span class="nx">value</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nx">value</span><span class="o">.</span><span class="nx">getDate</span><span class="o">()+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nx">value</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">calendar</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;selected&quot;</span><span class="o">,</span><span class="nx">selectedValue</span><span class="o">,</span><span class="kc">false</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">calendar</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in DateCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c">// To be impmlemented by subclass</span>
+<span class="c"></span><span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from DateCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">calendar</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">()[</span><span class="m">0</span><span class="o">];</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to DateCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The DropdownCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data a SELECT element.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class DropdownCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">DropdownCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-dropdownceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">DropdownCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;dropdown&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// DropdownCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DropdownCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// DropdownCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Array of dropdown values. Can either be a simple array (e.g., </span>
+<span class="c"> * [&quot;Alabama&quot;,&quot;Alaska&quot;,&quot;Arizona&quot;,&quot;Arkansas&quot;]) or a an array of objects (e.g., </span>
+<span class="c"> * [{label:&quot;Alabama&quot;, value:&quot;AL&quot;}, {label:&quot;Alaska&quot;, value:&quot;AK&quot;},</span>
+<span class="c"> * {label:&quot;Arizona&quot;, value:&quot;AZ}, {label:&quot;Arkansas&quot;, value:&quot;AR}]). </span>
+<span class="c"> *</span>
+<span class="c"> * @property dropdownOptions</span>
+<span class="c"> * @type String[] | Object[]</span>
+<span class="c"> */</span>
+<span class="nx">dropdownOptions</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Reference to Dropdown element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property dropdown</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> */</span>
+<span class="nx">dropdown</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// DropdownCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a form with select element.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elDropdown</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;select&quot;</span><span class="o">));</span>
+    <span class="nx">elDropdown</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">zoom</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span> <span class="o">=</span> <span class="nx">elDropdown</span><span class="o">;</span>
+    
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdownOptions</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">dropdownOption</span><span class="o">,</span> <span class="nx">elOption</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdownOptions</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">dropdownOption</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dropdownOptions</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="nx">elOption</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;option&quot;</span><span class="o">);</span>
+            <span class="nx">elOption</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">dropdownOption</span><span class="o">.</span><span class="nx">value</span><span class="o">))</span> <span class="o">?</span>
+                    <span class="nx">dropdownOption</span><span class="o">.</span><span class="nx">value</span> <span class="o">:</span> <span class="nx">dropdownOption</span><span class="o">;</span>
+            <span class="nx">elOption</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">dropdownOption</span><span class="o">.</span><span class="k">label</span><span class="o">))</span> <span class="o">?</span>
+                    <span class="nx">dropdownOption</span><span class="o">.</span><span class="k">label</span> <span class="o">:</span> <span class="nx">dropdownOption</span><span class="o">;</span>
+            <span class="nx">elOption</span> <span class="o">=</span> <span class="nx">elDropdown</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">elOption</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">,</span> <span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="c">// Save on change</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>        
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets DropdownCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">.</span><span class="nx">options</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span> <span class="o">===</span> <span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">.</span><span class="nx">options</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">.</span><span class="nx">options</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">selected</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>    
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in DropdownCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">getDataTable</span><span class="o">().</span><span class="nx">_focusEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from DropdownCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">.</span><span class="nx">options</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">dropdown</span><span class="o">.</span><span class="nx">options</span><span class="o">.</span><span class="nx">selectedIndex</span><span class="o">].</span><span class="nx">value</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to DropdownCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DropdownCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The RadioCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data with radio buttons.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class RadioCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">RadioCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-radioceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">RadioCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;radio&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// RadioCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RadioCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// RadioCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Reference to radio elements.</span>
+<span class="c"> *</span>
+<span class="c"> * @property radios</span>
+<span class="c"> * @type HTMLElement[]</span>
+<span class="c"> */</span>
+<span class="nx">radios</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/**</span>
+<span class="c"> * Array of radio values. Can either be a simple array (e.g., [&quot;yes&quot;,&quot;no&quot;,&quot;maybe&quot;])</span>
+<span class="c"> * or a an array of objects (e.g., [{label:&quot;yes&quot;, value:1}, {label:&quot;no&quot;, value:-1},</span>
+<span class="c"> * {label:&quot;maybe&quot;, value:0}]). </span>
+<span class="c"> *</span>
+<span class="c"> * @property radioOptions</span>
+<span class="c"> * @type String[] | Object[]</span>
+<span class="c"> */</span>
+<span class="nx">radioOptions</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// RadioCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a form with input(s) type=radio.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">radioOptions</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">radioOption</span><span class="o">,</span> <span class="nx">radioValue</span><span class="o">,</span> <span class="nx">radioId</span><span class="o">,</span> <span class="nx">elLabel</span><span class="o">;</span>
+        
+        <span class="c">// Create the radio buttons in an IE-friendly way</span>
+<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">radioOptions</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">radioOption</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">radioOptions</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="nx">radioValue</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">radioOption</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">?</span>
+                    <span class="nx">radioOption</span><span class="o">.</span><span class="nx">value</span> <span class="o">:</span> <span class="nx">radioOption</span><span class="o">;</span>
+            <span class="nx">radioId</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;-radio&quot;</span> <span class="o">+</span> <span class="nx">i</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;input type=\&quot;radio\&quot;&quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot; name=\&quot;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot; value=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">radioValue</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot; id=\&quot;&quot;</span> <span class="o">+</span>  <span class="nx">radioId</span> <span class="o">+</span> <span class="s2">&quot;\&quot; /&gt;&quot;</span><span class="o">;</span> <span class="c">// Needed for label</span>
+<span class="c"></span>            
+            <span class="c">// Create the labels in an IE-friendly way</span>
+<span class="c"></span>            <span class="nx">elLabel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;label&quot;</span><span class="o">));</span>
+            <span class="nx">elLabel</span><span class="o">.</span><span class="nx">htmlFor</span> <span class="o">=</span> <span class="nx">radioId</span><span class="o">;</span>
+            <span class="nx">elLabel</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">radioOption</span><span class="o">.</span><span class="k">label</span><span class="o">))</span> <span class="o">?</span>
+                    <span class="nx">radioOption</span><span class="o">.</span><span class="k">label</span> <span class="o">:</span> <span class="nx">radioOption</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+        <span class="c">// Store the reference to the checkbox elements</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">allRadios</span> <span class="o">=</span> <span class="o">[],</span>
+            <span class="nx">elRadio</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nx">elRadio</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">childNodes</span><span class="o">[</span><span class="nx">j</span><span class="o">*</span><span class="m">2</span><span class="o">];</span>
+            <span class="nx">allRadios</span><span class="o">[</span><span class="nx">allRadios</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">elRadio</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">radios</span> <span class="o">=</span> <span class="nx">allRadios</span><span class="o">;</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find radioOptions&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">(),</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="nx">Ev</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">v</span><span class="o">).</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;input&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// Save on blur</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets RadioCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">elRadio</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">elRadio</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">elRadio</span><span class="o">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in RadioCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">focus</span><span class="o">();</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from RadioCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">j</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">j</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">radios</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to RadioCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RadioCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The TextareaCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data with a TEXTAREA element.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class TextareaCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-textareaceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;textarea&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// TextareaCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// TextareaCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Reference to textarea element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property textarea</span>
+<span class="c"> * @type HTMLElement</span>
+<span class="c"> */</span>
+<span class="nx">textarea</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// TextareaCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a form with textarea.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elTextarea</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;textarea&quot;</span><span class="o">));</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">elTextarea</span><span class="o">;</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * After rendering form, if disabledBtns is set to true, then sets up a mechanism</span>
+<span class="c"> * to save input without them. </span>
+<span class="c"> *</span>
+<span class="c"> * @method handleDisabledBtns</span>
+<span class="c"> */</span>
+<span class="nx">handleDisabledBtns</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">,</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="c">// Save on blur</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>        
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Moves TextareaCellEditor UI to a cell.</span>
+<span class="c"> *</span>
+<span class="c"> * @method move</span>
+<span class="c"> */</span>
+<span class="nx">move</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTdEl</span><span class="o">().</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">&quot;3em&quot;</span><span class="o">;</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">move</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets TextareaCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in TextareaCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">select</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Retrieves input value from TextareaCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">textarea</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to TextareaCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+
+
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * The TextboxCellEditor class provides functionality for inline editing</span>
+<span class="c"> * DataTable cell data with an INPUT TYPE=TEXT element.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class TextboxCellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sId</span> <span class="o">=</span> <span class="s2">&quot;yui-textboxceditor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">BaseCellEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;textbox&quot;</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
+<span class="o">};</span>
+
+<span class="c">// TextboxCellEditor extends BaseCellEditor</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">,</span> <span class="o">{</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// TextboxCellEditor public properties</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/**</span>
+<span class="c"> * Reference to the textbox element.</span>
+<span class="c"> *</span>
+<span class="c"> * @property textbox</span>
+<span class="c"> */</span>
+<span class="nx">textbox</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// TextboxCellEditor public methods</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Render a form with input type=text.</span>
+<span class="c"> *</span>
+<span class="c"> * @method renderForm</span>
+<span class="c"> */</span>
+<span class="nx">renderForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="nx">elTextbox</span><span class="o">;</span>
+    <span class="c">// Bug 1802582: SF3/Mac needs a form element wrapping the input</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span><span class="o">&gt;</span><span class="m">420</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">elTextbox</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;form&quot;</span><span class="o">)).</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">));</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="nx">elTextbox</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getContainerEl</span><span class="o">().</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">));</span>
+    <span class="o">}</span>
+    <span class="nx">elTextbox</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span> <span class="o">=</span> <span class="nx">elTextbox</span><span class="o">;</span>
+
+    <span class="c">// Save on enter by default</span>
+<span class="c"></span>    <span class="c">// Bug: 1802582 Set up a listener on each textbox to track on keypress</span>
+<span class="c"></span>    <span class="c">// since SF/OP can&#39;t preventDefault on keydown</span>
+<span class="c"></span>    <span class="nx">Ev</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">elTextbox</span><span class="o">,</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">v</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">((</span><span class="nx">v</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">===</span> <span class="m">13</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c">// Prevent form submit</span>
+<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">v</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">save</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">disableBtns</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c">// By default this is no-op since enter saves by default</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">handleDisabledBtns</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Moves TextboxCellEditor UI to a cell.</span>
+<span class="c"> *</span>
+<span class="c"> * @method move</span>
+<span class="c"> */</span>
+<span class="nx">move</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTdEl</span><span class="o">().</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">move</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Resets TextboxCellEditor UI to initial state.</span>
+<span class="c"> *</span>
+<span class="c"> * @method resetForm</span>
+<span class="c"> */</span>
+<span class="nx">resetForm</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Sets focus in TextboxCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method focus</span>
+<span class="c"> */</span>
+<span class="nx">focus</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span><span class="o">.</span><span class="nx">select</span><span class="o">();</span>
+<span class="o">},</span>
+
+<span class="c">/**</span>
+<span class="c"> * Returns new value for TextboxCellEditor.</span>
+<span class="c"> *</span>
+<span class="c"> * @method getInputValue</span>
+<span class="c"> */</span>
+<span class="nx">getInputValue</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">textbox</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="o">});</span>
+
+<span class="c">// Copy static members to TextboxCellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+
+
+
+
+
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">//</span>
+<span class="c">// DataTable extension</span>
+<span class="c">//</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * CellEditor subclasses.</span>
+<span class="c"> * @property DataTable.Editors</span>
+<span class="c"> * @type Object</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">DT</span><span class="o">.</span><span class="nx">Editors</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nx">checkbox</span> <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">CheckboxCellEditor</span><span class="o">,</span>
+    <span class="s2">&quot;date&quot;</span>   <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">DateCellEditor</span><span class="o">,</span>
+    <span class="nx">dropdown</span> <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">DropdownCellEditor</span><span class="o">,</span>
+    <span class="nx">radio</span>    <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">RadioCellEditor</span><span class="o">,</span>
+    <span class="nx">textarea</span> <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">TextareaCellEditor</span><span class="o">,</span>
+    <span class="nx">textbox</span>  <span class="o">:</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">TextboxCellEditor</span>
+<span class="o">};</span>
+
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+<span class="c">/****************************************************************************/</span>
+    
+<span class="c">/**</span>
+<span class="c"> * Factory class for instantiating a BaseCellEditor subclass.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class CellEditor</span>
+<span class="c"> * @extends YAHOO.widget.BaseCellEditor </span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.</span>
+<span class="c"> * @param oConfigs {Object} (Optional) Object literal of configs.</span>
+<span class="c"> */</span>
+<span class="nx">widget</span><span class="o">.</span><span class="nx">CellEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sType</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Point to one of the subclasses</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">sType</span> <span class="o">&amp;&amp;</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">Editors</span><span class="o">[</span><span class="nx">sType</span><span class="o">])</span> <span class="o">{</span>
+        <span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">BCE</span><span class="o">,</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">Editors</span><span class="o">[</span><span class="nx">sType</span><span class="o">]);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">DT</span><span class="o">.</span><span class="nx">Editors</span><span class="o">[</span><span class="nx">sType</span><span class="o">](</span><span class="nx">oConfigs</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">BCE</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="k">var</span> <span class="nx">CE</span> <span class="o">=</span> <span class="nx">widget</span><span class="o">.</span><span class="nx">CellEditor</span><span class="o">;</span>
+
+<span class="c">// Copy static members to CellEditor class</span>
+<span class="c"></span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">CE</span><span class="o">,</span> <span class="nx">BCE</span><span class="o">);</span>
+
+
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class=""><a href="YAHOO.widget.BaseCellEditor.html">YAHOO.widget.BaseCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CellEditor.html">YAHOO.widget.CellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.CheckboxCellEditor.html">YAHOO.widget.CheckboxCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.DateCellEditor.html">YAHOO.widget.DateCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.DropdownCellEditor.html">YAHOO.widget.DropdownCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.RadioCellEditor.html">YAHOO.widget.RadioCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                                <li class=""><a href="YAHOO.widget.ScrollingDataTable.html">YAHOO.widget.ScrollingDataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.TextareaCellEditor.html">YAHOO.widget.TextareaCellEditor</a></li>
+                                <li class=""><a href="YAHOO.widget.TextboxCellEditor.html">YAHOO.widget.TextboxCellEditor</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="CellEditor.js.html">CellEditor.js</a></li>
+                                <li class=""><a href="Chain.js.html">Chain.js</a></li>
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                                <li class=""><a href="ScrollingDataTable.js.html">ScrollingDataTable.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

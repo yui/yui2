@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datatable   Chain.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datatable.html">datatable</a>
+                
+                 &gt; Chain.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * Mechanism to execute a series of callbacks in a non-blocking queue.  Each callback is executed via setTimout unless configured with a negative timeout, in which case it is run in blocking mode in the same execution thread as the previous callback.  Callbacks can be function references or object literals with the following keys:</span>
+<span class="c"> * &lt;ul&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;method&lt;/code&gt; - {Function} REQUIRED the callback function.&lt;/li&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;scope&lt;/code&gt; - {Object} the scope from which to execute the callback.  Default is the global window scope.&lt;/li&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;argument&lt;/code&gt; - {Array} parameters to be passed to method as individual arguments.&lt;/li&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;timeout&lt;/code&gt; - {number} millisecond delay to wait after previous callback completion before executing this callback.  Negative values cause immediate blocking execution.  Default 0.&lt;/li&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;until&lt;/code&gt; - {Function} boolean function executed before each iteration.  Return true to indicate completion and proceed to the next callback.&lt;/li&gt;</span>
+<span class="c"> *    &lt;li&gt;&lt;code&gt;iterations&lt;/code&gt; - {Number} number of times to execute the callback before proceeding to the next callback in the chain. Incompatible with &lt;code&gt;until&lt;/code&gt;.&lt;/li&gt;</span>
+<span class="c"> * &lt;/ul&gt;</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.util</span>
+<span class="c"> * @class Chain</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param callback* {Function|Object} Any number of callbacks to initialize the queue</span>
+<span class="c">*/</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Chain</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="c">/**</span>
+<span class="c">     * The callback queue</span>
+<span class="c">     * @property q</span>
+<span class="c">     * @type {Array}</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">q</span> <span class="o">=</span> <span class="o">[].</span><span class="nx">slice</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">arguments</span><span class="o">);</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Event fired when the callback queue is emptied via execution (not via</span>
+<span class="c">     * a call to chain.stop().</span>
+<span class="c">     * @event end</span>
+<span class="c">     */</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;end&#39;</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Chain</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c">/**</span>
+<span class="c">     * Timeout id used to pause or stop execution and indicate the execution state of the Chain.  0 indicates paused or stopped, -1 indicates blocking execution, and any positive number indicates non-blocking execution.</span>
+<span class="c">     * @property id</span>
+<span class="c">     * @type {number}</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">id</span>   <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Begin executing the chain, or resume execution from the last paused position.</span>
+<span class="c">     * @method run</span>
+<span class="c">     * @return {Chain} the Chain instance</span>
+<span class="c">     */</span>
+    <span class="nx">run</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="c">// Grab the first callback in the queue</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">c</span>  <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+            <span class="nx">fn</span><span class="o">;</span>
+
+        <span class="c">// If there is no callback in the queue or the Chain is currently</span>
+<span class="c"></span>        <span class="c">// in an execution mode, return</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;end&#39;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nx">fn</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">method</span> <span class="o">||</span> <span class="nx">c</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">o</span>    <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">scope</span> <span class="o">||</span> <span class="o">{},</span>
+                <span class="nx">args</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">argument</span> <span class="o">||</span> <span class="o">[],</span>
+                <span class="nx">ms</span>   <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">timeout</span> <span class="o">||</span> <span class="m">0</span><span class="o">,</span>
+                <span class="nx">me</span>   <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+                
+            <span class="k">if</span> <span class="o">(!(</span><span class="nx">args</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">args</span> <span class="o">=</span> <span class="o">[</span><span class="nx">args</span><span class="o">];</span>
+            <span class="o">}</span>
+
+            <span class="c">// Execute immediately if the callback timeout is negative.</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">ms</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">ms</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(;!</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">();)</span> <span class="o">{</span>
+                        <span class="c">// Execute the callback from scope, with argument</span>
+<span class="c"></span>                        <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">args</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(;</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span><span class="o">--</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">;)</span> <span class="o">{</span>
+                        <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">args</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">args</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c">// If the until condition is set, check if we&#39;re done</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">())</span> <span class="o">{</span>
+                        <span class="c">// Shift this callback from the queue and execute the next</span>
+<span class="c"></span>                        <span class="c">// callback</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
+                        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="c">// Otherwise if either iterations is not set or we&#39;re</span>
+<span class="c"></span>                <span class="c">// executing the last iteration, shift callback from the queue</span>
+<span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span> <span class="o">||</span> <span class="o">!--</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
+                <span class="o">}</span>
+
+                <span class="c">// Otherwise set to execute after the configured timeout</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                    <span class="c">// Execute the callback from scope, with argument</span>
+<span class="c"></span>                    <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">args</span><span class="o">);</span>
+                    <span class="c">// Check if the Chain was not paused from inside the callback</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">me</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c">// Indicate ready to run state</span>
+<span class="c"></span>                        <span class="nx">me</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                        <span class="c">// Start the fun all over again</span>
+<span class="c"></span>                        <span class="nx">me</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">},</span><span class="nx">ms</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Add a callback to the end of the queue</span>
+<span class="c">     * @method add</span>
+<span class="c">     * @param c {Function|Object} the callback function ref or object literal</span>
+<span class="c">     * @return {Chain} the Chain instance</span>
+<span class="c">     */</span>
+    <span class="nx">add</span>  <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">c</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Pause the execution of the Chain after the current execution of the</span>
+<span class="c">     * current callback completes.  If called interstitially, clears the</span>
+<span class="c">     * timeout for the pending callback. Paused Chains can be restarted with</span>
+<span class="c">     * chain.run()</span>
+<span class="c">     * @method pause</span>
+<span class="c">     * @return {Chain} the Chain instance</span>
+<span class="c">     */</span>
+    <span class="nx">pause</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Stop and clear the Chain&#39;s queue after the current execution of the</span>
+<span class="c">     * current callback completes.</span>
+<span class="c">     * @method stop</span>
+<span class="c">     * @return {Chain} the Chain instance</span>
+<span class="c">     */</span>
+    <span class="nx">stop</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">pause</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">q</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentProto</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Chain</span><span class="o">,</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class="selected"><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
+                                <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
+                                <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
+                                <li class=""><a href="YAHOO.widget.Column.html">YAHOO.widget.Column</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSet.html">YAHOO.widget.ColumnSet</a></li>
+                                <li class=""><a href="YAHOO.widget.DataTable.html">YAHOO.widget.DataTable</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.CurrentPageReport.html">YAHOO.widget.Paginator.ui.CurrentPageReport</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.FirstPageLink.html">YAHOO.widget.Paginator.ui.FirstPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.LastPageLink.html">YAHOO.widget.Paginator.ui.LastPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.NextPageLink.html">YAHOO.widget.Paginator.ui.NextPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PageLinks.html">YAHOO.widget.Paginator.ui.PageLinks</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PreviousPageLink.html">YAHOO.widget.Paginator.ui.PreviousPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="Chain.js.html">Chain.js</a></li>
+                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                                <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
+                                <li class=""><a href="Paginator.js.html">Paginator.js</a></li>
+                                <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: charts   Chart.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Charts Widget&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_charts.html">charts</a>
+                
+                 &gt; Chart.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * The Charts widget provides a Flash control for displaying data</span>
+<span class="c"> * graphically by series across A-grade browsers with Flash Player installed.</span>
+<span class="c"> *</span>
+<span class="c"> * @module charts</span>
+<span class="c"> * @requires yahoo, dom, event, datasource</span>
+<span class="c"> * @title Charts Widget</span>
+<span class="c"> * @beta</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Chart class for the YUI Charts widget.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget</span>
+<span class="c"> * @class Chart</span>
+<span class="c"> * @uses YAHOO.util.FlashAdapter</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param type {String} The char type. May be &quot;line&quot;, &quot;column&quot;, &quot;bar&quot;, or &quot;pie&quot;</span>
+<span class="c"> * @param containerId {HTMLElement} Container element for the Flash Player instance.</span>
+<span class="c"> * @param dataSource {YAHOO.util.DataSource} DataSource instance.</span>
+<span class="c"> * @param attributes {object} (optional) Object literal of configuration values.</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span>
+<span class="o">{</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
+	
+	<span class="k">this</span><span class="o">.</span><span class="nx">_type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">=</span> <span class="nx">dataSource</span><span class="o">;</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user moves the mouse over the bounds of an item renderer in the chart.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemMouseOverEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOverEvent&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user moves the mouse out of the bounds of an item renderer in the chart.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemMouseOutEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOutEvent&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user clicks an item renderer in the chart with the mouse.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemClickEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemClickEvent&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user double-clicks an item renderer in the chart with the mouse.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemDoubleClickEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDoubleClickEvent&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user presses the mouse down on an item to initiate a drag action.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemDragStartEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragStartEvent&quot;</span><span class="o">);</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user moves the mouse during a drag action.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemDragEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEvent&quot;</span><span class="o">);</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Fires when the user releases the mouse during a drag action.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @event itemDragEndEvent</span>
+<span class="c">	 * @param event.type {String} The event type</span>
+<span class="c">	 * @param event.item {Object} The data displayed by the renderer</span>
+<span class="c">	 * @param event.index {Number} The position within the series that the item appears.</span>
+<span class="c">	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.</span>
+<span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
+<span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
+<span class="c">	 */</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEndEvent&quot;</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span>
+<span class="o">{</span>
+	<span class="c">/**</span>
+<span class="c">	 * The type of this chart instance.</span>
+<span class="c">	 * @property _type</span>
+<span class="c">	 * @type String</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_type</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The id returned from the DataSource&#39;s setInterval function.</span>
+<span class="c">	 * @property _pollingID</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_pollingID</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * The time, in ms, between requests for data.</span>
+<span class="c">	 * @property _pollingInterval</span>
+<span class="c">	 * @type Number</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_pollingInterval</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Public accessor to the unique name of the Chart instance.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method toString</span>
+<span class="c">	 * @return {String} Unique name of the Chart instance.</span>
+<span class="c">	 */</span>
+	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="s2">&quot;Chart &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Sets a single style value on the Chart instance.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method setStyle</span>
+<span class="c">	 * @param name {String} Name of the Chart style value to change.</span>
+<span class="c">	 * @param value {Object} New value to pass to the Chart style.</span>
+<span class="c">	 */</span>
+	<span class="nx">setStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Resets all styles on the Chart instance.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method setStyles</span>
+<span class="c">	 * @param styles {Object} Initializer for all Chart styles.</span>
+<span class="c">	 */</span>
+	<span class="nx">setStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyles</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Sets the styles on all series in the Chart.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method setSeriesStyles</span>
+<span class="c">	 * @param styles {Array} Initializer for all Chart series styles.</span>
+<span class="c">	 */</span>
+	<span class="nx">setSeriesStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setSeriesStyles</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Initializes the attributes.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _initAttributes</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_initAttributes</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">attributes</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initAttributes</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
+
+		<span class="c">/**</span>
+<span class="c">		 * @attribute request</span>
+<span class="c">		 * @description Request to be sent to the Chart&#39;s DataSource.</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getRequest</span>
+		<span class="o">});</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setRequest</span>
+		<span class="o">});</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * @attribute dataSource</span>
+<span class="c">		 * @description The DataSource instance to display in the Chart.</span>
+<span class="c">		 * @type DataSource</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataSource</span>
+		<span class="o">});</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataSource</span>
+		<span class="o">});</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * @attribute series</span>
+<span class="c">		 * @description Defines the series to be displayed by the Chart.</span>
+<span class="c">		 * @type Array</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSeriesDefs</span>
+		<span class="o">});</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setSeriesDefs</span>
+		<span class="o">});</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * @attribute categoryNames</span>
+<span class="c">		 * @description Defines the names of the categories to be displayed in the Chart..</span>
+<span class="c">		 * @type Array</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCategoryNames</span>
+		<span class="o">});</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setCategoryNames</span>
+		<span class="o">});</span>
+		
+		<span class="c">/**</span>
+<span class="c">		 * @attribute dataTipFunction</span>
+<span class="c">		 * @description The string representation of a globally-accessible function</span>
+<span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart&#39;s item.</span>
+<span class="c">		 * @type String</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataTipFunction</span>
+		<span class="o">});</span>
+		
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataTipFunction</span>
+		<span class="o">});</span>
+
+		<span class="c">/**</span>
+<span class="c">		 * @attribute polling</span>
+<span class="c">		 * @description A numeric value indicating the number of milliseconds between</span>
+<span class="c">		 * polling requests to the DataSource.</span>
+<span class="c">		 * @type Number</span>
+<span class="c">		 */</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getPolling</span>
+		<span class="o">});</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="o">{</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setPolling</span>
+		<span class="o">});</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Called when the SWF is ready for communication. Sets the type, initializes</span>
+<span class="c">	 * the styles, and sets the DataSource.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _loadHandler</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_loadHandler</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setType</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">);</span>
+		
+		<span class="c">//set initial styles</span>
+<span class="c"></span>		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">style</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="k">var</span> <span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyles</span><span class="o">(</span><span class="nx">style</span><span class="o">);</span>		
+		<span class="o">}</span>
+		
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_loadHandler</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+		
+		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Sends the request to the DataSource.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _refreshData</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_refreshData</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_pollingID</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">.</span><span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_pollingID</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_pollingID</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+			<span class="o">}</span>
+			
+			<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_pollingInterval</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_pollingID</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">.</span><span class="nx">setInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_pollingInterval</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_request</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_loadDataHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">else</span>
+			<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">.</span><span class="nx">sendRequest</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_request</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_loadDataHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Called when the DataSource receives new data. The series definitions are used</span>
+<span class="c">	 * to build a data provider for the SWF chart.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _loadDataHandler</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_loadDataHandler</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">request</span><span class="o">,</span> <span class="nx">response</span><span class="o">,</span> <span class="nx">error</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">error</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unable to load data.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">else</span>
+		<span class="o">{</span>
+			<span class="k">var</span> <span class="nx">styleChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+			
+			<span class="c">//make a copy of the series definitions so that we aren&#39;t</span>
+<span class="c"></span>			<span class="c">//editing them directly.</span>
+<span class="c"></span>			<span class="k">var</span> <span class="nx">dataProvider</span> <span class="o">=</span> <span class="o">[];</span>	
+			<span class="k">var</span> <span class="nx">seriesCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+			<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_seriesDefs</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="nx">seriesCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_seriesDefs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+				<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">seriesCount</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span>
+				<span class="o">{</span>
+					<span class="k">var</span> <span class="nx">currentSeries</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_seriesDefs</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+					<span class="k">var</span> <span class="nx">clonedSeries</span> <span class="o">=</span> <span class="o">{};</span>
+					<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">currentSeries</span><span class="o">)</span>
+					<span class="o">{</span>
+						<span class="nx">clonedSeries</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">currentSeries</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
+						<span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">&quot;style&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">currentSeries</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+						<span class="o">{</span>
+							<span class="nx">styleChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+							<span class="nx">currentSeries</span><span class="o">.</span><span class="nx">style</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+						<span class="o">}</span>
+					<span class="o">}</span>
+					<span class="nx">dataProvider</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">clonedSeries</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			
+			<span class="k">if</span><span class="o">(</span><span class="nx">seriesCount</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="k">for</span><span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">seriesCount</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span>
+				<span class="o">{</span>
+					<span class="nx">currentSeries</span> <span class="o">=</span> <span class="nx">dataProvider</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+					<span class="k">if</span><span class="o">(!</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span>
+					<span class="o">{</span>
+						<span class="nx">currentSeries</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">;</span>
+					<span class="o">}</span>
+					<span class="nx">currentSeries</span><span class="o">.</span><span class="nx">dataProvider</span> <span class="o">=</span> <span class="nx">response</span><span class="o">.</span><span class="nx">results</span><span class="o">;</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="k">else</span>
+			<span class="o">{</span>
+				<span class="k">var</span> <span class="nx">series</span> <span class="o">=</span> <span class="o">{</span><span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">,</span> <span class="nx">dataProvider</span><span class="o">:</span> <span class="nx">response</span><span class="o">.</span><span class="nx">results</span><span class="o">};</span>
+				<span class="nx">dataProvider</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">series</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">,</span> <span class="nx">styleChanged</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Storage for the request attribute.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @property _request</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_request</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the request attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getRequest</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getRequest</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_request</span><span class="o">;</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the request attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setRequest</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setRequest</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_request</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_refreshData</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Storage for the dataSource attribute.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @property _dataSource</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_dataSource</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the dataSource attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getDataSource</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getDataSource</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the dataSource attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setDataSource</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setDataSource</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>	
+		<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_refreshData</span><span class="o">();</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Storage for the series attribute.</span>
+<span class="c">	 * </span>
+<span class="c">	 * @property _seriesDefs</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_seriesDefs</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the series attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getSeriesDefs</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getSeriesDefs</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_seriesDefs</span><span class="o">;</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the series attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setSeriesDefs</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setSeriesDefs</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_seriesDefs</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the categoryNames attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getCategoryNames</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getCategoryNames</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">getCategoryNames</span><span class="o">();</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the categoryNames attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setCategoryNames</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setCategoryNames</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setCategoryNames</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Storage for the dataTipFunction attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @property _dataTipFunction</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_dataTipFunction</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the dataTipFunction attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getDataTipFunction</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getDataTipFunction</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span><span class="o">;</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the dataTipFunction attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setDataTipFunction</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setDataTipFunction</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataTipFunction</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Getter for the polling attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _getPolling</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_getPolling</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_pollingInterval</span><span class="o">;</span>
+	<span class="o">},</span>
+
+	<span class="c">/**</span>
+<span class="c">	 * Setter for the polling attribute.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method _setPolling</span>
+<span class="c">	 * @private</span>
+<span class="c">	 */</span>
+	<span class="nx">_setPolling</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_pollingInterval</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_refreshData</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+
+<span class="c">/**</span>
+<span class="c"> * Storage for the dataTipFunction attribute.</span>
+<span class="c"> *</span>
+<span class="c"> * @property Chart.SWFURL</span>
+<span class="c"> * @private</span>
+<span class="c"> * @static</span>
+<span class="c"> * @final</span>
+<span class="c"> * @default &quot;assets/charts.swf&quot;</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">&quot;assets/charts.swf&quot;</span><span class="o">;</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class="selected"><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_date.html">date</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_number.html">number</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                                <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
+                                <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
+                                <li class=""><a href="YAHOO.widget.CartesianSeries.html">YAHOO.widget.CartesianSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.CategoryAxis.html">YAHOO.widget.CategoryAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.Chart.html">YAHOO.widget.Chart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnChart.html">YAHOO.widget.ColumnChart</a></li>
+                                <li class=""><a href="YAHOO.widget.ColumnSeries.html">YAHOO.widget.ColumnSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
+                                <li class=""><a href="YAHOO.widget.LineChart.html">YAHOO.widget.LineChart</a></li>
+                                <li class=""><a href="YAHOO.widget.LineSeries.html">YAHOO.widget.LineSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.NumericAxis.html">YAHOO.widget.NumericAxis</a></li>
+                                <li class=""><a href="YAHOO.widget.PieChart.html">YAHOO.widget.PieChart</a></li>
+                                <li class=""><a href="YAHOO.widget.PieSeries.html">YAHOO.widget.PieSeries</a></li>
+                                <li class=""><a href="YAHOO.widget.Series.html">YAHOO.widget.Series</a></li>
+                                <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                                <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
+                                <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
+                                <li class="selected"><a href="Chart.js.html">Chart.js</a></li>
+                                <li class=""><a href="ChartTypes.js.html">ChartTypes.js</a></li>
+                                <li class=""><a href="FlashAdapter.js.html">FlashAdapter.js</a></li>
+                                <li class=""><a href="NumericAxis.js.html">NumericAxis.js</a></li>
+                                <li class=""><a href="PieChart.js.html">PieChart.js</a></li>
+                                <li class=""><a href="Series.js.html">Series.js</a></li>
+                                <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
+                                <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

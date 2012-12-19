@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: datasource   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>DataSource Utility&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_datasource.html">datasource</a>
+                
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                   
+                    <h3>Module: datasource
+                    
+                    <span class="description"><em>Beta</em></span>
+
+
+                    </h3>
+                    <div class="description summary">
+                        The DataSource utility provides a common configurable interface for widgets
+to access a variety of data, from JavaScript arrays to online servers over
+XHR.
+                    </div>
+
+                    <form onsubmit="return false">
+                        <p>Search datasource:
+                        <div id="propertysearch">
+                            <input autocomplete="off" id="searchinput" />
+                            <div id="searchresults">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.util.DataSource", "name": "_aCache", "url": "YAHOO.util.DataSource.html#_aCache"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "addToCache", "url": "YAHOO.util.DataSource.html#addToCache"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "cacheFlushEvent", "url": "YAHOO.util.DataSource.html#cacheFlushEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "cacheRequestEvent", "url": "YAHOO.util.DataSource.html#cacheRequestEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "connMethodPost", "url": "YAHOO.util.DataSource.html#connMethodPost"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "connMgr", "url": "YAHOO.util.DataSource.html#connMgr"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "connTimeout", "url": "YAHOO.util.DataSource.html#connTimeout"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "connXhrMode", "url": "YAHOO.util.DataSource.html#connXhrMode"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "dataErrorEvent", "url": "YAHOO.util.DataSource.html#dataErrorEvent"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "DataSource._nIndex", "url": "YAHOO.util.DataSource.html#DataSource._nIndex"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "DataSource._nTransactionId", "url": "YAHOO.util.DataSource.html#DataSource._nTransactionId"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "DataSource.parseDate", "url": "YAHOO.util.DataSource.html#DataSource.parseDate"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "DataSource.parseNumber", "url": "YAHOO.util.DataSource.html#DataSource.parseNumber"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "DataSource.parseString", "url": "YAHOO.util.DataSource.html#DataSource.parseString"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "dataType", "url": "YAHOO.util.DataSource.html#dataType"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "doBeforeCallback", "url": "YAHOO.util.DataSource.html#doBeforeCallback"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "doBeforeParseData", "url": "YAHOO.util.DataSource.html#doBeforeParseData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "ERROR_DATAINVALID", "url": "YAHOO.util.DataSource.html#ERROR_DATAINVALID"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "ERROR_DATANULL", "url": "YAHOO.util.DataSource.html#ERROR_DATANULL"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "flushCache", "url": "YAHOO.util.DataSource.html#flushCache"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "getCachedResponse", "url": "YAHOO.util.DataSource.html#getCachedResponse"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "getCachedResponseEvent", "url": "YAHOO.util.DataSource.html#getCachedResponseEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "handleResponse", "url": "YAHOO.util.DataSource.html#handleResponse"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "isCacheHit", "url": "YAHOO.util.DataSource.html#isCacheHit"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "liveData", "url": "YAHOO.util.DataSource.html#liveData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "makeConnection", "url": "YAHOO.util.DataSource.html#makeConnection"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "maxCacheEntries", "url": "YAHOO.util.DataSource.html#maxCacheEntries"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "_oQueue", "url": "YAHOO.util.DataSource.html#_oQueue"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "parseArrayData", "url": "YAHOO.util.DataSource.html#parseArrayData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "parseHTMLTableData", "url": "YAHOO.util.DataSource.html#parseHTMLTableData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "parseJSONData", "url": "YAHOO.util.DataSource.html#parseJSONData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "parseTextData", "url": "YAHOO.util.DataSource.html#parseTextData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "parseXMLData", "url": "YAHOO.util.DataSource.html#parseXMLData"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "requestEvent", "url": "YAHOO.util.DataSource.html#requestEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "responseCacheEvent", "url": "YAHOO.util.DataSource.html#responseCacheEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "responseEvent", "url": "YAHOO.util.DataSource.html#responseEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "responseParseEvent", "url": "YAHOO.util.DataSource.html#responseParseEvent"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "responseSchema", "url": "YAHOO.util.DataSource.html#responseSchema"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "responseType", "url": "YAHOO.util.DataSource.html#responseType"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "sendRequest", "url": "YAHOO.util.DataSource.html#sendRequest"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "_sName", "url": "YAHOO.util.DataSource.html#_sName"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "toString", "url": "YAHOO.util.DataSource.html#toString"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_HTMLTABLE", "url": "YAHOO.util.DataSource.html#TYPE_HTMLTABLE"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_JSARRAY", "url": "YAHOO.util.DataSource.html#TYPE_JSARRAY"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_JSFUNCTION", "url": "YAHOO.util.DataSource.html#TYPE_JSFUNCTION"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_JSON", "url": "YAHOO.util.DataSource.html#TYPE_JSON"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_TEXT", "url": "YAHOO.util.DataSource.html#TYPE_TEXT"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_UNKNOWN", "url": "YAHOO.util.DataSource.html#TYPE_UNKNOWN"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_XHR", "url": "YAHOO.util.DataSource.html#TYPE_XHR"}, {"access": "", "host": "YAHOO.util.DataSource", "name": "TYPE_XML", "url": "YAHOO.util.DataSource.html#TYPE_XML"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "_xhrCallback", "url": "YAHOO.util.DataSource.html#_xhrCallback"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "_xhrFailure", "url": "YAHOO.util.DataSource.html#_xhrFailure"}, {"access": "private", "host": "YAHOO.util.DataSource", "name": "_xhrSuccess", "url": "YAHOO.util.DataSource.html#_xhrSuccess"}];
+                    </script>
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class="selected"><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.DataSource.html">YAHOO.util.DataSource</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="DataSource.js.html">DataSource.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

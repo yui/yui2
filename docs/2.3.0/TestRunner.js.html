@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: yuitest   TestRunner.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yuitest.html">yuitest</a>
+                
+                 &gt; TestRunner.js (source view) 
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;tool&quot;</span><span class="o">);</span>
+
+<span class="c">/**</span>
+<span class="c"> * The YUI test tool</span>
+<span class="c"> * @module yuitest</span>
+<span class="c"> * @namespace YAHOO.tool</span>
+<span class="c"> * @requires yahoo,dom,event,logger</span>
+<span class="c"> */</span>
+
+
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c">// TestRunner object</span>
+<span class="c">//-----------------------------------------------------------------------------</span>
+<span class="c"></span>
+<span class="c">/**</span>
+<span class="c"> * Runs test suites and test cases, providing events to allowing for the</span>
+<span class="c"> * interpretation of test results.</span>
+<span class="c"> * @namespace YAHOO.tool</span>
+<span class="c"> * @class TestRunner</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span> <span class="o">=</span> <span class="o">(</span><span class="k">function</span><span class="o">(){</span>
+
+    <span class="k">function</span> <span class="nx">TestRunner</span><span class="o">(){</span>
+    
+        <span class="c">//inherit from EventProvider</span>
+<span class="c"></span>        <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="nx">arguments</span><span class="o">);</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * The test objects to run.</span>
+<span class="c">         * @type Array</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">items</span> <span class="c">/*:Array*/</span> <span class="o">=</span> <span class="o">[];</span>
+        
+        <span class="c">//create events</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">events</span> <span class="c">/*:Array*/</span> <span class="o">=</span> <span class="o">[</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_CASE_BEGIN_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_CASE_COMPLETE_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_SUITE_BEGIN_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_SUITE_COMPLETE_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_PASS_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_FAIL_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">TEST_IGNORE_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">COMPLETE_EVENT</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">BEGIN_EVENT</span>
+        <span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">events</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">events</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="o">{</span> <span class="nx">scope</span><span class="o">:</span> <span class="k">this</span> <span class="o">});</span>
+        <span class="o">}</span>
+       
+   
+    <span class="o">}</span>
+    
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">TestRunner</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">,</span> <span class="o">{</span>
+    
+        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>        <span class="c">// Constants</span>
+<span class="c"></span>        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>         
+        <span class="c">/**</span>
+<span class="c">         * Fires when a test case is opened but before the first </span>
+<span class="c">         * test is executed.</span>
+<span class="c">         * @event testcasebegin</span>
+<span class="c">         */</span>         
+        <span class="nx">TEST_CASE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testcasebegin&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when all tests in a test case have been executed.</span>
+<span class="c">         * @event testcasecomplete</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_CASE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testcasecomplete&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when a test suite is opened but before the first </span>
+<span class="c">         * test is executed.</span>
+<span class="c">         * @event testsuitebegin</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_SUITE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testsuitebegin&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when all test cases in a test suite have been</span>
+<span class="c">         * completed.</span>
+<span class="c">         * @event testsuitecomplete</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_SUITE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testsuitecomplete&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when a test has passed.</span>
+<span class="c">         * @event pass</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_PASS_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;pass&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when a test has failed.</span>
+<span class="c">         * @event fail</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_FAIL_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;fail&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when a test has been ignored.</span>
+<span class="c">         * @event ignore</span>
+<span class="c">         */</span>        
+        <span class="nx">TEST_IGNORE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;ignore&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when all test suites and test cases have been completed.</span>
+<span class="c">         * @event complete</span>
+<span class="c">         */</span>        
+        <span class="nx">COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;complete&quot;</span><span class="o">,</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Fires when the run() method is called.</span>
+<span class="c">         * @event begin</span>
+<span class="c">         */</span>        
+        <span class="nx">BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;begin&quot;</span><span class="o">,</span>    
+    
+        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>        <span class="c">// Private Methods</span>
+<span class="c"></span>        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>         
+        <span class="c">/**</span>
+<span class="c">         * Runs a given test case.</span>
+<span class="c">         * @param {YAHOO.tool.TestCase} testCase The test case to run.</span>
+<span class="c">         * @return {Object} Results of the execution with properties passed, failed, and total.</span>
+<span class="c">         * @method _runTestCase</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_runTestCase</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testCase</span> <span class="c">/*YAHOO.tool.TestCase*/</span><span class="o">)</span> <span class="c">/*:Void*/</span><span class="o">{</span>
+        
+            <span class="c">//object to store results</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">results</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">{};</span>
+        
+            <span class="c">//test case begins</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_CASE_BEGIN_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span> <span class="o">});</span>
+        
+            <span class="c">//gather the test functions</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">tests</span> <span class="c">/*:Array*/</span> <span class="o">=</span> <span class="o">[];</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">testCase</span><span class="o">){</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">prop</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;test&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">testCase</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">tests</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">prop</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            
+            <span class="c">//get the &quot;should&quot; test cases</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">shouldFail</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">fail</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="k">var</span> <span class="nx">shouldError</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">error</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="k">var</span> <span class="nx">shouldIgnore</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">ignore</span> <span class="o">||</span> <span class="o">{};</span>
+            
+            <span class="c">//test counts</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">failCount</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">passCount</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">runCount</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            
+            <span class="c">//run each test</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">tests</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+            
+                <span class="c">//figure out if the test should be ignored or not</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">shouldIgnore</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]){</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_IGNORE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span><span class="o">,</span> <span class="nx">testName</span><span class="o">:</span> <span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">});</span>
+                    <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+            
+                <span class="c">//variable to hold whether or not the test failed</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">failed</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="k">var</span> <span class="nx">error</span> <span class="c">/*:Error*/</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            
+                <span class="c">//run the setup</span>
+<span class="c"></span>                <span class="nx">testCase</span><span class="o">.</span><span class="nx">setUp</span><span class="o">();</span>
+                
+                <span class="c">//try the test</span>
+<span class="c"></span>                <span class="k">try</span> <span class="o">{</span>
+                
+                    <span class="c">//run the test</span>
+<span class="c"></span>                    <span class="nx">testCase</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]();</span>
+                    
+                    <span class="c">//if it should fail, and it got here, then it&#39;s a fail because it didn&#39;t</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">shouldFail</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]){</span>
+                        <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldFail</span><span class="o">();</span>
+                        <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]){</span>
+                        <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldError</span><span class="o">();</span>
+                        <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                               
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">thrown</span> <span class="c">/*:Error*/</span><span class="o">){</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">thrown</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="nx">shouldFail</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]){</span>
+                            <span class="nx">error</span> <span class="o">=</span> <span class="nx">thrown</span><span class="o">;</span>
+                            <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="c">//first check to see if it should error</span>
+<span class="c"></span>                        <span class="k">if</span> <span class="o">(!</span><span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]])</span> <span class="o">{</span>                        
+                            <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
+                            <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="c">//check to see what type of data we have</span>
+<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]])){</span>
+                                
+                                <span class="c">//if it&#39;s a string, check the error message</span>
+<span class="c"></span>                                <span class="k">if</span> <span class="o">(</span><span class="nx">thrown</span><span class="o">.</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]){</span>
+                                    <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
+                                    <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>                                    
+                                <span class="o">}</span>
+                            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]])){</span>
+                            
+                                <span class="c">//if it&#39;s an object, check the instance and message</span>
+<span class="c"></span>                                <span class="k">if</span> <span class="o">(!(</span><span class="nx">thrown</span> <span class="k">instanceof</span> <span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]].</span><span class="nx">constructor</span><span class="o">)</span> <span class="o">||</span> 
+                                        <span class="nx">thrown</span><span class="o">.</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">shouldError</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]].</span><span class="nx">message</span><span class="o">){</span>
+                                    <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
+                                    <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>                                    
+                                <span class="o">}</span>
+                            
+                            <span class="o">}</span>
+                        
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    
+                <span class="o">}</span> <span class="nx">finally</span> <span class="o">{</span>
+                
+                    <span class="c">//fireEvent appropriate event</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">failed</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_FAIL_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span><span class="o">,</span> <span class="nx">testName</span><span class="o">:</span> <span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span> <span class="o">});</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_PASS_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span><span class="o">,</span> <span class="nx">testName</span><span class="o">:</span> <span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">});</span>
+                    <span class="o">}</span>            
+                <span class="o">}</span>
+                
+                <span class="c">//run the tear down</span>
+<span class="c"></span>                <span class="nx">testCase</span><span class="o">.</span><span class="nx">tearDown</span><span class="o">();</span>
+                
+                <span class="c">//update results</span>
+<span class="c"></span>                <span class="nx">results</span><span class="o">[</span><span class="nx">tests</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="o">{</span> 
+                    <span class="nx">result</span><span class="o">:</span> <span class="nx">failed</span> <span class="o">?</span> <span class="s2">&quot;fail&quot;</span> <span class="o">:</span> <span class="s2">&quot;pass&quot;</span><span class="o">,</span>
+                    <span class="nx">message</span> <span class="o">:</span> <span class="nx">error</span> <span class="o">?</span> <span class="nx">error</span><span class="o">.</span><span class="nx">getMessage</span><span class="o">()</span> <span class="o">:</span> <span class="s2">&quot;Test passed&quot;</span>
+                <span class="o">};</span>
+                
+                <span class="c">//update counts</span>
+<span class="c"></span>                <span class="nx">runCount</span><span class="o">++;</span>
+                <span class="nx">failCount</span> <span class="o">+=</span> <span class="o">(</span><span class="nx">failed</span> <span class="o">?</span> <span class="m">1</span> <span class="o">:</span> <span class="m">0</span><span class="o">);</span>
+                <span class="nx">passCount</span> <span class="o">+=</span> <span class="o">(</span><span class="nx">failed</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="m">1</span><span class="o">);</span>
+            <span class="o">}</span>
+            
+            <span class="c">//add test counts to results</span>
+<span class="c"></span>            <span class="nx">results</span><span class="o">.</span><span class="nx">total</span> <span class="o">=</span> <span class="nx">runCount</span><span class="o">;</span>
+            <span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">=</span> <span class="nx">failCount</span><span class="o">;</span>
+            <span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">=</span> <span class="nx">passCount</span><span class="o">;</span>
+            
+            <span class="c">//test case is done</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_CASE_COMPLETE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span><span class="o">,</span> <span class="nx">results</span><span class="o">:</span> <span class="nx">results</span> <span class="o">});</span>
+            
+            <span class="c">//return results</span>
+<span class="c"></span>            <span class="k">return</span> <span class="nx">results</span><span class="o">;</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Runs all the tests in a test suite.</span>
+<span class="c">         * @param {YAHOO.tool.TestSuite} testSuite The test suite to run.</span>
+<span class="c">         * @return {Object} Results of the execution with properties passed, failed, and total.</span>
+<span class="c">         * @method _runTestSuite</span>
+<span class="c">         * @private</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_runTestSuite</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testSuite</span> <span class="c">/*:YAHOO.tool.TestSuite*/</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="c">//object to store results</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">results</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">{</span>
+                <span class="nx">passed</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="nx">failed</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="nx">total</span><span class="o">:</span> <span class="m">0</span>
+            <span class="o">};</span>
+        
+            <span class="c">//fireEvent event for beginning of test suite run</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_SUITE_BEGIN_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testSuite</span><span class="o">:</span> <span class="nx">testSuite</span> <span class="o">});</span>
+        
+            <span class="c">//iterate over the test suite items</span>
+<span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+                <span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_runTestSuite</span><span class="o">(</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_runTestCase</span><span class="o">(</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="o">}</span>
+                
+                <span class="k">if</span> <span class="o">(</span><span class="nx">result</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">){</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">total</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">total</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">passed</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">failed</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">[</span><span class="nx">testSuite</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">result</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+    
+            <span class="c">//fireEvent event for completion of test suite run</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_SUITE_COMPLETE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testSuite</span><span class="o">:</span> <span class="nx">testSuite</span><span class="o">,</span> <span class="nx">results</span><span class="o">:</span> <span class="nx">results</span> <span class="o">});</span>
+            
+            <span class="c">//return the results</span>
+<span class="c"></span>            <span class="k">return</span> <span class="nx">results</span><span class="o">;</span>
+        
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Runs a test case or test suite, returning the results.</span>
+<span class="c">         * @param {YAHOO.tool.TestCase|YAHOO.tool.TestSuite} testObject The test case or test suite to run.</span>
+<span class="c">         * @return {Object} Results of the execution with properties passed, failed, and total.</span>
+<span class="c">         * @private</span>
+<span class="c">         * @method _run</span>
+<span class="c">         * @static</span>
+<span class="c">         */</span>
+        <span class="nx">_run</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testObject</span> <span class="c">/*:YAHOO.tool.TestCase|YAHOO.tool.TestSuite*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">testObject</span><span class="o">)){</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">testObject</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_runTestSuite</span><span class="o">(</span><span class="nx">testObject</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">testObject</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_runTestCase</span><span class="o">(</span><span class="nx">testObject</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;_run(): Expected either YAHOO.tool.TestCase or YAHOO.tool.TestSuite.&quot;</span><span class="o">);</span>
+                <span class="o">}</span>    
+            <span class="o">}</span>        
+        <span class="o">},</span>
+        
+        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>        <span class="c">// Protected Methods</span>
+<span class="c"></span>        <span class="c">//-------------------------------------------------------------------------   </span>
+<span class="c"></span>    
+        <span class="c">/*</span>
+<span class="c">         * Fires events for the TestRunner. This overrides the default fireEvent()</span>
+<span class="c">         * method from EventProvider to add the type property to the data that is</span>
+<span class="c">         * passed through on each event call.</span>
+<span class="c">         * @param {String} type The type of event to fire.</span>
+<span class="c">         * @param {Object} data (Optional) Data for the event.</span>
+<span class="c">         * @method fireEvent</span>
+<span class="c">         * @static</span>
+<span class="c">         * @protected</span>
+<span class="c">         */</span>
+        <span class="nx">fireEvent</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">data</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+            <span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="nx">data</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
+            <span class="nx">TestRunner</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">data</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">//-------------------------------------------------------------------------</span>
+<span class="c"></span>        <span class="c">// Public Methods</span>
+<span class="c"></span>        <span class="c">//-------------------------------------------------------------------------   </span>
+<span class="c"></span>    
+        <span class="c">/**</span>
+<span class="c">         * Adds a test suite or test case to the list of test objects to run.</span>
+<span class="c">         * @param testObject Either a TestCase or a TestSuite that should be run.</span>
+<span class="c">         */</span>
+        <span class="nx">add</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testObject</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">testObject</span><span class="o">);</span>
+        <span class="o">},</span>
+        
+        <span class="c">/**</span>
+<span class="c">         * Removes all test objects from the runner.</span>
+<span class="c">         */</span>
+        <span class="nx">clear</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
+            <span class="k">while</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">length</span><span class="o">){</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">pop</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">},</span>
+    
+        <span class="c">/**</span>
+<span class="c">         * Runs the test suite.</span>
+<span class="c">         */</span>
+        <span class="nx">run</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">testObject</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span> 
+            <span class="k">var</span> <span class="nx">results</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">BEGIN_EVENT</span><span class="o">);</span>
+       
+            <span class="c">//an object passed in overrides everything else</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">testObject</span><span class="o">)){</span>
+                <span class="nx">results</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_run</span><span class="o">(</span><span class="nx">testObject</span><span class="o">);</span>  
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="nx">results</span> <span class="o">=</span> <span class="o">{</span>
+                    <span class="nx">passed</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                    <span class="nx">failed</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                    <span class="nx">total</span><span class="o">:</span> <span class="m">0</span>
+                <span class="o">};</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+                    <span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_run</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">passed</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">passed</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">failed</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">failed</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">.</span><span class="nx">total</span> <span class="o">+=</span> <span class="nx">result</span><span class="o">.</span><span class="nx">total</span><span class="o">;</span>
+                    <span class="nx">results</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">result</span><span class="o">;</span>
+                <span class="o">}</span>            
+            <span class="o">}</span>
+            
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">COMPLETE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">results</span><span class="o">:</span> <span class="nx">results</span> <span class="o">});</span>
+        <span class="o">}</span>    
+    <span class="o">});</span>
+    
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">TestRunner</span><span class="o">();</span>
+    
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                                <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
+                                <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
+                                <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
+                                <li class=""><a href="YAHOO.tool.TestSuite.html">YAHOO.tool.TestSuite</a></li>
+                                <li class=""><a href="YAHOO.util.ArrayAssert.html">YAHOO.util.ArrayAssert</a></li>
+                                <li class=""><a href="YAHOO.util.Assert.html">YAHOO.util.Assert</a></li>
+                                <li class=""><a href="YAHOO.util.AssertionError.html">YAHOO.util.AssertionError</a></li>
+                                <li class=""><a href="YAHOO.util.ComparisonFailure.html">YAHOO.util.ComparisonFailure</a></li>
+                                <li class=""><a href="YAHOO.util.DateAssert.html">YAHOO.util.DateAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ObjectAssert.html">YAHOO.util.ObjectAssert</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldError.html">YAHOO.util.ShouldError</a></li>
+                                <li class=""><a href="YAHOO.util.ShouldFail.html">YAHOO.util.ShouldFail</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
+                                <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
+                                <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                                <li class=""><a href="Assert.js.html">Assert.js</a></li>
+                                <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
+                                <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
+                                <li class=""><a href="TestCase.js.html">TestCase.js</a></li>
+                                <li class=""><a href="TestLogger.js.html">TestLogger.js</a></li>
+                                <li class=""><a href="TestManager.js.html">TestManager.js</a></li>
+                                <li class="selected"><a href="TestRunner.js.html">TestRunner.js</a></li>
+                                <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
+                                <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1899 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: connection  YAHOO.util.Connect   (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <h1>Yahoo! UI Library</h1>
+        <h3>connection&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_connection.html">connection</a>
+                 &gt; YAHOO.util.Connect 
+                
+            </p>
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b>YAHOO.util.Connect</b>
+                        <span class="extends">
+                        </span>
+
+                        <span class="extends">
+                        </span>
+                        
+                        </code>
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description">
+                        The Connection Manager singleton provides methods for creating and managing
+asynchronous transactions.
+                    </div>
+
+
+                        <div class="section field details">
+                            <h3><a name="field_detail">Properties</a></h3>
+                            <div class="content">
+                                    <div class="private">
+                                    <h4><a name="_customEvents">_customEvents</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A reference table that maps callback custom events members to its specific
+event name.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_default_post_header">_default_post_header</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines if a default header of
+Content-Type of 'application/x-www-form-urlencoded'
+will be added to client HTTP headers sent for POST
+transactions.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_default_xhr_header">_default_xhr_header</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The default header value for the label
+"X-Requested-With".  This is sent with each
+transaction, by default, to identify the
+request as being made by YUI Connection Manager.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_formNode">_formNode</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Property modified by setForm() to set a reference to the HTML
+form node if the desired action is file upload.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_has_default_header">_has_default_header</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines if custom, default headers
+are set for each transaction.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_has_http_headers">_has_http_headers</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines if HTTP headers are set.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_hasSubmitListener">_hasSubmitListener</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines whether YAHOO.util.Event is available and returns true or false.
+If true, an event listener is bound at the document level to trap click events that
+resolve to a target type of "Submit".  This listener will enable setForm() to determine
+the clicked "Submit" value in a multi-Submit button, HTML form.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_http_header">_http_header</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Object literal of HTTP header(s)
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_isFileUpload">_isFileUpload</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Property modified by setForm() to determine if a file(s)
+upload is expected.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_isFormSubmit">_isFormSubmit</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Property modified by setForm() to determine if the data
+should be submitted as an HTML form.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_msxml_progid">_msxml_progid</a>
+                                        <code>- private static array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Array of MSFT ActiveX ids for XMLHttpRequest.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_poll">_poll</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Collection of polling references to the polling mechanism in handleReadyState.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_polling_interval">_polling_interval</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            The polling frequency, in milliseconds, for HandleReadyState.
+when attempting to determine a transaction's XHR readyState.
+The default is 50 milliseconds.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_sFormData">_sFormData</a>
+                                        <code>- private static string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Property modified by setForm() to set the HTML form data
+for each transaction.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_submitElementValue">_submitElementValue</a>
+                                        <code>- private static string</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Tracks the name-value pair of the "clicked" submit button if multiple submit
+buttons are present in an HTML form; and, if YAHOO.util.Event is available.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_timeOut">_timeOut</a>
+                                        <code>- private static object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Queue of timeout values for each transaction callback with a defined timeout value.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_transaction_id">_transaction_id</a>
+                                        <code>- private static int</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A transaction counter that increments the transaction id for each transaction.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_use_default_post_header">_use_default_post_header</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines if a default header of
+Content-Type of 'application/x-www-form-urlencoded'
+will be added to any client HTTP headers sent for POST
+transactions.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="_use_default_xhr_header">_use_default_xhr_header</a>
+                                        <code>- private static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Determines if a default header of
+'X-Requested-With: XMLHttpRequest'
+will be added to each transaction.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="abortEvent">abortEvent</a>
+                                        <code>- private static CustomEvent</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires when a transaction is successfully aborted.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="completeEvent">completeEvent</a>
+                                        <code>- private static CustomEvent</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires when a transaction response has completed.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="failureEvent">failureEvent</a>
+                                        <code>- private static CustomEvent</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires when handleTransactionResponse() determines a
+response in the HTTP 4xx/5xx range.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="startEvent">startEvent</a>
+                                        <code>- private static CustomEvent</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires at the start of a transaction
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="successEvent">successEvent</a>
+                                        <code>- private static CustomEvent</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Custom event that fires when handleTransactionResponse() determines a
+response in the HTTP 2xx range.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="section method details">
+                            <h3><a name="methodDetails">Methods</a></h3>
+                            <div class="content">
+                                    <div class="">
+                                    <h4>
+                                        <a name="abort">abort</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>abort</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         isTimeout
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Method to terminate a transaction, if it has not reached readyState 4.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object returned by asyncRequest.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;object&gt;</code>
+                                                              User-defined callback object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>isTimeout &lt;string&gt;</code>
+                                                             boolean to indicate if abort resulted from a callback timeout.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="appendPostData">appendPostData</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        array
+                                            <strong>appendPostData</strong>
+                                           (
+                                                
+                                                        
+                                                         postData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Parses the POST data and creates hidden form elements
+for each key-value, and appends them to the HTML form object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>postData &lt;string&gt;</code>
+                                                             The HTTP POST data
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        array
+                                                    </code></dt>
+                                                    <dd>formElements Collection of hidden fields.</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="asyncRequest">asyncRequest</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        object
+                                            <strong>asyncRequest</strong>
+                                           (
+                                                
+                                                        
+                                                         method
+                                                    
+                                                
+                                                        , 
+                                                         uri
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         postData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Method for initiating an asynchronous request via the XHR object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>method &lt;string&gt;</code>
+                                                             HTTP transaction method
+                                                        </dd>
+                                                        <dd>
+                                                            <code>uri &lt;string&gt;</code>
+                                                             Fully qualified path of resource
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;callback&gt;</code>
+                                                             User-defined callback function or object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>postData &lt;string&gt;</code>
+                                                             POST body
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        object
+                                                    </code></dt>
+                                                    <dd>Returns the connection object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="createExceptionObject">createExceptionObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        object
+                                            <strong>createExceptionObject</strong>
+                                           (
+                                                
+                                                        
+                                                         tId
+                                                    
+                                                
+                                                        , 
+                                                         callbackArg
+                                                    
+                                                
+                                                        , 
+                                                         isAbort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            If a transaction cannot be completed due to dropped or closed connections,
+there may be not be enough information to build a full response object.
+The failure callback will be fired and this specific condition can be identified
+by a status property value of 0.
+If an abort was successful, the status property will report a value of -1.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>tId &lt;int&gt;</code>
+                                                             The Transaction Id
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callbackArg &lt;callbackArg&gt;</code>
+                                                             The user-defined argument or arguments to be passed to the callback
+                                                        </dd>
+                                                        <dd>
+                                                            <code>isAbort &lt;boolean&gt;</code>
+                                                             Determines if the exception case is caused by a transaction abort
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        object
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="createFrame">createFrame</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>createFrame</strong>
+                                           (
+                                                
+                                                        
+                                                         optional
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Creates an iframe to be used for form file uploads.  It is remove from the
+document upon completion of the upload transaction.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>optional &lt;string&gt;</code>
+                                                             qualified path of iframe resource for SSL in IE.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="createResponseObject">createResponseObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        object
+                                            <strong>createResponseObject</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         callbackArg
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method evaluates the server response, creates and returns the results via
+its properties.  Success and failure cases will differ in the response
+object's property values.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callbackArg &lt;callbackArg&gt;</code>
+                                                             The user-defined argument or arguments to be passed to the callback
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        object
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="createXhrObject">createXhrObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>createXhrObject</strong>
+                                           (
+                                                
+                                                        
+                                                         transactionId
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Instantiates a XMLHttpRequest object and returns an object with two properties:
+the XMLHttpRequest instance and the transaction id.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>transactionId &lt;int&gt;</code>
+                                                             Property containing the transaction id for this transaction.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>object</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="getConnectionObject">getConnectionObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        object
+                                            <strong>getConnectionObject</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method is called by asyncRequest to create a
+valid connection object for the transaction.  It also passes a
+transaction id and increments the transaction id counter.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        object
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="handleReadyState">handleReadyState</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>handleReadyState</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method serves as a timer that polls the XHR object's readyState
+property during a transaction, instead of binding a callback to the
+onreadystatechange event.  Upon readyState 4, handleTransactionResponse
+will process the response, and the timer will be cleared.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;callback&gt;</code>
+                                                             The user-defined callback object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="handleTransactionResponse">handleTransactionResponse</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>handleTransactionResponse</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         isAbort
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method attempts to interpret the server response and
+determine whether the transaction was successful, or if an error or
+exception was encountered.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;object&gt;</code>
+                                                             The user-defined callback object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>isAbort &lt;boolean&gt;</code>
+                                                             Determines if the transaction was terminated via abort().
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="initCustomEvents">initCustomEvents</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>initCustomEvents</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method creates and subscribes custom events,
+specific to each transaction
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;callback&gt;</code>
+                                                             The user-defined callback object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="initHeader">initHeader</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>initHeader</strong>
+                                           (
+                                                
+                                                        
+                                                         label
+                                                    
+                                                
+                                                        , 
+                                                         value
+                                                    
+                                                
+                                                        , 
+                                                         isDefault
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Method that initializes the custom HTTP headers for the each transaction.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>label &lt;string&gt;</code>
+                                                             The HTTP header label
+                                                        </dd>
+                                                        <dd>
+                                                            <code>value &lt;string&gt;</code>
+                                                             The HTTP header value
+                                                        </dd>
+                                                        <dd>
+                                                            <code>isDefault &lt;string&gt;</code>
+                                                             Determines if the specific header is a default header
+automatically sent with each transaction.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="isCallInProgress">isCallInProgress</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong>isCallInProgress</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Public method to check if the transaction is still being processed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object returned by asyncRequest
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="releaseObject">releaseObject</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>releaseObject</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Dereference the XHR instance and the connection object after the transaction is completed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="resetDefaultHeaders">resetDefaultHeaders</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>resetDefaultHeaders</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets the default HTTP headers object
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="resetFormState">resetFormState</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>resetFormState</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Resets HTML form properties when an HTML form or HTML form
+with file upload transaction is sent.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setDefaultPostHeader">setDefaultPostHeader</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>setDefaultPostHeader</strong>
+                                           (
+                                                
+                                                        
+                                                         b
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Member to enable or disable the default POST header.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>b &lt;boolean&gt;</code>
+                                                             Set and use default header - true or false .
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setDefaultXhrHeader">setDefaultXhrHeader</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>setDefaultXhrHeader</strong>
+                                           (
+                                                
+                                                        
+                                                         b
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Member to enable or disable the default POST header.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>b &lt;boolean&gt;</code>
+                                                             Set and use default header - true or false .
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setForm">setForm</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        string
+                                            <strong>setForm</strong>
+                                           (
+                                                
+                                                        
+                                                         form
+                                                    
+                                                
+                                                        , 
+                                                         optional
+                                                    
+                                                
+
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            This method assembles the form label and value pairs and
+constructs an encoded string.
+asyncRequest() will automatically initialize the transaction with a
+a HTTP header Content-Type of application/x-www-form-urlencoded.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>form &lt;string || object&gt;</code>
+                                                             id or name attribute, or form object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>optional &lt;boolean&gt;</code>
+                                                             enable file upload.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>optional &lt;boolean&gt;</code>
+                                                             enable file upload over SSL in IE only.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        string
+                                                    </code></dt>
+                                                    <dd>string of the HTML form field name and value pairs..</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="setHeader">setHeader</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>setHeader</strong>
+                                           (
+                                                
+                                                        
+                                                         o
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Accessor that sets the HTTP headers for each transaction.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>o &lt;object&gt;</code>
+                                                             The connection object for the transaction.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setPollingInterval">setPollingInterval</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>setPollingInterval</strong>
+                                           (
+                                                
+                                                        
+                                                         i
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Member to modify the default polling interval.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>i &lt;int&gt;</code>
+                                                             The polling interval in milliseconds.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="setProgId">setProgId</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        void
+                                            <strong>setProgId</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Member to add an ActiveX id to the existing xml_progid array.
+In the event(unlikely) a new ActiveX id is introduced, it can be added
+without internal code modifications.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;string&gt;</code>
+                                                             The ActiveX id to be added to initialize the XHR object.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd>void</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="uploadFile">uploadFile</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        void
+                                            <strong>uploadFile</strong>
+                                           (
+                                                
+                                                        
+                                                         id
+                                                    
+                                                
+                                                        , 
+                                                         callback
+                                                    
+                                                
+                                                        , 
+                                                         uri
+                                                    
+                                                
+                                                        , 
+                                                         postData
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Uploads HTML form, inclusive of files/attachments, using the
+iframe created in createFrame to facilitate the transaction.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>id &lt;int&gt;</code>
+                                                             The transaction id.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>callback &lt;object&gt;</code>
+                                                             User-defined callback object.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>uri &lt;string&gt;</code>
+                                                             Fully qualified path of resource.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>postData &lt;string&gt;</code>
+                                                             POST data to be submitted in addition to HTML form.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class="selected"><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="YAHOO.util.Connect.html">YAHOO.util.Connect</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="connection.js.html">connection.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class="private"><a href="#_customEvents">_customEvents</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_default_post_header">_default_post_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_default_xhr_header">_default_xhr_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_formNode">_formNode</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_has_default_header">_has_default_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_has_http_headers">_has_http_headers</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_hasSubmitListener">_hasSubmitListener</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_http_header">_http_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_isFileUpload">_isFileUpload</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_isFormSubmit">_isFormSubmit</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_msxml_progid">_msxml_progid</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_poll">_poll</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_polling_interval">_polling_interval</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_sFormData">_sFormData</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_submitElementValue">_submitElementValue</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_timeOut">_timeOut</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_transaction_id">_transaction_id</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_use_default_post_header">_use_default_post_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#_use_default_xhr_header">_use_default_xhr_header</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#abortEvent">abortEvent</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#completeEvent">completeEvent</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#failureEvent">failureEvent</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#startEvent">startEvent</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                                <li class="private"><a href="#successEvent">successEvent</a>
+                                        <!--<code>&lt;CustomEvent&gt;</code>-->
+                                </li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#abort">abort</a>
+                                </li>
+                                <li class="private"><!--<code>array</code>-->
+                                <a href="#appendPostData">appendPostData</a>
+                                </li>
+                                <li class=""><!--<code>object</code>-->
+                                <a href="#asyncRequest">asyncRequest</a>
+                                </li>
+                                <li class="private"><!--<code>object</code>-->
+                                <a href="#createExceptionObject">createExceptionObject</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#createFrame">createFrame</a>
+                                </li>
+                                <li class="private"><!--<code>object</code>-->
+                                <a href="#createResponseObject">createResponseObject</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#createXhrObject">createXhrObject</a>
+                                </li>
+                                <li class="private"><!--<code>object</code>-->
+                                <a href="#getConnectionObject">getConnectionObject</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#handleReadyState">handleReadyState</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#handleTransactionResponse">handleTransactionResponse</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#initCustomEvents">initCustomEvents</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#initHeader">initHeader</a>
+                                </li>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#isCallInProgress">isCallInProgress</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#releaseObject">releaseObject</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#resetDefaultHeaders">resetDefaultHeaders</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#resetFormState">resetFormState</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setDefaultPostHeader">setDefaultPostHeader</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setDefaultXhrHeader">setDefaultXhrHeader</a>
+                                </li>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#setForm">setForm</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#setHeader">setHeader</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setPollingInterval">setPollingInterval</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#setProgId">setProgId</a>
+                                </li>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#uploadFile">uploadFile</a>
+                                </li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>

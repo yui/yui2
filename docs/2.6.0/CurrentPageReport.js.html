@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>API: paginator   CurrentPageReport.js  (YUI Library)</title>
+	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+
+	<div id="hd">
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>paginator&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <p>
+        <a href="./index.html">Yahoo! UI Library</a> 
+            &gt; <a href="./module_paginator.html">paginator</a>
+                
+                 &gt; CurrentPageReport.js (source view) 
+            </p>
+
+
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+<span class="k">var</span> <span class="nx">Paginator</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">,</span>
+    <span class="nx">l</span>         <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * ui Component to generate the textual report of current pagination status.</span>
+<span class="c"> * E.g. &quot;Now viewing page 1 of 13&quot;.</span>
+<span class="c"> *</span>
+<span class="c"> * @namespace YAHOO.widget.Paginator.ui</span>
+<span class="c"> * @class CurrentPageReport</span>
+<span class="c"> * @for YAHOO.widget.Paginator</span>
+<span class="c"> *</span>
+<span class="c"> * @constructor</span>
+<span class="c"> * @param p {Pagintor} Paginator instance to attach to</span>
+<span class="c"> */</span>
+<span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">CurrentPageReport</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span> <span class="o">=</span> <span class="nx">p</span><span class="o">;</span>
+
+    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;pageReportClassChange&#39;</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;pageReportTemplateChange&#39;</span><span class="o">);</span>
+
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;recordOffsetChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;rowsPerPageChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;pageReportTemplateChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">destroy</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+
+    <span class="c">//TODO: make this work</span>
+<span class="c"></span>    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;pageReportClassChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Decorates Paginator instances with new attributes. Called during</span>
+<span class="c"> * Paginator instantiation.</span>
+<span class="c"> * @method init</span>
+<span class="c"> * @param p {Paginator} Paginator instance to decorate</span>
+<span class="c"> * @static</span>
+<span class="c"> */</span>
+<span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">CurrentPageReport</span><span class="o">.</span><span class="nx">init</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * CSS class assigned to the span containing the info.</span>
+<span class="c">     * @attribute pageReportClass</span>
+<span class="c">     * @default &#39;yui-pg-current&#39;</span>
+<span class="c">     */</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;pageReportClass&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span> <span class="o">:</span> <span class="s1">&#39;yui-pg-current&#39;</span><span class="o">,</span>
+        <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
+    <span class="o">});</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Used as innerHTML for the span.  Place holders in the form of {name}</span>
+<span class="c">     * will be replaced with the so named value from the key:value map</span>
+<span class="c">     * generated by the function held in the pageReportValueGenerator attribute.</span>
+<span class="c">     * @attribute pageReportTemplate</span>
+<span class="c">     * @default &#39;({currentPage} of {totalPages})&#39;</span>
+<span class="c">     * @see pageReportValueGenerator attribute</span>
+<span class="c">     */</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;pageReportTemplate&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span> <span class="o">:</span> <span class="s1">&#39;({currentPage} of {totalPages})&#39;</span><span class="o">,</span>
+        <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
+    <span class="o">});</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Function to generate the value map used to populate the</span>
+<span class="c">     * pageReportTemplate.  The function is passed the Paginator instance as a</span>
+<span class="c">     * parameter.  The default function returns a map with the following keys:</span>
+<span class="c">     * &lt;ul&gt;</span>
+<span class="c">     * &lt;li&gt;currentPage&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;totalPages&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;startIndex&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;endIndex&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;startRecord&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;endRecord&lt;/li&gt;</span>
+<span class="c">     * &lt;li&gt;totalRecords&lt;/li&gt;</span>
+<span class="c">     * &lt;/ul&gt;</span>
+<span class="c">     * @attribute pageReportValueGenarator</span>
+<span class="c">     */</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;pageReportValueGenerator&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">paginator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">curPage</span> <span class="o">=</span> <span class="nx">paginator</span><span class="o">.</span><span class="nx">getCurrentPage</span><span class="o">(),</span>
+                <span class="nx">records</span> <span class="o">=</span> <span class="nx">paginator</span><span class="o">.</span><span class="nx">getPageRecords</span><span class="o">();</span>
+
+            <span class="k">return</span> <span class="o">{</span>
+                <span class="s1">&#39;currentPage&#39;</span> <span class="o">:</span> <span class="nx">records</span> <span class="o">?</span> <span class="nx">curPage</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="s1">&#39;totalPages&#39;</span>  <span class="o">:</span> <span class="nx">paginator</span><span class="o">.</span><span class="nx">getTotalPages</span><span class="o">(),</span>
+                <span class="s1">&#39;startIndex&#39;</span>  <span class="o">:</span> <span class="nx">records</span> <span class="o">?</span> <span class="nx">records</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="s1">&#39;endIndex&#39;</span>    <span class="o">:</span> <span class="nx">records</span> <span class="o">?</span> <span class="nx">records</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="s1">&#39;startRecord&#39;</span> <span class="o">:</span> <span class="nx">records</span> <span class="o">?</span> <span class="nx">records</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="m">1</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="s1">&#39;endRecord&#39;</span>   <span class="o">:</span> <span class="nx">records</span> <span class="o">?</span> <span class="nx">records</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="m">1</span> <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
+                <span class="s1">&#39;totalRecords&#39;</span><span class="o">:</span> <span class="nx">paginator</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">)</span>
+            <span class="o">};</span>
+        <span class="o">},</span>
+        <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isFunction</span>
+    <span class="o">});</span>
+<span class="o">};</span>
+
+<span class="c">/**</span>
+<span class="c"> * Replace place holders in a string with the named values found in an</span>
+<span class="c"> * object literal.</span>
+<span class="c"> * @static</span>
+<span class="c"> * @method sprintf</span>
+<span class="c"> * @param template {string} The content string containing place holders</span>
+<span class="c"> * @param values {object} The key:value pairs used to replace the place holders</span>
+<span class="c"> * @return {string}</span>
+<span class="c"> */</span>
+<span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">CurrentPageReport</span><span class="o">.</span><span class="nx">sprintf</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">template</span><span class="o">,</span> <span class="nx">values</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nx">template</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\{([\w\s\-]+)\}/g</span><span class="o">,</span> <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">values</span><span class="o">)</span> <span class="o">?</span> <span class="nx">values</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="o">});</span>
+<span class="o">};</span>
+
+<span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">CurrentPageReport</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Span node containing the formatted info</span>
+<span class="c">     * @property span</span>
+<span class="c">     * @type HTMLElement</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">span</span> <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+
+
+    <span class="c">/**</span>
+<span class="c">     * Generate the span containing info formatted per the pageReportTemplate</span>
+<span class="c">     * attribute.</span>
+<span class="c">     * @method render</span>
+<span class="c">     * @param id_base {string} used to create unique ids for generated nodes</span>
+<span class="c">     * @return {HTMLElement}</span>
+<span class="c">     */</span>
+    <span class="nx">render</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">id_base</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;span&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">id</span>        <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">&#39;-page-report&#39;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;pageReportClass&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">();</span>
+        
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">;</span>
+    <span class="o">},</span>
+    
+    <span class="c">/**</span>
+<span class="c">     * Regenerate the content of the span if appropriate. Calls</span>
+<span class="c">     * CurrentPageReport.sprintf with the value of the pageReportTemplate</span>
+<span class="c">     * attribute and the value map returned from pageReportValueGenerator</span>
+<span class="c">     * function.</span>
+<span class="c">     * @method update</span>
+<span class="c">     * @param e {CustomEvent} The calling change event</span>
+<span class="c">     */</span>
+    <span class="nx">update</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">e</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">===</span> <span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">CurrentPageReport</span><span class="o">.</span><span class="nx">sprintf</span><span class="o">(</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;pageReportTemplate&#39;</span><span class="o">),</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;pageReportValueGenerator&#39;</span><span class="o">)(</span><span class="k">this</span><span class="o">.</span><span class="nx">paginator</span><span class="o">));</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Removes the link/span node and clears event listeners</span>
+<span class="c">     * removal.</span>
+<span class="c">     * @method destroy</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">destroy</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">};</span>
+
+<span class="o">})();</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+
+                                <li class=""><a href="module_animation.html">animation</a></li>
+
+                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
+
+                                <li class=""><a href="module_button.html">button</a></li>
+
+                                <li class=""><a href="module_calendar.html">calendar</a></li>
+
+                                <li class=""><a href="module_carousel.html">carousel</a></li>
+
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
+                                <li class=""><a href="module_connection.html">connection</a></li>
+
+                                <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
+
+                                <li class=""><a href="module_datasource.html">datasource</a></li>
+
+                                <li class=""><a href="module_datatable.html">datatable</a></li>
+
+                                <li class=""><a href="module_dom.html">dom</a></li>
+
+                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
+
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
+                                <li class=""><a href="module_element.html">element</a></li>
+
+                                <li class=""><a href="module_event.html">event</a></li>
+
+                                <li class=""><a href="module_get.html">get</a></li>
+
+                                <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
+
+                                <li class=""><a href="module_logger.html">logger</a></li>
+
+                                <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class="selected"><a href="module_paginator.html">paginator</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
+
+                                <li class=""><a href="module_slider.html">slider</a></li>
+
+                                <li class=""><a href="module_tabview.html">tabview</a></li>
+
+                                <li class=""><a href="module_treeview.html">treeview</a></li>
+
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
+                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.CurrentPageReport.html">YAHOO.widget.Paginator.ui.CurrentPageReport</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.FirstPageLink.html">YAHOO.widget.Paginator.ui.FirstPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.LastPageLink.html">YAHOO.widget.Paginator.ui.LastPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.NextPageLink.html">YAHOO.widget.Paginator.ui.NextPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PageLinks.html">YAHOO.widget.Paginator.ui.PageLinks</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.PreviousPageLink.html">YAHOO.widget.Paginator.ui.PreviousPageLink</a></li>
+                                <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
+                                <li class=""><a href="FirstPageLink.js.html">FirstPageLink.js</a></li>
+                                <li class=""><a href="LastPageLink.js.html">LastPageLink.js</a></li>
+                                <li class=""><a href="NextPageLink.js.html">NextPageLink.js</a></li>
+                                <li class=""><a href="PageLinks.js.html">PageLinks.js</a></li>
+                                <li class=""><a href="Paginator.js.html">Paginator.js</a></li>
+                                <li class=""><a href="PreviousPageLink.js.html">PreviousPageLink.js</a></li>
+                                <li class=""><a href="RowsPerPageDropDown.js.html">RowsPerPageDropDown.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+</body>
+</html>
