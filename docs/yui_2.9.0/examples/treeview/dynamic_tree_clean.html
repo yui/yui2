@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Dynamically Loading Node Data</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="../../build/treeview/assets/skins/sam/treeview.css" />
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
+<script type="text/javascript" src="../../build/treeview/treeview-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#treeDiv1 {background: #fff; margin-top:1em; padding:1em; min-height:7em;}
+</style>
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+
+<h1>Dynamically Loading Node Data</h1>
+
+<div class="exampleIntro">
+	<p>In many cases, you'll want to avoid rendering your <a
+href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a> with a
+full dataset.  Rather, you'll want to load all visible nodes immediately and
+then retrieve data only when needed for nodes that aren't visible when the
+control is first loaded.  This example shows you how to do that.</p>
+
+<p>In the TreeView instance below, we've loaded all "top-level" nodes into the
+page as soon as the page loads; these nodes contain the names of several popular
+music groups.  When a node is expanded, we use <a
+href="http://developer.yahoo.com/yui/connection/">Connection Manager</a> to
+access <a
+href="http://developer.yahoo.com/music/">a Yahoo!
+Music web service that will return a list of tracks from the group that you can
+listen to.</a>  So
+when the page loads, we know nothing about our top-level nodes' children.  And
+while the resulting TreeView instance could grow quite large through user
+interaction, we need only load a very light set of nodes to begin with.
+</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="treeDiv1"></div>
+<script type="text/javascript">
+(function() {
+
+    var tree;
+
+    function loadNodeData(node, fnLoadComplete)  {
+        //We'll load node data based on what we get back when we
+        //use Connection Manager topass the text label of the
+        //expanding node to the Yahoo!
+        //Music track search API.  Here, we're at the
+        //first part of the request -- we'll make the request to the
+        //server.  In our success handler, we'll build our new children
+        //and then return fnLoadComplete back to the tree.
+
+        //Get the node's label and urlencode it; this is the word/s
+        //on which we'll search for related words:
+        var nodeLabel = encodeURI(node.label);
+
+        //prepare URL for XHR request:
+        var sUrl = "assets/ysuggest_proxy.php?query=" + nodeLabel;
+
+        //prepare our callback object
+        var callback = {
+
+            //if our XHR call is successful, we want to make use
+            //of the returned data and create child nodes.
+            success: function(oResponse) {
+                YAHOO.log("XHR transaction was successful.", "info", "example");
+                //YAHOO.log(oResponse.responseText);
+                var oResults = eval("(" + oResponse.responseText + ")");
+
+                var query = oResults.query,
+                    results = query && query.results,
+                    tracks = results && results.Track,
+                    title, url, titles, tempNode;
+
+                if (YAHOO.lang.isArray(tracks)) {
+                    titles = {};
+                    for (var i = 0, len = tracks.length; i < len; i++) {
+                        title = tracks[i].title;
+                        url = tracks[i].url;
+
+                        // prevent duplicate track titles by creating a hash of titles
+                        if (!titles[title]) {
+                            titles[title] = true;
+                            tempNode = new YAHOO.widget.TextNode(title, node, false);
+
+                            // we can tell the tree node that this is a leaf node so
+                            // that it doesn't try to dynamically load children.
+                            tempNode.isLeaf = true;
+
+                            // Define a href so that a click on the node will navigate
+                            // to the page that has the track that you may be able
+                            // to listen to.
+                            tempNode.href = url;
+                        }
+                    }
+                }
+
+                //When we're done creating child nodes, we execute the node's
+                //loadComplete callback method which comes in via the argument
+                //in the response object (we could also access it at node.loadComplete,
+                //if necessary):
+                oResponse.argument.fnLoadComplete();
+            },
+
+            //if our XHR call is not successful, we want to
+            //fire the TreeView callback and let the Tree
+            //proceed with its business.
+            failure: function(oResponse) {
+                YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                oResponse.argument.fnLoadComplete();
+            },
+
+            //our handlers for the XHR response will need the same
+            //argument information we got to loadNodeData, so
+            //we'll pass those along:
+            argument: {
+                "node": node,
+                "fnLoadComplete": fnLoadComplete
+            },
+
+            //timeout -- if more than 7 seconds go by, we'll abort
+            //the transaction and assume there are no children:
+            timeout: 7000
+        };
+
+        //With our callback object ready, it's now time to
+        //make our XHR call using Connection Manager's
+        //asyncRequest method:
+        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+    }
+
+    function init() {
+       //create a new tree:
+       tree = new YAHOO.widget.TreeView("treeDiv1");
+
+       //turn dynamic loading on for entire tree:
+       tree.setDynamicLoad(loadNodeData);
+
+       //get root node for tree:
+       var root = tree.getRoot();
+
+       //add child nodes for tree; our top level nodes are bands
+       var bands = ["Radiohead","Phoenix","Bon Iver","Born Ruffians","LCD Soundsystem","Blind Pilot","The Black Keys"];
+
+       for (var i=0, j=bands.length; i<j; i++) {
+            var tempNode = new YAHOO.widget.TextNode(bands[i], root, false);
+       }
+
+       //render tree with these toplevel nodes; all descendants of these nodes
+       //will be generated as needed by the dynamic loader.
+       tree.draw();
+    }
+
+    //once the DOM has loaded, we can go ahead and set up our tree:
+    YAHOO.util.Event.onDOMReady(init);
+}());
+
+
+</script>
+
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

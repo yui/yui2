@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Find Photos on Flickr</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="../../build/autocomplete/assets/skins/sam/autocomplete.css" />
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="../../build/autocomplete/autocomplete-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+#flickrselections {
+    float:right;
+    width:240px;
+    padding:10px;
+    background-color:#FFA928;
+}
+
+#flickrselections h5 {
+    color:#009;
+    margin:0;
+}
+
+/* custom styles for scrolling container */
+#flickrautocomplete {
+    width:15em; /* set width of widget here */
+    padding-bottom:2em;
+}
+#flickrautocomplete .yui-ac-content {
+    max-height:30em;overflow:auto;overflow-x:hidden; /* set scrolling */
+    _height:30em; /* ie6 */
+}
+#flickrautocomplete .flickrImg {
+    width:6em;height:6em;padding:.1em;vertical-align:middle;
+}
+</style>
+
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+
+<h1>Find Photos on Flickr</h1>
+
+<div class="exampleIntro">
+	<p>This example uses AutoComplete to find images by tag from the Flickr webservice. A simple PHP proxy is used to access the remote server via XHR. The <code>generateRequest()</code> method has been customized in order send additional required parameters to the Flickr application. The <code>formatResult()</code> method has been customized in order to display images in the results container, and the default CSS has been enhanced so the results container can scroll. Finally, a <code>itemSelectEvent</code> handler has been defined to collect selected images in a separate container.</p>
+
+<p>Implementers who are working with data from third-party sources, user input data, or otherwise untrustworthy sources should be sure to read the <a href="http://developer.yahoo.com/yui/autocomplete/#security">Security Considerations</a> section of the AutoComplete user guide.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<label for="flickrinput">Find photos by tag and collect your selections:</label>
+<div id="flickrselections">
+    <h5>Selections</h5>
+    <div id="photos"></div>
+</div>
+
+<div id="flickrautocomplete">
+	<input id="flickrinput" type="text">
+	<div id="flickrcontainer"></div>
+</div>
+
+	
+<script type="text/javascript">
+YAHOO.example.ACFlickr = function() {
+    // Set up a local proxy to YQL
+    var myDS = new YAHOO.util.XHRDataSource("assets/php/yql_proxy.php?format=xml&q=select%20*%20from%20flickr.photos.search");
+    myDS.responseSchema = {
+        resultNode: "photo",
+        fields: ["title", "id", "owner", "secret", "server"]
+    };
+    myDS.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
+    myDS.maxCacheEntries = 100;
+
+    // Instantiate AutoComplete
+    var myAC = new YAHOO.widget.AutoComplete("flickrinput","flickrcontainer", myDS);
+    myAC.resultTypeList = false;
+    myAC.suppressInputUpdate = true;
+    myAC.generateRequest = function(sQuery) {
+        return "%20where%20tags%3D%22"+sQuery+"%22";
+    };
+    
+    // Helper function to generate the img tag
+    var getImgMarkup = function(oPhoto, sSize) {
+        var sUrl = "http://static.flickr.com/" +
+            oPhoto.server +
+            "/" +
+            oPhoto.id +
+            "_" +
+            oPhoto.secret +
+            "_"+ (sSize || "s") +".jpg";
+        return '<img src="' + sUrl + '" class="flickrImg" alt="' + oPhoto.title + '">';
+    };
+    
+    // Helper function to generate the link tag
+    var getImgLink = function(oPhoto) {
+        return '<a href="http://www.flickr.com/photos/' + oPhoto.owner + "/" + oPhoto.id + '">';
+    };
+    
+    // Custom formatting to display photos in the suggestions container
+    myAC.formatResult = function(oResultItem, sQuery) {
+        // This was defined by the schema array of the data source
+        var sTitle = oResultItem.title,
+            sMarkup = getImgMarkup(oResultItem) + " " + sTitle;
+        return (sMarkup);
+    };
+    
+    // Selecting a photo adds it to the selections area
+    myAC.itemSelectEvent.subscribe(function(sType, aArgs){
+        var oPhoto = aArgs[2];
+        YAHOO.util.Dom.get("photos").innerHTML = 
+            '<p>' + getImgLink(oPhoto) +
+                getImgMarkup(oPhoto, "m")+'</a></p>'+
+                YAHOO.util.Dom.get("photos").innerHTML;
+    });
+    
+    return {
+        oDS: myDS,
+        oAC: myAC
+    };
+}();
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

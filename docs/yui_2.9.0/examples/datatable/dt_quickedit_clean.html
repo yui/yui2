@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Quick Edit</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="../../build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="../../build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+#quick-edit-controls
+{
+	display: none;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <cite class="byline">DataTable Quick Edit was developed by <a href='http://jafl.my.speedingbits.com/blog/'>John Lindal</a>. This was originally a concept for <a href='http://apt.yahoo.com/'>Yahoo! APT</a> by Neal Sainani.</cite>
+
+<h1>Quick Edit</h1>
+
+<div class="exampleIntro">
+	<!-- Introductory text -->
+<p>A demonstration of switching DataTable into <q>Quick Edit</q> mode. When the table first loads, it displays the normal way. When it switches to Quick Edit mode, the editable colums are filled with input fields.  <code>getQuickEditChanges()</code> returns the changed values for efficiently saving the updates.</p>
+<p>In Quick Edit mode, hold down the Control key and press the up or down arrow keys to move within a column.</p>
+<p>To test validation, try entering <q>John Lindal</q> as the author, anything other than 4 digits for the date, and anything other than a positive integer for the quantity.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<div>
+    <button id="start-quick-edit">Quick Edit</button>
+    <span id="quick-edit-controls">
+        <button id="save-quick-edit">Save</button>
+        <button id="cancel-quick-edit">Cancel</button>
+    </span>
+</div>
+<div id="quickedit_table"></div>
+<div id="pagination"></div>
+
+<script type="text/javascript">
+(function(){
+    var orig = YAHOO.widget.DataTable._cloneObject;
+    YAHOO.widget.DataTable._cloneObject = function(o)
+    {
+        if (o instanceof RegExp)
+        {
+            return o;
+        }
+        else
+        {
+            return orig(o);
+        }
+    }
+})();
+</script>
+
+<script src="assets/js/quickedit.js"></script>
+<script type="text/javascript">
+/* Modify as needed */
+YAHOO.util.Event.onDOMReady( function() {
+
+    YAHOO.example.Data = {
+        bookorders: [
+            {author:"C.S. Lewis", year:1950, quantity:10, title:"The Lion, the Witch and the Wardrobe"},
+            {author:"C.S. Lewis", year:1951, quantity:5, title:"Prince Caspian: The Return to Narnia"},
+            {author:"C.S. Lewis", year:1952, quantity:2, title:"The Voyage of the Dawn Treader"},
+            {author:"C.S. Lewis", year:1953, quantity:6, title:"The Silver Chair"},
+            {author:"C.S. Lewis", year:1954, quantity:9, title:"The Horse and His Boy"},
+            {author:"C.S. Lewis", year:1955, quantity:4, title:"The Magician's Nephew"},
+            {author:"C.S. Lewis", year:1956, quantity:8, title:"The Last Battle"},
+            {author:"C.S. Lewis", year:1938, quantity:10, title:"Out of the Silent Planet"},
+            {author:"C.S. Lewis", year:1943, quantity:5, title:"Perelandra"},
+            {author:"C.S. Lewis", year:1945, quantity:2, title:"That Hideous Strength"},
+            {author:"Philip Pullman", year:1995, quantity:7, title:"Northern Lights"},
+            {author:"Philip Pullman", year:1997, quantity:5, title:"The Subtle Knife"},
+            {author:"Philip Pullman", year:2000, quantity:8, title:"The Amber Spyglass"},
+            {author:"J. R. R. Tolkien", year:1937, quantity:5, title:"The Hobbit"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:12, title:"The Fellowship of the Ring"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:0, title:"The Two Towers"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:8, title:"The Return of the King"},
+            {author:"Philip K. Dick", year:1966, quantity:5, title:"Do Androids Dream of Electric Sheep?"},
+            {author:"Robert A. Heinlein", year:1959, quantity:4, title:"Starship Troopers"},
+            {author:"Robert A. Heinlein", year:1961, quantity:7, title:"Stranger in a Strange Land"},
+            {author:"Robert A. Heinlein", year:1966, quantity:3, title:"The Moon Is a Harsh Mistress"},
+            {author:"A. E. van Vogt", year:1946, quantity:3, title:"Slan"},
+            {author:"A. E. van Vogt", year:1950, quantity:5, title:"The Voyage of the Space Beagle"},
+            {author:"A. E. van Vogt", year:1970, quantity:8, title:"Quest for the Future"}
+        ]
+    };
+
+    /**
+    *
+    * Create a YUI DataSource instance. This will create an XHR datasource and will use YQL 
+    * to query the Flickr web service.
+    *
+    **/
+    var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders, {
+
+        responseType: YAHOO.util.DataSource.TYPE_JSARRAY,
+        responseSchema: {
+            fields: [ 'author', 'year', 'quantity', 'title' ]
+        }
+    });
+
+    /**
+    *
+    * Create a YUI DataTable instance.
+    *
+    **/
+    var myDataTable = new YAHOO.widget.QuickEditDataTable(
+        "quickedit_table",
+        [
+            {
+                key:"title",
+                label:"Title",
+                resizeable: true,
+                sortable: true
+            },
+            {
+                key:"author",
+                label:"Author",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        fn: function(e) {
+                            if (e.value == "John Lindal") {
+                                this.displayQuickEditMessage(e, 'He has never been published!', 'error');
+                                return false;
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                key:"year",
+                label:"Publication Date",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        regex: /^[0-9]{4}$/,
+                        msg: {
+                            regex: 'Please enter a four digit year.'
+                        }
+                    }
+                }
+            },
+            {
+                key:"quantity",
+                label:"Quantity",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    copyDown: true,
+                    validation: {
+//                      css: "yiv-integer:[0,]",
+                        regex: /^[0-9]+$/,
+                        msg: {
+                            regex: 'Please enter a positive integer.'
+                        }
+                    }
+                }
+            }
+        ],
+        myDataSource,
+        { 
+            paginator: new YAHOO.widget.Paginator({
+                rowsPerPage:5,
+                containers:'pagination'
+            })
+        }
+    );
+
+    /**
+    * Quick Edit controls
+    **/
+    YAHOO.util.Event.on('start-quick-edit', 'click', function()
+    {
+        document.getElementById('start-quick-edit').disabled = true;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'inline');
+        myDataTable.startQuickEdit();
+    });
+
+    YAHOO.util.Event.on('save-quick-edit', 'click', function()
+    {
+        stopQuickEdit(true);
+    });
+
+    YAHOO.util.Event.on('cancel-quick-edit', 'click', function()
+    {
+        stopQuickEdit(false);
+    });
+
+    function stopQuickEdit(save)
+    {
+        if (save)
+        {
+            var changes = myDataTable.getQuickEditChanges();
+            if (changes === false)
+            {
+                return false;
+            }
+
+            var offset = myDataTable.get('paginator').getStartIndex();
+            for (var i=0; i<changes.length; i++)
+            {
+                var j = i + offset;
+                for (var key in changes[i])
+                {
+                    if (YAHOO.lang.hasOwnProperty(changes[i], key))
+                    {
+                        myDataTable.getRecord(j).setData(key, changes[i][key]);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('start-quick-edit').disabled = false;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'none');
+        myDataTable.cancelQuickEdit();
+        return true;
+    }
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

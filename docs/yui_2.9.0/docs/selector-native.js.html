@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: dom   selector-native.js  (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
+
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>dom&nbsp; <span class="subtitle">2.9.0</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_dom.html" title="dom">dom</a>
+                
+                 &gt; selector-native.js (source view) 
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+                        <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * The selector-native module provides support for native querySelector</span>
+<span class="cm"> * @module dom</span>
+<span class="cm"> * @submodule selector-native</span>
+<span class="cm"> * @for Selector</span>
+<span class="cm"> */</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Provides support for using CSS selectors to query the DOM </span>
+<span class="cm"> * @class Selector </span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @for Selector</span>
+<span class="cm"> */</span>
+
+<span class="kd">var</span> <span class="nx">COMPARE_DOCUMENT_POSITION</span> <span class="o">=</span> <span class="s1">&#39;compareDocumentPosition&#39;</span><span class="p">,</span>
+    <span class="nx">OWNER_DOCUMENT</span> <span class="o">=</span> <span class="s1">&#39;ownerDocument&#39;</span><span class="p">,</span>
+
+<span class="nx">Selector</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">_foundCache</span><span class="o">:</span> <span class="p">[],</span>
+
+    <span class="nx">useNative</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+    <span class="nx">_compare</span><span class="o">:</span> <span class="p">(</span><span class="s1">&#39;sourceIndex&#39;</span> <span class="k">in</span> <span class="nx">Y_DOCUMENT_ELEMENT</span><span class="p">)</span> <span class="o">?</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">nodeA</span><span class="p">,</span> <span class="nx">nodeB</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">nodeA</span><span class="p">.</span><span class="nx">sourceIndex</span><span class="p">,</span>
+                <span class="nx">b</span> <span class="o">=</span> <span class="nx">nodeB</span><span class="p">.</span><span class="nx">sourceIndex</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">&gt;</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+        <span class="p">}</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Y_DOCUMENT_ELEMENT</span><span class="p">[</span><span class="nx">COMPARE_DOCUMENT_POSITION</span><span class="p">]</span> <span class="o">?</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">nodeA</span><span class="p">,</span> <span class="nx">nodeB</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">nodeA</span><span class="p">[</span><span class="nx">COMPARE_DOCUMENT_POSITION</span><span class="p">](</span><span class="nx">nodeB</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="o">:</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">nodeA</span><span class="p">,</span> <span class="nx">nodeB</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">rangeA</span><span class="p">,</span> <span class="nx">rangeB</span><span class="p">,</span> <span class="nx">compare</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">nodeA</span> <span class="o">&amp;&amp;</span> <span class="nx">nodeB</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">rangeA</span> <span class="o">=</span> <span class="nx">nodeA</span><span class="p">[</span><span class="nx">OWNER_DOCUMENT</span><span class="p">].</span><span class="nx">createRange</span><span class="p">();</span>
+                <span class="nx">rangeA</span><span class="p">.</span><span class="nx">setStart</span><span class="p">(</span><span class="nx">nodeA</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="nx">rangeB</span> <span class="o">=</span> <span class="nx">nodeB</span><span class="p">[</span><span class="nx">OWNER_DOCUMENT</span><span class="p">].</span><span class="nx">createRange</span><span class="p">();</span>
+                <span class="nx">rangeB</span><span class="p">.</span><span class="nx">setStart</span><span class="p">(</span><span class="nx">nodeB</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="nx">compare</span> <span class="o">=</span> <span class="nx">rangeA</span><span class="p">.</span><span class="nx">compareBoundaryPoints</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">rangeB</span><span class="p">);</span> <span class="c1">// 1 === Range.START_TO_END</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="nx">compare</span><span class="p">;</span>
+        
+    <span class="p">}),</span>
+
+    <span class="nx">_sort</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">Y_Array</span><span class="p">(</span><span class="nx">nodes</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">sort</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">nodes</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">Selector</span><span class="p">.</span><span class="nx">_compare</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">nodes</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">_deDupe</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="p">[],</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">node</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">node</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">_found</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">ret</span><span class="p">[</span><span class="nx">ret</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">_found</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">node</span> <span class="o">=</span> <span class="nx">ret</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">_found</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">removeAttribute</span><span class="p">(</span><span class="s1">&#39;_found&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Retrieves a set of nodes based on a given CSS selector. </span>
+<span class="cm">     * @method query</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param {string} selector The CSS Selector to test the node against.</span>
+<span class="cm">     * @param {HTMLElement} root optional An HTMLElement to start the query from. Defaults to Y.config.doc</span>
+<span class="cm">     * @param {Boolean} firstOnly optional Whether or not to return only the first match.</span>
+<span class="cm">     * @return {Array} An array of nodes that match the given selector.</span>
+<span class="cm">     * @static</span>
+<span class="cm">     */</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">firstOnly</span><span class="p">,</span> <span class="nx">skipNative</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">root</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">root</span> <span class="o">=</span> <span class="nx">Y_DOM</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="nx">firstOnly</span><span class="p">)</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="p">[];</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span> <span class="o">||</span> <span class="nx">Y_DOC</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="p">[],</span>
+            <span class="nx">useNative</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Selector</span><span class="p">.</span><span class="nx">useNative</span> <span class="o">&amp;&amp;</span> <span class="nx">Y_DOC</span><span class="p">.</span><span class="nx">querySelector</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">skipNative</span><span class="p">),</span>
+            <span class="nx">queries</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">]],</span>
+            <span class="nx">query</span><span class="p">,</span>
+            <span class="nx">result</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span>
+            <span class="nx">fn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">useNative</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">_nativeQuery</span> <span class="o">:</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">_bruteQuery</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">selector</span> <span class="o">&amp;&amp;</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// split group into seperate queries</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">skipNative</span> <span class="o">&amp;&amp;</span> <span class="c1">// already done if skipping</span>
+                    <span class="p">(</span><span class="o">!</span><span class="nx">useNative</span> <span class="o">||</span> <span class="nx">root</span><span class="p">.</span><span class="nx">tagName</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// split native when element scoping is needed</span>
+                <span class="nx">queries</span> <span class="o">=</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">_splitQueries</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">query</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);)</span> <span class="p">{</span>
+                <span class="nx">result</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">query</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">query</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">firstOnly</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">firstOnly</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// coerce DOM Collection to Array</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="nx">Y_Array</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">ret</span> <span class="o">=</span> <span class="nx">ret</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">queries</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// remove dupes and sort by doc order </span>
+                <span class="nx">ret</span> <span class="o">=</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">_sort</span><span class="p">(</span><span class="nx">Selector</span><span class="p">.</span><span class="nx">_deDupe</span><span class="p">(</span><span class="nx">ret</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;query: &#39;</span> <span class="o">+</span> <span class="nx">selector</span> <span class="o">+</span> <span class="s1">&#39; returning: &#39;</span> <span class="o">+</span> <span class="nx">ret</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Selector&#39;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">firstOnly</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="nx">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="kc">null</span><span class="p">)</span> <span class="o">:</span> <span class="nx">ret</span><span class="p">;</span>
+
+    <span class="p">},</span>
+
+    <span class="c1">// allows element scoped queries to begin with combinator</span>
+    <span class="c1">// e.g. query(&#39;&gt; p&#39;, document.body) === query(&#39;body &gt; p&#39;)</span>
+    <span class="nx">_splitQueries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">groups</span> <span class="o">=</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">),</span>
+            <span class="nx">queries</span> <span class="o">=</span> <span class="p">[],</span>
+            <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// enforce for element scoping</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">tagName</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">Y_guid</span><span class="p">();</span>
+                <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;[id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot;] &#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">groups</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">selector</span> <span class="o">=</span>  <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">groups</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                <span class="nx">queries</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">node</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">queries</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">_nativeQuery</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">one</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">Y_UA</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;:checked&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
+                <span class="p">(</span><span class="nx">Selector</span><span class="p">.</span><span class="nx">pseudos</span> <span class="o">&amp;&amp;</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">pseudos</span><span class="p">.</span><span class="nx">checked</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// webkit (chrome, safari) fails to find &quot;selected&quot;</span>
+            <span class="k">return</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">one</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// redo with skipNative true to try brute query</span>
+        <span class="p">}</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="c1">//YAHOO.log(&#39;trying native query with: &#39; + selector, &#39;info&#39;, &#39;selector-native&#39;);</span>
+            <span class="k">return</span> <span class="nx">root</span><span class="p">[</span><span class="s1">&#39;querySelector&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">one</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="s1">&#39;All&#39;</span><span class="p">)](</span><span class="nx">selector</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// fallback to brute if available</span>
+            <span class="c1">//YAHOO.log(&#39;native query error; reverting to brute query with: &#39; + selector, &#39;info&#39;, &#39;selector-native&#39;);</span>
+            <span class="k">return</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">one</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// redo with skipNative true</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="nx">filter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nodes</span><span class="p">,</span> <span class="nx">selector</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="p">[],</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">node</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">nodes</span> <span class="o">&amp;&amp;</span> <span class="nx">selector</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">node</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">Selector</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">selector</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nx">ret</span><span class="p">[</span><span class="nx">ret</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;invalid filter input (nodes: &#39;</span> <span class="o">+</span> <span class="nx">nodes</span> <span class="o">+</span>
+                    <span class="s1">&#39;, selector: &#39;</span> <span class="o">+</span> <span class="nx">selector</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Selector&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">selector</span><span class="p">,</span> <span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">groups</span> <span class="o">=</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">),</span>
+            <span class="nx">useFrag</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">parent</span><span class="p">,</span>
+            <span class="nx">item</span><span class="p">,</span>
+            <span class="nx">items</span><span class="p">,</span>
+            <span class="nx">frag</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">group</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">tagName</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// only test HTMLElements</span>
+
+            <span class="c1">// we need a root if off-doc</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Y_DOM_inDoc</span><span class="p">(</span><span class="nx">node</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">parent</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span> 
+                    <span class="nx">root</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// only use frag when no parent to query</span>
+                    <span class="nx">frag</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="nx">OWNER_DOCUMENT</span><span class="p">].</span><span class="nx">createDocumentFragment</span><span class="p">();</span>
+                    <span class="nx">frag</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+                    <span class="nx">root</span> <span class="o">=</span> <span class="nx">frag</span><span class="p">;</span>
+                    <span class="nx">useFrag</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span> <span class="o">||</span> <span class="nx">node</span><span class="p">[</span><span class="nx">OWNER_DOCUMENT</span><span class="p">];</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">Y_guid</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">group</span> <span class="o">=</span> <span class="nx">groups</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);)</span> <span class="p">{</span> <span class="c1">// TODO: off-dom test</span>
+                <span class="nx">group</span> <span class="o">+=</span> <span class="s1">&#39;[id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">;</span>
+                <span class="nx">items</span> <span class="o">=</span> <span class="nx">Selector</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">group</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">j</span><span class="o">++</span><span class="p">];)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">item</span> <span class="o">===</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">useFrag</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// cleanup</span>
+                <span class="nx">frag</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">};</span>
+
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Selector</span> <span class="o">=</span> <span class="nx">Selector</span><span class="p">;</span>
+</pre></div>
+
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                                <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
+                                <li class=""><a href="module_button.html" title="button">button</a></li>
+                                <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
+                                <li class=""><a href="module_carousel.html" title="carousel">carousel</a></li>
+                                <li class=""><a href="module_charts.html" title="charts">charts</a></li>
+                                <li class=""><a href="module_colorpicker.html" title="colorpicker">colorpicker</a></li>
+                                <li class=""><a href="module_connection.html" title="connection">connection</a></li>
+                                <li class=""><a href="module_container.html" title="container">container</a></li>
+                                <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
+                                <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
+                                <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
+                                <li class="selected"><a href="module_dom.html" title="dom">dom</a></li>
+                                <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
+                                <li class=""><a href="module_editor.html" title="editor">editor</a></li>
+                                <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
+                                <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
+                                <li class=""><a href="module_get.html" title="get">get</a></li>
+                                <li class=""><a href="module_history.html" title="history">history</a></li>
+                                <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
+                                <li class=""><a href="module_imageloader.html" title="imageloader">imageloader</a></li>
+                                <li class=""><a href="module_json.html" title="json">json</a></li>
+                                <li class=""><a href="module_layout.html" title="layout">layout</a></li>
+                                <li class=""><a href="module_logger.html" title="logger">logger</a></li>
+                                <li class=""><a href="module_menu.html" title="menu">menu</a></li>
+                                <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
+                                <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
+                                <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
+                                <li class=""><a href="module_resize.html" title="resize">resize</a></li>
+                                <li class=""><a href="module_selector.html" title="selector">selector</a></li>
+                                <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
+                                <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
+                                <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
+                                <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
+                                <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
+                                <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
+                                <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
+                                <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="YAHOO.util.Dom.html" title="YAHOO.util.Dom">YAHOO.util.Dom</a></li>
+                                <li class=""><a href="YAHOO.util.Dom.Color.html" title="YAHOO.util.Dom.Color">YAHOO.util.Dom.Color</a></li>
+                                <li class=""><a href="YAHOO.util.Dom.IEStyle.html" title="YAHOO.util.Dom.IEStyle">YAHOO.util.Dom.IEStyle</a></li>
+                                <li class=""><a href="YAHOO.util.Point.html" title="YAHOO.util.Point">YAHOO.util.Point</a></li>
+                                <li class=""><a href="YAHOO.util.Region.html" title="YAHOO.util.Region">YAHOO.util.Region</a></li>
+                                <li class=""><a href="YAHOO.util.Selector.html" title="YAHOO.util.Selector">YAHOO.util.Selector</a></li>
+                                <li class=""><a href="YAHOO.widget.Record.html" title="YAHOO.widget.Record">YAHOO.widget.Record</a></li>
+                                <li class=""><a href="YAHOO.widget.RecordSet.html" title="YAHOO.widget.RecordSet">YAHOO.widget.RecordSet</a></li>
+                                <li class=""><a href="YAHOO.widget.ScrollingDataTable.html" title="YAHOO.widget.ScrollingDataTable">YAHOO.widget.ScrollingDataTable</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Color.js.html" title="Color.js">Color.js</a></li>
+                                <li class=""><a href="Dom.js.html" title="Dom.js">Dom.js</a></li>
+                                <li class=""><a href="IEStyle.js.html" title="IEStyle.js">IEStyle.js</a></li>
+                                <li class=""><a href="RecordSet.js.html" title="RecordSet.js">RecordSet.js</a></li>
+                                <li class=""><a href="Region.js.html" title="Region.js">Region.js</a></li>
+                                <li class=""><a href="ScrollingDataTable.js.html" title="ScrollingDataTable.js">ScrollingDataTable.js</a></li>
+                                <li class=""><a href="selector-css3.js.html" title="selector-css3.js">selector-css3.js</a></li>
+                                <li class=""><a href="selector-mapping.js.html" title="selector-mapping.js">selector-mapping.js</a></li>
+                                <li class="selected"><a href="selector-native.js.html" title="selector-native.js">selector-native.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2011 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Region", "name": "0", "url": "YAHOO.util.Region.html#property_0", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "1", "url": "YAHOO.util.Region.html#property_1", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "addClass", "url": "YAHOO.util.Dom.html#method_addClass", "type": "method"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_addRecord", "url": "YAHOO.widget.RecordSet.html#method__addRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "addRecord", "url": "YAHOO.widget.RecordSet.html#method_addRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "addRecords", "url": "YAHOO.widget.RecordSet.html#method_addRecords", "type": "method"}, {"access": "", "host": "YAHOO.util.Selector", "name": "attrAliases", "url": "YAHOO.util.Selector.html#property_attrAliases", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "batch", "url": "YAHOO.util.Dom.html#method_batch", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeCOLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeCOLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeHeightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeWidthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Region", "name": "bottom", "url": "YAHOO.util.Region.html#property_bottom", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_bScrollbarX", "url": "YAHOO.widget.ScrollingDataTable.html#property__bScrollbarX", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "clearScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method_clearScrollPositions", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLER", "url": "YAHOO.widget.ScrollingDataTable.html#config_COLOR_COLUMNFILLER", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_COLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Region", "name": "contains", "url": "YAHOO.util.Region.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_BODY", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_BODY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_HEADER", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_HEADER", "type": "property"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_deleteRecord", "url": "YAHOO.widget.RecordSet.html#method__deleteRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "deleteRecord", "url": "YAHOO.widget.RecordSet.html#method_deleteRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "deleteRecords", "url": "YAHOO.widget.RecordSet.html#method_deleteRecords", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "disable", "url": "YAHOO.widget.ScrollingDataTable.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.Selector", "name": "document", "url": "YAHOO.util.Selector.html#property_document", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdThead", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdThead", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdTable", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpTable", "type": "property"}, {"access": "", "host": "YAHOO.util.Selector", "name": "filter", "url": "YAHOO.util.Selector.html#method_filter", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_focusEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__focusEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "generateId", "url": "YAHOO.util.Dom.html#method_generateId", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "get", "url": "YAHOO.util.Dom.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "get", "url": "YAHOO.util.Dom.IEStyle.html#method_get", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorBy", "url": "YAHOO.util.Dom.html#method_getAncestorBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByClassName", "url": "YAHOO.util.Dom.html#method_getAncestorByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAncestorByTagName", "url": "YAHOO.util.Dom.html#method_getAncestorByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getArea", "url": "YAHOO.util.Region.html#method_getArea", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getAttribute", "url": "YAHOO.util.Dom.html#method_getAttribute", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderColor", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getBorderWidth", "url": "YAHOO.util.Dom.IEStyle.html#method_getBorderWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildren", "url": "YAHOO.util.Dom.html#method_getChildren", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getChildrenBy", "url": "YAHOO.util.Dom.html#method_getChildrenBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientHeight", "url": "YAHOO.util.Dom.html#method_getClientHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientRegion", "url": "YAHOO.util.Dom.html#method_getClientRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getClientWidth", "url": "YAHOO.util.Dom.html#method_getClientWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getColor", "url": "YAHOO.util.Dom.IEStyle.html#method_getColor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Record", "name": "getCount", "url": "YAHOO.widget.Record.html#method_getCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.Record", "name": "getData", "url": "YAHOO.widget.Record.html#method_getData", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentHeight", "url": "YAHOO.util.Dom.html#method_getDocumentHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollLeft", "url": "YAHOO.util.Dom.html#method_getDocumentScrollLeft", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentScrollTop", "url": "YAHOO.util.Dom.html#method_getDocumentScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getDocumentWidth", "url": "YAHOO.util.Dom.html#method_getDocumentWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementBy", "url": "YAHOO.util.Dom.html#method_getElementBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsBy", "url": "YAHOO.util.Dom.html#method_getElementsBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getElementsByClassName", "url": "YAHOO.util.Dom.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChild", "url": "YAHOO.util.Dom.html#method_getFirstChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getFirstChildBy", "url": "YAHOO.util.Dom.html#method_getFirstChildBy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "getId", "url": "YAHOO.widget.RecordSet.html#method_getId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Record", "name": "getId", "url": "YAHOO.widget.Record.html#method_getId", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChild", "url": "YAHOO.util.Dom.html#method_getLastChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getLastChildBy", "url": "YAHOO.util.Dom.html#method_getLastChildBy", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "getLength", "url": "YAHOO.widget.RecordSet.html#method_getLength", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getMargin", "url": "YAHOO.util.Dom.IEStyle.html#method_getMargin", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSibling", "url": "YAHOO.util.Dom.html#method_getNextSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getNextSiblingBy", "url": "YAHOO.util.Dom.html#method_getNextSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getOffset", "url": "YAHOO.util.Dom.IEStyle.html#method_getOffset", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getPixel", "url": "YAHOO.util.Dom.IEStyle.html#method_getPixel", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSibling", "url": "YAHOO.util.Dom.html#method_getPreviousSibling", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getPreviousSiblingBy", "url": "YAHOO.util.Dom.html#method_getPreviousSiblingBy", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "getRecord", "url": "YAHOO.widget.RecordSet.html#method_getRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "getRecordIndex", "url": "YAHOO.widget.RecordSet.html#method_getRecordIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "getRecords", "url": "YAHOO.widget.RecordSet.html#method_getRecords", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getRegion", "url": "YAHOO.util.Dom.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "getRegion", "url": "YAHOO.util.Region.html#method_getRegion", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getStyle", "url": "YAHOO.util.Dom.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportHeight", "url": "YAHOO.util.Dom.html#method_getViewportHeight", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getViewportWidth", "url": "YAHOO.util.Dom.html#method_getViewportWidth", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.IEStyle", "name": "getVisibility", "url": "YAHOO.util.Dom.IEStyle.html#method_getVisibility", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getX", "url": "YAHOO.util.Dom.html#method_getX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getXY", "url": "YAHOO.util.Dom.html#method_getXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "getY", "url": "YAHOO.util.Dom.html#method_getY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "hasClass", "url": "YAHOO.util.Dom.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "hasRecords", "url": "YAHOO.widget.RecordSet.html#method_hasRecords", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "height", "url": "YAHOO.widget.ScrollingDataTable.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.util.Region", "name": "height", "url": "YAHOO.util.Region.html#property_height", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "heightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_heightChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Dom", "name": "inDocument", "url": "YAHOO.util.Dom.html#method_inDocument", "type": "method"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_init", "url": "YAHOO.widget.RecordSet.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_init", "url": "YAHOO.widget.ScrollingDataTable.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "initAttributes", "url": "YAHOO.widget.ScrollingDataTable.html#method_initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdThEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initCaptionEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initCaptionEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initDomElements", "url": "YAHOO.widget.ScrollingDataTable.html#method__initDomElements", "type": "method"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_initEvents", "url": "YAHOO.widget.RecordSet.html#method__initEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTableEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTbodyEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTbodyEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initThEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertAfter", "url": "YAHOO.util.Dom.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "insertBefore", "url": "YAHOO.util.Dom.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "insertColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_insertColumn", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "intersect", "url": "YAHOO.util.Region.html#method_intersect", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "isAncestor", "url": "YAHOO.util.Dom.html#method_isAncestor", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "keyUpdateEvent", "url": "YAHOO.widget.RecordSet.html#event_keyUpdateEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "KEYWORDS", "url": "YAHOO.util.Dom.Color.html#property_KEYWORDS", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "left", "url": "YAHOO.util.Region.html#property_left", "type": "property"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_length", "url": "YAHOO.widget.RecordSet.html#property__length", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Record", "name": "_nCount", "url": "YAHOO.widget.Record.html#property__nCount", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Record", "name": "_oData", "url": "YAHOO.widget.Record.html#property__oData", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "onColumnChange", "url": "YAHOO.widget.ScrollingDataTable.html#method_onColumnChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__onScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onTheadKeydown", "url": "YAHOO.widget.ScrollingDataTable.html#method__onTheadKeydown", "type": "method"}, {"access": "", "host": "YAHOO.util.Selector", "name": "operators", "url": "YAHOO.util.Selector.html#property_operators", "type": "property"}, {"access": "", "host": "YAHOO.util.Selector", "name": "PARENT_NODE", "url": "YAHOO.util.Selector.html#property_PARENT_NODE", "type": "property"}, {"access": "", "host": "YAHOO.util.Selector", "name": "pseudos", "url": "YAHOO.util.Selector.html#property_pseudos", "type": "property"}, {"access": "", "host": "YAHOO.util.Selector", "name": "query", "url": "YAHOO.util.Selector.html#method_query", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordAddEvent", "url": "YAHOO.widget.RecordSet.html#event_recordAddEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordDeleteEvent", "url": "YAHOO.widget.RecordSet.html#event_recordDeleteEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Record", "name": "Record._nCount", "url": "YAHOO.widget.Record.html#property_Record._nCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordsAddEvent", "url": "YAHOO.widget.RecordSet.html#event_recordsAddEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordsDeleteEvent", "url": "YAHOO.widget.RecordSet.html#event_recordsDeleteEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordSetEvent", "url": "YAHOO.widget.RecordSet.html#event_recordSetEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "RecordSet._nCount", "url": "YAHOO.widget.RecordSet.html#property_RecordSet._nCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordsSetEvent", "url": "YAHOO.widget.RecordSet.html#event_recordsSetEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordUpdateEvent", "url": "YAHOO.widget.RecordSet.html#event_recordUpdateEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "recordValueUpdateEvent", "url": "YAHOO.widget.RecordSet.html#event_recordValueUpdateEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex", "url": "YAHOO.util.Dom.Color.html#property_re_hex", "type": "property"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_hex3", "url": "YAHOO.util.Dom.Color.html#property_re_hex3", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom", "name": "removeClass", "url": "YAHOO.util.Dom.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "removeColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_removeColumn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "reorderColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_reorderColumn", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "replaceClass", "url": "YAHOO.util.Dom.html#method_replaceClass", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "replaceRecords", "url": "YAHOO.widget.RecordSet.html#method_replaceRecords", "type": "method"}, {"access": "private", "host": "YAHOO.util.Dom.Color", "name": "re_RGB", "url": "YAHOO.util.Dom.Color.html#property_re_RGB", "type": "property"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "reset", "url": "YAHOO.widget.RecordSet.html#method_reset", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "resetEvent", "url": "YAHOO.widget.RecordSet.html#event_resetEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_retoreScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__retoreScrollPositions", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "reverseRecords", "url": "YAHOO.widget.RecordSet.html#method_reverseRecords", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "right", "url": "YAHOO.util.Region.html#property_right", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_runRenderChain", "url": "YAHOO.widget.ScrollingDataTable.html#method__runRenderChain", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "scrollTo", "url": "YAHOO.widget.ScrollingDataTable.html#method_scrollTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setAttribute", "url": "YAHOO.util.Dom.html#method_setAttribute", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "setColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method_setColumnWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Record", "name": "setData", "url": "YAHOO.widget.Record.html#method_setData", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_setOverhangValue", "url": "YAHOO.widget.ScrollingDataTable.html#method__setOverhangValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_setRecord", "url": "YAHOO.widget.RecordSet.html#method__setRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "setRecord", "url": "YAHOO.widget.RecordSet.html#method_setRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "setRecords", "url": "YAHOO.widget.RecordSet.html#method_setRecords", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setStyle", "url": "YAHOO.util.Dom.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setX", "url": "YAHOO.util.Dom.html#method_setX", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setXY", "url": "YAHOO.util.Dom.html#method_setXY", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom", "name": "setY", "url": "YAHOO.util.Dom.html#method_setY", "type": "method"}, {"access": "", "host": "YAHOO.util.Selector", "name": "shorthand", "url": "YAHOO.util.Selector.html#property_shorthand", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "showTableMessage", "url": "YAHOO.widget.ScrollingDataTable.html#method_showTableMessage", "type": "method"}, {"access": "private", "host": "YAHOO.widget.RecordSet", "name": "_sId", "url": "YAHOO.widget.RecordSet.html#property__sId", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Record", "name": "_sId", "url": "YAHOO.widget.Record.html#property__sId", "type": "property"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "sortRecords", "url": "YAHOO.widget.RecordSet.html#method_sortRecords", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_storeScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__storeScrollPositions", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollOverhang", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollOverhang", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollX", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollY", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollY", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "tableScrollEvent", "url": "YAHOO.widget.ScrollingDataTable.html#event_tableScrollEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Selector", "name": "test", "url": "YAHOO.util.Selector.html#method_test", "type": "method"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toHex", "url": "YAHOO.util.Dom.Color.html#method_toHex", "type": "method"}, {"access": "", "host": "YAHOO.util.Selector", "name": "_tokenize", "url": "YAHOO.util.Selector.html#method__tokenize", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "top", "url": "YAHOO.util.Region.html#property_top", "type": "property"}, {"access": "", "host": "YAHOO.util.Dom.Color", "name": "toRGB", "url": "YAHOO.util.Dom.Color.html#method_toRGB", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "toString", "url": "YAHOO.widget.RecordSet.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "toString", "url": "YAHOO.util.Region.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Region", "name": "union", "url": "YAHOO.util.Region.html#method_union", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "updateKey", "url": "YAHOO.widget.RecordSet.html#method_updateKey", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "updateRecord", "url": "YAHOO.widget.RecordSet.html#method_updateRecord", "type": "method"}, {"access": "", "host": "YAHOO.widget.RecordSet", "name": "updateRecordValue", "url": "YAHOO.widget.RecordSet.html#method_updateRecordValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_validateColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method__validateColumnWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "validateColumnWidths", "url": "YAHOO.widget.ScrollingDataTable.html#method_validateColumnWidths", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "width", "url": "YAHOO.widget.ScrollingDataTable.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.util.Region", "name": "width", "url": "YAHOO.util.Region.html#property_width", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "widthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_widthChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Region", "name": "x", "url": "YAHOO.util.Region.html#property_x", "type": "property"}, {"access": "", "host": "YAHOO.util.Region", "name": "y", "url": "YAHOO.util.Region.html#property_y", "type": "property"}];
+</script>
+</body>
+</html>

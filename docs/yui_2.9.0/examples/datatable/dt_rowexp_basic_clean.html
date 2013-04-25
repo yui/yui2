@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Row Expansion</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="../../build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
+<script type="text/javascript" src="../../build/json/json-min.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="../../build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+/* custom styles for this example */
+#expandable_table{width:500px;}
+		
+/** 
+*
+* Style the yui-dt-expandablerow-trigger column 
+*
+**/
+.yui-dt-expandablerow-trigger a {
+	display:block;
+	padding:20px 5px 0;
+	cursor:pointer;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger a{
+	background:url(../datatable/assets/images/arrow_open.png) 0 6px no-repeat;
+}
+.yui-dt-expandablerow-trigger a, .yui-dt-collapsed .yui-dt-expandablerow-trigger a {
+	background:url(../datatable/assets/images/arrow_closed.png) 0 4px no-repeat;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner a {
+	background:url(../datatable/assets/images/spinner.gif) 0 4px no-repeat;
+	padding-right: 10px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+    <cite class="byline">DataTable Row Expansion was developed by <a href='http://standardpixel.com'>Eric Gelinas</a>. This was originally a concept for <a href='http://apt.yahoo.com/'>Yahoo! APT</a> by Ryan Leffel with designs by Edward Zee.</cite>
+
+<h1>Row Expansion</h1>
+
+<div class="exampleIntro">
+	<!-- Introductory text -->
+<p>A demonstration of the DataTable's row expansion feature to display a list of "Interestingness" from <a href="http://www.flickr.com">Flickr</a>. When the table first loads, it displays a list of image titles. When a row is expanded the photo is displayed in the expansion area along with a link to the Flickr user's photostream. A simple string-based template is used to format the row expansion area.</p>
+
+<p>This example is designed to assume that expanded rows will be wiped out and restored when the DataTable paginates or sorts, which is why we keep track of expanded rows and automatically restore them after each rendering of the DataTable. Anytime the <code>restoreExpandedRows</code> method is called and the state shows a row is open, its expansion will be re-created.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<div id="expandable_table"></div>
+<div id="pagination"></div>
+
+<script src="assets/js/rowexpansion.js"></script>
+<script type="text/javascript">
+/* Modify as needed */
+YAHOO.util.Event.onDOMReady( function() {
+        YAHOO.example.Basic = function() {
+
+                /**
+                *
+                * Create a YUI DataSource instance. This will create an XHR datasource and will use YQL 
+                * to query the Flickr web service.
+                *
+                **/
+                var myDataSource = new YAHOO.util.DataSource('assets/php/yql_proxy.php?q=select%20*%20from%20flickr.photos.interestingness(20)&format=json');
+                        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+                        myDataSource.connXhrMode = "queueRequests";
+                        myDataSource.responseSchema = {
+                            resultsList: "query.results.photo"
+                        };
+
+                /**
+                *
+                * Create a YUI DataTable instance.
+                *
+                **/
+                var myDataTable = new YAHOO.widget.RowExpansionDataTable(
+                        "expandable_table",
+                        [
+                            {
+                                label:"",
+                                formatter:YAHOO.widget.RowExpansionDataTable.formatRowExpansion
+                            },
+                            {
+                                key:"title",
+                                label:"Interestingness",
+                                resizeable: true,
+                                sortable: true,
+                                width : '200px',
+                                /**
+                                * This formatter includes a default string in cells where the record
+                                * is missing a title. This just makes the finsished product look nicer.
+                                **/
+                                formatter: function( el, oRecord, oColumn, oData ){
+                                    
+                                    el.innerHTML = oData || '--[ No description ]--';
+                                    
+                                }
+                            }
+                        ],
+                        myDataSource,
+                        { 
+                            /**
+                            * The "rowExpansionTemplate" property is passed a string. This is passed 
+                            * through YAHOO.lang.substitute which can match tokens (represented with brackets), 
+                            * which contain keys from the DataTables data.
+                            **/
+                            rowExpansionTemplate : '<img src="http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_m_d.jpg" /><div><a href="http://flickr.com/photos/{owner}">See more photos from this Flickr User</a></div>',
+
+                            paginator: new YAHOO.widget.Paginator({
+                                rowsPerPage:5,
+                                containers:'pagination'
+                            })
+                        }
+                    );
+
+                /**
+                *
+                * Subscribe to the "cellClickEvent" which will yui-dt-expandablerow-trigger the expansion 
+                * when the user clicks on the yui-dt-expandablerow-trigger column
+                *
+                **/
+                myDataTable.subscribe( 'cellClickEvent', myDataTable.onEventToggleRowExpansion );
+                
+                return {
+                        oDS: myDataSource,
+                        oDT: myDataTable
+                };
+        }();
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

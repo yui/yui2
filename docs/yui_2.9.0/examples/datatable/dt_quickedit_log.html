@@ -1,0 +1,1238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: DataTable Control: Quick Edit</title>
+    
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+/*Supplemental CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<!--Script and CSS includes for YUI dependencies on this page-->
+<link rel="stylesheet" type="text/css" href="../../build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="../../build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="../../build/event/event-min.js"></script>
+<script type="text/javascript" src="../../build/dom/dom-min.js"></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-debug.js"></script>
+<script type="text/javascript" src="../../build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-debug.js"></script>
+<script type="text/javascript" src="../../build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+#quick-edit-controls
+{
+	display: none;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+
+<script type="text/javascript">
+//enable passthrough of errors from YUI Event:
+if ((typeof YAHOO !== "undefined") && (YAHOO.util) && (YAHOO.util.Event)) {
+	YAHOO.util.Event.throwErrors = true;
+}
+</script>
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em><a href="http://developer.yahoo.com/yui/">YUI Library Home</a></em></p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="developer.yahoo.com">
+		<input name="vs" type="hidden" value="yuiblog.com">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search (YDN &amp; YUIBlog): </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>	</div>
+	<div id="ygma"><a href="../../"><img src="../../assets/yui.gif"  border="0" height="38"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: DataTable Control: Quick Edit</h1></div>
+</div>
+<div id="bd">
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+            <cite class="byline">DataTable Quick Edit was developed by <a href='http://jafl.my.speedingbits.com/blog/'>John Lindal</a>. This was originally a concept for <a href='http://apt.yahoo.com/'>Yahoo! APT</a> by Neal Sainani.</cite>
+    
+	<div class="promo">
+	<h1>DataTable Control: Quick Edit</h1>
+	
+	<div class="exampleIntro">
+	<!-- Introductory text -->
+<p>A demonstration of switching DataTable into <q>Quick Edit</q> mode. When the table first loads, it displays the normal way. When it switches to Quick Edit mode, the editable colums are filled with input fields.  <code>getQuickEditChanges()</code> returns the changed values for efficiently saving the updates.</p>
+<p>In Quick Edit mode, hold down the Control key and press the up or down arrow keys to move within a column.</p>
+<p>To test validation, try entering <q>John Lindal</q> as the author, anything other than 4 digits for the date, and anything other than a positive integer for the quantity.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="dt_quickedit_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	
+<div>
+    <button id="start-quick-edit">Quick Edit</button>
+    <span id="quick-edit-controls">
+        <button id="save-quick-edit">Save</button>
+        <button id="cancel-quick-edit">Cancel</button>
+    </span>
+</div>
+<div id="quickedit_table"></div>
+<div id="pagination"></div>
+
+<script type="text/javascript">
+(function(){
+    var orig = YAHOO.widget.DataTable._cloneObject;
+    YAHOO.widget.DataTable._cloneObject = function(o)
+    {
+        if (o instanceof RegExp)
+        {
+            return o;
+        }
+        else
+        {
+            return orig(o);
+        }
+    }
+})();
+</script>
+
+<script src="assets/js/quickedit.js"></script>
+<script type="text/javascript">
+/* Modify as needed */
+YAHOO.util.Event.onDOMReady( function() {
+
+    YAHOO.example.Data = {
+        bookorders: [
+            {author:"C.S. Lewis", year:1950, quantity:10, title:"The Lion, the Witch and the Wardrobe"},
+            {author:"C.S. Lewis", year:1951, quantity:5, title:"Prince Caspian: The Return to Narnia"},
+            {author:"C.S. Lewis", year:1952, quantity:2, title:"The Voyage of the Dawn Treader"},
+            {author:"C.S. Lewis", year:1953, quantity:6, title:"The Silver Chair"},
+            {author:"C.S. Lewis", year:1954, quantity:9, title:"The Horse and His Boy"},
+            {author:"C.S. Lewis", year:1955, quantity:4, title:"The Magician's Nephew"},
+            {author:"C.S. Lewis", year:1956, quantity:8, title:"The Last Battle"},
+            {author:"C.S. Lewis", year:1938, quantity:10, title:"Out of the Silent Planet"},
+            {author:"C.S. Lewis", year:1943, quantity:5, title:"Perelandra"},
+            {author:"C.S. Lewis", year:1945, quantity:2, title:"That Hideous Strength"},
+            {author:"Philip Pullman", year:1995, quantity:7, title:"Northern Lights"},
+            {author:"Philip Pullman", year:1997, quantity:5, title:"The Subtle Knife"},
+            {author:"Philip Pullman", year:2000, quantity:8, title:"The Amber Spyglass"},
+            {author:"J. R. R. Tolkien", year:1937, quantity:5, title:"The Hobbit"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:12, title:"The Fellowship of the Ring"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:0, title:"The Two Towers"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:8, title:"The Return of the King"},
+            {author:"Philip K. Dick", year:1966, quantity:5, title:"Do Androids Dream of Electric Sheep?"},
+            {author:"Robert A. Heinlein", year:1959, quantity:4, title:"Starship Troopers"},
+            {author:"Robert A. Heinlein", year:1961, quantity:7, title:"Stranger in a Strange Land"},
+            {author:"Robert A. Heinlein", year:1966, quantity:3, title:"The Moon Is a Harsh Mistress"},
+            {author:"A. E. van Vogt", year:1946, quantity:3, title:"Slan"},
+            {author:"A. E. van Vogt", year:1950, quantity:5, title:"The Voyage of the Space Beagle"},
+            {author:"A. E. van Vogt", year:1970, quantity:8, title:"Quest for the Future"}
+        ]
+    };
+
+    /**
+    *
+    * Create a YUI DataSource instance. This will create an XHR datasource and will use YQL 
+    * to query the Flickr web service.
+    *
+    **/
+    var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders, {
+
+        responseType: YAHOO.util.DataSource.TYPE_JSARRAY,
+        responseSchema: {
+            fields: [ 'author', 'year', 'quantity', 'title' ]
+        }
+    });
+
+    /**
+    *
+    * Create a YUI DataTable instance.
+    *
+    **/
+    var myDataTable = new YAHOO.widget.QuickEditDataTable(
+        "quickedit_table",
+        [
+            {
+                key:"title",
+                label:"Title",
+                resizeable: true,
+                sortable: true
+            },
+            {
+                key:"author",
+                label:"Author",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        fn: function(e) {
+                            if (e.value == "John Lindal") {
+                                this.displayQuickEditMessage(e, 'He has never been published!', 'error');
+                                return false;
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                key:"year",
+                label:"Publication Date",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        regex: /^[0-9]{4}$/,
+                        msg: {
+                            regex: 'Please enter a four digit year.'
+                        }
+                    }
+                }
+            },
+            {
+                key:"quantity",
+                label:"Quantity",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    copyDown: true,
+                    validation: {
+//                      css: "yiv-integer:[0,]",
+                        regex: /^[0-9]+$/,
+                        msg: {
+                            regex: 'Please enter a positive integer.'
+                        }
+                    }
+                }
+            }
+        ],
+        myDataSource,
+        { 
+            paginator: new YAHOO.widget.Paginator({
+                rowsPerPage:5,
+                containers:'pagination'
+            })
+        }
+    );
+
+    /**
+    * Quick Edit controls
+    **/
+    YAHOO.util.Event.on('start-quick-edit', 'click', function()
+    {
+        document.getElementById('start-quick-edit').disabled = true;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'inline');
+        myDataTable.startQuickEdit();
+    });
+
+    YAHOO.util.Event.on('save-quick-edit', 'click', function()
+    {
+        stopQuickEdit(true);
+    });
+
+    YAHOO.util.Event.on('cancel-quick-edit', 'click', function()
+    {
+        stopQuickEdit(false);
+    });
+
+    function stopQuickEdit(save)
+    {
+        if (save)
+        {
+            var changes = myDataTable.getQuickEditChanges();
+            if (changes === false)
+            {
+                return false;
+            }
+
+            var offset = myDataTable.get('paginator').getStartIndex();
+            for (var i=0; i<changes.length; i++)
+            {
+                var j = i + offset;
+                for (var key in changes[i])
+                {
+                    if (YAHOO.lang.hasOwnProperty(changes[i], key))
+                    {
+                        myDataTable.getRecord(j).setData(key, changes[i][key]);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('start-quick-edit').disabled = false;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'none');
+        myDataTable.cancelQuickEdit();
+        return true;
+    }
+});
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<!-- Example text. Note that code excerpts are housed in special
+textarea's that are used to do syntax highlighting -->
+
+<h2 class="first">Custom CSS for this Example</h2>
+<textarea name="code" class="CSS" cols="60" rows="1">
+<style type="text/css">
+#quick-edit-controls
+{
+	display: none;
+}
+</style>
+</textarea>
+
+<h2>DataTable Quick Edit extension code:</h2>
+<p>Also available <a href="assets/js/quickedit.js">here</a>.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+/* This code should not be modified */
+(function(){
+/**********
+* Quick Edit extension to YUI 2 DataTable
+* Author: lindalj@yahoo-inc.com / John Lindal
+* @submodule Quick Edit
+* @class YAHOO.widget.QuickEditDataTable
+***********/
+(function(){
+
+    var lang = YAHOO.lang,
+        Dom = YAHOO.util.Dom;
+
+    /**
+     * The QuickEditDataTable class extends the DataTable class to provide
+     * Quick Edit mode.  (It could just as easily extend
+     * ScrollingDataTable.)  QuickEdit mode allows the user to edit all the
+     * values that are visible in the table, controlled by the column
+     * configuration.  Each editable cell contains an input field.  If the
+     * user decides to save the changes, then you can extract the changes
+     * by calling <code>getQuickEditChanges()</code>.
+     * 
+     * For a column to be editable in QuickEdit mode, the column
+     * configuration must include <code>quickEdit</code>.  The contents of
+     * this object define the column's behavior in QuickEdit mode.
+     * 
+     * If a column should not be editable, but needs to be formatted
+     * differently in QuickEdit mode, then you must define qeFormatter in
+     * the column configuration. This is simply a normal cell formatter
+     * function that will be used in QuickEdit mode.  The static functions
+     * <code>readonly*QuickEditFormatter</code> provide examples.
+     * 
+     * The following configuration can be provided as part of quickEdit:
+     * 
+     * <dl>
+     * 
+     * <dt>copyDown</dt><dd>If true, the top cell in the column will have a
+     * button to copy the value down to the rest of the rows.</dd>
+     * 
+     * <dt>formatter</dt><dd>The cell formatter which will render an
+     * appropriate form field: &lt;input type="text"&gt;, &lt;textarea&gt;,
+     * or &lt;select&gt;.</dd>
+     * 
+     * <dt>validation</dt><dd>Validation configuration for every field in
+     * the column.</dd>
+     * 
+     * </dl>
+     * 
+     * The following configuration can be provided as part of
+     * quickEdit.validation:
+     * 
+     * <dl>
+     * 
+     * <dt>css</dt><dd>CSS classes encoding basic validation rules.  Note
+     * that this will only work if you uncomment the call to
+     * <code>validateFromCSSData()</code> inside
+     * <code>_validateElements()</code>.</dd>
+     * 
+     * <dt>fn</dt><dd>A function that will be called with the DataTable as
+     * its scope and the cell's form element as the argument. Return true
+     * if the value is valid. Otherwise, call this.displayMessage(...) to
+     * display an error and return false.</dd>
+     * 
+     * <dt>msg</dt><dd>A map of types to messages that will be displayed
+     * when a basic or regex validation rule fails. Currently, the only
+     * valid type is regex.  If you copy the implementation of
+     * validateFromCSSData(), from FormManager in the YUI 3 Gallery, then
+     * you will be able to specify more types:  required, min_length,
+     * max_length, integer, and decimal.</dd>
+     * 
+     * <dt>regex</dt><dd>Regular expression that the value must satisfy in
+     * order to be considered valid.</dd>
+     * 
+     * </dl>
+     * 
+     * Custom QuickEdit Formatters
+     * 
+     * To write a custom cell formatter for QuickEdit mode, you must
+     * structure the function as follows:
+     * 
+     * function myQuickEditFormatter(el, oRecord, oColumn, oData) {
+     *   var markup =
+     *     '&lt;input type="text" class="{yiv} yui-quick-edit yui-quick-edit-key:{key}"/&gt;' +
+     *     YAHOO.widget.QuickEditDataTable.MARKUP_QE_ERROR_DISPLAY;
+     *     
+     *     el.innerHTML = lang.substitute(markup, {
+     *       key: oColumn.key,
+     *       yiv: oColumn.quickEdit.validation ? (oColumn.quickEdit.validation.css || '') : ''
+     *     });
+     *     
+     *     el.firstChild.value = extractMyEditableValue(oData);
+     *     
+     *     YAHOO.widget.QuickEditDataTable.copyDownFormatter.apply(this, arguments);
+     * };
+     * 
+     * You can use textarea or select instead of input, but you can only
+     * create a single field.
+     * 
+     * <code>extractMyEditableValue</code> does not have to be a separate
+     * function nor must it be limited to using only oData. The work should
+     * normally be done inline in the formatter function, but the name of
+     * the sample function makes the point clear.
+     *
+     * @module QuickEdit
+     * @namespace YAHOO.widget
+     * @class QuickEditDataTable
+     * @extends YAHOO.widget.DataTable
+     * @constructor
+     * @param elContainer {HTMLElement} Container element for the TABLE.
+     * @param aColumnDefs {Object[]} Array of object literal Column definitions.
+     * @param oDataSource {YAHOO.util.DataSource} DataSource instance.
+     * @param oConfigs {object} (optional) Object literal of configuration values.
+     */
+    YAHOO.widget.QuickEditDataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs)
+    {
+        YAHOO.widget.QuickEditDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
+
+        this.hasQEMessages = false;
+
+    };
+
+    var QEDT = YAHOO.widget.QuickEditDataTable,
+        quick_edit_re             = /yui-quick-edit-key:([^\s]+)/,
+        qe_row_status_even_prefix = 'yui-quick-edit-even-has',
+        qe_row_status_odd_prefix  = 'yui-quick-edit-odd-has',
+        qe_row_status_pattern     = '(?:^|\\s)(?:yui-quick-edit-(even|odd)-has([a-z]+))(?= |$)',
+        qe_row_status_re          = new RegExp(qe_row_status_pattern),
+        qe_cell_status_prefix     = 'yui-quick-edit-has',
+        qe_cell_status_pattern    = '(?:^|\\s)(?:' + qe_cell_status_prefix + '([a-z]+))(?= |$)',
+        qe_cell_status_re         = new RegExp(qe_cell_status_pattern);
+
+    QEDT.status_order =
+    [
+        'error',
+        'warn',
+        'success',
+        'info'
+    ];
+
+    getStatusPrecedence = function(
+        /* string */    status)
+    {
+        for (var i=0; i<QEDT.status_order.length; i++)
+        {
+            if (status == QEDT.status_order[i])
+            {
+                return i;
+            }
+        }
+
+        return QEDT.status_order.length;
+    };
+
+    statusTakesPrecendence = function(
+        /* string */    orig_status,
+        /* string */    new_status)
+    {
+        return (!orig_status || getStatusPrecedence(new_status) < getStatusPrecedence(orig_status));
+    };
+
+    YAHOO.lang.extend( 
+        YAHOO.widget.QuickEditDataTable,
+        YAHOO.widget.DataTable, 
+    {
+        /**
+         * Switch to Quick Edit mode.  Columns that have quickEdit defined will
+         * be editable.
+         *
+         * @method startQuickEdit
+         */
+        startQuickEdit : function() {
+
+            this.fireEvent('clearErrorNotification');
+
+            if (YAHOO.lang.isFunction(this.collapseAllRows)) {
+                this.collapseAllRows();
+            }
+
+            var cols        = this.getColumnSet().keys;
+            this.qeSaveSort = [];
+            this.qeSaveEdit = {};
+            this.qeSaveFmt  = {};
+            var sortable    = false;
+            for (var i=0; i<cols.length; i++) {
+                var col  = cols[i];
+                sortable = sortable || col.sortable;
+                this.qeSaveSort.push(col.sortable);
+                col.sortable = false;
+
+                this.qeSaveEdit[ col.key ] = col.editor;
+                col.editor                 = null;
+
+                if (!col.hidden && (col.quickEdit || col.qeFormatter)) {
+                    var fn;
+                    if (col.quickEdit && lang.isFunction(col.quickEdit.formatter)) {
+                        fn = col.quickEdit.formatter;
+                    }
+                    else if (lang.isFunction(col.qeFormatter)) {
+                        fn = col.qeFormatter;
+                    }
+                    else {
+                        fn = QEDT.textQuickEditFormatter;
+                    }
+
+                    if (fn) {
+                        var fmt                 = this._wrapFormatter(fn, col.formatter);
+                        this.qeSaveFmt[col.key] = col.formatter;
+                        col.formatter           = fmt;
+                    }
+                }
+            }
+
+            Dom.addClass(this.getContainerEl(), 'yui-dt-quick-edit');
+            this.subscribe('tbodyKeyEvent', this._moveFocus, null, this);
+
+            var pg = this.get('paginator');
+            if (pg) {
+                var c = pg.get('containers');
+                if (!(c instanceof Array)) {
+                    c = [c];
+                }
+                for (var i=0; i<c.length; i++) {
+                    Dom.setStyle(c[i], 'display', 'none');
+                }
+            }
+
+            if (sortable) {
+                this._initTheadEl();
+            }
+            this.render();
+        },
+
+        _wrapFormatter : function(editFmt, origFmt) {
+
+            return function(el, oRecord, oColumn, oData) {
+                if (oRecord) {
+                    editFmt.apply(this, arguments);
+                }
+                else {
+                    origFmt.apply(this, arguments);
+                }
+            };
+        },
+
+        /**
+         * Switch out of Quick Edit mode.  THIS DISCARDS ALL DATA!  If you
+         * want to save the data, call getQuickEditChanges() BEFORE calling
+         * this function.
+         *
+         * @method cancelQuickEdit
+         */
+        cancelQuickEdit : function() {
+
+            this.fireEvent('clearErrorNotification');
+
+            var cols     = this.getColumnSet().keys;
+            var sortable = false;
+            for (var i=0; i<cols.length; i++) {
+                var col      = cols[i];
+                col.sortable = this.qeSaveSort[i];
+                sortable     = sortable || col.sortable;
+                col.editor   = this.qeSaveEdit[ col.key ];
+            }
+            delete this.qeSaveSort;
+            delete this.qeSaveEdit;
+
+            for (var key in this.qeSaveFmt) {
+                if (lang.hasOwnProperty(this.qeSaveFmt, key)) {
+                    var col       = this.getColumn(key);
+                    col.formatter = this.qeSaveFmt[key];
+                }
+            }
+            delete this.qeSaveFmt;
+
+            Dom.removeClass(this.getContainerEl(), 'yui-dt-quick-edit');
+            this.unsubscribe('tbodyKeyEvent', this._moveFocus);
+
+            var pg = this.get('paginator');
+            if (pg) {
+                var c = pg.get('containers');
+                if (!(c instanceof Array)) {
+                    c = [c];
+                }
+                for (var i=0; i<c.length; i++) {
+                    Dom.setStyle(c[i], 'display', 'block');
+                }
+            }
+
+            if (sortable) {
+                this._initTheadEl();
+            }
+            this.render();
+        },
+
+        /**
+         * Return the changed values.  For each row, an object is created
+         * with only the changed values.  The object keys are the column keys.
+         *
+         * @method getQuickEditChanges
+         * @return {mixed} array if all validation passed, false otherwise
+         */
+        getQuickEditChanges : function() {
+
+            if (!this.validateQuickEdit()) {
+                return false;
+            }
+
+            var changes = [];
+
+            var tr = this.getFirstTrEl();
+            while (tr) {
+                var rec  = this.getRecord(tr);
+                var list = Dom.getElementsByClassName(quick_edit_re, null, tr);
+
+                var change = {};
+                changes.push(change);
+
+                for (var i=0; i<list.length; i++) {
+                    var m    = quick_edit_re.exec(list[i].className);
+                    var key  = m[1];
+                    var col  = this.getColumn(key);
+                    var prev = rec.getData(key);
+
+                    var val = list[i].value;
+                    if (col.parser) {
+                        val = col.parser.call(this, val);
+                    }
+
+                    if (col.quickEditChanged ? col.quickEditChanged(prev, val) :
+                            val !== (prev ? prev.toString() : '')) {
+                        change[key] = val;
+                    }
+                }
+
+                tr = this.getNextTrEl(tr);
+            }
+
+            return changes;
+        },
+
+        /**
+         * Copy value from first cell to all other cells in the column.
+         *
+         * @method _quickEditCopyDown
+         * @param e {Event} triggering event
+         * @param cell {Element} cell from which to copy
+         * @private
+         */
+        _quickEditCopyDown : function(
+            /* event */     e,
+            /* element */   cell) {
+
+            var list = Dom.getElementsByClassName(quick_edit_re, null, cell);
+            if (!list || !list.length) {
+                return;
+            }
+
+            var value = list[0].value;
+            while (1) {
+                cell = this.getBelowTdEl(cell);
+                if (!cell) {
+                    break;
+                }
+
+                list = Dom.getElementsByClassName(quick_edit_re, null, cell);
+                if (list && list.length) {
+                    list[0].value = value;
+                }
+            }
+        },
+
+        /**
+         * Validate the quick edit data.
+         *
+         * @method validateQuickEdit
+         * @return {boolean} true if all validation checks pass
+         */
+        validateQuickEdit : function() {
+
+            this.clearMessages();
+            var status = true;
+
+            var e1 = this.getTbodyEl().getElementsByTagName('input');
+            var e2 = this.getTbodyEl().getElementsByTagName('textarea');
+
+            status = this._validateElements(e1) && status;	// status last to guarantee call
+            status = this._validateElements(e2) && status;
+
+            if (!status) {
+                this.fireEvent('notifyErrors');
+            }
+
+            return status;
+        },
+
+        /**
+         * Validate the given form fields.
+         *
+         * @method _validateElements
+         * @param e {Array} Array of form fields.
+         * @return {boolean} true if all validation checks pass
+         * @private
+         */
+        _validateElements : function(
+            /* array */ e) {
+
+            var status = true;
+            for (var i=0; i<e.length; i++) {
+                var col = this.getColumn(e[i]);
+                if (!col.quickEdit) {
+                    continue;
+                }
+                var msg_list = col.quickEdit.validation ? col.quickEdit.validation.msg : null;
+/*
+                // see yui3-gallery:gallery-formmgr for an example of validateFromCSSData()
+
+                var info = validateFromCSSData(e[i], msg_list);
+                if (info.error) {
+                    this.displayMessage(e[i], info.error, 'error');
+                    status = false;
+                }
+                if (!info.keepGoing) {
+                    continue;
+                }
+*/
+                if (col.quickEdit.validation
+                        && col.quickEdit.validation.regex instanceof RegExp
+                        && !col.quickEdit.validation.regex.test(e[i].value)) {
+                    this.displayMessage(e[i], msg_list ? msg_list.regex : null, 'error');
+                    status = false;
+                    continue;
+                }
+
+                if (col.quickEdit.validation
+                        && lang.isFunction(col.quickEdit.validation.fn)
+                        && !col.quickEdit.validation.fn.call(this, e[i])) {
+                    status = false;
+                    continue;
+                }
+            }
+
+            return status;
+        },
+
+        /**
+         * Clear all validation messages in quick edit mode.
+         *
+         * @method clearMessages
+         */
+        clearMessages : function() {
+
+            this.hasQEMessages = false;
+
+            this.fireEvent('clearErrorNotification');
+
+            var list = Dom.getElementsByClassName(qe_row_status_re, null, this.getTbodyEl());
+            Dom.removeClass(list, qe_row_status_re);
+
+            list = Dom.getElementsByClassName(qe_cell_status_re, null, this.getTbodyEl());
+            Dom.removeClass(list, qe_cell_status_re);
+
+            for (var i=0; i<list.length; i++) {
+                var m = Dom.getElementsByClassName(QEDT.CLASS_QE_ERROR_TEXT, null, list[i]);
+                if (m && m.length > 0) {
+                    m[0].innerHTML = '';
+                }
+            }
+        },
+
+        /**
+         * Display a message for a quick edit field.  If an existing message with
+         * a higher precedence is already visible, it will not be replaced.
+         *
+         * @method displayMessage
+         * @param e {Element} form field
+         * @param msg {String} message to display
+         * @param type {String} message type: error, warn, success, info
+         * @param scroll {boolean} If false, does not scroll, even if this is the first message to display.
+         */
+        displayMessage : function(
+            /* element */   e,
+            /* string */    msg,
+            /* string */    type,
+            /* boolean */   scroll) {
+
+            if (lang.isUndefined(scroll)) {
+                scroll = true;
+            }
+
+            var row = this.getTrEl(e);
+            if (statusTakesPrecendence(this._getElementStatus(row, qe_row_status_re), type)) {
+                if (!this.hasQEMessages && scroll) {
+                    this.getFirstTdEl(row).scrollIntoView();
+                }
+
+                if (Dom.hasClass(row, 'yui-dt-even')) {
+                    Dom.replaceClass(row, qe_row_status_re, qe_row_status_even_prefix + type);
+                }
+                else {
+                    Dom.replaceClass(row, qe_row_status_re, qe_row_status_odd_prefix + type);
+                }
+                this.hasQEMessages = true;
+            }
+
+            var cell = this.getTdEl(e);
+            if (statusTakesPrecendence(this._getElementStatus(cell, qe_cell_status_re), type)) {
+                if (msg) {
+                    var m = Dom.getElementsByClassName(QEDT.CLASS_QE_ERROR_TEXT, null, cell);
+                    if (m && m.length > 0) {
+                        m[0].innerHTML = msg;
+                    }
+                }
+
+                Dom.replaceClass(cell, qe_cell_status_re, qe_cell_status_prefix + type);
+                this.hasQEMessages = true;
+            }
+        },
+
+        /**
+         * Return the status of the field.
+         *
+         * @method _getElementStatus
+         * @param e {Element} form field
+         * @param r {RegExp} regex to match against className
+         * @private
+         */
+        _getElementStatus : function(
+            /* string/object */ e,
+            /* regex */         r) {
+
+            var m = e.className.match(r);
+            return ((m && m.length) ? m[1] : false);
+        },
+
+        /**
+         * Shift the focus up/down within a column.
+         *
+         * @method _moveFocus
+         * @param cssClass {String} Extra class to apply to the row.
+         * @return {Element} reference to the new row
+         * @private
+         */
+        _moveFocus : function(data) {
+            var e   = data.event;
+            var key = YAHOO.util.Event.getCharCode(e);
+            if (e.ctrlKey && (key == 38 || key == 40)) {    // Ctrl-up/down
+                var target = YAHOO.util.Event.getTarget(e);
+                var cell   = (key == 38 ? this.getAboveTdEl(target) : this.getBelowTdEl(target));
+                if (cell) {
+                    var input = Dom.getElementsByClassName(quick_edit_re, null, cell)[0];
+                    if (input) {
+                        input.focus();
+                        input.select();
+                        YAHOO.util.Event.stopEvent(e);
+                    }
+                }
+            }
+        }
+    });
+
+    YAHOO.lang.augmentObject(YAHOO.widget.QuickEditDataTable,
+    {
+        CLASS_QE_ERROR_TEXT     : 'yui-quick-edit-message-text',
+        MARKUP_QE_ERROR_DISPLAY : '<div class="yui-quick-edit-message-text"></div>',
+
+        /**
+         * Called with exactly the same arguments as any other cell
+         * formatter, this function displays an input field.
+         *
+         * @method textQuickEditFormatter
+         * @static
+         */
+        textQuickEditFormatter : function(el, oRecord, oColumn, oData)
+        {
+            var markup =
+                '<input type="text" class="{yiv} yui-quick-edit yui-quick-edit-key:{key}"/>' +
+                QEDT.MARKUP_QE_ERROR_DISPLAY;
+
+            el.innerHTML = lang.substitute(markup,
+            {
+                key: oColumn.key,
+                yiv: oColumn.quickEdit.validation ? (oColumn.quickEdit.validation.css || '') : ''
+            });
+
+            el.firstChild.value = oData;
+
+            QEDT.copyDownFormatter.apply(this, arguments);
+        },
+
+        /**
+         * Called with exactly the same arguments as any other cell
+         * formatter, this function displays a textarea field.
+         *
+         * @method textareaQuickEditFormatter
+         * @static
+         */
+        textareaQuickEditFormatter : function(el, oRecord, oColumn, oData) {
+
+            var markup =
+                '<textarea class="{yiv} yui-quick-edit yui-quick-edit-key:{key}"/>' +
+                QEDT.MARKUP_QE_ERROR_DISPLAY;
+
+            el.innerHTML = lang.substitute(markup,
+            {
+                key: oColumn.key,
+                yiv: oColumn.quickEdit.validation ? (oColumn.quickEdit.validation.css || '') : ''
+            });
+
+            el.firstChild.value = oData;
+
+            QEDT.copyDownFormatter.apply(this, arguments);
+        },
+
+        /**
+         * Called with exactly the same arguments as any other cell
+         * formatter, this function displays an email address without the
+         * anchor tag.  Use this as the column's qeFormatter if the column
+         * should not be editable in Quick Edit mode.
+         *
+         * @method readonlyLinkQuickEditFormatter
+         * @static
+         */
+        readonlyEmailQuickEditFormatter : function(el, oRecord, oColumn, oData)
+        {
+            el.innerHTML = (oData ? oData : '');
+        },
+
+        /**
+         * Called with exactly the same arguments as any other cell
+         * formatter, this function displays a link without the anchor tag.
+         * Use this as the column's qeFormatter if the column should not be
+         * editable in Quick Edit mode.
+         *
+         * @method readonlyLinkQuickEditFormatter
+         * @static
+         */
+         readonlyLinkQuickEditFormatter : function(el, oRecord, oColumn, oData)
+         {
+            el.innerHTML = oData;
+        },
+
+        /**
+         * Called with exactly the same arguments as a normal cell
+         * formatter, this function inserts a "Copy down" button if the
+         * cell is in the first row of the DataTable.  Call this at the end
+         * of your QuickEdit formatter.
+         *
+         * @method copyDownFormatter
+         * @static
+         */
+        copyDownFormatter : function(el, oRecord, oColumn, oData)
+        {
+            if (oColumn.quickEdit.copyDown &&
+                this.getRecordSet().getRecordIndex(oRecord) ==
+                    this.getState().pagination.recordOffset)
+            {
+                var button       = document.createElement('button');
+                button.title     = 'Copy down';
+                button.innerHTML = '&darr;'
+
+                var msg = Dom.getElementsByClassName(QEDT.CLASS_QE_ERROR_TEXT, null, el)[0];
+                el.insertBefore(button, msg);
+
+                YAHOO.util.Event.on(button, 'click', this._quickEditCopyDown, el, this);
+            }
+        }
+    });
+
+})();
+})();
+</textarea>
+
+<h2>JavaScript to run this example</h2>
+<textarea name="code" class="JScript" cols="60" rows="1">
+/* Modify as needed */
+YAHOO.util.Event.onDOMReady( function() {
+
+    YAHOO.example.Data = {
+        bookorders: [
+            {author:"C.S. Lewis", year:1950, quantity:10, title:"The Lion, the Witch and the Wardrobe"},
+            {author:"C.S. Lewis", year:1951, quantity:5, title:"Prince Caspian: The Return to Narnia"},
+            {author:"C.S. Lewis", year:1952, quantity:2, title:"The Voyage of the Dawn Treader"},
+            {author:"C.S. Lewis", year:1953, quantity:6, title:"The Silver Chair"},
+            {author:"C.S. Lewis", year:1954, quantity:9, title:"The Horse and His Boy"},
+            {author:"C.S. Lewis", year:1955, quantity:4, title:"The Magician's Nephew"},
+            {author:"C.S. Lewis", year:1956, quantity:8, title:"The Last Battle"},
+            {author:"C.S. Lewis", year:1938, quantity:10, title:"Out of the Silent Planet"},
+            {author:"C.S. Lewis", year:1943, quantity:5, title:"Perelandra"},
+            {author:"C.S. Lewis", year:1945, quantity:2, title:"That Hideous Strength"},
+            {author:"Philip Pullman", year:1995, quantity:7, title:"Northern Lights"},
+            {author:"Philip Pullman", year:1997, quantity:5, title:"The Subtle Knife"},
+            {author:"Philip Pullman", year:2000, quantity:8, title:"The Amber Spyglass"},
+            {author:"J. R. R. Tolkien", year:1937, quantity:5, title:"The Hobbit"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:12, title:"The Fellowship of the Ring"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:0, title:"The Two Towers"},
+            {author:"J. R. R. Tolkien", year:1955, quantity:8, title:"The Return of the King"},
+            {author:"Philip K. Dick", year:1966, quantity:5, title:"Do Androids Dream of Electric Sheep?"},
+            {author:"Robert A. Heinlein", year:1959, quantity:4, title:"Starship Troopers"},
+            {author:"Robert A. Heinlein", year:1961, quantity:7, title:"Stranger in a Strange Land"},
+            {author:"Robert A. Heinlein", year:1966, quantity:3, title:"The Moon Is a Harsh Mistress"},
+            {author:"A. E. van Vogt", year:1946, quantity:3, title:"Slan"},
+            {author:"A. E. van Vogt", year:1950, quantity:5, title:"The Voyage of the Space Beagle"},
+            {author:"A. E. van Vogt", year:1970, quantity:8, title:"Quest for the Future"}
+        ]
+    };
+
+    /**
+    *
+    * Create a YUI DataSource instance. This will create an XHR datasource and will use YQL 
+    * to query the Flickr web service.
+    *
+    **/
+    var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders, {
+
+        responseType: YAHOO.util.DataSource.TYPE_JSARRAY,
+        responseSchema: {
+            fields: [ 'author', 'year', 'quantity', 'title' ]
+        }
+    });
+
+    /**
+    *
+    * Create a YUI DataTable instance.
+    *
+    **/
+    var myDataTable = new YAHOO.widget.QuickEditDataTable(
+        "quickedit_table",
+        [
+            {
+                key:"title",
+                label:"Title",
+                resizeable: true,
+                sortable: true
+            },
+            {
+                key:"author",
+                label:"Author",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        fn: function(e) {
+                            if (e.value == "John Lindal") {
+                                this.displayMessage(e, 'He has never been published!', 'error');
+                                return false;
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                key:"year",
+                label:"Publication Date",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    validation: {
+                        regex: /^[0-9]{4}$/,
+                        msg: {
+                            regex: 'Please enter a four digit year.'
+                        }
+                    }
+                }
+            },
+            {
+                key:"quantity",
+                label:"Quantity",
+                resizeable: true,
+                sortable: true,
+                quickEdit: {
+                    copyDown: true,
+                    validation: {
+//                          css: "yiv-integer:[0,]"
+                        regex: /^[0-9]+$/,
+                        msg: {
+                            regex: 'Please enter a positive integer.'
+                        }
+                    }
+                }
+            },
+        ],
+        myDataSource,
+        { 
+            paginator: new YAHOO.widget.Paginator({
+                rowsPerPage:5,
+                containers:'pagination'
+            })
+        }
+    );
+
+    /**
+    * Quick Edit controls
+    **/
+    YAHOO.util.Event.on('start-quick-edit', 'click', function()
+    {
+        document.getElementById('start-quick-edit').disabled = true;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'inline');
+        myDataTable.startQuickEdit();
+    });
+
+    YAHOO.util.Event.on('save-quick-edit', 'click', function()
+    {
+        stopQuickEdit(true);
+    });
+
+    YAHOO.util.Event.on('cancel-quick-edit', 'click', function()
+    {
+        stopQuickEdit(false);
+    });
+
+    function stopQuickEdit(save)
+    {
+        if (save)
+        {
+            var changes = myDataTable.getQuickEditChanges();
+            if (changes === false)
+            {
+                return false;
+            }
+
+            var offset = myDataTable.get('paginator').getStartIndex();
+            for (var i=0; i<changes.length; i++)
+            {
+                var j = i + offset;
+                for (var key in changes[i])
+                {
+                    if (YAHOO.lang.hasOwnProperty(changes[i], key))
+                    {
+                        myDataTable.getRecord(j).setData(key, changes[i][key]);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('start-quick-edit').disabled = false;
+        YAHOO.util.Dom.setStyle('quick-edit-controls', 'display', 'none');
+        myDataTable.cancelQuickEdit();
+        return true;
+    }
+});
+</textarea>
+
+<h2>Configuration for This Example</h2>
+
+<p>You can load the necessary JavaScript and CSS for this example from Yahoo's servers.  <a href="http://developer.yahoo.com/yui/articles/hosting/?paginator&datatable&MIN#configure">Click here to load the YUI Dependency Configurator with all of this example's dependencies preconfigured</a>.</p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="dt_quickedit.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>DataTable Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../datatable/dt_basic.html'>Basic Example</a></li><li><a href='../datatable/dt_enhanced.html'>Progressive Enhancement</a></li><li><a href='../datatable/dt_formatting.html'>Custom Cell Formatting</a></li><li><a href='../datatable/dt_row_coloring.html'>Conditional row coloring</a></li><li><a href='../datatable/dt_nestedheaders.html'>Nested Headers</a></li><li><a href='../datatable/dt_xhrjson.html'>JSON Data Over XHR</a></li><li><a href='../datatable/dt_xhrpostxml.html'>XML Data Over XHR With POST</a></li><li><a href='../datatable/dt_xpath.html'>XML Data with XPath</a></li><li><a href='../datatable/dt_xhrtext.html'>Textual Data Over XHR</a></li><li><a href='../datatable/dt_polling.html'>Polling the DataSource</a></li><li><a href='../datatable/dt_rowdatamod.html'>Adding, Updating, and Deleting Rows</a></li><li><a href='../datatable/dt_clientpagination.html'>Client-side Pagination</a></li><li><a href='../datatable/dt_clientsorting.html'>Client-side Sorting</a></li><li><a href='../datatable/dt_dynamicdata.html'>Server-side Pagination and Sorting for Dynamic Data</a></li><li><a href='../datatable/dt_bhm.html'>Integrating Browser History Manager with Server-side Pagination and Sorting</a></li><li><a href='../datatable/dt_fixedscroll.html'>XY-scrolling, Y-scrolling, and X-scrolling</a></li><li><a href='../datatable/dt_rowselect.html'>Row Selection</a></li><li><a href='../datatable/dt_cellselect.html'>Cell Selection</a></li><li><a href='../datatable/dt_cellediting.html'>Inline Cell Editing</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a></li><li><a href='../datatable/dt_highlighting.html'>Highlighting Cells, Rows, or Columns</a></li><li><a href='../datatable/dt_ddrows.html'>Reorder Rows with Drag and Drop</a></li><li class='selected'><a href='../datatable/dt_quickedit.html'>Quick Edit</a></li><li><a href='../datatable/dt_rowexp_basic.html'>Row Expansion</a></li><li><a href='../datatable/dt_contextmenu.html'>Context Menu Integration</a></li><li><a href='../paginator/pag_configuration.html'>Configuring the Paginator (included with examples for Paginator)</a></li><li><a href='../datatable/dt_tabview.html'>TabView Integration</a></li><li><a href='../datatable/dt_complex.html'>Complex Example of Multiple Features</a></li><li><a href='../datatable/dt_localfilter.html'>Client-side Filtering of Local Data</a></li><li><a href='../datatable/dt_dynamicfilter.html'>Filtering of Dynamic Data</a></li><li><a href='../datatable/dt_autocomplete.html'>Datatable with Autocomplete</a></li><li><a href='../datatable/dt_skinning.html'>Skinning Model</a></li><li><a href='../progressbar/pb_ratings.html'>Ratings (included with examples for ProgressBar Control)</a></li><li><a href='../datasource/datasource_yql.html'>YQLDataSource (included with examples for DataSource Utility)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More DataTable Control Resources:</h3>
+						<ul>
+							<li><a href="http://developer.yahoo.com/yui/datatable/">User's Guide</a> (external)</li>
+						<li><a href="../../docs/module_datatable.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/datatable.pdf">Cheat Sheet PDF</a> (external)</li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+<div class="yui-b" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">Yahoo! UI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://developer.yahoo.com/yui/">Home (external)</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog (external)</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="http://yuilibrary.com/forum/">YUI Discussion Forum (external)</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../docs/index.html">API Documentation</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">Functional Examples</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License (external)</a></li><li class="sect">YUI Functional Examples</li><li class="item"><a title="The YUI Animation Utility - Functional Examples" href="../../examples/animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager - Functional Examples" href="../../examples/history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control - Functional Examples" href="../../examples/button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control - Functional Examples" href="../../examples/calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control - Functional Examples" href="../../examples/carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control - Functional Examples" href="../../examples/charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control - Functional Examples" href="../../examples/colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Cookie Utility - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI Connection Manager (AJAX) - Functional Examples" href="../../examples/connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog) - Functional Examples" href="../../examples/container/index.html">Container</a></li><li class="selected "><a title="The YUI DataTable Control - Functional Examples" href="../../examples/datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection - Functional Examples" href="../../examples/dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility - Functional Examples" href="../../examples/dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Event Utility - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control - Functional Examples" href="../../examples/imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manager - Functional Examples" href="../../examples/layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control - Functional Examples" href="../../examples/logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control - Functional Examples" href="../../examples/menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator - Functional Examples" href="../../examples/paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler Utility - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfileViewer Control - Functional Examples" href="../../examples/profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control - Functional Examples" href="../../examples/progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility - Functional Examples" href="../../examples/resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor - Functional Examples" href="../../examples/editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility - Functional Examples" href="../../examples/selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control - Functional Examples" href="../../examples/slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility - Functional Examples" href="../../examples/storage/index.html">Storage</a></li><li class="item"><a title="The YUI SWF Utility - Functional Examples" href="../../examples/swf/index.html">SWF</a></li><li class="item"><a title="The YUI SWFStore Utility - Functional Examples" href="../../examples/swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI Stylesheet Utility - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="The YUI TabView Control - Functional Examples" href="../../examples/tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control - Functional Examples" href="../../examples/treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Utility - Functional Examples" href="../../examples/uploader/index.html">Uploader (experimental)</a></li><li class="item"><a title="The YUI YAHOO Global Object - Functional Examples" href="../../examples/yahoo/index.html">YAHOO Global Object</a></li><li class="item"><a title="The YUI Loader Utility - Functional Examples" href="../../examples/yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility - Functional Examples" href="../../examples/yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS - Functional Examples" href="../../examples/reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS - Functional Examples" href="../../examples/base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS - Functional Examples" href="../../examples/fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS - Functional Examples" href="../../examples/grids/index.html">Grids CSS</a></li><li class="sect">YUI Articles on the YUI Website</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests (external)</a></li><li class="item"><a title="Serve YUI source files from Yahoo! -- free, fast, and simple" href="http://developer.yahoo.com/yui/articles/hosting/">Serving YUI Files from Yahoo! (external)</a></li><li class="item"><a title="Best practices for working with web services while protecting user privacy" href="http://developer.yahoo.com/security/">Security Best Practices (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
