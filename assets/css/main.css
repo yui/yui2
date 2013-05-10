@@ -1,7 +1,6 @@
 body {
     font-family: sans-serif;
     color: #777;
-    
 }
 
 
@@ -103,7 +102,7 @@ a {
 .gist::before {
     content: "Code:";
     margin-bottom: 10px;
-    display: block; 
+    display: block;
     font-family: sans-serif;
     font-weight: 300;
 }
@@ -143,3 +142,19 @@ a {
         margin:0;
         color: rgb(116, 130, 230);
     }
+
+#intro {
+    padding-top: 40px;
+}
+
+#intro .content p.ann {
+    border: 1px solid black;
+    padding: 6px;
+    border-radius: 4px;
+    padding-top: 12px;
+}
+
+.announce {
+    font-style: normal;
+    font-size: 2em;
+}
