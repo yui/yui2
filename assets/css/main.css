@@ -154,6 +154,10 @@ a {
     padding-top: 12px;
 }
 
+#intro a {
+    white-space: nowrap;
+}
+
 .announce {
     font-style: normal;
     font-size: 2em;
