@@ -15,11 +15,11 @@ package com.yahoo.yui
 
 	public class YUIAdapter extends Sprite
 	{
-		
+
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
-	
+
 		/**
 		 * Constructor.
 		 */
@@ -31,9 +31,9 @@ package com.yahoo.yui
 				this.stage.scaleMode = StageScaleMode.NO_SCALE;
 				this.stage.align = StageAlign.TOP_LEFT;
 			}
-			
+
 			super();
-			
+
 			try
 			{
 				//show error popups
@@ -43,7 +43,7 @@ package com.yahoo.yui
 			{
 				//do nothing, we're in a flash player that properly displays exceptions
 			}
-			
+
 			this._errorText = new TextField();
 			this._errorText.defaultTextFormat = new TextFormat("_sans", 10, 0xff0000);
 			this._errorText.wordWrap = true;
@@ -51,9 +51,9 @@ package com.yahoo.yui
 			this._errorText.selectable = false;
 			this._errorText.mouseEnabled = false;
 			this.addChild(this._errorText);
-			
+
 			this.addEventListener(Event.ADDED, addedHandler);
-			
+
 			if(ExternalInterface.available)
 			{
 				this.initializeComponent();
@@ -64,29 +64,29 @@ package com.yahoo.yui
 			{
 				throw new IOError("Flash YUIComponent cannot communicate with JavaScript content.");
 			}
-			
+
 
 		}
-		
+
 	//--------------------------------------
 	//  Properties
 	//--------------------------------------
-	
+
 		/**
 		 * The element id that references the SWF in the HTML.
 		 */
 		protected var elementID:String;
-		
+
 		/**
 		 * The globally accessible JavaScript function that accepts events through ExternalInterface.
 		 */
 		protected var javaScriptEventHandler:String;
-		
+
 		/**
 		 * The reference to the Flash component.
 		 */
 		private var _component:DisplayObject;
-		
+
 		/**
 		 * @private
 		 */
@@ -94,7 +94,7 @@ package com.yahoo.yui
 		{
 			return this._component;
 		}
-		
+
 		/**
 		 * @private
 		 */
@@ -103,24 +103,24 @@ package com.yahoo.yui
 			this._component = value;
 			this.refreshComponentSize();
 		}
-		
+
 		/**
 		 * @private
 		 * For errors that cannot be passed to JavaScript.
 		 * (ONLY SecurityErrors when ExternalInterface is not available!)
 		 */
 		private var _errorText:TextField;
-		
+
 		/**
 		 * @private
 		 * Alternative text for assistive technology.
 		 */
 		private var _altText:String;
-		
+
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
-		
+
 		/**
 		 * Gets the alternative text for assistive technology.
 		 */
@@ -128,7 +128,7 @@ package com.yahoo.yui
 		{
 			return this._altText;
 		}
-		
+
 		/**
 		 * Sets the alternative text for assistive technology.
 		 */
@@ -141,17 +141,21 @@ package com.yahoo.yui
 			accProps.noAutoLabeling = true;
 			this.component.accessibilityProperties = accProps;
 		}
-		
+
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
-		
+
 		/**
 		 * To be overridden by subclasses to add ExternalInterface callbacks.
 		 */
 		protected function initializeComponent():void
-		{	
+		{
 			this.elementID = this.loaderInfo.parameters.YUISwfId;
+			var idCheck:RegExp = /^yuiswf[0-9]*$/g;
+			if (!idCheck.test(this.elementID)) {
+  				this.elementID = "";
+			}
 
 			this.javaScriptEventHandler = this.loaderInfo.parameters.YUIBridgeCallback;
 			var jsCheck:RegExp = /^[A-Za-z0-9.]*$/g;
@@ -160,14 +164,14 @@ package com.yahoo.yui
 			}
 
 
-			
+
 			var allowedDomain:String = this.loaderInfo.parameters.allowedDomain;
 			if(allowedDomain)
 			{
 				Security.allowDomain(allowedDomain);
 				this.log("allowing: " + allowedDomain);
 			}
-			
+
 			try
 			{
 				ExternalInterface.addCallback("getAltText", getAltText);
@@ -178,7 +182,7 @@ package com.yahoo.yui
 				//do nothing. it will be caught somewhere else.
 			}
 		}
-		
+
 		/**
 		 * Sends a log message to the YUI Logger.
 		 */
@@ -187,7 +191,7 @@ package com.yahoo.yui
 			if(message == null) message = "";
 			this.dispatchEventToJavaScript({type: "log", message: message.toString(), category: category});
 		}
-		
+
 		protected function showFatalError(message:Object):void
 		{
 			if(!message) message = "";
@@ -200,7 +204,7 @@ package com.yahoo.yui
 				this._errorText.selectable = true;
 			}
 		}
-		
+
 		/**
 		 * @private
 		 *
@@ -210,7 +214,9 @@ package com.yahoo.yui
 		{
 			try
 			{
-				if(ExternalInterface.available) ExternalInterface.call(this.javaScriptEventHandler, this.elementID, event);
+				if(ExternalInterface.available) {
+					ExternalInterface.call("YAHOO.widget.SWF.eventHandler", this.elementID, event);
+				}
 			}
 			catch(error:Error)
 			{
@@ -223,23 +229,23 @@ package com.yahoo.yui
 
 		/**
 		 * @private
-		 * 
+		 *
 		 * The size of the SWF/stage is dependant on the container it is in.
 		 * The visual component will resize to match the stage size.
 		 */
 		protected function stageResizeHandler(event:Event):void
 		{
 			this.refreshComponentSize();
-			
+
 			if(this._errorText)
 			{
 				this._errorText.width = this.stage.stageWidth;
 				this._errorText.height = this.stage.stageHeight;
 			}
-			
+
 			this.log("resize (width: " + this.stage.stageWidth + ", height: " + this.stage.stageHeight + ")", LoggerCategory.INFO);
 		}
-		
+
 		/**
 		 * @private
 		 */
@@ -252,7 +258,7 @@ package com.yahoo.yui
 				this.component.height = this.stage.stageHeight;
 			}
 		}
-		
+
 		/**
 		 * @private
 		 * ensures that errorText is always on top!
