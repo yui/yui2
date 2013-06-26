@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: connection   connection_core.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: connection   connection_core.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>connection&nbsp; <span class="subtitle">2.8.1</span></h3>
+        <h3>connection  <span class="subtitle">2.8.1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_connection.html" title="connection">connection</a>
                 
                  &gt; connection_core.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * The Connection Manager provides a simplified interface to the XMLHttpRequest</span>
 <span class="cm"> * object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the</span>
 <span class="cm"> * interactive states and server response, returning the results to a pre-defined</span>
@@ -76,9 +60,9 @@
 <span class="cm">   * @type array</span>
 <span class="cm">   */</span>
 	<span class="nx">_msxml_progid</span><span class="o">:</span><span class="p">[</span>
-		<span class="s1">&#39;Microsoft.XMLHTTP&#39;</span><span class="p">,</span>
-		<span class="s1">&#39;MSXML2.XMLHTTP.3.0&#39;</span><span class="p">,</span>
-		<span class="s1">&#39;MSXML2.XMLHTTP&#39;</span>
+		<span class="s1">'Microsoft.XMLHTTP'</span><span class="p">,</span>
+		<span class="s1">'MSXML2.XMLHTTP.3.0'</span><span class="p">,</span>
+		<span class="s1">'MSXML2.XMLHTTP'</span>
 		<span class="p">],</span>
 
   <span class="cm">/**</span>
@@ -101,7 +85,7 @@
 
  <span class="cm">/**</span>
 <span class="cm">  * @description Determines if a default header of</span>
-<span class="cm">  * Content-Type of &#39;application/x-www-form-urlencoded&#39;</span>
+<span class="cm">  * Content-Type of 'application/x-www-form-urlencoded'</span>
 <span class="cm">  * will be added to any client HTTP headers sent for POST</span>
 <span class="cm">  * transactions.</span>
 <span class="cm">  * @property _use_default_post_header</span>
@@ -118,7 +102,7 @@
 <span class="cm">  * @static</span>
 <span class="cm">  * @type boolean</span>
 <span class="cm">  */</span>
-    <span class="nx">_default_post_header</span><span class="o">:</span><span class="s1">&#39;application/x-www-form-urlencoded; charset=UTF-8&#39;</span><span class="p">,</span>
+    <span class="nx">_default_post_header</span><span class="o">:</span><span class="s1">'application/x-www-form-urlencoded; charset=UTF-8'</span><span class="p">,</span>
 
  <span class="cm">/**</span>
 <span class="cm">  * @description The default header used for transactions involving the</span>
@@ -128,11 +112,11 @@
 <span class="cm">  * @static</span>
 <span class="cm">  * @type boolean</span>
 <span class="cm">  */</span>
-    <span class="nx">_default_form_header</span><span class="o">:</span><span class="s1">&#39;application/x-www-form-urlencoded&#39;</span><span class="p">,</span>
+    <span class="nx">_default_form_header</span><span class="o">:</span><span class="s1">'application/x-www-form-urlencoded'</span><span class="p">,</span>
 
  <span class="cm">/**</span>
 <span class="cm">  * @description Determines if a default header of</span>
-<span class="cm">  * &#39;X-Requested-With: XMLHttpRequest&#39;</span>
+<span class="cm">  * 'X-Requested-With: XMLHttpRequest'</span>
 <span class="cm">  * will be added to each transaction.</span>
 <span class="cm">  * @property _use_default_xhr_header</span>
 <span class="cm">  * @private</span>
@@ -143,7 +127,7 @@
 
  <span class="cm">/**</span>
 <span class="cm">  * @description The default header value for the label</span>
-<span class="cm">  * &quot;X-Requested-With&quot;.  This is sent with each</span>
+<span class="cm">  * "X-Requested-With".  This is sent with each</span>
 <span class="cm">  * transaction, by default, to identify the</span>
 <span class="cm">  * request as being made by YUI Connection Manager.</span>
 <span class="cm">  * @property _default_xhr_header</span>
@@ -151,7 +135,7 @@
 <span class="cm">  * @static</span>
 <span class="cm">  * @type boolean</span>
 <span class="cm">  */</span>
-    <span class="nx">_default_xhr_header</span><span class="o">:</span><span class="s1">&#39;XMLHttpRequest&#39;</span><span class="p">,</span>
+    <span class="nx">_default_xhr_header</span><span class="o">:</span><span class="s1">'XMLHttpRequest'</span><span class="p">,</span>
 
  <span class="cm">/**</span>
 <span class="cm">  * @description Determines if custom, default headers</span>
@@ -193,7 +177,7 @@
 
   <span class="cm">/**</span>
 <span class="cm">   * @description The polling frequency, in milliseconds, for HandleReadyState.</span>
-<span class="cm">   * when attempting to determine a transaction&#39;s XHR readyState.</span>
+<span class="cm">   * when attempting to determine a transaction's XHR readyState.</span>
 <span class="cm">   * The default is 50 milliseconds.</span>
 <span class="cm">   * @property _polling_interval</span>
 <span class="cm">   * @private</span>
@@ -218,7 +202,7 @@
 <span class="cm">   * @static</span>
 <span class="cm">   * @type CustomEvent</span>
 <span class="cm">   */</span>
-	<span class="nx">startEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">),</span>
+	<span class="nx">startEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'start'</span><span class="p">),</span>
 
   <span class="cm">/**</span>
 <span class="cm">   * @description Custom event that fires when a transaction response has completed.</span>
@@ -227,7 +211,7 @@
 <span class="cm">   * @static</span>
 <span class="cm">   * @type CustomEvent</span>
 <span class="cm">   */</span>
-	<span class="nx">completeEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;complete&#39;</span><span class="p">),</span>
+	<span class="nx">completeEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'complete'</span><span class="p">),</span>
 
   <span class="cm">/**</span>
 <span class="cm">   * @description Custom event that fires when handleTransactionResponse() determines a</span>
@@ -237,7 +221,7 @@
 <span class="cm">   * @static</span>
 <span class="cm">   * @type CustomEvent</span>
 <span class="cm">   */</span>
-	<span class="nx">successEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">),</span>
+	<span class="nx">successEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'success'</span><span class="p">),</span>
 
   <span class="cm">/**</span>
 <span class="cm">   * @description Custom event that fires when handleTransactionResponse() determines a</span>
@@ -247,7 +231,7 @@
 <span class="cm">   * @static</span>
 <span class="cm">   * @type CustomEvent</span>
 <span class="cm">   */</span>
-	<span class="nx">failureEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;failure&#39;</span><span class="p">),</span>
+	<span class="nx">failureEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'failure'</span><span class="p">),</span>
 
   <span class="cm">/**</span>
 <span class="cm">   * @description Custom event that fires when a transaction is successfully aborted.</span>
@@ -256,7 +240,7 @@
 <span class="cm">   * @static</span>
 <span class="cm">   * @type CustomEvent</span>
 <span class="cm">   */</span>
-	<span class="nx">abortEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;abort&#39;</span><span class="p">),</span>
+	<span class="nx">abortEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'abort'</span><span class="p">),</span>
 
   <span class="cm">/**</span>
 <span class="cm">   * @description A reference table that maps callback custom events members to its specific</span>
@@ -268,12 +252,12 @@
 <span class="cm">   */</span>
 	<span class="nx">_customEvents</span><span class="o">:</span>
 	<span class="p">{</span>
-		<span class="nx">onStart</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;startEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">],</span>
-		<span class="nx">onComplete</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;completeEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;complete&#39;</span><span class="p">],</span>
-		<span class="nx">onSuccess</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;successEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">],</span>
-		<span class="nx">onFailure</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;failureEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;failure&#39;</span><span class="p">],</span>
-		<span class="nx">onUpload</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;uploadEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;upload&#39;</span><span class="p">],</span>
-		<span class="nx">onAbort</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;abortEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;abort&#39;</span><span class="p">]</span>
+		<span class="nx">onStart</span><span class="o">:</span><span class="p">[</span><span class="s1">'startEvent'</span><span class="p">,</span> <span class="s1">'start'</span><span class="p">],</span>
+		<span class="nx">onComplete</span><span class="o">:</span><span class="p">[</span><span class="s1">'completeEvent'</span><span class="p">,</span> <span class="s1">'complete'</span><span class="p">],</span>
+		<span class="nx">onSuccess</span><span class="o">:</span><span class="p">[</span><span class="s1">'successEvent'</span><span class="p">,</span> <span class="s1">'success'</span><span class="p">],</span>
+		<span class="nx">onFailure</span><span class="o">:</span><span class="p">[</span><span class="s1">'failureEvent'</span><span class="p">,</span> <span class="s1">'failure'</span><span class="p">],</span>
+		<span class="nx">onUpload</span><span class="o">:</span><span class="p">[</span><span class="s1">'uploadEvent'</span><span class="p">,</span> <span class="s1">'upload'</span><span class="p">],</span>
+		<span class="nx">onAbort</span><span class="o">:</span><span class="p">[</span><span class="s1">'abortEvent'</span><span class="p">,</span> <span class="s1">'abort'</span><span class="p">]</span>
 	<span class="p">},</span>
 
   <span class="cm">/**</span>
@@ -289,7 +273,7 @@
 	<span class="nx">setProgId</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="k">this</span><span class="p">.</span><span class="nx">_msxml_progid</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-		<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;ActiveX Program Id  &#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; added to _msxml_progid.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+		<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'ActiveX Program Id  '</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">' added to _msxml_progid.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 	<span class="p">},</span>
 
   <span class="cm">/**</span>
@@ -302,11 +286,11 @@
 <span class="cm">   */</span>
 	<span class="nx">setDefaultPostHeader</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
 	<span class="p">{</span>
-		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">'string'</span><span class="p">){</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_default_post_header</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Default POST header set to  &#39;</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Default POST header set to  '</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 		<span class="p">}</span>
-		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">&#39;boolean&#39;</span><span class="p">){</span>
+		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">'boolean'</span><span class="p">){</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_use_default_post_header</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
 		<span class="p">}</span>
 	<span class="p">},</span>
@@ -321,9 +305,9 @@
 <span class="cm">   */</span>
 	<span class="nx">setDefaultXhrHeader</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
 	<span class="p">{</span>
-		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s1">'string'</span><span class="p">){</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_default_xhr_header</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Default XHR header set to  &#39;</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Default XHR header set to  '</span> <span class="o">+</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 		<span class="p">}</span>
 		<span class="k">else</span><span class="p">{</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_use_default_xhr_header</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
@@ -340,9 +324,9 @@
 <span class="cm">   */</span>
 	<span class="nx">setPollingInterval</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 	<span class="p">{</span>
-		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">i</span> <span class="o">==</span> <span class="s1">&#39;number&#39;</span> <span class="o">&amp;&amp;</span> <span class="nb">isFinite</span><span class="p">(</span><span class="nx">i</span><span class="p">)){</span>
+		<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">i</span> <span class="o">==</span> <span class="s1">'number'</span> <span class="o">&amp;&amp;</span> <span class="nb">isFinite</span><span class="p">(</span><span class="nx">i</span><span class="p">)){</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_polling_interval</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Default polling interval set to &#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Default polling interval set to '</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span><span class="s1">'ms'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 		<span class="p">}</span>
 	<span class="p">},</span>
 
@@ -364,7 +348,7 @@
 			<span class="nx">http</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
 			<span class="c1">//  Object literal with http and tId properties</span>
 			<span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">conn</span><span class="o">:</span><span class="nx">http</span><span class="p">,</span> <span class="nx">tId</span><span class="o">:</span><span class="nx">transactionId</span><span class="p">,</span> <span class="nx">xhr</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;XHR object created for transaction &#39;</span> <span class="o">+</span> <span class="nx">transactionId</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'XHR object created for transaction '</span> <span class="o">+</span> <span class="nx">transactionId</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 		<span class="p">}</span>
 		<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
 		<span class="p">{</span>
@@ -375,7 +359,7 @@
 					<span class="nx">http</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_msxml_progid</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
 					<span class="c1">//  Object literal with conn and tId properties</span>
 					<span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">conn</span><span class="o">:</span><span class="nx">http</span><span class="p">,</span> <span class="nx">tId</span><span class="o">:</span><span class="nx">transactionId</span><span class="p">,</span> <span class="nx">xhr</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;ActiveX XHR object created for transaction &#39;</span> <span class="o">+</span> <span class="nx">transactionId</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'ActiveX XHR object created for transaction '</span> <span class="o">+</span> <span class="nx">transactionId</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 					<span class="k">break</span><span class="p">;</span>
 				<span class="p">}</span>
 				<span class="k">catch</span><span class="p">(</span><span class="nx">e1</span><span class="p">){}</span>
@@ -407,11 +391,11 @@
 			<span class="p">}</span>
 			<span class="k">else</span><span class="p">{</span>
 				<span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="p">};</span>
-				<span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="o">===</span><span class="s1">&#39;xdr&#39;</span><span class="p">){</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="o">===</span><span class="s1">'xdr'</span><span class="p">){</span>
 					<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_transport</span><span class="p">;</span>
 					<span class="nx">o</span><span class="p">.</span><span class="nx">xdr</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 				<span class="p">}</span>
-				<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="o">===</span><span class="s1">&#39;upload&#39;</span><span class="p">){</span>
+				<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="o">===</span><span class="s1">'upload'</span><span class="p">){</span>
 					<span class="nx">o</span><span class="p">.</span><span class="nx">upload</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
@@ -440,15 +424,15 @@
 		<span class="kd">var</span> <span class="nx">o</span><span class="p">,</span><span class="nx">t</span><span class="p">,</span><span class="nx">args</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">argument</span><span class="p">)</span><span class="o">?</span><span class="nx">callback</span><span class="p">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="p">;</span>
 
 		<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_isFileUpload</span><span class="p">){</span>
-			<span class="nx">t</span> <span class="o">=</span> <span class="s1">&#39;upload&#39;</span><span class="p">;</span>
+			<span class="nx">t</span> <span class="o">=</span> <span class="s1">'upload'</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">xdr</span><span class="p">){</span>
-			<span class="nx">t</span> <span class="o">=</span> <span class="s1">&#39;xdr&#39;</span><span class="p">;</span>
+			<span class="nx">t</span> <span class="o">=</span> <span class="s1">'xdr'</span><span class="p">;</span>
 		<span class="p">}</span>
 
 		<span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getConnectionObject</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
 		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">o</span><span class="p">){</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Unable to create connection object.&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Unable to create connection object.'</span><span class="p">,</span> <span class="s1">'error'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 			<span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="k">else</span><span class="p">{</span>
@@ -467,41 +451,41 @@
 				<span class="c1">// If the specified HTTP method is GET, setForm() will return an</span>
 				<span class="c1">// encoded string that is concatenated to the uri to</span>
 				<span class="c1">// create a querystring.</span>
-				<span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;GET&#39;</span><span class="p">){</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'GET'</span><span class="p">){</span>
 					<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">){</span>
 						<span class="c1">// If the URI already contains a querystring, append an ampersand</span>
 						<span class="c1">// and then concatenate _sFormData to the URI.</span>
-						<span class="nx">uri</span> <span class="o">+=</span> <span class="p">((</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">?</span><span class="s1">&#39;?&#39;</span><span class="o">:</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span><span class="p">;</span>
+						<span class="nx">uri</span> <span class="o">+=</span> <span class="p">((</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'?'</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">?</span><span class="s1">'?'</span><span class="o">:</span><span class="s1">'&amp;'</span><span class="p">)</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span><span class="p">;</span>
 					<span class="p">}</span>
 				<span class="p">}</span>
-				<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">){</span>
+				<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">){</span>
 					<span class="c1">// If POST data exist in addition to the HTML form data,</span>
 					<span class="c1">// it will be concatenated to the form data.</span>
-					<span class="nx">postData</span> <span class="o">=</span> <span class="nx">postData</span><span class="o">?</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span> <span class="o">+</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">+</span> <span class="nx">postData</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span><span class="p">;</span>
+					<span class="nx">postData</span> <span class="o">=</span> <span class="nx">postData</span><span class="o">?</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span> <span class="o">+</span> <span class="s2">"&amp;"</span> <span class="o">+</span> <span class="nx">postData</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">_sFormData</span><span class="p">;</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 
-			<span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;GET&#39;</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">cache</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)){</span>
+			<span class="k">if</span><span class="p">(</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'GET'</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">cache</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)){</span>
 				<span class="c1">// If callback.cache is defined and set to false, a</span>
 				<span class="c1">// timestamp value will be added to the querystring.</span>
-				<span class="nx">uri</span> <span class="o">+=</span> <span class="p">((</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">?</span><span class="s1">&#39;?&#39;</span><span class="o">:</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;rnd=&quot;</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">valueOf</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+				<span class="nx">uri</span> <span class="o">+=</span> <span class="p">((</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'?'</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">?</span><span class="s1">'?'</span><span class="o">:</span><span class="s1">'&amp;'</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"rnd="</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">valueOf</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
 			<span class="p">}</span>
 
 			<span class="c1">// Each transaction will automatically include a custom header of</span>
-			<span class="c1">// &quot;X-Requested-With: XMLHttpRequest&quot; to identify the request as</span>
+			<span class="c1">// "X-Requested-With: XMLHttpRequest" to identify the request as</span>
 			<span class="c1">// having originated from Connection Manager.</span>
 			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_use_default_xhr_header</span><span class="p">){</span>
-				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">[</span><span class="s1">&#39;X-Requested-With&#39;</span><span class="p">]){</span>
-					<span class="k">this</span><span class="p">.</span><span class="nx">initHeader</span><span class="p">(</span><span class="s1">&#39;X-Requested-With&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_xhr_header</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Initialize transaction header X-Request-Header to XMLHttpRequest.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">[</span><span class="s1">'X-Requested-With'</span><span class="p">]){</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">initHeader</span><span class="p">(</span><span class="s1">'X-Requested-With'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_xhr_header</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Initialize transaction header X-Request-Header to XMLHttpRequest.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 
 			<span class="c1">//If the transaction method is POST and the POST header value is set to true</span>
 			<span class="c1">//or a custom value, initalize the Content-Type header to this value.</span>
-			<span class="k">if</span><span class="p">((</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;POST&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_use_default_post_header</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_isFormSubmit</span> <span class="o">===</span> <span class="kc">false</span><span class="p">){</span>
-				<span class="k">this</span><span class="p">.</span><span class="nx">initHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_post_header</span><span class="p">);</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Initialize header Content-Type to application/x-www-form-urlencoded; UTF-8 for POST transaction.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="k">if</span><span class="p">((</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">===</span> <span class="s1">'POST'</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_use_default_post_header</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_isFormSubmit</span> <span class="o">===</span> <span class="kc">false</span><span class="p">){</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">initHeader</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_post_header</span><span class="p">);</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Initialize header Content-Type to application/x-www-form-urlencoded; UTF-8 for POST transaction.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 			<span class="p">}</span>
 
 			<span class="k">if</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">xdr</span><span class="p">){</span>
@@ -516,8 +500,8 @@
 			<span class="p">}</span>
 
 			<span class="k">this</span><span class="p">.</span><span class="nx">handleReadyState</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
-			<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">postData</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Transaction &#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">&#39; sent.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">postData</span> <span class="o">||</span> <span class="s1">''</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Transaction '</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">' sent.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 
 			<span class="c1">// Reset the HTML form data and state properties as</span>
 			<span class="c1">// soon as the data are submitted.</span>
@@ -556,17 +540,17 @@
 			<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">0</span><span class="p">]){</span>
 				<span class="c1">// Create the custom event</span>
 				<span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">)</span><span class="o">?</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="o">:</span><span class="kc">null</span><span class="p">);</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Transaction-specific Custom Event &#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="s1">&#39; created.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Transaction-specific Custom Event '</span> <span class="o">+</span> <span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="s1">' created.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 
 				<span class="c1">// Subscribe the custom event</span>
 				<span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">0</span><span class="p">]].</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">customevents</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Transaction-specific Custom Event &#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="s1">&#39; subscribed.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Transaction-specific Custom Event '</span> <span class="o">+</span> <span class="nx">o</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_customEvents</span><span class="p">[</span><span class="nx">prop</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="s1">' subscribed.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 			<span class="p">}</span>
 		<span class="p">}</span>
 	<span class="p">},</span>
 
   <span class="cm">/**</span>
-<span class="cm">   * @description This method serves as a timer that polls the XHR object&#39;s readyState</span>
+<span class="cm">   * @description This method serves as a timer that polls the XHR object's readyState</span>
 <span class="cm">   * property during a transaction, instead of binding a callback to the</span>
 <span class="cm">   * onreadystatechange event.  Upon readyState 4, handleTransactionResponse</span>
 <span class="cm">   * will process the response, and the timer will be cleared.</span>
@@ -632,8 +616,8 @@
     <span class="p">{</span>
 		<span class="kd">var</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="nx">responseObject</span><span class="p">,</span>
 			<span class="nx">args</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">argument</span><span class="p">)</span><span class="o">?</span><span class="nx">callback</span><span class="p">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
-			<span class="nx">xdrS</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">r</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="p">.</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:success&#39;</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
-			<span class="nx">xdrF</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">r</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="p">.</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:failure&#39;</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+			<span class="nx">xdrS</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">r</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="p">.</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">'xdr:success'</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+			<span class="nx">xdrF</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">r</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="p">.</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">'xdr:failure'</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
 			<span class="nx">xdrA</span> <span class="o">=</span> <span class="nx">isAbort</span><span class="p">;</span>
 
 		<span class="k">try</span>
@@ -656,7 +640,7 @@
 		<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
 
 			 <span class="c1">// 13030 is a custom code to indicate the condition -- in Mozilla/FF --</span>
-			 <span class="c1">// when the XHR object&#39;s status and statusText properties are</span>
+			 <span class="c1">// when the XHR object's status and statusText properties are</span>
 			 <span class="c1">// unavailable, and a query attempt throws an exception.</span>
 			<span class="nx">httpStatus</span> <span class="o">=</span> <span class="mi">13030</span><span class="p">;</span>
 		<span class="p">}</span>
@@ -666,13 +650,13 @@
 			<span class="k">if</span><span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">success</span><span class="p">){</span>
 				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">){</span>
 					<span class="nx">callback</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="nx">responseObject</span><span class="p">);</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Success callback. HTTP code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Success callback. HTTP code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 				<span class="p">}</span>
 				<span class="k">else</span><span class="p">{</span>
 					<span class="c1">// If a scope property is defined, the callback will be fired from</span>
 					<span class="c1">// the context of the object.</span>
 					<span class="nx">callback</span><span class="p">.</span><span class="nx">success</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">,</span> <span class="p">[</span><span class="nx">responseObject</span><span class="p">]);</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Success callback with scope. HTTP code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Success callback with scope. HTTP code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 
@@ -699,11 +683,11 @@
 					<span class="k">if</span><span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">){</span>
 						<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">){</span>
 							<span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">(</span><span class="nx">responseObject</span><span class="p">);</span>
-							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Failure callback. Exception detected. Status code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Failure callback. Exception detected. Status code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'warn'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 						<span class="p">}</span>
 						<span class="k">else</span><span class="p">{</span>
 							<span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">,</span> <span class="p">[</span><span class="nx">responseObject</span><span class="p">]);</span>
-							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Failure callback with scope. Exception detected. Status code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Failure callback with scope. Exception detected. Status code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'warn'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 						<span class="p">}</span>
 					<span class="p">}</span>
 
@@ -713,11 +697,11 @@
 					<span class="k">if</span><span class="p">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">){</span>
 						<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">){</span>
 							<span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">(</span><span class="nx">responseObject</span><span class="p">);</span>
-							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Failure callback. HTTP status code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Failure callback. HTTP status code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'warn'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 						<span class="p">}</span>
 						<span class="k">else</span><span class="p">{</span>
 							<span class="nx">callback</span><span class="p">.</span><span class="nx">failure</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">callback</span><span class="p">.</span><span class="nx">scope</span><span class="p">,</span> <span class="p">[</span><span class="nx">responseObject</span><span class="p">]);</span>
-							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Failure callback with scope. HTTP status code is &#39;</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+							<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Failure callback with scope. HTTP status code is '</span> <span class="o">+</span> <span class="nx">httpStatus</span><span class="p">,</span> <span class="s1">'warn'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 						<span class="p">}</span>
 					<span class="p">}</span>
 			<span class="p">}</span>
@@ -739,7 +723,7 @@
   <span class="cm">/**</span>
 <span class="cm">   * @description This method evaluates the server response, creates and returns the results via</span>
 <span class="cm">   * its properties.  Success and failure cases will differ in the response</span>
-<span class="cm">   * object&#39;s property values.</span>
+<span class="cm">   * object's property values.</span>
 <span class="cm">   * @method createResponseObject</span>
 <span class="cm">   * @private</span>
 <span class="cm">   * @static</span>
@@ -755,9 +739,9 @@
 		<span class="k">try</span>
 		<span class="p">{</span>
 			<span class="nx">headerStr</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">getAllResponseHeaders</span><span class="p">();</span>
-			<span class="nx">header</span> <span class="o">=</span> <span class="nx">headerStr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+			<span class="nx">header</span> <span class="o">=</span> <span class="nx">headerStr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'\n'</span><span class="p">);</span>
 			<span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">header</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-				<span class="nx">delimitPos</span> <span class="o">=</span> <span class="nx">header</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">);</span>
+				<span class="nx">delimitPos</span> <span class="o">=</span> <span class="nx">header</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">':'</span><span class="p">);</span>
 				<span class="k">if</span><span class="p">(</span><span class="nx">delimitPos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
 					<span class="nx">headerObj</span><span class="p">[</span><span class="nx">header</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">delimitPos</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="nx">delimitPos</span><span class="o">+</span><span class="mi">2</span><span class="p">));</span>
 				<span class="p">}</span>
@@ -766,10 +750,10 @@
 		<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){}</span>
 
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">tId</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">;</span>
-		<span class="c1">// Normalize IE&#39;s response to HTTP 204 when Win error 1223.</span>
+		<span class="c1">// Normalize IE's response to HTTP 204 when Win error 1223.</span>
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1223</span><span class="p">)</span><span class="o">?</span><span class="mi">204</span><span class="o">:</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">status</span><span class="p">;</span>
-		<span class="c1">// Normalize IE&#39;s statusText to &quot;No Content&quot; instead of &quot;Unknown&quot;.</span>
-		<span class="nx">obj</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1223</span><span class="p">)</span><span class="o">?</span><span class="s2">&quot;No Content&quot;</span><span class="o">:</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">statusText</span><span class="p">;</span>
+		<span class="c1">// Normalize IE's statusText to "No Content" instead of "Unknown".</span>
+		<span class="nx">obj</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">=</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1223</span><span class="p">)</span><span class="o">?</span><span class="s2">"No Content"</span><span class="o">:</span><span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">statusText</span><span class="p">;</span>
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">getResponseHeader</span> <span class="o">=</span> <span class="nx">headerObj</span><span class="p">;</span>
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">getAllResponseHeaders</span> <span class="o">=</span> <span class="nx">headerStr</span><span class="p">;</span>
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
@@ -801,9 +785,9 @@
     <span class="nx">createExceptionObject</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">tId</span><span class="p">,</span> <span class="nx">callbackArg</span><span class="p">,</span> <span class="nx">isAbort</span><span class="p">)</span>
     <span class="p">{</span>
 		<span class="kd">var</span> <span class="nx">COMM_CODE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-			<span class="nx">COMM_ERROR</span> <span class="o">=</span> <span class="s1">&#39;communication failure&#39;</span><span class="p">,</span>
+			<span class="nx">COMM_ERROR</span> <span class="o">=</span> <span class="s1">'communication failure'</span><span class="p">,</span>
 			<span class="nx">ABORT_CODE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-			<span class="nx">ABORT_ERROR</span> <span class="o">=</span> <span class="s1">&#39;transaction aborted&#39;</span><span class="p">,</span>
+			<span class="nx">ABORT_ERROR</span> <span class="o">=</span> <span class="s1">'transaction aborted'</span><span class="p">,</span>
 			<span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
 
 		<span class="nx">obj</span><span class="p">.</span><span class="nx">tId</span> <span class="o">=</span> <span class="nx">tId</span><span class="p">;</span>
@@ -863,7 +847,7 @@
 			<span class="k">for</span><span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">){</span>
 				<span class="k">if</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)){</span>
 					<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="nx">prop</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Default HTTP header &#39;</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s1">&#39; set with value of &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Default HTTP header '</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s1">' set with value of '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_default_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 		<span class="p">}</span>
@@ -872,7 +856,7 @@
 			<span class="k">for</span><span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">_http_headers</span><span class="p">){</span>
 				<span class="k">if</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_http_headers</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)){</span>
 					<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="nx">prop</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_http_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
-					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;HTTP header &#39;</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s1">&#39; set with value of &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_http_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+					<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'HTTP header '</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s1">' set with value of '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_http_headers</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 
@@ -932,16 +916,16 @@
 			<span class="p">}</span>
 		<span class="p">}</span>
 		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">upload</span><span class="p">){</span>
-			<span class="kd">var</span> <span class="nx">frameId</span> <span class="o">=</span> <span class="s1">&#39;yuiIO&#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">;</span>
+			<span class="kd">var</span> <span class="nx">frameId</span> <span class="o">=</span> <span class="s1">'yuiIO'</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">;</span>
 			<span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">frameId</span><span class="p">);</span>
 
 			<span class="k">if</span><span class="p">(</span><span class="nx">io</span><span class="p">){</span>
 				<span class="c1">// Remove all listeners on the iframe prior to</span>
 				<span class="c1">// its destruction.</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="nx">io</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">);</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="nx">io</span><span class="p">,</span> <span class="s2">"load"</span><span class="p">);</span>
 				<span class="c1">// Destroy the iframe facilitating the transaction.</span>
 				<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">io</span><span class="p">);</span>
-				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;File upload iframe destroyed. Id is:&#39;</span> <span class="o">+</span> <span class="nx">frameId</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'File upload iframe destroyed. Id is:'</span> <span class="o">+</span> <span class="nx">frameId</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 
 				<span class="k">if</span><span class="p">(</span><span class="nx">isTimeout</span><span class="p">){</span>
 					<span class="nb">window</span><span class="p">.</span><span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_timeOut</span><span class="p">[</span><span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">]);</span>
@@ -965,7 +949,7 @@
 			<span class="p">}</span>
 
 			<span class="k">this</span><span class="p">.</span><span class="nx">handleTransactionResponse</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Transaction &#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">&#39; aborted.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Transaction '</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">' aborted.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 		<span class="p">}</span>
 
 		<span class="k">return</span> <span class="nx">abortStatus</span><span class="p">;</span>
@@ -991,7 +975,7 @@
 			<span class="k">return</span> <span class="nx">o</span><span class="p">.</span><span class="nx">conn</span><span class="p">.</span><span class="nx">isCallInProgress</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">);</span>
 		<span class="p">}</span>
 		<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">upload</span> <span class="o">===</span> <span class="kc">true</span><span class="p">){</span>
-			<span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;yuiIO&#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">;</span>
+			<span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'yuiIO'</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">)</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="k">else</span><span class="p">{</span>
 			<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
@@ -1012,7 +996,7 @@
 			<span class="c1">//dereference the XHR instance.</span>
 			<span class="nx">o</span><span class="p">.</span><span class="nx">conn</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Connection object for transaction &#39;</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">&#39; destroyed.&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connection object for transaction '</span> <span class="o">+</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tId</span> <span class="o">+</span> <span class="s1">' destroyed.'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Connection'</span><span class="p">);</span>
 
 			<span class="c1">//dereference the connection object.</span>
 			<span class="nx">o</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -1029,8 +1013,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -1078,24 +1061,19 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Connect.html" title="YAHOO.util.Connect">YAHOO.util.Connect</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Connect.html" title="YAHOO.util.Connect">YAHOO.util.Connect</a></li>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="connection_core.js.html" title="connection_core.js">connection_core.js</a></li>
+                        <ul class="content"><li class="selected"><a href="connection_core.js.html" title="connection_core.js">connection_core.js</a></li>
                                 <li class=""><a href="connection_xdr.js.html" title="connection_xdr.js">connection_xdr.js</a></li>
                                 <li class=""><a href="connectionx.js.html" title="connectionx.js">connectionx.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1105,13 +1083,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Connect", "name": "abort", "url": "YAHOO.util.Connect.html#method_abort", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "abortEvent", "url": "YAHOO.util.Connect.html#property_abortEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "appendPostData", "url": "YAHOO.util.Connect.html#method_appendPostData", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "asyncRequest", "url": "YAHOO.util.Connect.html#method_asyncRequest", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "completeEvent", "url": "YAHOO.util.Connect.html#property_completeEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createExceptionObject", "url": "YAHOO.util.Connect.html#method_createExceptionObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createFrame", "url": "YAHOO.util.Connect.html#method_createFrame", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createResponseObject", "url": "YAHOO.util.Connect.html#method_createResponseObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createXhrObject", "url": "YAHOO.util.Connect.html#method_createXhrObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_customEvents", "url": "YAHOO.util.Connect.html#property__customEvents", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_form_header", "url": "YAHOO.util.Connect.html#property__default_form_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_post_header", "url": "YAHOO.util.Connect.html#property__default_post_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_xhr_header", "url": "YAHOO.util.Connect.html#property__default_xhr_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "failureEvent", "url": "YAHOO.util.Connect.html#property_failureEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_formNode", "url": "YAHOO.util.Connect.html#property__formNode", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "getConnectionObject", "url": "YAHOO.util.Connect.html#method_getConnectionObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleReadyState", "url": "YAHOO.util.Connect.html#method_handleReadyState", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleTransactionResponse", "url": "YAHOO.util.Connect.html#method_handleTransactionResponse", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleXdrResponse", "url": "YAHOO.util.Connect.html#method_handleXdrResponse", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_default_header", "url": "YAHOO.util.Connect.html#property__has_default_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_http_headers", "url": "YAHOO.util.Connect.html#property__has_http_headers", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_hasSubmitListener", "url": "YAHOO.util.Connect.html#property__hasSubmitListener", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_http_header", "url": "YAHOO.util.Connect.html#property__http_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "initCustomEvents", "url": "YAHOO.util.Connect.html#method_initCustomEvents", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "initHeader", "url": "YAHOO.util.Connect.html#method_initHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "isCallInProgress", "url": "YAHOO.util.Connect.html#method_isCallInProgress", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFileUpload", "url": "YAHOO.util.Connect.html#property__isFileUpload", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFormSubmit", "url": "YAHOO.util.Connect.html#property__isFormSubmit", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_msxml_progid", "url": "YAHOO.util.Connect.html#property__msxml_progid", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_poll", "url": "YAHOO.util.Connect.html#property__poll", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_polling_interval", "url": "YAHOO.util.Connect.html#property__polling_interval", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "releaseObject", "url": "YAHOO.util.Connect.html#method_releaseObject", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "resetDefaultHeaders", "url": "YAHOO.util.Connect.html#method_resetDefaultHeaders", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "resetFormState", "url": "YAHOO.util.Connect.html#method_resetFormState", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultPostHeader", "url": "YAHOO.util.Connect.html#method_setDefaultPostHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultXhrHeader", "url": "YAHOO.util.Connect.html#method_setDefaultXhrHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setForm", "url": "YAHOO.util.Connect.html#method_setForm", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "setHeader", "url": "YAHOO.util.Connect.html#method_setHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setPollingInterval", "url": "YAHOO.util.Connect.html#method_setPollingInterval", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setProgId", "url": "YAHOO.util.Connect.html#method_setProgId", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_sFormData", "url": "YAHOO.util.Connect.html#property__sFormData", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "startEvent", "url": "YAHOO.util.Connect.html#property_startEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_submitElementValue", "url": "YAHOO.util.Connect.html#property__submitElementValue", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "successEvent", "url": "YAHOO.util.Connect.html#property_successEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_swf", "url": "YAHOO.util.Connect.html#method__swf", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_timeOut", "url": "YAHOO.util.Connect.html#property__timeOut", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_transaction_id", "url": "YAHOO.util.Connect.html#property__transaction_id", "type": "property"}, {"access": "", "host": "YAHOO.util.Connect", "name": "transport", "url": "YAHOO.util.Connect.html#method_transport", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "uploadFile", "url": "YAHOO.util.Connect.html#method_uploadFile", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_post_header", "url": "YAHOO.util.Connect.html#property__use_default_post_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_xhr_header", "url": "YAHOO.util.Connect.html#property__use_default_xhr_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "xdr", "url": "YAHOO.util.Connect.html#method_xdr", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_xdrStart", "url": "YAHOO.util.Connect.html#method__xdrStart", "type": "method"}];
-</script>
-</body>
-</html>
+</script></body>

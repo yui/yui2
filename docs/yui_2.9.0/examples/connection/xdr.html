@@ -1,54 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>YUI Library Examples: Connection Manager: Cross-Domain Transactions with Connection Manager</title>
-    
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
-
-<style>
+<head><title>YUI Library Examples: Connection Manager: Cross-Domain Transactions with Connection Manager</title><meta http-equiv="content-type" content="text/html; charset=utf-8"><link rel="stylesheet" type="text/css" href="../../assets/yui.css"><style>
 /*Supplemental CSS for the YUI distribution*/
 #custom-doc { width: 95%; min-width: 950px; }
 #pagetitle {background-image: url(../../assets/bg_hd.gif);}
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
-<!--Script and CSS includes for YUI dependencies on this page-->
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<script type="text/javascript" src="../../build/yuiloader/yuiloader-min.js"></script>
-<script type="text/javascript" src="../../build/event/event-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-<script type="text/javascript" src="../../build/dom/dom-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-
-<!--there is no custom header content for this example-->
-
-
-<script type="text/javascript">
+</style><link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css"><!--Script and CSS includes for YUI dependencies on this page--><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><script type="text/javascript" src="../../build/yuiloader/yuiloader-min.js"></script><script type="text/javascript" src="../../build/event/event-min.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/json/json-min.js"></script><script type="text/javascript" src="../../build/dom/dom-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><!--there is no custom header content for this example--><script type="text/javascript">
 //enable passthrough of errors from YUI Event:
 if ((typeof YAHOO !== "undefined") && (YAHOO.util) && (YAHOO.util.Event)) {
 	YAHOO.util.Event.throwErrors = true;
 }
-</script>
-</head>
-<body id="yahoo-com" class="yui-skin-sam">
-<div id="custom-doc" class="yui-t2">
+</script></head><body id="yahoo-com" class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="custom-doc" class="yui-t2">
 <div id="hd">
 	<div id="ygunav">
 		<p><em><a href="http://developer.yahoo.com/yui/">YUI Library Home</a></em></p>
 		<form action="http://search.yahoo.com/search" id="sitesearchform">
-		<input name="vs" type="hidden" value="developer.yahoo.com">
-		<input name="vs" type="hidden" value="yuiblog.com">
-		<div id="sitesearch">
+		<input name="vs" type="hidden" value="developer.yahoo.com"><input name="vs" type="hidden" value="yuiblog.com"><div id="sitesearch">
 			<label for="searchinput">Site Search (YDN &amp; YUIBlog): </label>
-			<input type="text" id="searchinput" name="p">
-			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
-		</div>
+			<input type="text" id="searchinput" name="p"><input type="submit" value="Search" id="searchsubmit" class="ygbt"></div>
 		</form>	</div>
-	<div id="ygma"><a href="../../"><img src="../../assets/yui.gif"  border="0" height="38"></a></div>
+	<div id="ygma"><a href="../../"><img src="../../assets/yui.gif" border="0" height="38"></a></div>
 	<div id="pagetitle"><h1>YUI Library Examples: Connection Manager: Cross-Domain Transactions with Connection Manager</h1></div>
 </div>
 <div id="bd">
@@ -72,7 +43,7 @@ if ((typeof YAHOO !== "undefined") && (YAHOO.util) && (YAHOO.util.Event)) {
 		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="xdr_source.html" target="_blank">View example in new window.</a></span></span>		
 	
 		
-		</div>
+		</p></div>
 		
 	
 	</div>			
@@ -86,16 +57,13 @@ if ((typeof YAHOO !== "undefined") && (YAHOO.util) && (YAHOO.util.Event)) {
   &lt;script src="event.js"&gt;
   &lt;script src="json.js"&gt;
   &lt;script src="connection.js"&gt;
-</textarea>
-
-<h3>Initialize the Flash Transport</h3>
+</textarea><h3>Initialize the Flash Transport</h3>
 <p>
 Before making a cross-domain request, the underlying transport -- <code>connection.swf</code> must be initialized.  This is done by calling the transport() on <code>YAHOO.util.Connect</code>, and setting the parameter as the path to the swf, relative to the HTML.
 </p>
 <textarea name="code" class="JScript" cols="60" rows="1">
 YAHOO.util.Connect.transport('connection.swf');
-</textarea>
-<p>
+</textarea><p>
 Once the transport has initialized, it will fire xdrReadyEvent.  Attach a listener to this event, so we know when the transport is ready for use.  Here, the button to send the cross-domain request is disabled until the transport fires xdrReadyEvent.
 </p>
 <textarea name="code" class="JScript" cols="60" rows="1">
@@ -104,17 +72,14 @@ Once the transport has initialized, it will fire xdrReadyEvent.  Attach a listen
 YAHOO.util.Connect.xdrReadyEvent.subscribe(function() {
 	document.getElementById('fetch').disabled = false;
 });
-</textarea>
-
-<h3>Configure the Callback Handlers and Make a Cross-Domain Request.</h3>
+</textarea><h3>Configure the Callback Handlers and Make a Cross-Domain Request.</h3>
 <p>
 Cross-domain transactions are determined by setting the <code>xdr</code> property on the callback object to <code>true</code>.  This instructs Connection Manager to use the alternate transport, initialized earlier, instead of XMLHttpRequest.
 </p>
 <p>
 In this example, we will create functions to handle success and failure outcomes, and use a global listener to Connection Manager's <code>startEvent</code> to listen for the start of each transaction.  Since the response data are JSON, we use the JSON utility to parse it, and use <code>substitute</code> to filter the results.
 </p>
-<textarea name="code" class="JScript" cols="60" rows="1">
-<script language="javascript">
+<textarea name="code" class="JScript" cols="60" rows="1"><script language="javascript">
 //Response data will be displayed as an unordered list.
 var output = document.getElementById('list'),
 	//Shortcut for YAHOO.util.Connect.
@@ -234,14 +199,6 @@ var send = function(o) {
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
-<script src="../../assets/syntax.js"></script>
-<script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
+<script src="../../assets/syntax.js"></script><script src="../../assets/dpSyntaxHighlighter.js"></script><script language="javascript"> 
 dp.SyntaxHighlighter.HighlightAll('code'); 
-</script>
-
-<script src='../../assets/YUIexamples.js'></script>
-
-
-</body>
-</html>
+</script><script src="../../assets/YUIexamples.js"></script></textarea></div></div></div></div></div></div></body>

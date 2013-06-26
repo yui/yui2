@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Example of Color Picker Built in a Dialog from Markup</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Example of Color Picker Built in a Dialog from Markup</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,52 +8,22 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css" />
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css" />
-<link rel="stylesheet" type="text/css" href="../../build/colorpicker/assets/skins/sam/colorpicker.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/container/container-min.js"></script>
-<script type="text/javascript" src="../../build/slider/slider-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/colorpicker/colorpicker-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style>
+</style><link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css"><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css"><link rel="stylesheet" type="text/css" href="../../build/colorpicker/assets/skins/sam/colorpicker.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/container/container-min.js"></script><script type="text/javascript" src="../../build/slider/slider-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/colorpicker/colorpicker-min.js"></script><!--begin custom header content for this example--><style>
 	/*style for the server response field*/
     #resp { font-family:courier;margin:10px;padding:5px;border:1px solid #ccc;background:#fff;}
 	#yui-picker-panel {visibility:hidden;}
   #yui-picker-panel .yui-picker-controls li {
     list-style: none;
   }
-</style>
-
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Example of Color Picker Built in a Dialog from Markup</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Example of Color Picker Built in a Dialog from Markup</h1><div class="exampleIntro">
 	<p>This example differs from <a href="colorpicker-dialog-from-script.html">the previous example</a> only in that the markup for the Color Picker instance is placed on the page rather than being generated automatically by the control.  By exploring this markup and the CSS file accompanying Color Picker <a href="http://developer.yahoo.com/yui/download/">in the YUI download</a>, you will get a sense of how to create your own customized interface for Color Picker that reflects the design imperatives of your own implementation.</p>
 
 <p>To interact with this example, click the "Show Color Picker" button below.  You can then experiment with enabling/disabling portions of the picker interface via the dashboard and submit color data via <a href="http://developer.yahoo.com/yui/connection/">Connection Manager</a> and peruse the returned values that are echoed back to the page.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<script type="text/javascript">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><script type="text/javascript">
 
 //create a namespace object in the example namespace:
 YAHOO.namespace("example.colorpicker")
@@ -198,22 +160,14 @@ YAHOO.example.colorpicker.inDialog = function() {
 //Container element is onDOMReady; we'll initialize then:
 YAHOO.util.Event.onDOMReady(YAHOO.example.colorpicker.inDialog.init, YAHOO.example.colorpicker.inDialog, true);
 
-</script>
-
-
-<!--Begin markup for configurations dashboard-->
-<div>
+</script><!--Begin markup for configurations dashboard--><div>
 	<button id="show">Show Color Picker</button> 
 	<button id="hide">Hide Color Picker</button>
 	<button id="btnhsv">Show/hide HSV fields</button>
 	<button id="btnhex">Show/hide HEX field</button>
 	<button id="btnrgb">Show/hide RGB field</button>
 	<button id="btnhexsummary">Show/hide HEX summary info</button>
-</div>
-
-
-<!--begin dialog markup-->
-<div id="yui-picker-panel" class="yui-picker-panel">
+</div><!--begin dialog markup--><div id="yui-picker-panel" class="yui-picker-panel">
   <div class="hd">Please choose a color:</div>
   <div class="bd">
 		
@@ -222,12 +176,12 @@ YAHOO.util.Event.onDOMReady(YAHOO.example.colorpicker.inDialog.init, YAHOO.examp
 		
 		<!--markup for the Region Slider of the Color Picker-->
         <div class="yui-picker-bg" id="yui-picker-bg" tabindex="-1" hidefocus="true">
-          <div class="yui-picker-thumb" id="yui-picker-thumb"><img src="assets/picker_thumb.png" /></div> 
+          <div class="yui-picker-thumb" id="yui-picker-thumb"><img src="assets/picker_thumb.png"></div> 
         </div>
 
 		<!--markup for the vertical Slider for color hue-->
         <div class="yui-picker-hue-bg" id="yui-picker-hue-bg" tabindex="-1" hidefocus="true">
-          <div class="yui-picker-hue-thumb" id="yui-picker-hue-thumb"><img src="assets/hue_thumb.png" /></div> 
+          <div class="yui-picker-hue-thumb" id="yui-picker-hue-thumb"><img src="assets/hue_thumb.png"></div> 
         </div> 
 
 		<!--markup for the various Color Picker interface controls-->
@@ -236,52 +190,33 @@ YAHOO.util.Event.onDOMReady(YAHOO.example.colorpicker.inDialog.init, YAHOO.examp
           <div class="bd">
             <form name="yui-picker-form" method="post" action="assets/post.php">
 
-              <ul id="yui-picker-rgb-controls" class="yui-picker-rgb-controls">
-                <li>R
-                <input autocomplete="off" name="yui-picker-r" id="yui-picker-r" type="text" value="0" size="3" maxlength="3" /></li>
+              <ul id="yui-picker-rgb-controls" class="yui-picker-rgb-controls"><li>R
+                <input autocomplete="off" name="yui-picker-r" id="yui-picker-r" type="text" value="0" size="3" maxlength="3"></li>
                 <li>G
-                <input autocomplete="off" name="yui-picker-g" id="yui-picker-g" type="text" value="0" size="3" maxlength="3" /></li>
+                <input autocomplete="off" name="yui-picker-g" id="yui-picker-g" type="text" value="0" size="3" maxlength="3"></li>
                 <li>B
-                <input autocomplete="off" name="yui-picker-b" id="yui-picker-b" type="text" value="0" size="3" maxlength="3" /></li>
-              </ul>
-
-              <ul class="yui-picker-hsv-controls" id="yui-picker-hsv-controls">
-                <li>H
-                <input autocomplete="off" name="yui-picker-h" id="yui-picker-h" type="text" value="0" size="3" maxlength="3" /> &#176;</li>
+                <input autocomplete="off" name="yui-picker-b" id="yui-picker-b" type="text" value="0" size="3" maxlength="3"></li>
+              </ul><ul class="yui-picker-hsv-controls" id="yui-picker-hsv-controls"><li>H
+                <input autocomplete="off" name="yui-picker-h" id="yui-picker-h" type="text" value="0" size="3" maxlength="3"> °</li>
                 <li>S
-                <input autocomplete="off" name="yui-picker-s" id="yui-picker-s" type="text" value="0" size="3" maxlength="3" /> %</li>
+                <input autocomplete="off" name="yui-picker-s" id="yui-picker-s" type="text" value="0" size="3" maxlength="3"> %</li>
                 <li>V
-                <input autocomplete="off" name="yui-picker-v" id="yui-picker-v" type="text" value="0" size="3" maxlength="3" /> %</li>
-              </ul>
-
-              <ul class="yui-picker-hex-summary" id="yui-picker-hex-summary">
-                <li id="yui-picker-rhex">
-                <li id="yui-picker-ghex">
-                <li id="yui-picker-bhex">
-              </ul>
-
-              <div class="yui-picker-hex-controls" id="yui-picker-hex-controls">
-                # <input autocomplete="off" name="yui-picker-hex" id="yui-picker-hex" type="text" value="0" size="6" maxlength="6" />
-              </div>
+                <input autocomplete="off" name="yui-picker-v" id="yui-picker-v" type="text" value="0" size="3" maxlength="3"> %</li>
+              </ul><ul class="yui-picker-hex-summary" id="yui-picker-hex-summary"><li id="yui-picker-rhex">
+                </li><li id="yui-picker-ghex">
+                </li><li id="yui-picker-bhex">
+              </li></ul><div class="yui-picker-hex-controls" id="yui-picker-hex-controls">
+                # <input autocomplete="off" name="yui-picker-hex" id="yui-picker-hex" type="text" value="0" size="6" maxlength="6"></div>
 
             </form>
           </div>
         </div>
 
 		<!--markup for swatches-->
-        <div class="yui-picker-swatch" id="yui-picker-swatch">&nbsp;</div>
-        <div class="yui-picker-websafe-swatch" id="yui-picker-websafe-swatch">&nbsp;</div>
+        <div class="yui-picker-swatch" id="yui-picker-swatch"> </div>
+        <div class="yui-picker-websafe-swatch" id="yui-picker-websafe-swatch"> </div>
       </div>
 
   </div>
   <div class="ft"></div>
-</div>
-
-<!--container element for information returned via XHR-->
-<div id="resp">Server response will be displayed in this area</div>
-
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</div><!--container element for information returned via XHR--><div id="resp">Server response will be displayed in this area</div><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

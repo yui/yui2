@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: charts   FlashAdapter.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: charts   FlashAdapter.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Charts Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <h3>Charts Widget  <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_charts.html">charts</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * Wraps Flash embedding functionality and allows communication with SWF through</span>
 <span class="c"> * attributes.</span>
 <span class="c"> *</span>
@@ -51,13 +42,13 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
 	<span class="nx">attributes</span> <span class="o">=</span> <span class="nx">attributes</span> <span class="o">||</span> <span class="o">{};</span>
 	
-	<span class="c">//the Flash Player external interface code from Adobe doesn&#39;t play nicely</span>
+	<span class="c">//the Flash Player external interface code from Adobe doesn't play nicely</span>
 <span class="c"></span>	<span class="c">//with the default value, yui-gen, in IE</span>
-<span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuigen&quot;</span><span class="o">);</span>
-	<span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">&quot;9.0.45&quot;</span><span class="o">;</span>
-	<span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">&quot;#ffffff&quot;</span><span class="o">;</span>
+<span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">"yuigen"</span><span class="o">);</span>
+	<span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">"9.0.45"</span><span class="o">;</span>
+	<span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">"#ffffff"</span><span class="o">;</span>
 	
-	<span class="c">//we can&#39;t use the initial attributes right away</span>
+	<span class="c">//we can't use the initial attributes right away</span>
 <span class="c"></span>	<span class="c">//so save them for once the SWF finishes loading</span>
 <span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">;</span>
 	
@@ -72,7 +63,7 @@
 <span class="c">	 * Fires when the SWF is initialized and communication is possible.</span>
 <span class="c">	 * @event contentReady</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;contentReady&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"contentReady"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">,</span>
@@ -124,7 +115,7 @@
 <span class="c">	 */</span>
 	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;FlashAdapter &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">"FlashAdapter "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -155,7 +146,7 @@
 			<span class="o">}</span>
 		<span class="o">}</span>
 		
-		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;FlashAdapter instance destroyed: &quot;</span> <span class="o">+</span> <span class="nx">instanceName</span><span class="o">);</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"FlashAdapter instance destroyed: "</span> <span class="o">+</span> <span class="nx">instanceName</span><span class="o">);</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -167,7 +158,7 @@
 	<span class="nx">_embedSWF</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">containerID</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">,</span> <span class="nx">expressInstall</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">)</span>
 	<span class="o">{</span>
 		<span class="c">//standard SWFObject embed</span>
-<span class="c"></span>		<span class="k">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="s2">&quot;100%&quot;</span><span class="o">,</span> <span class="s2">&quot;100%&quot;</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">);</span>
+<span class="c"></span>		<span class="k">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="s2">"100%"</span><span class="o">,</span> <span class="s2">"100%"</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">);</span>
 
 		<span class="k">if</span><span class="o">(</span><span class="nx">expressInstall</span><span class="o">)</span>
 		<span class="o">{</span>
@@ -175,34 +166,34 @@
 		<span class="o">}</span>
 
 		<span class="c">//make sure we can communicate with ExternalInterface</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">&quot;allowScriptAccess&quot;</span><span class="o">,</span> <span class="s2">&quot;always&quot;</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">"allowScriptAccess"</span><span class="o">,</span> <span class="s2">"always"</span><span class="o">);</span>
 		
 		<span class="k">if</span><span class="o">(</span><span class="nx">wmode</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">&quot;wmode&quot;</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">);</span>
+			<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">"wmode"</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">);</span>
 		<span class="o">}</span>
 		
 		<span class="c">//again, a useful ExternalInterface trick</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;allowedDomain&quot;</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"allowedDomain"</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">);</span>
 
 		<span class="c">//tell the SWF which HTML element it is in</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;elementID&quot;</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"elementID"</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">);</span>
 
 		<span class="c">// set the name of the function to call when the swf has an event</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;eventHandler&quot;</span><span class="o">,</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.eventHandler&quot;</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"eventHandler"</span><span class="o">,</span> <span class="s2">"YAHOO.widget.FlashAdapter.eventHandler"</span><span class="o">);</span>
 
 		<span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">containerID</span><span class="o">);</span>
 		<span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">swfObj</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span><span class="nx">container</span><span class="o">);</span>
 		<span class="k">if</span><span class="o">(</span><span class="nx">result</span><span class="o">)</span>
 		<span class="o">{</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">swfID</span><span class="o">);</span>
-			<span class="c">//if successful, let&#39;s add an owner property to the SWF reference</span>
+			<span class="c">//if successful, let's add an owner property to the SWF reference</span>
 <span class="c"></span>			<span class="c">//this will allow the event handler to communicate with a YAHOO.widget.FlashAdapter</span>
 <span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">owner</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 		<span class="o">}</span>
 		<span class="k">else</span>
 		<span class="o">{</span>
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unable to load SWF &quot;</span> <span class="o">+</span> <span class="nx">swfURL</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Unable to load SWF "</span> <span class="o">+</span> <span class="nx">swfURL</span><span class="o">);</span>
 		<span class="o">}</span>
 	<span class="o">},</span>
 
@@ -217,10 +208,10 @@
 		<span class="k">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">;</span>
 		<span class="nx">switch</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="nx">case</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">:</span>
+			<span class="nx">case</span> <span class="s2">"swfReady"</span><span class="o">:</span>
    				<span class="k">this</span><span class="o">.</span><span class="nx">_loadHandler</span><span class="o">();</span>
 				<span class="k">return</span><span class="o">;</span>
-			<span class="nx">case</span> <span class="s2">&quot;log&quot;</span><span class="o">:</span>
+			<span class="nx">case</span> <span class="s2">"log"</span><span class="o">:</span>
 				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span> <span class="nx">event</span><span class="o">.</span><span class="nx">category</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 				<span class="k">return</span><span class="o">;</span>
 		<span class="o">}</span>
@@ -241,7 +232,7 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributes</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;contentReady&quot;</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"contentReady"</span><span class="o">);</span>
 	<span class="o">},</span>
 	
 	<span class="c">/**</span>
@@ -257,14 +248,14 @@
 		<span class="c">/**</span>
 <span class="c">		 * @attribute wmode</span>
 <span class="c">		 * @description Sets the window mode of the Flash Player control. May be</span>
-<span class="c">		 *		&quot;window&quot;, &quot;opaque&quot;, or &quot;transparent&quot;. Only available in the constructor</span>
+<span class="c">		 *		"window", "opaque", or "transparent". Only available in the constructor</span>
 <span class="c">		 *		because it may not be set after Flash Player has been embedded in the page.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
 		 
 		<span class="c">/**</span>
 <span class="c">		 * @attribute expressInstall</span>
-<span class="c">		 * @description URL pointing to a SWF file that handles Flash Player&#39;s express</span>
+<span class="c">		 * @description URL pointing to a SWF file that handles Flash Player's express</span>
 <span class="c">		 *		install feature. Only available in the constructor because it may not be</span>
 <span class="c">		 *		set after Flash Player has been embedded in the page.</span>
 <span class="c">		 * @type String</span>
@@ -290,7 +281,7 @@
 <span class="c">		 *		set after Flash Player has been embedded in the page.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;swfURL&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"swfURL"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSWFURL</span>
 		<span class="o">});</span>
@@ -321,7 +312,7 @@
 	<span class="k">var</span> <span class="nx">loadedSWF</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">elementID</span><span class="o">);</span>
 	<span class="k">if</span><span class="o">(!</span><span class="nx">loadedSWF</span><span class="o">.</span><span class="nx">owner</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//fix for ie: if owner doesn&#39;t exist yet, try again in a moment</span>
+		<span class="c">//fix for ie: if owner doesn't exist yet, try again in a moment</span>
 <span class="c"></span>		<span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">eventHandler</span><span class="o">(</span> <span class="nx">elementID</span><span class="o">,</span> <span class="nx">event</span> <span class="o">);</span> <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
 	<span class="o">}</span>
 	<span class="k">else</span>
@@ -339,7 +330,7 @@
 
 <span class="c">/**</span>
 <span class="c"> * Creates a globally accessible function that wraps a function reference.</span>
-<span class="c"> * Returns the proxy function&#39;s name as a string for use by the SWF through</span>
+<span class="c"> * Returns the proxy function's name as a string for use by the SWF through</span>
 <span class="c"> * ExternalInterface.</span>
 <span class="c"> *</span>
 <span class="c"> * @method YAHOO.widget.FlashAdapter.createProxyFunction</span>
@@ -349,12 +340,12 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">createProxyFunction</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">func</span><span class="o">)</span>
 <span class="o">{</span>
 	<span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">proxyFunctionCount</span><span class="o">;</span>
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">[</span><span class="s2">&quot;proxyFunction&quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">[</span><span class="s2">"proxyFunction"</span> <span class="o">+</span> <span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
 		<span class="k">return</span> <span class="nx">func</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
 	<span class="o">};</span>
 	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">proxyFunctionCount</span><span class="o">++;</span>
-	<span class="k">return</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.proxyFunction&quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
+	<span class="k">return</span> <span class="s2">"YAHOO.widget.FlashAdapter.proxyFunction"</span> <span class="o">+</span> <span class="nx">index</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -367,7 +358,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">removeProxyFunction</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">funcName</span><span class="o">)</span>
 <span class="o">{</span>
 	<span class="c">//quick error check</span>
-<span class="c"></span>	<span class="k">if</span><span class="o">(!</span><span class="nx">funcName</span> <span class="o">||</span> <span class="nx">funcName</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;YAHOO.widget.FlashAdapter.proxyFunction&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span>
+<span class="c"></span>	<span class="k">if</span><span class="o">(!</span><span class="nx">funcName</span> <span class="o">||</span> <span class="nx">funcName</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"YAHOO.widget.FlashAdapter.proxyFunction"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span>
 	<span class="o">{</span>
 		<span class="k">return</span><span class="o">;</span>
 	<span class="o">}</span>
@@ -384,9 +375,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -455,13 +444,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
                                 <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
                                 <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
@@ -478,13 +465,11 @@
                                 <li class=""><a href="YAHOO.widget.PieSeries.html">YAHOO.widget.PieSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.Series.html">YAHOO.widget.Series</a></li>
                                 <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                        <ul class="content"><li class=""><a href="Axis.js.html">Axis.js</a></li>
                                 <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
                                 <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
                                 <li class=""><a href="Chart.js.html">Chart.js</a></li>
@@ -495,8 +480,7 @@
                                 <li class=""><a href="Series.js.html">Series.js</a></li>
                                 <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
                                 <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -506,9 +490,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

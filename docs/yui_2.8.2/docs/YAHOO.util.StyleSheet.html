@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: stylesheet  YAHOO.util.StyleSheet   (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: stylesheet  YAHOO.util.StyleSheet   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>stylesheet&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>stylesheet  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_stylesheet.html" title="stylesheet">stylesheet</a>
                  &gt; YAHOO.util.StyleSheet 
                 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,13 +22,11 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <h2>
                         
@@ -61,19 +46,17 @@
                     <div class="summary description" property="yui:description">
                         Create an instance of YAHOO.util.StyleSheet to encapsulate a css stylesheet.
 The constructor can be called using function or constructor syntax.
-<pre><code>var sheet = YAHOO.util.StyleSheet(..);</pre></code>
+<pre><code>var sheet = YAHOO.util.StyleSheet(..);</code></pre>
 or
-<pre><code>var sheet = new YAHOO.util.StyleSheet(..);</pre></code>
+<pre><code>var sheet = new YAHOO.util.StyleSheet(..);</code></pre>
 The first parameter passed can be any of the following things:
-<ul>
-<li>The desired string name to register a new empty sheet</li>
+<ul><li>The desired string name to register a new empty sheet</li>
 <li>The string name of an existing YAHOO.util.StyleSheet instance</li>
 <li>The unique yuiSSID generated for an existing YAHOO.util.StyleSheet instance</li>
 <li>The id of an existing <code>&lt;link&gt;</code> or <code>&lt;style&gt;</code> node</li>
 <li>The node reference for an existing <code>&lt;link&gt;</code> or <code>&lt;style&gt;</code> node</li>
 <li>A chunk of css text to create a new stylesheet from</li>
-</ul>
-<p>If a string is passed, StyleSheet will first look in its static name
+</ul><p>If a string is passed, StyleSheet will first look in its static name
 registry for an existing sheet, then in the DOM for an element with that id.
 If neither are found and the string contains the { character, it will be
 used as a the initial cssText for a new StyleSheet.  Otherwise, a new empty
@@ -101,8 +84,7 @@ text to create a populated instance.</p>
                                     )
                                 </code>
                                 <div class="description">
-                                        <dl rel="yui:parameters">
-                                            <dt>Parameters:</dt>
+                                        <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">seed</span>
                                                     &lt;<span property="yui:type">String|HTMLElement</span>&gt;
@@ -117,10 +99,7 @@ yuiSSID of a StyleSheet, or a string of css text (see above)</span>
                                                     <span property="yui:description">  OPTIONAL name to register instance for future static
 access</span>
                                                 </dd>
-                                        </dl>
-                                    
-                                    
-                                </div>
+                                        </dl></div>
                             </div>
                         </div>
                     </div>
@@ -142,8 +121,7 @@ access</span>
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -156,7 +134,7 @@ access</span>
                                     <div class="" rel="yui:method" resource="#method_disable">
                                     <h4>
                                         <a name="method_disable">disable</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -175,15 +153,12 @@ StyleSheet is disabled.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             StyleSheet
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the instance</dd>
-                                                </dl>
-
-                                            <div class="chainable">
+                                                </dl><div class="chainable">
                                                 <strong>Chainable:</strong> This method is chainable.
                                             </div>        
 
@@ -192,12 +167,11 @@ StyleSheet is disabled.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_enable">
                                     <h4>
                                         <a name="method_enable">enable</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -215,15 +189,12 @@ StyleSheet is disabled.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             StyleSheet
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the instance</dd>
-                                                </dl>
-
-                                            <div class="chainable">
+                                                </dl><div class="chainable">
                                                 <strong>Chainable:</strong> This method is chainable.
                                             </div>        
 
@@ -232,12 +203,11 @@ StyleSheet is disabled.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_getCssText">
                                     <h4>
                                         <a name="method_getCssText">getCssText</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -264,29 +234,21 @@ cssText will be returned.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">sel</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
                                                         </code>
                                                         <span property="yui:description">  Selector string</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_getId">
                                     <h4>
                                         <a name="method_getId">getId</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -304,26 +266,19 @@ cssText will be returned.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Number
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the static id</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_isEnabled">
                                     <h4>
                                         <a name="method_isEnabled">isEnabled</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -341,26 +296,19 @@ cssText will be returned.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">is it enabled?</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_set">
                                     <h4>
                                         <a name="method_set">set</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -389,16 +337,15 @@ have a corresponding rule in the sheet, it will be added.</p>
 formatted as CSS ("font-size: 10px;"), or an object collection of
 properties and their new values.  Object properties must be in
 JavaScript format ({ fontSize: "10px" }).</p>
-<p>The float style property will be set by any of &quot;float&quot;,
-&quot;styleFloat&quot;, or &quot;cssFloat&quot; if passed in the
+<p>The float style property will be set by any of "float",
+"styleFloat", or "cssFloat" if passed in the
 object map.  Use "float: left;" format when passing a CSS text
 string.</p>
                                         </div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">sel</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -412,17 +359,12 @@ string.</p>
                                                         <span property="yui:description">  Object literal of style properties and
 new values, or a string of cssText</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             StyleSheet
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the StyleSheet instance</dd>
-                                                </dl>
-
-                                            <div class="chainable">
+                                                </dl><div class="chainable">
                                                 <strong>Chainable:</strong> This method is chainable.
                                             </div>        
 
@@ -431,12 +373,11 @@ new values, or a string of cssText</span>
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_StyleSheet.isValidSelector">
                                     <h4>
                                         <a name="method_StyleSheet.isValidSelector">StyleSheet.isValidSelector</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                          static 
@@ -455,39 +396,28 @@ new values, or a string of cssText</span>
                                         <div class="description" property="yui:description">
                                             <p>Determines if a selector string is safe to use.  Used internally
 in set to prevent IE from locking up when attempting to add a rule for a
-&quot;bad selector&quot;.</p>
+"bad selector".</p>
 <p>Bad selectors are considered to be any string containing unescaped
-`~!@$%^&()+=|{}[];'"?< or space. Also forbidden are . or # followed by
-anything other than an alphanumeric.  Additionally -abc or .-abc or
-#_abc or '# ' all fail.  There are likely more failure cases, so
-please file a bug if you encounter one.</p>
-                                        </div>
+`~!@$%^&amp;()+=|{}[];'"?
+                                        </p></div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">sel</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
                                                         </code>
                                                         <span property="yui:description">  the selector string</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_StyleSheet.register">
                                     <h4>
                                         <a name="method_StyleSheet.register">StyleSheet.register</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                          static 
@@ -513,8 +443,7 @@ please file a bug if you encounter one.</p>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">name</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -527,29 +456,20 @@ please file a bug if you encounter one.</p>
                                                         </code>
                                                         <span property="yui:description">  The StyleSheet instance</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">false if no name or sheet is not a StyleSheet
 instance. true otherwise.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_StyleSheet.toCssText">
                                     <h4>
                                         <a name="method_StyleSheet.toCssText">StyleSheet.toCssText</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                          static 
@@ -579,8 +499,7 @@ extracted from the eventual target's current el.style.cssText.</p>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">css</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
@@ -593,28 +512,19 @@ extracted from the eventual target's current el.style.cssText.</p>
                                                         </code>
                                                         <span property="yui:description">  OPTIONAL starting cssText value</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the resulting cssText string</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_unset">
                                     <h4>
                                         <a name="method_unset">unset</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -641,15 +551,14 @@ their effect from the style cascade.</p>
 selectors and applied accordingly.  If there are no properties
 remaining in the rule after unsetting, the rule is removed.</p>
 <p>The style property or properties in the second parameter must be the
-<p>JavaScript style property names. E.g. fontSize rather than font-size.</p>
-<p>The float style property will be unset by any of &quot;float&quot;,
-&quot;styleFloat&quot;, or &quot;cssFloat&quot;.</p>
+</p><p>JavaScript style property names. E.g. fontSize rather than font-size.</p>
+<p>The float style property will be unset by any of "float",
+"styleFloat", or "cssFloat".</p>
                                         </div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">sel</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -662,17 +571,12 @@ remaining in the rule after unsetting, the rule is removed.</p>
                                                         </code>
                                                         <span property="yui:description">  style property name or Array of names</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             StyleSheet
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the StyleSheet instance</dd>
-                                                </dl>
-
-                                            <div class="chainable">
+                                                </dl><div class="chainable">
                                                 <strong>Chainable:</strong> This method is chainable.
                                             </div>        
 
@@ -681,8 +585,7 @@ remaining in the rule after unsetting, the rule is removed.</p>
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -704,8 +607,7 @@ remaining in the rule after unsetting, the rule is removed.</p>
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -753,34 +655,26 @@ remaining in the rule after unsetting, the rule is removed.</p>
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class="selected"><a href="YAHOO.util.StyleSheet.html" title="YAHOO.util.StyleSheet">YAHOO.util.StyleSheet</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="YAHOO.util.StyleSheet.html" title="YAHOO.util.StyleSheet">YAHOO.util.StyleSheet</a></li>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="stylesheet.js.html" title="stylesheet.js">stylesheet.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="stylesheet.js.html" title="stylesheet.js">stylesheet.js</a></li>
+                        </ul></div>
 
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#property_node" title="node">node</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="#property_node" title="node">node</a></li>
+                        </ul></div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#method_disable" title="disable">disable</a></li>
+                        <ul class="content"><li class=""><a href="#method_disable" title="disable">disable</a></li>
                                 <li class=""><a href="#method_enable" title="enable">enable</a></li>
                                 <li class=""><a href="#method_getCssText" title="getCssText">getCssText</a></li>
                                 <li class=""><a href="#method_getId" title="getId">getId</a></li>
@@ -790,8 +684,7 @@ remaining in the rule after unsetting, the rule is removed.</p>
                                 <li class=""><a href="#method_StyleSheet.register" title="StyleSheet.register">StyleSheet.register</a></li>
                                 <li class=""><a href="#method_StyleSheet.toCssText" title="StyleSheet.toCssText">StyleSheet.toCssText</a></li>
                                 <li class=""><a href="#method_unset" title="unset">unset</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -799,13 +692,10 @@ remaining in the rule after unsetting, the rule is removed.</p>
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.StyleSheet", "name": "disable", "url": "YAHOO.util.StyleSheet.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "enable", "url": "YAHOO.util.StyleSheet.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "getCssText", "url": "YAHOO.util.StyleSheet.html#method_getCssText", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "getId", "url": "YAHOO.util.StyleSheet.html#method_getId", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "isEnabled", "url": "YAHOO.util.StyleSheet.html#method_isEnabled", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "node", "url": "YAHOO.util.StyleSheet.html#property_node", "type": "property"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "set", "url": "YAHOO.util.StyleSheet.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "StyleSheet.isValidSelector", "url": "YAHOO.util.StyleSheet.html#method_StyleSheet.isValidSelector", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "StyleSheet.register", "url": "YAHOO.util.StyleSheet.html#method_StyleSheet.register", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "StyleSheet.toCssText", "url": "YAHOO.util.StyleSheet.html#method_StyleSheet.toCssText", "type": "method"}, {"access": "", "host": "YAHOO.util.StyleSheet", "name": "unset", "url": "YAHOO.util.StyleSheet.html#method_unset", "type": "method"}];
-</script>
-</body>
-</html>
+</script></body>

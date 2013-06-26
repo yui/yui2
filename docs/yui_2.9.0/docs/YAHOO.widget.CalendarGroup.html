@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: calendar  YAHOO.widget.CalendarGroup   (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: calendar  YAHOO.widget.CalendarGroup   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Calendar&nbsp; <span class="subtitle">2.9.0</span></h3>
+        <h3>Calendar  <span class="subtitle">2.9.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_calendar.html" title="calendar">calendar</a>
                  &gt; YAHOO.widget.CalendarGroup 
                 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,13 +22,11 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <h2>
                         
@@ -55,26 +40,20 @@
                     </h2>
                     <!-- class tree goes here -->
                     
-                        <dl class="subclasses" rel="yui:subclasses">
-                            <dt>Known Subclasses:</dt>
+                        <dl class="subclasses" rel="yui:subclasses"><dt>Known Subclasses:</dt>
                             <dd>
                                     <span rel="yui:subclass" resource="YAHOO.widget.Calendar2up.html">
                                     <a href="YAHOO.widget.Calendar2up.html" property="yui:name" title="YAHOO.widget.Calendar2up">YAHOO.widget.Calendar2up</a>
                                     </span>
                             </dd>
-                       </dl>
-                
-  
-
-                    <div class="summary description" property="yui:description">
+                       </dl><div class="summary description" property="yui:description">
                         YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates
 the ability to have multi-page calendar views that share a single dataset and are
 dependent on each other.
 The calendar group instance will refer to each of its elements using a 0-based index.
 For example, to construct the placeholder for a calendar group widget with id "cal1" and
 containerId of "cal1Container", the markup would be as follows:
-<xmp>
-<div id="cal1Container_0"></div>
+<xmp><div id="cal1Container_0"></div>
 <div id="cal1Container_1"></div>
 </xmp>
 The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
@@ -84,16 +63,14 @@ The CalendarGroup can be constructed by simply providing a container ID string,
 or a reference to a container DIV HTMLElement (the element needs to exist 
 in the document).
 E.g.:
-<xmp>
+</p><xmp>
 var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
 </xmp>
 or:
 <xmp>
 var containerDiv = YAHOO.util.Dom.get("calContainer");
 var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
-</xmp>
-</p>
-<p>
+</xmp><p>
 If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
 For example if an ID is not provided, and the container's ID is "calContainer", the CalendarGroup's ID will be set to "calContainer_t".
 </p>
@@ -119,8 +96,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                     )
                                 </code>
                                 <div class="description">
-                                        <dl rel="yui:parameters">
-                                            <dt>Parameters:</dt>
+                                        <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">id</span>
                                                     &lt;<span property="yui:type">String</span>&gt;
@@ -139,10 +115,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                                     </code>
                                                     <span property="yui:description"> optional The configuration object containing the initial configuration values for the CalendarGroup.</span>
                                                 </dd>
-                                        </dl>
-                                    
-                                    
-                                </div>
+                                        </dl></div>
                             </div>
                         </div>
                     </div>
@@ -164,8 +137,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_containerId">
                                     <h4><a name="property_containerId" property="yui:name">containerId</a>
                                         - <code><span property="yui:type">String</span></code>
@@ -179,8 +151,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_id">
                                     <h4><a name="property_id" property="yui:name">id</a>
                                         - <code><span property="yui:type">String</span></code>
@@ -194,8 +165,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_Locale">
                                     <h4><a name="property_Locale" property="yui:name">Locale</a>
                                         - <code><span property="yui:type">Object</span></code>
@@ -209,8 +179,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_Options">
                                     <h4><a name="property_Options" property="yui:name">Options</a>
                                         - <code><span property="yui:type">Object</span></code>
@@ -224,8 +193,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_pages">
                                     <h4><a name="property_pages" property="yui:name">pages</a>
                                         - <code><span property="yui:type">YAHOO.widget.Calendar[]</span></code>
@@ -239,8 +207,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private deprecated" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup._DEFAULT_CONFIG">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup._DEFAULT_CONFIG" property="yui:name">YAHOO.widget.CalendarGroup._DEFAULT_CONFIG</a>
                                         - <code>private static <span property="yui:type">Object</span></code>
@@ -257,8 +224,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         <strong>Deprecated:</strong> Made public. See the public DEFAULT_CONFIG property for details
                                     </div>        
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class=" deprecated" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup.CSS_2UPCLOSE">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_2UPCLOSE" property="yui:name">YAHOO.widget.CalendarGroup.CSS_2UPCLOSE</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -276,8 +242,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
 Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
                                     </div>        
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup.CSS_2UPTITLE">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_2UPTITLE" property="yui:name">YAHOO.widget.CalendarGroup.CSS_2UPTITLE</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -291,8 +256,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup.CSS_CONTAINER">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_CONTAINER" property="yui:name">YAHOO.widget.CalendarGroup.CSS_CONTAINER</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -306,8 +270,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP" property="yui:name">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -321,8 +284,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:property" resource="#property_YAHOO.widget.CalendarGroup.DEFAULT_CONFIG">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.DEFAULT_CONFIG" property="yui:name">YAHOO.widget.CalendarGroup.DEFAULT_CONFIG</a>
                                         - <code>static <span property="yui:type">Object An object with key/value pairs, the key being the 
@@ -344,8 +306,7 @@ modify the key string, unless they are overriding the Calendar implementation
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -358,7 +319,7 @@ modify the key string, unless they are overriding the Calendar implementation
                                     <div class="private" rel="yui:method" resource="#method__fixWidth">
                                     <h4>
                                         <a name="method__fixWidth">_fixWidth</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                          private 
                                         
@@ -383,12 +344,11 @@ modify the key string, unless they are overriding the Calendar implementation
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private" rel="yui:method" resource="#method__setMonthOnDate">
                                     <h4>
                                         <a name="method__setMonthOnDate">_setMonthOnDate</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                          private 
                                         
@@ -415,8 +375,7 @@ The Date object passed in is modified. It should be cloned before passing it int
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">date</span>
                                                         &lt;<span property="yui:type">Date</span>&gt;
@@ -429,21 +388,14 @@ The Date object passed in is modified. It should be cloned before passing it int
                                                         </code>
                                                         <span property="yui:description"> The month index to set</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_addMonthRenderer">
                                     <h4>
                                         <a name="method_addMonthRenderer">addMonthRenderer</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -467,13 +419,12 @@ The Date object passed in is modified. It should be cloned before passing it int
                                             Adds a month renderer to the render stack. The function reference passed to this method will be executed
 when a date cell matches the month passed to this method
 <p>NOTE: The contents of the cell set by the renderer will be added to the DOM as HTML. The custom renderer implementation should 
-escape markup used to set the cell contents, if coming from an external source.<p>
-                                        </div>
+escape markup used to set the cell contents, if coming from an external source.</p><p>
+                                        </p></div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">month</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
@@ -486,21 +437,14 @@ escape markup used to set the cell contents, if coming from an external source.<
                                                         </code>
                                                         <span property="yui:description"> The function executed to render cells that match the render rules for this renderer.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_addMonths">
                                     <h4>
                                         <a name="method_addMonths">addMonths</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -523,29 +467,21 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">count</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The number of months to add to the current calendar</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_addRenderer">
                                     <h4>
                                         <a name="method_addRenderer">addRenderer</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -569,13 +505,12 @@ calendar page date to the new month.
                                             Adds a renderer to the render stack. The function reference passed to this method will be executed
 when a date cell matches the conditions specified in the date string for this renderer.
 <p>NOTE: The contents of the cell set by the renderer will be added to the DOM as HTML. The custom renderer implementation should 
-escape markup used to set the cell contents, if coming from an external source.<p>
-                                        </div>
+escape markup used to set the cell contents, if coming from an external source.</p><p>
+                                        </p></div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">sDates</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -589,21 +524,14 @@ include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)</sp
                                                         </code>
                                                         <span property="yui:description"> The function executed to render cells that match the render rules for this renderer.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_addWeekdayRenderer">
                                     <h4>
                                         <a name="method_addWeekdayRenderer">addWeekdayRenderer</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -627,13 +555,12 @@ include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)</sp
                                             Adds a weekday renderer to the render stack. The function reference passed to this method will be executed
 when a date cell matches the weekday passed to this method.
 <p>NOTE: The contents of the cell set by the renderer will be added to the DOM as HTML. The custom renderer implementation should 
-escape HTML used to set the cell contents, if coming from an external source.<p>
-                                        </div>
+escape HTML used to set the cell contents, if coming from an external source.</p><p>
+                                        </p></div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">weekday</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
@@ -646,21 +573,14 @@ escape HTML used to set the cell contents, if coming from an external source.<p>
                                                         </code>
                                                         <span property="yui:description"> The function executed to render cells that match the render rules for this renderer.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_addYears">
                                     <h4>
                                         <a name="method_addYears">addYears</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -683,29 +603,21 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">count</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The number of years to add to the current calendar</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_callChildFunction">
                                     <h4>
                                         <a name="method_callChildFunction">callChildFunction</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -731,8 +643,7 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">fnName</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -745,21 +656,14 @@ calendar page date to the new month.
                                                         </code>
                                                         <span property="yui:description">  The arguments to pass to the function</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_clear">
                                     <h4>
                                         <a name="method_clear">clear</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -785,12 +689,11 @@ to the current month and year.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_configPageDate">
                                     <h4>
                                         <a name="method_configPageDate">configPageDate</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -820,8 +723,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">type</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -840,21 +742,14 @@ to the current month and year.
                                                         </code>
                                                         <span property="yui:description"> The scope object. For configuration handlers, this will usually equal the owner.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_configPages">
                                     <h4>
                                         <a name="method_configPages">configPages</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -884,8 +779,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">type</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -904,21 +798,14 @@ to the current month and year.
                                                         </code>
                                                         <span property="yui:description"> The scope object. For configuration handlers, this will usually equal the owner.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_configSelected">
                                     <h4>
                                         <a name="method_configSelected">configSelected</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -948,8 +835,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">type</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -968,21 +854,14 @@ to the current month and year.
                                                         </code>
                                                         <span property="yui:description"> The scope object. For configuration handlers, this will usually equal the owner.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_constructChild">
                                     <h4>
                                         <a name="method_constructChild">constructChild</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1013,8 +892,7 @@ calendar is to be used.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">id</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -1033,28 +911,19 @@ calendar is to be used.
                                                         </code>
                                                         <span property="yui:description">  The configuration object containing the Calendar's arguments</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             YAHOO.widget.Calendar
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The YAHOO.widget.Calendar instance that is constructed</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_delegateConfig">
                                     <h4>
                                         <a name="method_delegateConfig">delegateConfig</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1084,8 +953,7 @@ calendar is to be used.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">type</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -1104,21 +972,14 @@ calendar is to be used.
                                                         </code>
                                                         <span property="yui:description"> The scope object. For configuration handlers, this will usually equal the owner.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_deselect">
                                     <h4>
                                         <a name="method_deselect">deselect</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1142,8 +1003,7 @@ called for the changes to be reflected visually.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">date</span>
                                                         &lt;<span property="yui:type">String/Date/Date[]</span>&gt;
@@ -1153,28 +1013,19 @@ individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006
 Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
 This method can also take a JavaScript Date object or an array of Date objects.</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Date[]
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_deselectAll">
                                     <h4>
                                         <a name="method_deselectAll">deselectAll</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1192,8 +1043,7 @@ This method can also take a JavaScript Date object or an array of Date objects.<
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Date[]
                                                     </code></dt>
@@ -1201,20 +1051,14 @@ This method can also take a JavaScript Date object or an array of Date objects.<
 Assuming that this function executes properly, the return value should be an empty array.
 However, the empty array is returned for the sake of being able to check the selection status
 of the calendar.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_deselectCell">
                                     <h4>
                                         <a name="method_deselectCell">deselectCell</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1237,36 +1081,26 @@ deselectCell will deselect the cell at the specified index on each displayed Cal
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">cellIndex</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The index of the cell to deselect.</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Date[]
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_destroy">
                                     <h4>
                                         <a name="method_destroy">destroy</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1294,12 +1128,11 @@ CalendarGroup and the individual Calendar instances created for each page.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_getCalendarPage">
                                     <h4>
                                         <a name="method_getCalendarPage">getCalendarPage</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1322,37 +1155,27 @@ Returns null if no match is found.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">date</span>
                                                         &lt;<span property="yui:type">Date</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The JavaScript Date object for which a Calendar page is to be found.</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Calendar
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The Calendar page instance representing the month to which the date 
 belongs.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_getSelectedDates">
                                     <h4>
                                         <a name="method_getSelectedDates">getSelectedDates</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1370,25 +1193,18 @@ belongs.</dd>
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">An array of currently selected JavaScript Date objects.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_init">
                                     <h4>
                                         <a name="method_init">init</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1419,8 +1235,7 @@ group to be initialized properly.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">id</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -1439,21 +1254,14 @@ group to be initialized properly.
                                                         </code>
                                                         <span property="yui:description"> optional The configuration object containing the initial configuration values for the CalendarGroup.</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_initEvents">
                                     <h4>
                                         <a name="method_initEvents">initEvents</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1478,12 +1286,11 @@ group to be initialized properly.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_nextMonth">
                                     <h4>
                                         <a name="method_nextMonth">nextMonth</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1508,12 +1315,11 @@ group to be initialized properly.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_nextYear">
                                     <h4>
                                         <a name="method_nextYear">nextYear</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1538,12 +1344,11 @@ group to be initialized properly.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_previousMonth">
                                     <h4>
                                         <a name="method_previousMonth">previousMonth</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1568,12 +1373,11 @@ group to be initialized properly.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_previousYear">
                                     <h4>
                                         <a name="method_previousYear">previousYear</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1598,12 +1402,11 @@ group to be initialized properly.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_removeRenderers">
                                     <h4>
                                         <a name="method_removeRenderers">removeRenderers</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1630,12 +1433,11 @@ to see the changes applied.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_render">
                                     <h4>
                                         <a name="method_render">render</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1660,12 +1462,11 @@ to see the changes applied.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_renderFooter">
                                     <h4>
                                         <a name="method_renderFooter">renderFooter</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1691,12 +1492,11 @@ unimplemented.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_renderHeader">
                                     <h4>
                                         <a name="method_renderHeader">renderHeader</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1721,12 +1521,11 @@ unimplemented.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_reset">
                                     <h4>
                                         <a name="method_reset">reset</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1752,12 +1551,11 @@ sets the calendar to the initial selection(s).
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_select">
                                     <h4>
                                         <a name="method_select">select</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1781,8 +1579,7 @@ called for the changes to be reflected visually.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">date</span>
                                                         &lt;<span property="yui:type">String/Date/Date[]</span>&gt;
@@ -1792,28 +1589,19 @@ individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006
 Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
 This method can also take a JavaScript Date object or an array of Date objects.</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Date[]
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_selectCell">
                                     <h4>
                                         <a name="method_selectCell">selectCell</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1832,44 +1620,32 @@ This method can also take a JavaScript Date object or an array of Date objects.<
                                         <div class="description" property="yui:description">
                                             Selects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.
 The value of the MULTI_SELECT Configuration attribute will determine the set of dates which get selected. 
-<ul>
-<li>If MULTI_SELECT is false, selectCell will select the cell at the specified index for only the last displayed Calendar page.</li>
+<ul><li>If MULTI_SELECT is false, selectCell will select the cell at the specified index for only the last displayed Calendar page.</li>
 <li>If MULTI_SELECT is true, selectCell will select the cell at the specified index, on each displayed Calendar page.</li>
-</ul>
-                                        </div>
+</ul></div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">cellIndex</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The index of the cell to be selected.</span>
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code property="yui:return">
                                                             Date[]
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_setChildFunction">
                                     <h4>
                                         <a name="method_setChildFunction">setChildFunction</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1895,8 +1671,7 @@ The value of the MULTI_SELECT Configuration attribute will determine the set of 
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">fnName</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
@@ -1909,21 +1684,14 @@ The value of the MULTI_SELECT Configuration attribute will determine the set of 
                                                         </code>
                                                         <span property="yui:description">   The function to apply to each Calendar page object</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_setMonth">
                                     <h4>
                                         <a name="method_setMonth">setMonth</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1946,29 +1714,21 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">month</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description">  The numeric month, from 0 (January) to 11 (December)</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_setYear">
                                     <h4>
                                         <a name="method_setYear">setYear</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -1991,29 +1751,21 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">year</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description">  The numeric 4-digit year</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private" rel="yui:method" resource="#method_sub">
                                     <h4>
                                         <a name="method_sub">sub</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                          private 
                                         
@@ -2043,8 +1795,7 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">fn</span>
                                                         &lt;<span property="yui:type">Function</span>&gt;
@@ -2063,21 +1814,14 @@ page of the multi-page calendar, and all other months will be iterated appropria
                                                         </code>
                                                         <span property="yui:description"> Whether or not to apply scope correction</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_subtractMonths">
                                     <h4>
                                         <a name="method_subtractMonths">subtractMonths</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -2100,29 +1844,21 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">count</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The number of months to subtract from the current calendar</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_subtractYears">
                                     <h4>
                                         <a name="method_subtractYears">subtractYears</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -2145,29 +1881,21 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">count</span>
                                                         &lt;<span property="yui:type">Number</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The number of years to subtract from the current calendar</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:method" resource="#method_toString">
                                     <h4>
                                         <a name="method_toString">toString</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                         
                                         
@@ -2185,26 +1913,19 @@ calendar page date to the new month.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code property="yui:return">
                                                             String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">A string representation of the CalendarGroup object.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private" rel="yui:method" resource="#method_unsub">
                                     <h4>
                                         <a name="method_unsub">unsub</a></h4>
-                                    <div class="detail" >
+                                    <div class="detail">
                                         <code>
                                          private 
                                         
@@ -2230,8 +1951,7 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">fn</span>
                                                         &lt;<span property="yui:type">Function</span>&gt;
@@ -2244,17 +1964,10 @@ calendar page date to the new month.
                                                         </code>
                                                         <span property="yui:description"> The CustomEvent's scope object</span>
                                                         </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -2291,8 +2004,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeDestroyEvent">
                                     <h4>
                                         <a name="event_beforeDestroyEvent">beforeDestroyEvent</a></h4>
@@ -2320,8 +2032,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeHideEvent">
                                     <h4>
                                         <a name="event_beforeHideEvent">beforeHideEvent</a></h4>
@@ -2349,8 +2060,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeHideNavEvent">
                                     <h4>
                                         <a name="event_beforeHideNavEvent">beforeHideNavEvent</a></h4>
@@ -2378,8 +2088,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeRenderEvent">
                                     <h4>
                                         <a name="event_beforeRenderEvent">beforeRenderEvent</a></h4>
@@ -2407,8 +2116,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeRenderNavEvent">
                                     <h4>
                                         <a name="event_beforeRenderNavEvent">beforeRenderNavEvent</a></h4>
@@ -2436,8 +2144,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeSelectEvent">
                                     <h4>
                                         <a name="event_beforeSelectEvent">beforeSelectEvent</a></h4>
@@ -2465,8 +2172,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeShowEvent">
                                     <h4>
                                         <a name="event_beforeShowEvent">beforeShowEvent</a></h4>
@@ -2494,8 +2200,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_beforeShowNavEvent">
                                     <h4>
                                         <a name="event_beforeShowNavEvent">beforeShowNavEvent</a></h4>
@@ -2523,8 +2228,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_changePageEvent">
                                     <h4>
                                         <a name="event_changePageEvent">changePageEvent</a></h4>
@@ -2552,8 +2256,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_clearEvent">
                                     <h4>
                                         <a name="event_clearEvent">clearEvent</a></h4>
@@ -2581,8 +2284,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_deselectEvent">
                                     <h4>
                                         <a name="event_deselectEvent">deselectEvent</a></h4>
@@ -2610,8 +2312,7 @@ calendar page date to the new month.
                                         <div class="description">
 
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">Array</span>
                                                                 &lt;<span property="yui:type">Array</span>&gt;
@@ -2619,14 +2320,10 @@ calendar page date to the new month.
                                                             <span property="yui:description"> of Date field arrays in the format [YYYY, MM, DD].</span>
                                                         </dd>
                                                         
-                                                </dl>
-
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_destroyEvent">
                                     <h4>
                                         <a name="event_destroyEvent">destroyEvent</a></h4>
@@ -2658,8 +2355,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_hideEvent">
                                     <h4>
                                         <a name="event_hideEvent">hideEvent</a></h4>
@@ -2687,8 +2383,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_hideNavEvent">
                                     <h4>
                                         <a name="event_hideNavEvent">hideNavEvent</a></h4>
@@ -2716,8 +2411,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_renderEvent">
                                     <h4>
                                         <a name="event_renderEvent">renderEvent</a></h4>
@@ -2745,8 +2439,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_renderNavEvent">
                                     <h4>
                                         <a name="event_renderNavEvent">renderNavEvent</a></h4>
@@ -2774,8 +2467,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_resetEvent">
                                     <h4>
                                         <a name="event_resetEvent">resetEvent</a></h4>
@@ -2803,8 +2495,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_selectEvent">
                                     <h4>
                                         <a name="event_selectEvent">selectEvent</a></h4>
@@ -2832,8 +2523,7 @@ state.
                                         <div class="description">
 
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
+                                                <dl rel="yui:parameters"><dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">Array</span>
                                                                 &lt;<span property="yui:type">Array</span>&gt;
@@ -2841,14 +2531,10 @@ state.
                                                             <span property="yui:description"> of Date field arrays in the format [YYYY, MM, DD].</span>
                                                         </dd>
                                                         
-                                                </dl>
-
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_showEvent">
                                     <h4>
                                         <a name="event_showEvent">showEvent</a></h4>
@@ -2876,8 +2562,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="" rel="yui:event" resource="#event_showNavEvent">
                                     <h4>
                                         <a name="event_showNavEvent">showNavEvent</a></h4>
@@ -2905,8 +2590,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -2932,8 +2616,7 @@ state.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_DATE_DELIMITER">
                                     <h4><a name="config_DATE_DELIMITER">DATE_DELIMITER</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -2949,8 +2632,7 @@ state.
                                         Default Value: ","
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_DATE_FIELD_DELIMITER">
                                     <h4><a name="config_DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -2966,8 +2648,7 @@ state.
                                         Default Value: "/"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_DATE_RANGE_DELIMITER">
                                     <h4><a name="config_DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -2983,8 +2664,7 @@ state.
                                         Default Value: "-"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_HIDE_BLANK_WEEKS">
                                     <h4><a name="config_HIDE_BLANK_WEEKS">HIDE_BLANK_WEEKS</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3000,8 +2680,7 @@ state.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_iframe">
                                     <h4><a name="config_iframe">iframe</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3019,8 +2698,7 @@ enabled if required.
                                         Default Value: true for IE6 and below, false for all other browsers
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_LOCALE_MONTHS">
                                     <h4><a name="config_LOCALE_MONTHS">LOCALE_MONTHS</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3036,8 +2714,7 @@ enabled if required.
                                         Default Value: "long"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_LOCALE_WEEKDAYS">
                                     <h4><a name="config_LOCALE_WEEKDAYS">LOCALE_WEEKDAYS</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3053,8 +2730,7 @@ enabled if required.
                                         Default Value: "short"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_maxdate">
                                     <h4><a name="config_maxdate">maxdate</a>
                                         <code>- <span property="yui:type">String | Date</span></code>
@@ -3070,8 +2746,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MD_DAY_POSITION">
                                     <h4><a name="config_MD_DAY_POSITION">MD_DAY_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3087,8 +2762,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MD_MONTH_POSITION">
                                     <h4><a name="config_MD_MONTH_POSITION">MD_MONTH_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3104,8 +2778,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MDY_DAY_POSITION">
                                     <h4><a name="config_MDY_DAY_POSITION">MDY_DAY_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3121,8 +2794,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MDY_MONTH_POSITION">
                                     <h4><a name="config_MDY_MONTH_POSITION">MDY_MONTH_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3138,8 +2810,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MDY_YEAR_POSITION">
                                     <h4><a name="config_MDY_YEAR_POSITION">MDY_YEAR_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3155,8 +2826,7 @@ enabled if required.
                                         Default Value: 3
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_mindate">
                                     <h4><a name="config_mindate">mindate</a>
                                         <code>- <span property="yui:type">String | Date</span></code>
@@ -3172,8 +2842,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MONTHS_LONG">
                                     <h4><a name="config_MONTHS_LONG">MONTHS_LONG</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3189,8 +2858,7 @@ enabled if required.
                                         Default Value: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MONTHS_SHORT">
                                     <h4><a name="config_MONTHS_SHORT">MONTHS_SHORT</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3206,8 +2874,7 @@ enabled if required.
                                         Default Value: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MULTI_SELECT">
                                     <h4><a name="config_MULTI_SELECT">MULTI_SELECT</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3223,8 +2890,7 @@ enabled if required.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_LABEL_MONTH_POSITION">
                                     <h4><a name="config_MY_LABEL_MONTH_POSITION">MY_LABEL_MONTH_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3240,8 +2906,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_LABEL_MONTH_SUFFIX">
                                     <h4><a name="config_MY_LABEL_MONTH_SUFFIX">MY_LABEL_MONTH_SUFFIX</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3257,8 +2922,7 @@ enabled if required.
                                         Default Value: " "
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_LABEL_YEAR_POSITION">
                                     <h4><a name="config_MY_LABEL_YEAR_POSITION">MY_LABEL_YEAR_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3274,8 +2938,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_LABEL_YEAR_SUFFIX">
                                     <h4><a name="config_MY_LABEL_YEAR_SUFFIX">MY_LABEL_YEAR_SUFFIX</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3291,8 +2954,7 @@ enabled if required.
                                         Default Value: ""
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_MONTH_POSITION">
                                     <h4><a name="config_MY_MONTH_POSITION">MY_MONTH_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3308,8 +2970,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_MY_YEAR_POSITION">
                                     <h4><a name="config_MY_YEAR_POSITION">MY_YEAR_POSITION</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3325,8 +2986,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class=" deprecated" rel="yui:attribute" resource="#config_NAV_ARROW_LEFT">
                                     <h4><a name="config_NAV_ARROW_LEFT">NAV_ARROW_LEFT</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3345,8 +3005,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class=" deprecated" rel="yui:attribute" resource="#config_NAV_ARROW_RIGHT">
                                     <h4><a name="config_NAV_ARROW_RIGHT">NAV_ARROW_RIGHT</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3365,8 +3024,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_navigator">
                                     <h4><a name="config_navigator">navigator</a>
                                         <code>- <span property="yui:type">{Object|Boolean}</span></code>
@@ -3386,21 +3044,17 @@ This property can also be set to an object literal containing configuration prop
 The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
 Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
 </p>
-<dl>
-<dt>strings</dt>
+<dl><dt>strings</dt>
 <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI. The strings are inserted into the DOM as HTML, and should be escaped by the implementor if coming from an external source. 
-<dl>
-<dt>month</dt><dd><em>HTML</em> : The markup to use for the month label. Defaults to "Month".</dd>
+<dl><dt>month</dt><dd><em>HTML</em> : The markup to use for the month label. Defaults to "Month".</dd>
 <dt>year</dt><dd><em>HTML</em> : The markup to use for the year label. Defaults to "Year".</dd>
 <dt>submit</dt><dd><em>HTML</em> : The markup to use for the submit button label. Defaults to "Okay".</dd>
 <dt>cancel</dt><dd><em>HTML</em> : The markup to use for the cancel button label. Defaults to "Cancel".</dd>
 <dt>invalidYear</dt><dd><em>HTML</em> : The markup to use for invalid year values. Defaults to "Year needs to be a number".</dd>
-</dl>
-</dd>
+</dl></dd>
 <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
 <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
-</dl>
-<p>E.g.</p>
+</dl><p>E.g.</p>
 <pre>
 var navConfig = {
 strings: {
@@ -3422,8 +3076,7 @@ initialFocus: "month"
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_OOM_SELECT">
                                     <h4><a name="config_OOM_SELECT">OOM_SELECT</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3439,8 +3092,7 @@ initialFocus: "month"
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_pagedate">
                                     <h4><a name="config_pagedate">pagedate</a>
                                         <code>- <span property="yui:type">String | Date</span></code>
@@ -3456,8 +3108,7 @@ initialFocus: "month"
                                         Default Value: Today's date
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_pages">
                                     <h4><a name="config_pages">pages</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3473,8 +3124,7 @@ initialFocus: "month"
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_selected">
                                     <h4><a name="config_selected">selected</a>
                                         <code>- <span property="yui:type">String</span></code>
@@ -3490,8 +3140,7 @@ initialFocus: "month"
                                         Default Value: []
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_SHOW_WEEK_FOOTER">
                                     <h4><a name="config_SHOW_WEEK_FOOTER">SHOW_WEEK_FOOTER</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3507,8 +3156,7 @@ initialFocus: "month"
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_SHOW_WEEK_HEADER">
                                     <h4><a name="config_SHOW_WEEK_HEADER">SHOW_WEEK_HEADER</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3524,8 +3172,7 @@ initialFocus: "month"
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_SHOW_WEEKDAYS">
                                     <h4><a name="config_SHOW_WEEKDAYS">SHOW_WEEKDAYS</a>
                                         <code>- <span property="yui:type">Boolean</span></code>
@@ -3541,8 +3188,7 @@ initialFocus: "month"
                                         Default Value: true
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_START_WEEKDAY">
                                     <h4><a name="config_START_WEEKDAY">START_WEEKDAY</a>
                                         <code>- <span property="yui:type">number</span></code>
@@ -3558,8 +3204,7 @@ initialFocus: "month"
                                         Default Value: 0
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_strings">
                                     <h4><a name="config_strings">strings</a>
                                         <code>- <span property="yui:type">{Object}</span></code>
@@ -3573,15 +3218,12 @@ initialFocus: "month"
      
                                     <div class="default">
                                         Default Value: An object with the properties shown below:
-<dl>
-<dt>previousMonth</dt><dd><em>HTML</em> : The markup to use for the "Previous Month" navigation label. Defaults to "Previous Month". The string is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</dd>
+<dl><dt>previousMonth</dt><dd><em>HTML</em> : The markup to use for the "Previous Month" navigation label. Defaults to "Previous Month". The string is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</dd>
 <dt>nextMonth</dt><dd><em>HTML</em> : The markup to use for the "Next Month" navigation UI. Defaults to "Next Month". The string is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</dd>
 <dt>close</dt><dd><em>HTML</em> : The markup to use for the close button label. Defaults to "Close". The string is added to the DOM as HTML, and should be escaped by the implementor if coming from an external source.</dd>
-</dl>
-                                    </div>        
+</dl></div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_title">
                                     <h4><a name="config_title">title</a>
                                         <code>- <span property="yui:type">HTML</span></code>
@@ -3597,8 +3239,7 @@ initialFocus: "month"
                                         Default Value: ""
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_today">
                                     <h4><a name="config_today">today</a>
                                         <code>- <span property="yui:type">Date</span></code>
@@ -3614,8 +3255,7 @@ initialFocus: "month"
                                         Default Value: Today's date
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_WEEKDAYS_1CHAR">
                                     <h4><a name="config_WEEKDAYS_1CHAR">WEEKDAYS_1CHAR</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3631,8 +3271,7 @@ initialFocus: "month"
                                         Default Value: ["S", "M", "T", "W", "T", "F", "S"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_WEEKDAYS_LONG">
                                     <h4><a name="config_WEEKDAYS_LONG">WEEKDAYS_LONG</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3648,8 +3287,7 @@ initialFocus: "month"
                                         Default Value: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_WEEKDAYS_MEDIUM">
                                     <h4><a name="config_WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3665,8 +3303,7 @@ initialFocus: "month"
                                         Default Value: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_WEEKDAYS_SHORT">
                                     <h4><a name="config_WEEKDAYS_SHORT">WEEKDAYS_SHORT</a>
                                         <code>- <span property="yui:type">HTML[]</span></code>
@@ -3682,8 +3319,7 @@ initialFocus: "month"
                                         Default Value: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="" rel="yui:attribute" resource="#config_year_offset">
                                     <h4><a name="config_year_offset">year_offset</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -3701,8 +3337,7 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                         Default Value: 0
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
 
                             </div>
                         </div>
@@ -3716,8 +3351,7 @@ methods will always represent the Gregorian year, in order to maintain date/mont
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class="selected"><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -3765,33 +3399,27 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Calendar.html" title="YAHOO.widget.Calendar">YAHOO.widget.Calendar</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Calendar.html" title="YAHOO.widget.Calendar">YAHOO.widget.Calendar</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar2up.html" title="YAHOO.widget.Calendar2up">YAHOO.widget.Calendar2up</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar_Core.html" title="YAHOO.widget.Calendar_Core">YAHOO.widget.Calendar_Core</a></li>
                                 <li class="selected"><a href="YAHOO.widget.CalendarGroup.html" title="YAHOO.widget.CalendarGroup">YAHOO.widget.CalendarGroup</a></li>
                                 <li class=""><a href="YAHOO.widget.CalendarNavigator.html" title="YAHOO.widget.CalendarNavigator">YAHOO.widget.CalendarNavigator</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Calendar.js.html" title="Calendar.js">Calendar.js</a></li>
+                        <ul class="content"><li class=""><a href="Calendar.js.html" title="Calendar.js">Calendar.js</a></li>
                                 <li class=""><a href="CalendarGroup.js.html" title="CalendarGroup.js">CalendarGroup.js</a></li>
                                 <li class=""><a href="CalendarNavigator.js.html" title="CalendarNavigator.js">CalendarNavigator.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#property_cfg" title="cfg">cfg</a></li>
+                        <ul class="content"><li class=""><a href="#property_cfg" title="cfg">cfg</a></li>
                                 <li class=""><a href="#property_containerId" title="containerId">containerId</a></li>
                                 <li class=""><a href="#property_id" title="id">id</a></li>
                                 <li class=""><a href="#property_Locale" title="Locale">Locale</a></li>
@@ -3803,13 +3431,11 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                 <li class=""><a href="#property_YAHOO.widget.CalendarGroup.CSS_CONTAINER" title="YAHOO.widget.CalendarGroup.CSS_CONTAINER">YAHOO.widget.CalendarGroup.CSS_CONTAINER</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP" title="YAHOO.widget.CalendarGroup.CSS_MULTI_UP">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.CalendarGroup.DEFAULT_CONFIG" title="YAHOO.widget.CalendarGroup.DEFAULT_CONFIG">YAHOO.widget.CalendarGroup.DEFAULT_CONFIG</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class="private"><a href="#method__fixWidth" title="_fixWidth">_fixWidth</a></li>
+                        <ul class="content"><li class="private"><a href="#method__fixWidth" title="_fixWidth">_fixWidth</a></li>
                                 <li class="private"><a href="#method__setMonthOnDate" title="_setMonthOnDate">_setMonthOnDate</a></li>
                                 <li class=""><a href="#method_addMonthRenderer" title="addMonthRenderer">addMonthRenderer</a></li>
                                 <li class=""><a href="#method_addMonths" title="addMonths">addMonths</a></li>
@@ -3850,13 +3476,11 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                 <li class=""><a href="#method_subtractYears" title="subtractYears">subtractYears</a></li>
                                 <li class=""><a href="#method_toString" title="toString">toString</a></li>
                                 <li class="private"><a href="#method_unsub" title="unsub">unsub</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="eventsList" class="module">
                         <h4>Events</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#event_beforeDeselectEvent" title="beforeDeselectEvent">beforeDeselectEvent</a></li>
+                        <ul class="content"><li class=""><a href="#event_beforeDeselectEvent" title="beforeDeselectEvent">beforeDeselectEvent</a></li>
                                 <li class=""><a href="#event_beforeDestroyEvent" title="beforeDestroyEvent">beforeDestroyEvent</a></li>
                                 <li class=""><a href="#event_beforeHideEvent" title="beforeHideEvent">beforeHideEvent</a></li>
                                 <li class=""><a href="#event_beforeHideNavEvent" title="beforeHideNavEvent">beforeHideNavEvent</a></li>
@@ -3877,13 +3501,11 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                 <li class=""><a href="#event_selectEvent" title="selectEvent">selectEvent</a></li>
                                 <li class=""><a href="#event_showEvent" title="showEvent">showEvent</a></li>
                                 <li class=""><a href="#event_showNavEvent" title="showNavEvent">showNavEvent</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="configList" class="module">
                         <h4>Configuration Attributes</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#config_close" title="close">close</a></li>
+                        <ul class="content"><li class=""><a href="#config_close" title="close">close</a></li>
                                 <li class=""><a href="#config_DATE_DELIMITER" title="DATE_DELIMITER">DATE_DELIMITER</a></li>
                                 <li class=""><a href="#config_DATE_FIELD_DELIMITER" title="DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a></li>
                                 <li class=""><a href="#config_DATE_RANGE_DELIMITER" title="DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a></li>
@@ -3926,20 +3548,16 @@ methods will always represent the Gregorian year, in order to maintain date/mont
                                 <li class=""><a href="#config_WEEKDAYS_MEDIUM" title="WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a></li>
                                 <li class=""><a href="#config_WEEKDAYS_SHORT" title="WEEKDAYS_SHORT">WEEKDAYS_SHORT</a></li>
                                 <li class=""><a href="#config_year_offset" title="year_offset">year_offset</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
             </div>
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2011 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2011 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Calendar", "name": "addMonthRenderer", "url": "YAHOO.widget.Calendar.html#method_addMonthRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "addMonthRenderer", "url": "YAHOO.widget.CalendarGroup.html#method_addMonthRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "addMonths", "url": "YAHOO.widget.Calendar.html#method_addMonths", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "addMonths", "url": "YAHOO.widget.CalendarGroup.html#method_addMonths", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_addRenderer", "url": "YAHOO.widget.Calendar.html#method__addRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "addRenderer", "url": "YAHOO.widget.Calendar.html#method_addRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "addRenderer", "url": "YAHOO.widget.CalendarGroup.html#method_addRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "addWeekdayRenderer", "url": "YAHOO.widget.Calendar.html#method_addWeekdayRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "addWeekdayRenderer", "url": "YAHOO.widget.CalendarGroup.html#method_addWeekdayRenderer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "addYears", "url": "YAHOO.widget.Calendar.html#method_addYears", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "addYears", "url": "YAHOO.widget.CalendarGroup.html#method_addYears", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "applyListeners", "url": "YAHOO.widget.Calendar.html#method_applyListeners", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "applyNavListeners", "url": "YAHOO.widget.Calendar.html#method_applyNavListeners", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeDeselectEvent", "url": "YAHOO.widget.Calendar.html#event_beforeDeselectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeDeselectEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeDeselectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeDestroyEvent", "url": "YAHOO.widget.Calendar.html#event_beforeDestroyEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeDestroyEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeDestroyEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeHideEvent", "url": "YAHOO.widget.Calendar.html#event_beforeHideEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeHideEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeHideEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeHideNavEvent", "url": "YAHOO.widget.Calendar.html#event_beforeHideNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeHideNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeHideNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeRenderEvent", "url": "YAHOO.widget.Calendar.html#event_beforeRenderEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeRenderEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeRenderEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeRenderNavEvent", "url": "YAHOO.widget.Calendar.html#event_beforeRenderNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeRenderNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeRenderNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeSelectEvent", "url": "YAHOO.widget.Calendar.html#event_beforeSelectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeSelectEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeSelectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeShowEvent", "url": "YAHOO.widget.Calendar.html#event_beforeShowEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeShowEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeShowEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "beforeShowNavEvent", "url": "YAHOO.widget.Calendar.html#event_beforeShowNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "beforeShowNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_beforeShowNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "browser", "url": "YAHOO.widget.Calendar.html#property_browser", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "buildDayLabel", "url": "YAHOO.widget.Calendar.html#method_buildDayLabel", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_buildMonthLabel", "url": "YAHOO.widget.Calendar.html#method__buildMonthLabel", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "buildMonthLabel", "url": "YAHOO.widget.Calendar.html#method_buildMonthLabel", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "buildWeekdays", "url": "YAHOO.widget.Calendar.html#method_buildWeekdays", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "callChildFunction", "url": "YAHOO.widget.CalendarGroup.html#method_callChildFunction", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "cellDates", "url": "YAHOO.widget.Calendar.html#property_cellDates", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "cells", "url": "YAHOO.widget.Calendar.html#property_cells", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "cfg", "url": "YAHOO.widget.Calendar.html#property_cfg", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "cfg", "url": "YAHOO.widget.CalendarGroup.html#property_cfg", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "changePageEvent", "url": "YAHOO.widget.Calendar.html#event_changePageEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "changePageEvent", "url": "YAHOO.widget.CalendarGroup.html#event_changePageEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "clear", "url": "YAHOO.widget.Calendar.html#method_clear", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "clear", "url": "YAHOO.widget.CalendarGroup.html#method_clear", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "clearAllBodyCellStyles", "url": "YAHOO.widget.Calendar.html#method_clearAllBodyCellStyles", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "clearElement", "url": "YAHOO.widget.Calendar.html#method_clearElement", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "clearEvent", "url": "YAHOO.widget.Calendar.html#event_clearEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "clearEvent", "url": "YAHOO.widget.CalendarGroup.html#event_clearEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "close", "url": "YAHOO.widget.Calendar.html#config_close", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "close", "url": "YAHOO.widget.CalendarGroup.html#config_close", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "Config", "url": "YAHOO.widget.Calendar.html#property_Config", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configClose", "url": "YAHOO.widget.Calendar.html#method_configClose", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configIframe", "url": "YAHOO.widget.Calendar.html#method_configIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configLocale", "url": "YAHOO.widget.Calendar.html#method_configLocale", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configLocaleValues", "url": "YAHOO.widget.Calendar.html#method_configLocaleValues", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configMaxDate", "url": "YAHOO.widget.Calendar.html#method_configMaxDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configMinDate", "url": "YAHOO.widget.Calendar.html#method_configMinDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configNavigator", "url": "YAHOO.widget.Calendar.html#method_configNavigator", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configOptions", "url": "YAHOO.widget.Calendar.html#method_configOptions", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configPageDate", "url": "YAHOO.widget.Calendar.html#method_configPageDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "configPageDate", "url": "YAHOO.widget.CalendarGroup.html#method_configPageDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "configPages", "url": "YAHOO.widget.CalendarGroup.html#method_configPages", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configSelected", "url": "YAHOO.widget.Calendar.html#method_configSelected", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "configSelected", "url": "YAHOO.widget.CalendarGroup.html#method_configSelected", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configStrings", "url": "YAHOO.widget.Calendar.html#method_configStrings", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configTitle", "url": "YAHOO.widget.Calendar.html#method_configTitle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "configToday", "url": "YAHOO.widget.Calendar.html#method_configToday", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "constructChild", "url": "YAHOO.widget.CalendarGroup.html#method_constructChild", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "containerId", "url": "YAHOO.widget.Calendar.html#property_containerId", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "containerId", "url": "YAHOO.widget.CalendarGroup.html#property_containerId", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "createCloseButton", "url": "YAHOO.widget.Calendar.html#method_createCloseButton", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "createTitleBar", "url": "YAHOO.widget.Calendar.html#method_createTitleBar", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "DATE_DELIMITER", "url": "YAHOO.widget.Calendar.html#config_DATE_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "DATE_DELIMITER", "url": "YAHOO.widget.CalendarGroup.html#config_DATE_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "DATE_FIELD_DELIMITER", "url": "YAHOO.widget.Calendar.html#config_DATE_FIELD_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "DATE_FIELD_DELIMITER", "url": "YAHOO.widget.CalendarGroup.html#config_DATE_FIELD_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "DATE_RANGE_DELIMITER", "url": "YAHOO.widget.Calendar.html#config_DATE_RANGE_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "DATE_RANGE_DELIMITER", "url": "YAHOO.widget.CalendarGroup.html#config_DATE_RANGE_DELIMITER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "delegateConfig", "url": "YAHOO.widget.CalendarGroup.html#method_delegateConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "deselect", "url": "YAHOO.widget.Calendar.html#method_deselect", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "deselect", "url": "YAHOO.widget.CalendarGroup.html#method_deselect", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "deselectAll", "url": "YAHOO.widget.Calendar.html#method_deselectAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "deselectAll", "url": "YAHOO.widget.CalendarGroup.html#method_deselectAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "deselectCell", "url": "YAHOO.widget.Calendar.html#method_deselectCell", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "deselectCell", "url": "YAHOO.widget.CalendarGroup.html#method_deselectCell", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "deselectEvent", "url": "YAHOO.widget.Calendar.html#event_deselectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "deselectEvent", "url": "YAHOO.widget.CalendarGroup.html#event_deselectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "destroy", "url": "YAHOO.widget.Calendar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "destroy", "url": "YAHOO.widget.CalendarGroup.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "destroyEvent", "url": "YAHOO.widget.Calendar.html#event_destroyEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "destroyEvent", "url": "YAHOO.widget.CalendarGroup.html#event_destroyEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "doCellMouseOut", "url": "YAHOO.widget.Calendar.html#method_doCellMouseOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "doCellMouseOver", "url": "YAHOO.widget.Calendar.html#method_doCellMouseOver", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "domEventMap", "url": "YAHOO.widget.Calendar.html#property_domEventMap", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "doNextMonthNav", "url": "YAHOO.widget.Calendar.html#method_doNextMonthNav", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "doPreviousMonthNav", "url": "YAHOO.widget.Calendar.html#method_doPreviousMonthNav", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "doSelectCell", "url": "YAHOO.widget.Calendar.html#method_doSelectCell", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_fieldArraysAreEqual", "url": "YAHOO.widget.Calendar.html#method__fieldArraysAreEqual", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CalendarGroup", "name": "_fixWidth", "url": "YAHOO.widget.CalendarGroup.html#method__fixWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "getCalendarPage", "url": "YAHOO.widget.CalendarGroup.html#method_getCalendarPage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "getCellIndex", "url": "YAHOO.widget.Calendar.html#method_getCellIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "getDateByCellId", "url": "YAHOO.widget.Calendar.html#method_getDateByCellId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "getDateFieldsByCellId", "url": "YAHOO.widget.Calendar.html#method_getDateFieldsByCellId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "getIndexFromId", "url": "YAHOO.widget.Calendar.html#method_getIndexFromId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "getSelectedDates", "url": "YAHOO.widget.Calendar.html#method_getSelectedDates", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "getSelectedDates", "url": "YAHOO.widget.CalendarGroup.html#method_getSelectedDates", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "hide", "url": "YAHOO.widget.Calendar.html#method_hide", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "HIDE_BLANK_WEEKS", "url": "YAHOO.widget.Calendar.html#config_HIDE_BLANK_WEEKS", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "HIDE_BLANK_WEEKS", "url": "YAHOO.widget.CalendarGroup.html#config_HIDE_BLANK_WEEKS", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "hideEvent", "url": "YAHOO.widget.Calendar.html#event_hideEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "hideEvent", "url": "YAHOO.widget.CalendarGroup.html#event_hideEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "hideNavEvent", "url": "YAHOO.widget.Calendar.html#event_hideNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "hideNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_hideNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "id", "url": "YAHOO.widget.Calendar.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "id", "url": "YAHOO.widget.CalendarGroup.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "iframe", "url": "YAHOO.widget.Calendar.html#config_iframe", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "iframe", "url": "YAHOO.widget.CalendarGroup.html#config_iframe", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "index", "url": "YAHOO.widget.Calendar.html#property_index", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_indexOfSelectedFieldArray", "url": "YAHOO.widget.Calendar.html#method__indexOfSelectedFieldArray", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "init", "url": "YAHOO.widget.Calendar.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "init", "url": "YAHOO.widget.CalendarGroup.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "initEvents", "url": "YAHOO.widget.Calendar.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "initEvents", "url": "YAHOO.widget.CalendarGroup.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "initStyles", "url": "YAHOO.widget.Calendar.html#method_initStyles", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "isDateOOB", "url": "YAHOO.widget.Calendar.html#method_isDateOOB", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "isDateOOM", "url": "YAHOO.widget.Calendar.html#method_isDateOOM", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Locale", "url": "YAHOO.widget.Calendar.html#property_Locale", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "Locale", "url": "YAHOO.widget.CalendarGroup.html#property_Locale", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "LOCALE_MONTHS", "url": "YAHOO.widget.Calendar.html#config_LOCALE_MONTHS", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "LOCALE_MONTHS", "url": "YAHOO.widget.CalendarGroup.html#config_LOCALE_MONTHS", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "LOCALE_WEEKDAYS", "url": "YAHOO.widget.Calendar.html#config_LOCALE_WEEKDAYS", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "LOCALE_WEEKDAYS", "url": "YAHOO.widget.CalendarGroup.html#config_LOCALE_WEEKDAYS", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "maxdate", "url": "YAHOO.widget.Calendar.html#config_maxdate", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "maxdate", "url": "YAHOO.widget.CalendarGroup.html#config_maxdate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MD_DAY_POSITION", "url": "YAHOO.widget.Calendar.html#config_MD_DAY_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MD_DAY_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MD_DAY_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MD_MONTH_POSITION", "url": "YAHOO.widget.Calendar.html#config_MD_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MD_MONTH_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MD_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MDY_DAY_POSITION", "url": "YAHOO.widget.Calendar.html#config_MDY_DAY_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MDY_DAY_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MDY_DAY_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MDY_MONTH_POSITION", "url": "YAHOO.widget.Calendar.html#config_MDY_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MDY_MONTH_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MDY_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MDY_YEAR_POSITION", "url": "YAHOO.widget.Calendar.html#config_MDY_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MDY_YEAR_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MDY_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "mindate", "url": "YAHOO.widget.Calendar.html#config_mindate", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "mindate", "url": "YAHOO.widget.CalendarGroup.html#config_mindate", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MONTHS_LONG", "url": "YAHOO.widget.Calendar.html#config_MONTHS_LONG", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MONTHS_LONG", "url": "YAHOO.widget.CalendarGroup.html#config_MONTHS_LONG", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MONTHS_SHORT", "url": "YAHOO.widget.Calendar.html#config_MONTHS_SHORT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MONTHS_SHORT", "url": "YAHOO.widget.CalendarGroup.html#config_MONTHS_SHORT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MULTI_SELECT", "url": "YAHOO.widget.Calendar.html#config_MULTI_SELECT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MULTI_SELECT", "url": "YAHOO.widget.CalendarGroup.html#config_MULTI_SELECT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_LABEL_MONTH_POSITION", "url": "YAHOO.widget.Calendar.html#config_MY_LABEL_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_LABEL_MONTH_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MY_LABEL_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_LABEL_MONTH_SUFFIX", "url": "YAHOO.widget.Calendar.html#config_MY_LABEL_MONTH_SUFFIX", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_LABEL_MONTH_SUFFIX", "url": "YAHOO.widget.CalendarGroup.html#config_MY_LABEL_MONTH_SUFFIX", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_LABEL_YEAR_POSITION", "url": "YAHOO.widget.Calendar.html#config_MY_LABEL_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_LABEL_YEAR_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MY_LABEL_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_LABEL_YEAR_SUFFIX", "url": "YAHOO.widget.Calendar.html#config_MY_LABEL_YEAR_SUFFIX", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_LABEL_YEAR_SUFFIX", "url": "YAHOO.widget.CalendarGroup.html#config_MY_LABEL_YEAR_SUFFIX", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_MONTH_POSITION", "url": "YAHOO.widget.Calendar.html#config_MY_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_MONTH_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MY_MONTH_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "MY_YEAR_POSITION", "url": "YAHOO.widget.Calendar.html#config_MY_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "MY_YEAR_POSITION", "url": "YAHOO.widget.CalendarGroup.html#config_MY_YEAR_POSITION", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "NAV_ARROW_LEFT", "url": "YAHOO.widget.Calendar.html#config_NAV_ARROW_LEFT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "NAV_ARROW_LEFT", "url": "YAHOO.widget.CalendarGroup.html#config_NAV_ARROW_LEFT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "NAV_ARROW_RIGHT", "url": "YAHOO.widget.Calendar.html#config_NAV_ARROW_RIGHT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "NAV_ARROW_RIGHT", "url": "YAHOO.widget.CalendarGroup.html#config_NAV_ARROW_RIGHT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "navigator", "url": "YAHOO.widget.Calendar.html#config_navigator", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "navigator", "url": "YAHOO.widget.CalendarGroup.html#config_navigator", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "nextMonth", "url": "YAHOO.widget.Calendar.html#method_nextMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "nextMonth", "url": "YAHOO.widget.CalendarGroup.html#method_nextMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "nextYear", "url": "YAHOO.widget.Calendar.html#method_nextYear", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "nextYear", "url": "YAHOO.widget.CalendarGroup.html#method_nextYear", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "oDomContainer", "url": "YAHOO.widget.Calendar.html#property_oDomContainer", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "oNavigator", "url": "YAHOO.widget.Calendar.html#property_oNavigator", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onBeforeDeselect", "url": "YAHOO.widget.Calendar.html#method_onBeforeDeselect", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onBeforeSelect", "url": "YAHOO.widget.Calendar.html#method_onBeforeSelect", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onChangePage", "url": "YAHOO.widget.Calendar.html#method_onChangePage", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onClear", "url": "YAHOO.widget.Calendar.html#method_onClear", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onDeselect", "url": "YAHOO.widget.Calendar.html#method_onDeselect", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onRender", "url": "YAHOO.widget.Calendar.html#method_onRender", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onReset", "url": "YAHOO.widget.Calendar.html#method_onReset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "onSelect", "url": "YAHOO.widget.Calendar.html#method_onSelect", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "OOM_SELECT", "url": "YAHOO.widget.Calendar.html#config_OOM_SELECT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "OOM_SELECT", "url": "YAHOO.widget.CalendarGroup.html#config_OOM_SELECT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Options", "url": "YAHOO.widget.Calendar.html#property_Options", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "Options", "url": "YAHOO.widget.CalendarGroup.html#property_Options", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "pagedate", "url": "YAHOO.widget.Calendar.html#config_pagedate", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "pagedate", "url": "YAHOO.widget.CalendarGroup.html#config_pagedate", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "pages", "url": "YAHOO.widget.CalendarGroup.html#property_pages", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "pages", "url": "YAHOO.widget.CalendarGroup.html#config_pages", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "parent", "url": "YAHOO.widget.Calendar.html#property_parent", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.Calendar", "name": "_parseArgs", "url": "YAHOO.widget.Calendar.html#method__parseArgs", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_parseDate", "url": "YAHOO.widget.Calendar.html#method__parseDate", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_parseDates", "url": "YAHOO.widget.Calendar.html#method__parseDates", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_parsePageDate", "url": "YAHOO.widget.Calendar.html#method__parsePageDate", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_parseRange", "url": "YAHOO.widget.Calendar.html#method__parseRange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "previousMonth", "url": "YAHOO.widget.Calendar.html#method_previousMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "previousMonth", "url": "YAHOO.widget.CalendarGroup.html#method_previousMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "previousYear", "url": "YAHOO.widget.Calendar.html#method_previousYear", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "previousYear", "url": "YAHOO.widget.CalendarGroup.html#method_previousYear", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "refreshLocale", "url": "YAHOO.widget.Calendar.html#method_refreshLocale", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "removeCloseButton", "url": "YAHOO.widget.Calendar.html#method_removeCloseButton", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "removeRenderers", "url": "YAHOO.widget.Calendar.html#method_removeRenderers", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "removeRenderers", "url": "YAHOO.widget.CalendarGroup.html#method_removeRenderers", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "removeTitleBar", "url": "YAHOO.widget.Calendar.html#method_removeTitleBar", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "render", "url": "YAHOO.widget.Calendar.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "render", "url": "YAHOO.widget.CalendarGroup.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderBody", "url": "YAHOO.widget.Calendar.html#method_renderBody", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderBodyCellRestricted", "url": "YAHOO.widget.Calendar.html#method_renderBodyCellRestricted", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellDefault", "url": "YAHOO.widget.Calendar.html#method_renderCellDefault", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellNotThisMonth", "url": "YAHOO.widget.Calendar.html#method_renderCellNotThisMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleHighlight1", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleHighlight1", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleHighlight2", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleHighlight2", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleHighlight3", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleHighlight3", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleHighlight4", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleHighlight4", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleSelected", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleSelected", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderCellStyleToday", "url": "YAHOO.widget.Calendar.html#method_renderCellStyleToday", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderEvent", "url": "YAHOO.widget.Calendar.html#event_renderEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "renderEvent", "url": "YAHOO.widget.CalendarGroup.html#event_renderEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderFooter", "url": "YAHOO.widget.Calendar.html#method_renderFooter", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "renderFooter", "url": "YAHOO.widget.CalendarGroup.html#method_renderFooter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderHeader", "url": "YAHOO.widget.Calendar.html#method_renderHeader", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "renderHeader", "url": "YAHOO.widget.CalendarGroup.html#method_renderHeader", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderNavEvent", "url": "YAHOO.widget.Calendar.html#event_renderNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "renderNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_renderNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderOutOfBoundsDate", "url": "YAHOO.widget.Calendar.html#method_renderOutOfBoundsDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderRowFooter", "url": "YAHOO.widget.Calendar.html#method_renderRowFooter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderRowHeader", "url": "YAHOO.widget.Calendar.html#method_renderRowHeader", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_renderStack", "url": "YAHOO.widget.Calendar.html#property__renderStack", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "renderStack", "url": "YAHOO.widget.Calendar.html#property_renderStack", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "reset", "url": "YAHOO.widget.Calendar.html#method_reset", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "reset", "url": "YAHOO.widget.CalendarGroup.html#method_reset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "resetEvent", "url": "YAHOO.widget.Calendar.html#event_resetEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "resetEvent", "url": "YAHOO.widget.CalendarGroup.html#event_resetEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "resetRenderers", "url": "YAHOO.widget.Calendar.html#method_resetRenderers", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "select", "url": "YAHOO.widget.Calendar.html#method_select", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "select", "url": "YAHOO.widget.CalendarGroup.html#method_select", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "selectCell", "url": "YAHOO.widget.Calendar.html#method_selectCell", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "selectCell", "url": "YAHOO.widget.CalendarGroup.html#method_selectCell", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "selected", "url": "YAHOO.widget.Calendar.html#config_selected", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "selected", "url": "YAHOO.widget.CalendarGroup.html#config_selected", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_selectedDates", "url": "YAHOO.widget.Calendar.html#property__selectedDates", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "selectEvent", "url": "YAHOO.widget.Calendar.html#event_selectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "selectEvent", "url": "YAHOO.widget.CalendarGroup.html#event_selectEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "setChildFunction", "url": "YAHOO.widget.CalendarGroup.html#method_setChildFunction", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "setMonth", "url": "YAHOO.widget.Calendar.html#method_setMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "setMonth", "url": "YAHOO.widget.CalendarGroup.html#method_setMonth", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CalendarGroup", "name": "_setMonthOnDate", "url": "YAHOO.widget.CalendarGroup.html#method__setMonthOnDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "setYear", "url": "YAHOO.widget.Calendar.html#method_setYear", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "setYear", "url": "YAHOO.widget.CalendarGroup.html#method_setYear", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "show", "url": "YAHOO.widget.Calendar.html#method_show", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "showEvent", "url": "YAHOO.widget.Calendar.html#event_showEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "showEvent", "url": "YAHOO.widget.CalendarGroup.html#event_showEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "showNavEvent", "url": "YAHOO.widget.Calendar.html#event_showNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "showNavEvent", "url": "YAHOO.widget.CalendarGroup.html#event_showNavEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "SHOW_WEEKDAYS", "url": "YAHOO.widget.Calendar.html#config_SHOW_WEEKDAYS", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "SHOW_WEEKDAYS", "url": "YAHOO.widget.CalendarGroup.html#config_SHOW_WEEKDAYS", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "SHOW_WEEK_FOOTER", "url": "YAHOO.widget.Calendar.html#config_SHOW_WEEK_FOOTER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "SHOW_WEEK_FOOTER", "url": "YAHOO.widget.CalendarGroup.html#config_SHOW_WEEK_FOOTER", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "SHOW_WEEK_HEADER", "url": "YAHOO.widget.Calendar.html#config_SHOW_WEEK_HEADER", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "SHOW_WEEK_HEADER", "url": "YAHOO.widget.CalendarGroup.html#config_SHOW_WEEK_HEADER", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "START_WEEKDAY", "url": "YAHOO.widget.Calendar.html#config_START_WEEKDAY", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "START_WEEKDAY", "url": "YAHOO.widget.CalendarGroup.html#config_START_WEEKDAY", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "strings", "url": "YAHOO.widget.Calendar.html#config_strings", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "strings", "url": "YAHOO.widget.CalendarGroup.html#config_strings", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "styleCellDefault", "url": "YAHOO.widget.Calendar.html#method_styleCellDefault", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "styleCellNotThisMonth", "url": "YAHOO.widget.Calendar.html#method_styleCellNotThisMonth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_BODY", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_BODY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CALENDAR", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CALENDAR", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_BOTTOM", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_BOTTOM", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_HIGHLIGHT1", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_HIGHLIGHT1", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_HIGHLIGHT2", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_HIGHLIGHT2", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_HIGHLIGHT3", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_HIGHLIGHT3", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_HIGHLIGHT4", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_HIGHLIGHT4", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_HOVER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_HOVER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_LEFT", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_OOB", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_OOB", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_OOM", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_OOM", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_RESTRICTED", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_RESTRICTED", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_RIGHT", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_RIGHT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_SELECTABLE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_SELECTABLE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_SELECTED", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_SELECTED", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_SELECTOR", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_SELECTOR", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_TODAY", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_TODAY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CELL_TOP", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CELL_TOP", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CLOSE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CLOSE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_CONTAINER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_CONTAINER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_FIXED_SIZE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_FIXED_SIZE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_FOOTER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_FOOTER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_HEADER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_HEADER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_HEADER_TEXT", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_HEADER_TEXT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_LINK_CLOSE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_LINK_CLOSE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_NAV", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_NAV", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_NAV_LEFT", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_NAV_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_NAV_RIGHT", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_NAV_RIGHT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_ROW_FOOTER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_ROW_FOOTER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_ROW_HEADER", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_ROW_HEADER", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_SINGLE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_SINGLE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_WEEKDAY_CELL", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_WEEKDAY_CELL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_WEEKDAY_ROW", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_WEEKDAY_ROW", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "Style.CSS_WITH_TITLE", "url": "YAHOO.widget.Calendar.html#property_Style.CSS_WITH_TITLE", "type": "property"}, {"access": "private", "host": "YAHOO.widget.CalendarGroup", "name": "sub", "url": "YAHOO.widget.CalendarGroup.html#method_sub", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "subtractMonths", "url": "YAHOO.widget.Calendar.html#method_subtractMonths", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "subtractMonths", "url": "YAHOO.widget.CalendarGroup.html#method_subtractMonths", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "subtractYears", "url": "YAHOO.widget.Calendar.html#method_subtractYears", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "subtractYears", "url": "YAHOO.widget.CalendarGroup.html#method_subtractYears", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "title", "url": "YAHOO.widget.Calendar.html#config_title", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "title", "url": "YAHOO.widget.CalendarGroup.html#config_title", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_toDate", "url": "YAHOO.widget.Calendar.html#method__toDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "toDate", "url": "YAHOO.widget.Calendar.html#method_toDate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "today", "url": "YAHOO.widget.Calendar.html#property_today", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "today", "url": "YAHOO.widget.Calendar.html#config_today", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "today", "url": "YAHOO.widget.CalendarGroup.html#config_today", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "_toFieldArray", "url": "YAHOO.widget.Calendar.html#method__toFieldArray", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "toString", "url": "YAHOO.widget.Calendar.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "toString", "url": "YAHOO.widget.CalendarGroup.html#method_toString", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CalendarGroup", "name": "unsub", "url": "YAHOO.widget.CalendarGroup.html#method_unsub", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "validate", "url": "YAHOO.widget.Calendar.html#method_validate", "type": "method"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "WEEKDAYS_1CHAR", "url": "YAHOO.widget.Calendar.html#config_WEEKDAYS_1CHAR", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "WEEKDAYS_1CHAR", "url": "YAHOO.widget.CalendarGroup.html#config_WEEKDAYS_1CHAR", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "WEEKDAYS_LONG", "url": "YAHOO.widget.Calendar.html#config_WEEKDAYS_LONG", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "WEEKDAYS_LONG", "url": "YAHOO.widget.CalendarGroup.html#config_WEEKDAYS_LONG", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "WEEKDAYS_MEDIUM", "url": "YAHOO.widget.Calendar.html#config_WEEKDAYS_MEDIUM", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "WEEKDAYS_MEDIUM", "url": "YAHOO.widget.CalendarGroup.html#config_WEEKDAYS_MEDIUM", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "WEEKDAYS_SHORT", "url": "YAHOO.widget.Calendar.html#config_WEEKDAYS_SHORT", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "WEEKDAYS_SHORT", "url": "YAHOO.widget.CalendarGroup.html#config_WEEKDAYS_SHORT", "type": "config"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.DATE", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.DATE", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar._DEFAULT_CONFIG", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar._DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.DEFAULT_CONFIG", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.DISPLAY_DAYS", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.DISPLAY_DAYS", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar._EVENT_TYPES", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar._EVENT_TYPES", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup.CSS_2UPCLOSE", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup.CSS_2UPCLOSE", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup.CSS_2UPTITLE", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup.CSS_2UPTITLE", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup.CSS_CONTAINER", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup.CSS_CONTAINER", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup.CSS_MULTI_UP", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup._DEFAULT_CONFIG", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup._DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "YAHOO.widget.CalendarGroup.DEFAULT_CONFIG", "url": "YAHOO.widget.CalendarGroup.html#property_YAHOO.widget.CalendarGroup.DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.IMG_ROOT", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.IMG_ROOT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.LONG", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.LONG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.MEDIUM", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.MEDIUM", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.MONTH", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.MONTH", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.MONTH_DAY", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.MONTH_DAY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.ONE_CHAR", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.ONE_CHAR", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.RANGE", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.RANGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.SHORT", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.SHORT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.STOP_RENDER", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.STOP_RENDER", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar._STYLES", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar._STYLES", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.STYLES", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.STYLES", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YAHOO.widget.Calendar.WEEKDAY", "url": "YAHOO.widget.Calendar.html#property_YAHOO.widget.Calendar.WEEKDAY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Calendar", "name": "YEAR_OFFSET", "url": "YAHOO.widget.Calendar.html#config_YEAR_OFFSET", "type": "config"}, {"access": "", "host": "YAHOO.widget.CalendarGroup", "name": "year_offset", "url": "YAHOO.widget.CalendarGroup.html#config_year_offset", "type": "config"}];
-</script>
-</body>
-</html>
+</script></body>

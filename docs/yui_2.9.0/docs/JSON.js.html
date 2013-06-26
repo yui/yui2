@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: json   JSON.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: json   JSON.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>json&nbsp; <span class="subtitle">2.9.0</span></h3>
+        <h3>json  <span class="subtitle">2.9.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_json.html" title="json">json</a>
                 
                  &gt; JSON.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * Provides methods to parse JSON strings and convert objects to JSON strings.</span>
 <span class="cm"> *</span>
 <span class="cm"> * @module json</span>
@@ -62,7 +46,7 @@
     <span class="nx">isObject</span>   <span class="o">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">isObject</span><span class="p">,</span>
     <span class="nx">isArray</span>    <span class="o">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">isArray</span><span class="p">,</span>
     <span class="nx">_toStr</span>     <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">,</span>
-                 <span class="c1">// &#39;this&#39; is the global object.  window in browser env.  Keep</span>
+                 <span class="c1">// 'this' is the global object.  window in browser env.  Keep</span>
                  <span class="c1">// the code env agnostic.  Caja requies window, unfortunately.</span>
     <span class="nx">Native</span>     <span class="o">=</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">ua</span><span class="p">.</span><span class="nx">caja</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="k">this</span><span class="p">).</span><span class="nx">JSON</span><span class="p">,</span>
 
@@ -83,25 +67,25 @@
 
     <span class="cm">/**</span>
 <span class="cm">     * First step in the safety evaluation.  Regex used to replace all escape</span>
-<span class="cm">     * sequences (i.e. &quot;\\&quot;, etc) with &#39;@&#39; characters (a non-JSON character).</span>
+<span class="cm">     * sequences (i.e. "\\", etc) with '@' characters (a non-JSON character).</span>
 <span class="cm">     *</span>
 <span class="cm">     * @property _ESCAPES</span>
 <span class="cm">     * @type {RegExp}</span>
 <span class="cm">     * @static</span>
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
-    <span class="nx">_ESCAPES</span> <span class="o">=</span> <span class="sr">/\\(?:[&quot;\\\/bfnrt]|u[0-9a-fA-F]{4})/g</span><span class="p">,</span>
+    <span class="nx">_ESCAPES</span> <span class="o">=</span> <span class="sr">/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g</span><span class="p">,</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Second step in the safety evaluation.  Regex used to replace all simple</span>
-<span class="cm">     * values with &#39;]&#39; characters.</span>
+<span class="cm">     * values with ']' characters.</span>
 <span class="cm">     *</span>
 <span class="cm">     * @property _VALUES</span>
 <span class="cm">     * @type {RegExp}</span>
 <span class="cm">     * @static</span>
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
-    <span class="nx">_VALUES</span>  <span class="o">=</span> <span class="sr">/&quot;[^&quot;\\\n\r]*&quot;|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g</span><span class="p">,</span>
+    <span class="nx">_VALUES</span>  <span class="o">=</span> <span class="sr">/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g</span><span class="p">,</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Third step in the safety evaluation.  Regex used to remove all open</span>
@@ -138,7 +122,7 @@
 <span class="cm">     * @static</span>
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
-    <span class="nx">_SPECIAL_CHARS</span> <span class="o">=</span> <span class="sr">/[\\\&quot;\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g</span><span class="p">,</span>
+    <span class="nx">_SPECIAL_CHARS</span> <span class="o">=</span> <span class="sr">/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g</span><span class="p">,</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Character substitution map for common escapes and special characters.</span>
@@ -149,52 +133,52 @@
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
     <span class="nx">_CHARS</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;\b&#39;</span><span class="o">:</span> <span class="s1">&#39;\\b&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;\t&#39;</span><span class="o">:</span> <span class="s1">&#39;\\t&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;\n&#39;</span><span class="o">:</span> <span class="s1">&#39;\\n&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;\f&#39;</span><span class="o">:</span> <span class="s1">&#39;\\f&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;\r&#39;</span><span class="o">:</span> <span class="s1">&#39;\\r&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&quot;&#39;</span> <span class="o">:</span> <span class="s1">&#39;\\&quot;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;\\&#39;</span><span class="o">:</span> <span class="s1">&#39;\\\\&#39;</span>
+        <span class="s1">'\b'</span><span class="o">:</span> <span class="s1">'\\b'</span><span class="p">,</span>
+        <span class="s1">'\t'</span><span class="o">:</span> <span class="s1">'\\t'</span><span class="p">,</span>
+        <span class="s1">'\n'</span><span class="o">:</span> <span class="s1">'\\n'</span><span class="p">,</span>
+        <span class="s1">'\f'</span><span class="o">:</span> <span class="s1">'\\f'</span><span class="p">,</span>
+        <span class="s1">'\r'</span><span class="o">:</span> <span class="s1">'\\r'</span><span class="p">,</span>
+        <span class="s1">'"'</span> <span class="o">:</span> <span class="s1">'\\"'</span><span class="p">,</span>
+        <span class="s1">'\\'</span><span class="o">:</span> <span class="s1">'\\\\'</span>
     <span class="p">},</span>
     
-    <span class="nx">UNDEFINED</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span><span class="p">,</span>
-    <span class="nx">OBJECT</span>    <span class="o">=</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>
-    <span class="nx">NULL</span>      <span class="o">=</span> <span class="s1">&#39;null&#39;</span><span class="p">,</span>
-    <span class="nx">STRING</span>    <span class="o">=</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span>
-    <span class="nx">NUMBER</span>    <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
-    <span class="nx">BOOLEAN</span>   <span class="o">=</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span>
-    <span class="nx">DATE</span>      <span class="o">=</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span>
+    <span class="nx">UNDEFINED</span> <span class="o">=</span> <span class="s1">'undefined'</span><span class="p">,</span>
+    <span class="nx">OBJECT</span>    <span class="o">=</span> <span class="s1">'object'</span><span class="p">,</span>
+    <span class="nx">NULL</span>      <span class="o">=</span> <span class="s1">'null'</span><span class="p">,</span>
+    <span class="nx">STRING</span>    <span class="o">=</span> <span class="s1">'string'</span><span class="p">,</span>
+    <span class="nx">NUMBER</span>    <span class="o">=</span> <span class="s1">'number'</span><span class="p">,</span>
+    <span class="nx">BOOLEAN</span>   <span class="o">=</span> <span class="s1">'boolean'</span><span class="p">,</span>
+    <span class="nx">DATE</span>      <span class="o">=</span> <span class="s1">'date'</span><span class="p">,</span>
     <span class="nx">_allowable</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;undefined&#39;</span>        <span class="o">:</span> <span class="nx">UNDEFINED</span><span class="p">,</span>
-        <span class="s1">&#39;string&#39;</span>           <span class="o">:</span> <span class="nx">STRING</span><span class="p">,</span>
-        <span class="s1">&#39;[object String]&#39;</span>  <span class="o">:</span> <span class="nx">STRING</span><span class="p">,</span>
-        <span class="s1">&#39;number&#39;</span>           <span class="o">:</span> <span class="nx">NUMBER</span><span class="p">,</span>
-        <span class="s1">&#39;[object Number]&#39;</span>  <span class="o">:</span> <span class="nx">NUMBER</span><span class="p">,</span>
-        <span class="s1">&#39;boolean&#39;</span>          <span class="o">:</span> <span class="nx">BOOLEAN</span><span class="p">,</span>
-        <span class="s1">&#39;[object Boolean]&#39;</span> <span class="o">:</span> <span class="nx">BOOLEAN</span><span class="p">,</span>
-        <span class="s1">&#39;[object Date]&#39;</span>    <span class="o">:</span> <span class="nx">DATE</span><span class="p">,</span>
-        <span class="s1">&#39;[object RegExp]&#39;</span>  <span class="o">:</span> <span class="nx">OBJECT</span>
+        <span class="s1">'undefined'</span>        <span class="o">:</span> <span class="nx">UNDEFINED</span><span class="p">,</span>
+        <span class="s1">'string'</span>           <span class="o">:</span> <span class="nx">STRING</span><span class="p">,</span>
+        <span class="s1">'[object String]'</span>  <span class="o">:</span> <span class="nx">STRING</span><span class="p">,</span>
+        <span class="s1">'number'</span>           <span class="o">:</span> <span class="nx">NUMBER</span><span class="p">,</span>
+        <span class="s1">'[object Number]'</span>  <span class="o">:</span> <span class="nx">NUMBER</span><span class="p">,</span>
+        <span class="s1">'boolean'</span>          <span class="o">:</span> <span class="nx">BOOLEAN</span><span class="p">,</span>
+        <span class="s1">'[object Boolean]'</span> <span class="o">:</span> <span class="nx">BOOLEAN</span><span class="p">,</span>
+        <span class="s1">'[object Date]'</span>    <span class="o">:</span> <span class="nx">DATE</span><span class="p">,</span>
+        <span class="s1">'[object RegExp]'</span>  <span class="o">:</span> <span class="nx">OBJECT</span>
     <span class="p">},</span>
-    <span class="nx">EMPTY</span>     <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="nx">OPEN_O</span>    <span class="o">=</span> <span class="s1">&#39;{&#39;</span><span class="p">,</span>
-    <span class="nx">CLOSE_O</span>   <span class="o">=</span> <span class="s1">&#39;}&#39;</span><span class="p">,</span>
-    <span class="nx">OPEN_A</span>    <span class="o">=</span> <span class="s1">&#39;[&#39;</span><span class="p">,</span>
-    <span class="nx">CLOSE_A</span>   <span class="o">=</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span>
-    <span class="nx">COMMA</span>     <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span>
-    <span class="nx">COMMA_CR</span>  <span class="o">=</span> <span class="s2">&quot;,\n&quot;</span><span class="p">,</span>
-    <span class="nx">CR</span>        <span class="o">=</span> <span class="s2">&quot;\n&quot;</span><span class="p">,</span>
-    <span class="nx">COLON</span>     <span class="o">=</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span>
-    <span class="nx">COLON_SP</span>  <span class="o">=</span> <span class="s1">&#39;: &#39;</span><span class="p">,</span>
-    <span class="nx">QUOTE</span>     <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">;</span>
+    <span class="nx">EMPTY</span>     <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="nx">OPEN_O</span>    <span class="o">=</span> <span class="s1">'{'</span><span class="p">,</span>
+    <span class="nx">CLOSE_O</span>   <span class="o">=</span> <span class="s1">'}'</span><span class="p">,</span>
+    <span class="nx">OPEN_A</span>    <span class="o">=</span> <span class="s1">'['</span><span class="p">,</span>
+    <span class="nx">CLOSE_A</span>   <span class="o">=</span> <span class="s1">']'</span><span class="p">,</span>
+    <span class="nx">COMMA</span>     <span class="o">=</span> <span class="s1">','</span><span class="p">,</span>
+    <span class="nx">COMMA_CR</span>  <span class="o">=</span> <span class="s2">",\n"</span><span class="p">,</span>
+    <span class="nx">CR</span>        <span class="o">=</span> <span class="s2">"\n"</span><span class="p">,</span>
+    <span class="nx">COLON</span>     <span class="o">=</span> <span class="s1">':'</span><span class="p">,</span>
+    <span class="nx">COLON_SP</span>  <span class="o">=</span> <span class="s1">': '</span><span class="p">,</span>
+    <span class="nx">QUOTE</span>     <span class="o">=</span> <span class="s1">'"'</span><span class="p">;</span>
 
 <span class="c1">// Only accept JSON objects that report a [[Class]] of JSON</span>
-<span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">Native</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="p">;</span>
+<span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">Native</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'[object JSON]'</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="p">;</span>
 
 <span class="c1">// Escapes a special character to a safe Unicode representation</span>
 <span class="kd">function</span> <span class="nx">_char</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_CHARS</span><span class="p">[</span><span class="nx">c</span><span class="p">])</span> <span class="p">{</span>
-        <span class="nx">_CHARS</span><span class="p">[</span><span class="nx">c</span><span class="p">]</span> <span class="o">=</span>  <span class="s1">&#39;\\u&#39;</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;0000&#39;</span><span class="o">+</span><span class="p">(</span><span class="o">+</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">))).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">)).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">);</span>
+        <span class="nx">_CHARS</span><span class="p">[</span><span class="nx">c</span><span class="p">]</span> <span class="o">=</span>  <span class="s1">'\\u'</span><span class="o">+</span><span class="p">(</span><span class="s1">'0000'</span><span class="o">+</span><span class="p">(</span><span class="o">+</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">))).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">)).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">_CHARS</span><span class="p">[</span><span class="nx">c</span><span class="p">];</span>
 <span class="p">}</span>
@@ -217,7 +201,7 @@
 <span class="kd">function</span> <span class="nx">_revive</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">reviver</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">walk</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">o</span><span class="p">,</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">,</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">o</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">'object'</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">for</span> <span class="p">(</span><span class="nx">k</span> <span class="k">in</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span><span class="nx">k</span><span class="p">))</span> <span class="p">{</span>
                     <span class="nx">v</span> <span class="o">=</span> <span class="nx">walk</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">k</span><span class="p">);</span>
@@ -232,7 +216,7 @@
         <span class="k">return</span> <span class="nx">reviver</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="k">return</span> <span class="k">typeof</span> <span class="nx">reviver</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">?</span> <span class="nx">walk</span><span class="p">({</span><span class="s1">&#39;&#39;</span><span class="o">:</span><span class="nx">data</span><span class="p">},</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="nx">data</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">typeof</span> <span class="nx">reviver</span> <span class="o">===</span> <span class="s1">'function'</span> <span class="o">?</span> <span class="nx">walk</span><span class="p">({</span><span class="s1">''</span><span class="o">:</span><span class="nx">data</span><span class="p">},</span><span class="s1">''</span><span class="p">)</span> <span class="o">:</span> <span class="nx">data</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="cm">/**</span>
@@ -250,9 +234,9 @@
 
 <span class="kd">function</span> <span class="nx">_isSafe</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">l</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-            <span class="o">!</span><span class="nx">_UNSAFE</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">_ESCAPES</span><span class="p">,</span><span class="s1">&#39;@&#39;</span><span class="p">).</span>
-                             <span class="nx">replace</span><span class="p">(</span><span class="nx">_VALUES</span><span class="p">,</span><span class="s1">&#39;]&#39;</span><span class="p">).</span>
-                             <span class="nx">replace</span><span class="p">(</span><span class="nx">_BRACKETS</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
+            <span class="o">!</span><span class="nx">_UNSAFE</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">_ESCAPES</span><span class="p">,</span><span class="s1">'@'</span><span class="p">).</span>
+                             <span class="nx">replace</span><span class="p">(</span><span class="nx">_VALUES</span><span class="p">,</span><span class="s1">']'</span><span class="p">).</span>
+                             <span class="nx">replace</span><span class="p">(</span><span class="nx">_BRACKETS</span><span class="p">,</span><span class="s1">''</span><span class="p">));</span>
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">_parse</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">reviver</span><span class="p">)</span> <span class="p">{</span>
@@ -263,11 +247,11 @@
     <span class="k">if</span> <span class="p">(</span><span class="nx">_isSafe</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span> <span class="p">{</span>
         <span class="c1">// Eval the text into a JavaScript data structure, apply the</span>
         <span class="c1">// reviver function if provided, and return</span>
-        <span class="k">return</span> <span class="nx">_revive</span><span class="p">(</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">),</span> <span class="nx">reviver</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="nx">_revive</span><span class="p">(</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'('</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="s1">')'</span><span class="p">),</span> <span class="nx">reviver</span> <span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// The text is not valid JSON</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nx">SyntaxError</span><span class="p">(</span><span class="s1">&#39;JSON.parse&#39;</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nx">SyntaxError</span><span class="p">(</span><span class="s1">'JSON.parse'</span><span class="p">);</span>
 <span class="p">}</span>
 
 
@@ -321,8 +305,8 @@
 
     <span class="c1">// Per the spec, strings are truncated to 10 characters and numbers</span>
     <span class="c1">// are converted to that number of spaces (max 10)</span>
-    <span class="nx">space</span> <span class="o">=</span> <span class="nx">format</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;Number&#39;</span> <span class="o">?</span>
-                <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">space</span><span class="p">),</span><span class="mi">10</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="o">:</span>
+    <span class="nx">space</span> <span class="o">=</span> <span class="nx">format</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'Number'</span> <span class="o">?</span>
+                <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">space</span><span class="p">),</span><span class="mi">10</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span> <span class="o">:</span>
                 <span class="p">(</span><span class="nx">space</span> <span class="o">||</span> <span class="nx">EMPTY</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
 
     <span class="kd">function</span> <span class="nx">_serialize</span><span class="p">(</span><span class="nx">h</span><span class="p">,</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
@@ -365,7 +349,7 @@
         <span class="c1">// Check for cyclical references in nested objects</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">stack</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;JSON.stringify. Cyclical reference&quot;</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">"JSON.stringify. Cyclical reference"</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -408,7 +392,7 @@
     <span class="p">}</span>
 
     <span class="c1">// process the input</span>
-    <span class="k">return</span> <span class="nx">_serialize</span><span class="p">({</span><span class="s1">&#39;&#39;</span><span class="o">:</span><span class="nx">o</span><span class="p">},</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">_serialize</span><span class="p">({</span><span class="s1">''</span><span class="o">:</span><span class="nx">o</span><span class="p">},</span><span class="s1">''</span><span class="p">);</span>
 <span class="p">}</span>
 
 
@@ -473,8 +457,8 @@
 <span class="cm">     * @static</span>
 <span class="cm">     */</span>
     <span class="nx">parse</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">reviver</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">!==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">s</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">!==</span> <span class="s1">'string'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">s</span> <span class="o">+=</span> <span class="s1">''</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nx">Native</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">useNativeParse</span> <span class="o">?</span>
@@ -494,7 +478,7 @@
 <span class="cm">     *</span>
 <span class="cm">     * &lt;p&gt;If a positive integer or non-empty string is passed as the third</span>
 <span class="cm">     * parameter, the output will be formatted with carriage returns and</span>
-<span class="cm">     * indentation for readability.  If a String is passed (such as &quot;\t&quot;) it</span>
+<span class="cm">     * indentation for readability.  If a String is passed (such as "\t") it</span>
 <span class="cm">     * will be used once for each indentation level.  If a number is passed,</span>
 <span class="cm">     * that number of spaces will be used.&lt;/p&gt;</span>
 <span class="cm">     *</span>
@@ -523,7 +507,7 @@
 <span class="cm">     * the JavaScript implementation of stringify.  If you need a different</span>
 <span class="cm">     * Date serialization format, override this method.  If you change this,</span>
 <span class="cm">     * you should also set useNativeStringify to false, since native JSON</span>
-<span class="cm">     * implementations serialize Dates per the ECMAScript 5 spec.  You&#39;ve been</span>
+<span class="cm">     * implementations serialize Dates per the ECMAScript 5 spec.  You've been</span>
 <span class="cm">     * warned.</span>
 <span class="cm">     *</span>
 <span class="cm">     * @method dateToString</span>
@@ -533,15 +517,15 @@
 <span class="cm">     */</span>
     <span class="nx">dateToString</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">function</span> <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">v</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">?</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">:</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nx">v</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">?</span> <span class="s1">'0'</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">:</span> <span class="nx">v</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCFullYear</span><span class="p">()</span>         <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDate</span><span class="p">())</span>      <span class="o">+</span> <span class="s1">&#39;T&#39;</span> <span class="o">+</span>
+        <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCFullYear</span><span class="p">()</span>         <span class="o">+</span> <span class="s1">'-'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'-'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDate</span><span class="p">())</span>      <span class="o">+</span> <span class="s1">'T'</span> <span class="o">+</span>
             <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCHours</span><span class="p">())</span>     <span class="o">+</span> <span class="nx">COLON</span> <span class="o">+</span>
             <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCMinutes</span><span class="p">())</span>   <span class="o">+</span> <span class="nx">COLON</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCSeconds</span><span class="p">())</span>   <span class="o">+</span> <span class="s1">&#39;Z&#39;</span><span class="p">;</span>
+            <span class="nx">_zeroPad</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCSeconds</span><span class="p">())</span>   <span class="o">+</span> <span class="s1">'Z'</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -592,8 +576,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -641,22 +624,17 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.lang.JSON.html" title="YAHOO.lang.JSON">YAHOO.lang.JSON</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.lang.JSON.html" title="YAHOO.lang.JSON">YAHOO.lang.JSON</a></li>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="JSON.js.html" title="JSON.js">JSON.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="JSON.js.html" title="JSON.js">JSON.js</a></li>
+                        </ul></div>
 
 
 
@@ -666,13 +644,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2011 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2011 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.lang.JSON", "name": "_BRACKETS", "url": "YAHOO.lang.JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_CHARS", "url": "YAHOO.lang.JSON.html#property__CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "dateToString", "url": "YAHOO.lang.JSON.html#method_dateToString", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_ESCAPES", "url": "YAHOO.lang.JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isSafe", "url": "YAHOO.lang.JSON.html#method_isSafe", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isValid", "url": "YAHOO.lang.JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "parse", "url": "YAHOO.lang.JSON.html#method_parse", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_prepare", "url": "YAHOO.lang.JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_revive", "url": "YAHOO.lang.JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_SPECIAL_CHARS", "url": "YAHOO.lang.JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringify", "url": "YAHOO.lang.JSON.html#method_stringify", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringToDate", "url": "YAHOO.lang.JSON.html#method_stringToDate", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNICODE_EXCEPTIONS", "url": "YAHOO.lang.JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNSAFE", "url": "YAHOO.lang.JSON.html#property__UNSAFE", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeParse", "url": "YAHOO.lang.JSON.html#property_useNativeParse", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeStringify", "url": "YAHOO.lang.JSON.html#property_useNativeStringify", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_VALUES", "url": "YAHOO.lang.JSON.html#property__VALUES", "type": "property"}];
-</script>
-</body>
-</html>
+</script></body>

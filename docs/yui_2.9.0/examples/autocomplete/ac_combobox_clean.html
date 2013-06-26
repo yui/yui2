@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Combobox, with CSS for Multiple Stacked Instances</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Combobox, with CSS for Multiple Stacked Instances</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,21 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="../../build/autocomplete/assets/skins/sam/autocomplete.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="../../build/autocomplete/autocomplete-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><link rel="stylesheet" type="text/css" href="../../build/autocomplete/assets/skins/sam/autocomplete.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><script type="text/javascript" src="../../build/datasource/datasource-min.js"></script><script type="text/javascript" src="../../build/autocomplete/autocomplete-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 /* custom styles for inline instances */
 .yui-skin-sam .yui-ac-input { position:static;width:20em; vertical-align:middle;}
 .yui-skin-sam .yui-ac-container { width:20em;left:0px;}
@@ -43,52 +21,26 @@ body {
 .yui-ac .yui-button {vertical-align:middle;}
 .yui-ac .yui-button button {background: url(../autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat }
 .yui-ac .open .yui-button button {background: url(../autocomplete/assets/img/ac-arrow-dn.png) center center no-repeat}
-</style>
-
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Combobox, with CSS for Multiple Stacked Instances</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Combobox, with CSS for Multiple Stacked Instances</h1><div class="exampleIntro">
 	<p>This "combo box" AutoComplete implementation allows the user to pick an item from a set list or enter a custom value directly into the input field. Please note the following custom CSS:</p>
 
-<ul>
-    <li>z-index has been applied to support multiple vertically stacked AutoComplete instances</li>
+<ul><li>z-index has been applied to support multiple vertically stacked AutoComplete instances</li>
     <li>the input field and container have been styled to support a button inline to the right</li>
-</ul>
-
-<p>Implementers who are working with data from third-party sources, user input data, or otherwise untrustworthy sources should be sure to read the <a href="http://developer.yahoo.com/yui/autocomplete/#security">Security Considerations</a> section of the AutoComplete user guide.</p>
+</ul><p>Implementers who are working with data from third-party sources, user input data, or otherwise untrustworthy sources should be sure to read the <a href="http://developer.yahoo.com/yui/autocomplete/#security">Security Considerations</a> section of the AutoComplete user guide.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<label for="bInput">What would you like for breakfast?</label>
-<div id="bAutoComplete">
-    <input id="bInput" type="text"> <span id="toggleB"></span>
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><label for="bInput">What would you like for breakfast?</label><div id="bAutoComplete">
+    <input id="bInput" type="text"><span id="toggleB"></span>
 	<div id="bContainer"></div>
-</div>
-
-<label for="lInput">What would you like for lunch?</label>
-<div id="lAutoComplete">
-	<input id="lInput" type="text"> <span id="toggleL"></span>
+</div><label for="lInput">What would you like for lunch?</label><div id="lAutoComplete">
+	<input id="lInput" type="text"><span id="toggleL"></span>
 	<div id="lContainer"></div>
-</div>
-
-<label for="dInput">What would you like for dinner?</label>
-<div id="dAutoComplete">
-	<input id="dInput" type="text"> <span id="toggleD"></span>
+</div><label for="dInput">What would you like for dinner?</label><div id="dAutoComplete">
+	<input id="dInput" type="text"><span id="toggleD"></span>
 	<div id="dContainer"></div>
-</div>
-
-<script type="text/javascript" src="assets/js/data.js"></script>
-<script type="text/javascript">
+</div><script type="text/javascript" src="assets/js/data.js"></script><script type="text/javascript">
 YAHOO.example.Combobox = function() {
     // Instantiate DataSources
     var bDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.menu.breakfasts);
@@ -188,9 +140,4 @@ YAHOO.example.Combobox = function() {
         dAC: dAC
     };
 }();
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

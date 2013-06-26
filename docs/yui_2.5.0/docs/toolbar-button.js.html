@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: editor   toolbar-button.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: editor   toolbar-button.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>editor&nbsp; <span class="subtitle">2.5.0</span></h3>
+        <h3>editor  <span class="subtitle">2.5.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_editor.html">editor</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="c">/**</span>
 <span class="c">    * @private</span>
 <span class="c">    **/</span>
@@ -43,7 +34,7 @@
     <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
     <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
     <span class="c">/**</span>
-<span class="c">     * @description &lt;p&gt;Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor&#39;s Toolbar&lt;/p&gt;</span>
+<span class="c">     * @description &lt;p&gt;Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar&lt;/p&gt;</span>
 <span class="c">     * @class ToolbarButtonAdvanced</span>
 <span class="c">     * @namespace YAHOO.widget</span>
 <span class="c">     * @requires yahoo, dom, element, event, container_core, menu, button</span>
@@ -61,7 +52,7 @@
 <span class="c">        * @private</span>
 <span class="c">        * @description Tells if the Button is a Rich Button or a Simple Button</span>
 <span class="c">        */</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ToolbarButtonAdvanced</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">buttonType</span> <span class="o">=</span> <span class="s1">&#39;rich&#39;</span><span class="o">;</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ToolbarButtonAdvanced</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">buttonType</span> <span class="o">=</span> <span class="s1">'rich'</span><span class="o">;</span>
         <span class="c">/**</span>
 <span class="c">        * @method checkValue</span>
 <span class="c">        * @param {String} value The value of the option that we want to mark as selected</span>
@@ -74,9 +65,9 @@
                 <span class="nx">_menuItems</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getMenu</span><span class="o">().</span><span class="nx">getItems</span><span class="o">();</span>
             <span class="o">}</span>
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">_menuItems</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="nx">_menuItems</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s1">&#39;checked&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                <span class="nx">_menuItems</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s1">'checked'</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">_menuItems</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span> <span class="o">==</span> <span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">_menuItems</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s1">&#39;checked&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                    <span class="nx">_menuItems</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s1">'checked'</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>      
         <span class="o">};</span>
@@ -86,22 +77,22 @@
 
 
     <span class="c">/**</span>
-<span class="c">     * @description &lt;p&gt;Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor&#39;s Toolbar&lt;/p&gt;</span>
+<span class="c">     * @description &lt;p&gt;Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar&lt;/p&gt;</span>
 <span class="c">     * @class ToolbarButton</span>
 <span class="c">     * @namespace YAHOO.widget</span>
 <span class="c">     * @requires yahoo, dom, element, event</span>
 <span class="c">     * @Extends YAHOO.util.Element</span>
 <span class="c">     * @beta</span>
 <span class="c">     * </span>
-<span class="c">     * Provides a toolbar button based on the button and menu widgets, &lt;select&gt; elements are used in place of menu&#39;s.</span>
+<span class="c">     * Provides a toolbar button based on the button and menu widgets, &lt;select&gt; elements are used in place of menu's.</span>
 <span class="c">     * @constructor</span>
 <span class="c">     * @param {String/HTMLElement} el The element to turn into a button.</span>
 <span class="c">     * @param {Object} attrs Object liternal containing configuration parameters.</span>
 <span class="c">    */</span>
 
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ToolbarButton</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attrs</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;ToolbarButton Initalizing&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;ToolbarButton&#39;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; arguments passed to constructor&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Toolbar&#39;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'ToolbarButton Initalizing'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'ToolbarButton'</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">' arguments passed to constructor'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'Toolbar'</span><span class="o">);</span>
         
         <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">arguments</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">).</span><span class="nx">nodeType</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
@@ -114,13 +105,13 @@
         <span class="o">};</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;push&#39;</span><span class="o">;</span>
+            <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">'push'</span><span class="o">;</span>
         <span class="o">}</span>
         
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;span&#39;</span><span class="o">);</span>
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;unselectable&#39;</span><span class="o">,</span> <span class="s1">&#39;on&#39;</span><span class="o">);</span>
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;yui-button yui-&#39;</span> <span class="o">+</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s1">&#39;-button&#39;</span><span class="o">;</span>
-        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span class=&quot;first-child&quot;&gt;&lt;a href=&quot;#&quot;&gt;LABEL&lt;/a&gt;&lt;/span&gt;&#39;</span><span class="o">;</span>
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'span'</span><span class="o">);</span>
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'unselectable'</span><span class="o">,</span> <span class="s1">'on'</span><span class="o">);</span>
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">'yui-button yui-'</span> <span class="o">+</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s1">'-button'</span><span class="o">;</span>
+        <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">'&lt;span class="first-child"&gt;&lt;a href="#"&gt;LABEL&lt;/a&gt;&lt;/span&gt;'</span><span class="o">;</span>
         <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">();</span>
 
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ToolbarButton</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">attributes</span><span class="o">);</span>
@@ -132,16 +123,16 @@
 <span class="c">        * @private</span>
 <span class="c">        * @description Tells if the Button is a Rich Button or a Simple Button</span>
 <span class="c">        */</span>
-        <span class="nx">buttonType</span><span class="o">:</span> <span class="s1">&#39;normal&#39;</span><span class="o">,</span>
+        <span class="nx">buttonType</span><span class="o">:</span> <span class="s1">'normal'</span><span class="o">,</span>
         <span class="c">/**</span>
 <span class="c">        * @method _handleMouseOver</span>
 <span class="c">        * @private</span>
 <span class="c">        * @description Adds classes to the button elements on mouseover (hover)</span>
 <span class="c">        */</span>
         <span class="nx">_handleMouseOver</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">))</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-button-hover&#39;</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-button-hover&#39;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'disabled'</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">'yui-button-hover'</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">'yui-'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'-button-hover'</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">},</span>
         <span class="c">/**</span>
@@ -150,8 +141,8 @@
 <span class="c">        * @description Removes classes from the button elements on mouseout (hover)</span>
 <span class="c">        */</span>
         <span class="nx">_handleMouseOut</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">&#39;yui-button-hover&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">&#39;yui-&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-button-hover&#39;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">'yui-button-hover'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">'yui-'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'-button-hover'</span><span class="o">);</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method checkValue</span>
@@ -159,7 +150,7 @@
 <span class="c">        * @description Select an option by value</span>
 <span class="c">        */</span>
         <span class="nx">checkValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;menu&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">==</span> <span class="s1">'menu'</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">.</span><span class="nx">options</span><span class="o">;</span>
                 <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">opts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">opts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span> <span class="o">==</span> <span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
@@ -170,13 +161,13 @@
         <span class="o">},</span>
         <span class="c">/** </span>
 <span class="c">        * @method init</span>
-<span class="c">        * @description The ToolbarButton class&#39;s initialization method</span>
+<span class="c">        * @description The ToolbarButton class's initialization method</span>
 <span class="c">        */</span>        
         <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ToolbarButton</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;mouseover&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOver</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;mouseout&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOut</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'mouseover'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOver</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'mouseout'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOut</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method initAttributes</span>
@@ -192,7 +183,7 @@
 <span class="c">            * @description The value of the button</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;value&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'value'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">value</span>
             <span class="o">});</span>
             <span class="c">/**</span>
@@ -200,7 +191,7 @@
 <span class="c">            * @description The menu attribute, see YAHOO.widget.Button</span>
 <span class="c">            * @type Object</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;menu&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'menu'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">menu</span> <span class="o">||</span> <span class="kc">false</span>
             <span class="o">});</span>
             <span class="c">/**</span>
@@ -208,21 +199,21 @@
 <span class="c">            * @description The type of button to create: push, menu, color, select, spin</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'type'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">opt</span><span class="o">;</span>
                     <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_button</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">&#39;a&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_button</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">'a'</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
                     <span class="o">}</span>
                     <span class="nx">switch</span> <span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">case</span> <span class="s1">&#39;select&#39;</span><span class="o">:</span>
-                        <span class="nx">case</span> <span class="s1">&#39;menu&#39;</span><span class="o">:</span>
-                            <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;select&#39;</span><span class="o">);</span>
-                            <span class="k">var</span> <span class="nx">menu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;menu&#39;</span><span class="o">);</span>
+                        <span class="nx">case</span> <span class="s1">'select'</span><span class="o">:</span>
+                        <span class="nx">case</span> <span class="s1">'menu'</span><span class="o">:</span>
+                            <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'select'</span><span class="o">);</span>
+                            <span class="k">var</span> <span class="nx">menu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'menu'</span><span class="o">);</span>
                             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">menu</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-                                <span class="nx">opt</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;option&#39;</span><span class="o">);</span>
+                                <span class="nx">opt</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'option'</span><span class="o">);</span>
                                 <span class="nx">opt</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">menu</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">text</span><span class="o">;</span>
                                 <span class="nx">opt</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">menu</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">value</span><span class="o">;</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">menu</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">checked</span><span class="o">)</span> <span class="o">{</span>
@@ -231,7 +222,7 @@
                                 <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">opt</span><span class="o">);</span>
                             <span class="o">}</span>
                             <span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">);</span>
-                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;change&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleSelect</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">'change'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleSelect</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                             <span class="k">this</span><span class="o">.</span><span class="nx">_button</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
                             <span class="k">break</span><span class="o">;</span>
                     <span class="o">}</span>
@@ -243,17 +234,17 @@
 <span class="c">            * @description Set the button into a disabled state</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'disabled'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">disabled</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">disabled</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">disabled</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-button-disabled&#39;</span><span class="o">);</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">&#39;yui-&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-button-disabled&#39;</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">'yui-button-disabled'</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="s1">'yui-'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'-button-disabled'</span><span class="o">);</span>
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">&#39;yui-button-disabled&#39;</span><span class="o">);</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">&#39;yui-&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-button-disabled&#39;</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">'yui-button-disabled'</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="s1">'yui-'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'-button-disabled'</span><span class="o">);</span>
                     <span class="o">}</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;menu&#39;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">==</span> <span class="s1">'menu'</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="nx">disabled</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -264,13 +255,13 @@
 <span class="c">            * @description The text label for the button</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;label&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'label'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="k">label</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="k">label</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_button</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">&#39;a&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_button</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">'a'</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
                     <span class="o">}</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;push&#39;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'type'</span><span class="o">)</span> <span class="o">==</span> <span class="s1">'push'</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_button</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">label</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -281,7 +272,7 @@
 <span class="c">            * @description The title of the button</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;title&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'title'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">title</span>
             <span class="o">});</span>
 
@@ -290,7 +281,7 @@
 <span class="c">            * @description The container that the button is rendered to, handled by Toolbar</span>
 <span class="c">            * @type String</span>
 <span class="c">            */</span>            
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;container&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'container'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">cont</span><span class="o">)</span> <span class="o">{</span>
@@ -308,14 +299,14 @@
         <span class="nx">_handleSelect</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">tar</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">tar</span><span class="o">.</span><span class="nx">options</span><span class="o">[</span><span class="nx">tar</span><span class="o">.</span><span class="nx">selectedIndex</span><span class="o">].</span><span class="nx">value</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;change&#39;</span><span class="o">,</span> <span class="o">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;change&#39;</span><span class="o">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">value</span> <span class="o">});</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'change'</span><span class="o">,</span> <span class="o">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">'change'</span><span class="o">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">value</span> <span class="o">});</span>
         <span class="o">},</span>
         <span class="c">/** </span>
 <span class="c">        * @method getMenu</span>
-<span class="c">        * @description A stub function to mimic YAHOO.widget.Button&#39;s getMenu method</span>
+<span class="c">        * @description A stub function to mimic YAHOO.widget.Button's getMenu method</span>
 <span class="c">        */</span>        
         <span class="nx">getMenu</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;menu&#39;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'menu'</span><span class="o">);</span>
         <span class="o">},</span>
         <span class="c">/** </span>
 <span class="c">        * @method fireEvent</span>
@@ -323,7 +314,7 @@
 <span class="c">        */</span>        
         <span class="nx">fireEvent</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span> <span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">)</span> <span class="o">{</span>
             <span class="c">//  Disabled buttons should not respond to DOM events</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">[</span><span class="nx">p_sType</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">))</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">[</span><span class="nx">p_sType</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'disabled'</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
         
@@ -335,7 +326,7 @@
 <span class="c">        * @return {String}</span>
 <span class="c">        */</span>        
         <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="s1">&#39;ToolbarButton (&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">;</span>
+            <span class="k">return</span> <span class="s1">'ToolbarButton ('</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">')'</span><span class="o">;</span>
         <span class="o">}</span>
         
     <span class="o">});</span>
@@ -349,9 +340,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -420,31 +409,26 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a></li>
                                 <li class=""><a href="YAHOO.widget.EditorInfo.html">YAHOO.widget.EditorInfo</a></li>
                                 <li class=""><a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a></li>
                                 <li class=""><a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a></li>
                                 <li class=""><a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a></li>
                                 <li class=""><a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a></li>
                                 <li class=""><a href="YAHOO.widget.ToolbarButtonAdvanced.html">YAHOO.widget.ToolbarButtonAdvanced</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="editor.js.html">editor.js</a></li>
+                        <ul class="content"><li class=""><a href="editor.js.html">editor.js</a></li>
                                 <li class=""><a href="simple-editor.js.html">simple-editor.js</a></li>
                                 <li class="selected"><a href="toolbar-button.js.html">toolbar-button.js</a></li>
                                 <li class=""><a href="toolbar.js.html">toolbar.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -454,9 +438,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

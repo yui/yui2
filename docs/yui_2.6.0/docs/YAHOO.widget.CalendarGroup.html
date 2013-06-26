@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: calendar  YAHOO.widget.CalendarGroup   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: calendar  YAHOO.widget.CalendarGroup   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Calendar&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>Calendar  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_calendar.html">calendar</a>
@@ -28,9 +20,9 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <h2>
@@ -45,28 +37,22 @@
                         <span class="extends">
                         </span>
                         
-                        </code>
+                        
                     </h2>
                     <!-- class tree goes here -->
                     
-                        <dl class="subclasses">
-                            <dt>Known Subclasses:</dd>
-                            <dd>
+                        <dl class="subclasses"><dt>Known Subclasses:
+                            </dt><dd>
                                     <a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a>
                             </dd>
-                       </dl>
-                
-  
-
-                    <div class="summary description">
+                       </dl><div class="summary description">
                         YAHOO.widget.CalendarGroup is a special container class for YAHOO.widget.Calendar. This class facilitates
 the ability to have multi-page calendar views that share a single dataset and are
 dependent on each other.
 The calendar group instance will refer to each of its elements using a 0-based index.
 For example, to construct the placeholder for a calendar group widget with id "cal1" and
 containerId of "cal1Container", the markup would be as follows:
-<xmp>
-<div id="cal1Container_0"></div>
+<xmp><div id="cal1Container_0"></div>
 <div id="cal1Container_1"></div>
 </xmp>
 The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
@@ -76,16 +62,14 @@ The CalendarGroup can be constructed by simply providing a container ID string,
 or a reference to a container DIV HTMLElement (the element needs to exist 
 in the document).
 E.g.:
-<xmp>
+</p><xmp>
 var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
 </xmp>
 or:
 <xmp>
 var containerDiv = YAHOO.util.Dom.get("calContainer");
 var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
-</xmp>
-</p>
-<p>
+</xmp><p>
 If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
 For example if an ID is not provided, and the container's ID is "calContainer", the CalendarGroup's ID will be set to "calContainer_t".
 </p>
@@ -111,8 +95,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                     )
                                 </code>
                                 <div class="description">
-                                        <dl>
-                                            <dt>Parameters:</dt>
+                                        <dl><dt>Parameters:</dt>
                                                 <dd>
                                                     <code>id
                                                     &lt;String&gt; 
@@ -131,10 +114,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                                     </code>
                                                      optional The configuration object containing the initial configuration values for the CalendarGroup.
                                                 </dd>
-                                        </dl>
-                                    
-                                    
-                                </div>
+                                        </dl></div>
                             </div>
                         </div>
                     </div>
@@ -155,8 +135,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_containerId">containerId</a>
                                         <code>- String</code>
@@ -170,8 +149,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_id">id</a>
                                         <code>- String</code>
@@ -185,8 +163,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_Locale">Locale</a>
                                         <code>- Object</code>
@@ -200,8 +177,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_Options">Options</a>
                                         <code>- Object</code>
@@ -215,8 +191,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_pages">pages</a>
                                         <code>- YAHOO.widget.Calendar[]</code>
@@ -230,8 +205,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup._DEFAULT_CONFIG">YAHOO.widget.CalendarGroup._DEFAULT_CONFIG</a>
                                         <code>- private static final Object</code>
@@ -245,8 +219,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class=" deprecated">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_2UPCLOSE">YAHOO.widget.CalendarGroup.CSS_2UPCLOSE</a>
                                         <code>- static final String</code>
@@ -264,8 +237,7 @@ For example if an ID is not provided, and the container's ID is "calContainer", 
 Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
                                     </div>        
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_2UPTITLE">YAHOO.widget.CalendarGroup.CSS_2UPTITLE</a>
                                         <code>- static final String</code>
@@ -279,8 +251,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_CONTAINER">YAHOO.widget.CalendarGroup.CSS_CONTAINER</a>
                                         <code>- static final String</code>
@@ -294,8 +265,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a>
                                         <code>- static final String</code>
@@ -309,8 +279,7 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
 
 
                             </div>
@@ -341,22 +310,15 @@ Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE<
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private">
                                     <h4>
                                         <a name="method__setMonthOnDate">_setMonthOnDate</a></h4>
@@ -387,8 +349,7 @@ The Date object passed in is modified. It should be cloned before passing it int
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The Date object on which to set the month index
@@ -397,24 +358,15 @@ The Date object passed in is modified. It should be cloned before passing it int
                                                             <code>iMonth &lt;Number&gt;</code>
                                                             	The month index to set
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_addMonthRenderer">addMonthRenderer</a></h4>
@@ -445,8 +397,7 @@ when a date cell matches the month passed to this method.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>month &lt;Number&gt;</code>
                                                             		The month (1-12) to associate with this renderer
@@ -455,24 +406,15 @@ when a date cell matches the month passed to this method.
                                                             <code>fnRender &lt;Function&gt;</code>
                                                             	The function executed to render cells that match the render rules for this renderer.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_addMonths">addMonths</a></h4>
@@ -499,30 +441,20 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>count &lt;Number&gt;</code>
                                                             	The number of months to add to the current calendar
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_addRenderer">addRenderer</a></h4>
@@ -553,8 +485,7 @@ when a date cell matches the conditions specified in the date string for this re
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>sDates &lt;String&gt;</code>
                                                             		A date string to associate with the specified renderer. Valid formats
@@ -564,24 +495,15 @@ include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
                                                             <code>fnRender &lt;Function&gt;</code>
                                                             	The function executed to render cells that match the render rules for this renderer.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_addWeekdayRenderer">addWeekdayRenderer</a></h4>
@@ -612,8 +534,7 @@ when a date cell matches the weekday passed to this method.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>weekday &lt;Number&gt;</code>
                                                             		The weekday (1-7) to associate with this renderer. 1=Sunday, 2=Monday etc.
@@ -622,24 +543,15 @@ when a date cell matches the weekday passed to this method.
                                                             <code>fnRender &lt;Function&gt;</code>
                                                             	The function executed to render cells that match the render rules for this renderer.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_addYears">addYears</a></h4>
@@ -666,30 +578,20 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>count &lt;Number&gt;</code>
                                                             	The number of years to add to the current calendar
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_callChildFunction">callChildFunction</a></h4>
@@ -719,8 +621,7 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>fnName &lt;String&gt;</code>
                                                             		The name of the function
@@ -729,24 +630,15 @@ calendar page date to the new month.
                                                             <code>args &lt;Array&gt;</code>
                                                             		The arguments to pass to the function
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_clear">clear</a></h4>
@@ -769,22 +661,15 @@ to the current month and year.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_configPageDate">configPageDate</a></h4>
@@ -818,8 +703,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
                                                             	The CustomEvent type (usually the property name)
@@ -832,24 +716,15 @@ to the current month and year.
                                                             <code>obj &lt;Object&gt;</code>
                                                             	The scope object. For configuration handlers, this will usually equal the owner.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_configPages">configPages</a></h4>
@@ -883,8 +758,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
                                                             	The CustomEvent type (usually the property name)
@@ -897,24 +771,15 @@ to the current month and year.
                                                             <code>obj &lt;Object&gt;</code>
                                                             	The scope object. For configuration handlers, this will usually equal the owner.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_configSelected">configSelected</a></h4>
@@ -948,8 +813,7 @@ to the current month and year.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
                                                             	The CustomEvent type (usually the property name)
@@ -962,24 +826,15 @@ to the current month and year.
                                                             <code>obj &lt;Object&gt;</code>
                                                             	The scope object. For configuration handlers, this will usually equal the owner.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_constructChild">constructChild</a></h4>
@@ -1014,8 +869,7 @@ calendar is to be used.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>id &lt;String&gt;</code>
                                                             			The id of the table element that will represent the calendar widget
@@ -1028,24 +882,15 @@ calendar is to be used.
                                                             <code>config &lt;Object&gt;</code>
                                                             		The configuration object containing the Calendar's arguments
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         YAHOO.widget.Calendar
                                                     </code></dt>
                                                     <dd>The YAHOO.widget.Calendar instance that is constructed</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_delegateConfig">delegateConfig</a></h4>
@@ -1079,8 +924,7 @@ calendar is to be used.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
                                                             	The CustomEvent type (usually the property name)
@@ -1093,24 +937,15 @@ calendar is to be used.
                                                             <code>obj &lt;Object&gt;</code>
                                                             	The scope object. For configuration handlers, this will usually equal the owner.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_deselect">deselect</a></h4>
@@ -1138,8 +973,7 @@ called for the changes to be reflected visually.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;String/Date/Date[]&gt;</code>
                                                             	The date string of dates to deselect in the current calendar. Valid formats are
@@ -1147,24 +981,15 @@ individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006
 Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
 This method can also take a JavaScript Date object or an array of Date objects.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date[]
                                                     </code></dt>
                                                     <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_deselectAll">deselectAll</a></h4>
@@ -1186,8 +1011,7 @@ This method can also take a JavaScript Date object or an array of Date objects.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Date[]
                                                     </code></dt>
@@ -1195,16 +1019,10 @@ This method can also take a JavaScript Date object or an array of Date objects.
 Assuming that this function executes properly, the return value should be an empty array.
 However, the empty array is returned for the sake of being able to check the selection status
 of the calendar.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_deselectCell">deselectCell</a></h4>
@@ -1231,30 +1049,20 @@ deselectCell will deselect the cell at the specified index on each displayed Cal
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>cellIndex &lt;Number&gt;</code>
                                                             	The index of the cell to deselect.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date[]
                                                     </code></dt>
                                                     <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_destroy">destroy</a></h4>
@@ -1279,22 +1087,15 @@ CalendarGroup and the individual Calendar instances created for each page.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getCalendarPage">getCalendarPage</a></h4>
@@ -1321,31 +1122,21 @@ Returns null if no match is found.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                              The JavaScript Date object for which a Calendar page is to be found.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Calendar
                                                     </code></dt>
                                                     <dd>The Calendar page instance representing the month to which the date 
 belongs.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getSelectedDates">getSelectedDates</a></h4>
@@ -1374,8 +1165,7 @@ belongs.</dd>
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_init">init</a></h4>
@@ -1410,8 +1200,7 @@ group to be initialized properly.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>id &lt;String&gt;</code>
                                                              optional The id of the table element that will represent the CalendarGroup widget. As of 2.4.0, this argument is optional.
@@ -1424,24 +1213,15 @@ group to be initialized properly.
                                                             <code>config &lt;Object&gt;</code>
                                                              optional The configuration object containing the initial configuration values for the CalendarGroup.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_initEvents">initEvents</a></h4>
@@ -1463,22 +1243,15 @@ group to be initialized properly.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_nextMonth">nextMonth</a></h4>
@@ -1500,22 +1273,15 @@ group to be initialized properly.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_nextYear">nextYear</a></h4>
@@ -1537,22 +1303,15 @@ group to be initialized properly.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_previousMonth">previousMonth</a></h4>
@@ -1574,22 +1333,15 @@ group to be initialized properly.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_previousYear">previousYear</a></h4>
@@ -1611,22 +1363,15 @@ group to be initialized properly.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_removeRenderers">removeRenderers</a></h4>
@@ -1650,22 +1395,15 @@ to see the changes applied.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_render">render</a></h4>
@@ -1687,22 +1425,15 @@ to see the changes applied.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_renderFooter">renderFooter</a></h4>
@@ -1725,22 +1456,15 @@ unimplemented.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_renderHeader">renderHeader</a></h4>
@@ -1762,22 +1486,15 @@ unimplemented.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_reset">reset</a></h4>
@@ -1800,22 +1517,15 @@ sets the calendar to the initial selection(s).
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_select">select</a></h4>
@@ -1843,8 +1553,7 @@ called for the changes to be reflected visually.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;String/Date/Date[]&gt;</code>
                                                             	The date string of dates to select in the current calendar. Valid formats are
@@ -1852,24 +1561,15 @@ individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006
 Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
 This method can also take a JavaScript Date object or an array of Date objects.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date[]
                                                     </code></dt>
                                                     <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_selectCell">selectCell</a></h4>
@@ -1892,38 +1592,26 @@ This method can also take a JavaScript Date object or an array of Date objects.
                                         <div class="description">
                                             Selects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.
 The value of the MULTI_SELECT Configuration attribute will determine the set of dates which get selected. 
-<ul>
-<li>If MULTI_SELECT is false, selectCell will select the cell at the specified index for only the last displayed Calendar page.</li>
+<ul><li>If MULTI_SELECT is false, selectCell will select the cell at the specified index for only the last displayed Calendar page.</li>
 <li>If MULTI_SELECT is true, selectCell will select the cell at the specified index, on each displayed Calendar page.</li>
-</ul>
-                                        </div>
+</ul></div>
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>cellIndex &lt;Number&gt;</code>
                                                             	The index of the cell to be selected.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date[]
                                                     </code></dt>
                                                     <dd>Array of JavaScript Date objects representing all individual dates that are currently selected.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setChildFunction">setChildFunction</a></h4>
@@ -1953,8 +1641,7 @@ The value of the MULTI_SELECT Configuration attribute will determine the set of 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>fnName &lt;String&gt;</code>
                                                             		The name of the function
@@ -1963,24 +1650,15 @@ The value of the MULTI_SELECT Configuration attribute will determine the set of 
                                                             <code>fn &lt;Function&gt;</code>
                                                             			The function to apply to each Calendar page object
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setMonth">setMonth</a></h4>
@@ -2007,30 +1685,20 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>month &lt;Number&gt;</code>
                                                             		The numeric month, from 0 (January) to 11 (December)
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setYear">setYear</a></h4>
@@ -2057,30 +1725,20 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>year &lt;Number&gt;</code>
                                                             		The numeric 4-digit year
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private">
                                     <h4>
                                         <a name="method_sub">sub</a></h4>
@@ -2114,8 +1772,7 @@ page of the multi-page calendar, and all other months will be iterated appropria
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>fn &lt;Function&gt;</code>
                                                             	The function to subscribe to this CustomEvent
@@ -2128,24 +1785,15 @@ page of the multi-page calendar, and all other months will be iterated appropria
                                                             <code>bOverride &lt;Boolean&gt;</code>
                                                             	Whether or not to apply scope correction
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_subtractMonths">subtractMonths</a></h4>
@@ -2172,30 +1820,20 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>count &lt;Number&gt;</code>
                                                             	The number of months to subtract from the current calendar
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_subtractYears">subtractYears</a></h4>
@@ -2222,30 +1860,20 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>count &lt;Number&gt;</code>
                                                             	The number of years to subtract from the current calendar
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_toString">toString</a></h4>
@@ -2267,22 +1895,15 @@ calendar page date to the new month.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         String
                                                     </code></dt>
                                                     <dd>A string representation of the CalendarGroup object.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private">
                                     <h4>
                                         <a name="method_unsub">unsub</a></h4>
@@ -2312,8 +1933,7 @@ calendar page date to the new month.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>fn &lt;Function&gt;</code>
                                                             	The function to subscribe to this CustomEvent
@@ -2322,24 +1942,15 @@ calendar page date to the new month.
                                                             <code>obj &lt;Object&gt;</code>
                                                             	The CustomEvent's scope object
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -2374,8 +1985,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeDestroyEvent">beforeDestroyEvent</a></h4>
@@ -2403,8 +2013,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeHideEvent">beforeHideEvent</a></h4>
@@ -2432,8 +2041,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeHideNavEvent">beforeHideNavEvent</a></h4>
@@ -2461,8 +2069,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeRenderEvent">beforeRenderEvent</a></h4>
@@ -2490,8 +2097,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeRenderNavEvent">beforeRenderNavEvent</a></h4>
@@ -2519,8 +2125,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeSelectEvent">beforeSelectEvent</a></h4>
@@ -2548,8 +2153,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeShowEvent">beforeShowEvent</a></h4>
@@ -2577,8 +2181,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_beforeShowNavEvent">beforeShowNavEvent</a></h4>
@@ -2606,8 +2209,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_changePageEvent">changePageEvent</a></h4>
@@ -2635,8 +2237,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_clearEvent">clearEvent</a></h4>
@@ -2664,8 +2265,7 @@ calendar page date to the new month.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_deselectEvent">deselectEvent</a></h4>
@@ -2693,20 +2293,15 @@ calendar page date to the new month.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>Array &lt;Array&gt;</code>
                                                              of Date field arrays in the format [YYYY, MM, DD].
                                                         </dd>
-                                                </dl>
-
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_destroyEvent">destroyEvent</a></h4>
@@ -2738,8 +2333,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_hideEvent">hideEvent</a></h4>
@@ -2767,8 +2361,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_hideNavEvent">hideNavEvent</a></h4>
@@ -2796,8 +2389,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_renderEvent">renderEvent</a></h4>
@@ -2825,8 +2417,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_renderNavEvent">renderNavEvent</a></h4>
@@ -2854,8 +2445,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_resetEvent">resetEvent</a></h4>
@@ -2883,8 +2473,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_selectEvent">selectEvent</a></h4>
@@ -2912,20 +2501,15 @@ state.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>Array &lt;Array&gt;</code>
                                                              of Date field arrays in the format [YYYY, MM, DD].
                                                         </dd>
-                                                </dl>
-
-
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_showEvent">showEvent</a></h4>
@@ -2953,8 +2537,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="event_showNavEvent">showNavEvent</a></h4>
@@ -2982,8 +2565,7 @@ state.
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -3007,8 +2589,7 @@ state.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_DATE_DELIMITER">DATE_DELIMITER</a>
                                         <code>- String</code>
@@ -3024,8 +2605,7 @@ state.
                                         Default Value: ","
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_DATE_FIELD_DELIMITER">DATE_FIELD_DELIMITER</a>
                                         <code>- String</code>
@@ -3041,8 +2621,7 @@ state.
                                         Default Value: "/"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_DATE_RANGE_DELIMITER">DATE_RANGE_DELIMITER</a>
                                         <code>- String</code>
@@ -3058,8 +2637,7 @@ state.
                                         Default Value: "-"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_HIDE_BLANK_WEEKS">HIDE_BLANK_WEEKS</a>
                                         <code>- Boolean</code>
@@ -3075,8 +2653,7 @@ state.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_iframe">iframe</a>
                                         <code>- Boolean</code>
@@ -3094,8 +2671,7 @@ enabled if required.
                                         Default Value: true for IE6 and below, false for all other browsers
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_LOCALE_MONTHS">LOCALE_MONTHS</a>
                                         <code>- String</code>
@@ -3111,8 +2687,7 @@ enabled if required.
                                         Default Value: "long"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_LOCALE_WEEKDAYS">LOCALE_WEEKDAYS</a>
                                         <code>- String</code>
@@ -3128,8 +2703,7 @@ enabled if required.
                                         Default Value: "short"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_maxdate">maxdate</a>
                                         <code>- String | Date</code>
@@ -3145,8 +2719,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MD_DAY_POSITION">MD_DAY_POSITION</a>
                                         <code>- Number</code>
@@ -3162,8 +2735,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MD_MONTH_POSITION">MD_MONTH_POSITION</a>
                                         <code>- Number</code>
@@ -3179,8 +2751,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MDY_DAY_POSITION">MDY_DAY_POSITION</a>
                                         <code>- Number</code>
@@ -3196,8 +2767,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MDY_MONTH_POSITION">MDY_MONTH_POSITION</a>
                                         <code>- Number</code>
@@ -3213,8 +2783,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MDY_YEAR_POSITION">MDY_YEAR_POSITION</a>
                                         <code>- Number</code>
@@ -3230,8 +2799,7 @@ enabled if required.
                                         Default Value: 3
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_mindate">mindate</a>
                                         <code>- String | Date</code>
@@ -3247,8 +2815,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MONTHS_LONG">MONTHS_LONG</a>
                                         <code>- String[]</code>
@@ -3264,8 +2831,7 @@ enabled if required.
                                         Default Value: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MONTHS_SHORT">MONTHS_SHORT</a>
                                         <code>- String[]</code>
@@ -3281,8 +2847,7 @@ enabled if required.
                                         Default Value: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MULTI_SELECT">MULTI_SELECT</a>
                                         <code>- Boolean</code>
@@ -3298,8 +2863,7 @@ enabled if required.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_LABEL_MONTH_POSITION">MY_LABEL_MONTH_POSITION</a>
                                         <code>- Number</code>
@@ -3315,8 +2879,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_LABEL_MONTH_SUFFIX">MY_LABEL_MONTH_SUFFIX</a>
                                         <code>- String</code>
@@ -3332,8 +2895,7 @@ enabled if required.
                                         Default Value: " "
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_LABEL_YEAR_POSITION">MY_LABEL_YEAR_POSITION</a>
                                         <code>- Number</code>
@@ -3349,8 +2911,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_LABEL_YEAR_SUFFIX">MY_LABEL_YEAR_SUFFIX</a>
                                         <code>- String</code>
@@ -3366,8 +2927,7 @@ enabled if required.
                                         Default Value: ""
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_MONTH_POSITION">MY_MONTH_POSITION</a>
                                         <code>- Number</code>
@@ -3383,8 +2943,7 @@ enabled if required.
                                         Default Value: 1
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_MY_YEAR_POSITION">MY_YEAR_POSITION</a>
                                         <code>- Number</code>
@@ -3400,8 +2959,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_NAV">NAV</a>
                                         <code>- Object</code>
@@ -3417,8 +2975,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class=" deprecated">
                                     <h4><a name="config_NAV_ARROW_LEFT">NAV_ARROW_LEFT</a>
                                         <code>- String</code>
@@ -3437,8 +2994,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class=" deprecated">
                                     <h4><a name="config_NAV_ARROW_RIGHT">NAV_ARROW_RIGHT</a>
                                         <code>- String</code>
@@ -3457,8 +3013,7 @@ enabled if required.
                                         Default Value: null
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_pagedate">pagedate</a>
                                         <code>- String | Date</code>
@@ -3474,8 +3029,7 @@ enabled if required.
                                         Default Value: today's date
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_pages">pages</a>
                                         <code>- Number</code>
@@ -3491,8 +3045,7 @@ enabled if required.
                                         Default Value: 2
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_selected">selected</a>
                                         <code>- String</code>
@@ -3508,8 +3061,7 @@ enabled if required.
                                         Default Value: []
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_SHOW_WEEK_FOOTER">SHOW_WEEK_FOOTER</a>
                                         <code>- Boolean</code>
@@ -3525,8 +3077,7 @@ enabled if required.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_SHOW_WEEK_HEADER">SHOW_WEEK_HEADER</a>
                                         <code>- Boolean</code>
@@ -3542,8 +3093,7 @@ enabled if required.
                                         Default Value: false
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_SHOW_WEEKDAYS">SHOW_WEEKDAYS</a>
                                         <code>- Boolean</code>
@@ -3559,8 +3109,7 @@ enabled if required.
                                         Default Value: true
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_START_WEEKDAY">START_WEEKDAY</a>
                                         <code>- number</code>
@@ -3576,8 +3125,7 @@ enabled if required.
                                         Default Value: 0
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_strings">strings</a>
                                         <code>- {Object}</code>
@@ -3591,15 +3139,12 @@ enabled if required.
      
                                     <div class="default">
                                         Default Value: An object with the properties shown below:
-<dl>
-<dt>previousMonth</dt><dd><em>String</em> : The string to use for the "Previous Month" navigation UI. Defaults to "Previous Month".</dd>
+<dl><dt>previousMonth</dt><dd><em>String</em> : The string to use for the "Previous Month" navigation UI. Defaults to "Previous Month".</dd>
 <dt>nextMonth</dt><dd><em>String</em> : The string to use for the "Next Month" navigation UI. Defaults to "Next Month".</dd>
 <dt>close</dt><dd><em>String</em> : The string to use for the close button label. Defaults to "Close".</dd>
-</dl>
-                                    </div>        
+</dl></div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_title">title</a>
                                         <code>- String</code>
@@ -3615,8 +3160,7 @@ enabled if required.
                                         Default Value: ""
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_WEEKDAYS_1CHAR">WEEKDAYS_1CHAR</a>
                                         <code>- String[]</code>
@@ -3632,8 +3176,7 @@ enabled if required.
                                         Default Value: ["S", "M", "T", "W", "T", "F", "S"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_WEEKDAYS_LONG">WEEKDAYS_LONG</a>
                                         <code>- String[]</code>
@@ -3649,8 +3192,7 @@ enabled if required.
                                         Default Value: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_WEEKDAYS_MEDIUM">WEEKDAYS_MEDIUM</a>
                                         <code>- String[]</code>
@@ -3666,8 +3208,7 @@ enabled if required.
                                         Default Value: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
                                     <div class="">
                                     <h4><a name="config_WEEKDAYS_SHORT">WEEKDAYS_SHORT</a>
                                         <code>- String[]</code>
@@ -3683,8 +3224,7 @@ enabled if required.
                                         Default Value: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
                                     </div>        
 
-                                    <hr />
-                                    </div>        
+                                    <hr></div>        
 
                             </div>
                         </div>
@@ -3697,9 +3237,7 @@ enabled if required.
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -3772,35 +3310,29 @@ enabled if required.
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
                                 <li class="selected"><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
                                 <li class=""><a href="YAHOO.widget.CalendarNavigator.html">YAHOO.widget.CalendarNavigator</a></li>
                                 <li class=""><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                        <ul class="content"><li class=""><a href="Calendar.js.html">Calendar.js</a></li>
                                 <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
                                 <li class=""><a href="CalendarNavigator.js.html">CalendarNavigator.js</a></li>
                                 <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#property_cfg">cfg</a>
+                        <ul class="content"><li class=""><a href="#property_cfg">cfg</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
                                 <li class=""><a href="#property_containerId">containerId</a>
@@ -3833,13 +3365,11 @@ enabled if required.
                                 <li class=""><a href="#property_YAHOO.widget.CalendarGroup.CSS_MULTI_UP">YAHOO.widget.CalendarGroup.CSS_MULTI_UP</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class="private"><!--<code>void</code>-->
+                        <ul class="content"><li class="private"><!--<code>void</code>-->
                                 <a href="#method__fixWidth">_fixWidth</a>
                                 </li>
                                 <li class="private"><!--<code>void</code>-->
@@ -3962,13 +3492,11 @@ enabled if required.
                                 <li class="private"><!--<code>void</code>-->
                                 <a href="#method_unsub">unsub</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Events</h4>
-                        <ul class="content">        
-                                <li class="">
+                        <ul class="content"><li class="">
                                 <a href="#event_beforeDeselectEvent">beforeDeselectEvent</a>
                                 </li>
                                 <li class="">
@@ -4031,13 +3559,11 @@ enabled if required.
                                 <li class="">
                                 <a href="#event_showNavEvent">showNavEvent</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Configuration Attributes</h4>
-                        <ul class="content">        
-                                <li class="">
+                        <ul class="content"><li class="">
                                 <a href="#config_close">close</a>
                                 </li>
                                 <li class="">
@@ -4157,16 +3683,13 @@ enabled if required.
                                 <li class="">
                                 <a href="#config_WEEKDAYS_SHORT">WEEKDAYS_SHORT</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
             </div>
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

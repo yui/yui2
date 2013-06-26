@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Basic Features</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Basic Features</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,21 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css" />
-<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="../../build/slider/slider-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/progressbar/progressbar-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css"><link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script><script type="text/javascript" src="../../build/slider/slider-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/progressbar/progressbar-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 .yui-skin-sam .yui-h-slider {
   width:128px;
   background:transparent url(../progressbar/assets/slider-bg.gif) no-repeat scroll 5px 0pt;
@@ -98,52 +76,31 @@ legend {
 	padding-left:10px;
 	white-space:nowrap;
 }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Basic Features</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Basic Features</h1><div class="exampleIntro">
 	<p>This example shows the simplest ProgressBar with the default "Sam" skin. Use the controls below to change various settings.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="basic" ></div>
-<fieldset id="control">
-	<legend>Control</legend>
-	<fieldset id="valueSet">
-		<legend>Value</legend>
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="basic"></div><fieldset id="control"><legend>Control</legend>
+	<fieldset id="valueSet"><legend>Value</legend>
 		<div id="sliderValue" class="yui-h-slider" tabindex="-1" title="Value slider">
 			<div id="sliderValueThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
 		</div>
 		<p>
-			<label>Set: <span id="value">50</span> </label> &nbsp;
+			<label>Set: <span id="value">50</span> </label>  
 			<label> Actual <span id="actualValue">50</span></label>
 		</p>
-	</fieldset>
-
-	<fieldset id="rangeSet">
-		<legend>Range</legend>
+	</fieldset><fieldset id="rangeSet"><legend>Range</legend>
 		<div id="sliderRange" class="yui-h-slider" title="Range slider">
 			<div id="sliderRangeMinThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-e.gif"></div>
 			<div id="sliderRangeMaxThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-w.gif"></div>
 		</div>
 		<p>
-			<label>Min: <span id="minValue">-50</span> </label>  &nbsp;
+			<label>Min: <span id="minValue">-50</span> </label>   
 			<label> Max: <span id="maxValue">50</span></label>
 		</p>
-	</fieldset>
-
-	<fieldset id="sizeSet">
-		<legend>Size</legend>
+	</fieldset><fieldset id="sizeSet"><legend>Size</legend>
 
 		Width<div id="sliderWidth" class="yui-h-slider" tabindex="-1" title="Width slider">
 			<div id="sliderWidthThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
@@ -154,41 +111,16 @@ legend {
 		</div>
 		<p><label>Width: <span id="width">200</span>px </label></p>
 		<p><label> Height: <span id="height">20</span>px</label></p>
-	</fieldset>
-	<fieldset id="animationSet" class="disabled">
-		<legend>Animation</legend>
-		<p style="color:black;"><input type="checkbox" id="anim" /> Enable animation</p>
+	</fieldset><fieldset id="animationSet" class="disabled"><legend>Animation</legend>
+		<p style="color:black;"><input type="checkbox" id="anim"> Enable animation</p>
 		Duration<div id="sliderDuration" class="yui-h-slider" tabindex="-1" title="Duration slider">
 			<div id="sliderDurationThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
 		</div>
 		<p>
 			<label>Duration <span id="duration">200</span> second(s)</label>
 		</p>
-		<fieldset id="easing">
-			<legend>Easing</legend>
-			<input type="radio" name="easing" value="easeNone" id="easeNone"/> easeNone<br/>
-			<input type="radio" name="easing" value="backBoth" /> backBoth<br/>
-			<input type="radio" name="easing" value="backIn" /> backIn<br/>
-			<input type="radio" name="easing" value="backOut" /> backOut<br/>
-			<input type="radio" name="easing" value="bounceBoth" /> bounceBoth<br/>
-			<input type="radio" name="easing" value="bounceIn" /> bounceIn<br/>
-			<input type="radio" name="easing" value="bounceOut" /> bounceOut<br/>
-			<input type="radio" name="easing" value="easeBoth" /> easeBoth<br/>
-			<input type="radio" name="easing" value="easeBothStrong" /> easeBothStrong<br/>
-			<input type="radio" name="easing" value="easeIn" /> easeIn<br/>
-			<input type="radio" name="easing" value="easeInStrong" /> easeInStrong<br/>
-			<input type="radio" name="easing" value="easeOut" /> easeOut<br/>
-			<input type="radio" name="easing" value="easeOutStrong" /> easeOutStrong<br/>
-			<input type="radio" name="easing" value="elasticBoth" /> elasticBoth<br/>
-			<input type="radio" name="easing" value="elasticIn" /> elasticIn<br/>
-			<input type="radio" name="easing" value="elasticOut" /> elasticOut<br/>
-		</fieldset>
-	</fieldset>
-
-</fieldset>
-
-
-<script type="text/javascript">
+		<fieldset id="easing"><legend>Easing</legend>
+			<input type="radio" name="easing" value="easeNone" id="easeNone"> easeNone<br><input type="radio" name="easing" value="backBoth"> backBoth<br><input type="radio" name="easing" value="backIn"> backIn<br><input type="radio" name="easing" value="backOut"> backOut<br><input type="radio" name="easing" value="bounceBoth"> bounceBoth<br><input type="radio" name="easing" value="bounceIn"> bounceIn<br><input type="radio" name="easing" value="bounceOut"> bounceOut<br><input type="radio" name="easing" value="easeBoth"> easeBoth<br><input type="radio" name="easing" value="easeBothStrong"> easeBothStrong<br><input type="radio" name="easing" value="easeIn"> easeIn<br><input type="radio" name="easing" value="easeInStrong"> easeInStrong<br><input type="radio" name="easing" value="easeOut"> easeOut<br><input type="radio" name="easing" value="easeOutStrong"> easeOutStrong<br><input type="radio" name="easing" value="elasticBoth"> elasticBoth<br><input type="radio" name="easing" value="elasticIn"> elasticIn<br><input type="radio" name="easing" value="elasticOut"> elasticOut<br></fieldset></fieldset></fieldset><script type="text/javascript">
 YAHOO.util.Event.onDOMReady( function () {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event;
@@ -300,9 +232,4 @@ YAHOO.util.Event.onDOMReady( function () {
 		anim.method = YAHOO.util.Easing[input.value];
 	});
 });
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

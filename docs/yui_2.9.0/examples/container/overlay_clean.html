@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Creating and Positioning an Overlay</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Creating and Positioning an Overlay</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,31 +8,14 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/container/container-min.js"></script>
-
-<!--there is no custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Creating and Positioning an Overlay</h1>
-
-<div class="exampleIntro">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/container/container-min.js"></script><!--there is no custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Creating and Positioning an Overlay</h1><div class="exampleIntro">
 	<p>Overlays are extensions of Modules and differ in the sense that the float <em>above</em> the normal page flow.  They can be positioned in three different ways: By fixing them to the center of the viewport (overlay1 below), by specifying a position (overlay2), and by positioning them relative to a context element (overlay3).</p>
 
 <p>Use the buttons in the example below to show and hide the three Overlay instances.</p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<style>
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><style>
 	.yui-overlay { position:absolute;background:#fff;border:1px dotted black;padding:5px;margin:10px; }
 	.yui-overlay .hd { border:1px solid red;padding:5px; }
 	.yui-overlay .bd { border:1px solid green;padding:5px; }
@@ -49,9 +24,7 @@ body {
 	#ctx { background:orange;width:100px;height:25px; }
 	
 	#example {height:15em;}
-</style>
-
-<script>
+</style><script>
 		YAHOO.namespace("example.container");
 
 		function init() {
@@ -96,34 +69,20 @@ body {
 		}
 
 		YAHOO.util.Event.addListener(window, "load", init);
-</script>
-
-
-<div>
+</script><div>
 	overlay1:
 	<button id="show1">Show</button>
 	<button id="hide1">Hide</button>
-</div>
-<div>
+</div><div>
 	overlay2:
 	<button id="show2">Show</button>
 	<button id="hide2">Hide</button>
-</div>
-<div>
+</div><div>
 	overlay3:
 	<button id="show3">Show</button>
 	<button id="hide3">Hide</button>
-</div>
-
-<div id="ctx">Align to me</div>
-
-<div id="overlay1" style="visibility:hidden">
+</div><div id="ctx">Align to me</div><div id="overlay1" style="visibility:hidden">
 	<div class="hd">Overlay #1 from Markup</div>
 	<div class="bd">This is a Overlay that was marked up in the document.</div>
 	<div class="ft">End of Overlay #1</div>
-</div>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</div><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

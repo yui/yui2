@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: autocomplete  YAHOO.widget.DS_ScriptNode   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: autocomplete  YAHOO.widget.DS_ScriptNode   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>AutoComplete Widget&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <h3>AutoComplete Widget  <span class="subtitle">2.4.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_autocomplete.html">autocomplete</a>
@@ -27,8 +19,8 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <h2>
@@ -44,7 +36,7 @@
                         <span class="extends">
                         </span>
                         
-                        </code>
+                        
                     </h2>
                     <!-- class tree goes here -->
                     
@@ -76,8 +68,7 @@ dynamic SCRIPT nodes for data retrieval.
                                     )
                                 </code>
                                 <div class="description">
-                                        <dl>
-                                            <dt>Parameters:</dt>
+                                        <dl><dt>Parameters:</dt>
                                                 <dd>
                                                     <code>sUri
                                                     &lt;String&gt; 
@@ -96,10 +87,7 @@ dynamic SCRIPT nodes for data retrieval.
                                                     </code>
                                                       (optional) Object literal of config params.
                                                 </dd>
-                                        </dl>
-                                    
-                                    
-                                </div>
+                                        </dl></div>
                             </div>
                         </div>
                     </div>
@@ -120,8 +108,7 @@ dynamic SCRIPT nodes for data retrieval.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="private">
                                     <h4><a name="_nPending">_nPending</a>
                                         <code>- private static Number</code>
@@ -136,8 +123,7 @@ array.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="asyncMode">asyncMode</a>
                                         <code>- String</code>
@@ -145,17 +131,14 @@ array.
                                     <div class="detail">
                                         <div class="description">
                                             Defines request/response management in the following manner:
-<dl>
-<!--<dt>queueRequests</dt>
+<dl><!--<dt>queueRequests</dt>
 <dd>If a request is already in progress, wait until response is returned before sending the next request.</dd>
 <dt>cancelStaleRequests</dt>
-<dd>If a request is already in progress, cancel it before sending the next request.</dd>-->
-<dt>ignoreStaleResponses</dt>
+<dd>If a request is already in progress, cancel it before sending the next request.</dd>--><dt>ignoreStaleResponses</dt>
 <dd>Send all requests, but handle only the response for the most recently sent request.</dd>
 <dt>allowAll</dt>
 <dd>Send all requests and handle all responses.</dd>
-</dl>
-                                        </div>
+</dl></div>
                                     </div>
      
                                         
@@ -164,8 +147,7 @@ array.
                                     </div>        
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="callbacks">callbacks</a>
                                         <code>- static Function[]</code>
@@ -179,8 +161,7 @@ array.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="getUtility">getUtility</a>
                                         <code>- Object</code>
@@ -198,8 +179,7 @@ subclasses of the YUI Get Utility.
                                     </div>        
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="scriptCallbackParam">scriptCallbackParam</a>
                                         <code>- String</code>
@@ -207,7 +187,7 @@ subclasses of the YUI Get Utility.
                                     <div class="detail">
                                         <div class="description">
                                             Callback string parameter name sent to scriptURI. For instance, requests will be
-sent to &#60;scriptURI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+sent to &lt;scriptURI&gt;?&lt;scriptCallbackParam&gt;=callbackFunction
                                         </div>
                                     </div>
      
@@ -217,8 +197,7 @@ sent to &#60;scriptURI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
                                     </div>        
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="scriptQueryParam">scriptQueryParam</a>
                                         <code>- String</code>
@@ -226,7 +205,7 @@ sent to &#60;scriptURI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
                                     <div class="detail">
                                         <div class="description">
                                             Query string parameter name sent to scriptURI. For instance, requests will be
-sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
+sent to &lt;scriptURI&gt;?&lt;scriptQueryParam&gt;=queryString
                                         </div>
                                     </div>
      
@@ -236,8 +215,7 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
                                     </div>        
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="scriptURI">scriptURI</a>
                                         <code>- String</code>
@@ -251,8 +229,7 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
 
 
                             </div>
@@ -297,19 +274,15 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="doQuery">doQuery</a></h4>
@@ -343,8 +316,7 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>oCallbackFn &lt;HTMLFunction&gt;</code>
                                                               Callback function defined by oParent object to which to return results.
@@ -357,21 +329,15 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
                                                             <code>oParent &lt;Object&gt;</code>
                                                               The object instance that has requested data.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="handleResponse">handleResponse</a></h4>
@@ -410,8 +376,7 @@ the callback function.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>oResponse &lt;Object&gt;</code>
                                                               The raw response data to parse.
@@ -428,21 +393,15 @@ the callback function.
                                                             <code>oParent &lt;Object&gt;</code>
                                                               The object instance that has requested data.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -475,9 +434,7 @@ the callback function.
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class="selected"><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -538,33 +495,27 @@ the callback function.
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.AutoComplete.html">YAHOO.widget.AutoComplete</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.AutoComplete.html">YAHOO.widget.AutoComplete</a></li>
                                 <li class=""><a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a></li>
                                 <li class=""><a href="YAHOO.widget.DS_JSArray.html">YAHOO.widget.DS_JSArray</a></li>
                                 <li class=""><a href="YAHOO.widget.DS_JSFunction.html">YAHOO.widget.DS_JSFunction</a></li>
                                 <li class="selected"><a href="YAHOO.widget.DS_ScriptNode.html">YAHOO.widget.DS_ScriptNode</a></li>
                                 <li class=""><a href="YAHOO.widget.DS_XHR.html">YAHOO.widget.DS_XHR</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="AutoComplete.js.html">AutoComplete.js</a></li>
+                        <ul class="content"><li class=""><a href="AutoComplete.js.html">AutoComplete.js</a></li>
                                 <li class=""><a href="DataSource.js.html">DataSource.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class="private"><a href="#_nId">_nId</a>
+                        <ul class="content"><li class="private"><a href="#_nId">_nId</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
                                 <li class="private"><a href="#_nPending">_nPending</a>
@@ -588,13 +539,11 @@ the callback function.
                                 <li class=""><a href="#scriptURI">scriptURI</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class="private"><!--<code>void</code>-->
+                        <ul class="content"><li class="private"><!--<code>void</code>-->
                                 <a href="#_bumpPendingDown">_bumpPendingDown</a>
                                 </li>
                                 <li class=""><!--<code>void</code>-->
@@ -603,8 +552,7 @@ the callback function.
                                 <li class=""><!--<code>void</code>-->
                                 <a href="#handleResponse">handleResponse</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -612,9 +560,7 @@ the callback function.
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

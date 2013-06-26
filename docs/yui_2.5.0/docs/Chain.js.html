@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: datatable   Chain.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: datatable   Chain.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>DataTable Widget&nbsp; <span class="subtitle">2.5.0</span></h3>
+        <h3>DataTable Widget  <span class="subtitle">2.5.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_datatable.html">datatable</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * Mechanism to execute a series of callbacks in a non-blocking queue.  Each callback is executed via setTimout unless configured with a negative timeout, in which case it is run in blocking mode in the same execution thread as the previous callback.  Callbacks can be function references or object literals with the following keys:</span>
 <span class="c"> * &lt;ul&gt;</span>
 <span class="c"> *    &lt;li&gt;&lt;code&gt;method&lt;/code&gt; - {Function} REQUIRED the callback function.&lt;/li&gt;</span>
@@ -88,7 +79,7 @@
 
         <span class="nx">fn</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">method</span> <span class="o">||</span> <span class="nx">c</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">===</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">o</span>    <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">scope</span> <span class="o">||</span> <span class="o">{},</span>
                 <span class="nx">args</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">argument</span> <span class="o">||</span> <span class="o">[],</span>
                 <span class="nx">ms</span>   <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">timeout</span> <span class="o">||</span> <span class="m">0</span><span class="o">,</span>
@@ -117,7 +108,7 @@
                 <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                 <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="c">// If the until condition is set, check if we&#39;re done</span>
+                <span class="c">// If the until condition is set, check if we're done</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">until</span><span class="o">())</span> <span class="o">{</span>
                         <span class="c">// Shift this callback from the queue and execute the next</span>
@@ -125,7 +116,7 @@
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
                         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">run</span><span class="o">();</span>
                     <span class="o">}</span>
-                <span class="c">// Otherwise if either iterations is not set or we&#39;re</span>
+                <span class="c">// Otherwise if either iterations is not set or we're</span>
 <span class="c"></span>                <span class="c">// executing the last iteration, shift callback from the queue</span>
 <span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span> <span class="o">||</span> <span class="o">!--</span><span class="nx">c</span><span class="o">.</span><span class="nx">iterations</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">q</span><span class="o">.</span><span class="nx">shift</span><span class="o">();</span>
@@ -175,7 +166,7 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Stop and clear the Chain&#39;s queue after the current execution of the</span>
+<span class="c">     * Stop and clear the Chain's queue after the current execution of the</span>
 <span class="c">     * current callback completes.</span>
 <span class="c">     * @method stop</span>
 <span class="c">     * @return {Chain} the Chain instance</span>
@@ -195,9 +186,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -266,13 +255,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Chain.html">YAHOO.util.Chain</a></li>
                                 <li class=""><a href="YAHOO.util.ColumnDD.html">YAHOO.util.ColumnDD</a></li>
                                 <li class=""><a href="YAHOO.util.ColumnResizer.html">YAHOO.util.ColumnResizer</a></li>
                                 <li class=""><a href="YAHOO.util.Sort.html">YAHOO.util.Sort</a></li>
@@ -289,19 +276,16 @@
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
                                 <li class=""><a href="YAHOO.widget.Record.html">YAHOO.widget.Record</a></li>
                                 <li class=""><a href="YAHOO.widget.RecordSet.html">YAHOO.widget.RecordSet</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="Chain.js.html">Chain.js</a></li>
+                        <ul class="content"><li class="selected"><a href="Chain.js.html">Chain.js</a></li>
                                 <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
                                 <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
                                 <li class=""><a href="Paginator.js.html">Paginator.js</a></li>
                                 <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -311,9 +295,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

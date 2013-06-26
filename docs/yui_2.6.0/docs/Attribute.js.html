@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: element   Attribute.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: element   Attribute.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>element&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>element  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html">element</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * Provides Attribute configurations.</span>
 <span class="c"> * @namespace YAHOO.util</span>
 <span class="c"> * @class Attribute</span>
@@ -90,7 +81,7 @@
     <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
 
 	<span class="c">/**</span>
-<span class="c">     * The attribute&#39;s initial configuration.</span>
+<span class="c">     * The attribute's initial configuration.</span>
 <span class="c">     * @private</span>
 <span class="c">	 * @property _initialConfig</span>
 <span class="c">	 * @type Object</span>
@@ -98,7 +89,7 @@
     <span class="nx">_initialConfig</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
     
 	<span class="c">/**</span>
-<span class="c">     * Whether or not the attribute&#39;s value has been set.</span>
+<span class="c">     * Whether or not the attribute's value has been set.</span>
 <span class="c">     * @private</span>
 <span class="c">	 * @property _written</span>
 <span class="c">	 * @type Boolean</span>
@@ -106,7 +97,7 @@
     <span class="nx">_written</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
     
 	<span class="c">/**</span>
-<span class="c">     * The method to use when setting the attribute&#39;s value.</span>
+<span class="c">     * The method to use when setting the attribute's value.</span>
 <span class="c">     * The method recieves the new value as the only argument.</span>
 <span class="c">	 * @property method</span>
 <span class="c">	 * @type Function</span>
@@ -114,7 +105,7 @@
     <span class="nx">method</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
     
 	<span class="c">/**</span>
-<span class="c">     * The validator to use when setting the attribute&#39;s value.</span>
+<span class="c">     * The validator to use when setting the attribute's value.</span>
 <span class="c">	 * @property validator</span>
 <span class="c">	 * @type Function</span>
 <span class="c">     * @return Boolean</span>
@@ -149,22 +140,22 @@
         <span class="o">};</span>
         
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">readOnly</span> <span class="o">||</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">writeOnce</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_written</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span>  <span class="nx">value</span> <span class="o">+</span>
-                    <span class="s1">&#39; failed: read only&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span>  <span class="nx">value</span> <span class="o">+</span>
+                    <span class="s1">' failed: read only'</span><span class="o">,</span> <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'Attribute'</span><span class="o">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="c">// write not allowed</span>
 <span class="c"></span>        <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">validator</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">validator</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">owner</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span>
-                    <span class="s1">&#39; validation failed&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span>
+                    <span class="s1">' validation failed'</span><span class="o">,</span> <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'Attribute'</span><span class="o">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="c">// invalid value</span>
 <span class="c"></span>        <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">beforeRetVal</span> <span class="o">=</span> <span class="nx">owner</span><span class="o">.</span><span class="nx">fireBeforeChangeEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">beforeRetVal</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> 
-                        <span class="s1">&#39; cancelled by beforeChange event&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> 
+                        <span class="s1">' cancelled by beforeChange event'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'Attribute'</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -186,7 +177,7 @@
     <span class="o">},</span>
     
     <span class="c">/**</span>
-<span class="c">     * Allows for configuring the Attribute&#39;s properties.</span>
+<span class="c">     * Allows for configuring the Attribute's properties.</span>
 <span class="c">     * @method configure</span>
 <span class="c">     * @param {Object} map A key-value map of Attribute properties.</span>
 <span class="c">     * @param {Boolean} init Whether or not this should become the initial config.</span>
@@ -242,9 +233,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -317,26 +306,21 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
                                 <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
                                 <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="Attribute.js.html">Attribute.js</a></li>
+                        <ul class="content"><li class="selected"><a href="Attribute.js.html">Attribute.js</a></li>
                                 <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
                                 <li class=""><a href="Element.js.html">Element.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -346,9 +330,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

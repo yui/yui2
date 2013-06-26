@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: charts   Chart.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: charts   Chart.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Charts Widget&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Charts Widget  <span class="subtitle">2.7.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_charts.html" title="charts">charts</a>
                 
                  &gt; Chart.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The Charts widget provides a Flash control for displaying data</span>
 <span class="c"> * graphically by series across A-grade browsers with Flash Player installed.</span>
 <span class="c"> *</span>
@@ -68,7 +52,7 @@
 <span class="c"> * @class Chart</span>
 <span class="c"> * @uses YAHOO.widget.FlashAdapter</span>
 <span class="c"> * @constructor</span>
-<span class="c"> * @param type {String} The char type. May be &quot;line&quot;, &quot;column&quot;, &quot;bar&quot;, or &quot;pie&quot;</span>
+<span class="c"> * @param type {String} The char type. May be "line", "column", "bar", or "pie"</span>
 <span class="c"> * @param containerId {HTMLElement} Container element for the Flash Player instance.</span>
 <span class="c"> * @param dataSource {YAHOO.util.DataSource} DataSource instance.</span>
 <span class="c"> * @param attributes {object} (optional) Object literal of configuration values.</span>
@@ -91,7 +75,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOverEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemMouseOverEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user moves the mouse out of the bounds of an item renderer in the chart.</span>
@@ -104,7 +88,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOutEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemMouseOutEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user clicks an item renderer in the chart with the mouse.</span>
@@ -117,7 +101,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemClickEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemClickEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user double-clicks an item renderer in the chart with the mouse.</span>
@@ -130,7 +114,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDoubleClickEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDoubleClickEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user presses the mouse down on an item to initiate a drag action.</span>
@@ -143,7 +127,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragStartEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragStartEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user moves the mouse during a drag action.</span>
@@ -156,7 +140,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragEvent"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user releases the mouse during a drag action.</span>
@@ -169,7 +153,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEndEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragEndEvent"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span>
@@ -183,7 +167,7 @@
 	<span class="nx">_type</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * The id returned from the DataSource&#39;s setInterval function.</span>
+<span class="c">	 * The id returned from the DataSource's setInterval function.</span>
 <span class="c">	 * @property _pollingID</span>
 <span class="c">	 * @type Number</span>
 <span class="c">	 * @private</span>
@@ -224,7 +208,7 @@
 <span class="c">	 */</span>
 	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;Chart &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">"Chart "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 	<span class="o">},</span>
 	
 	<span class="c">/**</span>
@@ -236,7 +220,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="nx">value</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span><span class="o">.</span><span class="nx">stringify</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
@@ -250,7 +234,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="nx">styles</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span><span class="o">.</span><span class="nx">stringify</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyles</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
@@ -264,7 +248,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setSeriesStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">styles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span>
 		<span class="o">{</span>
@@ -307,15 +291,15 @@
 
 		<span class="c">/**</span>
 <span class="c">		 * @attribute request</span>
-<span class="c">		 * @description Request to be sent to the Chart&#39;s DataSource.</span>
+<span class="c">		 * @description Request to be sent to the Chart's DataSource.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"request"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getRequest</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"request"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setRequest</span>
 		<span class="o">});</span>
@@ -325,12 +309,12 @@
 <span class="c">		 * @description The DataSource instance to display in the Chart.</span>
 <span class="c">		 * @type DataSource</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataSource</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataSource</span>
 		<span class="o">});</span>
@@ -340,12 +324,12 @@
 <span class="c">		 * @description Defines the series to be displayed by the Chart.</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"series"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSeriesDefs</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"series"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setSeriesDefs</span>
 		<span class="o">});</span>
@@ -355,12 +339,12 @@
 <span class="c">		 * @description Defines the names of the categories to be displayed in the Chart..</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"categoryNames"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCategoryNames</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"categoryNames"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setCategoryNames</span>
@@ -369,15 +353,15 @@
 		<span class="c">/**</span>
 <span class="c">		 * @attribute dataTipFunction</span>
 <span class="c">		 * @description The string representation of a globally-accessible function</span>
-<span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart&#39;s item.</span>
+<span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart's item.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"dataTipFunction"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataTipFunction</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"dataTipFunction"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataTipFunction</span>
 		<span class="o">});</span>
@@ -388,12 +372,12 @@
 <span class="c">		 * polling requests to the DataSource.</span>
 <span class="c">		 * @type Number</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"polling"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getPolling</span>
 		<span class="o">});</span>
 
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"polling"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setPolling</span>
 		<span class="o">});</span>
@@ -422,7 +406,7 @@
 		
 		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">);</span>
 		<span class="o">}</span>
 	<span class="o">},</span>
 
@@ -467,7 +451,7 @@
 		<span class="o">{</span>
 			<span class="k">if</span><span class="o">(</span><span class="nx">error</span><span class="o">)</span>
 			<span class="o">{</span>
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unable to load data.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Unable to load data."</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">);</span>
 			<span class="o">}</span>
 			<span class="k">else</span>
 			<span class="o">{</span>
@@ -483,7 +467,7 @@
 				<span class="o">}</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">_seriesLabelFunctions</span> <span class="o">=</span> <span class="o">[];</span>
 
-				<span class="c">//make a copy of the series definitions so that we aren&#39;t</span>
+				<span class="c">//make a copy of the series definitions so that we aren't</span>
 <span class="c"></span>				<span class="c">//editing them directly.</span>
 <span class="c"></span>				<span class="k">var</span> <span class="nx">dataProvider</span> <span class="o">=</span> <span class="o">[];</span>	
 				<span class="k">var</span> <span class="nx">seriesCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
@@ -499,7 +483,7 @@
 						<span class="o">{</span>
 							<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">,</span> <span class="nx">prop</span><span class="o">))</span>
 							<span class="o">{</span>
-								<span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">&quot;style&quot;</span><span class="o">)</span>
+								<span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">"style"</span><span class="o">)</span>
 								<span class="o">{</span>
 									<span class="k">if</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">style</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span>
 									<span class="o">{</span>
@@ -507,10 +491,10 @@
 									<span class="o">}</span>
 								<span class="o">}</span>
 
-								<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">&quot;labelFunction&quot;</span><span class="o">)</span>
+								<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">"labelFunction"</span><span class="o">)</span>
 								<span class="o">{</span>
 									<span class="k">if</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
-										<span class="k">typeof</span> <span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="o">)</span>
+										<span class="k">typeof</span> <span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">==</span> <span class="s2">"function"</span><span class="o">)</span>
 									<span class="o">{</span>
 										<span class="nx">clonedSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">createProxyFunction</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span><span class="o">);</span>
 										<span class="k">this</span><span class="o">.</span><span class="nx">_seriesLabelFunctions</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">clonedSeries</span><span class="o">.</span><span class="nx">labelFunction</span><span class="o">);</span>
@@ -555,7 +539,7 @@
 <span class="c">	 * @property _request</span>
 <span class="c">	 * @private</span>
 <span class="c">	 */</span>
-	<span class="nx">_request</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">,</span>
+	<span class="nx">_request</span><span class="o">:</span> <span class="s2">""</span><span class="o">,</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Getter for the request attribute.</span>
@@ -677,7 +661,7 @@
 			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">removeProxyFunction</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span><span class="o">);</span>
 		<span class="o">}</span>
 		
-		<span class="k">if</span><span class="o">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="o">)</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">==</span> <span class="s2">"function"</span><span class="o">)</span>
 		<span class="o">{</span>
 			<span class="nx">value</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">createProxyFunction</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
@@ -716,9 +700,9 @@
 <span class="c"> * @private</span>
 <span class="c"> * @static</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;assets/charts.swf&quot;</span>
+<span class="c"> * @default "assets/charts.swf"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">&quot;assets/charts.swf&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">"assets/charts.swf"</span><span class="o">;</span>
 </pre></div>
                     </div>
 			</div>
@@ -728,8 +712,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -767,13 +750,11 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Axis.html" title="YAHOO.widget.Axis">YAHOO.widget.Axis</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Axis.html" title="YAHOO.widget.Axis">YAHOO.widget.Axis</a></li>
                                 <li class=""><a href="YAHOO.widget.BarChart.html" title="YAHOO.widget.BarChart">YAHOO.widget.BarChart</a></li>
                                 <li class=""><a href="YAHOO.widget.BarSeries.html" title="YAHOO.widget.BarSeries">YAHOO.widget.BarSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.CartesianChart.html" title="YAHOO.widget.CartesianChart">YAHOO.widget.CartesianChart</a></li>
@@ -794,13 +775,11 @@
                                 <li class=""><a href="YAHOO.widget.StackedColumnChart.html" title="YAHOO.widget.StackedColumnChart">YAHOO.widget.StackedColumnChart</a></li>
                                 <li class=""><a href="YAHOO.widget.StackedColumnSeries.html" title="YAHOO.widget.StackedColumnSeries">YAHOO.widget.StackedColumnSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.TimeAxis.html" title="YAHOO.widget.TimeAxis">YAHOO.widget.TimeAxis</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Axis.js.html" title="Axis.js">Axis.js</a></li>
+                        <ul class="content"><li class=""><a href="Axis.js.html" title="Axis.js">Axis.js</a></li>
                                 <li class=""><a href="CartesianChart.js.html" title="CartesianChart.js">CartesianChart.js</a></li>
                                 <li class=""><a href="CategoryAxis.js.html" title="CategoryAxis.js">CategoryAxis.js</a></li>
                                 <li class="selected"><a href="Chart.js.html" title="Chart.js">Chart.js</a></li>
@@ -811,8 +790,7 @@
                                 <li class=""><a href="Series.js.html" title="Series.js">Series.js</a></li>
                                 <li class=""><a href="swfobject.js.html" title="swfobject.js">swfobject.js</a></li>
                                 <li class=""><a href="TimeAxis.js.html" title="TimeAxis.js">TimeAxis.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -822,12 +800,9 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2009 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
     ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "altText", "url": "YAHOO.widget.FlashAdapter.html#config_altText", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "altTextChange", "url": "YAHOO.widget.FlashAdapter.html#event_altTextChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "alwaysShowZero", "url": "YAHOO.widget.NumericAxis.html#property_alwaysShowZero", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_attributes", "url": "YAHOO.widget.FlashAdapter.html#property__attributes", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColor", "url": "YAHOO.widget.FlashAdapter.html#config_backgroundColor", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_backgroundColorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeAltTextChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeAltTextChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeBackgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeBackgroundColorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeCategoryNamesChange", "url": "YAHOO.widget.Chart.html#event_beforeCategoryNamesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeDataSourceChange", "url": "YAHOO.widget.Chart.html#event_beforeDataSourceChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeDataTipFunctionChange", "url": "YAHOO.widget.Chart.html#event_beforeDataTipFunctionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeExpressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeExpressInstallChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforePollingChange", "url": "YAHOO.widget.Chart.html#event_beforePollingChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeRequestChange", "url": "YAHOO.widget.Chart.html#event_beforeRequestChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "beforeSeriesChange", "url": "YAHOO.widget.Chart.html#event_beforeSeriesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeSwfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeSwfURLChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeVersionChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeVersionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeWmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeWmodeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "calcualateCategoryCount", "url": "YAHOO.widget.CategoryAxis.html#property_calcualateCategoryCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "categoryField", "url": "YAHOO.widget.PieSeries.html#property_categoryField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "categoryNames", "url": "YAHOO.widget.CategoryAxis.html#property_categoryNames", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "categoryNames", "url": "YAHOO.widget.Chart.html#config_categoryNames", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "categoryNamesChange", "url": "YAHOO.widget.Chart.html#event_categoryNamesChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "Chart.SWFURL", "url": "YAHOO.widget.Chart.html#property_Chart.SWFURL", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_containerID", "url": "YAHOO.widget.FlashAdapter.html#property__containerID", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "contentReady", "url": "YAHOO.widget.FlashAdapter.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "dataField", "url": "YAHOO.widget.PieSeries.html#property_dataField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_dataSource", "url": "YAHOO.widget.Chart.html#property__dataSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataSource", "url": "YAHOO.widget.Chart.html#config_dataSource", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataSourceChange", "url": "YAHOO.widget.Chart.html#event_dataSourceChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_dataTipFunction", "url": "YAHOO.widget.Chart.html#property__dataTipFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataTipFunction", "url": "YAHOO.widget.Chart.html#config_dataTipFunction", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "dataTipFunctionChange", "url": "YAHOO.widget.Chart.html#event_dataTipFunctionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "destroy", "url": "YAHOO.widget.FlashAdapter.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_embedSWF", "url": "YAHOO.widget.FlashAdapter.html#method__embedSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method__eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstall", "url": "YAHOO.widget.FlashAdapter.html#config_expressInstall", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_expressInstallChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_getAltText", "url": "YAHOO.widget.FlashAdapter.html#method__getAltText", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getCategoryNames", "url": "YAHOO.widget.Chart.html#method__getCategoryNames", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getDataSource", "url": "YAHOO.widget.Chart.html#method__getDataSource", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getPolling", "url": "YAHOO.widget.Chart.html#method__getPolling", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getRequest", "url": "YAHOO.widget.Chart.html#method__getRequest", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_getSeriesDefs", "url": "YAHOO.widget.Chart.html#method__getSeriesDefs", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_getSWFURL", "url": "YAHOO.widget.FlashAdapter.html#method__getSWFURL", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getXField", "url": "YAHOO.widget.CartesianChart.html#method__getXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getYField", "url": "YAHOO.widget.CartesianChart.html#method__getYField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_id", "url": "YAHOO.widget.FlashAdapter.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_initAttributes", "url": "YAHOO.widget.FlashAdapter.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_initAttributes", "url": "YAHOO.widget.CartesianChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_initAttributes", "url": "YAHOO.widget.Chart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_initialized", "url": "YAHOO.widget.FlashAdapter.html#property__initialized", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemClickEvent", "url": "YAHOO.widget.Chart.html#event_itemClickEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDoubleClickEvent", "url": "YAHOO.widget.Chart.html#event_itemDoubleClickEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragEndEvent", "url": "YAHOO.widget.Chart.html#event_itemDragEndEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragEvent", "url": "YAHOO.widget.Chart.html#event_itemDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemDragStartEvent", "url": "YAHOO.widget.Chart.html#event_itemDragStartEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemMouseOutEvent", "url": "YAHOO.widget.Chart.html#event_itemMouseOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "itemMouseOverEvent", "url": "YAHOO.widget.Chart.html#event_itemMouseOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "labelFunction", "url": "YAHOO.widget.PieSeries.html#property_labelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "labelFunction", "url": "YAHOO.widget.Axis.html#property_labelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "labelSpacing", "url": "YAHOO.widget.Axis.html#property_labelSpacing", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_loadDataHandler", "url": "YAHOO.widget.Chart.html#method__loadDataHandler", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_loadHandler", "url": "YAHOO.widget.FlashAdapter.html#method__loadHandler", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_loadHandler", "url": "YAHOO.widget.Chart.html#method__loadHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorTimeUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorTimeUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "majorUnit", "url": "YAHOO.widget.NumericAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "maximum", "url": "YAHOO.widget.TimeAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "maximum", "url": "YAHOO.widget.NumericAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "minimum", "url": "YAHOO.widget.TimeAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minimum", "url": "YAHOO.widget.NumericAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minorUnit", "url": "YAHOO.widget.NumericAxis.html#property_minorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "polling", "url": "YAHOO.widget.Chart.html#config_polling", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "pollingChange", "url": "YAHOO.widget.Chart.html#event_pollingChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_pollingID", "url": "YAHOO.widget.Chart.html#property__pollingID", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_pollingInterval", "url": "YAHOO.widget.Chart.html#property__pollingInterval", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "proxyFunctionCount", "url": "YAHOO.widget.FlashAdapter.html#property_proxyFunctionCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "refreshData", "url": "YAHOO.widget.Chart.html#method_refreshData", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_request", "url": "YAHOO.widget.Chart.html#property__request", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "request", "url": "YAHOO.widget.Chart.html#config_request", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "requestChange", "url": "YAHOO.widget.Chart.html#event_requestChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "reverse", "url": "YAHOO.widget.Axis.html#property_reverse", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "roundMajorUnit", "url": "YAHOO.widget.NumericAxis.html#property_roundMajorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "scale", "url": "YAHOO.widget.NumericAxis.html#property_scale", "type": "property"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "series", "url": "YAHOO.widget.Chart.html#config_series", "type": "config"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "seriesChange", "url": "YAHOO.widget.Chart.html#event_seriesChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_seriesDefs", "url": "YAHOO.widget.Chart.html#property__seriesDefs", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_seriesLabelFunctions", "url": "YAHOO.widget.Chart.html#property__seriesLabelFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_setAltText", "url": "YAHOO.widget.FlashAdapter.html#method__setAltText", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setCategoryNames", "url": "YAHOO.widget.Chart.html#method__setCategoryNames", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setDataSource", "url": "YAHOO.widget.Chart.html#method__setDataSource", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setDataTipFunction", "url": "YAHOO.widget.Chart.html#method__setDataTipFunction", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setPolling", "url": "YAHOO.widget.Chart.html#method__setPolling", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setRequest", "url": "YAHOO.widget.Chart.html#method__setRequest", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_setSeriesDefs", "url": "YAHOO.widget.Chart.html#method__setSeriesDefs", "type": "method"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setSeriesStyles", "url": "YAHOO.widget.Chart.html#method_setSeriesStyles", "type": "method"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setStyle", "url": "YAHOO.widget.Chart.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "setStyles", "url": "YAHOO.widget.Chart.html#method_setStyles", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxis", "url": "YAHOO.widget.CartesianChart.html#method__setXAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXField", "url": "YAHOO.widget.CartesianChart.html#method__setXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxis", "url": "YAHOO.widget.CartesianChart.html#method__setYAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYField", "url": "YAHOO.widget.CartesianChart.html#method__setYField", "type": "method"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "snapToUnits", "url": "YAHOO.widget.TimeAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "snapToUnits", "url": "YAHOO.widget.NumericAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "stackingEnabled", "url": "YAHOO.widget.TimeAxis.html#property_stackingEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "stackingEnabled", "url": "YAHOO.widget.NumericAxis.html#property_stackingEnabled", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swf", "url": "YAHOO.widget.FlashAdapter.html#property__swf", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swfURL", "url": "YAHOO.widget.FlashAdapter.html#property__swfURL", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURL", "url": "YAHOO.widget.FlashAdapter.html#config_swfURL", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_swfURLChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "title", "url": "YAHOO.widget.Axis.html#property_title", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "toString", "url": "YAHOO.widget.FlashAdapter.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Chart", "name": "toString", "url": "YAHOO.widget.Chart.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Chart", "name": "_type", "url": "YAHOO.widget.Chart.html#property__type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Axis", "name": "type", "url": "YAHOO.widget.Axis.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "version", "url": "YAHOO.widget.FlashAdapter.html#config_version", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "versionChange", "url": "YAHOO.widget.FlashAdapter.html#event_versionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmode", "url": "YAHOO.widget.FlashAdapter.html#config_wmode", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_wmodeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxis", "url": "YAHOO.widget.CartesianChart.html#config_xAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_xAxisLabelFunction", "url": "YAHOO.widget.CartesianChart.html#property__xAxisLabelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xField", "url": "YAHOO.widget.CartesianChart.html#config_xField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_xFieldChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.createProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.createProxyFunction", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.eventHandler", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.removeProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.removeProxyFunction", "type": "method"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxis", "url": "YAHOO.widget.CartesianChart.html#config_yAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_yAxisLabelFunction", "url": "YAHOO.widget.CartesianChart.html#property__yAxisLabelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yField", "url": "YAHOO.widget.CartesianChart.html#config_yField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_yFieldChange", "type": "event"}];
-</script>
-</body>
-</html>
+</script></body>

@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: menu   menu.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: menu   menu.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Menu&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>Menu  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html">menu</a>
@@ -28,97 +20,96 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 	<span class="k">var</span> <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
 
 	<span class="c">// String constants</span>
 <span class="c"></span>	
-		<span class="nx">_MENU</span> <span class="o">=</span> <span class="s2">&quot;Menu&quot;</span><span class="o">,</span>
-		<span class="nx">_DIV_UPPERCASE</span> <span class="o">=</span> <span class="s2">&quot;DIV&quot;</span><span class="o">,</span>
-		<span class="nx">_DIV_LOWERCASE</span> <span class="o">=</span> <span class="s2">&quot;div&quot;</span><span class="o">,</span>
-		<span class="nx">_ID</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="o">,</span>
-		<span class="nx">_SELECT</span> <span class="o">=</span> <span class="s2">&quot;SELECT&quot;</span><span class="o">,</span>
-		<span class="nx">_XY</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span><span class="o">,</span>
-		<span class="nx">_Y</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span><span class="o">,</span>
-		<span class="nx">_UL_UPPERCASE</span> <span class="o">=</span> <span class="s2">&quot;UL&quot;</span><span class="o">,</span>
-		<span class="nx">_UL_LOWERCASE</span> <span class="o">=</span> <span class="s2">&quot;ul&quot;</span><span class="o">,</span>
-		<span class="nx">_FIRST_OF_TYPE</span> <span class="o">=</span> <span class="s2">&quot;first-of-type&quot;</span><span class="o">,</span>
-		<span class="nx">_LI</span> <span class="o">=</span> <span class="s2">&quot;LI&quot;</span><span class="o">,</span>
-		<span class="nx">_OPTGROUP</span> <span class="o">=</span> <span class="s2">&quot;OPTGROUP&quot;</span><span class="o">,</span>
-		<span class="nx">_OPTION</span> <span class="o">=</span> <span class="s2">&quot;OPTION&quot;</span><span class="o">,</span>
-		<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="o">,</span>
-		<span class="nx">_NONE</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">,</span>
-		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="o">,</span>
-		<span class="nx">_GROUP_INDEX</span> <span class="o">=</span> <span class="s2">&quot;groupindex&quot;</span><span class="o">,</span>
-		<span class="nx">_INDEX</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span><span class="o">,</span>
-		<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">&quot;submenu&quot;</span><span class="o">,</span>
-		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span>
-		<span class="nx">_HIDE_DELAY</span> <span class="o">=</span> <span class="s2">&quot;hidedelay&quot;</span><span class="o">,</span>
-		<span class="nx">_POSITION</span> <span class="o">=</span> <span class="s2">&quot;position&quot;</span><span class="o">,</span>
-		<span class="nx">_DYNAMIC</span> <span class="o">=</span> <span class="s2">&quot;dynamic&quot;</span><span class="o">,</span>
-		<span class="nx">_STATIC</span> <span class="o">=</span> <span class="s2">&quot;static&quot;</span><span class="o">,</span>
-		<span class="nx">_DYNAMIC_STATIC</span> <span class="o">=</span> <span class="nx">_DYNAMIC</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">_STATIC</span><span class="o">,</span>
-		<span class="nx">_WINDOWS</span> <span class="o">=</span> <span class="s2">&quot;windows&quot;</span><span class="o">,</span>
-		<span class="nx">_URL</span> <span class="o">=</span> <span class="s2">&quot;url&quot;</span><span class="o">,</span>
-		<span class="nx">_HASH</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span><span class="o">,</span>
-		<span class="nx">_TARGET</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span><span class="o">,</span>
-		<span class="nx">_MAX_HEIGHT</span> <span class="o">=</span> <span class="s2">&quot;maxheight&quot;</span><span class="o">,</span>
-        <span class="nx">_TOP_SCROLLBAR</span> <span class="o">=</span> <span class="s2">&quot;topscrollbar&quot;</span><span class="o">,</span>
-        <span class="nx">_BOTTOM_SCROLLBAR</span> <span class="o">=</span> <span class="s2">&quot;bottomscrollbar&quot;</span><span class="o">,</span>
-        <span class="nx">_UNDERSCORE</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">,</span>
+		<span class="nx">_MENU</span> <span class="o">=</span> <span class="s2">"Menu"</span><span class="o">,</span>
+		<span class="nx">_DIV_UPPERCASE</span> <span class="o">=</span> <span class="s2">"DIV"</span><span class="o">,</span>
+		<span class="nx">_DIV_LOWERCASE</span> <span class="o">=</span> <span class="s2">"div"</span><span class="o">,</span>
+		<span class="nx">_ID</span> <span class="o">=</span> <span class="s2">"id"</span><span class="o">,</span>
+		<span class="nx">_SELECT</span> <span class="o">=</span> <span class="s2">"SELECT"</span><span class="o">,</span>
+		<span class="nx">_XY</span> <span class="o">=</span> <span class="s2">"xy"</span><span class="o">,</span>
+		<span class="nx">_Y</span> <span class="o">=</span> <span class="s2">"y"</span><span class="o">,</span>
+		<span class="nx">_UL_UPPERCASE</span> <span class="o">=</span> <span class="s2">"UL"</span><span class="o">,</span>
+		<span class="nx">_UL_LOWERCASE</span> <span class="o">=</span> <span class="s2">"ul"</span><span class="o">,</span>
+		<span class="nx">_FIRST_OF_TYPE</span> <span class="o">=</span> <span class="s2">"first-of-type"</span><span class="o">,</span>
+		<span class="nx">_LI</span> <span class="o">=</span> <span class="s2">"LI"</span><span class="o">,</span>
+		<span class="nx">_OPTGROUP</span> <span class="o">=</span> <span class="s2">"OPTGROUP"</span><span class="o">,</span>
+		<span class="nx">_OPTION</span> <span class="o">=</span> <span class="s2">"OPTION"</span><span class="o">,</span>
+		<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">"disabled"</span><span class="o">,</span>
+		<span class="nx">_NONE</span> <span class="o">=</span> <span class="s2">"none"</span><span class="o">,</span>
+		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">"selected"</span><span class="o">,</span>
+		<span class="nx">_GROUP_INDEX</span> <span class="o">=</span> <span class="s2">"groupindex"</span><span class="o">,</span>
+		<span class="nx">_INDEX</span> <span class="o">=</span> <span class="s2">"index"</span><span class="o">,</span>
+		<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">"submenu"</span><span class="o">,</span>
+		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">"visible"</span><span class="o">,</span>
+		<span class="nx">_HIDE_DELAY</span> <span class="o">=</span> <span class="s2">"hidedelay"</span><span class="o">,</span>
+		<span class="nx">_POSITION</span> <span class="o">=</span> <span class="s2">"position"</span><span class="o">,</span>
+		<span class="nx">_DYNAMIC</span> <span class="o">=</span> <span class="s2">"dynamic"</span><span class="o">,</span>
+		<span class="nx">_STATIC</span> <span class="o">=</span> <span class="s2">"static"</span><span class="o">,</span>
+		<span class="nx">_DYNAMIC_STATIC</span> <span class="o">=</span> <span class="nx">_DYNAMIC</span> <span class="o">+</span> <span class="s2">","</span> <span class="o">+</span> <span class="nx">_STATIC</span><span class="o">,</span>
+		<span class="nx">_WINDOWS</span> <span class="o">=</span> <span class="s2">"windows"</span><span class="o">,</span>
+		<span class="nx">_URL</span> <span class="o">=</span> <span class="s2">"url"</span><span class="o">,</span>
+		<span class="nx">_HASH</span> <span class="o">=</span> <span class="s2">"#"</span><span class="o">,</span>
+		<span class="nx">_TARGET</span> <span class="o">=</span> <span class="s2">"target"</span><span class="o">,</span>
+		<span class="nx">_MAX_HEIGHT</span> <span class="o">=</span> <span class="s2">"maxheight"</span><span class="o">,</span>
+        <span class="nx">_TOP_SCROLLBAR</span> <span class="o">=</span> <span class="s2">"topscrollbar"</span><span class="o">,</span>
+        <span class="nx">_BOTTOM_SCROLLBAR</span> <span class="o">=</span> <span class="s2">"bottomscrollbar"</span><span class="o">,</span>
+        <span class="nx">_UNDERSCORE</span> <span class="o">=</span> <span class="s2">"_"</span><span class="o">,</span>
 		<span class="nx">_TOP_SCROLLBAR_DISABLED</span> <span class="o">=</span> <span class="nx">_TOP_SCROLLBAR</span> <span class="o">+</span> <span class="nx">_UNDERSCORE</span> <span class="o">+</span> <span class="nx">_DISABLED</span><span class="o">,</span>
 		<span class="nx">_BOTTOM_SCROLLBAR_DISABLED</span> <span class="o">=</span> <span class="nx">_BOTTOM_SCROLLBAR</span> <span class="o">+</span> <span class="nx">_UNDERSCORE</span> <span class="o">+</span> <span class="nx">_DISABLED</span><span class="o">,</span>
-		<span class="nx">_MOUSEMOVE</span> <span class="o">=</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span>
-		<span class="nx">_SHOW_DELAY</span> <span class="o">=</span> <span class="s2">&quot;showdelay&quot;</span><span class="o">,</span>
-		<span class="nx">_SUBMENU_HIDE_DELAY</span> <span class="o">=</span> <span class="s2">&quot;submenuhidedelay&quot;</span><span class="o">,</span>
-		<span class="nx">_IFRAME</span> <span class="o">=</span> <span class="s2">&quot;iframe&quot;</span><span class="o">,</span>
-		<span class="nx">_CONSTRAIN_TO_VIEWPORT</span> <span class="o">=</span> <span class="s2">&quot;constraintoviewport&quot;</span><span class="o">,</span>
-		<span class="nx">_PREVENT_CONTEXT_OVERLAP</span> <span class="o">=</span> <span class="s2">&quot;preventcontextoverlap&quot;</span><span class="o">,</span>
-		<span class="nx">_SUBMENU_ALIGNMENT</span> <span class="o">=</span> <span class="s2">&quot;submenualignment&quot;</span><span class="o">,</span>
-		<span class="nx">_AUTO_SUBMENU_DISPLAY</span> <span class="o">=</span> <span class="s2">&quot;autosubmenudisplay&quot;</span><span class="o">,</span>
-		<span class="nx">_CLICK_TO_HIDE</span> <span class="o">=</span> <span class="s2">&quot;clicktohide&quot;</span><span class="o">,</span>
-		<span class="nx">_CONTAINER</span> <span class="o">=</span> <span class="s2">&quot;container&quot;</span><span class="o">,</span>
-		<span class="nx">_SCROLL_INCREMENT</span> <span class="o">=</span> <span class="s2">&quot;scrollincrement&quot;</span><span class="o">,</span>
-		<span class="nx">_MIN_SCROLL_HEIGHT</span> <span class="o">=</span> <span class="s2">&quot;minscrollheight&quot;</span><span class="o">,</span>
-		<span class="nx">_CLASSNAME</span> <span class="o">=</span> <span class="s2">&quot;classname&quot;</span><span class="o">,</span>
-		<span class="nx">_SHADOW</span> <span class="o">=</span> <span class="s2">&quot;shadow&quot;</span><span class="o">,</span>
-		<span class="nx">_KEEP_OPEN</span> <span class="o">=</span> <span class="s2">&quot;keepopen&quot;</span><span class="o">,</span>
-		<span class="nx">_HD</span> <span class="o">=</span> <span class="s2">&quot;hd&quot;</span><span class="o">,</span>
-		<span class="nx">_HAS_TITLE</span> <span class="o">=</span> <span class="s2">&quot;hastitle&quot;</span><span class="o">,</span>
-		<span class="nx">_CONTEXT</span> <span class="o">=</span> <span class="s2">&quot;context&quot;</span><span class="o">,</span>
-		<span class="nx">_EMPTY_STRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEDOWN</span> <span class="o">=</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span>
-		<span class="nx">_KEYDOWN</span> <span class="o">=</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span>
-		<span class="nx">_HEIGHT</span> <span class="o">=</span> <span class="s2">&quot;height&quot;</span><span class="o">,</span>
-		<span class="nx">_WIDTH</span> <span class="o">=</span> <span class="s2">&quot;width&quot;</span><span class="o">,</span>
-		<span class="nx">_PX</span> <span class="o">=</span> <span class="s2">&quot;px&quot;</span><span class="o">,</span>
-		<span class="nx">_EFFECT</span> <span class="o">=</span> <span class="s2">&quot;effect&quot;</span><span class="o">,</span>
-		<span class="nx">_MONITOR_RESIZE</span> <span class="o">=</span> <span class="s2">&quot;monitorresize&quot;</span><span class="o">,</span>
-		<span class="nx">_DISPLAY</span> <span class="o">=</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span>
-		<span class="nx">_BLOCK</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span><span class="o">,</span>
-		<span class="nx">_VISIBILITY</span> <span class="o">=</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span>
-		<span class="nx">_ABSOLUTE</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">,</span>
-		<span class="nx">_ZINDEX</span> <span class="o">=</span> <span class="s2">&quot;zindex&quot;</span><span class="o">,</span>
-		<span class="nx">_YUI_MENU_BODY_SCROLLED</span> <span class="o">=</span> <span class="s2">&quot;yui-menu-body-scrolled&quot;</span><span class="o">,</span>
-		<span class="nx">_NON_BREAKING_SPACE</span> <span class="o">=</span> <span class="s2">&quot;&amp;#32;&quot;</span><span class="o">,</span>
-		<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEOVER</span> <span class="o">=</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEOUT</span> <span class="o">=</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span>
-        <span class="nx">_ITEM_ADDED</span> <span class="o">=</span> <span class="s2">&quot;itemAdded&quot;</span><span class="o">,</span>
-        <span class="nx">_ITEM_REMOVED</span> <span class="o">=</span> <span class="s2">&quot;itemRemoved&quot;</span><span class="o">,</span>
-        <span class="nx">_HIDDEN</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">,</span>
-        <span class="nx">_YUI_MENU_SHADOW</span> <span class="o">=</span> <span class="s2">&quot;yui-menu-shadow&quot;</span><span class="o">,</span>
-        <span class="nx">_YUI_MENU_SHADOW_VISIBLE</span> <span class="o">=</span> <span class="nx">_YUI_MENU_SHADOW</span> <span class="o">+</span> <span class="s2">&quot;-visible&quot;</span><span class="o">,</span>
+		<span class="nx">_MOUSEMOVE</span> <span class="o">=</span> <span class="s2">"mousemove"</span><span class="o">,</span>
+		<span class="nx">_SHOW_DELAY</span> <span class="o">=</span> <span class="s2">"showdelay"</span><span class="o">,</span>
+		<span class="nx">_SUBMENU_HIDE_DELAY</span> <span class="o">=</span> <span class="s2">"submenuhidedelay"</span><span class="o">,</span>
+		<span class="nx">_IFRAME</span> <span class="o">=</span> <span class="s2">"iframe"</span><span class="o">,</span>
+		<span class="nx">_CONSTRAIN_TO_VIEWPORT</span> <span class="o">=</span> <span class="s2">"constraintoviewport"</span><span class="o">,</span>
+		<span class="nx">_PREVENT_CONTEXT_OVERLAP</span> <span class="o">=</span> <span class="s2">"preventcontextoverlap"</span><span class="o">,</span>
+		<span class="nx">_SUBMENU_ALIGNMENT</span> <span class="o">=</span> <span class="s2">"submenualignment"</span><span class="o">,</span>
+		<span class="nx">_AUTO_SUBMENU_DISPLAY</span> <span class="o">=</span> <span class="s2">"autosubmenudisplay"</span><span class="o">,</span>
+		<span class="nx">_CLICK_TO_HIDE</span> <span class="o">=</span> <span class="s2">"clicktohide"</span><span class="o">,</span>
+		<span class="nx">_CONTAINER</span> <span class="o">=</span> <span class="s2">"container"</span><span class="o">,</span>
+		<span class="nx">_SCROLL_INCREMENT</span> <span class="o">=</span> <span class="s2">"scrollincrement"</span><span class="o">,</span>
+		<span class="nx">_MIN_SCROLL_HEIGHT</span> <span class="o">=</span> <span class="s2">"minscrollheight"</span><span class="o">,</span>
+		<span class="nx">_CLASSNAME</span> <span class="o">=</span> <span class="s2">"classname"</span><span class="o">,</span>
+		<span class="nx">_SHADOW</span> <span class="o">=</span> <span class="s2">"shadow"</span><span class="o">,</span>
+		<span class="nx">_KEEP_OPEN</span> <span class="o">=</span> <span class="s2">"keepopen"</span><span class="o">,</span>
+		<span class="nx">_HD</span> <span class="o">=</span> <span class="s2">"hd"</span><span class="o">,</span>
+		<span class="nx">_HAS_TITLE</span> <span class="o">=</span> <span class="s2">"hastitle"</span><span class="o">,</span>
+		<span class="nx">_CONTEXT</span> <span class="o">=</span> <span class="s2">"context"</span><span class="o">,</span>
+		<span class="nx">_EMPTY_STRING</span> <span class="o">=</span> <span class="s2">""</span><span class="o">,</span>
+		<span class="nx">_MOUSEDOWN</span> <span class="o">=</span> <span class="s2">"mousedown"</span><span class="o">,</span>
+		<span class="nx">_KEYDOWN</span> <span class="o">=</span> <span class="s2">"keydown"</span><span class="o">,</span>
+		<span class="nx">_HEIGHT</span> <span class="o">=</span> <span class="s2">"height"</span><span class="o">,</span>
+		<span class="nx">_WIDTH</span> <span class="o">=</span> <span class="s2">"width"</span><span class="o">,</span>
+		<span class="nx">_PX</span> <span class="o">=</span> <span class="s2">"px"</span><span class="o">,</span>
+		<span class="nx">_EFFECT</span> <span class="o">=</span> <span class="s2">"effect"</span><span class="o">,</span>
+		<span class="nx">_MONITOR_RESIZE</span> <span class="o">=</span> <span class="s2">"monitorresize"</span><span class="o">,</span>
+		<span class="nx">_DISPLAY</span> <span class="o">=</span> <span class="s2">"display"</span><span class="o">,</span>
+		<span class="nx">_BLOCK</span> <span class="o">=</span> <span class="s2">"block"</span><span class="o">,</span>
+		<span class="nx">_VISIBILITY</span> <span class="o">=</span> <span class="s2">"visibility"</span><span class="o">,</span>
+		<span class="nx">_ABSOLUTE</span> <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">,</span>
+		<span class="nx">_ZINDEX</span> <span class="o">=</span> <span class="s2">"zindex"</span><span class="o">,</span>
+		<span class="nx">_YUI_MENU_BODY_SCROLLED</span> <span class="o">=</span> <span class="s2">"yui-menu-body-scrolled"</span><span class="o">,</span>
+		<span class="nx">_NON_BREAKING_SPACE</span> <span class="o">=</span> <span class="s2">"&amp;#32;"</span><span class="o">,</span>
+		<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">,</span>
+		<span class="nx">_MOUSEOVER</span> <span class="o">=</span> <span class="s2">"mouseover"</span><span class="o">,</span>
+		<span class="nx">_MOUSEOUT</span> <span class="o">=</span> <span class="s2">"mouseout"</span><span class="o">,</span>
+        <span class="nx">_ITEM_ADDED</span> <span class="o">=</span> <span class="s2">"itemAdded"</span><span class="o">,</span>
+        <span class="nx">_ITEM_REMOVED</span> <span class="o">=</span> <span class="s2">"itemRemoved"</span><span class="o">,</span>
+        <span class="nx">_HIDDEN</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">,</span>
+        <span class="nx">_YUI_MENU_SHADOW</span> <span class="o">=</span> <span class="s2">"yui-menu-shadow"</span><span class="o">,</span>
+        <span class="nx">_YUI_MENU_SHADOW_VISIBLE</span> <span class="o">=</span> <span class="nx">_YUI_MENU_SHADOW</span> <span class="o">+</span> <span class="s2">"-visible"</span><span class="o">,</span>
         <span class="nx">_YUI_MENU_SHADOW_YUI_MENU_SHADOW_VISIBLE</span> <span class="o">=</span> <span class="nx">_YUI_MENU_SHADOW</span> <span class="o">+</span> <span class="nx">_SPACE</span> <span class="o">+</span> <span class="nx">_YUI_MENU_SHADOW_VISIBLE</span><span class="o">;</span>
 
 
@@ -131,11 +122,11 @@
 <span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
 <span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source </span>
 <span class="c">* for the menu.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">* level-one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">* level-one-html.html#ID-22445964"&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the menu.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">* level-one-html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">* level-one-html.html#ID-94282980"&gt;HTMLSelectElement&lt;/a&gt;} p_oElement </span>
 <span class="c">* Object specifying the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as </span>
 <span class="c">* the data source for the menu.</span>
 <span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
@@ -165,7 +156,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method checkPosition</span>
-<span class="c">* @description Checks to make sure that the value of the &quot;position&quot; property </span>
+<span class="c">* @description Checks to make sure that the value of the "position" property </span>
 <span class="c">* is one of the supported strings. Returns true if the position is supported.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {Object} p_sPosition String specifying the position of the menu.</span>
@@ -199,18 +190,18 @@
 
 	<span class="nx">EVENT_TYPES</span> <span class="o">=</span> <span class="o">[</span>
     
-		<span class="o">[</span><span class="s2">&quot;mouseOverEvent&quot;</span><span class="o">,</span> <span class="nx">_MOUSEOVER</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;mouseOutEvent&quot;</span><span class="o">,</span> <span class="nx">_MOUSEOUT</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;mouseDownEvent&quot;</span><span class="o">,</span> <span class="nx">_MOUSEDOWN</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;mouseUpEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;clickEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;keyPressEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;keypress&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;keyDownEvent&quot;</span><span class="o">,</span> <span class="nx">_KEYDOWN</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;keyUpEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;keyup&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;focusEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;focus&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;blurEvent&quot;</span><span class="o">,</span> <span class="s2">&quot;blur&quot;</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;itemAddedEvent&quot;</span><span class="o">,</span> <span class="nx">_ITEM_ADDED</span><span class="o">],</span>
-		<span class="o">[</span><span class="s2">&quot;itemRemovedEvent&quot;</span><span class="o">,</span> <span class="nx">_ITEM_REMOVED</span><span class="o">]</span>
+		<span class="o">[</span><span class="s2">"mouseOverEvent"</span><span class="o">,</span> <span class="nx">_MOUSEOVER</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"mouseOutEvent"</span><span class="o">,</span> <span class="nx">_MOUSEOUT</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"mouseDownEvent"</span><span class="o">,</span> <span class="nx">_MOUSEDOWN</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"mouseUpEvent"</span><span class="o">,</span> <span class="s2">"mouseup"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"clickEvent"</span><span class="o">,</span> <span class="s2">"click"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"keyPressEvent"</span><span class="o">,</span> <span class="s2">"keypress"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"keyDownEvent"</span><span class="o">,</span> <span class="nx">_KEYDOWN</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"keyUpEvent"</span><span class="o">,</span> <span class="s2">"keyup"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"focusEvent"</span><span class="o">,</span> <span class="s2">"focus"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"blurEvent"</span><span class="o">,</span> <span class="s2">"blur"</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"itemAddedEvent"</span><span class="o">,</span> <span class="nx">_ITEM_ADDED</span><span class="o">],</span>
+		<span class="o">[</span><span class="s2">"itemRemovedEvent"</span><span class="o">,</span> <span class="nx">_ITEM_REMOVED</span><span class="o">]</span>
 
 	<span class="o">],</span>
 
@@ -224,7 +215,7 @@
 		<span class="nx">key</span><span class="o">:</span> <span class="nx">_CONSTRAIN_TO_VIEWPORT</span><span class="o">,</span> 
 		<span class="nx">value</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
 		<span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span> 
-		<span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="nx">_IFRAME</span><span class="o">,</span><span class="s2">&quot;x&quot;</span><span class="o">,</span><span class="nx">_Y</span><span class="o">,</span><span class="nx">_XY</span><span class="o">]</span>
+		<span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="nx">_IFRAME</span><span class="o">,</span><span class="s2">"x"</span><span class="o">,</span><span class="nx">_Y</span><span class="o">,</span><span class="nx">_XY</span><span class="o">]</span>
 	<span class="o">},</span> 
 
 	<span class="nx">PREVENT_CONTEXT_OVERLAP_CONFIG</span> <span class="o">=</span>  <span class="o">{</span>
@@ -243,7 +234,7 @@
 
 	<span class="nx">SUBMENU_ALIGNMENT_CONFIG</span> <span class="o">=</span>  <span class="o">{</span> 
 		<span class="nx">key</span><span class="o">:</span> <span class="nx">_SUBMENU_ALIGNMENT</span><span class="o">,</span> 
-		<span class="nx">value</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;tl&quot;</span><span class="o">,</span><span class="s2">&quot;tr&quot;</span><span class="o">]</span>
+		<span class="nx">value</span><span class="o">:</span> <span class="o">[</span><span class="s2">"tl"</span><span class="o">,</span><span class="s2">"tr"</span><span class="o">]</span>
 	<span class="o">},</span>
 
 	<span class="nx">AUTO_SUBMENU_DISPLAY_CONFIG</span> <span class="o">=</span>  <span class="o">{</span> 
@@ -349,12 +340,12 @@
 <span class="c">/**</span>
 <span class="c">* @property CSS_CLASS_NAME</span>
 <span class="c">* @description String representing the CSS class(es) to be applied to the </span>
-<span class="c">* menu&#39;s &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.</span>
-<span class="c">* @default &quot;yuimenu&quot;</span>
+<span class="c">* menu's &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.</span>
+<span class="c">* @default "yuimenu"</span>
 <span class="c">* @final</span>
 <span class="c">* @type String</span>
 <span class="c">*/</span>
-<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenu&quot;</span><span class="o">,</span>
+<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">"yuimenu"</span><span class="o">,</span>
 
 
 <span class="c">/**</span>
@@ -362,7 +353,7 @@
 <span class="c">* @description Object representing the type of menu item to instantiate and </span>
 <span class="c">* add when parsing the child nodes (either &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element, </span>
 <span class="c">* &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element or &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt;) </span>
-<span class="c">* of the menu&#39;s source HTML element.</span>
+<span class="c">* of the menu's source HTML element.</span>
 <span class="c">* @default YAHOO.widget.MenuItem</span>
 <span class="c">* @final</span>
 <span class="c">* @type YAHOO.widget.MenuItem</span>
@@ -373,24 +364,24 @@
 <span class="c">/**</span>
 <span class="c">* @property GROUP_TITLE_TAG_NAME</span>
 <span class="c">* @description String representing the tagname of the HTML element used to </span>
-<span class="c">* title the menu&#39;s item groups.</span>
+<span class="c">* title the menu's item groups.</span>
 <span class="c">* @default H6</span>
 <span class="c">* @final</span>
 <span class="c">* @type String</span>
 <span class="c">*/</span>
-<span class="nx">GROUP_TITLE_TAG_NAME</span><span class="o">:</span> <span class="s2">&quot;h6&quot;</span><span class="o">,</span>
+<span class="nx">GROUP_TITLE_TAG_NAME</span><span class="o">:</span> <span class="s2">"h6"</span><span class="o">,</span>
 
 
 <span class="c">/**</span>
 <span class="c">* @property OFF_SCREEN_POSITION</span>
 <span class="c">* @description Array representing the default x and y position that a menu </span>
 <span class="c">* should have when it is positioned outside the viewport by the </span>
-<span class="c">* &quot;poistionOffScreen&quot; method.</span>
-<span class="c">* @default &quot;-999em&quot;</span>
+<span class="c">* "poistionOffScreen" method.</span>
+<span class="c">* @default "-999em"</span>
 <span class="c">* @final</span>
 <span class="c">* @type String</span>
 <span class="c">*/</span>
-<span class="nx">OFF_SCREEN_POSITION</span><span class="o">:</span> <span class="s2">&quot;-999em&quot;</span><span class="o">,</span>
+<span class="nx">OFF_SCREEN_POSITION</span><span class="o">:</span> <span class="s2">"-999em"</span><span class="o">,</span>
 
 
 <span class="c">// Private properties</span>
@@ -398,8 +389,8 @@
 
 <span class="c">/** </span>
 <span class="c">* @property _bHideDelayEventHandlersAssigned</span>
-<span class="c">* @description Boolean indicating if the &quot;mouseover&quot; and &quot;mouseout&quot; event </span>
-<span class="c">* handlers used for hiding the menu via a call to &quot;YAHOO.lang.later&quot; have </span>
+<span class="c">* @description Boolean indicating if the "mouseover" and "mouseout" event </span>
+<span class="c">* handlers used for hiding the menu via a call to "YAHOO.lang.later" have </span>
 <span class="c">* already been assigned.</span>
 <span class="c">* @default false</span>
 <span class="c">* @private</span>
@@ -410,8 +401,8 @@
 
 <span class="c">/**</span>
 <span class="c">* @property _bHandledMouseOverEvent</span>
-<span class="c">* @description Boolean indicating the current state of the menu&#39;s </span>
-<span class="c">* &quot;mouseover&quot; event.</span>
+<span class="c">* @description Boolean indicating the current state of the menu's </span>
+<span class="c">* "mouseover" event.</span>
 <span class="c">* @default false</span>
 <span class="c">* @private</span>
 <span class="c">* @type Boolean</span>
@@ -421,8 +412,8 @@
 
 <span class="c">/**</span>
 <span class="c">* @property _bHandledMouseOutEvent</span>
-<span class="c">* @description Boolean indicating the current state of the menu&#39;s</span>
-<span class="c">* &quot;mouseout&quot; event.</span>
+<span class="c">* @description Boolean indicating the current state of the menu's</span>
+<span class="c">* "mouseout" event.</span>
 <span class="c">* @default false</span>
 <span class="c">* @private</span>
 <span class="c">* @type Boolean</span>
@@ -454,7 +445,7 @@
 <span class="c">/**</span>
 <span class="c">* @property _aListElements</span>
 <span class="c">* @description Array of &lt;code&gt;&amp;#60;ul&amp;#62;&lt;/code&gt; elements, each of which is </span>
-<span class="c">* the parent node for each item&#39;s &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element.</span>
+<span class="c">* the parent node for each item's &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element.</span>
 <span class="c">* @default []</span>
 <span class="c">* @private</span>
 <span class="c">* @type Array</span>
@@ -475,7 +466,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @property _bStopMouseEventHandlers</span>
-<span class="c">* @description Stops &quot;mouseover,&quot; &quot;mouseout,&quot; and &quot;mousemove&quot; event handlers </span>
+<span class="c">* @description Stops "mouseover," "mouseout," and "mousemove" event handlers </span>
 <span class="c">* from executing.</span>
 <span class="c">* @default false</span>
 <span class="c">* @private</span>
@@ -486,7 +477,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @property _sClassName</span>
-<span class="c">* @description The current value of the &quot;classname&quot; configuration attribute.</span>
+<span class="c">* @description The current value of the "classname" configuration attribute.</span>
 <span class="c">* @default null</span>
 <span class="c">* @private</span>
 <span class="c">* @type String</span>
@@ -500,8 +491,8 @@
 
 <span class="c">/**</span>
 <span class="c">* @property lazyLoad</span>
-<span class="c">* @description Boolean indicating if the menu&#39;s &quot;lazy load&quot; feature is </span>
-<span class="c">* enabled.  If set to &quot;true,&quot; initialization and rendering of the menu&#39;s </span>
+<span class="c">* @description Boolean indicating if the menu's "lazy load" feature is </span>
+<span class="c">* enabled.  If set to "true," initialization and rendering of the menu's </span>
 <span class="c">* items will be deferred until the first time it is made visible.  This </span>
 <span class="c">* property should be set via the constructor using the configuration </span>
 <span class="c">* object literal.</span>
@@ -535,7 +526,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @property parent</span>
-<span class="c">* @description Object reference to the menu&#39;s parent menu or menu item.  </span>
+<span class="c">* @description Object reference to the menu's parent menu or menu item.  </span>
 <span class="c">* This property can be set via the constructor using the configuration </span>
 <span class="c">* object literal.</span>
 <span class="c">* @default null</span>
@@ -550,10 +541,10 @@
 <span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; or &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt;) used to </span>
 <span class="c">* create the menu.</span>
 <span class="c">* @default null</span>
-<span class="c">* @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">* level-one-html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;|&lt;a </span>
-<span class="c">* href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.</span>
-<span class="c">* html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;</span>
+<span class="c">* @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">* level-one-html.html#ID-94282980"&gt;HTMLSelectElement&lt;/a&gt;|&lt;a </span>
+<span class="c">* href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.</span>
+<span class="c">* html#ID-22445964"&gt;HTMLDivElement&lt;/a&gt;</span>
 <span class="c">*/</span>
 <span class="nx">srcElement</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
@@ -604,14 +595,14 @@
 <span class="c">/**</span>
 <span class="c">* @event keyPressEvent</span>
 <span class="c">* @description Fires when the user presses an alphanumeric key when one of the</span>
-<span class="c">* menu&#39;s items has focus.  Passes back the DOM Event object as an argument.</span>
+<span class="c">* menu's items has focus.  Passes back the DOM Event object as an argument.</span>
 <span class="c">* @type YAHOO.util.CustomEvent</span>
 <span class="c">*/</span>
 
 
 <span class="c">/**</span>
 <span class="c">* @event keyDownEvent</span>
-<span class="c">* @description Fires when the user presses a key when one of the menu&#39;s items </span>
+<span class="c">* @description Fires when the user presses a key when one of the menu's items </span>
 <span class="c">* has focus.  Passes back the DOM Event object as an argument.</span>
 <span class="c">* @type YAHOO.util.CustomEvent</span>
 <span class="c">*/</span>
@@ -619,7 +610,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @event keyUpEvent</span>
-<span class="c">* @description Fires when the user releases a key when one of the menu&#39;s items </span>
+<span class="c">* @description Fires when the user releases a key when one of the menu's items </span>
 <span class="c">* has focus.  Passes back the DOM Event object as an argument.</span>
 <span class="c">* @type YAHOO.util.CustomEvent</span>
 <span class="c">*/</span>
@@ -641,7 +632,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method init</span>
-<span class="c">* @description The Menu class&#39;s initialization method. This method is </span>
+<span class="c">* @description The Menu class's initialization method. This method is </span>
 <span class="c">* automatically called by the constructor, and sets up all DOM references </span>
 <span class="c">* for pre-existing markup, and creates required markup if it is not </span>
 <span class="c">* already present.</span>
@@ -650,11 +641,11 @@
 <span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
 <span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source </span>
 <span class="c">* for the menu.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">* level-one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">* level-one-html.html#ID-22445964"&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the menu.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">* level-one-html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">* level-one-html.html#ID-94282980"&gt;HTMLSelectElement&lt;/a&gt;} p_oElement </span>
 <span class="c">* Object specifying the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as </span>
 <span class="c">* the data source for the menu.</span>
 <span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
@@ -704,7 +695,7 @@
 
 
                 <span class="c">/* </span>
-<span class="c">                    Note: we don&#39;t pass the user config in here yet </span>
+<span class="c">                    Note: we don't pass the user config in here yet </span>
 <span class="c">                    because we only want it executed once, at the lowest </span>
 <span class="c">                    subclass level.</span>
 <span class="c">                */</span> 
@@ -713,7 +704,7 @@
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Menu</span><span class="o">);</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Source element: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Source element: "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     
             <span class="k">break</span><span class="o">;</span>
     
@@ -726,7 +717,7 @@
 <span class="c">                    The source element is not something that we can use </span>
 <span class="c">                    outright, so we need to create a new Overlay</span>
 <span class="c"></span>
-<span class="c">                    Note: we don&#39;t pass the user config in here yet </span>
+<span class="c">                    Note: we don't pass the user config in here yet </span>
 <span class="c">                    because we only want it executed once, at the lowest </span>
 <span class="c">                    subclass level.</span>
 <span class="c">                */</span> 
@@ -735,7 +726,7 @@
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Menu</span><span class="o">);</span>
 
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Source element: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Source element: "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">.</span><span class="nx">tagName</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
             <span class="k">break</span><span class="o">;</span>
 
@@ -745,7 +736,7 @@
     <span class="k">else</span> <span class="o">{</span>
 
         <span class="c">/* </span>
-<span class="c">            Note: we don&#39;t pass the user config in here yet </span>
+<span class="c">            Note: we don't pass the user config in here yet </span>
 <span class="c">            because we only want it executed once, at the lowest </span>
 <span class="c">            subclass level.</span>
 <span class="c">        */</span> 
@@ -754,7 +745,7 @@
 
         <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Menu</span><span class="o">);</span>
 
-		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;No source element found.  Created element with id: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"No source element found.  Created element with id: "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
     <span class="o">}</span>
 
@@ -877,8 +868,8 @@
         
         
                 <span class="c">/*</span>
-<span class="c">                    Apply the &quot;first-of-type&quot; class to the first UL to mimic </span>
-<span class="c">                    the &quot;:first-of-type&quot; CSS3 psuedo class.</span>
+<span class="c">                    Apply the "first-of-type" class to the first UL to mimic </span>
+<span class="c">                    the ":first-of-type" CSS3 psuedo class.</span>
 <span class="c">                */</span>
         
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_aListElements</span><span class="o">[</span><span class="m">0</span><span class="o">])</span> <span class="o">{</span>
@@ -894,7 +885,7 @@
     
         <span class="nx">oNode</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Searching DOM for items to initialize.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Searching DOM for items to initialize."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">sSrcElementTagName</span><span class="o">)</span> <span class="o">{</span>
@@ -908,8 +899,8 @@
         
                     <span class="k">if</span> <span class="o">(</span><span class="nx">nListElements</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
         
-        				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Found &quot;</span> <span class="o">+</span> <span class="nx">nListElements</span> <span class="o">+</span> <span class="s2">&quot; item groups to initialize.&quot;</span><span class="o">,</span> 
-        							<span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Found "</span> <span class="o">+</span> <span class="nx">nListElements</span> <span class="o">+</span> <span class="s2">" item groups to initialize."</span><span class="o">,</span> 
+        							<span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         
                         <span class="nx">i</span> <span class="o">=</span> <span class="nx">nListElements</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
         
@@ -919,17 +910,17 @@
             
                             <span class="k">if</span> <span class="o">(</span><span class="nx">oNode</span><span class="o">)</span> <span class="o">{</span>
 
-                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Scanning &quot;</span> <span class="o">+</span> 
+                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Scanning "</span> <span class="o">+</span> 
                                     <span class="nx">aListElements</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">childNodes</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> 
-                                    <span class="s2">&quot; child nodes for items to initialize.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                                    <span class="s2">" child nodes for items to initialize."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             
                                 <span class="k">do</span> <span class="o">{</span>
                 
                                     <span class="k">if</span> <span class="o">(</span><span class="nx">oNode</span> <span class="o">&amp;&amp;</span> <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> 
                                         <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="nx">_LI</span><span class="o">)</span> <span class="o">{</span>
                 
-                                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initializing &quot;</span> <span class="o">+</span> 
-                                            <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">&quot; node.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Initializing "</span> <span class="o">+</span> 
+                                            <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">" node."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         
                                         <span class="k">this</span><span class="o">.</span><span class="nx">addItem</span><span class="o">(</span><span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span><span class="nx">oNode</span><span class="o">,</span> 
                                                     <span class="o">{</span> <span class="nx">parent</span><span class="o">:</span> <span class="k">this</span> <span class="o">}),</span> <span class="nx">i</span><span class="o">);</span>
@@ -950,9 +941,9 @@
         
                 <span class="nx">case</span> <span class="nx">_SELECT</span><span class="o">:</span>
         
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Scanning &quot;</span> <span class="o">+</span>  
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Scanning "</span> <span class="o">+</span>  
                         <span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">childNodes</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> 
-                        <span class="s2">&quot; child nodes for items to initialize.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                        <span class="s2">" child nodes for items to initialize."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         
                     <span class="nx">oNode</span> <span class="o">=</span> <span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
         
@@ -965,8 +956,8 @@
                                 <span class="nx">case</span> <span class="nx">_OPTGROUP</span><span class="o">:</span>
                                 <span class="nx">case</span> <span class="nx">_OPTION</span><span class="o">:</span>
             
-                                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Initializing &quot;</span> <span class="o">+</span>  
-                                        <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">&quot; node.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Initializing "</span> <span class="o">+</span>  
+                                        <span class="nx">oNode</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">" node."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             
                                     <span class="k">this</span><span class="o">.</span><span class="nx">addItem</span><span class="o">(</span>
                                             <span class="k">new</span> <span class="k">this</span><span class="o">.</span><span class="nx">ITEM_TYPE</span><span class="o">(</span>
@@ -1153,10 +1144,10 @@
                 
                 <span class="k">this</span><span class="o">.</span><span class="nx">_updateItemProperties</span><span class="o">(</span><span class="nx">nGroupIndex</span><span class="o">);</span>
         
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Item inserted.&quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Text: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Index: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Group Index: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Item inserted."</span> <span class="o">+</span> 
+                    <span class="s2">" Text: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"text"</span><span class="o">)</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                    <span class="s2">" Index: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                    <span class="s2">" Group Index: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">itemAddedEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oGroupItem</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
@@ -1201,10 +1192,10 @@
         
                 <span class="o">}</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Item added.&quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Text: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Index: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                    <span class="s2">&quot; Group Index: &quot;</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Item added."</span> <span class="o">+</span> 
+                    <span class="s2">" Text: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"text"</span><span class="o">)</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                    <span class="s2">" Index: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                    <span class="s2">" Group Index: "</span> <span class="o">+</span> <span class="nx">oGroupItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">itemAddedEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">oGroupItem</span><span class="o">);</span>
@@ -1276,7 +1267,7 @@
     
     
                 <span class="c">/*</span>
-<span class="c">                     Assign the &quot;first-of-type&quot; class to the new first UL </span>
+<span class="c">                     Assign the "first-of-type" class to the new first UL </span>
 <span class="c">                     in the collection</span>
 <span class="c">                */</span>
     
@@ -1362,7 +1353,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _updateItemProperties</span>
-<span class="c">* @description Updates the &quot;index,&quot; &quot;groupindex,&quot; and &quot;className&quot; properties </span>
+<span class="c">* @description Updates the "index," "groupindex," and "className" properties </span>
 <span class="c">* of the menu items in the specified group. </span>
 <span class="c">* @private</span>
 <span class="c">* @param {Number} p_nGroupIndex Number indicating the group of items to update.</span>
@@ -1472,7 +1463,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _configureSubmenu</span>
-<span class="c">* @description Subscribes the menu item&#39;s submenu to its parent menu&#39;s events.</span>
+<span class="c">* @description Subscribes the menu item's submenu to its parent menu's events.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem </span>
 <span class="c">* instance with the submenu to be configured.</span>
@@ -1501,7 +1492,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _subscribeToItemEvents</span>
-<span class="c">* @description Subscribes a menu to a menu item&#39;s event.</span>
+<span class="c">* @description Subscribes a menu to a menu item's event.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {YAHOO.widget.MenuItem} p_oItem Object reference for the MenuItem </span>
 <span class="c">* instance whose events should be subscribed to.</span>
@@ -1516,7 +1507,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onVisibleChange</span>
-<span class="c">* @description Change event handler for the the menu&#39;s &quot;visible&quot; configuration</span>
+<span class="c">* @description Change event handler for the the menu's "visible" configuration</span>
 <span class="c">* property.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
@@ -1543,7 +1534,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _cancelHideDelay</span>
-<span class="c">* @description Cancels the call to &quot;hideMenu.&quot;</span>
+<span class="c">* @description Cancels the call to "hideMenu."</span>
 <span class="c">* @private</span>
 <span class="c">*/</span>
 <span class="nx">_cancelHideDelay</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -1562,7 +1553,7 @@
 <span class="c">/**</span>
 <span class="c">* @method _execHideDelay</span>
 <span class="c">* @description Hides the menu after the number of milliseconds specified by </span>
-<span class="c">* the &quot;hidedelay&quot; configuration property.</span>
+<span class="c">* the "hidedelay" configuration property.</span>
 <span class="c">* @private</span>
 <span class="c">*/</span>
 <span class="nx">_execHideDelay</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -1599,7 +1590,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _cancelShowDelay</span>
-<span class="c">* @description Cancels the call to the &quot;showMenu.&quot;</span>
+<span class="c">* @description Cancels the call to the "showMenu."</span>
 <span class="c">* @private</span>
 <span class="c">*/</span>
 <span class="nx">_cancelShowDelay</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -1618,12 +1609,12 @@
 <span class="c">/**</span>
 <span class="c">* @method _execSubmenuHideDelay</span>
 <span class="c">* @description Hides a submenu after the number of milliseconds specified by </span>
-<span class="c">* the &quot;submenuhidedelay&quot; configuration property have ellapsed.</span>
+<span class="c">* the "submenuhidedelay" configuration property have ellapsed.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {YAHOO.widget.Menu} p_oSubmenu Object specifying the submenu that  </span>
 <span class="c">* should be hidden.</span>
 <span class="c">* @param {Number} p_nMouseX The x coordinate of the mouse when it left </span>
-<span class="c">* the specified submenu&#39;s parent menu item.</span>
+<span class="c">* the specified submenu's parent menu item.</span>
 <span class="c">* @param {Number} p_nHideDelay The number of milliseconds that should ellapse</span>
 <span class="c">* before the submenu is hidden.</span>
 <span class="c">*/</span>
@@ -1725,7 +1716,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onMouseOver</span>
-<span class="c">* @description &quot;mouseover&quot; event handler for the menu.</span>
+<span class="c">* @description "mouseover" event handler for the menu.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -1771,7 +1762,7 @@
 
 			<span class="c">/*</span>
 <span class="c">				If the mouse is moving from the submenu back to its corresponding menu item, </span>
-<span class="c">				don&#39;t hide the submenu or clear the active MenuItem.</span>
+<span class="c">				don't hide the submenu or clear the active MenuItem.</span>
 <span class="c">			*/</span>
 
 			<span class="k">if</span> <span class="o">(!(</span><span class="nx">oItem</span> <span class="o">&amp;&amp;</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getRelatedTarget</span><span class="o">(</span><span class="nx">oEvent</span><span class="o">))))</span> <span class="o">{</span>
@@ -1878,7 +1869,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onMouseOut</span>
-<span class="c">* @description &quot;mouseout&quot; event handler for the menu.</span>
+<span class="c">* @description "mouseout" event handler for the menu.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -1975,7 +1966,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onMouseMove</span>
-<span class="c">* @description &quot;click&quot; event handler for the menu.</span>
+<span class="c">* @description "click" event handler for the menu.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {Event} p_oEvent Object representing the DOM event object passed </span>
 <span class="c">* back by the event utility (YAHOO.util.Event).</span>
@@ -1995,7 +1986,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onClick</span>
-<span class="c">* @description &quot;click&quot; event handler for the menu.</span>
+<span class="c">* @description "click" event handler for the menu.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -2018,19 +2009,19 @@
 
 		<span class="c">/*</span>
 <span class="c">			There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows </span>
-<span class="c">			regarding the triggering of the display of the browser&#39;s context menu and the </span>
-<span class="c">			subsequent firing of the &quot;click&quot; event. In Firefox for Windows, when the user </span>
-<span class="c">			triggers the display of the browser&#39;s context menu the &quot;click&quot; event also fires </span>
-<span class="c">			for the document object, even though the &quot;click&quot; event did not fire for the </span>
-<span class="c">			element that was the original target of the &quot;contextmenu&quot; event. This is unique </span>
+<span class="c">			regarding the triggering of the display of the browser's context menu and the </span>
+<span class="c">			subsequent firing of the "click" event. In Firefox for Windows, when the user </span>
+<span class="c">			triggers the display of the browser's context menu the "click" event also fires </span>
+<span class="c">			for the document object, even though the "click" event did not fire for the </span>
+<span class="c">			element that was the original target of the "contextmenu" event. This is unique </span>
 <span class="c">			to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for </span>
-<span class="c">			Mac OS X, the &quot;click&quot; event doesn&#39;t fire for the document object. </span>
+<span class="c">			Mac OS X, the "click" event doesn't fire for the document object. </span>
 <span class="c"></span>
 <span class="c">			This bug in Firefox 2 for Windows affects Menu as Menu instances listen for </span>
-<span class="c">			events at the document level and have an internal &quot;click&quot; event handler they </span>
+<span class="c">			events at the document level and have an internal "click" event handler they </span>
 <span class="c">			use to hide themselves when clicked. As a result, in Firefox for Windows a </span>
-<span class="c">			Menu will hide when the user right clicks on a MenuItem to raise the browser&#39;s </span>
-<span class="c">			default context menu, because its internal &quot;click&quot; event handler ends up </span>
+<span class="c">			Menu will hide when the user right clicks on a MenuItem to raise the browser's </span>
+<span class="c">			default context menu, because its internal "click" event handler ends up </span>
 <span class="c">			getting called.  The following line fixes this bug.</span>
 <span class="c">		*/</span>
 
@@ -2144,7 +2135,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onKeyDown</span>
-<span class="c">* @description &quot;keydown&quot; event handler for the menu.</span>
+<span class="c">* @description "keydown" event handler for the menu.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -2457,7 +2448,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onKeyPress</span>
-<span class="c">* @description &quot;keypress&quot; event handler for a Menu instance.</span>
+<span class="c">* @description "keypress" event handler for a Menu instance.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
@@ -2479,7 +2470,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onBlur</span>
-<span class="c">* @description &quot;blur&quot; event handler for a Menu instance.</span>
+<span class="c">* @description "blur" event handler for a Menu instance.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
@@ -2495,7 +2486,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onYChange</span>
-<span class="c">* @description &quot;y&quot; event handler for a Menu instance.</span>
+<span class="c">* @description "y" event handler for a Menu instance.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
@@ -2540,9 +2531,9 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onScrollTargetMouseOver</span>
-<span class="c">* @description &quot;mouseover&quot; event handler for the menu&#39;s &quot;header&quot; and &quot;footer&quot; </span>
+<span class="c">* @description "mouseover" event handler for the menu's "header" and "footer" </span>
 <span class="c">* elements.  Used to scroll the body of the menu up and down when the </span>
-<span class="c">* menu&#39;s &quot;maxheight&quot; configuration property is set to a value greater than 0.</span>
+<span class="c">* menu's "maxheight" configuration property is set to a value greater than 0.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {Event} p_oEvent Object representing the DOM event object passed </span>
 <span class="c">* back by the event utility (YAHOO.util.Event).</span>
@@ -2642,9 +2633,9 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onScrollTargetMouseOut</span>
-<span class="c">* @description &quot;mouseout&quot; event handler for the menu&#39;s &quot;header&quot; and &quot;footer&quot; </span>
+<span class="c">* @description "mouseout" event handler for the menu's "header" and "footer" </span>
 <span class="c">* elements.  Used to stop scrolling the body of the menu up and down when the </span>
-<span class="c">* menu&#39;s &quot;maxheight&quot; configuration property is set to a value greater than 0.</span>
+<span class="c">* menu's "maxheight" configuration property is set to a value greater than 0.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {Event} p_oEvent Object representing the DOM event object passed </span>
 <span class="c">* back by the event utility (YAHOO.util.Event).</span>
@@ -2672,7 +2663,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onInit</span>
-<span class="c">* @description &quot;init&quot; event handler for the menu.</span>
+<span class="c">* @description "init" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -2687,7 +2678,7 @@
 
 
     <span class="c">/*</span>
-<span class="c">        Automatically initialize a menu&#39;s subtree if:</span>
+<span class="c">        Automatically initialize a menu's subtree if:</span>
 <span class="c"></span>
 <span class="c">        1) This is the root menu and lazyload is off</span>
 <span class="c">        </span>
@@ -2729,7 +2720,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onBeforeRender</span>
-<span class="c">* @description &quot;beforerender&quot; event handler for the menu.  Appends all of the </span>
+<span class="c">* @description "beforerender" event handler for the menu.  Appends all of the </span>
 <span class="c">* &lt;code&gt;&amp;#60;ul&amp;#62;&lt;/code&gt;, &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; and their accompanying </span>
 <span class="c">* title elements to the body element of the menu.</span>
 <span class="c">* @private</span>
@@ -2798,7 +2789,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onRender</span>
-<span class="c">* @description &quot;render&quot; event handler for the menu.</span>
+<span class="c">* @description "render" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -2824,7 +2815,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onBeforeShow</span>
-<span class="c">* @description &quot;beforeshow&quot; event handler for the menu.</span>
+<span class="c">* @description "beforeshow" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -2954,10 +2945,10 @@
 
 		<span class="nx">oOverlapPositions</span> <span class="o">=</span> <span class="o">{</span>
 
-			<span class="s2">&quot;trbr&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-			<span class="s2">&quot;tlbl&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-			<span class="s2">&quot;bltl&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-			<span class="s2">&quot;brtr&quot;</span><span class="o">:</span> <span class="kc">true</span>
+			<span class="s2">"trbr"</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="s2">"tlbl"</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="s2">"bltl"</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="s2">"brtr"</span><span class="o">:</span> <span class="kc">true</span>
 
 		<span class="o">},</span>
 
@@ -3010,7 +3001,7 @@
 
 
 	<span class="c">/*</span>
-<span class="c">		 Uses the context element&#39;s position to calculate the availble height </span>
+<span class="c">		 Uses the context element's position to calculate the availble height </span>
 <span class="c">		 above and below it to display its corresponding Menu.</span>
 <span class="c">	*/</span>
 
@@ -3028,7 +3019,7 @@
 
 
 	<span class="c">/*</span>
-<span class="c">		Sets the Menu&#39;s &quot;y&quot; configuration property to the correct value based on its</span>
+<span class="c">		Sets the Menu's "y" configuration property to the correct value based on its</span>
 <span class="c">		current orientation.</span>
 <span class="c">	*/</span> 
 
@@ -3102,7 +3093,7 @@
 				<span class="k">if</span> <span class="o">(</span><span class="nx">bFlipped</span><span class="o">)</span> <span class="o">{</span>
 	
 					<span class="c">/*</span>
-<span class="c">						 All possible positions and values for the &quot;maxheight&quot; </span>
+<span class="c">						 All possible positions and values for the "maxheight" </span>
 <span class="c">						 configuration property have been tried, but none were </span>
 <span class="c">						 successful, so fall back to the original size and position.</span>
 <span class="c">					*/</span>
@@ -3199,7 +3190,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onHide</span>
-<span class="c">* @description &quot;hide&quot; event handler for the menu.</span>
+<span class="c">* @description "hide" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3218,7 +3209,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onShow</span>
-<span class="c">* @description &quot;show&quot; event handler for the menu.</span>
+<span class="c">* @description "show" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3240,7 +3231,7 @@
         <span class="k">if</span> <span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">_MOUSEDOWN</span> <span class="o">||</span> <span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">_KEYDOWN</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="m">27</span><span class="o">))</span> <span class="o">{</span>
 
             <span class="c">/*  </span>
-<span class="c">                Set the &quot;autosubmenudisplay&quot; to &quot;false&quot; if the user</span>
+<span class="c">                Set the "autosubmenudisplay" to "false" if the user</span>
 <span class="c">                clicks outside the menu bar.</span>
 <span class="c">            */</span>
 
@@ -3288,7 +3279,7 @@
 		<span class="c">// The following fixes an issue with the selected state of a MenuItem not rendering </span>
 <span class="c"></span>		<span class="c">// correctly when a submenu is aligned to the left of its parent Menu instance.</span>
 <span class="c"></span>
-		<span class="k">if</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">))</span> <span class="o">&amp;&amp;</span> 
+		<span class="k">if</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"x"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"x"</span><span class="o">))</span> <span class="o">&amp;&amp;</span> 
 			<span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">.</span><span class="m">9</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
 			<span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">))</span> <span class="o">{</span>
 		
@@ -3297,9 +3288,9 @@
 			
 			<span class="c">/*</span>
 <span class="c">				Measuring the difference of the offsetWidth before and after</span>
-<span class="c">				setting the &quot;width&quot; style attribute allows us to compute the </span>
+<span class="c">				setting the "width" style attribute allows us to compute the </span>
 <span class="c">				about of padding and borders applied to the element, which in </span>
-<span class="c">				turn allows us to set the &quot;width&quot; property correctly.</span>
+<span class="c">				turn allows us to set the "width" property correctly.</span>
 <span class="c">			*/</span>
 			
 			<span class="nx">oElement</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">nOffsetWidth</span> <span class="o">+</span> <span class="nx">_PX</span><span class="o">;</span>
@@ -3319,7 +3310,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onBeforeHide</span>
-<span class="c">* @description &quot;beforehide&quot; event handler for the menu.</span>
+<span class="c">* @description "beforehide" event handler for the menu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3375,7 +3366,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onParentMenuConfigChange</span>
-<span class="c">* @description &quot;configchange&quot; event handler for a submenu.</span>
+<span class="c">* @description "configchange" event handler for a submenu.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3425,8 +3416,8 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onParentMenuRender</span>
-<span class="c">* @description &quot;render&quot; event handler for a submenu.  Renders a  </span>
-<span class="c">* submenu in response to the firing of its parent&#39;s &quot;render&quot; event.</span>
+<span class="c">* @description "render" event handler for a submenu.  Renders a  </span>
+<span class="c">* submenu in response to the firing of its parent's "render" event.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3507,7 +3498,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onMenuItemDestroy</span>
-<span class="c">* @description &quot;destroy&quot; event handler for the menu&#39;s items.</span>
+<span class="c">* @description "destroy" event handler for the menu's items.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event </span>
 <span class="c">* that was fired.</span>
@@ -3524,7 +3515,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onMenuItemConfigChange</span>
-<span class="c">* @description &quot;configchange&quot; event handler for the menu&#39;s items.</span>
+<span class="c">* @description "configchange" event handler for the menu's items.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3574,7 +3565,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configVisible</span>
-<span class="c">* @description Event handler for when the &quot;visible&quot; configuration property </span>
+<span class="c">* @description Event handler for when the "visible" configuration property </span>
 <span class="c">* the menu changes.</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3625,7 +3616,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configPosition</span>
-<span class="c">* @description Event handler for when the &quot;position&quot; configuration property </span>
+<span class="c">* @description Event handler for when the "position" configuration property </span>
 <span class="c">* of the menu changes.</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3656,10 +3647,10 @@
     <span class="k">else</span> <span class="o">{</span>
 
         <span class="c">/*</span>
-<span class="c">            Even though the &quot;visible&quot; property is queued to </span>
-<span class="c">            &quot;false&quot; by default, we need to set the &quot;visibility&quot; property to </span>
-<span class="c">            &quot;hidden&quot; since Overlay&#39;s &quot;configVisible&quot; implementation checks the </span>
-<span class="c">            element&#39;s &quot;visibility&quot; style property before deciding whether </span>
+<span class="c">            Even though the "visible" property is queued to </span>
+<span class="c">            "false" by default, we need to set the "visibility" property to </span>
+<span class="c">            "hidden" since Overlay's "configVisible" implementation checks the </span>
+<span class="c">            element's "visibility" style property before deciding whether </span>
 <span class="c">            or not to show an Overlay instance.</span>
 <span class="c">        */</span>
 
@@ -3685,7 +3676,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configIframe</span>
-<span class="c">* @description Event handler for when the &quot;iframe&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "iframe" configuration property of </span>
 <span class="c">* the menu changes.</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3706,7 +3697,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configHideDelay</span>
-<span class="c">* @description Event handler for when the &quot;hidedelay&quot; configuration property </span>
+<span class="c">* @description Event handler for when the "hidedelay" configuration property </span>
 <span class="c">* of the menu changes.</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3754,7 +3745,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configContainer</span>
-<span class="c">* @description Event handler for when the &quot;container&quot; configuration property </span>
+<span class="c">* @description Event handler for when the "container" configuration property </span>
 <span class="c">* of the menu changes.</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -3777,12 +3768,12 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _clearSetWidthFlag</span>
-<span class="c">* @description Change event listener for the &quot;width&quot; configuration property.  This listener is </span>
-<span class="c">* added when a Menu&#39;s &quot;width&quot; configuration property is set by the &quot;_setScrollHeight&quot; method, and </span>
-<span class="c">* is used to set the &quot;_widthSetForScroll&quot; property to &quot;false&quot; if the &quot;width&quot; configuration property </span>
-<span class="c">* is changed after it was set by the &quot;_setScrollHeight&quot; method.  If the &quot;_widthSetForScroll&quot; </span>
-<span class="c">* property is set to &quot;false&quot;, and the &quot;_setScrollHeight&quot; method is in the process of tearing down </span>
-<span class="c">* scrolling functionality, it will maintain the Menu&#39;s new width rather than reseting it.</span>
+<span class="c">* @description Change event listener for the "width" configuration property.  This listener is </span>
+<span class="c">* added when a Menu's "width" configuration property is set by the "_setScrollHeight" method, and </span>
+<span class="c">* is used to set the "_widthSetForScroll" property to "false" if the "width" configuration property </span>
+<span class="c">* is changed after it was set by the "_setScrollHeight" method.  If the "_widthSetForScroll" </span>
+<span class="c">* property is set to "false", and the "_setScrollHeight" method is in the process of tearing down </span>
+<span class="c">* scrolling functionality, it will maintain the Menu's new width rather than reseting it.</span>
 <span class="c">* @private</span>
 <span class="c">*/</span>
 <span class="nx">_clearSetWidthFlag</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -3844,9 +3835,9 @@
 
 		<span class="c">/*</span>
 <span class="c">			There is a bug in gecko-based browsers where an element whose </span>
-<span class="c">			&quot;position&quot; property is set to &quot;absolute&quot; and &quot;overflow&quot; property is set </span>
-<span class="c">			to &quot;hidden&quot; will not render at the correct width when its </span>
-<span class="c">			offsetParent&#39;s &quot;position&quot; property is also set to &quot;absolute.&quot;  It is </span>
+<span class="c">			"position" property is set to "absolute" and "overflow" property is set </span>
+<span class="c">			to "hidden" will not render at the correct width when its </span>
+<span class="c">			offsetParent's "position" property is also set to "absolute."  It is </span>
 <span class="c">			possible to work around this bug by specifying a value for the width </span>
 <span class="c">			property in addition to overflow.</span>
 <span class="c">	</span>
@@ -3864,9 +3855,9 @@
 	
 			<span class="c">/*</span>
 <span class="c">				Measuring the difference of the offsetWidth before and after</span>
-<span class="c">				setting the &quot;width&quot; style attribute allows us to compute the </span>
+<span class="c">				setting the "width" style attribute allows us to compute the </span>
 <span class="c">				about of padding and borders applied to the element, which in </span>
-<span class="c">				turn allows us to set the &quot;width&quot; property correctly.</span>
+<span class="c">				turn allows us to set the "width" property correctly.</span>
 <span class="c">			*/</span>
 			
 			<span class="nx">oElement</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">nOffsetWidth</span> <span class="o">+</span> <span class="nx">_PX</span><span class="o">;</span>
@@ -3876,16 +3867,16 @@
 
 			<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">unsubscribeFromConfigEvent</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_clearSetWidthFlag</span><span class="o">);</span>
 
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting the \&quot;width\&quot; configuration property to &quot;</span> <span class="o">+</span> <span class="nx">sWidth</span> <span class="o">+</span> <span class="s2">&quot; for srolling.&quot;</span><span class="o">,</span> 
-				<span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Setting the \"width\" configuration property to "</span> <span class="o">+</span> <span class="nx">sWidth</span> <span class="o">+</span> <span class="s2">" for srolling."</span><span class="o">,</span> 
+				<span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
 			<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">,</span> <span class="nx">sWidth</span><span class="o">);</span>
 
 
 			<span class="c">/*</span>
 <span class="c">				Set a flag (_widthSetForScroll) to maintain some history regarding how the </span>
-<span class="c">				&quot;width&quot; configuration property was set.  If the &quot;width&quot; configuration property </span>
-<span class="c">				is set by something other than the &quot;_setScrollHeight&quot; method, it will be </span>
+<span class="c">				"width" configuration property was set.  If the "width" configuration property </span>
+<span class="c">				is set by something other than the "_setScrollHeight" method, it will be </span>
 <span class="c">				necessary to maintain that new value and not clear the width if scrolling </span>
 <span class="c">				is turned off.</span>
 <span class="c">			*/</span>
@@ -3899,7 +3890,7 @@
 	
 		<span class="k">if</span> <span class="o">(</span><span class="nx">nScrollHeight</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">(!</span><span class="nx">oHeader</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oFooter</span><span class="o">))</span> <span class="o">{</span>
 	
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Creating header and footer for scrolling.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Creating header and footer for scrolling."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 	
 			<span class="k">this</span><span class="o">.</span><span class="nx">setHeader</span><span class="o">(</span><span class="nx">_NON_BREAKING_SPACE</span><span class="o">);</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">setFooter</span><span class="o">(</span><span class="nx">_NON_BREAKING_SPACE</span><span class="o">);</span>
@@ -3926,8 +3917,8 @@
 	
 		<span class="k">if</span> <span class="o">((</span><span class="nx">nHeight</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oBody</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">&gt;</span> <span class="nx">nScrollHeight</span><span class="o">))</span> <span class="o">{</span>
 
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting up styles and event handlers for scrolling.&quot;</span><span class="o">,</span> 
-				<span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Setting up styles and event handlers for scrolling."</span><span class="o">,</span> 
+				<span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 	
 			<span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">oBody</span><span class="o">,</span> <span class="nx">_YUI_MENU_BODY_SCROLLED</span><span class="o">);</span>
 			<span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">oBody</span><span class="o">,</span> <span class="nx">_HEIGHT</span><span class="o">,</span> <span class="o">(</span><span class="nx">nHeight</span> <span class="o">+</span> <span class="nx">_PX</span><span class="o">));</span>
@@ -3951,17 +3942,17 @@
 		<span class="o">}</span>
 		<span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">oHeader</span> <span class="o">&amp;&amp;</span> <span class="nx">oFooter</span><span class="o">)</span> <span class="o">{</span>
 
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Removing styles and event handlers for scrolling.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Removing styles and event handlers for scrolling."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 	
 
 			<span class="c">/*</span>
-<span class="c">				Only clear the the &quot;width&quot; configuration property if it was set the </span>
-<span class="c">				&quot;_setScrollHeight&quot; method and wasn&#39;t changed by some other means after it was set.</span>
+<span class="c">				Only clear the the "width" configuration property if it was set the </span>
+<span class="c">				"_setScrollHeight" method and wasn't changed by some other means after it was set.</span>
 <span class="c">			*/</span>	
 	
 			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_widthSetForScroll</span><span class="o">)</span> <span class="o">{</span>
 	
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Clearing width used for scrolling.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Clearing width used for scrolling."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
 				<span class="k">this</span><span class="o">.</span><span class="nx">_widthSetForScroll</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
@@ -4011,14 +4002,14 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _setMaxHeight</span>
-<span class="c">* @description &quot;renderEvent&quot; handler used to defer the setting of the </span>
-<span class="c">* &quot;maxheight&quot; configuration property until the menu is rendered in lazy </span>
+<span class="c">* @description "renderEvent" handler used to defer the setting of the </span>
+<span class="c">* "maxheight" configuration property until the menu is rendered in lazy </span>
 <span class="c">* load scenarios.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
 <span class="c">* was fired.</span>
 <span class="c">* @param {Number} p_nMaxHeight Number representing the value to set for the </span>
-<span class="c">* &quot;maxheight&quot; configuration property.</span>
+<span class="c">* "maxheight" configuration property.</span>
 <span class="c">* @private</span>
 <span class="c">*/</span>
 <span class="nx">_setMaxHeight</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_nMaxHeight</span><span class="o">)</span> <span class="o">{</span>
@@ -4031,7 +4022,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configMaxHeight</span>
-<span class="c">* @description Event handler for when the &quot;maxheight&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "maxheight" configuration property of </span>
 <span class="c">* a Menu changes.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
@@ -4059,7 +4050,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configClassName</span>
-<span class="c">* @description Event handler for when the &quot;classname&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "classname" configuration property of </span>
 <span class="c">* a menu changes.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event was fired.</span>
@@ -4083,7 +4074,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onItemAdded</span>
-<span class="c">* @description &quot;itemadded&quot; event handler for a Menu instance.</span>
+<span class="c">* @description "itemadded" event handler for a Menu instance.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event </span>
@@ -4104,7 +4095,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configDisabled</span>
-<span class="c">* @description Event handler for when the &quot;disabled&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "disabled" configuration property of </span>
 <span class="c">* a menu changes.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event was fired.</span>
@@ -4159,7 +4150,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method configShadow</span>
-<span class="c">* @description Event handler for when the &quot;shadow&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "shadow" configuration property of </span>
 <span class="c">* a menu changes.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event was fired.</span>
@@ -4282,7 +4273,7 @@
     
     	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">)</span> <span class="o">{</span>
 
-			<span class="c">// If called because the &quot;shadow&quot; event was refired - just append again and resize</span>
+			<span class="c">// If called because the "shadow" event was refired - just append again and resize</span>
 <span class="c"></span>			
 			<span class="nx">replaceShadow</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 			
@@ -4311,7 +4302,7 @@
 
 			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">)</span> <span class="o">{</span>
 
-				<span class="c">// If the &quot;shadow&quot; event was refired - just append again and resize</span>
+				<span class="c">// If the "shadow" event was refired - just append again and resize</span>
 <span class="c"></span>				
 				<span class="nx">replaceShadow</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 				
@@ -4372,9 +4363,9 @@
 
 <span class="c">/**</span>
 <span class="c">* @method positionOffScreen</span>
-<span class="c">* @description Positions the menu outside of the boundaries of the browser&#39;s </span>
+<span class="c">* @description Positions the menu outside of the boundaries of the browser's </span>
 <span class="c">* viewport.  Called automatically when a menu is hidden to ensure that </span>
-<span class="c">* it doesn&#39;t force the browser to render uncessary scrollbars.</span>
+<span class="c">* it doesn't force the browser to render uncessary scrollbars.</span>
 <span class="c">*/</span>
 <span class="nx">positionOffScreen</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -4397,7 +4388,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method getRoot</span>
-<span class="c">* @description Finds the menu&#39;s root menu.</span>
+<span class="c">* @description Finds the menu's root menu.</span>
 <span class="c">*/</span>
 <span class="nx">getRoot</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -4646,10 +4637,10 @@
 
             <span class="nx">oItem</span><span class="o">.</span><span class="nx">destroy</span><span class="o">();</span>
 
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Item removed.&quot;</span> <span class="o">+</span> 
-                <span class="s2">&quot; Text: &quot;</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;text&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                <span class="s2">&quot; Index: &quot;</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                <span class="s2">&quot; Group Index: &quot;</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Item removed."</span> <span class="o">+</span> 
+                <span class="s2">" Text: "</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"text"</span><span class="o">)</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                <span class="s2">" Index: "</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                <span class="s2">" Group Index: "</span> <span class="o">+</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">groupIndex</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
             <span class="nx">returnVal</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">;</span>
 
@@ -4863,7 +4854,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method destroy</span>
-<span class="c">* @description Removes the menu&#39;s &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element </span>
+<span class="c">* @description Removes the menu's &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element </span>
 <span class="c">* (and accompanying child nodes) from the document.</span>
 <span class="c">*/</span>
 <span class="nx">destroy</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -4881,14 +4872,14 @@
 <span class="c"></span>
     <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">destroy</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
     
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Destroyed.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Destroyed."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
 <span class="o">},</span>
 
 
 <span class="c">/**</span>
 <span class="c">* @method setInitialFocus</span>
-<span class="c">* @description Sets focus to the menu&#39;s first enabled item.</span>
+<span class="c">* @description Sets focus to the menu's first enabled item.</span>
 <span class="c">*/</span>
 <span class="nx">setInitialFocus</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -4905,8 +4896,8 @@
 
 <span class="c">/**</span>
 <span class="c">* @method setInitialSelection</span>
-<span class="c">* @description Sets the &quot;selected&quot; configuration property of the menu&#39;s first </span>
-<span class="c">* enabled item to &quot;true.&quot;</span>
+<span class="c">* @description Sets the "selected" configuration property of the menu's first </span>
+<span class="c">* enabled item to "true."</span>
 <span class="c">*/</span>
 <span class="nx">setInitialSelection</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -4922,9 +4913,9 @@
 
 <span class="c">/**</span>
 <span class="c">* @method clearActiveItem</span>
-<span class="c">* @description Sets the &quot;selected&quot; configuration property of the menu&#39;s active</span>
-<span class="c">* item to &quot;false&quot; and hides the item&#39;s submenu.</span>
-<span class="c">* @param {Boolean} p_bBlur Boolean indicating if the menu&#39;s active item </span>
+<span class="c">* @description Sets the "selected" configuration property of the menu's active</span>
+<span class="c">* item to "false" and hides the item's submenu.</span>
+<span class="c">* @param {Boolean} p_bBlur Boolean indicating if the menu's active item </span>
 <span class="c">* should be blurred.  </span>
 <span class="c">*/</span>
 <span class="nx">clearActiveItem</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_bBlur</span><span class="o">)</span> <span class="o">{</span>
@@ -4972,7 +4963,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method focus</span>
-<span class="c">* @description Causes the menu to receive focus and fires the &quot;focus&quot; event.</span>
+<span class="c">* @description Causes the menu to receive focus and fires the "focus" event.</span>
 <span class="c">*/</span>
 <span class="nx">focus</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -4987,7 +4978,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method blur</span>
-<span class="c">* @description Causes the menu to lose focus and fires the &quot;blur&quot; event.</span>
+<span class="c">* @description Causes the menu to lose focus and fires the "blur" event.</span>
 <span class="c">*/</span>    
 <span class="nx">blur</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -5107,8 +5098,8 @@
 
 
 <span class="c">/**</span>
-<span class="c">* @description Initializes the class&#39;s configurable properties which can be</span>
-<span class="c">* changed using the menu&#39;s Config object (&quot;cfg&quot;).</span>
+<span class="c">* @description Initializes the class's configurable properties which can be</span>
+<span class="c">* changed using the menu's Config object ("cfg").</span>
 <span class="c">* @method initDefaultConfig</span>
 <span class="c">*/</span>
 <span class="nx">initDefaultConfig</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -5135,7 +5126,7 @@
     <span class="c">/**</span>
 <span class="c">    * @config x</span>
 <span class="c">    * @description Number representing the absolute x-coordinate position of </span>
-<span class="c">    * the Menu.  This property is only applied when the &quot;position&quot; </span>
+<span class="c">    * the Menu.  This property is only applied when the "position" </span>
 <span class="c">    * configuration property is set to dynamic.</span>
 <span class="c">    * @type Number</span>
 <span class="c">    * @default null</span>
@@ -5145,7 +5136,7 @@
     <span class="c">/**</span>
 <span class="c">    * @config y</span>
 <span class="c">    * @description Number representing the absolute y-coordinate position of </span>
-<span class="c">    * the Menu.  This property is only applied when the &quot;position&quot; </span>
+<span class="c">    * the Menu.  This property is only applied when the "position" </span>
 <span class="c">    * configuration property is set to dynamic.</span>
 <span class="c">    * @type Number</span>
 <span class="c">    * @default null</span>
@@ -5154,7 +5145,7 @@
 
     <span class="c">/**</span>
 <span class="c">    * @description Array of the absolute x and y positions of the Menu.  This </span>
-<span class="c">    * property is only applied when the &quot;position&quot; configuration property is </span>
+<span class="c">    * property is only applied when the "position" configuration property is </span>
 <span class="c">    * set to dynamic.</span>
 <span class="c">    * @config xy</span>
 <span class="c">    * @type Number[]</span>
@@ -5166,9 +5157,9 @@
 <span class="c">    * @config context</span>
 <span class="c">    * @description Array of context arguments for context-sensitive positioning.  </span>
 <span class="c">    * The format is: [id or element, element corner, context corner]. </span>
-<span class="c">    * For example, setting this property to [&quot;img1&quot;, &quot;tl&quot;, &quot;bl&quot;] would </span>
-<span class="c">    * align the Mnu&#39;s top left corner to the context element&#39;s </span>
-<span class="c">    * bottom left corner.  This property is only applied when the &quot;position&quot; </span>
+<span class="c">    * For example, setting this property to ["img1", "tl", "bl"] would </span>
+<span class="c">    * align the Mnu's top left corner to the context element's </span>
+<span class="c">    * bottom left corner.  This property is only applied when the "position" </span>
 <span class="c">    * configuration property is set to dynamic.</span>
 <span class="c">    * @type Array</span>
 <span class="c">    * @default null</span>
@@ -5179,7 +5170,7 @@
 <span class="c">    * @config fixedcenter</span>
 <span class="c">    * @description Boolean indicating if the Menu should be anchored to the </span>
 <span class="c">    * center of the viewport.  This property is only applied when the </span>
-<span class="c">    * &quot;position&quot; configuration property is set to dynamic.</span>
+<span class="c">    * "position" configuration property is set to dynamic.</span>
 <span class="c">    * @type Boolean</span>
 <span class="c">    * @default false</span>
 <span class="c">    */</span>
@@ -5189,9 +5180,9 @@
 <span class="c">    * @config iframe</span>
 <span class="c">    * @description Boolean indicating whether or not the Menu should </span>
 <span class="c">    * have an IFRAME shim; used to prevent SELECT elements from </span>
-<span class="c">    * poking through an Overlay instance in IE6.  When set to &quot;true&quot;, </span>
+<span class="c">    * poking through an Overlay instance in IE6.  When set to "true", </span>
 <span class="c">    * the iframe shim is created when the Menu instance is intially</span>
-<span class="c">    * made visible.  This property is only applied when the &quot;position&quot; </span>
+<span class="c">    * made visible.  This property is only applied when the "position" </span>
 <span class="c">    * configuration property is set to dynamic and is automatically applied </span>
 <span class="c">    * to all submenus.</span>
 <span class="c">    * @type Boolean</span>
@@ -5202,20 +5193,20 @@
 	<span class="c">// Add configuration attributes</span>
 <span class="c"></span>
     <span class="c">/*</span>
-<span class="c">        Change the default value for the &quot;visible&quot; configuration </span>
-<span class="c">        property to &quot;false&quot; by re-adding the property.</span>
+<span class="c">        Change the default value for the "visible" configuration </span>
+<span class="c">        property to "false" by re-adding the property.</span>
 <span class="c">    */</span>
 
     <span class="c">/**</span>
 <span class="c">    * @config visible</span>
 <span class="c">    * @description Boolean indicating whether or not the menu is visible.  If </span>
-<span class="c">    * the menu&#39;s &quot;position&quot; configuration property is set to &quot;dynamic&quot; (the </span>
-<span class="c">    * default), this property toggles the menu&#39;s &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; </span>
-<span class="c">    * element&#39;s &quot;visibility&quot; style property between &quot;visible&quot; (true) or </span>
-<span class="c">    * &quot;hidden&quot; (false).  If the menu&#39;s &quot;position&quot; configuration property is </span>
-<span class="c">    * set to &quot;static&quot; this property toggles the menu&#39;s </span>
-<span class="c">    * &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element&#39;s &quot;display&quot; style property </span>
-<span class="c">    * between &quot;block&quot; (true) or &quot;none&quot; (false).</span>
+<span class="c">    * the menu's "position" configuration property is set to "dynamic" (the </span>
+<span class="c">    * default), this property toggles the menu's &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; </span>
+<span class="c">    * element's "visibility" style property between "visible" (true) or </span>
+<span class="c">    * "hidden" (false).  If the menu's "position" configuration property is </span>
+<span class="c">    * set to "static" this property toggles the menu's </span>
+<span class="c">    * &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element's "display" style property </span>
+<span class="c">    * between "block" (true) or "none" (false).</span>
 <span class="c">    * @default false</span>
 <span class="c">    * @type Boolean</span>
 <span class="c">    */</span>
@@ -5230,15 +5221,15 @@
 
 
     <span class="c">/*</span>
-<span class="c">        Change the default value for the &quot;constraintoviewport&quot; configuration </span>
-<span class="c">        property (inherited by YAHOO.widget.Overlay) to &quot;true&quot; by re-adding the property.</span>
+<span class="c">        Change the default value for the "constraintoviewport" configuration </span>
+<span class="c">        property (inherited by YAHOO.widget.Overlay) to "true" by re-adding the property.</span>
 <span class="c">    */</span>
 
     <span class="c">/**</span>
 <span class="c">    * @config constraintoviewport</span>
 <span class="c">    * @description Boolean indicating if the menu will try to remain inside </span>
 <span class="c">    * the boundaries of the size of viewport.  This property is only applied </span>
-<span class="c">    * when the &quot;position&quot; configuration property is set to dynamic and is </span>
+<span class="c">    * when the "position" configuration property is set to dynamic and is </span>
 <span class="c">    * automatically applied to all submenus.</span>
 <span class="c">    * @default true</span>
 <span class="c">    * @type Boolean</span>
@@ -5255,14 +5246,14 @@
 
 
     <span class="c">/*</span>
-<span class="c">        Change the default value for the &quot;preventcontextoverlap&quot; configuration </span>
-<span class="c">        property (inherited by YAHOO.widget.Overlay) to &quot;true&quot; by re-adding the property.</span>
+<span class="c">        Change the default value for the "preventcontextoverlap" configuration </span>
+<span class="c">        property (inherited by YAHOO.widget.Overlay) to "true" by re-adding the property.</span>
 <span class="c">    */</span>
 
 	<span class="c">/**</span>
 <span class="c">	* @config preventcontextoverlap</span>
 <span class="c">	* @description Boolean indicating whether or not a submenu should overlap its parent MenuItem </span>
-<span class="c">	* when the &quot;constraintoviewport&quot; configuration property is set to &quot;true&quot;.</span>
+<span class="c">	* when the "constraintoviewport" configuration property is set to "true".</span>
 <span class="c">	* @type Boolean</span>
 <span class="c">	* @default true</span>
 <span class="c">	*/</span>
@@ -5278,7 +5269,7 @@
     <span class="c">/**</span>
 <span class="c">    * @config position</span>
 <span class="c">    * @description String indicating how a menu should be positioned on the </span>
-<span class="c">    * screen.  Possible values are &quot;static&quot; and &quot;dynamic.&quot;  Static menus are </span>
+<span class="c">    * screen.  Possible values are "static" and "dynamic."  Static menus are </span>
 <span class="c">    * visible by default and reside in the normal flow of the document </span>
 <span class="c">    * (CSS position: static).  Dynamic menus are hidden by default, reside </span>
 <span class="c">    * out of the normal flow of the document (CSS position: absolute), and </span>
@@ -5301,9 +5292,9 @@
 <span class="c">    * @config submenualignment</span>
 <span class="c">    * @description Array defining how submenus should be aligned to their </span>
 <span class="c">    * parent menu item. The format is: [itemCorner, submenuCorner]. By default</span>
-<span class="c">    * a submenu&#39;s top left corner is aligned to its parent menu item&#39;s top </span>
+<span class="c">    * a submenu's top left corner is aligned to its parent menu item's top </span>
 <span class="c">    * right corner.</span>
-<span class="c">    * @default [&quot;tl&quot;,&quot;tr&quot;]</span>
+<span class="c">    * @default ["tl","tr"]</span>
 <span class="c">    * @type Array</span>
 <span class="c">    */</span>
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span>
@@ -5318,7 +5309,7 @@
     <span class="c">/**</span>
 <span class="c">    * @config autosubmenudisplay</span>
 <span class="c">    * @description Boolean indicating if submenus are automatically made </span>
-<span class="c">    * visible when the user mouses over the menu&#39;s items.</span>
+<span class="c">    * visible when the user mouses over the menu's items.</span>
 <span class="c">    * @default true</span>
 <span class="c">    * @type Boolean</span>
 <span class="c">    */</span>
@@ -5336,7 +5327,7 @@
 <span class="c">    * @config showdelay</span>
 <span class="c">    * @description Number indicating the time (in milliseconds) that should </span>
 <span class="c">    * expire before a submenu is made visible when the user mouses over </span>
-<span class="c">    * the menu&#39;s items.  This property is only applied when the &quot;position&quot; </span>
+<span class="c">    * the menu's items.  This property is only applied when the "position" </span>
 <span class="c">    * configuration property is set to dynamic and is automatically applied </span>
 <span class="c">    * to all submenus.</span>
 <span class="c">    * @default 250</span>
@@ -5356,7 +5347,7 @@
 <span class="c">    * @config hidedelay</span>
 <span class="c">    * @description Number indicating the time (in milliseconds) that should </span>
 <span class="c">    * expire before the menu is hidden.  This property is only applied when </span>
-<span class="c">    * the &quot;position&quot; configuration property is set to dynamic and is </span>
+<span class="c">    * the "position" configuration property is set to dynamic and is </span>
 <span class="c">    * automatically applied to all submenus.</span>
 <span class="c">    * @default 0</span>
 <span class="c">    * @type Number</span>
@@ -5377,8 +5368,8 @@
 <span class="c">    * @description Number indicating the time (in milliseconds) that should </span>
 <span class="c">    * expire before a submenu is hidden when the user mouses out of a menu item </span>
 <span class="c">    * heading in the direction of a submenu.  The value must be greater than or </span>
-<span class="c">    * equal to the value specified for the &quot;showdelay&quot; configuration property.</span>
-<span class="c">    * This property is only applied when the &quot;position&quot; configuration property </span>
+<span class="c">    * equal to the value specified for the "showdelay" configuration property.</span>
+<span class="c">    * This property is only applied when the "position" configuration property </span>
 <span class="c">    * is set to dynamic and is automatically applied to all submenus.</span>
 <span class="c">    * @default 250</span>
 <span class="c">    * @type Number</span>
@@ -5397,7 +5388,7 @@
 <span class="c">    * @config clicktohide</span>
 <span class="c">    * @description Boolean indicating if the menu will automatically be </span>
 <span class="c">    * hidden if the user clicks outside of it.  This property is only </span>
-<span class="c">    * applied when the &quot;position&quot; configuration property is set to dynamic </span>
+<span class="c">    * applied when the "position" configuration property is set to dynamic </span>
 <span class="c">    * and is automatically applied to all submenus.</span>
 <span class="c">    * @default true</span>
 <span class="c">    * @type Boolean</span>
@@ -5415,10 +5406,10 @@
 	<span class="c">/**</span>
 <span class="c">	* @config container</span>
 <span class="c">	* @description HTML element reference or string specifying the id </span>
-<span class="c">	* attribute of the HTML element that the menu&#39;s markup should be </span>
+<span class="c">	* attribute of the HTML element that the menu's markup should be </span>
 <span class="c">	* rendered into.</span>
-<span class="c">	* @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">	* level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|String</span>
+<span class="c">	* @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">	* level-one-html.html#ID-58190037"&gt;HTMLElement&lt;/a&gt;|String</span>
 <span class="c">	* @default document.body</span>
 <span class="c">	*/</span>
 	<span class="nx">oConfig</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span>
@@ -5434,7 +5425,7 @@
     <span class="c">/**</span>
 <span class="c">    * @config scrollincrement</span>
 <span class="c">    * @description Number used to control the scroll speed of a menu.  Used to </span>
-<span class="c">    * increment the &quot;scrollTop&quot; property of the menu&#39;s body by when a menu&#39;s </span>
+<span class="c">    * increment the "scrollTop" property of the menu's body by when a menu's </span>
 <span class="c">    * content is scrolling.  When set this property is automatically applied </span>
 <span class="c">    * to all submenus.</span>
 <span class="c">    * @default 1</span>
@@ -5453,7 +5444,7 @@
 
     <span class="c">/**</span>
 <span class="c">    * @config minscrollheight</span>
-<span class="c">    * @description Number defining the minimum threshold for the &quot;maxheight&quot; </span>
+<span class="c">    * @description Number defining the minimum threshold for the "maxheight" </span>
 <span class="c">    * configuration property.  When set this property is automatically applied </span>
 <span class="c">    * to all submenus.</span>
 <span class="c">    * @default 90</span>
@@ -5472,11 +5463,11 @@
 
     <span class="c">/**</span>
 <span class="c">    * @config maxheight</span>
-<span class="c">    * @description Number defining the maximum height (in pixels) for a menu&#39;s </span>
-<span class="c">    * body element (&lt;code&gt;&amp;#60;div class=&quot;bd&quot;&amp;#60;&lt;/code&gt;).  Once a menu&#39;s body </span>
+<span class="c">    * @description Number defining the maximum height (in pixels) for a menu's </span>
+<span class="c">    * body element (&lt;code&gt;&amp;#60;div class="bd"&amp;#60;&lt;/code&gt;).  Once a menu's body </span>
 <span class="c">    * exceeds this height, the contents of the body are scrolled to maintain </span>
 <span class="c">    * this value.  This value cannot be set lower than the value of the </span>
-<span class="c">    * &quot;minscrollheight&quot; configuration property.</span>
+<span class="c">    * "minscrollheight" configuration property.</span>
 <span class="c">    * @default 0</span>
 <span class="c">    * @type Number</span>
 <span class="c">    */</span>
@@ -5495,8 +5486,8 @@
     <span class="c">/**</span>
 <span class="c">    * @config classname</span>
 <span class="c">    * @description String representing the CSS class to be applied to the </span>
-<span class="c">    * menu&#39;s root &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.  The specified class(es)  </span>
-<span class="c">    * are appended in addition to the default class as specified by the menu&#39;s</span>
+<span class="c">    * menu's root &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.  The specified class(es)  </span>
+<span class="c">    * are appended in addition to the default class as specified by the menu's</span>
 <span class="c">    * CSS_CLASS_NAME constant. When set this property is automatically </span>
 <span class="c">    * applied to all submenus.</span>
 <span class="c">    * @default null</span>
@@ -5518,7 +5509,7 @@
 <span class="c">    * @description Boolean indicating if the menu should be disabled.  </span>
 <span class="c">    * Disabling a menu disables each of its items.  (Disabled menu items are </span>
 <span class="c">    * dimmed and will not respond to user input or fire events.)  Disabled</span>
-<span class="c">    * menus have a corresponding &quot;disabled&quot; CSS class applied to their root</span>
+<span class="c">    * menus have a corresponding "disabled" CSS class applied to their root</span>
 <span class="c">    * &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.</span>
 <span class="c">    * @default false</span>
 <span class="c">    * @type Boolean</span>
@@ -5578,9 +5569,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -5653,34 +5642,29 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
                                 <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBar.html">YAHOO.widget.MenuBar</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                        <ul class="content"><li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
                                 <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
                                 <li class="selected"><a href="menu.js.html">menu.js</a></li>
                                 <li class=""><a href="menubar.js.html">menubar.js</a></li>
                                 <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
                                 <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
                                 <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -5690,9 +5674,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: paginator   LastPageLink.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: paginator   LastPageLink.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>paginator&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>paginator  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_paginator.html">paginator</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">Paginator</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">,</span>
     <span class="nx">l</span>         <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
@@ -55,17 +46,17 @@
 <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">.</span><span class="nx">LastPageLink</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span> <span class="o">=</span> <span class="nx">p</span><span class="o">;</span>
 
-    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;lastPageLinkLabelChange&#39;</span><span class="o">);</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;lastPageLinkClassChange&#39;</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'lastPageLinkLabelChange'</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'lastPageLinkClassChange'</span><span class="o">);</span>
 
-    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;recordOffsetChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;rowsPerPageChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">destroy</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'recordOffsetChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'rowsPerPageChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'totalRecordsChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'destroy'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">destroy</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 
     <span class="c">// TODO: make this work</span>
-<span class="c"></span>    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;lastPageLinkLabelChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;lastPageLinkClassChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'lastPageLinkLabelChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'lastPageLinkClassChange'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">update</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -80,20 +71,20 @@
     <span class="c">/**</span>
 <span class="c">     * Used as innerHTML for the last page link/span.</span>
 <span class="c">     * @attribute lastPageLinkLabel</span>
-<span class="c">     * @default &#39;last&amp;nbsp;&amp;gt;&amp;gt;&#39;</span>
+<span class="c">     * @default 'last&amp;nbsp;&amp;gt;&amp;gt;'</span>
 <span class="c">     */</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;lastPageLinkLabel&#39;</span><span class="o">,</span> <span class="o">{</span>
-        <span class="nx">value</span> <span class="o">:</span> <span class="s1">&#39;last&amp;nbsp;&amp;gt;&amp;gt;&#39;</span><span class="o">,</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'lastPageLinkLabel'</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span> <span class="o">:</span> <span class="s1">'last&amp;nbsp;&amp;gt;&amp;gt;'</span><span class="o">,</span>
         <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
     <span class="o">});</span>
 
     <span class="c">/**</span>
 <span class="c">     * CSS class assigned to the link/span</span>
 <span class="c">     * @attribute lastPageLinkClass</span>
-<span class="c">     * @default &#39;yui-pg-last&#39;</span>
+<span class="c">     * @default 'yui-pg-last'</span>
 <span class="c">     */</span>
-    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;lastPageLinkClass&#39;</span><span class="o">,</span> <span class="o">{</span>
-        <span class="nx">value</span> <span class="o">:</span> <span class="s1">&#39;yui-pg-last&#39;</span><span class="o">,</span>
+    <span class="nx">p</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'lastPageLinkClass'</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nx">value</span> <span class="o">:</span> <span class="s1">'yui-pg-last'</span><span class="o">,</span>
         <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
     <span class="o">});</span>
 <span class="o">};</span>
@@ -143,25 +134,25 @@
 <span class="c">     */</span>
     <span class="nx">render</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">id_base</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">p</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">paginator</span><span class="o">,</span>
-            <span class="nx">c</span>     <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;lastPageLinkClass&#39;</span><span class="o">),</span>
-            <span class="k">label</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;lastPageLinkLabel&#39;</span><span class="o">),</span>
+            <span class="nx">c</span>     <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'lastPageLinkClass'</span><span class="o">),</span>
+            <span class="k">label</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'lastPageLinkLabel'</span><span class="o">),</span>
             <span class="nx">last</span>  <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">getTotalPages</span><span class="o">();</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;a&#39;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">span</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;span&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'a'</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'span'</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">na</span>   <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">id</span>        <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">&#39;-last-link&#39;</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">href</span>      <span class="o">=</span> <span class="s1">&#39;#&#39;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">id</span>        <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">'-last-link'</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">href</span>      <span class="o">=</span> <span class="s1">'#'</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">c</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">label</span><span class="o">;</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">,</span><span class="s1">&#39;click&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">onClick</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">link</span><span class="o">,</span><span class="s1">'click'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">onClick</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">id</span>        <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">&#39;-last-span&#39;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">id</span>        <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">'-last-span'</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">c</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">span</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">label</span><span class="o">;</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">na</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">&#39;-last-na&#39;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">na</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id_base</span> <span class="o">+</span> <span class="s1">'-last-na'</span><span class="o">;</span>
 
         <span class="nx">switch</span> <span class="o">(</span><span class="nx">last</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">case</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">VALUE_UNLIMITED</span> <span class="o">:</span>
@@ -215,7 +206,7 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Listener for the link&#39;s onclick event.  Passes to setPage method.</span>
+<span class="c">     * Listener for the link's onclick event.  Passes to setPage method.</span>
 <span class="c">     * @method onClick</span>
 <span class="c">     * @param e {DOMEvent} The click event</span>
 <span class="c">     */</span>
@@ -235,9 +226,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -310,13 +299,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.CurrentPageReport.html">YAHOO.widget.Paginator.ui.CurrentPageReport</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.FirstPageLink.html">YAHOO.widget.Paginator.ui.FirstPageLink</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.LastPageLink.html">YAHOO.widget.Paginator.ui.LastPageLink</a></li>
@@ -324,13 +311,11 @@
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.PageLinks.html">YAHOO.widget.Paginator.ui.PageLinks</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.PreviousPageLink.html">YAHOO.widget.Paginator.ui.PreviousPageLink</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
+                        <ul class="content"><li class=""><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
                                 <li class=""><a href="FirstPageLink.js.html">FirstPageLink.js</a></li>
                                 <li class="selected"><a href="LastPageLink.js.html">LastPageLink.js</a></li>
                                 <li class=""><a href="NextPageLink.js.html">NextPageLink.js</a></li>
@@ -338,8 +323,7 @@
                                 <li class=""><a href="Paginator.js.html">Paginator.js</a></li>
                                 <li class=""><a href="PreviousPageLink.js.html">PreviousPageLink.js</a></li>
                                 <li class=""><a href="RowsPerPageDropDown.js.html">RowsPerPageDropDown.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -349,9 +333,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

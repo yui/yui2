@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: connection   connection_xdr.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: connection   connection_xdr.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>connection&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>connection  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_connection.html" title="connection">connection</a>
                 
                  &gt; connection_xdr.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm">  * @for Connect</span>
 <span class="cm">  */</span>
 <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -62,12 +46,12 @@
 <span class="cm">    * @return {void}</span>
 <span class="cm">    */</span>
 	<span class="kd">function</span> <span class="nx">_swf</span><span class="p">(</span><span class="nx">uri</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="s1">&#39;&lt;object id=&quot;YUIConnectionSwf&quot; type=&quot;application/x-shockwave-flash&quot; data=&quot;&#39;</span> <span class="o">+</span>
-		        <span class="nx">uri</span> <span class="o">+</span> <span class="s1">&#39;&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;&#39;</span> <span class="o">+</span>
-		     	<span class="s1">&#39;&lt;param name=&quot;movie&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">uri</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
-                <span class="s1">&#39;&lt;param name=&quot;allowScriptAccess&quot; value=&quot;always&quot;&gt;&#39;</span> <span class="o">+</span>
-		    	<span class="s1">&#39;&lt;/object&gt;&#39;</span><span class="p">,</span>
-		    <span class="nx">c</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="s1">'&lt;object id="YUIConnectionSwf" type="application/x-shockwave-flash" data="'</span> <span class="o">+</span>
+		        <span class="nx">uri</span> <span class="o">+</span> <span class="s1">'" width="0" height="0"&gt;'</span> <span class="o">+</span>
+		     	<span class="s1">'&lt;param name="movie" value="'</span> <span class="o">+</span> <span class="nx">uri</span> <span class="o">+</span> <span class="s1">'"&gt;'</span> <span class="o">+</span>
+                <span class="s1">'&lt;param name="allowScriptAccess" value="always"&gt;'</span> <span class="o">+</span>
+		    	<span class="s1">'&lt;/object&gt;'</span><span class="p">,</span>
+		    <span class="nx">c</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'div'</span><span class="p">);</span>
 
 		<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">c</span><span class="p">);</span>
 		<span class="nx">c</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">o</span><span class="p">;</span>
@@ -76,19 +60,19 @@
    <span class="cm">/**</span>
 <span class="cm">    * @description This method calls the public method on the</span>
 <span class="cm">    * Flash transport to start the XDR transaction.  It is analogous</span>
-<span class="cm">    * to Connection Manager&#39;s asyncRequest method.</span>
+<span class="cm">    * to Connection Manager's asyncRequest method.</span>
 <span class="cm">    * @method xdr</span>
 <span class="cm">    * @private</span>
 <span class="cm">    * @static</span>
 <span class="cm">    * @param {object} The transaction object.</span>
 <span class="cm">    * @param {string} HTTP request method.</span>
 <span class="cm">    * @param {string} URI for the transaction.</span>
-<span class="cm">    * @param {object} The transaction&#39;s callback object.</span>
+<span class="cm">    * @param {object} The transaction's callback object.</span>
 <span class="cm">    * @param {object} The JSON object used as HTTP POST data.</span>
 <span class="cm">    * @return {void}</span>
 <span class="cm">    */</span>
 	<span class="kd">function</span> <span class="nx">_xdr</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">u</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">_fn</span><span class="p">[</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;o&#39;</span><span class="o">:</span><span class="nx">o</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="o">:</span><span class="nx">c</span> <span class="p">};</span>
+		<span class="nx">_fn</span><span class="p">[</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">tId</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">'o'</span><span class="o">:</span><span class="nx">o</span><span class="p">,</span> <span class="s1">'c'</span><span class="o">:</span><span class="nx">c</span> <span class="p">};</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
 			<span class="nx">c</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">m</span><span class="p">;</span>
 			<span class="nx">c</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">d</span><span class="p">;</span>
@@ -108,7 +92,7 @@
 <span class="cm">    */</span>
 	<span class="kd">function</span> <span class="nx">_init</span><span class="p">(</span><span class="nx">uri</span><span class="p">)</span> <span class="p">{</span>
 		<span class="nx">_swf</span><span class="p">(</span><span class="nx">uri</span><span class="p">);</span>
-		<span class="nx">YCM</span><span class="p">.</span><span class="nx">_transport</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;YUIConnectionSwf&#39;</span><span class="p">);</span>
+		<span class="nx">YCM</span><span class="p">.</span><span class="nx">_transport</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'YUIConnectionSwf'</span><span class="p">);</span>
 	<span class="p">}</span>
 
 	<span class="kd">function</span> <span class="nx">_xdrReady</span><span class="p">()</span> <span class="p">{</span>
@@ -122,7 +106,7 @@
 <span class="cm">    * @private</span>
 <span class="cm">    * @static</span>
 <span class="cm">    * @param {object} The transaction object.</span>
-<span class="cm">    * @param {string} The transaction&#39;s callback object.</span>
+<span class="cm">    * @param {string} The transaction's callback object.</span>
 <span class="cm">    * @return {void}</span>
 <span class="cm">    */</span>
 	<span class="kd">function</span> <span class="nx">_xdrStart</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
@@ -151,7 +135,7 @@
 		<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">_fn</span><span class="p">[</span><span class="nx">r</span><span class="p">.</span><span class="nx">tId</span><span class="p">].</span><span class="nx">o</span><span class="p">,</span>
 			<span class="nx">cb</span> <span class="o">=</span> <span class="nx">_fn</span><span class="p">[</span><span class="nx">r</span><span class="p">.</span><span class="nx">tId</span><span class="p">].</span><span class="nx">c</span><span class="p">;</span>
 
-		<span class="k">if</span> <span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:start&#39;</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">'xdr:start'</span><span class="p">)</span> <span class="p">{</span>
 			<span class="nx">_xdrStart</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">cb</span><span class="p">);</span>
 			<span class="k">return</span><span class="p">;</span>
 		<span class="p">}</span>
@@ -162,7 +146,7 @@
 			<span class="nx">o</span><span class="p">.</span><span class="nx">r</span><span class="p">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">cb</span><span class="p">.</span><span class="nx">argument</span><span class="p">;</span>
 		<span class="p">}</span>
 
-		<span class="k">this</span><span class="p">.</span><span class="nx">handleTransactionResponse</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:abort&#39;</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">handleTransactionResponse</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">'xdr:abort'</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">);</span>
 		<span class="k">delete</span> <span class="nx">_fn</span><span class="p">[</span><span class="nx">r</span><span class="p">.</span><span class="nx">tId</span><span class="p">];</span>
 	<span class="p">}</span>
 
@@ -170,7 +154,7 @@
 	<span class="nx">YCM</span><span class="p">.</span><span class="nx">xdr</span> <span class="o">=</span> <span class="nx">_xdr</span><span class="p">;</span>
 	<span class="nx">YCM</span><span class="p">.</span><span class="nx">swf</span> <span class="o">=</span> <span class="nx">_swf</span><span class="p">;</span>
 	<span class="nx">YCM</span><span class="p">.</span><span class="nx">transport</span> <span class="o">=</span> <span class="nx">_init</span><span class="p">;</span>
-	<span class="nx">YCM</span><span class="p">.</span><span class="nx">xdrReadyEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">&#39;xdrReady&#39;</span><span class="p">);</span>
+	<span class="nx">YCM</span><span class="p">.</span><span class="nx">xdrReadyEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">CustomEvent</span><span class="p">(</span><span class="s1">'xdrReady'</span><span class="p">);</span>
 	<span class="nx">YCM</span><span class="p">.</span><span class="nx">xdrReady</span> <span class="o">=</span> <span class="nx">_xdrReady</span><span class="p">;</span>
 	<span class="nx">YCM</span><span class="p">.</span><span class="nx">handleXdrResponse</span> <span class="o">=</span> <span class="nx">_handleXdrResponse</span><span class="p">;</span>
 <span class="p">})();</span>
@@ -184,8 +168,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -233,24 +216,19 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Connect.html" title="YAHOO.util.Connect">YAHOO.util.Connect</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Connect.html" title="YAHOO.util.Connect">YAHOO.util.Connect</a></li>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="connection_core.js.html" title="connection_core.js">connection_core.js</a></li>
+                        <ul class="content"><li class=""><a href="connection_core.js.html" title="connection_core.js">connection_core.js</a></li>
                                 <li class="selected"><a href="connection_xdr.js.html" title="connection_xdr.js">connection_xdr.js</a></li>
                                 <li class=""><a href="connectionx.js.html" title="connectionx.js">connectionx.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -260,13 +238,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Connect", "name": "abort", "url": "YAHOO.util.Connect.html#method_abort", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "abortEvent", "url": "YAHOO.util.Connect.html#property_abortEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "appendPostData", "url": "YAHOO.util.Connect.html#method_appendPostData", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "asyncRequest", "url": "YAHOO.util.Connect.html#method_asyncRequest", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "completeEvent", "url": "YAHOO.util.Connect.html#property_completeEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createExceptionObject", "url": "YAHOO.util.Connect.html#method_createExceptionObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createFrame", "url": "YAHOO.util.Connect.html#method_createFrame", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createResponseObject", "url": "YAHOO.util.Connect.html#method_createResponseObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "createXhrObject", "url": "YAHOO.util.Connect.html#method_createXhrObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_customEvents", "url": "YAHOO.util.Connect.html#property__customEvents", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_form_header", "url": "YAHOO.util.Connect.html#property__default_form_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_post_header", "url": "YAHOO.util.Connect.html#property__default_post_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_default_xhr_header", "url": "YAHOO.util.Connect.html#property__default_xhr_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "failureEvent", "url": "YAHOO.util.Connect.html#property_failureEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_formNode", "url": "YAHOO.util.Connect.html#property__formNode", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "getConnectionObject", "url": "YAHOO.util.Connect.html#method_getConnectionObject", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleReadyState", "url": "YAHOO.util.Connect.html#method_handleReadyState", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleTransactionResponse", "url": "YAHOO.util.Connect.html#method_handleTransactionResponse", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "handleXdrResponse", "url": "YAHOO.util.Connect.html#method_handleXdrResponse", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_default_header", "url": "YAHOO.util.Connect.html#property__has_default_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_has_http_headers", "url": "YAHOO.util.Connect.html#property__has_http_headers", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_hasSubmitListener", "url": "YAHOO.util.Connect.html#property__hasSubmitListener", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_http_header", "url": "YAHOO.util.Connect.html#property__http_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "initCustomEvents", "url": "YAHOO.util.Connect.html#method_initCustomEvents", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "initHeader", "url": "YAHOO.util.Connect.html#method_initHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "isCallInProgress", "url": "YAHOO.util.Connect.html#method_isCallInProgress", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFileUpload", "url": "YAHOO.util.Connect.html#property__isFileUpload", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_isFormSubmit", "url": "YAHOO.util.Connect.html#property__isFormSubmit", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_msxml_progid", "url": "YAHOO.util.Connect.html#property__msxml_progid", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_poll", "url": "YAHOO.util.Connect.html#property__poll", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_polling_interval", "url": "YAHOO.util.Connect.html#property__polling_interval", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "releaseObject", "url": "YAHOO.util.Connect.html#method_releaseObject", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "resetDefaultHeaders", "url": "YAHOO.util.Connect.html#method_resetDefaultHeaders", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "resetFormState", "url": "YAHOO.util.Connect.html#method_resetFormState", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultPostHeader", "url": "YAHOO.util.Connect.html#method_setDefaultPostHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setDefaultXhrHeader", "url": "YAHOO.util.Connect.html#method_setDefaultXhrHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setForm", "url": "YAHOO.util.Connect.html#method_setForm", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "setHeader", "url": "YAHOO.util.Connect.html#method_setHeader", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setPollingInterval", "url": "YAHOO.util.Connect.html#method_setPollingInterval", "type": "method"}, {"access": "", "host": "YAHOO.util.Connect", "name": "setProgId", "url": "YAHOO.util.Connect.html#method_setProgId", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_sFormData", "url": "YAHOO.util.Connect.html#property__sFormData", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "startEvent", "url": "YAHOO.util.Connect.html#property_startEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_submitElementValue", "url": "YAHOO.util.Connect.html#property__submitElementValue", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "successEvent", "url": "YAHOO.util.Connect.html#property_successEvent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_swf", "url": "YAHOO.util.Connect.html#method__swf", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_timeOut", "url": "YAHOO.util.Connect.html#property__timeOut", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_transaction_id", "url": "YAHOO.util.Connect.html#property__transaction_id", "type": "property"}, {"access": "", "host": "YAHOO.util.Connect", "name": "transport", "url": "YAHOO.util.Connect.html#method_transport", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "uploadFile", "url": "YAHOO.util.Connect.html#method_uploadFile", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_post_header", "url": "YAHOO.util.Connect.html#property__use_default_post_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_use_default_xhr_header", "url": "YAHOO.util.Connect.html#property__use_default_xhr_header", "type": "property"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "xdr", "url": "YAHOO.util.Connect.html#method_xdr", "type": "method"}, {"access": "private", "host": "YAHOO.util.Connect", "name": "_xdrStart", "url": "YAHOO.util.Connect.html#method__xdrStart", "type": "method"}];
-</script>
-</body>
-</html>
+</script></body>

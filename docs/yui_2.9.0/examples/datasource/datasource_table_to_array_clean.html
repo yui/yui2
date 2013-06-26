@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Extracting data from an HTML table</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Extracting data from an HTML table</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,15 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css" class="highlight-ignore">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/datasource/datasource-min.js"></script><!--begin custom header content for this example--><style type="text/css" class="highlight-ignore">
     #demo table {
         border: 1px solid #aaa;
         border-collapse: collapse;
@@ -45,88 +29,52 @@ body {
         border: 1px solid #aaa;
         padding: .5ex 1ex;
     }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Extracting data from an HTML table</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Extracting data from an HTML table</h1><div class="exampleIntro">
 	<p>DataSource supports using a table in markup as its source of truth.</p>
-<p>This example illustrates how to create a &quot;pass-thru&quot; DataSource instance to leverage the DOM walking and parsing routines inside in order to extract the table's data into a JavaScript array structure.</p>
+<p>This example illustrates how to create a "pass-thru" DataSource instance to leverage the DOM walking and parsing routines inside in order to extract the table's data into a JavaScript array structure.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="demo">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="demo">
     <button type="button" id="demo_load">Extract the table data</button>
-    <button type="button" id="demo_go" disabled="disabled">Get Total Amount Due</button>
+    <button type="button" id="demo_go" disabled>Get Total Amount Due</button>
     <p>Total Amount Due: <em id="report">(click the Extract button)</em></p>
 
-    <table id="accounts">
-        <caption>Table in markup with data in it</caption>
-        <thead>
-            <tr>
-                <th>Due Date</th>
+    <table id="accounts"><caption>Table in markup with data in it</caption>
+        <thead><tr><th>Due Date</th>
                 <th>Account Number</th>
                 <th>Quantity</th>
                 <th>Amount Due</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1/23/1999</td>
+            </tr></thead><tbody><tr><td>1/23/1999</td>
                 <td>29e8548592d8c82</td>
                 <td>12</td>
                 <td>$150.00</td>
-            </tr>
-            <tr>
-                <td>5/19/1999</td>
+            </tr><tr><td>5/19/1999</td>
                 <td>83849</td>
                 <td>8</td>
                 <td>$60.00</td>
-            </tr>
-            <tr>
-                <td>8/9/1999</td>
+            </tr><tr><td>8/9/1999</td>
                 <td>11348</td>
                 <td>1</td>
                 <td>-$34.99</td>
-            </tr>
-            <tr>
-                <td>1/23/2000</td>
+            </tr><tr><td>1/23/2000</td>
                 <td>29e8548592d8c82</td>
                 <td>10</td>
                 <td>-$1.00</td>
-            </tr>
-            <tr>
-                <td>4/28/2000</td>
+            </tr><tr><td>4/28/2000</td>
                 <td>37892857482836437378273</td>
                 <td>123</td>
                 <td>$33.32</td>
-            </tr>
-            <tr>
-                <td>1/23/2001</td>
+            </tr><tr><td>1/23/2001</td>
                 <td>83849</td>
                 <td>5</td>
                 <td>-$15.00</td>
-            </tr>
-            <tr>
-                <td>9/30/2001</td>
+            </tr><tr><td>9/30/2001</td>
                 <td>224747</td>
                 <td>14</td>
                 <td>$56.78</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<script type="text/javascript">
+            </tr></tbody></table></div><script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
 
 // Shortcuts
@@ -196,9 +144,4 @@ Event.on('demo_go','click', function (e) {
 });
 
 });
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

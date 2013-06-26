@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: yuiloader   yuiloader.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: yuiloader   yuiloader.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>yuiloader&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <h3>yuiloader  <span class="subtitle">2.3.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuiloader.html">yuiloader</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * Provides dynamic loading for the YUI library.  It includes the dependency</span>
 <span class="c"> * info for the library, and will automatically pull in dependencies for</span>
 <span class="c"> * the modules requested.  It supports rollup files (such as utilities.js</span>
@@ -55,9 +46,9 @@
 <span class="c"> */</span>
 <span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
  
-    <span class="c">// Define YAHOO_config if it doesn&#39;t exist.  Only relevant if YAHOO is not</span>
+    <span class="c">// Define YAHOO_config if it doesn't exist.  Only relevant if YAHOO is not</span>
 <span class="c"></span>    <span class="c">// already on the page</span>
-<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO_config</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO_config</span> <span class="o">===</span> <span class="s2">"undefined"</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">YAHOO_config</span> <span class="o">=</span> <span class="o">{};</span>
     <span class="o">}</span>
 
@@ -73,231 +64,231 @@
 <span class="c">         */</span>
         <span class="nx">info</span><span class="o">:</span> <span class="o">{</span>
 
-    <span class="s1">&#39;base&#39;</span><span class="o">:</span> <span class="s1">&#39;http://yui.yahooapis.com/2.3.0/build/&#39;</span><span class="o">,</span>
+    <span class="s1">'base'</span><span class="o">:</span> <span class="s1">'http://yui.yahooapis.com/2.3.0/build/'</span><span class="o">,</span>
 
-    <span class="s1">&#39;skin&#39;</span><span class="o">:</span> <span class="o">{</span>
-        <span class="s1">&#39;defaultSkin&#39;</span><span class="o">:</span> <span class="s1">&#39;sam&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;base&#39;</span><span class="o">:</span> <span class="s1">&#39;assets/skins/&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;skin.css&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">3</span>
+    <span class="s1">'skin'</span><span class="o">:</span> <span class="o">{</span>
+        <span class="s1">'defaultSkin'</span><span class="o">:</span> <span class="s1">'sam'</span><span class="o">,</span>
+        <span class="s1">'base'</span><span class="o">:</span> <span class="s1">'assets/skins/'</span><span class="o">,</span>
+        <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'skin.css'</span><span class="o">,</span>
+        <span class="s1">'rollup'</span><span class="o">:</span> <span class="m">3</span>
     <span class="o">},</span>
 
-    <span class="s1">&#39;moduleInfo&#39;</span><span class="o">:</span> <span class="o">{</span>
+    <span class="s1">'moduleInfo'</span><span class="o">:</span> <span class="o">{</span>
 
-        <span class="s1">&#39;animation&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;animation/animation-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'animation'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'animation/animation-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;autocomplete&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;autocomplete/autocomplete-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'autocomplete'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'autocomplete/autocomplete-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'connection'</span><span class="o">,</span> <span class="s1">'animation'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;button&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;button/button-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;menu&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'button'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'button/button-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'element'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'menu'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;calendar&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;calendar/calendar-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'calendar'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'calendar/calendar-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">,</span> <span class="s1">'dom'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;colorpicker&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;colorpicker/colorpicker-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;slider&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'colorpicker'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'colorpicker/colorpicker-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'slider'</span><span class="o">,</span> <span class="s1">'element'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'animation'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;connection&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;connection/connection-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'connection'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'connection/connection-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;container&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;container/container-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
+        <span class="s1">'container'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'container/container-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">],</span>
             <span class="c">// button is optional, but creates a circular dep</span>
-<span class="c"></span>            <span class="c">//&#39;optional&#39;: [&#39;dragdrop&#39;, &#39;animation&#39;, &#39;button&#39;],</span>
-<span class="c"></span>            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;containercore&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+<span class="c"></span>            <span class="c">//'optional': ['dragdrop', 'animation', 'button'],</span>
+<span class="c"></span>            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dragdrop'</span><span class="o">,</span> <span class="s1">'animation'</span><span class="o">],</span>
+            <span class="s1">'supersedes'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'containercore'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;containercore&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;container/container_core-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'containercore'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'container/container_core-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;datasource&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;datasource/datasource-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">]</span>
+        <span class="s1">'datasource'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'datasource/datasource-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'connection'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;datatable&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;datatable/datatable-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;datasource&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;calendar&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'datatable'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'datatable/datatable-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'element'</span><span class="o">,</span> <span class="s1">'datasource'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'calendar'</span><span class="o">,</span> <span class="s1">'dragdrop'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;dom&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;dom/dom-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
+        <span class="s1">'dom'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'dom/dom-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'yahoo'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;dragdrop&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;dragdrop/dragdrop-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'dragdrop'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'dragdrop/dragdrop-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;editor&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;editor/editor-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;menu&#39;</span><span class="o">,</span> <span class="s1">&#39;container&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;button&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'editor'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'editor/editor-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'menu'</span><span class="o">,</span> <span class="s1">'container'</span><span class="o">,</span> <span class="s1">'element'</span><span class="o">,</span> <span class="s1">'button'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'animation'</span><span class="o">,</span> <span class="s1">'dragdrop'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;element&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;element/element-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'element'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'element/element-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;event&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event/event-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
+        <span class="s1">'event'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'event/event-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'yahoo'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;fonts&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;fonts/fonts-min.css&#39;</span>
+        <span class="s1">'fonts'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'fonts/fonts-min.css'</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;grids&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;grids/grids-min.css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;fonts&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;reset&#39;</span><span class="o">]</span>
+        <span class="s1">'grids'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'grids/grids-min.css'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'fonts'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'reset'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;history&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;history/history-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="s1">'history'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'history/history-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;imageloader&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;imageloader/imageloader-experimental-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">]</span>
+        <span class="s1">'imageloader'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'imageloader/imageloader-experimental-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">,</span> <span class="s1">'dom'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;logger&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;logger/logger-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'logger'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'logger/logger-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">,</span> <span class="s1">'dom'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dragdrop'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;menu&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;menu/menu-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;containercore&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'menu'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'menu/menu-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'containercore'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;reset&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;reset/reset-min.css&#39;</span>
+        <span class="s1">'reset'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'reset/reset-min.css'</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;reset-fonts-grids&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;reset-fonts-grids/reset-fonts-grids.css&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;reset&#39;</span><span class="o">,</span> <span class="s1">&#39;fonts&#39;</span><span class="o">,</span> <span class="s1">&#39;grids&#39;</span><span class="o">]</span>
+        <span class="s1">'reset-fonts-grids'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'reset-fonts-grids/reset-fonts-grids.css'</span><span class="o">,</span>
+            <span class="s1">'supersedes'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'reset'</span><span class="o">,</span> <span class="s1">'fonts'</span><span class="o">,</span> <span class="s1">'grids'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;slider&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;slider/slider-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">]</span>
+        <span class="s1">'slider'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'slider/slider-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'dragdrop'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'animation'</span><span class="o">]</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;tabview&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;tabview/tabview-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'tabview'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'tabview/tabview-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'element'</span><span class="o">],</span>
+            <span class="s1">'optional'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'connection'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;treeview&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;treeview/treeview-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'treeview'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'treeview/treeview-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'event'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;utilities&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;utilities/utilities.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;animation&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;connection&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;yahoo-dom-event&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">6</span>
+        <span class="s1">'utilities'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'utilities/utilities.js'</span><span class="o">,</span>
+            <span class="s1">'supersedes'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'yahoo'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">,</span> <span class="s1">'dragdrop'</span><span class="o">,</span> <span class="s1">'animation'</span><span class="o">,</span> <span class="s1">'dom'</span><span class="o">,</span> <span class="s1">'connection'</span><span class="o">,</span> <span class="s1">'element'</span><span class="o">,</span> <span class="s1">'yahoo-dom-event'</span><span class="o">],</span>
+            <span class="s1">'rollup'</span><span class="o">:</span> <span class="m">6</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;yahoo&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yahoo/yahoo-min.js&#39;</span>
+        <span class="s1">'yahoo'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'yahoo/yahoo-min.js'</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;yahoo-dom-event&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yahoo-dom-event/yahoo-dom-event.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="m">3</span>
+        <span class="s1">'yahoo-dom-event'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'yahoo-dom-event/yahoo-dom-event.js'</span><span class="o">,</span>
+            <span class="s1">'supersedes'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'yahoo'</span><span class="o">,</span> <span class="s1">'event'</span><span class="o">,</span> <span class="s1">'dom'</span><span class="o">],</span>
+            <span class="s1">'rollup'</span><span class="o">:</span> <span class="m">3</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;yuiloader&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yuiloader/yuiloader-beta-min.js&#39;</span>
+        <span class="s1">'yuiloader'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'yuiloader/yuiloader-beta-min.js'</span>
         <span class="o">},</span>
 
-        <span class="s1">&#39;yuitest&#39;</span><span class="o">:</span> <span class="o">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;yuitest/yuitest-beta-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;logger&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'yuitest'</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'js'</span><span class="o">,</span>
+            <span class="s1">'path'</span><span class="o">:</span> <span class="s1">'yuitest/yuitest-beta-min.js'</span><span class="o">,</span>
+            <span class="s1">'requires'</span><span class="o">:</span> <span class="o">[</span><span class="s1">'logger'</span><span class="o">],</span>
+            <span class="s1">'skinnable'</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
  <span class="o">,</span> 
 
-        <span class="c">// Simple utils since we can&#39;t count on YAHOO.lang being available.</span>
+        <span class="c">// Simple utils since we can't count on YAHOO.lang being available.</span>
 <span class="c"></span>        <span class="nx">ObjectUtil</span><span class="o">:</span> <span class="o">{</span>
             <span class="nx">appendArray</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
@@ -416,7 +407,7 @@
         <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
             <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">YAHOO_config</span><span class="o">,</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">load</span><span class="o">,</span> 
-                <span class="nx">y_loaded</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">);</span>
+                <span class="nx">y_loaded</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">"undefined"</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">);</span>
 
 
             <span class="c">// add our listener to the existing YAHOO.env.listeners stack</span>
@@ -442,7 +433,7 @@
 
             <span class="c">// Fetch the required modules immediately if specified</span>
 <span class="c"></span>            <span class="c">// in YAHOO_config.  Otherwise detect YAHOO and fetch</span>
-<span class="c"></span>            <span class="c">// it if it doesn&#39;t exist so we have a place to put</span>
+<span class="c"></span>            <span class="c">// it if it doesn't exist so we have a place to put</span>
 <span class="c"></span>            <span class="c">// the loader.  The problem with this is that it will</span>
 <span class="c"></span>            <span class="c">// prevent rollups from working</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">o</span> <span class="o">||</span> <span class="o">!</span><span class="nx">y_loaded</span><span class="o">)</span> <span class="o">{</span>
@@ -466,7 +457,7 @@
                 <span class="c">// If no load was requested, we must load YAHOO</span>
 <span class="c"></span>                <span class="c">// so we have a place to put the loader</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">y_loaded</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">loader</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">&quot;yahoo&quot;</span><span class="o">);</span>
+                    <span class="nx">loader</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">"yahoo"</span><span class="o">);</span>
                 <span class="o">}</span>
 
                 <span class="nx">loader</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">o</span><span class="o">);</span>
@@ -506,7 +497,7 @@
 <span class="c">         * @type string</span>
 <span class="c">         * @default build</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;base&quot;</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">base</span> <span class="o">:</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">.</span><span class="nx">base</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">=</span> <span class="o">(</span><span class="s2">"base"</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">base</span> <span class="o">:</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">info</span><span class="o">.</span><span class="nx">base</span><span class="o">;</span>
 
         <span class="c">/**</span>
 <span class="c">         * Should we allow rollups</span>
@@ -514,7 +505,7 @@
 <span class="c">         * @type boolean</span>
 <span class="c">         * @default true</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;allowRollup&quot;</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">:</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">=</span> <span class="o">(</span><span class="s2">"allowRollup"</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">allowRollup</span> <span class="o">:</span> <span class="kc">true</span><span class="o">;</span>
 
         <span class="c">/**</span>
 <span class="c">         * Filter to apply to result url</span>
@@ -597,9 +588,9 @@
 
         <span class="c">/**</span>
 <span class="c">         * Provides the information used to skin the skinnable components.</span>
-<span class="c">         * The following skin definition would result in &#39;skin1&#39; and &#39;skin2&#39;</span>
+<span class="c">         * The following skin definition would result in 'skin1' and 'skin2'</span>
 <span class="c">         * being loaded for calendar (if calendar was requested), and</span>
-<span class="c">         * &#39;sam&#39; for all other skinnable components:</span>
+<span class="c">         * 'sam' for all other skinnable components:</span>
 <span class="c">         *</span>
 <span class="c">         *   &lt;code&gt;</span>
 <span class="c">         *   skin: {</span>
@@ -607,15 +598,15 @@
 <span class="c">         *      // The default skin, which is automatically applied if not</span>
 <span class="c">         *      // overriden by a component-specific skin definition.</span>
 <span class="c">         *      // Change this in to apply a different skin globally</span>
-<span class="c">         *      defaultSkin: &#39;sam&#39;, </span>
+<span class="c">         *      defaultSkin: 'sam', </span>
 <span class="c">         *</span>
 <span class="c">         *      // This is combined with the loader base property to get</span>
 <span class="c">         *      // the default root directory for a skin. ex:</span>
 <span class="c">         *      // http://yui.yahooapis.com/2.3.0/build/assets/skins/sam/</span>
-<span class="c">         *      base: &#39;assets/skins/&#39;,</span>
+<span class="c">         *      base: 'assets/skins/',</span>
 <span class="c">         *</span>
 <span class="c">         *      // The name of the rollup css file for the skin</span>
-<span class="c">         *      path: &#39;skin.css&#39;,</span>
+<span class="c">         *      path: 'skin.css',</span>
 <span class="c">         *</span>
 <span class="c">         *      // The number of skinnable components requested that are</span>
 <span class="c">         *      // required before using the rollup file rather than the</span>
@@ -627,7 +618,7 @@
 <span class="c">         *      // components.  It is possible to load more than one skin</span>
 <span class="c">         *      // for a given component as well.</span>
 <span class="c">         *      overrides: {</span>
-<span class="c">         *          calendar: [&#39;skin1&#39;, &#39;skin2&#39;]</span>
+<span class="c">         *          calendar: ['skin1', 'skin2']</span>
 <span class="c">         *      }</span>
 <span class="c">         *   }</span>
 <span class="c">         *   &lt;/code&gt;</span>
@@ -647,16 +638,16 @@
 
         <span class="nx">FILTERS</span><span class="o">:</span> <span class="o">{</span>
             <span class="nx">RAW</span><span class="o">:</span> <span class="o">{</span> 
-                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="o">,</span> 
-                <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;.js&quot;</span>
+                <span class="s1">'searchExp'</span><span class="o">:</span> <span class="s2">"-min\\.js"</span><span class="o">,</span> 
+                <span class="s1">'replaceStr'</span><span class="o">:</span> <span class="s2">".js"</span>
             <span class="o">},</span>
             <span class="nx">DEBUG</span><span class="o">:</span> <span class="o">{</span> 
-                <span class="s1">&#39;searchExp&#39;</span><span class="o">:</span> <span class="s2">&quot;-min\\.js&quot;</span><span class="o">,</span> 
-                <span class="s1">&#39;replaceStr&#39;</span><span class="o">:</span> <span class="s2">&quot;-debug.js&quot;</span>
+                <span class="s1">'searchExp'</span><span class="o">:</span> <span class="s2">"-min\\.js"</span><span class="o">,</span> 
+                <span class="s1">'replaceStr'</span><span class="o">:</span> <span class="s2">"-debug.js"</span>
             <span class="o">}</span>
         <span class="o">},</span>
 
-        <span class="nx">SKIN_PREFIX</span><span class="o">:</span> <span class="s2">&quot;skin-&quot;</span><span class="o">,</span>
+        <span class="nx">SKIN_PREFIX</span><span class="o">:</span> <span class="s2">"skin-"</span><span class="o">,</span>
 
         <span class="c">/** Add a new module to the component metadata.  The javascript </span>
 <span class="c">         * component must also use YAHOO.register to notify the loader </span>
@@ -665,7 +656,7 @@
 <span class="c">         * &lt;dl&gt;</span>
 <span class="c">         *     &lt;dt&gt;name:&lt;/dt&gt;       &lt;dd&gt;required, the component name&lt;/dd&gt;</span>
 <span class="c">         *     &lt;dt&gt;type:&lt;/dt&gt;       &lt;dd&gt;required, the component type (js or css)&lt;/dd&gt;</span>
-<span class="c">         *     &lt;dt&gt;path:&lt;/dt&gt;       &lt;dd&gt;required, the path to the script from &quot;base&quot;&lt;/dd&gt;</span>
+<span class="c">         *     &lt;dt&gt;path:&lt;/dt&gt;       &lt;dd&gt;required, the path to the script from "base"&lt;/dd&gt;</span>
 <span class="c">         *     &lt;dt&gt;requires:&lt;/dt&gt;   &lt;dd&gt;the modules required by this component&lt;/dd&gt;</span>
 <span class="c">         *     &lt;dt&gt;optional:&lt;/dt&gt;   &lt;dd&gt;the optional modules for this component&lt;/dd&gt;</span>
 <span class="c">         *     &lt;dt&gt;supersedes:&lt;/dt&gt; &lt;dd&gt;the modules this component replaces&lt;/dd&gt;</span>
@@ -697,7 +688,7 @@
 <span class="c">         * @param what {string[] | string*} the modules to load</span>
 <span class="c">         */</span>
         <span class="nx">require</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">what</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">what</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="nx">arguments</span> <span class="o">:</span> <span class="nx">what</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">what</span> <span class="o">===</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">?</span> <span class="nx">arguments</span> <span class="o">:</span> <span class="nx">what</span><span class="o">;</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">dirty</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
@@ -723,11 +714,11 @@
 <span class="c"></span>            <span class="k">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="nx">skin</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">addModule</span><span class="o">({</span>
-                    <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
-                    <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-                    <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">path</span><span class="o">,</span>
-                    <span class="c">//&#39;supersedes&#39;: &#39;*&#39;,</span>
-<span class="c"></span>                    <span class="s1">&#39;rollup&#39;</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">rollup</span>
+                    <span class="s1">'name'</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
+                    <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+                    <span class="s1">'path'</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">path</span><span class="o">,</span>
+                    <span class="c">//'supersedes': '*',</span>
+<span class="c"></span>                    <span class="s1">'rollup'</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">rollup</span>
                 <span class="o">});</span>
             <span class="o">}</span>
 
@@ -736,10 +727,10 @@
                 <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">formatSkin</span><span class="o">(</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">mod</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">addModule</span><span class="o">({</span>
-                        <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
-                        <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
-                        <span class="c">//&#39;path&#39;: this.skin.base + skin + &quot;/&quot; + mod + &quot;.css&quot;</span>
-<span class="c"></span>                        <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s2">&quot;.css&quot;</span>
+                        <span class="s1">'name'</span><span class="o">:</span> <span class="nx">name</span><span class="o">,</span>
+                        <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'css'</span><span class="o">,</span>
+                        <span class="c">//'path': this.skin.base + skin + "/" + mod + ".css"</span>
+<span class="c"></span>                        <span class="s1">'path'</span><span class="o">:</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">skin</span><span class="o">.</span><span class="nx">base</span> <span class="o">+</span> <span class="nx">skin</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="nx">mod</span> <span class="o">+</span> <span class="s2">".css"</span>
                     <span class="o">});</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -790,7 +781,7 @@
 
             <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">appendArray</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">s</span><span class="o">);</span>
 
-            <span class="c">// console.log(this.sorted + &quot;, &quot; + name + &quot; provides &quot; + YUI.ObjectUtil.keys(o));</span>
+            <span class="c">// console.log(this.sorted + ", " + name + " provides " + YUI.ObjectUtil.keys(o));</span>
 <span class="c"></span>
             <span class="k">return</span> <span class="nx">o</span><span class="o">;</span>
         <span class="o">},</span>
@@ -830,7 +821,7 @@
             <span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">clone</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">);</span> 
             
-            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">sandbox</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">sandbox</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">"undefined"</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">loaded</span> <span class="o">=</span> <span class="nx">YUI</span><span class="o">.</span><span class="nx">ObjectUtil</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">);</span>
             <span class="o">}</span>
 
@@ -911,7 +902,7 @@
         <span class="nx">formatSkin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">skin</span><span class="o">,</span> <span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span> <span class="o">+</span> <span class="nx">skin</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nx">mod</span><span class="o">;</span>
+                <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">+</span> <span class="s2">"-"</span> <span class="o">+</span> <span class="nx">mod</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="k">return</span> <span class="nx">s</span><span class="o">;</span>
@@ -929,7 +920,7 @@
         <span class="nx">parseSkin</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">mod</span><span class="o">)</span> <span class="o">{</span>
             
             <span class="k">if</span> <span class="o">(</span><span class="nx">mod</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;-&quot;</span><span class="o">);</span>
+                <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">mod</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">"-"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="o">{</span><span class="nx">skin</span><span class="o">:</span> <span class="nx">a</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">module</span><span class="o">:</span> <span class="nx">a</span><span class="o">[</span><span class="m">2</span><span class="o">]};</span>
             <span class="o">}</span> 
 
@@ -996,7 +987,7 @@
 <span class="c"></span>                            <span class="c">// threshold value has not proved worthwhile)</span>
 <span class="c"></span>                            <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
 
-                                <span class="c">// if the superseded module is loaded, we can&#39;t load the rollup</span>
+                                <span class="c">// if the superseded module is loaded, we can't load the rollup</span>
 <span class="c"></span>                                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">loaded</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">j</span><span class="o">]])</span> <span class="o">{</span>
                                     <span class="nx">roll</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
                                     <span class="k">break</span><span class="o">;</span>
@@ -1017,7 +1008,7 @@
 <span class="c"></span>                            <span class="nx">r</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                             <span class="nx">rolled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
-                            <span class="c">// expand the rollup&#39;s dependencies</span>
+                            <span class="c">// expand the rollup's dependencies</span>
 <span class="c"></span>                            <span class="k">this</span><span class="o">.</span><span class="nx">getRequires</span><span class="o">(</span><span class="nx">m</span><span class="o">);</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
@@ -1051,14 +1042,14 @@
                     <span class="k">var</span> <span class="nx">skinDef</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parseSkin</span><span class="o">(</span><span class="nx">i</span><span class="o">);</span>
 
                     <span class="k">if</span> <span class="o">(</span><span class="nx">skinDef</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c">//console.log(&quot;skin found in reduce: &quot; + skinDef.skin + &quot;, &quot; + skinDef.module);</span>
+                        <span class="c">//console.log("skin found in reduce: " + skinDef.skin + ", " + skinDef.module);</span>
 <span class="c"></span>                        <span class="c">// the skin rollup will not have a module name</span>
 <span class="c"></span>                        <span class="k">if</span> <span class="o">(!</span><span class="nx">skinDef</span><span class="o">.</span><span class="nx">module</span><span class="o">)</span> <span class="o">{</span>
                             <span class="k">var</span> <span class="nx">skin_pre</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SKIN_PREFIX</span> <span class="o">+</span> <span class="nx">skinDef</span><span class="o">.</span><span class="nx">skin</span><span class="o">;</span>
-                            <span class="c">//console.log(&quot;skin_pre: &quot; + skin_pre);</span>
+                            <span class="c">//console.log("skin_pre: " + skin_pre);</span>
 <span class="c"></span>                            <span class="k">for</span> <span class="o">(</span><span class="nx">j</span> <span class="k">in</span> <span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">j</span> <span class="o">!==</span> <span class="nx">i</span> <span class="o">&amp;&amp;</span> <span class="nx">j</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">skin_pre</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                                    <span class="c">//console.log (&quot;removing component skin: &quot; + j);</span>
+                                    <span class="c">//console.log ("removing component skin: " + j);</span>
 <span class="c"></span>                                    <span class="nx">delete</span> <span class="nx">r</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
                                 <span class="o">}</span>
                             <span class="o">}</span>
@@ -1173,7 +1164,7 @@
 
         <span class="c">/**</span>
 <span class="c">         * inserts the requested modules and their dependencies.  </span>
-<span class="c">         * &lt;code&gt;type&lt;/code&gt; can be &quot;js&quot; or &quot;css&quot;.  Both script and </span>
+<span class="c">         * &lt;code&gt;type&lt;/code&gt; can be "js" or "css".  Both script and </span>
 <span class="c">         * css are inserted if type is not provided.</span>
 <span class="c">         * @method insert</span>
 <span class="c">         * @param callback {Function} a function to execute when the load</span>
@@ -1191,9 +1182,9 @@
                 <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                             <span class="nx">self</span><span class="o">.</span><span class="nx">_internalCallback</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                            <span class="nx">self</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">&quot;js&quot;</span><span class="o">);</span>
+                            <span class="nx">self</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">"js"</span><span class="o">);</span>
                         <span class="o">};</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">&quot;css&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">insert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="s2">"css"</span><span class="o">);</span>
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
 
@@ -1205,13 +1196,13 @@
             <span class="c">// store the optional filter</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">.</span><span class="nx">filter</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">f</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">f</span> <span class="o">===</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">f</span> <span class="o">=</span> <span class="nx">f</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">();</span>
 
                 <span class="c">// the logger must be available in order to use the debug</span>
 <span class="c"></span>                <span class="c">// versions of the library</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">===</span> <span class="s2">&quot;DEBUG&quot;</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">&quot;logger&quot;</span><span class="o">);</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">===</span> <span class="s2">"DEBUG"</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">require</span><span class="o">(</span><span class="s2">"logger"</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
@@ -1246,7 +1237,7 @@
 <span class="c">         */</span>
         <span class="nx">loadNext</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">mname</span><span class="o">)</span> <span class="o">{</span>
 
-            <span class="c">// console.log(&quot;loadNext executing, just loaded &quot; + mname);</span>
+            <span class="c">// console.log("loadNext executing, just loaded " + mname);</span>
 <span class="c"></span>
             <span class="c">// The global handler that is called when each module is loaded</span>
 <span class="c"></span>            <span class="c">// will pass that module name to this function.  Storing this</span>
@@ -1264,7 +1255,7 @@
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="c">// if the module that was just loaded isn&#39;t what we were expecting,</span>
+            <span class="c">// if the module that was just loaded isn't what we were expecting,</span>
 <span class="c"></span>            <span class="c">// continue to wait</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">mname</span> <span class="o">&amp;&amp;</span> <span class="nx">mname</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">loading</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span><span class="o">;</span>
@@ -1276,7 +1267,7 @@
 
                 <span class="c">// This.inserted keeps track of what the loader has loaded</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">inserted</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">// console.log(s[i] + &quot; alread loaded &quot;);</span>
+                    <span class="c">// console.log(s[i] + " alread loaded ");</span>
 <span class="c"></span>                    <span class="k">continue</span><span class="o">;</span>
                 <span class="o">}</span>
 
@@ -1285,11 +1276,11 @@
 <span class="c"></span>                <span class="c">// the same module when loading a rollup.  We can safely</span>
 <span class="c"></span>                <span class="c">// skip the subsequent requests</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="k">this</span><span class="o">.</span><span class="nx">loading</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">// console.log(&quot;still loading &quot; + s[i] + &quot;, waiting&quot;);</span>
+                    <span class="c">// console.log("still loading " + s[i] + ", waiting");</span>
 <span class="c"></span>                    <span class="k">return</span><span class="o">;</span>
                 <span class="o">}</span>
 
-                <span class="c">// log(&quot;inserting &quot; + s[i]);</span>
+                <span class="c">// log("inserting " + s[i]);</span>
 <span class="c"></span>
                 <span class="nx">m</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">moduleInfo</span><span class="o">[</span><span class="nx">s</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
 
@@ -1303,7 +1294,7 @@
 <span class="c"></span>                    <span class="c">// may be a problem that needs to be addressed, but</span>
 <span class="c"></span>                    <span class="c">// unlike the script files, there is no notification</span>
 <span class="c"></span>                    <span class="c">// mechanism in place for the css files.</span>
-<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;css&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">"css"</span><span class="o">)</span> <span class="o">{</span>
 
                         <span class="nx">url</span> <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">fullpath</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">_url</span><span class="o">(</span><span class="nx">m</span><span class="o">.</span><span class="nx">path</span><span class="o">);</span>
                         
@@ -1356,7 +1347,7 @@
 <span class="c">         * @private</span>
 <span class="c">         */</span>
         <span class="nx">_pushEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">!==</span> <span class="s2">"undefined"</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_load</span><span class="o">();</span>
             <span class="o">}</span>
         <span class="o">},</span>
@@ -1370,12 +1361,12 @@
 <span class="c">         */</span>
         <span class="nx">_url</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">path</span><span class="o">)</span> <span class="o">{</span>
             
-            <span class="k">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">f</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">filter</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">base</span> <span class="o">||</span> <span class="s2">""</span><span class="o">,</span> <span class="nx">f</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">filter</span><span class="o">;</span>
             <span class="nx">u</span> <span class="o">=</span> <span class="nx">u</span> <span class="o">+</span> <span class="nx">path</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">f</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// console.log(&quot;filter: &quot; + f + &quot;, &quot; + f.searchExp + </span>
-<span class="c"></span>                <span class="c">// &quot;, &quot; + f.replaceStr);</span>
+                <span class="c">// console.log("filter: " + f + ", " + f.searchExp + </span>
+<span class="c"></span>                <span class="c">// ", " + f.replaceStr);</span>
 <span class="c"></span>                <span class="nx">u</span> <span class="o">=</span> <span class="nx">u</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="o">(</span><span class="nx">f</span><span class="o">.</span><span class="nx">searchExp</span><span class="o">),</span> <span class="nx">f</span><span class="o">.</span><span class="nx">replaceStr</span><span class="o">);</span>
             <span class="o">}</span>
 
@@ -1392,12 +1383,12 @@
 <span class="c">         */</span>
         <span class="nx">insertScript</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">)</span> <span class="o">{</span>
 
-            <span class="c">//console.log(&quot;inserting script &quot; + url);</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;script&quot;</span><span class="o">),</span>
-                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+            <span class="c">//console.log("inserting script " + url);</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"script"</span><span class="o">),</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">"head"</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
 
             <span class="nx">n</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
-            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/javascript&quot;</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"text/javascript"</span><span class="o">;</span>
             <span class="nx">h</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">n</span><span class="o">);</span>
         <span class="o">},</span>
 
@@ -1408,13 +1399,13 @@
 <span class="c">         * @param win {Window} optional window to target</span>
 <span class="c">         */</span>
         <span class="nx">insertCss</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// console.log(&quot;inserting css &quot; + url);</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;link&quot;</span><span class="o">),</span>
-                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+            <span class="c">// console.log("inserting css " + url);</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">win</span> <span class="o">||</span> <span class="nb">window</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">w</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"link"</span><span class="o">),</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">"head"</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
 
             <span class="nx">n</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
-            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/css&quot;</span><span class="o">;</span>
-            <span class="nx">n</span><span class="o">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">&quot;stylesheet&quot;</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"text/css"</span><span class="o">;</span>
+            <span class="nx">n</span><span class="o">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">"stylesheet"</span><span class="o">;</span>
             <span class="nx">h</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">n</span><span class="o">);</span>
         <span class="o">},</span>
        
@@ -1446,9 +1437,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1495,22 +1484,17 @@
                                 <li class="selected"><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.YUILoader.html">YAHOO.util.YUILoader</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.util.YUILoader.html">YAHOO.util.YUILoader</a></li>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="yuiloader.js.html">yuiloader.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="yuiloader.js.html">yuiloader.js</a></li>
+                        </ul></div>
 
 
 
@@ -1520,9 +1504,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

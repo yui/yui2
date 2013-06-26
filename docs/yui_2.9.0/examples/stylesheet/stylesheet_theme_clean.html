@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Using StyleSheet to create a page theme</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Using StyleSheet to create a page theme</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,59 +8,35 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/stylesheet/stylesheet-min.js"></script>
-
-<!--there is no custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Using StyleSheet to create a page theme</h1>
-
-<div class="exampleIntro">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/stylesheet/stylesheet-min.js"></script><!--there is no custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Using StyleSheet to create a page theme</h1><div class="exampleIntro">
 	<p>In this example, we'll change some colors in this page's color theme.  Enter any valid CSS color value into the inputs and submit the changes to see them applied to the page.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="demo">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="demo">
     <form id="demo_form" action="#" method="get">
-        <fieldset>
-            <p>Example values: #123456 or #123 or rgb(0,10,30) or red</p>
+        <fieldset><p>Example values: #123456 or #123 or rgb(0,10,30) or red</p>
             <label for="demo_headings">Headings and labels</label>
-                <input type="text" size="7" id="demo_headings" value="#e76300">
-            <pre><code>h1,h2,h3,h4,h5,h6,
+                <input type="text" size="7" id="demo_headings" value="#e76300"><pre><code>h1,h2,h3,h4,h5,h6,
 #demo label {
     color: <em id="demo_heading_value">#e76300</em>;
 }</code></pre>
 
             <label for="demo_bg">Demo background</label>
-                <input type="text" size="7" id="demo_bg" value="#89d">
-            <pre><code>.example .promo {
+                <input type="text" size="7" id="demo_bg" value="#89d"><pre><code>.example .promo {
     background-color: <em id="demo_background_value">#89d</em>;
 }</code></pre>
             <label for="demo_highlight">Left nav highlight</label>
-                <input type="text" size="7" id="demo_highlight" value="#f82">
-            <pre><code>#toc ul li.active,
+                <input type="text" size="7" id="demo_highlight" value="#f82"><pre><code>#toc ul li.active,
 #toc ul li a:hover {
     background-color: <em id="demo_highlight_value">#f82</em>;
 }</code></pre>
 
-        </fieldset>
-        <p>
-            <input type="submit" id="update" value="Update theme">
-        </p>
+        </fieldset><p>
+            <input type="submit" id="update" value="Update theme"></p>
     </form>
-</div>
-
-<script type="text/javascript">
+</div><script type="text/javascript">
 (function () {
 
 // Some shortcuts
@@ -167,9 +135,4 @@ Demo = YAHOO.namespace('demo').PageTheme = {
 YAHOO.util.Event.onDOMReady(Demo.init);
 
 })();
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

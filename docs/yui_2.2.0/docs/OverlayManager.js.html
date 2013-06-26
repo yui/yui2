@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: container   OverlayManager.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: container   OverlayManager.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Container&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <h3>Container  <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html">container</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/*</span>
+<div class="highlight"><pre><span class="c">/*</span>
 <span class="c">Copyright (c) 2006, Yahoo! Inc. All rights reserved.</span>
 <span class="c">Code licensed under the BSD License:</span>
 <span class="c">http://developer.yahoo.net/yui/license.txt</span>
@@ -50,11 +45,11 @@
 <span class="c">* @final</span>
 <span class="c">* @type String</span>
 <span class="c">*/</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span> <span class="o">=</span> <span class="s2">&quot;focused&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span> <span class="o">=</span> <span class="s2">"focused"</span><span class="o">;</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
 	<span class="c">/**</span>
-<span class="c">	* The class&#39;s constructor function</span>
+<span class="c">	* The class's constructor function</span>
 <span class="c">	* @property contructor</span>
 <span class="c">	* @type Function</span>
 <span class="c">	*/</span>
@@ -78,15 +73,15 @@
 <span class="c">		* @type YAHOO.widget.Overlay[]</span>
 <span class="c">		* @default null</span>
 <span class="c">		*/</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;overlays&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">suppressEvent</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">"overlays"</span><span class="o">,</span> <span class="o">{</span> <span class="nx">suppressEvent</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
 
 		<span class="c">/**</span>
 <span class="c">		* The default DOM event that should be used to focus an Overlay</span>
 <span class="c">		* @config focusevent</span>
 <span class="c">		* @type String</span>
-<span class="c">		* @default &quot;mousedown&quot;</span>
+<span class="c">		* @default "mousedown"</span>
 <span class="c">		*/</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;focusevent&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;mousedown&quot;</span> <span class="o">}</span> <span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">"focusevent"</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="s2">"mousedown"</span> <span class="o">}</span> <span class="o">);</span>
 	<span class="o">},</span> 
 
 	<span class="c">/**</span>
@@ -97,7 +92,7 @@
 <span class="c">	*/</span>
 	<span class="nx">init</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">userConfig</span><span class="o">)</span> <span class="o">{</span>
 		<span class="c">/**</span>
-<span class="c">		* The OverlayManager&#39;s Config object used for monitoring configuration properties.</span>
+<span class="c">		* The OverlayManager's Config object used for monitoring configuration properties.</span>
 <span class="c">		* @property cfg</span>
 <span class="c">		* @type YAHOO.util.Config</span>
 <span class="c">		*/</span>
@@ -140,9 +135,9 @@
 				<span class="nx">activeOverlay</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
 				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">activeOverlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">OverlayManager</span><span class="o">.</span><span class="nx">CSS_FOCUSED</span><span class="o">);</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
-				<span class="k">var</span> <span class="nx">topZIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+				<span class="k">var</span> <span class="nx">topZIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">element</span><span class="o">,</span> <span class="s2">"zIndex"</span><span class="o">);</span>
 				<span class="k">if</span> <span class="o">(!</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">topZIndex</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
-					<span class="nx">activeOverlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">topZIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">+</span> <span class="m">2</span><span class="o">));</span>
+					<span class="nx">activeOverlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">,</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">topZIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">+</span> <span class="m">2</span><span class="o">));</span>
 				<span class="o">}</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
 			<span class="o">}</span>
@@ -157,13 +152,13 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">find</span><span class="o">(</span><span class="nx">overlay</span><span class="o">);</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">var</span> <span class="nx">originalZ</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
-				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="o">-</span><span class="m">1000</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				<span class="k">var</span> <span class="nx">originalZ</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">"zIndex"</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">,</span> <span class="o">-</span><span class="m">1000</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">sort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">compareZIndexDesc</span><span class="o">);</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
-				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="nx">originalZ</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">,</span> <span class="nx">originalZ</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;manager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"manager"</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
 				<span class="nx">o</span><span class="o">.</span><span class="nx">focusEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 				<span class="nx">o</span><span class="o">.</span><span class="nx">blurEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 				<span class="nx">o</span><span class="o">.</span><span class="nx">focus</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -182,7 +177,7 @@
 			<span class="o">}</span>		
 		<span class="o">};</span>
 
-		<span class="k">var</span> <span class="nx">overlays</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;overlays&quot;</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">overlays</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"overlays"</span><span class="o">);</span>
 		
 		<span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span> <span class="o">=</span> <span class="o">[];</span>
@@ -203,10 +198,10 @@
 <span class="c">	*/</span>
 	<span class="nx">register</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">overlay</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Overlay</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">&quot;manager&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="k">this</span> <span class="o">}</span> <span class="o">);</span>
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="s2">"manager"</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span><span class="k">this</span> <span class="o">}</span> <span class="o">);</span>
 
-			<span class="nx">overlay</span><span class="o">.</span><span class="nx">focusEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;focus&quot;</span><span class="o">);</span>
-			<span class="nx">overlay</span><span class="o">.</span><span class="nx">blurEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;blur&quot;</span><span class="o">);</span>
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">focusEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">"focus"</span><span class="o">);</span>
+			<span class="nx">overlay</span><span class="o">.</span><span class="nx">blurEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">"blur"</span><span class="o">);</span>
 			
 			<span class="k">var</span> <span class="nx">mgr</span><span class="o">=</span><span class="k">this</span><span class="o">;</span>
 
@@ -224,14 +219,14 @@
 				<span class="nx">overlay</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
 			<span class="o">};</span>
 			
-			<span class="k">var</span> <span class="nx">focusevent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;focusevent&quot;</span><span class="o">);</span>
+			<span class="k">var</span> <span class="nx">focusevent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"focusevent"</span><span class="o">);</span>
 			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span><span class="nx">focusevent</span><span class="o">,</span><span class="nx">focusOnDomEvent</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 
-			<span class="k">var</span> <span class="nx">zIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+			<span class="k">var</span> <span class="nx">zIndex</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">overlay</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">"zIndex"</span><span class="o">);</span>
 			<span class="k">if</span> <span class="o">(!</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">zIndex</span><span class="o">))</span> <span class="o">{</span>
-				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">zIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">));</span>
+				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">,</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">zIndex</span><span class="o">,</span> <span class="m">10</span><span class="o">));</span>
 			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
+				<span class="nx">overlay</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">,</span> <span class="m">0</span><span class="o">);</span>
 			<span class="o">}</span>
 			
 			<span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">overlay</span><span class="o">);</span>
@@ -265,7 +260,7 @@
 					<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">o</span><span class="o">];</span>
 				<span class="o">}</span>
 			<span class="o">}</span>
-		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">overlay</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">overlay</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">p</span><span class="o">++)</span> <span class="o">{</span>
 				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">p</span><span class="o">].</span><span class="nx">id</span> <span class="o">==</span> <span class="nx">overlay</span><span class="o">)</span> <span class="o">{</span>
 					<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">overlays</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
@@ -276,14 +271,14 @@
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
-<span class="c">	* Used for sorting the manager&#39;s Overlays by z-index.</span>
+<span class="c">	* Used for sorting the manager's Overlays by z-index.</span>
 <span class="c">	* @method compareZIndexDesc</span>
 <span class="c">	* @private</span>
 <span class="c">	* @return {Number}	0, 1, or -1, depending on where the Overlay should fall in the stacking order.</span>
 <span class="c">	*/</span>
 	<span class="nx">compareZIndexDesc</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o1</span><span class="o">,</span> <span class="nx">o2</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">zIndex1</span> <span class="o">=</span> <span class="nx">o1</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
-		<span class="k">var</span> <span class="nx">zIndex2</span> <span class="o">=</span> <span class="nx">o2</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;zIndex&quot;</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">zIndex1</span> <span class="o">=</span> <span class="nx">o1</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">);</span>
+		<span class="k">var</span> <span class="nx">zIndex2</span> <span class="o">=</span> <span class="nx">o2</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">"zIndex"</span><span class="o">);</span>
 
 		<span class="k">if</span> <span class="o">(</span><span class="nx">zIndex1</span> <span class="o">&gt;</span> <span class="nx">zIndex2</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
@@ -321,7 +316,7 @@
 <span class="c">	* @return {String}	The string representation of the OverlayManager</span>
 <span class="c">	*/</span> 
 	<span class="nx">toString</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;OverlayManager&quot;</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">"OverlayManager"</span><span class="o">;</span>
 	<span class="o">}</span>
 
 <span class="o">};</span>
@@ -334,9 +329,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -373,13 +366,11 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
                                 <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
                                 <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
@@ -389,13 +380,11 @@
                                 <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
                                 <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
                                 <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                        <ul class="content"><li class=""><a href="Config.js.html">Config.js</a></li>
                                 <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
                                 <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
                                 <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
@@ -405,8 +394,7 @@
                                 <li class=""><a href="Panel.js.html">Panel.js</a></li>
                                 <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
                                 <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -416,9 +404,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

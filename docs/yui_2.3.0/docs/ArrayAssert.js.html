@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: yuitest   ArrayAssert.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: yuitest   ArrayAssert.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>yuitest&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <h3>yuitest  <span class="subtitle">2.3.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuitest.html">yuitest</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">//-----------------------------------------------------------------------------</span>
+                        </style><div class="highlight"><pre><span class="c">//-----------------------------------------------------------------------------</span>
 <span class="c">// ArrayAssert object</span>
 <span class="c">//-----------------------------------------------------------------------------</span>
 <span class="c"></span>
@@ -72,7 +63,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value (&quot;</span> <span class="o">+</span> <span class="nx">needle</span> <span class="o">+</span> <span class="s2">&quot;) not found in array.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value ("</span> <span class="o">+</span> <span class="nx">needle</span> <span class="o">+</span> <span class="s2">") not found in array."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -95,7 +86,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value not found in array.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value not found in array."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -112,8 +103,8 @@
                            <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
         
         <span class="c">//check for valid matcher</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.containsMatch(): First argument must be a function.&quot;</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">"function"</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">"ArrayAssert.containsMatch(): First argument must be a function."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
@@ -126,7 +117,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">found</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;No match found in array.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"No match found in array."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -152,7 +143,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(</span><span class="nx">found</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value found in array.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value found in array."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -188,8 +179,8 @@
                            <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
         
         <span class="c">//check for valid matcher</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.doesNotContainMatch(): First argument must be a function.&quot;</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">matcher</span> <span class="o">!=</span> <span class="s2">"function"</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">"ArrayAssert.doesNotContainMatch(): First argument must be a function."</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">var</span> <span class="nx">found</span> <span class="c">/*:Boolean*/</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
@@ -202,7 +193,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(</span><span class="nx">found</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value found in array.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value found in array."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
         
@@ -221,13 +212,13 @@
         <span class="c">//try to find the value in the array</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">){</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value exists at index &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; but should be at index &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value exists at index "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">" but should be at index "</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">"."</span><span class="o">);</span>
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
         
-        <span class="c">//if it makes it here, it wasn&#39;t found at all</span>
-<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value doesn&#39;t exist in array.&quot;</span><span class="o">);</span>        
+        <span class="c">//if it makes it here, it wasn't found at all</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value doesn't exist in array."</span><span class="o">);</span>        
     <span class="o">},</span>
         
     <span class="c">/**</span>
@@ -250,7 +241,7 @@
         <span class="c">//begin checking values</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">message</span> <span class="o">||</span> 
-                    <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not equal.&quot;</span><span class="o">);</span>
+                    <span class="s2">"Values in position "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">" are not equal."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
     
@@ -272,8 +263,8 @@
                            <span class="nx">comparator</span> <span class="c">/*:Function*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
         
         <span class="c">//make sure the comparator is valid</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">comparator</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;ArrayAssert.itemsAreEquivalent(): Third argument must be a function.&quot;</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">comparator</span> <span class="o">!=</span> <span class="s2">"function"</span><span class="o">){</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">"ArrayAssert.itemsAreEquivalent(): Third argument must be a function."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="c">//one may be longer than the other, so get the maximum length</span>
@@ -282,7 +273,7 @@
         <span class="c">//begin checking values</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">comparator</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">])){</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not equivalent.&quot;</span><span class="o">,</span> <span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Values in position "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">" are not equivalent."</span><span class="o">,</span> <span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -296,7 +287,7 @@
 <span class="c">     */</span>
     <span class="nx">isEmpty</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>        
         <span class="k">if</span> <span class="o">(</span><span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Array should be empty.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Array should be empty."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>    
     
@@ -309,7 +300,7 @@
 <span class="c">     */</span>
     <span class="nx">isNotEmpty</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">actual</span> <span class="c">/*:Array*/</span><span class="o">,</span> <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>        
         <span class="k">if</span> <span class="o">(</span><span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">){</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Array should not be empty.&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Array should not be empty."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>    
     
@@ -333,7 +324,7 @@
         <span class="c">//begin checking values</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areSame</span><span class="o">(</span><span class="nx">expected</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">actual</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> 
-                <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Values in position &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; are not the same.&quot;</span><span class="o">);</span>
+                <span class="nx">message</span> <span class="o">||</span> <span class="s2">"Values in position "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">" are not the same."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
     
@@ -353,13 +344,13 @@
         <span class="c">//try to find the value in the array</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="nx">haystack</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--){</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">haystack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">needle</span><span class="o">){</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value exists at index &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot; but should be at index &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value exists at index "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">" but should be at index "</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">"."</span><span class="o">);</span>
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
         
-        <span class="c">//if it makes it here, it wasn&#39;t found at all</span>
-<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;Value doesn&#39;t exist in array.&quot;</span><span class="o">);</span>        
+        <span class="c">//if it makes it here, it wasn't found at all</span>
+<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">.</span><span class="nx">fail</span><span class="o">(</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">"Value doesn't exist in array."</span><span class="o">);</span>        
     <span class="o">}</span>
     
 <span class="o">};</span>
@@ -372,9 +363,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -421,13 +410,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
                                 <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
                                 <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
                                 <li class=""><a href="YAHOO.tool.TestRunner.html">YAHOO.tool.TestRunner</a></li>
@@ -443,13 +430,11 @@
                                 <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
                                 <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
                                 <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                        <ul class="content"><li class="selected"><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
                                 <li class=""><a href="Assert.js.html">Assert.js</a></li>
                                 <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
                                 <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
@@ -459,8 +444,7 @@
                                 <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
                                 <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
                                 <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -470,9 +454,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

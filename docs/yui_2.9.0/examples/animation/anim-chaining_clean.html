@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Chaining Animations Using <code>onComplete</code></title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Chaining Animations Using <code>onComplete</code></title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,18 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 
 	#animator {
 		background-color:#003366; 
@@ -39,41 +20,22 @@ body {
 		padding:1em;
 	}
 
-</style>
-
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Chaining Animations Using <code>onComplete</code></h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Chaining Animations Using <code>onComplete</code></h1><div class="exampleIntro">
 	<p>A common use case for animation involves causing two or more animations to fire sequentially.  This is known as <em>chaining</em>.  It's easy to chain animations using the <a href="http://developer.yahoo.com/yui/animation/">YUI Animation Utility</a>'s custom events.</p>
 
 <p>In this example, a color animation is set to fire <em>after</em> an animation of position. Click the button below to start the sequence.</p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<!--markup for YUI Button Control-->
-<span id="startAnim" class="yui-button yui-link-button">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><!--markup for YUI Button Control--><span id="startAnim" class="yui-button yui-link-button">
     <em class="first-child">
         <a href="#" title="Click here to begin the chained animations.">Click here to begin the chained animations.</a>
     </em>
-</span>
-
-<!--The animated element.-->
-<div id="animator">
+</span><!--The animated element.--><div id="animator">
 	This element will animate position
     and then color when you click the 
     button.
-</div>
-
-<script language="javascript">
+</div><script language="javascript">
 
 //Setup the example once the animator div is present
 //in the DOM.
@@ -127,8 +89,4 @@ YAHOO.util.Event.onAvailable("animator", function() {
 			YAHOO.lang.dump(o), "info", "example");
 	});
 });
-</script>
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

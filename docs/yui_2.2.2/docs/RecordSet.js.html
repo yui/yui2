@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: datatable   RecordSet.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: datatable   RecordSet.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>DataTable Widget  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_datatable.html">datatable</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+<div class="highlight"><pre><span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 
@@ -59,18 +54,18 @@
 <span class="c">     * @param oArgs.oldData {Object} Old data.</span>
 <span class="c">     *</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;recordUpdateEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"recordUpdateEvent"</span><span class="o">);</span>
     
     
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;RecordSet initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"RecordSet initialized"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 <span class="o">};</span>
 
 <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">)</span> <span class="o">{</span>
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
 <span class="o">}</span>
 <span class="k">else</span> <span class="o">{</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Missing dependency: YAHOO.util.EventProvider&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Missing dependency: YAHOO.util.EventProvider"</span><span class="o">,</span><span class="s2">"error"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 <span class="o">}</span>
 
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
@@ -124,7 +119,7 @@
 <span class="c"> * @return {string} Unique name of the RecordSet instance</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;RecordSet instance &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"RecordSet instance "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -224,7 +219,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">updateRecord</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">oldData</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">[</span><span class="nx">index</span><span class="o">];</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">_records</span><span class="o">[</span><span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;recordUpdateEvent&quot;</span><span class="o">,{</span><span class="nx">record</span><span class="o">:</span><span class="nx">oRecord</span><span class="o">,</span><span class="nx">index</span><span class="o">:</span><span class="nx">index</span><span class="o">,</span><span class="nx">newData</span><span class="o">:</span><span class="nx">oData</span><span class="o">,</span><span class="nx">oldData</span><span class="o">:</span><span class="nx">oldData</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"recordUpdateEvent"</span><span class="o">,{</span><span class="nx">record</span><span class="o">:</span><span class="nx">oRecord</span><span class="o">,</span><span class="nx">index</span><span class="o">:</span><span class="nx">index</span><span class="o">,</span><span class="nx">newData</span><span class="o">:</span><span class="nx">oData</span><span class="o">,</span><span class="nx">oldData</span><span class="o">:</span><span class="nx">oldData</span><span class="o">});</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -238,7 +233,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">updateRecordField</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRecord</span><span class="o">,</span> <span class="nx">sKey</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">oldData</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="o">[</span><span class="nx">sKey</span><span class="o">];</span>
     <span class="nx">oRecord</span><span class="o">[</span><span class="nx">sKey</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;recordFieldUpdateEvent&quot;</span><span class="o">,{</span><span class="nx">record</span><span class="o">:</span><span class="nx">oRecord</span><span class="o">,</span><span class="nx">key</span><span class="o">:</span><span class="nx">sKey</span><span class="o">,</span><span class="nx">newData</span><span class="o">:</span><span class="nx">oData</span><span class="o">,</span><span class="nx">oldData</span><span class="o">:</span><span class="nx">oldData</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"recordFieldUpdateEvent"</span><span class="o">,{</span><span class="nx">record</span><span class="o">:</span><span class="nx">oRecord</span><span class="o">,</span><span class="nx">key</span><span class="o">:</span><span class="nx">sKey</span><span class="o">,</span><span class="nx">newData</span><span class="o">:</span><span class="nx">oData</span><span class="o">,</span><span class="nx">oldData</span><span class="o">:</span><span class="nx">oldData</span><span class="o">});</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -279,7 +274,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addRecords</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">,</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">data</span><span class="o">))</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="c">// Can&#39;t go backwards bc we need to preserve order</span>
+        <span class="c">// Can't go backwards bc we need to preserve order</span>
 <span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="nx">index</span><span class="o">);</span>
             <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
@@ -304,17 +299,17 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">append</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">data</span><span class="o">))</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="c">// Cant&#39;t go backwards bc we need to preserve order</span>
+        <span class="c">// Cant't go backwards bc we need to preserve order</span>
 <span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
             <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
             
        <span class="o">}</span>
-       <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;RecordSet appended with &quot;</span> <span class="o">+</span> <span class="nx">newRecords</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; Record(s)&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+       <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"RecordSet appended with "</span> <span class="o">+</span> <span class="nx">newRecords</span><span class="o">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">" Record(s)"</span><span class="o">,</span><span class="s2">"info"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
        <span class="k">return</span> <span class="nx">newRecords</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">))</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;RecordSet appended with 1 Record&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"RecordSet appended with 1 Record"</span><span class="o">,</span><span class="s2">"info"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
@@ -333,7 +328,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RecordSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">insert</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">data</span><span class="o">))</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">newRecords</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="c">// Can&#39;t go backwards bc we need to preserve order</span>
+        <span class="c">// Can't go backwards bc we need to preserve order</span>
 <span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">&gt;-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">record</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">addRecord</span><span class="o">(</span><span class="nx">data</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="m">0</span><span class="o">);</span>
             <span class="nx">newRecords</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">record</span><span class="o">);</span>
@@ -423,7 +418,7 @@
         <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sKey</span> <span class="k">in</span> <span class="nx">oLiteral</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">[</span><span class="nx">sKey</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oLiteral</span><span class="o">[</span><span class="nx">sKey</span><span class="o">];</span>
         <span class="o">}</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">yuiRecordId</span> <span class="o">=</span> <span class="s2">&quot;yui-dtrec&quot;</span><span class="o">+</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">yuiRecordId</span> <span class="o">=</span> <span class="s2">"yui-dtrec"</span><span class="o">+</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Record</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
     <span class="o">}</span>
 <span class="o">};</span>
@@ -466,9 +461,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -505,13 +498,11 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="Column.html">Column</a></li>
+                        <ul class="content"><li class=""><a href="Column.html">Column</a></li>
                                 <li class=""><a href="ColumnEditor.html">ColumnEditor</a></li>
                                 <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
                                 <li class=""><a href="DataTable.html">DataTable</a></li>
@@ -519,17 +510,14 @@
                                 <li class=""><a href="RecordSet.html">RecordSet</a></li>
                                 <li class=""><a href="Sort.html">Sort</a></li>
                                 <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                        <ul class="content"><li class=""><a href="ColumnSet.js.html">ColumnSet.js</a></li>
                                 <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
                                 <li class="selected"><a href="RecordSet.js.html">RecordSet.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -539,9 +527,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

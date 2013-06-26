@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: yuitest   TestRunner.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: yuitest   TestRunner.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>yuitest&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>yuitest  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuitest.html">yuitest</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;tool&quot;</span><span class="o">);</span>
+                        </style><div class="highlight"><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">"tool"</span><span class="o">);</span>
 
 <span class="c">/**</span>
 <span class="c"> * The YUI test tool</span>
@@ -72,28 +63,28 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">testObject</span> <span class="o">=</span> <span class="nx">testObject</span><span class="o">;</span>
         
         <span class="c">/**</span>
-<span class="c">         * Pointer to this node&#39;s first child.</span>
+<span class="c">         * Pointer to this node's first child.</span>
 <span class="c">         * @type TestNode</span>
 <span class="c">         * @property firstChild</span>
 <span class="c">         */</span>        
         <span class="k">this</span><span class="o">.</span><span class="nx">firstChild</span> <span class="c">/*:TestNode*/</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         
         <span class="c">/**</span>
-<span class="c">         * Pointer to this node&#39;s last child.</span>
+<span class="c">         * Pointer to this node's last child.</span>
 <span class="c">         * @type TestNode</span>
 <span class="c">         * @property lastChild</span>
 <span class="c">         */</span>        
         <span class="k">this</span><span class="o">.</span><span class="nx">lastChild</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         
         <span class="c">/**</span>
-<span class="c">         * Pointer to this node&#39;s parent.</span>
+<span class="c">         * Pointer to this node's parent.</span>
 <span class="c">         * @type TestNode</span>
 <span class="c">         * @property parent</span>
 <span class="c">         */</span>        
         <span class="k">this</span><span class="o">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> 
    
         <span class="c">/**</span>
-<span class="c">         * Pointer to this node&#39;s next sibling.</span>
+<span class="c">         * Pointer to this node's next sibling.</span>
 <span class="c">         * @type TestNode</span>
 <span class="c">         * @property next</span>
 <span class="c">         */</span>        
@@ -113,10 +104,10 @@
         
         <span class="c">//initialize results</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">testObject</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">){</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;testsuite&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"testsuite"</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">testObject</span><span class="o">.</span><span class="nx">name</span><span class="o">;</span>
         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">testObject</span> <span class="k">instanceof</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span><span class="o">){</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;testcase&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"testcase"</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">testObject</span><span class="o">.</span><span class="nx">name</span><span class="o">;</span>
         <span class="o">}</span>
        
@@ -162,7 +153,7 @@
 <span class="c">         * @private</span>
 <span class="c">         * @static</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">masterSuite</span> <span class="c">/*:YAHOO.tool.TestSuite*/</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">(</span><span class="s2">&quot;YUI Test Results&quot;</span><span class="o">);</span>        
+        <span class="k">this</span><span class="o">.</span><span class="nx">masterSuite</span> <span class="c">/*:YAHOO.tool.TestSuite*/</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">(</span><span class="s2">"YUI Test Results"</span><span class="o">);</span>        
 
         <span class="c">/**</span>
 <span class="c">         * Pointer to the current node in the test tree.</span>
@@ -211,57 +202,57 @@
 <span class="c">         * test is executed.</span>
 <span class="c">         * @event testcasebegin</span>
 <span class="c">         */</span>         
-        <span class="nx">TEST_CASE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testcasebegin&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_CASE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"testcasebegin"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when all tests in a test case have been executed.</span>
 <span class="c">         * @event testcasecomplete</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_CASE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testcasecomplete&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_CASE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"testcasecomplete"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when a test suite is opened but before the first </span>
 <span class="c">         * test is executed.</span>
 <span class="c">         * @event testsuitebegin</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_SUITE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testsuitebegin&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_SUITE_BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"testsuitebegin"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when all test cases in a test suite have been</span>
 <span class="c">         * completed.</span>
 <span class="c">         * @event testsuitecomplete</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_SUITE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;testsuitecomplete&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_SUITE_COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"testsuitecomplete"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when a test has passed.</span>
 <span class="c">         * @event pass</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_PASS_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;pass&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_PASS_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"pass"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when a test has failed.</span>
 <span class="c">         * @event fail</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_FAIL_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;fail&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_FAIL_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"fail"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when a test has been ignored.</span>
 <span class="c">         * @event ignore</span>
 <span class="c">         */</span>        
-        <span class="nx">TEST_IGNORE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;ignore&quot;</span><span class="o">,</span>
+        <span class="nx">TEST_IGNORE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"ignore"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when all test suites and test cases have been completed.</span>
 <span class="c">         * @event complete</span>
 <span class="c">         */</span>        
-        <span class="nx">COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;complete&quot;</span><span class="o">,</span>
+        <span class="nx">COMPLETE_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"complete"</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Fires when the run() method is called.</span>
 <span class="c">         * @event begin</span>
 <span class="c">         */</span>        
-        <span class="nx">BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">&quot;begin&quot;</span><span class="o">,</span>    
+        <span class="nx">BEGIN_EVENT</span> <span class="c">/*:String*/</span> <span class="o">:</span> <span class="s2">"begin"</span><span class="o">,</span>    
         
         <span class="c">//-------------------------------------------------------------------------</span>
 <span class="c"></span>        <span class="c">// Test Tree-Related Methods</span>
@@ -283,7 +274,7 @@
             
             <span class="c">//iterate over the items in the test case</span>
 <span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">testCase</span><span class="o">){</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">prop</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;test&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">testCase</span><span class="o">[</span><span class="nx">prop</span><span class="o">])){</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">prop</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"test"</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">testCase</span><span class="o">[</span><span class="nx">prop</span><span class="o">])){</span>
                     <span class="nx">node</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">prop</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -344,7 +335,7 @@
 <span class="c"></span>        <span class="c">//-------------------------------------------------------------------------</span>
 <span class="c"></span>        
         <span class="c">/**</span>
-<span class="c">         * Handles the completion of a test object&#39;s tests. Tallies test results </span>
+<span class="c">         * Handles the completion of a test object's tests. Tallies test results </span>
 <span class="c">         * from one level up to the next.</span>
 <span class="c">         * @param {TestNode} node The TestNode representing the test object.</span>
 <span class="c">         * @return {Void}</span>
@@ -393,7 +384,7 @@
                 <span class="o">}</span>
                 
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_cur</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">_root</span><span class="o">){</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;report&quot;</span><span class="o">;</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"report"</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">timestamp</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="nb">Date</span><span class="o">()).</span><span class="nx">toLocaleString</span><span class="o">();</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">duration</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="nb">Date</span><span class="o">())</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">duration</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">COMPLETE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">results</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_cur</span><span class="o">.</span><span class="nx">results</span><span class="o">});</span>
@@ -435,8 +426,8 @@
                         <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_CASE_BEGIN_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testObject</span> <span class="o">});</span>
                     <span class="o">}</span>
                     
-                    <span class="c">//some environments don&#39;t support setTimeout</span>
-<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">){</span>                    
+                    <span class="c">//some environments don't support setTimeout</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">"undefined"</span><span class="o">){</span>                    
                         <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">(){</span>
                             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">.</span><span class="nx">_run</span><span class="o">();</span>
                         <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
@@ -463,7 +454,7 @@
                 <span class="nx">delete</span> <span class="nx">testCase</span><span class="o">.</span><span class="nx">__yui_wait</span><span class="o">;</span>
             <span class="o">}</span>            
             
-            <span class="c">//get the &quot;should&quot; test cases</span>
+            <span class="c">//get the "should" test cases</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">shouldFail</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">(</span><span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">fail</span> <span class="o">||</span> <span class="o">{})[</span><span class="nx">testName</span><span class="o">];</span>
             <span class="k">var</span> <span class="nx">shouldError</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">(</span><span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">error</span> <span class="o">||</span> <span class="o">{})[</span><span class="nx">testName</span><span class="o">];</span>
             
@@ -477,7 +468,7 @@
                 <span class="c">//run the test</span>
 <span class="c"></span>                <span class="nx">segment</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">testCase</span><span class="o">);</span>
                 
-                <span class="c">//if it should fail, and it got here, then it&#39;s a fail because it didn&#39;t</span>
+                <span class="c">//if it should fail, and it got here, then it's a fail because it didn't</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">shouldFail</span><span class="o">){</span>
                     <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldFail</span><span class="o">();</span>
                     <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -497,13 +488,13 @@
                     <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">thrown</span><span class="o">.</span><span class="nx">segment</span><span class="o">)){</span>
                         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">thrown</span><span class="o">.</span><span class="nx">delay</span><span class="o">)){</span>
                         
-                            <span class="c">//some environments don&#39;t support setTimeout</span>
-<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">){</span>
+                            <span class="c">//some environments don't support setTimeout</span>
+<span class="c"></span>                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">"undefined"</span><span class="o">){</span>
                                 <span class="nx">testCase</span><span class="o">.</span><span class="nx">__yui_wait</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">(){</span>
                                     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">.</span><span class="nx">_resumeTest</span><span class="o">(</span><span class="nx">thrown</span><span class="o">.</span><span class="nx">segment</span><span class="o">);</span>
                                 <span class="o">},</span> <span class="nx">thrown</span><span class="o">.</span><span class="nx">delay</span><span class="o">);</span>                             
                             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;Asynchronous tests not supported in this environment.&quot;</span><span class="o">);</span>
+                                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"Asynchronous tests not supported in this environment."</span><span class="o">);</span>
                             <span class="o">}</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
@@ -519,14 +510,14 @@
                         <span class="c">//check to see what type of data we have</span>
 <span class="c"></span>                        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">shouldError</span><span class="o">)){</span>
                             
-                            <span class="c">//if it&#39;s a string, check the error message</span>
+                            <span class="c">//if it's a string, check the error message</span>
 <span class="c"></span>                            <span class="k">if</span> <span class="o">(</span><span class="nx">thrown</span><span class="o">.</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">shouldError</span><span class="o">){</span>
                                 <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
                                 <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>                                    
                             <span class="o">}</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">shouldError</span><span class="o">)){</span>
                         
-                            <span class="c">//if it&#39;s a function, see if the error is an instance of it</span>
+                            <span class="c">//if it's a function, see if the error is an instance of it</span>
 <span class="c"></span>                            <span class="k">if</span> <span class="o">(!(</span><span class="nx">thrown</span> <span class="k">instanceof</span> <span class="nx">shouldError</span><span class="o">)){</span>
                                 <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
                                 <span class="nx">failed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -534,7 +525,7 @@
                         
                         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">shouldError</span><span class="o">)){</span>
                         
-                            <span class="c">//if it&#39;s an object, check the instance and message</span>
+                            <span class="c">//if it's an object, check the instance and message</span>
 <span class="c"></span>                            <span class="k">if</span> <span class="o">(!(</span><span class="nx">thrown</span> <span class="k">instanceof</span> <span class="nx">shouldError</span><span class="o">.</span><span class="nx">constructor</span><span class="o">)</span> <span class="o">||</span> 
                                     <span class="nx">thrown</span><span class="o">.</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">shouldError</span><span class="o">.</span><span class="nx">message</span><span class="o">){</span>
                                 <span class="nx">error</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span><span class="o">(</span><span class="nx">thrown</span><span class="o">);</span>
@@ -560,9 +551,9 @@
             
             <span class="c">//update results</span>
 <span class="c"></span>            <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">results</span><span class="o">[</span><span class="nx">testName</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> 
-                <span class="nx">result</span><span class="o">:</span> <span class="nx">failed</span> <span class="o">?</span> <span class="s2">&quot;fail&quot;</span> <span class="o">:</span> <span class="s2">&quot;pass&quot;</span><span class="o">,</span>
-                <span class="nx">message</span><span class="o">:</span> <span class="nx">error</span> <span class="o">?</span> <span class="nx">error</span><span class="o">.</span><span class="nx">getMessage</span><span class="o">()</span> <span class="o">:</span> <span class="s2">&quot;Test passed&quot;</span><span class="o">,</span>
-                <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="o">,</span>
+                <span class="nx">result</span><span class="o">:</span> <span class="nx">failed</span> <span class="o">?</span> <span class="s2">"fail"</span> <span class="o">:</span> <span class="s2">"pass"</span><span class="o">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="nx">error</span> <span class="o">?</span> <span class="nx">error</span><span class="o">.</span><span class="nx">getMessage</span><span class="o">()</span> <span class="o">:</span> <span class="s2">"Test passed"</span><span class="o">,</span>
+                <span class="nx">type</span><span class="o">:</span> <span class="s2">"test"</span><span class="o">,</span>
                 <span class="nx">name</span><span class="o">:</span> <span class="nx">testName</span>
             <span class="o">};</span>
             
@@ -574,7 +565,7 @@
             <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">results</span><span class="o">.</span><span class="nx">total</span><span class="o">++;</span>
 
             <span class="c">//set timeout not supported in all environments</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">){</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">"undefined"</span><span class="o">){</span>
                 <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">(){</span>
                     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">.</span><span class="nx">_run</span><span class="o">();</span>
                 <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
@@ -599,7 +590,7 @@
             <span class="k">var</span> <span class="nx">testCase</span> <span class="c">/*:YAHOO.tool.TestCase*/</span> <span class="o">=</span> <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">testObject</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">test</span> <span class="c">/*:Function*/</span> <span class="o">=</span> <span class="nx">testCase</span><span class="o">[</span><span class="nx">testName</span><span class="o">];</span>
             
-            <span class="c">//get the &quot;should&quot; test cases</span>
+            <span class="c">//get the "should" test cases</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">shouldIgnore</span> <span class="c">/*:Object*/</span> <span class="o">=</span> <span class="o">(</span><span class="nx">testCase</span><span class="o">.</span><span class="nx">_should</span><span class="o">.</span><span class="nx">ignore</span> <span class="o">||</span> <span class="o">{})[</span><span class="nx">testName</span><span class="o">];</span>
             
             <span class="c">//figure out if the test should be ignored or not</span>
@@ -607,9 +598,9 @@
             
                 <span class="c">//update results</span>
 <span class="c"></span>                <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">results</span><span class="o">[</span><span class="nx">testName</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> 
-                    <span class="nx">result</span><span class="o">:</span> <span class="s2">&quot;ignore&quot;</span><span class="o">,</span>
-                    <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Test ignored&quot;</span><span class="o">,</span>
-                    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;test&quot;</span><span class="o">,</span>
+                    <span class="nx">result</span><span class="o">:</span> <span class="s2">"ignore"</span><span class="o">,</span>
+                    <span class="nx">message</span><span class="o">:</span> <span class="s2">"Test ignored"</span><span class="o">,</span>
+                    <span class="nx">type</span><span class="o">:</span> <span class="s2">"test"</span><span class="o">,</span>
                     <span class="nx">name</span><span class="o">:</span> <span class="nx">testName</span>
                 <span class="o">};</span>
                 
@@ -618,8 +609,8 @@
             
                 <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TEST_IGNORE_EVENT</span><span class="o">,</span> <span class="o">{</span> <span class="nx">testCase</span><span class="o">:</span> <span class="nx">testCase</span><span class="o">,</span> <span class="nx">testName</span><span class="o">:</span> <span class="nx">testName</span> <span class="o">});</span>
                 
-                <span class="c">//some environments don&#39;t support setTimeout</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">){</span>                    
+                <span class="c">//some environments don't support setTimeout</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">setTimeout</span> <span class="o">!=</span> <span class="s2">"undefined"</span><span class="o">){</span>                    
                     <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">(){</span>
                         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestRunner</span><span class="o">.</span><span class="nx">_run</span><span class="o">();</span>
                     <span class="o">},</span> <span class="m">0</span><span class="o">);</span>              
@@ -732,9 +723,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -807,13 +796,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
                                 <li class=""><a href="YAHOO.tool.TestCase.Wait.html">YAHOO.tool.TestCase.Wait</a></li>
                                 <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
                                 <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
@@ -832,13 +819,11 @@
                                 <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
                                 <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
                                 <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                        <ul class="content"><li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
                                 <li class=""><a href="Assert.js.html">Assert.js</a></li>
                                 <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
                                 <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
@@ -850,8 +835,7 @@
                                 <li class="selected"><a href="TestRunner.js.html">TestRunner.js</a></li>
                                 <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
                                 <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -861,9 +845,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: element   Element.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: element   Element.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>element&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>element  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html">element</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+<div class="highlight"><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 <span class="c">// internal shorthand</span>
 <span class="c"></span><span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
     <span class="nx">AttributeProvider</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">;</span>
@@ -68,8 +63,8 @@
 <span class="c">     * @param {Boolean} deep Whether or not to do a deep clone</span>
 <span class="c">     */</span>
     <span class="nx">appendChild</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">child</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">child</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
+        <span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">child</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -78,7 +73,7 @@
 <span class="c">     * @param {String} tag The tagName to collect</span>
 <span class="c">     */</span>
     <span class="nx">getElementsByTagName</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tag</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="nx">tag</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="nx">tag</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -87,7 +82,7 @@
 <span class="c">     * @return {Boolean} Whether or not the element has childNodes</span>
 <span class="c">     */</span>
     <span class="nx">hasChildNodes</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">hasChildNodes</span><span class="o">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">hasChildNodes</span><span class="o">();</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -98,10 +93,10 @@
 <span class="c">     * the element before.</span>
 <span class="c">     */</span>
     <span class="nx">insertBefore</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">before</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">element</span> <span class="o">=</span> <span class="nx">element</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">element</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">element</span><span class="o">;</span>
-        <span class="nx">before</span> <span class="o">=</span> <span class="o">(</span><span class="nx">before</span> <span class="o">&amp;&amp;</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">?</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">before</span><span class="o">;</span>
+        <span class="nx">element</span> <span class="o">=</span> <span class="nx">element</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">element</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">element</span><span class="o">;</span>
+        <span class="nx">before</span> <span class="o">=</span> <span class="o">(</span><span class="nx">before</span> <span class="o">&amp;&amp;</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">?</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">before</span><span class="o">;</span>
         
-        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">before</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">element</span><span class="o">,</span> <span class="nx">before</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -110,8 +105,8 @@
 <span class="c">     * @param {HTMLElement} child The HTMLElement to remove</span>
 <span class="c">     */</span>
     <span class="nx">removeChild</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">child</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">child</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
+        <span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">child</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">child</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">},</span>
     
@@ -122,9 +117,9 @@
 <span class="c">     * @param {HTMLElement} oldNode The HTMLElement to replace</span>
 <span class="c">     */</span>
     <span class="nx">replaceChild</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newNode</span><span class="o">,</span> <span class="nx">oldNode</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">newNode</span><span class="o">;</span>
-        <span class="nx">oldNode</span> <span class="o">=</span> <span class="nx">oldNode</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">oldNode</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">oldNode</span><span class="o">;</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">replaceChild</span><span class="o">(</span><span class="nx">newNode</span><span class="o">,</span> <span class="nx">oldNode</span><span class="o">);</span>
+        <span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">newNode</span><span class="o">;</span>
+        <span class="nx">oldNode</span> <span class="o">=</span> <span class="nx">oldNode</span><span class="o">.</span><span class="nx">get</span> <span class="o">?</span> <span class="nx">oldNode</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">oldNode</span><span class="o">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">replaceChild</span><span class="o">(</span><span class="nx">newNode</span><span class="o">,</span> <span class="nx">oldNode</span><span class="o">);</span>
     <span class="o">},</span>
 
     
@@ -147,10 +142,10 @@
 <span class="c">     * @param {Object} scope The object to use for the scope of the handler </span>
 <span class="c">     */</span>
     <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">scope</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         <span class="nx">scope</span> <span class="o">=</span> <span class="nx">scope</span> <span class="o">||</span> <span class="k">this</span><span class="o">;</span>
         
-        <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">el</span><span class="o">;</span>
+        <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">||</span> <span class="nx">el</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span> 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_events</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span> <span class="c">// create on the fly</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">[</span><span class="nx">type</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
@@ -196,7 +191,7 @@
 <span class="c">     * @param {String} className The className to add</span>
 <span class="c">     */</span>
     <span class="nx">addClass</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">className</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span>
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -209,7 +204,7 @@
 <span class="c">     */</span>
     <span class="nx">getElementsByClassName</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">className</span><span class="o">,</span> <span class="nx">tag</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">className</span><span class="o">,</span> <span class="nx">tag</span><span class="o">,</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -219,7 +214,7 @@
 <span class="c">     * @return {Boolean} Whether or not the element has the class name</span>
 <span class="c">     */</span>
     <span class="nx">hasClass</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">className</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span> 
+        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span> 
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -228,7 +223,7 @@
 <span class="c">     * @param {String} className The className to remove</span>
 <span class="c">     */</span>
     <span class="nx">removeClass</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">className</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="nx">className</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -238,7 +233,7 @@
 <span class="c">     * @param {String} newClassName The className to add</span>
 <span class="c">     */</span>
     <span class="nx">replaceClass</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oldClassName</span><span class="o">,</span> <span class="nx">newClassName</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">replaceClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> 
+        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">replaceClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> 
                 <span class="nx">oldClassName</span><span class="o">,</span> <span class="nx">newClassName</span><span class="o">);</span>
     <span class="o">},</span>
     
@@ -249,9 +244,9 @@
 <span class="c">     * @param {String} value The value to apply to the style property</span>
 <span class="c">     */</span>
     <span class="nx">setStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">property</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;setStyle&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">];</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">'setStyle'</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">];</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span>  <span class="nx">property</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span> <span class="c">// TODO: always queuing?</span>
@@ -264,7 +259,7 @@
 <span class="c">     * @return {String} The current value of the property</span>
 <span class="c">     */</span>
     <span class="nx">getStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">property</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span>  <span class="nx">property</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span>  <span class="nx">property</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -285,27 +280,27 @@
 <span class="c">     * @param {HTMLElement | Element} before An optional node to insert before</span>
 <span class="c">     */</span>
     <span class="nx">appendTo</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">before</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">parent</span> <span class="o">=</span> <span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">?</span>  <span class="nx">parent</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">parent</span><span class="o">);</span>
+        <span class="nx">parent</span> <span class="o">=</span> <span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">?</span>  <span class="nx">parent</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">parent</span><span class="o">);</span>
         
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;beforeAppendTo&#39;</span><span class="o">,</span> <span class="o">{</span>
-            <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;beforeAppendTo&#39;</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'beforeAppendTo'</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="s1">'beforeAppendTo'</span><span class="o">,</span>
             <span class="nx">target</span><span class="o">:</span> <span class="nx">parent</span>
         <span class="o">});</span>
         
         
         <span class="nx">before</span> <span class="o">=</span> <span class="o">(</span><span class="nx">before</span> <span class="o">&amp;&amp;</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">?</span> 
-                <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">before</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+                <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">before</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;appendTo failed: element not available&#39;</span><span class="o">,</span>
-                    <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Element&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'appendTo failed: element not available'</span><span class="o">,</span>
+                    <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'Element'</span><span class="o">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;appendTo failed: parent not available&#39;</span><span class="o">,</span>
-                    <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Element&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'appendTo failed: parent not available'</span><span class="o">,</span>
+                    <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'Element'</span><span class="o">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
         
@@ -317,17 +312,17 @@
             <span class="o">}</span>
         <span class="o">}</span>
         
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">element</span> <span class="o">+</span> <span class="s1">&#39;appended to &#39;</span> <span class="o">+</span> <span class="nx">parent</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">element</span> <span class="o">+</span> <span class="s1">'appended to '</span> <span class="o">+</span> <span class="nx">parent</span><span class="o">);</span>
         
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;appendTo&#39;</span><span class="o">,</span> <span class="o">{</span>
-            <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;appendTo&#39;</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'appendTo'</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="s1">'appendTo'</span><span class="o">,</span>
             <span class="nx">target</span><span class="o">:</span> <span class="nx">parent</span>
         <span class="o">});</span>
     <span class="o">},</span>
     
     <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">configs</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span> <span class="c">// avoid loop due to &#39;element&#39;</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">configs</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span> <span class="c">// avoid loop due to 'element'</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">value</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
             <span class="k">return</span> <span class="nx">el</span><span class="o">.</span><span class="nx">value</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
         <span class="o">}</span>
@@ -336,11 +331,11 @@
     <span class="o">},</span>
 
     <span class="nx">set</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">value</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;set&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">];</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_queue</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">'set'</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">];</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">].</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span> <span class="c">// so &quot;get&quot; works while queueing</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">].</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span> <span class="c">// so "get" works while queueing</span>
 <span class="c"></span>            
             <span class="o">}</span>
             <span class="k">return</span><span class="o">;</span>
@@ -355,7 +350,7 @@
     <span class="o">},</span>
     
     <span class="nx">setAttributeConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">,</span> <span class="nx">init</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">])</span> <span class="o">)</span> <span class="o">{</span>
             <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">);</span>
@@ -365,7 +360,7 @@
     <span class="o">},</span>
     
     <span class="nx">getAttributeKeys</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nx">AttributeProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getAttributeKeys</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
         
         <span class="c">//add any unconfigured element keys</span>
@@ -396,25 +391,25 @@
     <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">||</span> <span class="nx">el</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
 
     <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span> <span class="o">=</span> <span class="o">{</span>
-        <span class="s1">&#39;click&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;dblclick&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;keydown&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;keypress&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;keyup&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;mousedown&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;mousemove&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;mouseout&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
-        <span class="s1">&#39;mouseover&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
-        <span class="s1">&#39;mouseup&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;focus&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;blur&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-        <span class="s1">&#39;submit&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="s1">'click'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'dblclick'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'keydown'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'keypress'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'keyup'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'mousedown'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'mousemove'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'mouseout'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+        <span class="s1">'mouseover'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+        <span class="s1">'mouseup'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'focus'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'blur'</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+        <span class="s1">'submit'</span><span class="o">:</span> <span class="kc">true</span>
     <span class="o">};</span>
 
     <span class="k">var</span> <span class="nx">isReady</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c">// to determine when to init HTMLElement and content</span>
 <span class="c"></span>
     <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="c">// defer until available/ready</span>
-<span class="c"></span>        <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>
+<span class="c"></span>        <span class="nx">_registerHTMLAttr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s1">'id'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>
     <span class="o">}</span>
 
     <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
@@ -428,14 +423,14 @@
 <span class="c"></span>            <span class="nx">_initHTMLElement</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;available&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;available&#39;</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>  
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'available'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'available'</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>  
     <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
     
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">onContentReady</span><span class="o">(</span><span class="nx">attr</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">isReady</span><span class="o">)</span> <span class="o">{</span> <span class="c">// otherwise already done</span>
 <span class="c"></span>            <span class="nx">_initContent</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">attr</span><span class="o">);</span>
         <span class="o">}</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;contentReady&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;contentReady&#39;</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>  
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'contentReady'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">'contentReady'</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">element</span> <span class="o">});</span>  
     <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 <span class="o">};</span>
 
@@ -445,7 +440,7 @@
 <span class="c">     * @config element</span>
 <span class="c">     * @type HTMLElement</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'element'</span><span class="o">,</span> <span class="o">{</span>
         <span class="nx">value</span><span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">attr</span><span class="o">.</span><span class="nx">element</span><span class="o">),</span>
         <span class="nx">readOnly</span><span class="o">:</span> <span class="kc">true</span>
      <span class="o">});</span>
@@ -465,10 +460,10 @@
 <span class="c"> * @param {YAHOO.util.Element} element The Element instance to</span>
 <span class="c"> * register the config to.</span>
 <span class="c"> * @param {String} key The name of the config to register</span>
-<span class="c"> * @param {Object} map A key-value map of the config&#39;s params</span>
+<span class="c"> * @param {Object} map A key-value map of the config's params</span>
 <span class="c"> */</span>
 <span class="k">var</span> <span class="nx">_registerHTMLAttr</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
     <span class="nx">map</span> <span class="o">=</span> <span class="nx">map</span> <span class="o">||</span> <span class="o">{};</span>
     <span class="nx">map</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">key</span><span class="o">;</span>
     <span class="nx">map</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">map</span><span class="o">.</span><span class="nx">method</span> <span class="o">||</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
@@ -479,28 +474,28 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Fires when the Element&#39;s HTMLElement can be retrieved by Id.</span>
-<span class="c"> * &lt;p&gt;See: &lt;a href=&quot;#addListener&quot;&gt;Element.addListener&lt;/a&gt;&lt;/p&gt;</span>
+<span class="c"> * Fires when the Element's HTMLElement can be retrieved by Id.</span>
+<span class="c"> * &lt;p&gt;See: &lt;a href="#addListener"&gt;Element.addListener&lt;/a&gt;&lt;/p&gt;</span>
 <span class="c"> * &lt;p&gt;&lt;strong&gt;Event fields:&lt;/strong&gt;&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;&amp;lt;String&amp;gt; type&lt;/code&gt; available&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;&amp;lt;HTMLElement&amp;gt;</span>
 <span class="c"> * target&lt;/code&gt; the HTMLElement bound to this Element instance&lt;br&gt;</span>
 <span class="c"> * &lt;p&gt;&lt;strong&gt;Usage:&lt;/strong&gt;&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;var handler = function(e) {var target = e.target};&lt;br&gt;</span>
-<span class="c"> * myTabs.addListener(&#39;available&#39;, handler);&lt;/code&gt;&lt;/p&gt;</span>
+<span class="c"> * myTabs.addListener('available', handler);&lt;/code&gt;&lt;/p&gt;</span>
 <span class="c"> * @event available</span>
 <span class="c"> */</span>
  
 <span class="c">/**</span>
-<span class="c"> * Fires when the Element&#39;s HTMLElement subtree is rendered.</span>
-<span class="c"> * &lt;p&gt;See: &lt;a href=&quot;#addListener&quot;&gt;Element.addListener&lt;/a&gt;&lt;/p&gt;</span>
+<span class="c"> * Fires when the Element's HTMLElement subtree is rendered.</span>
+<span class="c"> * &lt;p&gt;See: &lt;a href="#addListener"&gt;Element.addListener&lt;/a&gt;&lt;/p&gt;</span>
 <span class="c"> * &lt;p&gt;&lt;strong&gt;Event fields:&lt;/strong&gt;&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;&amp;lt;String&amp;gt; type&lt;/code&gt; contentReady&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;&amp;lt;HTMLElement&amp;gt;</span>
 <span class="c"> * target&lt;/code&gt; the HTMLElement bound to this Element instance&lt;br&gt;</span>
 <span class="c"> * &lt;p&gt;&lt;strong&gt;Usage:&lt;/strong&gt;&lt;br&gt;</span>
 <span class="c"> * &lt;code&gt;var handler = function(e) {var target = e.target};&lt;br&gt;</span>
-<span class="c"> * myTabs.addListener(&#39;contentReady&#39;, handler);&lt;/code&gt;&lt;/p&gt;</span>
+<span class="c"> * myTabs.addListener('contentReady', handler);&lt;/code&gt;&lt;/p&gt;</span>
 <span class="c"> * @event contentReady</span>
 <span class="c"> */</span>
 
@@ -516,9 +511,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -555,26 +548,21 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Attribute.html">YAHOO.util.Attribute</a></li>
                                 <li class=""><a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a></li>
                                 <li class=""><a href="YAHOO.util.Element.html">YAHOO.util.Element</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Attribute.js.html">Attribute.js</a></li>
+                        <ul class="content"><li class=""><a href="Attribute.js.html">Attribute.js</a></li>
                                 <li class=""><a href="AttributeProvider.js.html">AttributeProvider.js</a></li>
                                 <li class="selected"><a href="Element.js.html">Element.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -584,9 +572,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

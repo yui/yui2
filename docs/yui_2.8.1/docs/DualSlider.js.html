@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: slider   DualSlider.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: slider   DualSlider.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.1</span></h3>
+        <h3>Slider Widget  <span class="subtitle">2.8.1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html" title="slider">slider</a>
                 
                  &gt; DualSlider.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * A slider with two thumbs, one that represents the min value and </span>
 <span class="cm"> * the other the max.  Actually a composition of two sliders, both with</span>
 <span class="cm"> * the same background.  The constraints for each slider are adjusted</span>
@@ -124,14 +108,14 @@
         <span class="nx">minSlider</span><span class="p">.</span><span class="nx">setStartSliderState</span><span class="p">();</span>
         <span class="nx">ready</span><span class="p">.</span><span class="nx">min</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">ready</span><span class="p">.</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span><span class="nx">self</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'ready'</span><span class="p">,</span><span class="nx">self</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">maxSlider</span><span class="p">.</span><span class="nx">thumb</span><span class="p">.</span><span class="nx">onAvailable</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
         <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">setStartSliderState</span><span class="p">();</span>
         <span class="nx">ready</span><span class="p">.</span><span class="nx">max</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">ready</span><span class="p">.</span><span class="nx">min</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span><span class="nx">self</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'ready'</span><span class="p">,</span><span class="nx">self</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -148,7 +132,7 @@
         <span class="nx">self</span><span class="p">.</span><span class="nx">_handleDrag</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="c1">// Likely only the minSlider&#39;s onMouseUp will be executed, but both are</span>
+    <span class="c1">// Likely only the minSlider's onMouseUp will be executed, but both are</span>
     <span class="c1">// overridden just to be safe</span>
     <span class="nx">minSlider</span><span class="p">.</span><span class="nx">onMouseUp</span> <span class="o">=</span>
     <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">onMouseUp</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
@@ -164,41 +148,41 @@
 
     <span class="c1">// The core events for each slider are handled so we can expose a single</span>
     <span class="c1">// event for when the event happens on either slider</span>
-    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleMinChange</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;slideStart&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideStart</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideEnd</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleMinChange</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"slideStart"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideStart</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">minSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"slideEnd"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideEnd</span><span class="p">,</span> <span class="nx">minSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
-    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleMaxChange</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;slideStart&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideStart</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideEnd</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleMaxChange</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"slideStart"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideStart</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="nx">maxSlider</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">"slideEnd"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleSlideEnd</span><span class="p">,</span> <span class="nx">maxSlider</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Event that fires when the slider is finished setting up</span>
 <span class="cm">     * @event ready</span>
 <span class="cm">     * @param {DualSlider} dualslider the DualSlider instance</span>
 <span class="cm">     */</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"ready"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Event that fires when either the min or max value changes</span>
 <span class="cm">     * @event change</span>
 <span class="cm">     * @param {DualSlider} dualslider the DualSlider instance</span>
 <span class="cm">     */</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Event that fires when one of the thumbs begins to move</span>
 <span class="cm">     * @event slideStart</span>
 <span class="cm">     * @param {Slider} activeSlider the moving slider</span>
 <span class="cm">     */</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;slideStart&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"slideStart"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Event that fires when one of the thumbs finishes moving</span>
 <span class="cm">     * @event slideEnd</span>
 <span class="cm">     * @param {Slider} activeSlider the moving slider</span>
 <span class="cm">     */</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"slideEnd"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="c1">// Validate initial values</span>
     <span class="nx">initVals</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">initVals</span><span class="p">)</span> <span class="o">?</span> <span class="nx">initVals</span> <span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nx">range</span><span class="p">];</span>
@@ -216,7 +200,7 @@
     <span class="k">this</span><span class="p">.</span><span class="nx">minSlider</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">minVal</span><span class="p">,</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">maxSlider</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">maxVal</span><span class="p">,</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
 
-    <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting initial values &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">minVal</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxVal</span><span class="p">,</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s2">&quot;DualSlider&quot;</span><span class="p">);</span>
+    <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Setting initial values "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">minVal</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxVal</span><span class="p">,</span><span class="s2">"info"</span><span class="p">,</span><span class="s2">"DualSlider"</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">DualSlider</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
@@ -249,7 +233,7 @@
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
     <span class="nx">_handleSlideStart</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">slider</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;slideStart&quot;</span><span class="p">,</span> <span class="nx">slider</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"slideStart"</span><span class="p">,</span> <span class="nx">slider</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -258,7 +242,7 @@
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
     <span class="nx">_handleSlideEnd</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">slider</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="p">,</span> <span class="nx">slider</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"slideEnd"</span><span class="p">,</span> <span class="nx">slider</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -297,8 +281,8 @@
 <span class="cm">     * @protected</span>
 <span class="cm">     */</span>
     <span class="nx">_bindKeyEvents</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">slider</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">slider</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleKeyDown</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
-        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">slider</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="s1">&#39;keypress&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">_handleKeyPress</span><span class="p">,</span><span class="k">this</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">slider</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="s1">'keydown'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handleKeyDown</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">slider</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="s1">'keypress'</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">_handleKeyPress</span><span class="p">,</span><span class="k">this</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -344,7 +328,7 @@
             <span class="nx">done</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">min</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">max</span> <span class="o">:</span> <span class="kc">false</span> <span class="p">};</span>
 
         <span class="c1">// Clear constraints to prevent animated thumbs from prematurely</span>
-        <span class="c1">// stopping when hitting a constraint that&#39;s moving with the other</span>
+        <span class="c1">// stopping when hitting a constraint that's moving with the other</span>
         <span class="c1">// thumb.</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">mint</span><span class="p">.</span><span class="nx">_isHoriz</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">mint</span><span class="p">.</span><span class="nx">setXConstraint</span><span class="p">(</span><span class="nx">mint</span><span class="p">.</span><span class="nx">leftConstraint</span><span class="p">,</span><span class="nx">maxt</span><span class="p">.</span><span class="nx">rightConstraint</span><span class="p">,</span><span class="nx">mint</span><span class="p">.</span><span class="nx">tickSize</span><span class="p">);</span>
@@ -356,28 +340,28 @@
 
         <span class="c1">// Set up one-time slideEnd callbacks to call updateValue when both</span>
         <span class="c1">// thumbs have been set</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
             <span class="nx">done</span><span class="p">.</span><span class="nx">min</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">done</span><span class="p">.</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">updateValue</span><span class="p">(</span><span class="nx">silent</span><span class="p">);</span>
-                <span class="c1">// Clean the slider&#39;s slideEnd events on a timeout since this</span>
-                <span class="c1">// will be executed from inside the event&#39;s fire</span>
+                <span class="c1">// Clean the slider's slideEnd events on a timeout since this</span>
+                <span class="c1">// will be executed from inside the event's fire</span>
                 <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span>
-                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span>
                 <span class="p">},</span><span class="mi">0</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">});</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
             <span class="nx">done</span><span class="p">.</span><span class="nx">max</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">done</span><span class="p">.</span><span class="nx">min</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">updateValue</span><span class="p">(</span><span class="nx">silent</span><span class="p">);</span>
-                <span class="c1">// Clean both sliders&#39; slideEnd events on a timeout since this</span>
-                <span class="c1">// will be executed from inside one of the event&#39;s fire</span>
+                <span class="c1">// Clean both sliders' slideEnd events on a timeout since this</span>
+                <span class="c1">// will be executed from inside one of the event's fire</span>
                 <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span>
-                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span>
+                    <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span>
                 <span class="p">},</span><span class="mi">0</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">});</span>
@@ -407,11 +391,11 @@
         <span class="c1">// Use a one-time event callback to delay the updateValue call</span>
         <span class="c1">// until after the slide operation is done</span>
         <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">updateValue</span><span class="p">(</span><span class="nx">silent</span><span class="p">);</span>
             <span class="c1">// Clean the slideEnd event on a timeout since this</span>
-            <span class="c1">// will be executed from inside the event&#39;s fire</span>
-            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="c1">// will be executed from inside the event's fire</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">mins</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
         <span class="p">});</span>
 
         <span class="nx">mins</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">min</span><span class="p">,</span> <span class="nx">skipAnim</span><span class="p">,</span> <span class="nx">force</span><span class="p">);</span>
@@ -436,11 +420,11 @@
 
         <span class="c1">// Use a one-time event callback to delay the updateValue call</span>
         <span class="c1">// until after the slide operation is done</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_oneTimeCallback</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">updateValue</span><span class="p">(</span><span class="nx">silent</span><span class="p">);</span>
             <span class="c1">// Clean the slideEnd event on a timeout since this</span>
-            <span class="c1">// will be executed from inside the event&#39;s fire</span>
-            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">&#39;slideEnd&#39;</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="c1">// will be executed from inside the event's fire</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cleanEvent</span><span class="p">(</span><span class="nx">maxs</span><span class="p">,</span><span class="s1">'slideEnd'</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
         <span class="p">});</span>
 
         <span class="nx">maxs</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">max</span><span class="p">,</span> <span class="nx">skipAnim</span><span class="p">,</span> <span class="nx">force</span><span class="p">);</span>
@@ -464,13 +448,13 @@
 
             <span class="nx">mint</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">minSlider</span><span class="p">.</span><span class="nx">thumb</span><span class="p">;</span>
             <span class="nx">maxt</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxSlider</span><span class="p">.</span><span class="nx">thumb</span><span class="p">;</span>
-            <span class="nx">dim</span>  <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">isHoriz</span> <span class="o">?</span> <span class="s1">&#39;x&#39;</span> <span class="o">:</span> <span class="s1">&#39;y&#39;</span><span class="p">;</span>
+            <span class="nx">dim</span>  <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">isHoriz</span> <span class="o">?</span> <span class="s1">'x'</span> <span class="o">:</span> <span class="s1">'y'</span><span class="p">;</span>
 
             <span class="nx">thumbInnerWidth</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">minSlider</span><span class="p">.</span><span class="nx">thumbCenterPoint</span><span class="p">[</span><span class="nx">dim</span><span class="p">]</span> <span class="o">+</span>
                               <span class="k">this</span><span class="p">.</span><span class="nx">maxSlider</span><span class="p">.</span><span class="nx">thumbCenterPoint</span><span class="p">[</span><span class="nx">dim</span><span class="p">];</span>
 
-            <span class="c1">// Establish barriers within the respective other thumb&#39;s edge, less</span>
-            <span class="c1">// the minRange.  Limit to the Slider&#39;s range in the case of</span>
+            <span class="c1">// Establish barriers within the respective other thumb's edge, less</span>
+            <span class="c1">// the minRange.  Limit to the Slider's range in the case of</span>
             <span class="c1">// negative minRanges.</span>
             <span class="nx">minConstraint</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">max</span><span class="o">-</span><span class="nx">thumbInnerWidth</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">minRange</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
             <span class="nx">maxConstraint</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="o">-</span><span class="nx">min</span><span class="o">-</span><span class="nx">thumbInnerWidth</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">minRange</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
@@ -493,7 +477,7 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">maxVal</span> <span class="o">=</span> <span class="nx">max</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">changed</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">silent</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">},</span>
 
@@ -575,7 +559,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">     * Clean up the slideEnd event subscribers array, since each one-time</span>
-<span class="cm">     * callback will be replaced in the event&#39;s subscribers property with</span>
+<span class="cm">     * callback will be replaced in the event's subscribers property with</span>
 <span class="cm">     * null.  This will cause memory bloat and loss of performance.</span>
 <span class="cm">     * @method _cleanEvent</span>
 <span class="cm">     * @param o {EventProvider} object housing the CustomEvent</span>
@@ -616,7 +600,7 @@
 <span class="cm"> * @for YAHOO.widget.Slider</span>
 <span class="cm"> * @method YAHOO.widget.Slider.getHorizDualSlider</span>
 <span class="cm"> * @static</span>
-<span class="cm"> * @param {String} bg the id of the slider&#39;s background element</span>
+<span class="cm"> * @param {String} bg the id of the slider's background element</span>
 <span class="cm"> * @param {String} minthumb the id of the min thumb</span>
 <span class="cm"> * @param {String} maxthumb the id of the thumb thumb</span>
 <span class="cm"> * @param {int} range the number of pixels the thumbs can move within</span>
@@ -631,8 +615,8 @@
             <span class="nx">maxt</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">SliderThumb</span><span class="p">(</span><span class="nx">maxthumb</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">range</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="k">new</span> <span class="nx">DualSlider</span><span class="p">(</span>
-                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">mint</span><span class="p">,</span> <span class="s2">&quot;horiz&quot;</span><span class="p">),</span>
-                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">maxt</span><span class="p">,</span> <span class="s2">&quot;horiz&quot;</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">mint</span><span class="p">,</span> <span class="s2">"horiz"</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">maxt</span><span class="p">,</span> <span class="s2">"horiz"</span><span class="p">),</span>
                     <span class="nx">range</span><span class="p">,</span> <span class="nx">initVals</span><span class="p">);</span>
 <span class="p">};</span>
 
@@ -641,7 +625,7 @@
 <span class="cm"> * @for YAHOO.widget.Slider</span>
 <span class="cm"> * @method YAHOO.widget.Slider.getVertDualSlider</span>
 <span class="cm"> * @static</span>
-<span class="cm"> * @param {String} bg the id of the slider&#39;s background element</span>
+<span class="cm"> * @param {String} bg the id of the slider's background element</span>
 <span class="cm"> * @param {String} minthumb the id of the min thumb</span>
 <span class="cm"> * @param {String} maxthumb the id of the thumb thumb</span>
 <span class="cm"> * @param {int} range the number of pixels the thumbs can move within</span>
@@ -656,8 +640,8 @@
             <span class="nx">maxt</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">SliderThumb</span><span class="p">(</span><span class="nx">maxthumb</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">range</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">DualSlider</span><span class="p">(</span>
-                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">mint</span><span class="p">,</span> <span class="s2">&quot;vert&quot;</span><span class="p">),</span>
-                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">maxt</span><span class="p">,</span> <span class="s2">&quot;vert&quot;</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">mint</span><span class="p">,</span> <span class="s2">"vert"</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">YW</span><span class="p">.</span><span class="nx">Slider</span><span class="p">(</span><span class="nx">bg</span><span class="p">,</span> <span class="nx">bg</span><span class="p">,</span> <span class="nx">maxt</span><span class="p">,</span> <span class="s2">"vert"</span><span class="p">),</span>
                     <span class="nx">range</span><span class="p">,</span> <span class="nx">initVals</span><span class="p">);</span>
 <span class="p">};</span>
 
@@ -674,8 +658,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -723,26 +706,21 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.DualSlider.html" title="YAHOO.widget.DualSlider">YAHOO.widget.DualSlider</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.DualSlider.html" title="YAHOO.widget.DualSlider">YAHOO.widget.DualSlider</a></li>
                                 <li class=""><a href="YAHOO.widget.Slider.html" title="YAHOO.widget.Slider">YAHOO.widget.Slider</a></li>
                                 <li class=""><a href="YAHOO.widget.SliderThumb.html" title="YAHOO.widget.SliderThumb">YAHOO.widget.SliderThumb</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="DualSlider.js.html" title="DualSlider.js">DualSlider.js</a></li>
+                        <ul class="content"><li class="selected"><a href="DualSlider.js.html" title="DualSlider.js">DualSlider.js</a></li>
                                 <li class=""><a href="Slider.js.html" title="Slider.js">Slider.js</a></li>
                                 <li class=""><a href="SliderThumb.js.html" title="SliderThumb.js">SliderThumb.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -752,13 +730,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.DualSlider", "name": "activeSlider", "url": "YAHOO.widget.DualSlider.html#property_activeSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "b4MouseDown", "url": "YAHOO.widget.Slider.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_bindKeyEvents", "url": "YAHOO.widget.DualSlider.html#method__bindKeyEvents", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_bindKeyEvents", "url": "YAHOO.widget.Slider.html#method__bindKeyEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "change", "url": "YAHOO.widget.DualSlider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_cleanEvent", "url": "YAHOO.widget.DualSlider.html#method__cleanEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "clearTicks", "url": "YAHOO.widget.SliderThumb.html#method_clearTicks", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "dragOnly", "url": "YAHOO.widget.SliderThumb.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "endMove", "url": "YAHOO.widget.Slider.html#method_endMove", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "fireEvents", "url": "YAHOO.widget.Slider.html#method_fireEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "focus", "url": "YAHOO.widget.Slider.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextX", "url": "YAHOO.widget.Slider.html#method__getNextX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextY", "url": "YAHOO.widget.Slider.html#method__getNextY", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getOffsetFromParent", "url": "YAHOO.widget.SliderThumb.html#method_getOffsetFromParent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getValue", "url": "YAHOO.widget.SliderThumb.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getXValue", "url": "YAHOO.widget.SliderThumb.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getYValue", "url": "YAHOO.widget.SliderThumb.html#method_getYValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_graduated", "url": "YAHOO.widget.SliderThumb.html#property__graduated", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleDrag", "url": "YAHOO.widget.DualSlider.html#method__handleDrag", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyDown", "url": "YAHOO.widget.DualSlider.html#method__handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleKeyPress", "url": "YAHOO.widget.DualSlider.html#method__handleKeyPress", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMaxChange", "url": "YAHOO.widget.DualSlider.html#method__handleMaxChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMinChange", "url": "YAHOO.widget.DualSlider.html#method__handleMinChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseDown", "url": "YAHOO.widget.DualSlider.html#method__handleMouseDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.DualSlider", "name": "_handleMouseUp", "url": "YAHOO.widget.DualSlider.html#method__handleMouseUp", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideEnd", "url": "YAHOO.widget.DualSlider.html#method__handleSlideEnd", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideStart", "url": "YAHOO.widget.DualSlider.html#method__handleSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "initSlider", "url": "YAHOO.widget.SliderThumb.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "isHoriz", "url": "YAHOO.widget.DualSlider.html#property_isHoriz", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_isHoriz", "url": "YAHOO.widget.SliderThumb.html#property__isHoriz", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "isTarget", "url": "YAHOO.widget.Slider.html#property_isTarget", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "isTarget", "url": "YAHOO.widget.SliderThumb.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "maintainOffset", "url": "YAHOO.widget.SliderThumb.html#property_maintainOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxSlider", "url": "YAHOO.widget.DualSlider.html#property_maxSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxVal", "url": "YAHOO.widget.DualSlider.html#property_maxVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minRange", "url": "YAHOO.widget.DualSlider.html#property_minRange", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minSlider", "url": "YAHOO.widget.DualSlider.html#property_minSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minVal", "url": "YAHOO.widget.DualSlider.html#property_minVal", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_mouseDown", "url": "YAHOO.widget.Slider.html#property__mouseDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveOneTick", "url": "YAHOO.widget.Slider.html#method_moveOneTick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveThumb", "url": "YAHOO.widget.Slider.html#method_moveThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "onChange", "url": "YAHOO.widget.SliderThumb.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onDrag", "url": "YAHOO.widget.Slider.html#method_onDrag", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_oneTimeCallback", "url": "YAHOO.widget.DualSlider.html#method__oneTimeCallback", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onMouseDown", "url": "YAHOO.widget.Slider.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "parentElId", "url": "YAHOO.widget.SliderThumb.html#property_parentElId", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_prevVal", "url": "YAHOO.widget.SliderThumb.html#property__prevVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "ready", "url": "YAHOO.widget.DualSlider.html#event_ready", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "scroll", "url": "YAHOO.widget.SliderThumb.html#property_scroll", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "selectActiveSlider", "url": "YAHOO.widget.DualSlider.html#method_selectActiveSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMaxValue", "url": "YAHOO.widget.DualSlider.html#method_setMaxValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMinValue", "url": "YAHOO.widget.DualSlider.html#method_setMinValue", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setRegionValue", "url": "YAHOO.widget.Slider.html#method__setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setValue", "url": "YAHOO.widget.Slider.html#method__setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setValues", "url": "YAHOO.widget.DualSlider.html#method_setValues", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_silent", "url": "YAHOO.widget.Slider.html#property__silent", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideEnd", "url": "YAHOO.widget.DualSlider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_KEY_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_KEY_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideStart", "url": "YAHOO.widget.DualSlider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "startOffset", "url": "YAHOO.widget.SliderThumb.html#property_startOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp", "url": "YAHOO.widget.Slider.html#method_thumbMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "tickSize", "url": "YAHOO.widget.SliderThumb.html#property_tickSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "toString", "url": "YAHOO.widget.SliderThumb.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "updateValue", "url": "YAHOO.widget.DualSlider.html#method_updateValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
-</script>
-</body>
-</html>
+</script></body>

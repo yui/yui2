@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: history   history.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: history   history.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Browser History Manager&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>Browser History Manager  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_history.html">history</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/**</span>
+<div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The Browser History Manager provides the ability to use the</span>
 <span class="c"> * back/forward navigation buttons in a DHTML application. It also allows</span>
 <span class="c"> * a DHTML application to be bookmarked in a specific state.</span>
@@ -62,10 +57,10 @@
 <span class="c">     *</span>
 <span class="c">     * @property _browser</span>
 <span class="c">     * @type string</span>
-<span class="c">     * @default &quot;unknown&quot;</span>
+<span class="c">     * @default "unknown"</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="k">var</span> <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">"unknown"</span><span class="o">;</span>
 
     <span class="c">/**</span>
 <span class="c">     * Our hidden IFrame used to store the browsing history.</span>
@@ -78,7 +73,7 @@
     <span class="k">var</span> <span class="nx">_iframe</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * INPUT field (with type=&quot;hidden&quot; or type=&quot;text&quot;) or TEXTAREA.</span>
+<span class="c">     * INPUT field (with type="hidden" or type="text") or TEXTAREA.</span>
 <span class="c">     * This field keeps the value of the initial state, current state</span>
 <span class="c">     * the list of all states across pages within a single browser session.</span>
 <span class="c">     *</span>
@@ -148,17 +143,17 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">function</span> <span class="nx">_trim</span><span class="o">(</span> <span class="nx">str</span> <span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">str</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span> <span class="sr">/^\s*(\S*(\s+\S+)*)\s*$/</span><span class="o">,</span> <span class="s2">&quot;$1&quot;</span> <span class="o">);</span>
+        <span class="k">return</span> <span class="nx">str</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span> <span class="sr">/^\s*(\S*(\s+\S+)*)\s*$/</span><span class="o">,</span> <span class="s2">"$1"</span> <span class="o">);</span>
     <span class="o">}</span>
 
     <span class="c">/**</span>
 <span class="c">     * location.hash is a bit buggy on Opera. I have seen instances where</span>
 <span class="c">     * navigating the history using the back/forward buttons, and hence</span>
-<span class="c">     * changing the URL, would not change location.hash. That&#39;s ok, the</span>
+<span class="c">     * changing the URL, would not change location.hash. That's ok, the</span>
 <span class="c">     * implementation of an equivalent is trivial.</span>
 <span class="c">     *</span>
 <span class="c">     * @method _getHash</span>
-<span class="c">     * @return {string} The hash portion of the document&#39;s location</span>
+<span class="c">     * @return {string} The hash portion of the document's location</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">function</span> <span class="nx">_getHash</span><span class="o">()</span> <span class="o">{</span>
@@ -167,12 +162,12 @@
         <span class="k">var</span> <span class="nx">i</span><span class="o">;</span>
 
         <span class="nx">href</span> <span class="o">=</span> <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="nx">href</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;#&quot;</span> <span class="o">);</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="nx">href</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"#"</span> <span class="o">);</span>
         <span class="k">return</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">?</span> <span class="nx">href</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span> <span class="nx">i</span> <span class="o">+</span> <span class="m">1</span> <span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="c">/**</span>
-<span class="c">     * Stores all the registered modules&#39; initial state and current state.</span>
+<span class="c">     * Stores all the registered modules' initial state and current state.</span>
 <span class="c">     * On Safari, we also store all the fully qualified states visited by</span>
 <span class="c">     * the application within a single browser session. The storage takes</span>
 <span class="c">     * place in the form field specified during initialization.</span>
@@ -190,15 +185,15 @@
         <span class="k">for</span> <span class="o">(</span> <span class="nx">moduleName</span> <span class="k">in</span> <span class="nx">_modules</span> <span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span> <span class="nx">_modules</span><span class="o">,</span> <span class="nx">moduleName</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                 <span class="nx">moduleObj</span> <span class="o">=</span> <span class="nx">_modules</span><span class="o">[</span><span class="nx">moduleName</span><span class="o">];</span>
-                <span class="nx">initialStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">initialState</span> <span class="o">);</span>
-                <span class="nx">currentStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">currentState</span> <span class="o">);</span>
+                <span class="nx">initialStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">initialState</span> <span class="o">);</span>
+                <span class="nx">currentStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">currentState</span> <span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span>
 
-        <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+        <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">)</span> <span class="o">+</span> <span class="s2">"|"</span> <span class="o">+</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
 
-        <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;safari&quot;</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="nx">_fqstates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">&quot;,&quot;</span> <span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"safari"</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="s2">"|"</span> <span class="o">+</span> <span class="nx">_fqstates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">","</span> <span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
 
@@ -227,9 +222,9 @@
 <span class="c"></span>        <span class="c">// the user has hit the back/forward button.</span>
 <span class="c"></span>
         <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_iframe</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
-        <span class="nx">elem</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">&quot;state&quot;</span> <span class="o">);</span>
+        <span class="nx">elem</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">"state"</span> <span class="o">);</span>
         <span class="c">// We must use innerText, and not innerHTML because our string contains</span>
-<span class="c"></span>        <span class="c">// the &quot;&amp;&quot; character (which would end up being escaped as &quot;&amp;amp;&quot;) and</span>
+<span class="c"></span>        <span class="c">// the "&amp;" character (which would end up being escaped as "&amp;amp;") and</span>
 <span class="c"></span>        <span class="c">// the string comparison would fail...</span>
 <span class="c"></span>        <span class="nx">fqstate</span> <span class="o">=</span> <span class="nx">elem</span> <span class="o">?</span> <span class="nx">elem</span><span class="o">.</span><span class="nx">innerText</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
 
@@ -242,7 +237,7 @@
             <span class="k">var</span> <span class="nx">moduleObj</span><span class="o">;</span>
 
             <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_iframe</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
-            <span class="nx">elem</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">&quot;state&quot;</span> <span class="o">);</span>
+            <span class="nx">elem</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">"state"</span> <span class="o">);</span>
             <span class="c">// See my comment above about using innerText instead of innerHTML...</span>
 <span class="c"></span>            <span class="nx">newfqstate</span> <span class="o">=</span> <span class="nx">elem</span> <span class="o">?</span> <span class="nx">elem</span><span class="o">.</span><span class="nx">innerText</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
 
@@ -255,16 +250,16 @@
                     <span class="k">for</span> <span class="o">(</span> <span class="nx">moduleName</span> <span class="k">in</span> <span class="nx">_modules</span> <span class="o">)</span> <span class="o">{</span>
                         <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span> <span class="nx">_modules</span><span class="o">,</span> <span class="nx">moduleName</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                             <span class="nx">moduleObj</span> <span class="o">=</span> <span class="nx">_modules</span><span class="o">[</span><span class="nx">moduleName</span><span class="o">];</span>
-                            <span class="nx">states</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">initialState</span> <span class="o">);</span>
+                            <span class="nx">states</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">+</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">initialState</span> <span class="o">);</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
-                    <span class="nx">hash</span> <span class="o">=</span> <span class="nx">states</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+                    <span class="nx">hash</span> <span class="o">=</span> <span class="nx">states</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="nx">hash</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="o">;</span>
                 <span class="o">}</span>
 
                 <span class="c">// Allow the state to be bookmarked without messing up the browser history...</span>
-<span class="c"></span>                <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">hash</span> <span class="o">);</span>
+<span class="c"></span>                <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span> <span class="s2">"#"</span> <span class="o">+</span> <span class="nx">hash</span> <span class="o">);</span>
 
                 <span class="nx">_storeStates</span><span class="o">();</span>
             <span class="o">}</span>
@@ -308,9 +303,9 @@
         <span class="o">}</span>
 
         <span class="nx">modules</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="nx">states</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+        <span class="nx">states</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
         <span class="k">for</span> <span class="o">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">states</span><span class="o">.</span><span class="nx">length</span> <span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="o">;</span> <span class="nx">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">states</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;=&quot;</span> <span class="o">);</span>
+            <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">states</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"="</span> <span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
                 <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
                 <span class="nx">currentState</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
@@ -351,16 +346,16 @@
         <span class="k">var</span> <span class="nx">counter</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">hash</span><span class="o">;</span>
 
-        <span class="nx">_storageField</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">&quot;yui_hist_field&quot;</span> <span class="o">);</span>
+        <span class="nx">_storageField</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">"yui_hist_field"</span> <span class="o">);</span>
 
         <span class="c">// Decode the content of our storage field...</span>
-<span class="c"></span>        <span class="nx">parts</span> <span class="o">=</span> <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;|&quot;</span> <span class="o">);</span>
+<span class="c"></span>        <span class="nx">parts</span> <span class="o">=</span> <span class="nx">_storageField</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"|"</span> <span class="o">);</span>
 
         <span class="k">if</span> <span class="o">(</span> <span class="nx">parts</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
 
-            <span class="nx">initialStates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+            <span class="nx">initialStates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
             <span class="k">for</span> <span class="o">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="o">.</span><span class="nx">length</span> <span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="o">;</span> <span class="nx">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;=&quot;</span> <span class="o">);</span>
+                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">initialStates</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"="</span> <span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
                     <span class="nx">initialState</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
@@ -371,9 +366,9 @@
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="nx">currentStates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">1</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+            <span class="nx">currentStates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">1</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
             <span class="k">for</span> <span class="o">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">length</span> <span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="o">;</span> <span class="nx">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;=&quot;</span> <span class="o">);</span>
+                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"="</span> <span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
                     <span class="nx">currentState</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
@@ -386,14 +381,14 @@
         <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(</span> <span class="nx">parts</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">_fqstates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">2</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;,&quot;</span> <span class="o">);</span>
+            <span class="nx">_fqstates</span> <span class="o">=</span> <span class="nx">parts</span><span class="o">[</span><span class="m">2</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">","</span> <span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nx">_storageFieldReady</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;msie&quot;</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"msie"</span> <span class="o">)</span> <span class="o">{</span>
 
-            <span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">&quot;yui_hist_iframe&quot;</span> <span class="o">);</span>
+            <span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span> <span class="s2">"yui_hist_iframe"</span> <span class="o">);</span>
             <span class="nx">_checkIframeLoaded</span><span class="o">();</span>
 
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
@@ -450,18 +445,18 @@
 <span class="c"></span>    <span class="c">// After talking with Matt Sweeney, I moved back to using the</span>
 <span class="c"></span>    <span class="c">// user agent string instead of doing browser detection.</span>
 <span class="c"></span>    <span class="nx">_ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;opera&quot;</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"opera"</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
         <span class="c">// Opera (check first in case of spoof)</span>
-<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">&quot;opera&quot;</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;msie&quot;</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">"opera"</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"msie"</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
         <span class="c">// Microsoft Internet Explorer and derivatives...</span>
-<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">&quot;msie&quot;</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;safari&quot;</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
-        <span class="c">// Safari (check before Gecko because it includes &quot;like Gecko&quot;)</span>
-<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">&quot;safari&quot;</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;gecko&quot;</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">"msie"</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"safari"</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="c">// Safari (check before Gecko because it includes "like Gecko")</span>
+<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">"safari"</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="nx">_ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"gecko"</span> <span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">)</span> <span class="o">{</span>
         <span class="c">// Gecko</span>
-<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">&quot;gecko&quot;</span><span class="o">;</span>
+<span class="c"></span>        <span class="nx">_browser</span> <span class="o">=</span> <span class="s2">"gecko"</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="k">return</span> <span class="o">{</span>
@@ -471,7 +466,7 @@
 <span class="c">         *</span>
 <span class="c">         * @event onLoadEvent</span>
 <span class="c">         */</span>
-        <span class="nx">onLoadEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span> <span class="s2">&quot;onLoad&quot;</span> <span class="o">),</span>
+        <span class="nx">onLoadEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span> <span class="s2">"onLoad"</span> <span class="o">),</span>
 
         <span class="c">/**</span>
 <span class="c">         * Registers a new module.</span>
@@ -493,14 +488,14 @@
             <span class="k">var</span> <span class="nx">scope</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">wrappedFn</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">||</span> <span class="nx">_trim</span><span class="o">(</span> <span class="nx">module</span> <span class="o">)</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span> <span class="o">||</span>
-                 <span class="k">typeof</span> <span class="nx">initialState</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">||</span>
-                 <span class="k">typeof</span> <span class="nx">onStateChange</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Missing or invalid argument passed to YAHOO.util.History.register&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">||</span> <span class="nx">_trim</span><span class="o">(</span> <span class="nx">module</span> <span class="o">)</span> <span class="o">===</span> <span class="s2">""</span> <span class="o">||</span>
+                 <span class="k">typeof</span> <span class="nx">initialState</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">||</span>
+                 <span class="k">typeof</span> <span class="nx">onStateChange</span> <span class="o">!=</span> <span class="s2">"function"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Missing or invalid argument passed to YAHOO.util.History.register"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span> <span class="nx">_modules</span><span class="o">[</span><span class="nx">module</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;A module cannot be registered twice&quot;</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"A module cannot be registered twice"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="c">// Note: A module CANNOT be registered after calling</span>
@@ -511,10 +506,10 @@
 <span class="c"></span>            <span class="c">// YAHOO.util.History.getCurrentState when coming back to the</span>
 <span class="c"></span>            <span class="c">// page using the back button.</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">_initialized</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;All modules must be registered before calling YAHOO.util.History.initialize&quot;</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"All modules must be registered before calling YAHOO.util.History.initialize"</span> <span class="o">);</span>
             <span class="o">}</span>
 
-            <span class="c">// Make sure the strings passed in do not contain our separators &quot;,&quot; and &quot;|&quot;</span>
+            <span class="c">// Make sure the strings passed in do not contain our separators "," and "|"</span>
 <span class="c"></span>            <span class="nx">module</span> <span class="o">=</span> <span class="nx">escape</span><span class="o">(</span> <span class="nx">module</span> <span class="o">);</span>
             <span class="nx">initialState</span> <span class="o">=</span> <span class="nx">escape</span><span class="o">(</span> <span class="nx">initialState</span> <span class="o">);</span>
 
@@ -546,7 +541,7 @@
 <span class="c">         * @method initialize</span>
 <span class="c">         * @param {string} iframeTarget Optional - Path to an existing</span>
 <span class="c">         *     HTML document accessible from the same domain. If not</span>
-<span class="c">         *     specified, defaults to &quot;blank.html&quot;. This is only useful</span>
+<span class="c">         *     specified, defaults to "blank.html". This is only useful</span>
 <span class="c">         *     if you use https.</span>
 <span class="c">         * @public</span>
 <span class="c">         */</span>
@@ -557,43 +552,43 @@
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;unknown&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Your web browser is not supported by the Browser History Manager&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"unknown"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Your web browser is not supported by the Browser History Manager"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">iframeTarget</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="nx">iframeTarget</span> <span class="o">=</span> <span class="s2">&quot;blank.html&quot;</span><span class="o">;</span>
+                <span class="nx">iframeTarget</span> <span class="o">=</span> <span class="s2">"blank.html"</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">iframeTarget</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">||</span> <span class="nx">_trim</span><span class="o">(</span> <span class="nx">iframeTarget</span> <span class="o">)</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Invalid argument passed to YAHOO.util.History.initialize&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">iframeTarget</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">||</span> <span class="nx">_trim</span><span class="o">(</span> <span class="nx">iframeTarget</span> <span class="o">)</span> <span class="o">===</span> <span class="s2">""</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Invalid argument passed to YAHOO.util.History.initialize"</span> <span class="o">);</span>
             <span class="o">}</span>
 
-            <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">&#39;&lt;input type=&quot;hidden&quot; id=&quot;yui_hist_field&quot;&gt;&#39;</span> <span class="o">);</span>
+            <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">'&lt;input type="hidden" id="yui_hist_field"&gt;'</span> <span class="o">);</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;msie&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span> <span class="nx">location</span><span class="o">.</span><span class="nx">protocol</span> <span class="o">==</span> <span class="s2">&quot;https:&quot;</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"msie"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span> <span class="nx">location</span><span class="o">.</span><span class="nx">protocol</span> <span class="o">==</span> <span class="s2">"https:"</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="c">// If we use https, we MUST point the IFrame to a valid</span>
-<span class="c"></span>                    <span class="c">// document on the same server. If we don&#39;t, we will get</span>
+<span class="c"></span>                    <span class="c">// document on the same server. If we don't, we will get</span>
 <span class="c"></span>                    <span class="c">// a warning (do you want to display non secure items?)</span>
-<span class="c"></span>                    <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">&#39;&lt;iframe id=&quot;yui_hist_iframe&quot; src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">iframeTarget</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;position:absolute;visibility:hidden;&quot;&gt;&lt;/iframe&gt;&#39;</span> <span class="o">);</span>
+<span class="c"></span>                    <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">'&lt;iframe id="yui_hist_iframe" src="'</span> <span class="o">+</span> <span class="nx">iframeTarget</span> <span class="o">+</span> <span class="s1">'" style="position:absolute;visibility:hidden;"&gt;&lt;/iframe&gt;'</span> <span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="c">// This trick allows us to do without having to download</span>
 <span class="c"></span>                    <span class="c">// the asset, saving one HTTP request...</span>
-<span class="c"></span>                    <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">&#39;&lt;iframe id=&quot;yui_hist_iframe&quot; src=&quot;javascript:document.open();document.write(&amp;quot;&#39;</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">().</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&amp;quot;);document.close();&quot; style=&quot;position:absolute;visibility:hidden;&quot;&gt;&lt;/iframe&gt;&#39;</span> <span class="o">);</span>
+<span class="c"></span>                    <span class="nb">document</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span> <span class="s1">'&lt;iframe id="yui_hist_iframe" src="javascript:document.open();document.write(&amp;quot;'</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">().</span><span class="nx">getTime</span><span class="o">()</span> <span class="o">+</span> <span class="s1">'&amp;quot;);document.close();" style="position:absolute;visibility:hidden;"&gt;&lt;/iframe&gt;'</span> <span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="c">// We have to wait for the window&#39;s onload handler. Otherwise, our</span>
-<span class="c"></span>            <span class="c">// hidden form field will always be empty (i.e. the browser won&#39;t</span>
+            <span class="c">// We have to wait for the window's onload handler. Otherwise, our</span>
+<span class="c"></span>            <span class="c">// hidden form field will always be empty (i.e. the browser won't</span>
 <span class="c"></span>            <span class="c">// have had enough time to restore the session)</span>
-<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span> <span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;load&quot;</span><span class="o">,</span> <span class="nx">_initialize</span> <span class="o">);</span>
+<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span> <span class="nb">window</span><span class="o">,</span> <span class="s2">"load"</span><span class="o">,</span> <span class="nx">_initialize</span> <span class="o">);</span>
 
             <span class="nx">_initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
-<span class="c">         * Call this method when you want to store a new entry in the browser&#39;s history.</span>
+<span class="c">         * Call this method when you want to store a new entry in the browser's history.</span>
 <span class="c">         *</span>
 <span class="c">         * @method navigate</span>
 <span class="c">         * @param {string} module Non-empty string representing your module.</span>
@@ -611,19 +606,19 @@
             <span class="k">var</span> <span class="nx">html</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">doc</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">state</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Missing or invalid argument passed to YAHOO.util.History.navigate&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">state</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Missing or invalid argument passed to YAHOO.util.History.navigate"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">_bhmReady</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;The Browser History Manager is not initialized&quot;</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"The Browser History Manager is not initialized"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">_modules</span><span class="o">[</span><span class="nx">module</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;The following module has not been registered: &quot;</span> <span class="o">+</span> <span class="nx">module</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"The following module has not been registered: "</span> <span class="o">+</span> <span class="nx">module</span> <span class="o">);</span>
             <span class="o">}</span>
 
-            <span class="c">// Make sure the strings passed in do not contain our separators &quot;,&quot; and &quot;|&quot;</span>
+            <span class="c">// Make sure the strings passed in do not contain our separators "," and "|"</span>
 <span class="c"></span>            <span class="nx">module</span> <span class="o">=</span> <span class="nx">escape</span><span class="o">(</span> <span class="nx">module</span> <span class="o">);</span>
             <span class="nx">state</span> <span class="o">=</span> <span class="nx">escape</span><span class="o">(</span> <span class="nx">state</span> <span class="o">);</span>
 
@@ -633,15 +628,15 @@
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span> <span class="nx">_modules</span><span class="o">,</span> <span class="nx">moduleName</span> <span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="nx">moduleObj</span> <span class="o">=</span> <span class="nx">_modules</span><span class="o">[</span><span class="nx">moduleName</span><span class="o">];</span>
                     <span class="nx">currentState</span> <span class="o">=</span> <span class="o">(</span> <span class="nx">moduleName</span> <span class="o">==</span> <span class="nx">module</span> <span class="o">)</span> <span class="o">?</span> <span class="nx">state</span> <span class="o">:</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">currentState</span><span class="o">;</span>
-                    <span class="nx">currentStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nx">currentState</span> <span class="o">);</span>
+                    <span class="nx">currentStates</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span> <span class="nx">moduleName</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">+</span> <span class="nx">currentState</span> <span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="nx">fqstate</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+            <span class="nx">fqstate</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;msie&quot;</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"msie"</span> <span class="o">)</span> <span class="o">{</span>
 
-                <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&lt;body&gt;&lt;div id=&quot;state&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">fqstate</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="o">;</span>
+                <span class="nx">html</span> <span class="o">=</span> <span class="s1">'&lt;html&gt;&lt;body&gt;&lt;div id="state"&gt;'</span> <span class="o">+</span> <span class="nx">fqstate</span> <span class="o">+</span> <span class="s1">'&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;'</span><span class="o">;</span>
                 <span class="k">try</span> <span class="o">{</span>
                     <span class="nx">doc</span> <span class="o">=</span> <span class="nx">_iframe</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
                     <span class="nx">doc</span><span class="o">.</span><span class="nx">open</span><span class="o">();</span>
@@ -659,10 +654,10 @@
 <span class="c"></span>                <span class="c">// One work around found by Dav Glass is to submit a form that</span>
 <span class="c"></span>                <span class="c">// points to the same document. This indeed works on Safari 1.x</span>
 <span class="c"></span>                <span class="c">// and 2.0 but creates bigger problems on WebKit. So for now,</span>
-<span class="c"></span>                <span class="c">// we&#39;ll consider this an acceptable bug, and hope that Apple</span>
+<span class="c"></span>                <span class="c">// we'll consider this an acceptable bug, and hope that Apple</span>
 <span class="c"></span>                <span class="c">// comes out with their next version of Safari very soon.</span>
 <span class="c"></span>                <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="nx">fqstate</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">&quot;safari&quot;</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span> <span class="nx">_browser</span> <span class="o">==</span> <span class="s2">"safari"</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="c">// The following two lines are only useful for Safari 1.x</span>
 <span class="c"></span>                    <span class="c">// and 2.0. Recent nightly builds of WebKit do not require</span>
 <span class="c"></span>                    <span class="c">// that, but unfortunately, it is not easy to differentiate</span>
@@ -689,17 +684,17 @@
 
             <span class="k">var</span> <span class="nx">moduleObj</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Missing or invalid argument passed to YAHOO.util.History.getCurrentState&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Missing or invalid argument passed to YAHOO.util.History.getCurrentState"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">_storageFieldReady</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;The Browser History Manager is not initialized&quot;</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"The Browser History Manager is not initialized"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="nx">moduleObj</span> <span class="o">=</span> <span class="nx">_modules</span><span class="o">[</span><span class="nx">module</span><span class="o">];</span>
             <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="nx">moduleObj</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;No such registered module: &quot;</span> <span class="o">+</span> <span class="nx">module</span> <span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"No such registered module: "</span> <span class="o">+</span> <span class="nx">module</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">return</span> <span class="nx">unescape</span><span class="o">(</span> <span class="nx">moduleObj</span><span class="o">.</span><span class="nx">currentState</span> <span class="o">);</span>
@@ -724,14 +719,14 @@
             <span class="k">var</span> <span class="nx">tokens</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">moduleName</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">&quot;string&quot;</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">&quot;Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState&quot;</span> <span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="k">typeof</span> <span class="nx">module</span> <span class="o">!=</span> <span class="s2">"string"</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span> <span class="s2">"Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState"</span> <span class="o">);</span>
             <span class="o">}</span>
 
             <span class="nx">hash</span> <span class="o">=</span> <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hash</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
-            <span class="nx">states</span> <span class="o">=</span> <span class="nx">hash</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+            <span class="nx">states</span> <span class="o">=</span> <span class="nx">hash</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
             <span class="k">for</span> <span class="o">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">states</span><span class="o">.</span><span class="nx">length</span> <span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="o">;</span> <span class="nx">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">states</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;=&quot;</span> <span class="o">);</span>
+                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">states</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"="</span> <span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">.</span><span class="nx">length</span> <span class="o">==</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
                     <span class="k">if</span> <span class="o">(</span> <span class="nx">moduleName</span> <span class="o">==</span> <span class="nx">module</span> <span class="o">)</span> <span class="o">{</span>
@@ -768,12 +763,12 @@
 
             <span class="nx">url</span> <span class="o">=</span> <span class="nx">url</span> <span class="o">||</span> <span class="nx">top</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
 
-            <span class="nx">idx</span> <span class="o">=</span> <span class="nx">url</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">&quot;?&quot;</span> <span class="o">);</span>
+            <span class="nx">idx</span> <span class="o">=</span> <span class="nx">url</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span> <span class="s2">"?"</span> <span class="o">);</span>
             <span class="nx">queryString</span> <span class="o">=</span> <span class="nx">idx</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">?</span> <span class="nx">url</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span> <span class="nx">idx</span> <span class="o">+</span> <span class="m">1</span> <span class="o">)</span> <span class="o">:</span> <span class="nx">url</span><span class="o">;</span>
-            <span class="nx">params</span> <span class="o">=</span> <span class="nx">queryString</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">);</span>
+            <span class="nx">params</span> <span class="o">=</span> <span class="nx">queryString</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"&amp;"</span> <span class="o">);</span>
 
             <span class="k">for</span> <span class="o">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">params</span><span class="o">.</span><span class="nx">length</span> <span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="o">;</span> <span class="nx">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">params</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">&quot;=&quot;</span> <span class="o">);</span>
+                <span class="nx">tokens</span> <span class="o">=</span> <span class="nx">params</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span> <span class="s2">"="</span> <span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="m">2</span> <span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="nx">paramName</span> <span class="o">)</span> <span class="o">{</span>
                         <span class="k">return</span> <span class="nx">unescape</span><span class="o">(</span> <span class="nx">tokens</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">);</span>
@@ -796,9 +791,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -835,22 +828,17 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.History.html">YAHOO.util.History</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.util.History.html">YAHOO.util.History</a></li>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="history.js.html">history.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="history.js.html">history.js</a></li>
+                        </ul></div>
 
 
 
@@ -860,9 +848,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

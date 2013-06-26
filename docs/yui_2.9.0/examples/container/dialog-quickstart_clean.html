@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Dialog Quickstart Example</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Dialog Quickstart Example</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,25 +8,9 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="../../build/container/container-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<script type="text/javascript">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script><script type="text/javascript" src="../../build/container/container-min.js"></script><!--begin custom header content for this example--><script type="text/javascript">
 document.documentElement.className = "yui-pe";
-</script>
-
-<style type="text/css">
+</script><style type="text/css">
 #example {
     height:30em;
 }
@@ -64,24 +40,12 @@ label {
 .yui-pe .yui-pe-content {
     display:none;
 }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Dialog Quickstart Example</h1>
-
-<div class="exampleIntro">
-	<p>The Dialog Control is designed to allow you to retrieve information from the user and make use of that information within the page &mdash; whether interally to the page or by sending the information to the server via form post or XMLHttpRequest.  This example shows how to do the latter.  Click the button to show the Dialog instance and its form fields; fill out the form; submit the form.  Dialog will automatically use the YUI Connection Manager to send the data via XMLHttpRequest to the server and will then echo that data back to you on the page.</p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<script>
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Dialog Quickstart Example</h1><div class="exampleIntro">
+	<p>The Dialog Control is designed to allow you to retrieve information from the user and make use of that information within the page — whether interally to the page or by sending the information to the server via form post or XMLHttpRequest.  This example shows how to do the latter.  Click the button to show the Dialog instance and its form fields; fill out the form; submit the form.  Dialog will automatically use the YUI Connection Manager to send the data via XMLHttpRequest to the server and will then echo that data back to you on the page.</p>			
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><script>
 YAHOO.namespace("example.container");
 
 YAHOO.util.Event.onDOMReady(function () {
@@ -136,54 +100,31 @@ YAHOO.util.Event.onDOMReady(function () {
 	YAHOO.util.Event.addListener("show", "click", YAHOO.example.container.dialog1.show, YAHOO.example.container.dialog1, true);
 	YAHOO.util.Event.addListener("hide", "click", YAHOO.example.container.dialog1.hide, YAHOO.example.container.dialog1, true);
 });
-</script>
-
-<div>
+</script><div>
 <button id="show">Show dialog1</button> 
 <button id="hide">Hide dialog1</button>
-</div>
-
-<div id="dialog1" class="yui-pe-content">
+</div><div id="dialog1" class="yui-pe-content">
 <div class="hd">Please enter your information</div>
 <div class="bd">
 <form method="POST" action="assets/post.php">
-	<label for="firstname">First Name:</label><input type="textbox" name="firstname" />
-	<label for="lastname">Last Name:</label><input type="textbox" name="lastname" />
-	<label for="email">E-mail:</label><input type="textbox" name="email" /> 
-
-	<label for="state[]">State:</label>
-	<select multiple name="state[]">
-		<option value="California">California</option>
-		<option value="New Jersey">New Jersey</option>
-		<option value="New York">New York</option>
-	</select> 
-
-	<div class="clear"></div>
+	<label for="firstname">First Name:</label><input type="textbox" name="firstname"><label for="lastname">Last Name:</label><input type="textbox" name="lastname"><label for="email">E-mail:</label><input type="textbox" name="email"><label for="state[]">State:</label>
+	<select multiple name="state[]"><option value="California">California</option><option value="New Jersey">New Jersey</option><option value="New York">New York</option></select><div class="clear"></div>
 
 	<label for="radiobuttons">Radio buttons:</label>
-	<input type="radio" name="radiobuttons[]" value="1" checked/> 1
-	<input type="radio" name="radiobuttons[]" value="2" /> 2
+	<input type="radio" name="radiobuttons[]" value="1" checked> 1
+	<input type="radio" name="radiobuttons[]" value="2"> 2
 	
 	<div class="clear"></div>
 
-	<label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1" /> 1
+	<label for="check">Single checkbox:</label><input type="checkbox" name="check" value="1"> 1
 	
 	<div class="clear"></div>
 		
-	<label for="textarea">Text area:</label><textarea name="textarea"></textarea>
-
-	<div class="clear"></div>
+	<label for="textarea">Text area:</label><textarea name="textarea"></textarea><div class="clear"></div>
 
 	<label for="cbarray">Multi checkbox:</label>
-	<input type="checkbox" name="cbarray[]" value="1" /> 1
-	<input type="checkbox" name="cbarray[]" value="2" /> 2
+	<input type="checkbox" name="cbarray[]" value="1"> 1
+	<input type="checkbox" name="cbarray[]" value="2"> 2
 </form>
 </div>
-</div>
-
-<div id="resp">Server response will be displayed in this area</div>	
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</div><div id="resp">Server response will be displayed in this area</div><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

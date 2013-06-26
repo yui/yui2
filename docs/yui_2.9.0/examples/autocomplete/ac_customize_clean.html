@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Configurations Dashboard</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Configurations Dashboard</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,154 +8,82 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/autocomplete/assets/skins/sam/autocomplete.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="../../build/autocomplete/autocomplete-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/autocomplete/assets/skins/sam/autocomplete.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/datasource/datasource-min.js"></script><script type="text/javascript" src="../../build/autocomplete/autocomplete-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 /* custom styles for this example */
 #dashboard_autocomplete {margin:0 1em 0 0;width:50%;height:4em;}/* set width and height of widget here*/
 #dashboard_autocomplete label {display:block;color:#E76300;font-weight:bold;}
-</style>
-
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Configurations Dashboard</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Configurations Dashboard</h1><div class="exampleIntro">
 	<p>This example is designed to allow you to experiment with the various configuration properties provided by AutoComplete and to explore their impact on the interaction.  The first field after the AutoComplete input textbox is a select element that allows you to test for bleed-through on Internet Explorer when the AutoComplete suggestion container descends to cover it.  The remaining form fields allow you to change property settings on the AutoComplete instance and to see immediately how those changes look and feel in the browser.</p>
 
 <p>Implementers who are working with data from third-party sources, user input data, or otherwise untrustworthy sources should be sure to read the <a href="http://developer.yahoo.com/yui/autocomplete/#security">Security Considerations</a> section of the AutoComplete user guide.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<!-- AutoComplete begins -->
-<div id="dashboard_autocomplete">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><!-- AutoComplete begins --><div id="dashboard_autocomplete">
     <label for="dashboard_input">Search the Web Using Yahoo!'s Search API:</label>
-	<input id="dashboard_input" type="text" name="p">
-	<div id="dashboard_container"></div>
-</div>
-<!-- AutoComplete ends -->
-
-<!-- Panel begins -->
-	
-	<h3>Use the Controls Below to Customize the Behavior of the AutoComplete Instance Above:</h3>
-    <form id="panel">
+	<input id="dashboard_input" type="text" name="p"><div id="dashboard_container"></div>
+</div><!-- AutoComplete ends --><!-- Panel begins --><h3>Use the Controls Below to Customize the Behavior of the AutoComplete Instance Above:</h3><form id="panel">
     
         <!-- The following is in a select to demonstrate the useIFrame feature -->
-        <select><option>Customize configurations for AutoComplete</option></select>
-
-        <div>
-            <input id="animHoriz" type="checkbox">
-            <label for="animHoriz">Animate Horizontally</label>
+        <select><option>Customize configurations for AutoComplete</option></select><div>
+            <input id="animHoriz" type="checkbox"><label for="animHoriz">Animate Horizontally</label>
         </div>
         <div>
-            <input id="animVert" type="checkbox" checked>
-            <label for="animVert">Animate Vertically</label>
+            <input id="animVert" type="checkbox" checked><label for="animVert">Animate Vertically</label>
         </div>
         <div>
             <label for="animSpeedInput">Animation Speed: </label>
-            <input id="animSpeedInput" type="text" size="2" value="0.3">
-            <input id="animSpeed" type="button" value="Update">
+            <input id="animSpeedInput" type="text" size="2" value="0.3"><input id="animSpeed" type="button" value="Update"></div>
+        <div>
+            <input id="useShadow" type="checkbox"><label for="useShadow">Use Shadow</label>
         </div>
         <div>
-            <input id="useShadow" type="checkbox">
-            <label for="useShadow">Use Shadow</label>
+            <input id="useIFrame" type="checkbox"><label for="useIFrame">Use IFrame</label>
         </div>
         <div>
-            <input id="useIFrame" type="checkbox">
-            <label for="useIFrame">Use IFrame</label>
+            <input id="autoHighlight" type="checkbox" checked><label for="autoHighlight">Automatically Highlight First Item</label>
         </div>
         <div>
-            <input id="autoHighlight" type="checkbox" checked>
-            <label for="autoHighlight">Automatically Highlight First Item</label>
+            <input id="typeAhead" type="checkbox"><label for="typeAhead">Type Ahead</label>
         </div>
         <div>
-            <input id="typeAhead" type="checkbox">
-            <label for="typeAhead">Type Ahead</label>
-        </div>
-        <div>
-            <input id="forceSelection" type="checkbox">
-            <label for="forceSelection">Force a Selection</label>
+            <input id="forceSelection" type="checkbox"><label for="forceSelection">Force a Selection</label>
         </div>
         <div>
             <label for="maxResultsDisplayedInput">Maximum Results: </label>
-            <input id="maxResultsDisplayedInput" type="text" size="2" value="10">
-            <input id="maxResultsDisplayed" type="button" value="Update">
-        </div>
+            <input id="maxResultsDisplayedInput" type="text" size="2" value="10"><input id="maxResultsDisplayed" type="button" value="Update"></div>
         <div>
             <label for="minQueryLengthInput">Minimum Query Length: </label>
-            <input id="minQueryLengthInput" type="text" size="2" value="1">
-            <input id="minQueryLength" type="button" value="Update">
-        </div>
+            <input id="minQueryLengthInput" type="text" size="2" value="1"><input id="minQueryLength" type="button" value="Update"></div>
         <div>
             <label for="queryDelayInput">Query Delay: </label>
-            <input id="queryDelayInput" type="text" size="2" value="0.2">
-            <input id="queryDelay" type="button" value="Update">
-        </div>
+            <input id="queryDelayInput" type="text" size="2" value="0.2"><input id="queryDelay" type="button" value="Update"></div>
         <div>
             <label for="typeAheadDelayInput">TypeAhead Delay: </label>
-            <input id="typeAheadDelayInput" type="text" size="2" value="0.2">
-            <input id="typeAheadDelay" type="button" value="Update">
+            <input id="typeAheadDelayInput" type="text" size="2" value="0.2"><input id="typeAheadDelay" type="button" value="Update"></div>
+        <div>
+            <label for="delimCharInput">Delimiter Character(s) like ; or [";", ","]</label><br><input id="delimCharInput" type="text" size="30" value=""><input id="delimChar" type="button" value="Update"></div>
+        <div>
+            <label for="highlightClassNameInput">Highlight Classname</label><br><input id="highlightClassNameInput" type="text" size="30" value="yui-ac-highlight" maxlength="30"><input id="highlightClassName" type="button" value="Update"></div>
+        <div>
+            <label for="prehighlightClassNameInput">Pre-highlight Classname</label><br><input id="prehighlightClassNameInput" type="text" size="30" value="" maxlength="30"><input id="prehighlightClassName" type="button" value="Update"></div>
+        <div>
+            <input id="allowBrowserAutocomplete" type="checkbox" checked><label for="allowBrowserAutocomplete">Allow Browser Autocomplete</label>
         </div>
         <div>
-            <label for="delimCharInput">Delimiter Character(s) like ; or [";", ","]</label><br>
-            <input id="delimCharInput" type="text" size="30" value="">
-            <input id="delimChar" type="button" value="Update">
-        </div>
-        <div>
-            <label for="highlightClassNameInput">Highlight Classname</label><br>
-            <input id="highlightClassNameInput" type="text" size="30" value="yui-ac-highlight" maxlength="30">
-            <input id="highlightClassName" type="button" value="Update">
-        </div>
-        <div>
-            <label for="prehighlightClassNameInput">Pre-highlight Classname</label><br>
-            <input id="prehighlightClassNameInput" type="text" size="30" value="" maxlength="30">
-            <input id="prehighlightClassName" type="button" value="Update">
-        </div>
-        <div>
-            <input id="allowBrowserAutocomplete" type="checkbox" checked>
-            <label for="allowBrowserAutocomplete">Allow Browser Autocomplete</label>
-        </div>
-        <div>
-            <input id="alwaysShowContainer" type="checkbox">
-            <label for="alwaysShowContainer">Always Show Container</label>
+            <input id="alwaysShowContainer" type="checkbox"><label for="alwaysShowContainer">Always Show Container</label>
         </div>
         <div>
             <label for="setHeaderInput">Set Header</label>
-            <input id="setHeader" type="button" value="Update"><br>
-            <textarea id="setHeaderInput" cols="25" rows="5"></textarea>
-        </div>
+            <input id="setHeader" type="button" value="Update"><br><textarea id="setHeaderInput" cols="25" rows="5"></textarea></div>
         <div>
             <label for="setBodyInput">Set Body</label>
-            <input id="setBody" type="button" value="Update"><br>
-            <textarea id="setBodyInput" cols="25" rows="5"></textarea>
-        </div>
+            <input id="setBody" type="button" value="Update"><br><textarea id="setBodyInput" cols="25" rows="5"></textarea></div>
         <div>
             <label for="setFooterInput">Set Footer</label>
-            <input id="setFooter" type="button" value="Update"><br>
-            <textarea id="setFooterInput" cols="25" rows="5"></textarea>
-        </div>
-    </form>
-<!-- Panel ends -->
-
-<script type="text/javascript">
+            <input id="setFooter" type="button" value="Update"><br><textarea id="setFooterInput" cols="25" rows="5"></textarea></div>
+    </form><!-- Panel ends --><script type="text/javascript">
 YAHOO.example.Dashboard = function() {
 return {
 
@@ -318,9 +238,4 @@ return {
 };
 }();
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.Dashboard.init, YAHOO.example.Dashboard, true);
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

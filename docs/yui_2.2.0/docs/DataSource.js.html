@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: datasource   DataSource.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: datasource   DataSource.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>DataSource Utility&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <h3>DataSource Utility  <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_datasource.html">datasource</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/**</span>
+<div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The DataSource utility provides a common configurable interface for widgets</span>
 <span class="c"> * to access a variety of data, from JavaScript arrays to online servers over</span>
 <span class="c"> * XHR.</span>
@@ -54,7 +49,7 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
     <span class="c">// Set any config params passed in to override defaults</span>
-<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">oConfigs</span> <span class="o">==</span> <span class="s2">"object"</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">sConfig</span> <span class="k">in</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">sConfig</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oConfigs</span><span class="o">[</span><span class="nx">sConfig</span><span class="o">];</span>
@@ -63,7 +58,7 @@
     <span class="o">}</span>
 
     <span class="k">if</span><span class="o">(!</span><span class="nx">oLiveData</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate DataSource due to invalid live database.&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not instantiate DataSource due to invalid live database."</span><span class="o">,</span><span class="s2">"error"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
@@ -96,12 +91,12 @@
     <span class="c">// Initialize local cache</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">maxCacheEntries</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Cache initialized&quot;</span><span class="o">,</span><span class="s2">&quot;info&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Cache initialized"</span><span class="o">,</span><span class="s2">"info"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 
-    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">&quot;instance&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">"instance"</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">++;</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSource initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DataSource initialized"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
 
     <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
@@ -118,7 +113,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheRequestEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheRequestEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when data is retrieved from the local cache.</span>
@@ -129,7 +124,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheResponseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheResponseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when a request is sent to the live data source.</span>
@@ -139,7 +134,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when live data source sends response.</span>
@@ -150,7 +145,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when response is parsed.</span>
@@ -161,7 +156,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseParseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseParseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when response is cached.</span>
@@ -172,7 +167,7 @@
 <span class="c">     * @param oArgs.callback {Function} The callback function.</span>
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseCacheEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseCacheEvent"</span><span class="o">);</span>
     <span class="c">/**</span>
 <span class="c">     * Fired when an error is encountered with the live data source.</span>
 <span class="c">     *</span>
@@ -182,14 +177,14 @@
 <span class="c">     * @param oArgs.caller {Object} The parent object of the callback function.</span>
 <span class="c">     * @param oArgs.message {String} The error message.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when the local cache is flushed.</span>
 <span class="c">     *</span>
 <span class="c">     * @event cacheFlushEvent</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheFlushEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheFlushEvent"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
@@ -275,9 +270,9 @@
 <span class="c"> * @property ERROR_DATAINVALID</span>
 <span class="c"> * @type String</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;Invalid data&quot;</span>
+<span class="c"> * @default "Invalid data"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span> <span class="o">=</span> <span class="s2">&quot;Invalid data&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span> <span class="o">=</span> <span class="s2">"Invalid data"</span><span class="o">;</span>
 
 <span class="c">/**</span>
 <span class="c"> * Error message for null data responses.</span>
@@ -285,9 +280,9 @@
 <span class="c"> * @property ERROR_DATANULL</span>
 <span class="c"> * @type String</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;Null data&quot;</span>
+<span class="c"> * @default "Null data"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span> <span class="o">=</span> <span class="s2">&quot;Null data&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span> <span class="o">=</span> <span class="s2">"Null data"</span><span class="o">;</span>
 
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
 <span class="c">//</span>
@@ -360,7 +355,7 @@
 <span class="c"> * If data is accessed over XHR via Connection Manager, the connection timeout is</span>
 <span class="c"> * configurable in milliseconds the XHR connection will wait for a server</span>
 <span class="c"> * response. A a value of zero indicates the XHR connection will wait forever.</span>
-<span class="c"> * Any value greater than zero will use the Connection utility&#39;s Auto-Abort</span>
+<span class="c"> * Any value greater than zero will use the Connection utility's Auto-Abort</span>
 <span class="c"> * feature.</span>
 <span class="c"> *</span>
 <span class="c"> * @property connTimeout</span>
@@ -411,7 +406,7 @@
 <span class="c"> * @return {String} Unique name of the DataSource instance.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;DataSource &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span><span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"DataSource "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -432,7 +427,7 @@
 
     <span class="c">// If cache is enabled...</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">maxCacheEntries</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">aCache</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">nCacheLength</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheRequestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheRequestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
 
         <span class="c">// Loop through each cached element</span>
 <span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">nCacheLength</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
@@ -447,7 +442,7 @@
 <span class="c"></span>                <span class="nx">aCache</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span><span class="m">1</span><span class="o">);</span>
                 <span class="c">// Add as newest</span>
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">addToCache</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheResponseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheResponseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
                 <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -480,7 +475,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">addToCache</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
     <span class="c">//TODO: check for duplicate entries</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">aCache</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">;</span>
-    <span class="c">// Don&#39;t add if anything important is missing.</span>
+    <span class="c">// Don't add if anything important is missing.</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">aCache</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oRequest</span> <span class="o">||</span> <span class="o">!</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span><span class="o">;</span>
     <span class="o">}</span>
@@ -493,7 +488,7 @@
     <span class="c">// Add to cache in the newest position, at the end of the array</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">oCacheElem</span> <span class="o">=</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">};</span>
     <span class="nx">aCache</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">oCacheElem</span><span class="o">);</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseCacheEvent&quot;</span><span class="o">,{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseCacheEvent"</span><span class="o">,{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">});</span>
 
 <span class="o">};</span>
 
@@ -506,7 +501,7 @@
     <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
     <span class="o">}</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheFlushEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheFlushEvent"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -541,7 +536,7 @@
 <span class="c"> * @param oCaller {Object} The Calling object that is making the request</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">makeConnection</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
     <span class="k">var</span> <span class="nx">oRawResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     
     <span class="c">// How to make the connection depends on the type of data</span>
@@ -578,14 +573,14 @@
             <span class="k">var</span> <span class="nx">_xhrSuccess</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
                 <span class="c">// Error if no response</span>
 <span class="c"></span>                <span class="k">if</span><span class="o">(!</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
                 <span class="o">}</span>
                 <span class="c">// Error if response ID does not match last made request ID.</span>
 <span class="c"></span>               <span class="k">else</span> <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">||</span> <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">tId</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span><span class="o">.</span><span class="nx">tId</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">});</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">});</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
                 <span class="o">}</span>
                 <span class="c">// Forward to handler</span>
@@ -602,8 +597,8 @@
 <span class="c">             * @private</span>
 <span class="c">             */</span>
             <span class="k">var</span> <span class="nx">_xhrFailure</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span><span class="o">});</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nx">oResp</span><span class="o">.</span><span class="nx">statusText</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span><span class="o">});</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ERROR_DATAXHR</span> <span class="o">+</span> <span class="s2">": "</span> <span class="o">+</span> <span class="nx">oResp</span><span class="o">.</span><span class="nx">statusText</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">};</span>
 
@@ -630,12 +625,12 @@
                 <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span><span class="o">);</span>
             <span class="o">}</span>
 
-            <span class="k">var</span> <span class="nx">sUri</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">+</span><span class="s2">&quot;?&quot;</span><span class="o">+</span><span class="nx">oRequest</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">sUri</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">+</span><span class="s2">"?"</span><span class="o">+</span><span class="nx">oRequest</span><span class="o">;</span>
             <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">.</span><span class="nx">asyncRequest</span><span class="o">(</span><span class="s2">&quot;GET&quot;</span><span class="o">,</span> <span class="nx">sUri</span><span class="o">,</span> <span class="nx">_xhrCallback</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span><span class="o">.</span><span class="nx">asyncRequest</span><span class="o">(</span><span class="s2">"GET"</span><span class="o">,</span> <span class="nx">sUri</span><span class="o">,</span> <span class="nx">_xhrCallback</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find a valid Connection Manager&quot;</span><span class="o">,</span><span class="s2">&quot;error&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not find a valid Connection Manager"</span><span class="o">,</span><span class="s2">"error"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             <span class="o">}</span>
 
             <span class="k">break</span><span class="o">;</span>
@@ -655,7 +650,7 @@
 <span class="c"> * @param oCaller {Object} The calling object that is making the request</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">handleResponse</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oRawResponse</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oRawResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oRawResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
     <span class="k">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dataType</span> <span class="o">==</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">TYPE_XHR</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     <span class="c">//TODO: break out into overridable methods</span>
@@ -686,19 +681,19 @@
             <span class="k">break</span><span class="o">;</span>
         <span class="nx">default</span><span class="o">:</span>
             <span class="c">//TODO: pass off to custom function</span>
-<span class="c"></span>            <span class="c">//var contentType = oRawResponse.getResponseHeader[&quot;Content-Type&quot;];</span>
-<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unknown response type&quot;</span><span class="o">,</span><span class="s2">&quot;warn&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toStrin</span><span class="o">());</span>
+<span class="c"></span>            <span class="c">//var contentType = oRawResponse.getResponseHeader["Content-Type"];</span>
+<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Unknown response type"</span><span class="o">,</span><span class="s2">"warn"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toStrin</span><span class="o">());</span>
             <span class="k">break</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseParseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oParsedResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseParseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oParsedResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
         <span class="c">// Cache the response</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">addToCache</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oParsedResponse</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span><span class="nx">message</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DataSource</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 
     <span class="c">// Send the response back to the caller</span>
@@ -756,10 +751,10 @@
 
                 <span class="c">// Remove quotation marks from edges, if applicable</span>
 <span class="c"></span>                <span class="k">var</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">fielddataarray</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
-                <span class="k">if</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">==</span> <span class="s2">"\""</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">string</span> <span class="o">=</span> <span class="nx">string</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
                 <span class="o">}</span>
-                <span class="k">if</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="nx">string</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">"\""</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">string</span> <span class="o">=</span> <span class="nx">string</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">string</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
                 <span class="o">}</span>
                 <span class="nx">dataobject</span><span class="o">[</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">j</span><span class="o">]]</span> <span class="o">=</span> <span class="nx">string</span><span class="o">;</span>
@@ -806,7 +801,7 @@
                         <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">xmlNode</span><span class="o">.</span><span class="nx">item</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">firstChild</span><span class="o">.</span><span class="nx">nodeValue</span><span class="o">;</span>
                     <span class="o">}</span>
                     <span class="k">else</span> <span class="o">{</span>
-                           <span class="nx">sValue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                           <span class="nx">sValue</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
                 <span class="c">// Capture the schema-mapped data field values into an array</span>
@@ -838,10 +833,10 @@
 
     <span class="k">var</span> <span class="nx">jsonObj</span><span class="o">,</span><span class="nx">jsonList</span><span class="o">;</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c">// Parse JSON object out if it&#39;s a string</span>
+        <span class="c">// Parse JSON object out if it's a string</span>
 <span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">String</span><span class="o">)</span> <span class="o">{</span>
             <span class="c">// Check for latest JSON lib but divert KHTML clients</span>
-<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">parseJSON</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;khtml&#39;</span><span class="o">)==</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">parseJSON</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'khtml'</span><span class="o">)==</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
                 <span class="c">// Use the new JSON utility if available</span>
 <span class="c"></span>                <span class="nx">jsonObj</span> <span class="o">=</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">parseJSON</span><span class="o">();</span>
                 <span class="k">if</span><span class="o">(!</span><span class="nx">jsonObj</span><span class="o">)</span> <span class="o">{</span>
@@ -849,7 +844,7 @@
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="c">// Check for older JSON lib but divert KHTML clients</span>
-<span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">JSON</span> <span class="o">&amp;&amp;</span> <span class="nx">JSON</span><span class="o">.</span><span class="nx">parse</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;khtml&#39;</span><span class="o">)==</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">JSON</span> <span class="o">&amp;&amp;</span> <span class="nx">JSON</span><span class="o">.</span><span class="nx">parse</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'khtml'</span><span class="o">)==</span> <span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span>
                 <span class="c">// Use the JSON utility if available</span>
 <span class="c"></span>                <span class="nx">jsonObj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="o">.</span><span class="nx">parse</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">);</span>
                 <span class="k">if</span><span class="o">(!</span><span class="nx">jsonObj</span><span class="o">)</span> <span class="o">{</span>
@@ -861,19 +856,19 @@
                 <span class="k">try</span> <span class="o">{</span>
                     <span class="c">// Trim leading spaces</span>
 <span class="c"></span>                    <span class="k">while</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
-                            <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">&quot;{&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-                            <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">&quot;[&quot;</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">"{"</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+                            <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">"["</span><span class="o">))</span> <span class="o">{</span>
                         <span class="nx">oRawResponse</span> <span class="o">=</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
                     <span class="o">}</span>
 
                     <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                         <span class="c">// Strip extraneous stuff at the end</span>
-<span class="c"></span>                        <span class="k">var</span> <span class="nx">objEnd</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">&quot;]&quot;</span><span class="o">),</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">&quot;}&quot;</span><span class="o">));</span>
+<span class="c"></span>                        <span class="k">var</span> <span class="nx">objEnd</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">"]"</span><span class="o">),</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">"}"</span><span class="o">));</span>
                         <span class="nx">oRawResponse</span> <span class="o">=</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">objEnd</span><span class="o">+</span><span class="m">1</span><span class="o">);</span>
 
                         <span class="c">// Turn the string into an object literal...</span>
 <span class="c"></span>                        <span class="c">// ...eval is necessary here</span>
-<span class="c"></span>                        <span class="nx">jsonObj</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nx">oRawResponse</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">);</span>
+<span class="c"></span>                        <span class="nx">jsonObj</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">"("</span> <span class="o">+</span> <span class="nx">oRawResponse</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">);</span>
                         <span class="k">if</span><span class="o">(!</span><span class="nx">jsonObj</span><span class="o">)</span> <span class="o">{</span>
                             <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                         <span class="o">}</span>
@@ -893,7 +888,7 @@
 <span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">jsonObj</span> <span class="o">&amp;&amp;</span> <span class="nx">jsonObj</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">try</span> <span class="o">{</span>
                 <span class="c">// eval is necessary here since schema can be of unknown depth</span>
-<span class="c"></span>                <span class="nx">jsonList</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;jsonObj.&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">responseSchema</span><span class="o">.</span><span class="nx">resultsList</span><span class="o">);</span>
+<span class="c"></span>                <span class="nx">jsonList</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">"jsonObj."</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">responseSchema</span><span class="o">.</span><span class="nx">resultsList</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -918,9 +913,9 @@
             <span class="c">// ...and capture data into an array mapped according to the schema...</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">dataFieldValue</span> <span class="o">=</span> <span class="nx">jsonResult</span><span class="o">[</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">j</span><span class="o">]];</span>
             <span class="k">if</span><span class="o">(!</span><span class="nx">dataFieldValue</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">dataFieldValue</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">dataFieldValue</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="c">//YAHOO.log(&quot;data: &quot; + i + &quot; value:&quot; +j+&quot; = &quot;+dataFieldValue,&quot;debug&quot;,this.toString());</span>
+            <span class="c">//YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());</span>
 <span class="c"></span>            <span class="nx">oResult</span><span class="o">[</span><span class="nx">aSchema</span><span class="o">[</span><span class="nx">j</span><span class="o">]]</span> <span class="o">=</span> <span class="nx">dataFieldValue</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="c">// Capture the array of data field values in an array of results</span>
@@ -937,9 +932,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -976,22 +969,17 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="DataSource.html">DataSource</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="DataSource.html">DataSource</a></li>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="DataSource.js.html">DataSource.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="DataSource.js.html">DataSource.js</a></li>
+                        </ul></div>
 
 
 
@@ -1001,9 +989,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

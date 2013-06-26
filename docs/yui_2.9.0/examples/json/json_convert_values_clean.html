@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Adding new object members during parsing</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Adding new object members during parsing</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,16 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/json/json-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 #demo table {
     border: 3px solid #89d;
     border-collapse: collapse;
@@ -46,84 +29,20 @@ body {
     border: 1px solid #ddd;
     padding: .5ex 1ex;
 }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Adding new object members during parsing</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Adding new object members during parsing</h1><div class="exampleIntro">
 	<p>This example shows how to use the <code>reviver</code> parameter in <code>JSON.parse</code> to add new object members and format existing members during the parsing phase.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="demo">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="demo">
     <p>Choose a currency, then get the data</p>
-    <select id="currencies">
-        <option value="ARS">Argentine Peso</option>
-        <option value="AUD">Australian Dollar</option>
-        <option value="BRL">Brazilian Real</option>
-        <option value="GBP">British Pound</option>
-        <option value="CAD">Canadian Dollar</option>
-        <option value="CNY">Chinese Yuan</option>
-        <option value="COP">Colombian Peso</option>
-        <option value="HRK">Croatian Kuna</option>
-        <option value="CZK">Czech Koruna</option>
-        <option value="DKK">Danish Krone</option>
-        <option value="EEK">Estonian Kroon</option>
-        <option value="EUR">Euro</option>
-        <option value="HKD">Hong Kong Dollar</option>
-        <option value="HUF">Hungarian Forint</option>
-        <option value="ISK">Iceland Krona</option>
-        <option value="INR">Indian Rupee</option>
-        <option value="JPY">Japanese Yen</option>
-        <option value="KRW">Korean Won</option>
-        <option value="LVL">Latvian Lat</option>
-        <option value="LTL">Lithuanian Lita</option>
-        <option value="MYR">Malaysian Ringgit</option>
-        <option value="MXN">Mexican Peso</option>
-        <option value="NZD">New Zealand Dollar</option>
-        <option value="NOK">Norwegian Krone</option>
-        <option value="PHP">Philippine Peso</option>
-        <option value="PLN">Polish Zloty</option>
-        <option value="RUB">Russian Rouble</option>
-        <option value="SGD">Singapore Dollar</option>
-        <option value="SKK">Slovak Koruna</option>
-        <option value="ZAR">South African Rand</option>
-        <option value="LKR">Sri Lanka Rupee</option>
-        <option value="SEK">Swedish Krona</option>
-        <option value="TRY">Turkey Lira</option>
-        <option value="USD" selected="selected">U.S. Dollar</option>
-        <option value="CHF">Swiss Franc</option>
-        <option value="TWD">Taiwan Dollar</option>
-        <option value="THB">Thai Baht</option>
-    </select>
-    <input type="button" id="demo_go" value="Get Data">
-
-    <table cellspacing="0">
-    <caption>Inventory</caption>
-    <thead>
-        <tr>
-            <th>SKU</th>
+    <select id="currencies"><option value="ARS">Argentine Peso</option><option value="AUD">Australian Dollar</option><option value="BRL">Brazilian Real</option><option value="GBP">British Pound</option><option value="CAD">Canadian Dollar</option><option value="CNY">Chinese Yuan</option><option value="COP">Colombian Peso</option><option value="HRK">Croatian Kuna</option><option value="CZK">Czech Koruna</option><option value="DKK">Danish Krone</option><option value="EEK">Estonian Kroon</option><option value="EUR">Euro</option><option value="HKD">Hong Kong Dollar</option><option value="HUF">Hungarian Forint</option><option value="ISK">Iceland Krona</option><option value="INR">Indian Rupee</option><option value="JPY">Japanese Yen</option><option value="KRW">Korean Won</option><option value="LVL">Latvian Lat</option><option value="LTL">Lithuanian Lita</option><option value="MYR">Malaysian Ringgit</option><option value="MXN">Mexican Peso</option><option value="NZD">New Zealand Dollar</option><option value="NOK">Norwegian Krone</option><option value="PHP">Philippine Peso</option><option value="PLN">Polish Zloty</option><option value="RUB">Russian Rouble</option><option value="SGD">Singapore Dollar</option><option value="SKK">Slovak Koruna</option><option value="ZAR">South African Rand</option><option value="LKR">Sri Lanka Rupee</option><option value="SEK">Swedish Krona</option><option value="TRY">Turkey Lira</option><option value="USD" selected>U.S. Dollar</option><option value="CHF">Swiss Franc</option><option value="TWD">Taiwan Dollar</option><option value="THB">Thai Baht</option></select><input type="button" id="demo_go" value="Get Data"><table cellspacing="0"><caption>Inventory</caption>
+    <thead><tr><th>SKU</th>
             <th>Item</th>
             <th>Price (USD)</th>
             <th>Price (<span>USD</span>)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td colspan="4">Click <em>Get Data</em></td></tr>
-    </tbody>
-    </table>
-</div>
-
-<script type="text/javascript">
+        </tr></thead><tbody><tr><td colspan="4">Click <em>Get Data</em></td></tr></tbody></table></div><script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
 
 // Set up some shortcuts
@@ -227,10 +146,4 @@ Event.on('demo_go','click', function (e) {
 });
 
 });
-</script>
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

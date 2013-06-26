@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: treeview   TextNode.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: treeview   TextNode.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>TreeView Widget  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
@@ -28,22 +20,21 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 	<span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
 		<span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
 		<span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
 <span class="c">/**</span>
 <span class="c"> * The default node presentation.  The first parameter should be</span>
-<span class="c"> * either a string that will be used as the node&#39;s label, or an object</span>
+<span class="c"> * either a string that will be used as the node's label, or an object</span>
 <span class="c"> * that has at least a string property called label.  By default,  clicking the</span>
 <span class="c"> * label will toggle the expanded/collapsed state of the node.  By</span>
 <span class="c"> * setting the href property of the instance, this behavior can be</span>
@@ -60,7 +51,7 @@
 <span class="c"> * All attributes are made available in noderef.data, which</span>
 <span class="c"> * can be used to store custom attributes.  TreeView.getNode(s)ByProperty</span>
 <span class="c"> * can be used to retrieve a node by one of the attributes.</span>
-<span class="c"> * @param oParent {YAHOO.widget.Node} this node&#39;s parent node</span>
+<span class="c"> * @param oParent {YAHOO.widget.Node} this node's parent node</span>
 <span class="c"> * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) </span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">,</span> <span class="nx">oParent</span><span class="o">,</span> <span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
@@ -84,7 +75,7 @@
 <span class="c">     * @property labelStyle</span>
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
-    <span class="nx">labelStyle</span><span class="o">:</span> <span class="s2">&quot;ygtvlabel&quot;</span><span class="o">,</span>
+    <span class="nx">labelStyle</span><span class="o">:</span> <span class="s2">"ygtvlabel"</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * The derived element id of the label for this node</span>
@@ -96,7 +87,7 @@
     <span class="c">/**</span>
 <span class="c">     * The text for the label.  It is assumed that the oData parameter will</span>
 <span class="c">     * either be a string that will be used as the label, or an object that</span>
-<span class="c">     * has a property called &quot;label&quot; that we will use.</span>
+<span class="c">     * has a property called "label" that we will use.</span>
 <span class="c">     * @property label</span>
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
@@ -114,9 +105,9 @@
 <span class="c">     * @property _type</span>
 <span class="c">     * @private</span>
 <span class="c">     * @type string</span>
-<span class="c">     * @default &quot;TextNode&quot;</span>
+<span class="c">     * @default "TextNode"</span>
 <span class="c">     */</span>
-    <span class="nx">_type</span><span class="o">:</span> <span class="s2">&quot;TextNode&quot;</span><span class="o">,</span>
+    <span class="nx">_type</span><span class="o">:</span> <span class="s2">"TextNode"</span><span class="o">,</span>
 
 
     <span class="c">/**</span>
@@ -138,7 +129,7 @@
 
         <span class="k">this</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">=</span> <span class="s2">&quot;ygtvlabelel&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">=</span> <span class="s2">"ygtvlabelel"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">;</span>
 		
     <span class="o">},</span>
 
@@ -155,20 +146,20 @@
     <span class="c">// overrides YAHOO.widget.Node</span>
 <span class="c"></span>	<span class="nx">getContentHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
         <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">&#39;&lt;a&#39;</span><span class="o">:</span><span class="s1">&#39;&lt;span&#39;</span><span class="o">;</span>
-        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">'&lt;a'</span><span class="o">:</span><span class="s1">'&lt;span'</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' id="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; title=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' title="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span>  <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' class="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span>  <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
 		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; href=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; target=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' href="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
+			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' target="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
 		<span class="o">}</span> 
-        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">' &gt;'</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
-        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="o">:</span><span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="o">;</span>
-        <span class="k">return</span> <span class="nx">sb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+        <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">'&lt;/a&gt;'</span><span class="o">:</span><span class="s1">'&lt;/span&gt;'</span><span class="o">;</span>
+        <span class="k">return</span> <span class="nx">sb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">""</span><span class="o">);</span>
     <span class="o">},</span>
 
 
@@ -186,7 +177,7 @@
 
 		<span class="c">// Node specific properties</span>
 <span class="c"></span>		<span class="nx">def</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">!=</span> <span class="s1">&#39;ygtvlabel&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span><span class="o">;</span> <span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">!=</span> <span class="s1">'ygtvlabel'</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span><span class="o">;</span> <span class="o">}</span>
 		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span> <span class="o">;</span> <span class="o">}</span>
 
 		<span class="k">return</span> <span class="nx">def</span><span class="o">;</span>
@@ -194,7 +185,7 @@
 	<span class="o">},</span>
 
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
-        <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">toString</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">toString</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">+</span> <span class="s2">": "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">// deprecated</span>
@@ -212,9 +203,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -287,13 +276,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.DateNode.html">YAHOO.widget.DateNode</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.DateNode.html">YAHOO.widget.DateNode</a></li>
                                 <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
                                 <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
@@ -303,13 +290,11 @@
                                 <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DateNode.js.html">DateNode.js</a></li>
+                        <ul class="content"><li class=""><a href="DateNode.js.html">DateNode.js</a></li>
                                 <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
                                 <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
                                 <li class=""><a href="Node.js.html">Node.js</a></li>
@@ -320,8 +305,7 @@
                                 <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
                                 <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
                                 <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -331,9 +315,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

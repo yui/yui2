@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: dom   Region.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: dom   Region.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>dom&nbsp; <span class="subtitle">2.2.0</span></h3>
+        <h3>dom  <span class="subtitle">2.2.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dom.html">dom</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/**</span>
+<div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * A region is a representation of an object on a grid.  It is defined</span>
 <span class="c"> * by the top, right, bottom, left extents, so is rectangular by default.  If </span>
 <span class="c"> * other shapes are required, this class could be extended to support it.</span>
@@ -39,42 +34,42 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">t</span><span class="o">,</span> <span class="nx">r</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">l</span><span class="o">)</span> <span class="o">{</span>
 
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s top extent</span>
+<span class="c">     * The region's top extent</span>
 <span class="c">     * @property top</span>
 <span class="c">     * @type Int</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">t</span><span class="o">;</span>
     
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s top extent as index, for symmetry with set/getXY</span>
+<span class="c">     * The region's top extent as index, for symmetry with set/getXY</span>
 <span class="c">     * @property 1</span>
 <span class="c">     * @type Int</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">=</span> <span class="nx">t</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s right extent</span>
+<span class="c">     * The region's right extent</span>
 <span class="c">     * @property right</span>
 <span class="c">     * @type int</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">right</span> <span class="o">=</span> <span class="nx">r</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s bottom extent</span>
+<span class="c">     * The region's bottom extent</span>
 <span class="c">     * @property bottom</span>
 <span class="c">     * @type Int</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">=</span> <span class="nx">b</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s left extent</span>
+<span class="c">     * The region's left extent</span>
 <span class="c">     * @property left</span>
 <span class="c">     * @type Int</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">l</span><span class="o">;</span>
     
     <span class="c">/**</span>
-<span class="c">     * The region&#39;s left extent as index, for symmetry with set/getXY</span>
+<span class="c">     * The region's left extent as index, for symmetry with set/getXY</span>
 <span class="c">     * @property 0</span>
 <span class="c">     * @type Int</span>
 <span class="c">     */</span>
@@ -94,13 +89,13 @@
              <span class="nx">region</span><span class="o">.</span><span class="nx">top</span>    <span class="o">&gt;=</span> <span class="k">this</span><span class="o">.</span><span class="nx">top</span>    <span class="o">&amp;&amp;</span> 
              <span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">&lt;=</span> <span class="k">this</span><span class="o">.</span><span class="nx">bottom</span>    <span class="o">);</span>
 
-    <span class="c">// this.logger.debug(&quot;does &quot; + this + &quot; contain &quot; + region + &quot; ... &quot; + ret);</span>
+    <span class="c">// this.logger.debug("does " + this + " contain " + region + " ... " + ret);</span>
 <span class="c"></span><span class="o">};</span>
 
 <span class="c">/**</span>
 <span class="c"> * Returns the area of the region</span>
 <span class="c"> * @method getArea</span>
-<span class="c"> * @return {Int} the region&#39;s area</span>
+<span class="c"> * @return {Int} the region's area</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getArea</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="o">(</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">top</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">left</span><span class="o">)</span> <span class="o">);</span>
@@ -147,12 +142,12 @@
 <span class="c"> * @return string the region properties</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Region</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">(</span> <span class="s2">&quot;Region {&quot;</span>    <span class="o">+</span>
-             <span class="s2">&quot;top: &quot;</span>       <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">top</span>    <span class="o">+</span> 
-             <span class="s2">&quot;, right: &quot;</span>   <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">right</span>  <span class="o">+</span> 
-             <span class="s2">&quot;, bottom: &quot;</span>  <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">+</span> 
-             <span class="s2">&quot;, left: &quot;</span>    <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">left</span>   <span class="o">+</span> 
-             <span class="s2">&quot;}&quot;</span> <span class="o">);</span>
+    <span class="k">return</span> <span class="o">(</span> <span class="s2">"Region {"</span>    <span class="o">+</span>
+             <span class="s2">"top: "</span>       <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">top</span>    <span class="o">+</span> 
+             <span class="s2">", right: "</span>   <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">right</span>  <span class="o">+</span> 
+             <span class="s2">", bottom: "</span>  <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">+</span> 
+             <span class="s2">", left: "</span>    <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">left</span>   <span class="o">+</span> 
+             <span class="s2">"}"</span> <span class="o">);</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -218,9 +213,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -257,25 +250,20 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
                                 <li class=""><a href="YAHOO.util.Point.html">YAHOO.util.Point</a></li>
                                 <li class=""><a href="YAHOO.util.Region.html">YAHOO.util.Region</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Dom.js.html">Dom.js</a></li>
+                        <ul class="content"><li class=""><a href="Dom.js.html">Dom.js</a></li>
                                 <li class="selected"><a href="Region.js.html">Region.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -285,9 +273,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>
